@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
-use App\Models\Logabsensi;
+// use App\Models\Logabsensi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
@@ -58,20 +58,20 @@ class AttendanceController extends Controller
                 'created_at' => now(),
             ]);
 
-            Logabsensi::create([
-                'nik' => $nikPegawai,
-                'kodejari' => $kodePegawai,
-                'waktu' => now(),
-                'lokasifoto' => $photoURL,
-                'upl' => 0,
-                'upl68' => 0,
-                'uplm68' => 0,
-                'upljam' => 0,
-                'jenis' => 'Wajah',
-                'waktuori' => now(),
-                'KodeBarcode' => null,
-                'status' => 'Masuk',
-            ]);
+            // Logabsensi::create([
+            //     'nik' => $nikPegawai,
+            //     'kodejari' => $kodePegawai,
+            //     'waktu' => now(),
+            //     'lokasifoto' => $photoURL,
+            //     'upl' => 0,
+            //     'upl68' => 0,
+            //     'uplm68' => 0,
+            //     'upljam' => 0,
+            //     'jenis' => 'Wajah',
+            //     'waktuori' => now(),
+            //     'KodeBarcode' => null,
+            //     'status' => 'Masuk',
+            // ]);
 
             return response()->json(['success' => true, 'message' => 'Attendance recorded successfully.']);
         } catch (\Exception $e) {

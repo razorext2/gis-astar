@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\AttendanceOut;
-use App\Models\Logabsensi;
+// use App\Models\Logabsensi;
 use Illuminate\Support\Facades\Auth;
 
 class AttendanceOutController extends Controller
@@ -57,20 +57,20 @@ class AttendanceOutController extends Controller
                 'created_at' => now(),
             ]);
 
-            Logabsensi::create([
-                'nik' => $nikPegawai,
-                'kodejari' => $kodePegawai,
-                'waktu' => now(),
-                'lokasifoto' => $photoURL,
-                'upl' => 0,
-                'upl68' => 0,
-                'uplm68' => 0,
-                'upljam' => 0,
-                'jenis' => 'Wajah',
-                'waktuori' => now(),
-                'KodeBarcode' => null,
-                'status' => 'Keluar',
-            ]);
+            // Logabsensi::create([
+            //     'nik' => $nikPegawai,
+            //     'kodejari' => $kodePegawai,
+            //     'waktu' => now(),
+            //     'lokasifoto' => $photoURL,
+            //     'upl' => 0,
+            //     'upl68' => 0,
+            //     'uplm68' => 0,
+            //     'upljam' => 0,
+            //     'jenis' => 'Wajah',
+            //     'waktuori' => now(),
+            //     'KodeBarcode' => null,
+            //     'status' => 'Keluar',
+            // ]);
 
             return response()->json(['success' => true, 'message' => 'Clock-out recorded successfully.']);
         } catch (\Exception $e) {
