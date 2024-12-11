@@ -18,7 +18,6 @@ class AdminController extends Controller
      */
 
     public function index()
-
     {
         if (auth()->user()->can('dashboard')) {
             $today = Carbon::today();
