@@ -30,8 +30,8 @@ use Illuminate\Support\Facades\Storage;
 // landing page
 // turn off for a while, redirect to dashboard
 Route::get('/', function () {
-    return view('home', ['title' => 'Take attendance']);
-    // return redirect('login');
+    // return view('home', ['title' => 'Take attendance']);
+    return redirect('login');
 })->name('landing.page');
 
 Route::get('photo-regist', function () {
