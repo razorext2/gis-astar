@@ -18,7 +18,6 @@ use App\Http\Controllers\CaptureController;
 use App\Http\Controllers\AllowanceController;
 use App\Http\Controllers\DeductionController;
 use App\Http\Controllers\CollectController;
-use App\Models\Placement;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -30,8 +29,8 @@ use Illuminate\Support\Facades\Storage;
 // landing page
 // turn off for a while, redirect to dashboard
 Route::get('/', function () {
-    // return view('home', ['title' => 'Take attendance']);
-    return redirect('login');
+    return view('home', ['title' => 'Take attendance']);
+    // return redirect('login');
 })->name('landing.page');
 
 Route::get('photo-regist', function () {
