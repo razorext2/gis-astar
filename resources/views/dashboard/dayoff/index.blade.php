@@ -8,7 +8,7 @@
 			<div class="max-w-xs">
 				<x-button.success id="add-button" form="add-dayoff" type="submit">
 					<x-slot name="icon">
-						<x-icons.arrow-left class="icon h-6 w-6 rotate-180 dark:fill-white" />
+						<x-icons.angle-right class="h-6 w-6 text-green-500 dark:text-white" />
 					</x-slot>
 					Tambah Data
 				</x-button.success>
@@ -98,7 +98,6 @@
 		</div>
 	</div>
 
-	@include('dashboard.layoutsDash.modals')
 	@push('script')
 		<script>
 			function showDatatables() {

@@ -7,7 +7,7 @@
 			<div class="max-w-xs">
 				<x-button.success id="add-button" form="add-collector" type="submit">
 					<x-slot name="icon">
-						<x-icons.angle-right class="icon h-6 w-6 text-green-500 dark:text-white" />
+						<x-icons.angle-right class="h-6 w-6 text-green-500 dark:text-white" />
 					</x-slot>
 					Tambah Data
 				</x-button.success>
