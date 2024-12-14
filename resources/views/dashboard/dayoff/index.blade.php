@@ -4,16 +4,16 @@
 
   <div class="relative grid grid-cols-1 gap-6">
 
-    @can('dayoff-create')
-      <div class="max-w-xs">
-        <x-button.success id="add-button" form="add-dayoff" type="submit">
-          <x-slot name="icon">
-            <x-icons.arrow-left class="icon h-6 w-6 rotate-180 dark:fill-white" />
-          </x-slot>
-          Tambah Data
-        </x-button.success>
-      </div>
-    @endcan
+		@can('dayoff-create')
+			<div class="max-w-xs">
+				<x-button.success id="add-button" form="add-dayoff" type="submit">
+					<x-slot name="icon">
+						<x-icons.angle-right class="h-6 w-6 text-green-500 dark:text-white" />
+					</x-slot>
+					Tambah Data
+				</x-button.success>
+			</div>
+		@endcan
 
     <div class="flex h-auto items-center justify-center">
       <div
@@ -99,11 +99,10 @@
     </div>
   </div>
 
-  @include('dashboard.layoutsDash.modals')
-  @push('script')
-    <script>
-      function showDatatables() {
-        let minDate, maxDate;
+	@push('script')
+		<script>
+			function showDatatables() {
+				let minDate, maxDate;
 
         // Initialize DataTable
         let table = $('#table-dayoff').DataTable({

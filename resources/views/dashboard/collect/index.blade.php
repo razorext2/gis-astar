@@ -3,16 +3,16 @@
  <form id="add-collector" action="{{ route('collect.create') }}"></form>
  <div class="relative grid grid-cols-1 gap-6">
 
-  @can('collect-create')
-   <div class="max-w-xs">
-    <x-button.success id="add-button" form="add-collector" type="submit">
-     <x-slot name="icon">
-      <x-icons.angle-right class="icon h-6 w-6 text-green-500 dark:text-white" />
-     </x-slot>
-     Tambah Data
-    </x-button.success>
-   </div>
-  @endcan
+	@can('collect-create')
+		<div class="max-w-xs">
+			<x-button.success id="add-button" form="add-collector" type="submit">
+				<x-slot name="icon">
+					<x-icons.angle-right class="h-6 w-6 text-green-500 dark:text-white" />
+				</x-slot>
+				Tambah Data
+			</x-button.success>
+		</div>
+	@endcan
 
   <div class="flex h-auto items-center justify-center">
    <div
