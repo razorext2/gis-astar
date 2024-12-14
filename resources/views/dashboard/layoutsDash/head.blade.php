@@ -39,7 +39,6 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <script>
-	// On page load or when changing themes, best to add inline in `head` to avoid FOUC
 	if (
 		localStorage.getItem("color-theme") === "dark" ||
 		(!("color-theme" in localStorage) &&
@@ -49,4 +48,6 @@
 	} else {
 		document.documentElement.classList.remove("dark");
 	}
+
+	const APP_URL = "{{ env('APP_URL') }}";
 </script>

@@ -23,6 +23,7 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\App;
 
 class PegawaiController extends Controller
 {
@@ -249,7 +250,9 @@ class PegawaiController extends Controller
 
         if (!empty($images)) {
             $relativeImagePaths = array_map(function ($path) use ($directoryPath) {
-                return str_replace(public_path(), '/attendance', $path);
+                return App::environment('production')
+                    ? str_replace(public_path(), '/attendance', $path)
+                    : str_replace(public_path(), '', $path);
             }, $images);
 
             // dd($relativeImagePaths);

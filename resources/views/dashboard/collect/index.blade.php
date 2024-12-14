@@ -40,7 +40,7 @@
   const permissionDelete = @json(auth()->user()->can('collect-delete'));
 
   if (!kode_pegawai) {
-   src = "{{ env('API_URL') }}api/collectors";
+   src = "{{ env('APP_URL') }}/api/collectors";
   } else {
    src = "collect";
   }

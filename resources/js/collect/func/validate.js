@@ -18,7 +18,7 @@ export async function confirmAction() {
     // If the action is confirmed
     if (result.isConfirmed) {
       $.ajax({
-        url: `../../api/collectors/${id}/confirm`,
+        url: `${APP_URL}/api/collectors/${id}/confirm`,
         type: 'PATCH',
         cache: false,
         data: {

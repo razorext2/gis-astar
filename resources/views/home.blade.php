@@ -45,9 +45,6 @@
   </div>
  </div>
  @push('script')
-  <script defer>
-   const API_URL = "{{ env('API_URL') }}"
-  </script>
   <script defer src="{{ asset('face-api.min.js') }}"></script>
   <script defer src="{{ asset('script.min.js') }}"></script>
  @endpush
