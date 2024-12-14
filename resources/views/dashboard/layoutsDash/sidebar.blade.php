@@ -207,7 +207,7 @@
 									href="{{ route('placement.index') }}">
 									<x-icons.landmark
 										class="{{ Route::is('placement.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
-									<span class="ms-3 flex-1 whitespace-nowrap text-sm">Penempatan</span>
+									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Penempatan</span>
 								</a>
 							</li>
 						@endcan
