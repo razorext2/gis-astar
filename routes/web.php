@@ -18,7 +18,6 @@ use App\Http\Controllers\CaptureController;
 use App\Http\Controllers\AllowanceController;
 use App\Http\Controllers\DeductionController;
 use App\Http\Controllers\CollectController;
-use App\Models\Placement;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
