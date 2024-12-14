@@ -25,23 +25,13 @@ class ApiDayoffController extends Controller
      */
     public function store(Request $request)
     {
-        // Dayoff::create([
-        //     'id_user' => $request->input('kode_pegawai'),
-        //     'dayoff_for' => $request->input('dayoff_for'),
-        //     'url' => null,
-        //     'tgl_dari' => $request->input('start_time'),
-        //     'tgl_hingga' => $request->input('end_time'),
-        //     'keterangan' => $request->input('keterangan'),
-        //     'status' => 2,
-        // ]);
-
         // mendefinisikan validator
         $validator = Validator::make($request->all(), [
             'id_user' => 'required|integer|max_digits:32',
             'dayoff_for' => 'required|string|min:2|max:10',
             'tgl_dari' => 'required|date|min:5|max:32',
             'tgl_hingga' => 'required|date|min:5|max:32',
-            'keterangan' => 'required|string|min:10',
+            'keterangan' => 'required|min:10',
         ]);
 
         if ($validator->fails()) {
@@ -52,6 +42,11 @@ class ApiDayoffController extends Controller
         }
 
         $data = $validator->validated();
+
+        // Menyelipkan status dengan nilai 0 (pending)
+        $data['status'] = 0;
+
+        // Simpan data
         $query = Dayoff::create($data);
 
         if ($request->isJson()) {

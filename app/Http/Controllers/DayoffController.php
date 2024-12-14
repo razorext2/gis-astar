@@ -51,9 +51,9 @@ class DayoffController extends Controller
 					$status = $data->status;
 					if ($status == 1) {
 						return '<span class="px-4 py-1 text-sm font-medium text-green-800 bg-green-100 rounded-full ring-1 dark:ring-gray-700 dark:bg-green-900 ring-gray-300 dark:text-green-300"> Diterima </span>';
-					} elseif ($status == 2) {
+					} elseif ($status == 0) {
 						return '<span class="px-4 py-1 text-sm font-medium text-yellow-800 bg-yellow-100 rounded-full ring-1 dark:ring-gray-700 dark:bg-yellow-900 ring-gray-300 dark:text-yellow-300"> Diajukan </span>';
-					} elseif ($status == 3) {
+					} elseif ($status == 2) {
 						return '<span class="px-4 py-1 text-sm font-medium text-red-800 bg-red-100 rounded-full ring-1 dark:ring-gray-700 dark:bg-red-900 ring-gray-300 dark:text-red-300"> Ditolak </span>';
 					} else {
 						return '<span class="px-4 py-1 text-sm font-medium text-red-800 bg-red-100 rounded-full ring-1 dark:ring-gray-700 dark:bg-red-900 ring-gray-300 dark:text-red-300"> Dibatalkan </span>';
@@ -74,15 +74,7 @@ class DayoffController extends Controller
 	 */
 	public function create()
 	{
-		//
-		if (!Auth::user()->kode_pegawai) {
-			// If the user has one of the specified roles, show the 'add' dayoff view without specific data
-			return view('dashboard.dayoff.add');
-		} else {
-			// If the user is not one of the specified roles, get their associated Pegawai data and pass it to the view
-			$data = Pegawai::where('kode_pegawai', Auth::user()->kode_pegawai)->firstOrFail();
-			return view('dashboard.dayoff.add', compact('data'));
-		}
+		return view('dashboard.dayoff.add');
 	}
 
 	public function autocomplete(Request $request)
@@ -96,25 +88,6 @@ class DayoffController extends Controller
 			->get();
 
 		return response()->json($users); // Kembalikan hasil sebagai JSON
-	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 */
-	public function store(Request $request)
-	{
-		//
-		Dayoff::create([
-			'id_user' => $request->input('kode_pegawai'),
-			'dayoff_for' => $request->input('dayoff_for'),
-			'url' => null,
-			'tgl_dari' => $request->input('start_time'),
-			'tgl_hingga' => $request->input('end_time'),
-			'keterangan' => $request->input('keterangan'),
-			'status' => 2,
-		]);
-
-		return redirect()->route('dayoff.index')->with('status', 'Berhasil menambah pengajuan off.');
 	}
 
 	public function uploadImage(Request $request)

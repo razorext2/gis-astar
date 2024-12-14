@@ -9,11 +9,13 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
 
 
+// laporan kolektor
 Route::apiResource('collectors', ApiCollectController::class);
 Route::patch('collectors/{collector}/confirm', [ApiCollectController::class, 'confirmCollect']);
 Route::patch('collectors/{collector}/deny', [ApiCollectController::class, 'denyCollect']);
 
-Route::apiResource('dayoff', ApiDayoffController::class);
+// pengajuan off
+Route::apiResource('dayoff-api', ApiDayoffController::class);
 
 // api ke server utama
 Route::post('proxy/server/attendance', function (Request $request) {
