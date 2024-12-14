@@ -14,7 +14,7 @@ export function deleteData() {
       if (result.isConfirmed) {
         // fetch data to ajax
         $.ajax({
-          url: `/api/collectors/${id}`,
+          url: `../api/collectors/${id}`,
           type: "DELETE",
           cache: false,
           data: {

@@ -244,12 +244,15 @@ class PegawaiController extends Controller
             return response()->json(['error' => 'Directory not found'], 404);
         }
 
-        $images = glob($directoryPath . '/*.{png,jpg,jpeg,webp}', GLOB_BRACE);
+        $images = glob($directoryPath . '\*.{png,jpg,jpeg,webp}', GLOB_BRACE);
+        // dd($images);
 
         if (!empty($images)) {
             $relativeImagePaths = array_map(function ($path) use ($directoryPath) {
-                return str_replace(public_path(), '', $path);
+                return str_replace(public_path(), '/attendance', $path);
             }, $images);
+
+            // dd($relativeImagePaths);
 
             return response()->json($relativeImagePaths);
         }

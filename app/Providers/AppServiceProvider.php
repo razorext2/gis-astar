@@ -24,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->app['url']->forceRootUrl($this->app['config']->get('app.url'));
         // tampung nilai total atIn dan atOut
         View::composer('*', function ($view) {
             $totalAtIn = Attendance::count();

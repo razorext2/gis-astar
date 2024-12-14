@@ -18,7 +18,7 @@ export async function confirmAction() {
     // If the action is confirmed
     if (result.isConfirmed) {
       $.ajax({
-        url: `/api/collectors/${id}/confirm`,
+        url: `../../api/collectors/${id}/confirm`,
         type: 'PATCH',
         cache: false,
         data: {
@@ -53,7 +53,7 @@ export async function confirmAction() {
       if (text) {
         // For now, just display the message
         $.ajax({
-          url: `/api/collectors/${id}/deny`,
+          url: `../../api/collectors/${id}/deny`,
           type: 'PATCH',
           cache: false,
           data: {
