@@ -22,8 +22,8 @@
 	    'placement.index' => 'Penempatan',
 	    'placement.create' => 'Tambah Penempatan',
 	    'placement.edit' => 'Edit Penempatan',
-	    'dayoff.index' => 'Pengajuan',
-	    'dayoff.create' => 'Tambah Pengajuan',
+	    'dayoff.index' => 'Pengajuan Off',
+	    'dayoff.create' => 'Tambah Pengajuan Off',
 	    'dayoff.edit' => 'Edit Pengajuan',
 	    'dayoff.detail' => 'Detail Pengajuan',
 	    'attendanceIn.index' => 'Absen Masuk',
@@ -36,8 +36,8 @@
 	$pageTitle = $titles[$currentRoute] ?? 'Unknown Page';
 @endphp
 
-<div class="dark:text-white mb-8 mt-2 text-gray-800">
-	<h2 class="dark:text-white text-2xl font-bold tracking-tight text-gray-950 sm:text-3xl">
+<div class="mb-8 mt-2 text-gray-800 dark:text-white">
+	<h2 class="text-2xl font-bold tracking-tight text-gray-950 dark:text-white sm:text-3xl">
 		{{ $pageTitle }}
 	</h2>
 </div>
