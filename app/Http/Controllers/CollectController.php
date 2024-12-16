@@ -22,7 +22,11 @@ class CollectController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Collector::with('photoCollectRelasi')->where('kode_pegawai', '=', Auth::user()->kode_pegawai)->latest();
+            if (Auth::user()->can('collect-approve')) {
+                $query = Collector::with('photoCollectRelasi')->latest();
+            } else {
+                $query = Collector::with('photoCollectRelasi')->where('kode_pegawai', '=', Auth::user()->kode_pegawai)->latest();
+            }
 
             return DataTables::eloquent($query)
                 ->addIndexColumn()
