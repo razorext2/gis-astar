@@ -23,9 +23,9 @@ class CollectController extends Controller
     {
         if ($request->ajax()) {
             if (Auth::user()->can('collect-approve')) {
-                $query = Collector::with('photoCollectRelasi')->latest();
+                $query = Collector::latest();
             } else {
-                $query = Collector::with('photoCollectRelasi')->where('kode_pegawai', '=', Auth::user()->kode_pegawai)->latest();
+                $query = Collector::where('kode_pegawai', '=', Auth::user()->kode_pegawai)->latest();
             }
 
             return DataTables::eloquent($query)
