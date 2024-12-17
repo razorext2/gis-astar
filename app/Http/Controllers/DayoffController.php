@@ -44,25 +44,39 @@ class DayoffController extends Controller
 			// Fetch the filtered data with pagination for DataTables
 			return DataTables::of($query)
 				->addIndexColumn()
-				->editColumn('id_nama_user', function ($data) {
-					return '<p>' . $data->pegawaiRelasi->full_name . '</p><span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300"> ' . $data->id_user . ' </span>';
+				->editColumn('id_user', function ($data) {
+					return view('components.dashboard.name-w-code', [
+						'name' => $data->pegawaiRelasi->full_name,
+						'code' => $data->id_user
+					]);
 				})
-				->editColumn('statuses', function ($data) {
-					$status = $data->status;
-					if ($status == 1) {
-						return '<span class="px-4 py-1 text-sm font-medium text-green-800 bg-green-100 rounded-full ring-1 dark:ring-gray-700 dark:bg-green-900 ring-gray-300 dark:text-green-300"> Diterima </span>';
-					} elseif ($status == 0) {
-						return '<span class="px-4 py-1 text-sm font-medium text-yellow-800 bg-yellow-100 rounded-full ring-1 dark:ring-gray-700 dark:bg-yellow-900 ring-gray-300 dark:text-yellow-300"> Diajukan </span>';
-					} elseif ($status == 2) {
-						return '<span class="px-4 py-1 text-sm font-medium text-red-800 bg-red-100 rounded-full ring-1 dark:ring-gray-700 dark:bg-red-900 ring-gray-300 dark:text-red-300"> Ditolak </span>';
-					} else {
-						return '<span class="px-4 py-1 text-sm font-medium text-red-800 bg-red-100 rounded-full ring-1 dark:ring-gray-700 dark:bg-red-900 ring-gray-300 dark:text-red-300"> Dibatalkan </span>';
-					}
+				->editColumn('status', function ($data) {
+					return view('components.dashboard.title-w-status', [
+						'title' => $data->dayoff_for,
+						'status' => $data->status
+					])->render();
 				})
-				->editColumn('created_updated_at', function ($data) {
-					return $data->created_at . ' / ' . $data->updated_at;
+				->editColumn('created_at', function ($data) {
+					return view('components.dashboard.created-updated', [
+						'created' => 'From: ' . Carbon::parse($data->tgl_dari)->locale('id')->isoFormat('D MMM YYYY'),
+						'updated' => 'To: ' . Carbon::parse($data->tgl_hingga)->locale('id')->isoFormat('D MMM YYYY')
+					])->render();
 				})
-				->rawColumns(['statuses', 'id_nama_user'])
+				->editColumn('jlh_hari', function ($data) {
+					return view('components.dashboard.name-w-code', [
+						'code' => 'Total hari',
+						'name' => Carbon::parse($data->tgl_dari)->diffInDays(Carbon::parse($data->tgl_hingga)) + 1 . ' hari',
+					])->render();
+				})
+				->addColumn('actions', function ($data) {
+					return view('components.dashboard.action-buttons', [
+						'id' => $data->id,
+						'edit' => ['show' => auth()->user()->can('dayoff-edit'), 'url' => route('dayoff.edit', $data->id)],
+						'show' => ['show' => auth()->user()->can('dayoff-list'), 'url' => route('dayoff.show', $data->id)],
+						'delete' => ['show' => auth()->user()->can('dayoff-delete')]
+					])->render();
+				})
+				->rawColumns(['status', 'id_user', 'created_at', 'jlh_hari', 'actions'])
 				->make(true);
 		} else {
 			return view('dashboard.dayoff.index');

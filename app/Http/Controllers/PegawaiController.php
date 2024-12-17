@@ -251,7 +251,8 @@ class PegawaiController extends Controller
         if (!empty($images)) {
             $relativeImagePaths = array_map(function ($path) use ($directoryPath) {
                 return App::environment('production')
-                    ? str_replace(public_path(), '/attendance', $path)
+                    // ganti nanti disini juga
+                    ? str_replace(public_path(), '/dev', $path)
                     : str_replace(public_path(), '', $path);
             }, $images);
 
