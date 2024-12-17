@@ -20,11 +20,12 @@ use App\Http\Controllers\DeductionController;
 use App\Http\Controllers\CollectController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Artisan;
 
 // breeze for regist, verif, login and logout
-// Route::get('/foo', function () {
-//     Artisan::call('storage:link');
-// });
+Route::get('/foo', function () {
+     Artisan::call('storage:link');
+});
 
 // landing page
 // turn off for a while, redirect to dashboard
