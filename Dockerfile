@@ -1,4 +1,4 @@
-FROM php:8.3.11-fpm
+FROM dunglas/frankenphp
 
 # Update package list and install dependencies
 RUN apt-get update && apt-get install -y \
@@ -29,14 +29,21 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
 # Install Composer
 COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
 
+# Ganti direktori tempat kita run command
+WORKDIR /var/www/html
+
 # Copy existing application directory contents
-COPY . /var/www/html/
+COPY . .
+
+# Generate autoload and optimize
+RUN composer dump-autoload --optimize
 
 # Set ownership and permissions for the /var/www/html directory to www-data
-RUN chown -R www-data:www-data /var/www/html/
+RUN chown -R www-data:www-data /var/www/html \
+  && chmod -R 755 /var/www/html/storage
 
 USER www-data
 
 EXPOSE 9000
 
-CMD ["php-fpm"]
+CMD ["php", "artisan", "octane:frankenphp", "--workers=4", "--max-requests=500"]
