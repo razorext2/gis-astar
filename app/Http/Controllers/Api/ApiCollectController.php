@@ -112,15 +112,15 @@ class ApiCollectController extends Controller
         $collector = Collector::create($data);
 
         // Memastikan folder 'public/collector' ada, buat jika belum ada
-        if (env('APP_ENV' == 'local')) {
-            $folderPath = "public/collectors"; // Change path to storage/app/public
-        } else {
-            $folderPath = "collectors";
-        }
 
-        if (!Storage::exists($folderPath)) {
-            Storage::makeDirectory($folderPath);
-            // chmod(storage_path("app/{$folderPath}"), 0755);
+        $folderPath = "public/collectors"; // Consistent path
+
+        // Always use public disk
+        if (!Storage::disk('public')->exists($folderPath)) {
+            Storage::disk('public')->makeDirectory($folderPath);
+
+            // Optional: Set permissions if needed
+            chmod(storage_path('app/public/' . $folderPath), 0755);
         }
 
         // Menyimpan gambar dan menambahkan ke tabel tb_photo_collect
@@ -134,12 +134,7 @@ class ApiCollectController extends Controller
                 Storage::put($imagePath, file_get_contents($image));
 
                 // Mendapatkan URL gambar
-                if (env('APP_ENV' == 'local')) {
-                    $imageUrl = Storage::url('public/collectors/' . $imageName); // Change path to storage/app/public
-                } else {
-                    $imageUrl = Storage::url('collectors/' . $imageName);
-                }
-
+                $imageUrl = Storage::url('collectors/' . $imageName); // Change path to storage/app/public
 
                 // Menyimpan informasi gambar ke tabel tb_photo_collect
                 PhotoCollect::create([
