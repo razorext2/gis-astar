@@ -25,7 +25,6 @@ class ApiDayoffController extends Controller
      */
     public function store(Request $request)
     {
-        // mendefinisikan validator
         $validator = Validator::make($request->all(), [
             'id_user' => 'required|integer|max_digits:32',
             'dayoff_for' => 'required|string|min:2|max:10',
@@ -60,25 +59,11 @@ class ApiDayoffController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         //

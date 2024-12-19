@@ -48,9 +48,9 @@ class CollectController extends Controller
                 ->addColumn('actions', function ($data) {
                     return view('components.dashboard.action-buttons', [
                         'id' => $data->id,
-                        'edit' => ['show' => auth()->user()->can('collect-edit'), 'url' => route('collect.edit', $data->id)],
-                        'show' => ['show' => auth()->user()->can('collect-list'), 'url' => route('collect.show', $data->id)],
-                        'delete' => ['show' => auth()->user()->can('collect-delete')]
+                        'edit' => ['show' => Auth::user()->can('collect-edit'), 'url' => route('collect.edit', $data->id)],
+                        'show' => ['show' => Auth::user()->can('collect-list'), 'url' => route('collect.show', $data->id)],
+                        'delete' => ['show' => Auth::user()->can('collect-delete')]
                     ])->render();
                 })
                 ->filter(function ($data) use ($request) {

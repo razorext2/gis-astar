@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 
 // class ApiCollectorController extends Controller
 class ApiCollectController extends Controller
@@ -20,11 +21,12 @@ class ApiCollectController extends Controller
 
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            // $query = Collector::with('pegawaiRelasi')->latest();
-            $query = Collector::latest();
+        $query = Collector::with('pegawaiRelasi:kode_pegawai,full_name')
+            ->orderBy('status', 'asc')
+            ->latest();
 
-            return DataTables::eloquent($query)
+        if ($request->ajax()) {
+            return DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('name_code', function ($data) {
                     return view('components.dashboard.name-w-code', [
@@ -82,9 +84,6 @@ class ApiCollectController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         // Mendefinisikan validator
@@ -157,20 +156,6 @@ class ApiCollectController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        // cari data berdasarkan id
-        $query = Collector::with('photoCollectRelasi', 'pegawaiRelasi')->find($id);
-
-        return new CollectResource(true, 'Detail data', $query);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
         // define validation rules
@@ -225,9 +210,6 @@ class ApiCollectController extends Controller
         return new CollectResource(true, 'Data berhasil ditolak', null);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
         $query = Collector::find($id);
