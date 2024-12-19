@@ -59,6 +59,11 @@ export function showDatatables() {
         }
     });
 
+    // set autorefresh
+    setInterval(() => {
+        $('#table-collector').DataTable().ajax.reload(null, false);
+    }, 300000);
+
     $('#cari').click(function () {
         // Ambil nilai dari semua input filter
         const filters = ['#title', '#kode-pegawai', '#status', '#datepicker-range-start',
