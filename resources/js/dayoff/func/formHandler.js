@@ -28,7 +28,7 @@ export function addDataHandler() {
           timer: 1000
         });
 
-        setTimeout(() => window.location.href = indexUrl, 1000);
+        setTimeout(() => window.location.href = `${APP_URL}/dashboard/dayoff`, 1000);
       },
       error: function (xhr) {
         console.log('error');

@@ -12,7 +12,7 @@ export function getLocation() {
           timer: 1500,
           icon: "error",
           showConfirmButton: false,
-        }).then(() => setTimeout(() => window.location.href = indexUrl, 1000));
+        }).then(() => setTimeout(() => window.location.href = `${APP_URL}/dashboard/collect`, 1000));
       }
     );
   } else {
@@ -22,6 +22,6 @@ export function getLocation() {
       timer: 1500,
       icon: "error",
       showConfirmButton: false,
-    }).then(() => setTimeout(() => window.location.href = indexUrl, 1000));
+    }).then(() => setTimeout(() => window.location.href = `${APP_URL}/dashboard/collect`, 1000));
   }
 }

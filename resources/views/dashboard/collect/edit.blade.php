@@ -121,7 +121,6 @@
 @endsection
 @push('script')
 	<script>
-		const indexUrl = "{{ route('collect.index') }}"
 		const data = @json($data->keterangan);
 	</script>
 	@vite(['resources/js/collect/edit.js'])

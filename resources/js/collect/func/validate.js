@@ -27,7 +27,7 @@ export async function confirmAction() {
         success: function (response) {
           Swal.fire("Laporan berhasil diapprove!", "", "success");
           setTimeout(() => {
-            window.location.href = window.location.href;
+            window.location.href = `${APP_URL}/dashboard/collect`;
           }, 1000);
         },
         error: function () {
@@ -53,7 +53,7 @@ export async function confirmAction() {
       if (text) {
         // For now, just display the message
         $.ajax({
-          url: `../../api/collectors/${id}/deny`,
+          url: `${APP_URL}/api/collectors/${id}/deny`,
           type: 'PATCH',
           cache: false,
           data: {
@@ -63,7 +63,7 @@ export async function confirmAction() {
           success: function (response) {
             Swal.fire("Laporan telah ditolak!", "", "error");
             setTimeout(() => {
-              window.location.href = window.location.href;
+              window.location.href = `${APP_URL}/dashboard/collect`;
             }, 1000);
           },
           error: function () {

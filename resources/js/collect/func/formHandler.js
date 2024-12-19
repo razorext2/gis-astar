@@ -36,7 +36,7 @@ export function addDataHandler() {
           timer: 1000
         });
 
-        setTimeout(() => window.location.href = indexUrl, 1000);
+        setTimeout(() => window.location.href = `${APP_URL}/dashboard/collect`, 1000);
       },
       error: function (xhr) {
         console.log('error');
@@ -52,7 +52,7 @@ export function editDataHandler() {
     e.preventDefault();
 
     const $button = $(this);
-    $button.prop('disabled', true); 
+    $button.prop('disabled', true);
 
     // define var
     let id = $('#id').val();
@@ -63,7 +63,7 @@ export function editDataHandler() {
 
     // ajax request
     $.ajax({
-      url: `/api/collectors/${id}`,
+      url: `${APP_URL}/api/collectors/${id}`,
       type: "PATCH",
       dataType: "json",
       data: {

@@ -75,7 +75,7 @@
 								id="start-time" name="start_time" type="datetime-local" required />
 							<div class="mt-2 text-sm text-red-500" id="alert-tgl_dari"></div>
 						</div>
-						
+
 						<div class="w-full">
 							<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="end-time">End
 								time:</label>
@@ -113,7 +113,6 @@
 @push('script')
 	<script>
 		// kirim kebawah
-		const indexUrl = "{{ route('dayoff.index') }}";
 		const storeUrl = "{{ route('dayoff-api.store') }}";
 		const searchUrl = "{{ route('dayoff.autocomplete') }}";
 		const uploadUrl = "{{ route('dayoff.uploadimage') }}";
