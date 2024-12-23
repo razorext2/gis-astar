@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Artisan;
 
 // breeze for regist, verif, login and logout
 Route::get('/foo', function () {
-     Artisan::call('storage:link');
+    Artisan::call('storage:link');
 });
 
 // landing page

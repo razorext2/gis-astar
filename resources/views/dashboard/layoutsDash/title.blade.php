@@ -36,7 +36,7 @@
 	$pageTitle = $titles[$currentRoute] ?? 'Unknown Page';
 @endphp
 
-<div class="mb-8 mt-2 text-gray-800 dark:text-white">
+<div class="mb-6 mt-2 text-gray-800 dark:text-white">
 	<h2 class="text-2xl font-bold tracking-tight text-gray-950 dark:text-white sm:text-3xl">
 		{{ $pageTitle }}
 	</h2>

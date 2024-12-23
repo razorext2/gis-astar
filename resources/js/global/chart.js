@@ -42,7 +42,7 @@ const bigChart = document.getElementById("tooltip-chart");
 const cardLate = document.getElementById("cardLate-chart");
 const cardOntime = document.getElementById("cardOntime-chart");
 const cardOuttime = document.getElementById("cardOuttime-chart");
-const kecepatan = document.getElementById("Cardkecepatan-chart");
+const cardKecepatan = document.getElementById("cardKecepatan-chart");
 
 function renderChart(element, options) {
     const chart = new ApexCharts(element, options);
@@ -161,14 +161,14 @@ const observer = new IntersectionObserver(
                     renderChart(cardOuttime, options);
                 }
 
-                if (element === kecepatan) {
-                    const fastCounts = JSON.parse(kecepatan.dataset.fastCounts);
+                if (element === cardKecepatan) {
+                    const fastCounts = JSON.parse(cardKecepatan.dataset.fastCounts);
                     options = createOptions(
                         fastCounts,
                         "#f43f5d",
                         "Kecepatan Pulang"
                     );
-                    renderChart(kecepatan, options);
+                    renderChart(cardKecepatan, options);
                 }
 
                 observer.unobserve(element); // Stop observing once the chart is rendered
@@ -183,4 +183,4 @@ if (bigChart) observer.observe(bigChart);
 if (cardLate) observer.observe(cardLate);
 if (cardOntime) observer.observe(cardOntime);
 if (cardOuttime) observer.observe(cardOuttime);
-if (kecepatan) observer.observe(kecepatan);
+if (cardKecepatan) observer.observe(cardKecepatan);

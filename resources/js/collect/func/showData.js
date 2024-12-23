@@ -3,6 +3,8 @@ export function showDatatables() {
         processing: true,
         serverSide: true,
         responsive: true,
+        searching: false,
+        ordering: false,
         "lengthMenu": [10, 25, 50, 75, 100, -1],
         ajax: {
             url: src,

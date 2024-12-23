@@ -21,12 +21,14 @@ class ApiCollectController extends Controller
 
     public function index(Request $request)
     {
-        $query = Collector::with('pegawaiRelasi:kode_pegawai,full_name')
+        $query = Collector::query()
+            ->select('id', 'kode_pegawai', 'title', 'status', 'longitude', 'latitude', 'created_at', 'updated_at')
+            ->with('pegawaiRelasi:kode_pegawai,full_name')
             ->orderBy('status', 'asc')
-            ->latest();
+            ->orderBy('created_at', 'desc');
 
         if ($request->ajax()) {
-            return DataTables::of($query)
+            return DataTables::eloquent($query)
                 ->addIndexColumn()
                 ->editColumn('kode_pegawai', function ($data) {
                     return view('components.dashboard.name-w-code', [
@@ -39,7 +41,6 @@ class ApiCollectController extends Controller
                         'date' => $data->created_at->locale('id')->isoFormat('D MMMM YYYY'),
                         'time' => $data->created_at->locale('id')->isoFormat('HH:mm:ss')
                     ])->render();
-                    // return $data->created_at->locale('id')->isoFormat('D MMM YYYY HH:mm:ss');
                 })
                 ->editColumn('title', function ($data) {
                     return view('components.dashboard.title-w-status', [
@@ -62,26 +63,34 @@ class ApiCollectController extends Controller
                         'location' => $data->location
                     ])->render();
                 })
-                ->filter(function ($data) use ($request) {
+                ->filter(function ($query) use ($request) {
                     if ($request->filled("title")) {
-                        $data->where('title', "LIKE", "%$request->title%");
+                        $query->where('title', "LIKE", "%{$request->title}%");
                     }
 
                     if ($request->filled("kode_pegawai")) {
-                        $data->where('kode_pegawai', "LIKE", "%$request->kode_pegawai%");
+                        $query->where('kode_pegawai', "LIKE", "%{$request->kode_pegawai}%");
                     }
 
                     if ($request->filled("status")) {
-                        $data->where('status', "LIKE", "%$request->status%");
+                        $query->where('status', "LIKE", "%{$request->status}%");
                     }
 
-                    if ($request->filled("startDate")) {
-                        $data->whereBetween('created_at', [$request->startDate, $request->endDate]);
+                    if ($request->filled("startDate") && $request->filled("endDate")) {
+                        $query->whereBetween('created_at', [$request->startDate, $request->endDate]);
                     }
                 })
                 ->rawColumns(['kode_pegawai', 'title', 'actions', 'latitude', 'created_at'])
                 ->make(true);
         }
+    }
+
+
+    public function show($id)
+    {
+        // cari data berdasarkan id
+        $query = Collector::with('pegawaiRelasi')->find($id);
+        return new CollectResource(true, 'Detail data', $query);
     }
 
     public function store(Request $request)

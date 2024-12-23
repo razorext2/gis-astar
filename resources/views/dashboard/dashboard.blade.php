@@ -18,9 +18,8 @@
 						{{ $formattedDateRange }}
 					</div>
 				</div>
-				<div id="tooltip-chart" data-late-counts='@json($lateCounts)'
-					data-ontime-counts='@json($ontimeCounts)' data-outtime-counts="@json($outtimeCounts)"
-					data-fast-counts='@json($fastCounts)' data-dates='@json($dates)'></div>
+				<div id="tooltip-chart" data-late-counts='[2,3,1]' data-ontime-counts='[0,2,3]' data-outtime-counts="[2,0,2]"
+					data-fast-counts='[0,5,0]' data-dates='[1,4,2]'></div>
 				<div class="mt-5 grid grid-cols-1 items-center justify-between border-t border-gray-200 dark:border-gray-700">
 					<div class="flex items-center justify-between pt-5">
 

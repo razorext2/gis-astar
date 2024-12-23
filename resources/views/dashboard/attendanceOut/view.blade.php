@@ -2,13 +2,13 @@
 @section('content')
 	<div class="grid grid-cols-1 gap-6">
 		<div
-			class="dark:bg-[#18181b] dark:ring-gray-700 flex h-auto items-center justify-center rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200">
+			class="flex h-auto items-center justify-center rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700">
 
 			<table id="filter-table">
 				<thead>
 					<tr>
 						<th>
-							<span class="dark:text-white flex items-center text-gray-800">
+							<span class="flex items-center text-gray-800 dark:text-white">
 								Foto
 								<svg class="ms-1 h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 									fill="none" viewBox="0 0 24 24">
@@ -18,7 +18,7 @@
 							</span>
 						</th>
 						<th>
-							<span class="dark:text-white flex items-center text-gray-800">
+							<span class="flex items-center text-gray-800 dark:text-white">
 								Kode Pegawai
 								<svg class="ms-1 h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 									fill="none" viewBox="0 0 24 24">
@@ -28,7 +28,7 @@
 							</span>
 						</th>
 						<th>
-							<span class="dark:text-white flex items-center text-gray-800">
+							<span class="flex items-center text-gray-800 dark:text-white">
 								Full Name
 								<svg class="ms-1 h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 									fill="none" viewBox="0 0 24 24">
@@ -38,7 +38,7 @@
 							</span>
 						</th>
 						<th>
-							<span class="dark:text-white flex items-center text-gray-800">
+							<span class="flex items-center text-gray-800 dark:text-white">
 								Absen Keluar
 								<svg class="ms-1 h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 									fill="none" viewBox="0 0 24 24">
@@ -51,16 +51,23 @@
 				</thead>
 				<tbody>
 					@foreach ($datas as $index => $data)
-						<tr class="dark:text-gray-300 dark:hover:bg-gray-700/50 dark:hover:text-white hover:bg-gray-100 hover:text-black">
+						<tr class="hover:bg-gray-100 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700/50 dark:hover:text-white">
 							<td>
 								@php
 									$photoURL = sha1('libs');
 									$url = $data->photoURL;
 									$path = asset($photoURL . '/' . $url);
+									$defaultImage = asset('assets/img/noImage.webp'); // Ganti dengan path gambar default Anda
 								@endphp
-								<img class="w-32 rounded-lg blur-sm transition-all duration-300 hover:blur-none" src="{{ $path . '.png' }}"
-									alt="image description">
-							</td>
+
+								@if (file_exists(public_path(
+											'storage/labels/' . $data->pegawaiRelasi->kode_pegawai . '/capturedImg/' . $data->photoURL . '.png')))
+									<img class="w-32 rounded-lg blur-sm transition-all duration-300 hover:blur-none" src="{{ $path . '.png' }}"
+										alt="image description">
+								@else
+									<img class="w-32 rounded-lg blur-sm transition-all duration-300 hover:blur-none" src="{{ $defaultImage }}"
+										alt="default image description">
+								@endif
 							<td>{{ $data->pegawaiRelasi->kode_pegawai ?? 'N/A' }}</td>
 							<td>{{ $data->pegawaiRelasi->full_name ?? 'N/A' }}</td>
 							<td>
@@ -69,11 +76,11 @@
 									\Carbon\Carbon::parse($data->jam_keluar)->lt(
 										\Carbon\Carbon::parse(\Carbon\Carbon::parse($data->jam_keluar)->toDateString() . '17:00:00')))
 									<span
-										class="dark:bg-red-900 dark:text-white dark:ring-gray-700 ml-2 rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 shadow-sm ring-1 ring-gray-300">Pulang
+										class="ml-2 rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 shadow-sm ring-1 ring-gray-300 dark:bg-red-900 dark:text-white dark:ring-gray-700">Pulang
 										Cepat</span>
 								@else
 									<span
-										class="dark:bg-green-800 dark:text-white dark:ring-gray-700 ml-2 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 shadow-sm ring-1 ring-gray-300">Tepat
+										class="ml-2 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 shadow-sm ring-1 ring-gray-300 dark:bg-green-800 dark:text-white dark:ring-gray-700">Tepat
 										Waktu</span>
 								@endif
 							</td>

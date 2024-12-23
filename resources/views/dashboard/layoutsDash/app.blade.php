@@ -45,38 +45,12 @@
 		@include('dashboard.layoutsDash.sidebar')
 		<div class="mt-2 max-w-screen-xl p-2 sm:ml-72 sm:mt-0 sm:p-4 xl:ml-[420px]">
 
-			<div class="mb-16 mt-12 rounded-lg p-2 sm:p-4 md:mb-0 md:mt-16">
+			<div class="mt-12 rounded-lg p-2 sm:p-4 md:mb-0 md:mt-16">
 				<!-- carousel for cards -->
-				<div class="mb-3 grid grid-cols-1 gap-6">
-					<div class="relative overflow-hidden">
-						<!-- component -->
-
-						@include('dashboard.layoutsDash.title')
-
-						<div class="p-auto relative m-auto flex flex-col">
-							<!-- Tombol Previous -->
-							<button
-								class="absolute -bottom-2.5 left-0 h-10 w-10 -translate-y-1/2 transform rounded-full border border-gray-300 bg-white p-2 text-gray-800 transition-all duration-500 hover:bg-gray-300 dark:border-gray-700 dark:bg-[#18181b] dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
-								id="prevButton">
-								&#8592;
-							</button>
-
-							<div class="hide-scroll-bar mb-6 flex snap-x scroll-ps-6 overflow-x-scroll pb-8" id="scrollContainer">
-								<div class="flex flex-nowrap gap-6">
-									@include('dashboard.layoutsDash.cardCarousel')
-								</div>
-							</div>
-
-							<!-- Tombol Next -->
-							<button
-								class="absolute -bottom-2.5 right-0 h-10 w-10 -translate-y-1/2 transform rounded-full border border-gray-300 bg-white p-2 text-gray-800 transition-all duration-500 hover:bg-gray-300 dark:border-gray-700 dark:bg-[#18181b] dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
-								id="nextButton">
-								&#8594;
-							</button>
-						</div>
-
-					</div>
+				<div class="grid grid-cols-1">
+					@include('dashboard.layoutsDash.title')
 				</div>
+				<x-card.card-carousel />
 				@yield('content')
 			</div>
 		</div>
