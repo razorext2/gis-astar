@@ -1,10 +1,10 @@
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>FaceID Attendance System</title>
 <meta name="description" content="Is a web-based attendance application for Indodacin using face recognition" />
 <meta name="keywords" content="face, attendance, face-attendance, face attendance, indodacin" />
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
 <!-- Favicons -->
 <link href="{{ asset('assets/img/logo.ico') }}" rel="icon" />
@@ -25,6 +25,7 @@
 		Route::is('pegawai.collectors'))
 	@vite(['resources/js/global/leaflet.js'])
 @endif
+
 
 <link href="https://cdn.datatables.net/2.1.8/css/dataTables.tailwindcss.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/datetime/1.5.4/css/dataTables.dateTime.min.css" rel="stylesheet">

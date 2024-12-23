@@ -30,16 +30,16 @@ class CollectController extends Controller
 
             return DataTables::eloquent($query)
                 ->addIndexColumn()
-                ->addColumn('name_code', function ($data) {
+                ->editColumn('kode_pegawai', function ($data) {
                     return view('components.dashboard.name-w-code', [
                         'name' => $data->pegawaiRelasi->full_name,
                         'code' => $data->kode_pegawai
                     ]);
                 })
-                ->addColumn('created_updated_at', function ($data) {
+                ->editColumn('created_at', function ($data) {
                     return $data->created_at->locale('id')->isoFormat('D MMM YYYY HH:mm:ss');
                 })
-                ->addColumn('title_status', function ($data) {
+                ->editColumn('title', function ($data) {
                     return view('components.dashboard.title-w-status', [
                         'title' => $data->short_title,
                         'status' => $data->status
@@ -70,7 +70,7 @@ class CollectController extends Controller
                         $data->whereBetween('created_at', [$request->startDate, $request->endDate]);
                     }
                 })
-                ->rawColumns(['title_status', 'actions'])
+                ->rawColumns(['kode_pegawai', 'title', 'actions', 'latitude', 'created_at'])
                 ->make(true);
         }
 

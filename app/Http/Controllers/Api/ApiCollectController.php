@@ -28,20 +28,20 @@ class ApiCollectController extends Controller
         if ($request->ajax()) {
             return DataTables::of($query)
                 ->addIndexColumn()
-                ->addColumn('name_code', function ($data) {
+                ->editColumn('kode_pegawai', function ($data) {
                     return view('components.dashboard.name-w-code', [
                         'name' => $data->pegawaiRelasi->full_name,
                         'code' => $data->kode_pegawai
                     ]);
                 })
-                ->addColumn('created_updated_at', function ($data) {
+                ->editColumn('created_at', function ($data) {
                     return view('components.dashboard.custom-date', [
                         'date' => $data->created_at->locale('id')->isoFormat('D MMMM YYYY'),
                         'time' => $data->created_at->locale('id')->isoFormat('HH:mm:ss')
                     ])->render();
                     // return $data->created_at->locale('id')->isoFormat('D MMM YYYY HH:mm:ss');
                 })
-                ->addColumn('title_status', function ($data) {
+                ->editColumn('title', function ($data) {
                     return view('components.dashboard.title-w-status', [
                         'title' => $data->short_title,
                         'status' => $data->status
@@ -55,7 +55,7 @@ class ApiCollectController extends Controller
                         'delete' => ['show' => true]
                     ])->render();
                 })
-                ->editColumn('location', function ($data) {
+                ->editColumn('latitude', function ($data) {
                     return view('components.dashboard.location-w-coordinate', [
                         'lat' => $data->latitude,
                         'long' => $data->longitude,
@@ -79,7 +79,7 @@ class ApiCollectController extends Controller
                         $data->whereBetween('created_at', [$request->startDate, $request->endDate]);
                     }
                 })
-                ->rawColumns(['name_code', 'title_status', 'actions', 'location', 'created_updated_at'])
+                ->rawColumns(['kode_pegawai', 'title', 'actions', 'latitude', 'created_at'])
                 ->make(true);
         }
     }
