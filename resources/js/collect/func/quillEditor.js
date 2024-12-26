@@ -1,4 +1,4 @@
-export function quillText(data = null, editable = true) {
+export function quillEditor(data = null, editable = true) {
   const BlockEmbed = Quill.import('blots/block/embed');
 
   class CustomEmbed extends BlockEmbed {

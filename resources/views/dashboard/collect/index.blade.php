@@ -18,8 +18,36 @@
 			<div
 				class="grid w-full grid-cols-2 gap-2 rounded-xl bg-white p-2 shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 md:gap-4 md:p-6">
 
-				<div class="col-span-2" x-data="{ openRow: null }">
+				{{-- filter --}}
+				<div class="col-span-2 mb-4">
+					<x-filter.filter-bar>
+						@can('collect-approve')
+							<div class="col-span-2 mx-auto flex w-full items-center lg:col-span-1">
+								<x-filter.filter-input-text id="kode-pegawai" name="kode-pegawai" :text="'kode pegawai'">
+									<x-icons.fingerprint class="h-4 w-4 text-gray-500 dark:text-gray-400" />
+								</x-filter.filter-input-text>
+							</div>
+						@endcan
 
+						<div class="col-span-2 mx-auto flex w-full items-center lg:col-span-1">
+							<x-filter.filter-input-text id="title" name="title" :text="'judul laporan'">
+								<x-icons.font-case class="h-4 w-4 text-gray-500 dark:text-gray-400" />
+							</x-filter.filter-input-text>
+						</div>
+
+						<div class="col-span-2 mx-auto w-full items-center lg:col-span-1">
+							<x-filter.filter-input-select id="status" name="status" :options="['0' => 'Pending', '1' => 'Approved', '2' => 'Rejected']" default-option="Filter by status" />
+						</div>
+
+						<div class="col-span-2 mx-auto w-full items-center lg:col-span-1">
+							<x-filter.date-range />
+						</div>
+
+					</x-filter.filter-bar>
+				</div>
+				{{-- end filter --}}
+
+				<div class="col-span-2" x-data="{ openRow: null }">
 					<x-dashboard.table id="table-collector" :tablename="[
 					    '0' => '#',
 					    '1' => 'Aksi',
@@ -35,14 +63,7 @@
 @endsection
 @push('script')
 	<script>
-		let kode_pegawai = "{{ Auth::user()->kode_pegawai }}";
-		const permissionDelete = @json(auth()->user()->can('collect-delete'));
-
-		if (!kode_pegawai) {
-			src = "{{ env('APP_URL') }}/api/collectors";
-		} else {
-			src = "collect";
-		}
+		const collectIndex = "{{ route('collect.index') }}";
 	</script>
 	@vite(['resources/js/collect/index.js'])
 @endpush

@@ -6,7 +6,7 @@ export async function confirmAction() {
     // Display SweetAlert2 dialog
     const result = await Swal.fire({
       title: "Konfirmasi",
-      text: "Apakah kamu yakin ingin approve laporan ini?",
+      text: "Apakah kamu yakin ingin approve permohonan ini?",
       icon: 'info',
       showCancelButton: true,
       showDenyButton: true,
@@ -18,16 +18,17 @@ export async function confirmAction() {
     // If the action is confirmed
     if (result.isConfirmed) {
       $.ajax({
-        url: `${APP_URL}/api/collect-api/${id}/confirm`,
+        url: `${APP_URL}/api/dayoff-api/${id}/approve`,
         type: 'PATCH',
         cache: false,
         data: {
-          "_token": token
+          "_token": token,
+          "validate_by": validate_by
         },
         success: function (response) {
           Swal.fire("Laporan berhasil diapprove!", "", "success");
           setTimeout(() => {
-            window.location.href = `${APP_URL}/dashboard/collect`;
+            window.location.href = `${APP_URL}/dashboard/dayoff`;
           }, 1000);
         },
         error: function () {
@@ -53,17 +54,18 @@ export async function confirmAction() {
       if (text) {
         // For now, just display the message
         $.ajax({
-          url: `${APP_URL}/api/collect-api/${id}/deny`,
+          url: `${APP_URL}/api/dayoff-api/${id}/deny`,
           type: 'PATCH',
           cache: false,
           data: {
             "_token": token,
-            "notes": text // Send the message with the request
+            "notes": text,
+            "validate_by": validate_by
           },
           success: function (response) {
             Swal.fire("Laporan telah ditolak!", "", "error");
             setTimeout(() => {
-              window.location.href = `${APP_URL}/dashboard/collect`;
+              window.location.href = `${APP_URL}/dashboard/dayoff`;
             }, 1000);
           },
           error: function () {

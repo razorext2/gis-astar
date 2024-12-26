@@ -6,7 +6,7 @@
 				<header class="flex flex-row">
 
 					<form id="index-dayoff" action="{{ route('dayoff.index') }}"></form>
-					<x-button.danger class="me-4" form="index-dayoff" type="submit">
+					<x-button.danger class="my-auto me-4 max-h-10" form="index-dayoff" type="submit">
 						<x-slot name="icon">
 							<x-icons.angle-left class="icon h-6 w-6 text-red-500 dark:text-white" />
 						</x-slot>
@@ -22,7 +22,7 @@
 					{{ __('Silahkan sesuaikan data dibawah ini dengan data yang benar.') }}
 				</p>
 
-				<form class="mt-4" id="content-form" action="{{ route('dayoff.store') }}" method="POST">
+				<form class="mt-4" method="POST">
 					@csrf
 					<div class="mb-4 grid grid-cols-2 gap-6 sm:mb-5 sm:gap-6">
 
@@ -51,7 +51,7 @@
 									class="block w-full cursor-not-allowed rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:placeholder-gray-400"
 									id="kode_pegawai" name="kode_pegawai" type="text" value="{{ $data->kode_pegawai }}" required readonly>
 							@endif
-							<div class="mt-2 text-sm text-red-500" id="alert-id_user"></div>
+							<div class="mt-2 text-sm text-red-500" id="alert-kode_pegawai"></div>
 						</div>
 
 						<div class="col-span-2 w-full">
@@ -93,11 +93,12 @@
 						<div class="h-32 w-full dark:bg-white" id="editor"></div>
 						<input id="keterangan" name="keterangan" type="hidden">
 						<div class="mt-2 text-sm text-red-500" id="alert-keterangan"></div>
+						<div class="mt-2 text-sm text-red-500" id="alert-image"></div>
 					</div>
 
 					<div class="relative w-full">
 
-						<x-button.primary id="store" data-url="{{ route('dayoff.store') }}" type="button">
+						<x-button.primary id="store" type="button">
 							<x-slot name="icon">
 								<x-icons.angle-right class="h-5 w-5 text-blue-500 dark:text-white" />
 							</x-slot>
@@ -112,7 +113,6 @@
 @endsection
 @push('script')
 	<script>
-		// kirim kebawah
 		const storeUrl = "{{ route('dayoff-api.store') }}";
 		const searchUrl = "{{ route('dayoff.autocomplete') }}";
 		const uploadUrl = "{{ route('dayoff.uploadimage') }}";

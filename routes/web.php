@@ -68,8 +68,6 @@ Route::middleware('auth')->group(function () {
         // route dayoff
         Route::get('dayoff/autocomplete/', [DayoffController::class, 'autocomplete'])->name('dayoff.autocomplete');
         Route::post('dayoff/upload-image', [DayoffController::class, 'uploadImage'])->name('dayoff.uploadimage');
-        Route::put('dayoff/confirm/{dayoff}', [DayoffController::class, 'confirm'])->name('dayoff.confirm');
-        Route::put('dayoff/ignore/{dayoff}', [DayoffController::class, 'ignore'])->name('dayoff.ignore');
         Route::resource('dayoff', DayoffController::class);
 
         // route permission

@@ -27,27 +27,20 @@ class DayoffController extends Controller
 	public function index(Request $request)
 	{
 		if ($request->ajax()) {
-			// Start building the query
-			if (!Auth::user()->kode_pegawai) {
-				// Fetch all Dayoff records with pegawaiRelasi relationship for specific roles
-				$query = Dayoff::with('pegawaiRelasi')
-					->latest()
-					->get();
-			} else {
-				// Fetch only Dayoff records for the currently logged-in user's pegawaiRelasi
-				$query = Dayoff::with('pegawaiRelasi')
-					->where('id_user', Auth::user()->kode_pegawai)
-					->latest()
-					->get();
+
+			$query = Dayoff::with('pegawaiRelasi:kode_pegawai,full_name');
+
+			if (!Auth::user()->can('dayoff-confirm')) {
+				$query->where('kode_pegawai', Auth::user()->kode_pegawai);
 			}
 
 			// Fetch the filtered data with pagination for DataTables
 			return DataTables::of($query)
 				->addIndexColumn()
-				->editColumn('id_user', function ($data) {
+				->editColumn('kode_pegawai', function ($data) {
 					return view('components.dashboard.name-w-code', [
 						'name' => $data->pegawaiRelasi->full_name,
-						'code' => $data->id_user
+						'code' => $data->kode_pegawai
 					]);
 				})
 				->editColumn('status', function ($data) {
@@ -62,25 +55,43 @@ class DayoffController extends Controller
 						'updated' => 'To: ' . Carbon::parse($data->tgl_hingga)->locale('id')->isoFormat('D MMM YYYY')
 					])->render();
 				})
-				->editColumn('jlh_hari', function ($data) {
+				->editColumn('tgl_dari', function ($data) {
 					return view('components.dashboard.name-w-code', [
 						'code' => 'Total hari',
-						'name' => Carbon::parse($data->tgl_dari)->diffInDays(Carbon::parse($data->tgl_hingga)) + 1 . ' hari',
+						'name' => round(Carbon::parse($data->tgl_dari)->diffInDays(Carbon::parse($data->tgl_hingga)) + 1) . ' hari',
 					])->render();
 				})
 				->addColumn('actions', function ($data) {
 					return view('components.dashboard.action-buttons', [
 						'id' => $data->id,
-						'edit' => ['show' => auth()->user()->can('dayoff-edit'), 'url' => route('dayoff.edit', $data->id)],
-						'show' => ['show' => auth()->user()->can('dayoff-list'), 'url' => route('dayoff.show', $data->id)],
-						'delete' => ['show' => auth()->user()->can('dayoff-delete')]
+						'edit' => ['show' => Auth::user()->can('dayoff-edit'), 'url' => route('dayoff.edit', $data->id)],
+						'show' => ['show' => Auth::user()->can('dayoff-list'), 'url' => route('dayoff.show', $data->id)],
+						'delete' => ['show' => Auth::user()->can('dayoff-delete')]
 					])->render();
 				})
-				->rawColumns(['status', 'id_user', 'created_at', 'jlh_hari', 'actions'])
+				->filter(function ($query) use ($request) {
+					if ($request->filled("dayoff_for")) {
+						$query->where('dayoff_for', "=", $request->dayoff_for);
+					}
+
+					if ($request->filled("kode_pegawai")) {
+						$query->where('kode_pegawai', "LIKE", "%{$request->kode_pegawai}%");
+					}
+
+					if ($request->filled("status")) {
+						$query->where('status', "=", $request->status);
+					}
+
+					if ($request->filled("startDate") && $request->filled("endDate")) {
+						$query->whereBetween('created_at', [$request->startDate, $request->endDate]);
+					}
+				})
+				->orderColumn('created_at', '-created_at $1')
+				->rawColumns(['status', 'kode_pegawai', 'created_at', 'tgl_dari', 'actions'])
 				->make(true);
-		} else {
-			return view('dashboard.dayoff.index');
 		}
+
+		return view('dashboard.dayoff.index');
 	}
 
 	/**
@@ -125,8 +136,8 @@ class DayoffController extends Controller
 	 */
 	public function show($id)
 	{
-		$dayoff = Dayoff::with('pegawaiRelasi')->findOrFail($id);
-		return view('dashboard.dayoff.detail', compact('dayoff'));
+		$data = Dayoff::with('pegawaiRelasi')->findOrFail($id);
+		return view('dashboard.dayoff.detail', compact('data'));
 	}
 
 	/**
@@ -134,42 +145,9 @@ class DayoffController extends Controller
 	 */
 	public function edit($id)
 	{
-		//
-		$dayoff = Dayoff::with('pegawaiRelasi')->findOrFail($id);
+		$data = Dayoff::with('pegawaiRelasi')->findOrFail($id);
 
-		return view('dashboard.dayoff.edit', compact('dayoff'));
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 */
-	public function update(Request $request, Dayoff $dayoff)
-	{
-		//
-		$dayoff->update([
-			'id_user' => $request->input('kode_pegawai'),
-			'dayoff_for' => $request->input('dayoff_for'),
-			'url' => null,
-			'tgl_dari' => $request->input('start_time'),
-			'tgl_hingga' => $request->input('end_time'),
-			'keterangan' => $request->input('keterangan'),
-		]);
-
-		return redirect()->route('dayoff.index')->with('status', 'Berhasil mengubah pengajuan');
-	}
-
-	public function confirm(Dayoff $dayoff)
-	{
-		$dayoff->update(['status' => 1]);
-
-		return redirect()->route('dayoff.index')->with('status', 'Berhasil menyetujui pengajuan');
-	}
-
-	public function ignore(Dayoff $dayoff)
-	{
-		$dayoff->update(['status' => 3]);
-
-		return redirect()->route('dayoff.index')->with('status', 'Berhasil menolak pengajuan');
+		return view('dashboard.dayoff.edit', compact('data'));
 	}
 
 	/**

@@ -1,7 +1,5 @@
-import { zoomImage } from "./func/zoomImage";
 import { confirmAction } from "./func/validate";
 
 document.addEventListener("DOMContentLoaded", function () {
-  zoomImage();
   confirmAction();
 })

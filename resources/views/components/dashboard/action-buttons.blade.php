@@ -1,10 +1,4 @@
 <div class="relative" x-data="{ open: false }">
-	{{-- <button
-		class="action-button z-20 inline-flex items-center rounded-lg bg-blue-700 p-1.5 text-center text-sm font-medium text-white focus:ring-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-		type="button" @click="open = !open" x-transition>
-		<x-icons.three-dots class="h-4 w-4 rotate-90" />
-	</button> --}}
-
 	<x-button.primary type="button" @click="open = !open" x-transition="">
 		<x-icons.three-dots class="h-4 w-4 rotate-90" />
 	</x-button.primary>

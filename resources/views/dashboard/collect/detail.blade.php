@@ -7,7 +7,7 @@
 				<header class="flex flex-row">
 
 					<form id="index-collector" action="{{ route('collect.index') }}"></form>
-					<x-button.danger class="me-4" id="back-button" form="index-collector" type="submit">
+					<x-button.danger class="my-auto me-4 max-h-10" id="back-button" form="index-collector" type="submit">
 						<x-slot name="icon">
 							<x-icons.angle-left class="icon h-6 w-6 text-red-500 dark:text-white" />
 						</x-slot>
@@ -22,7 +22,7 @@
 
 			<div class="w-full">
 
-				<div class="grid gap-2 md:grid-cols-2" id="laporan-content">
+				<div class="grid gap-2 md:grid-cols-2">
 					<div
 						class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700 lg:col-span-1">
 						<p class="text-sm text-gray-600 dark:text-gray-300">Kode Pegawai</p>
@@ -86,7 +86,7 @@
 					<div
 						class="col-span-2 items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
 						<p class="text-sm text-gray-600 dark:text-gray-300">Keterangan</p>
-						<div class="text-navy-700 quill-content text-wrap !mt-1 w-full !border-none !p-0 !text-base dark:text-white"
+						<div class="text-navy-700 quill-content !mt-1 w-full text-wrap !border-none !p-0 !text-base dark:text-white"
 							id="editor">
 							{!! $data->keterangan !!}
 						</div>
@@ -140,10 +140,6 @@
 		</div>
 	</div>
 @endsection
-
 @push('script')
-	<script>
-		const data = @json($data->keterangan);
-	</script>
 	@vite('resources/js/collect/detail.js')
 @endpush

@@ -9,9 +9,6 @@ use Yajra\DataTables\Facades\DataTables;
 
 class CollectController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     function __construct()
     {
         $this->middleware('permission:collect-list', ['only' => 'index']);
@@ -19,13 +16,16 @@ class CollectController extends Controller
         $this->middleware('permission:collect-edit', ['only' => 'edit']);
     }
 
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            if (Auth::user()->can('collect-approve')) {
-                $query = Collector::latest();
-            } else {
-                $query = Collector::where('kode_pegawai', '=', Auth::user()->kode_pegawai)->latest();
+            $query = Collector::with('pegawaiRelasi:kode_pegawai,full_name');
+
+            if (!Auth::user()->can('collect-approve')) {
+                $query->where('kode_pegawai', Auth::user()->kode_pegawai);
             }
 
             return DataTables::eloquent($query)
@@ -37,7 +37,10 @@ class CollectController extends Controller
                     ]);
                 })
                 ->editColumn('created_at', function ($data) {
-                    return $data->created_at->locale('id')->isoFormat('D MMM YYYY HH:mm:ss');
+                    return view('components.dashboard.custom-date', [
+                        'date' => $data->created_at->locale('id')->isoFormat('D MMMM YYYY'),
+                        'time' => $data->created_at->locale('id')->isoFormat('HH:mm:ss')
+                    ])->render();
                 })
                 ->editColumn('title', function ($data) {
                     return view('components.dashboard.title-w-status', [
@@ -53,25 +56,33 @@ class CollectController extends Controller
                         'delete' => ['show' => Auth::user()->can('collect-delete')]
                     ])->render();
                 })
-                ->filter(function ($data) use ($request) {
+                ->editColumn('latitude', function ($data) {
+                    return view('components.dashboard.location-w-coordinate', [
+                        'lat' => $data->latitude,
+                        'long' => $data->longitude,
+                        'location' => $data->location
+                    ])->render();
+                })
+                ->filter(function ($query) use ($request) {
                     if ($request->filled("title")) {
-                        $data->where('title', "LIKE", "%$request->title%");
+                        $query->where('title', "LIKE", "%{$request->title}%");
                     }
 
                     if ($request->filled("kode_pegawai")) {
-                        $data->where('kode_pegawai', "LIKE", "%$request->kode_pegawai%");
+                        $query->where('kode_pegawai', "LIKE", "%{$request->kode_pegawai}%");
                     }
 
                     if ($request->filled("status")) {
-                        $data->where('status', "LIKE", "%$request->status%");
+                        $query->where('status', "LIKE", "%{$request->status}%");
                     }
 
-                    if ($request->filled("startDate")) {
-                        $data->whereBetween('created_at', [$request->startDate, $request->endDate]);
+                    if ($request->filled("startDate") && $request->filled("endDate")) {
+                        $query->whereBetween('created_at', [$request->startDate, $request->endDate]);
                     }
                 })
+                ->orderColumn('created_at', '-created_at $1')
                 ->rawColumns(['kode_pegawai', 'title', 'actions', 'latitude', 'created_at'])
-                ->make(true);
+                ->toJson();
         }
 
         return view('dashboard.collect.index');
@@ -90,7 +101,7 @@ class CollectController extends Controller
      */
     public function show($id)
     {
-        $data = Collector::find($id);
+        $data = Collector::findOrFail($id);
         return view('dashboard.collect.detail', compact('data'));
     }
 
@@ -99,7 +110,7 @@ class CollectController extends Controller
      */
     public function edit($id)
     {
-        $data = Collector::find($id);
+        $data = Collector::findOrFail($id);
         return view('dashboard.collect.edit', compact('data'));
     }
 }

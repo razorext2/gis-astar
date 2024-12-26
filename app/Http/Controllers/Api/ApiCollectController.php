@@ -16,83 +16,17 @@ use Illuminate\Support\Facades\Cache;
 class ApiCollectController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display spesicif list of the resource.
      */
-
-    public function index(Request $request)
-    {
-        $query = Collector::query()
-            ->select('id', 'kode_pegawai', 'title', 'status', 'longitude', 'latitude', 'created_at', 'updated_at')
-            ->with('pegawaiRelasi:kode_pegawai,full_name')
-            ->orderBy('status', 'asc')
-            ->orderBy('created_at', 'desc');
-
-        if ($request->ajax()) {
-            return DataTables::eloquent($query)
-                ->addIndexColumn()
-                ->editColumn('kode_pegawai', function ($data) {
-                    return view('components.dashboard.name-w-code', [
-                        'name' => $data->pegawaiRelasi->full_name,
-                        'code' => $data->kode_pegawai
-                    ]);
-                })
-                ->editColumn('created_at', function ($data) {
-                    return view('components.dashboard.custom-date', [
-                        'date' => $data->created_at->locale('id')->isoFormat('D MMMM YYYY'),
-                        'time' => $data->created_at->locale('id')->isoFormat('HH:mm:ss')
-                    ])->render();
-                })
-                ->editColumn('title', function ($data) {
-                    return view('components.dashboard.title-w-status', [
-                        'title' => $data->short_title,
-                        'status' => $data->status
-                    ])->render();
-                })
-                ->addColumn('actions', function ($data) {
-                    return view('components.dashboard.action-buttons', [
-                        'id' => $data->id,
-                        'edit' => ['show' => true, 'url' => route('collect.edit', $data->id)],
-                        'show' => ['show' => true, 'url' => route('collect.show', $data->id)],
-                        'delete' => ['show' => true]
-                    ])->render();
-                })
-                ->editColumn('latitude', function ($data) {
-                    return view('components.dashboard.location-w-coordinate', [
-                        'lat' => $data->latitude,
-                        'long' => $data->longitude,
-                        'location' => $data->location
-                    ])->render();
-                })
-                ->filter(function ($query) use ($request) {
-                    if ($request->filled("title")) {
-                        $query->where('title', "LIKE", "%{$request->title}%");
-                    }
-
-                    if ($request->filled("kode_pegawai")) {
-                        $query->where('kode_pegawai', "LIKE", "%{$request->kode_pegawai}%");
-                    }
-
-                    if ($request->filled("status")) {
-                        $query->where('status', "LIKE", "%{$request->status}%");
-                    }
-
-                    if ($request->filled("startDate") && $request->filled("endDate")) {
-                        $query->whereBetween('created_at', [$request->startDate, $request->endDate]);
-                    }
-                })
-                ->rawColumns(['kode_pegawai', 'title', 'actions', 'latitude', 'created_at'])
-                ->make(true);
-        }
-    }
-
-
     public function show($id)
     {
-        // cari data berdasarkan id
         $query = Collector::with('pegawaiRelasi')->find($id);
         return new CollectResource(true, 'Detail data', $query);
     }
 
+    /**
+     * Save resource to database.
+     */
     public function store(Request $request)
     {
         // Mendefinisikan validator
@@ -103,8 +37,8 @@ class ApiCollectController extends Controller
             'longitude' => 'required|string',
             'latitude' => 'required|string',
             'location' => 'required|string|min:1',
-            'images' => 'required|array', // Menambahkan validasi untuk array gambar
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi tiap gambar
+            'images' => 'required|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // Validasi data
@@ -115,7 +49,7 @@ class ApiCollectController extends Controller
             ], 422); // Mengirim status 422 untuk validasi gagal
         }
 
-        // Menambah data ke tabel Collector jika validasi berhasil
+        // Menambah data jika validasi berhasil
         $data = $validator->validated();
         $collector = Collector::create($data);
 
@@ -165,6 +99,9 @@ class ApiCollectController extends Controller
         ]);
     }
 
+    /**
+     * Update resource from database.
+     */
     public function update(Request $request, $id)
     {
         // define validation rules
@@ -187,17 +124,20 @@ class ApiCollectController extends Controller
 
         // Jika request JSON, kembalikan response JSON
         if ($request->isJson()) {
-            return new CollectResource(true, 'Data berhasil ditambah!', $query);
+            return new CollectResource(true, 'Data berhasil diubah!', $query);
         }
 
         // Response default jika bukan request JSON
         return response()->json([
             'success' => true,
-            'message' => 'Data berhasil ditambah!',
+            'message' => 'Data berhasil diubah!',
             'data' => $query
         ]);
     }
 
+    /**
+     * Confirm laporan.
+     */
     public function confirmCollect($id)
     {
         $query = Collector::find($id);
@@ -208,6 +148,9 @@ class ApiCollectController extends Controller
         return new CollectResource(true, 'Data berhasil dikonfirmasi', null);
     }
 
+    /**
+     * Tolak laporan dengan notes.
+     */
     public function denyCollect(Request $request, $id)
     {
         $query = Collector::find($id);
@@ -219,6 +162,9 @@ class ApiCollectController extends Controller
         return new CollectResource(true, 'Data berhasil ditolak', null);
     }
 
+    /**
+     * Delete the resource.
+     */
     public function destroy($id)
     {
         $query = Collector::find($id);

@@ -9,10 +9,10 @@ class Dayoff extends Model
 {
     use HasFactory;
     protected $table = 'tb_dayoff';
-    protected $fillable = ['id_user', 'dayoff_for', 'url', 'tgl_dari', 'tgl_hingga', 'keterangan', 'status'];
+    protected $fillable = ['kode_pegawai', 'dayoff_for', 'url', 'tgl_dari', 'tgl_hingga', 'keterangan', 'status', 'notes', 'validate_by'];
 
     public function pegawaiRelasi()
     {
-        return $this->belongsTo(Pegawai::class, 'id_user', 'kode_pegawai');
+        return $this->belongsTo(Pegawai::class, 'kode_pegawai', 'kode_pegawai');
     }
 }

@@ -8,7 +8,7 @@
 					<header class="flex flex-row">
 
 						<form id="index-collector" action="{{ route('collect.index') }}"></form>
-						<x-button.danger class="me-4 flex" form="index-collector" type="submit">
+						<x-button.danger class="my-auto me-4 max-h-10" form="index-collector" type="submit">
 							<x-slot name="icon">
 								<x-icons.angle-left class="icon h-6 w-6 text-red-500 dark:text-white" />
 							</x-slot>

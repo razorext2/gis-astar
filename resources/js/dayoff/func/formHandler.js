@@ -6,7 +6,7 @@ export function addDataHandler() {
     $button.prop('disabled', true); // Disable the button to prevent multiple clicks
 
     let formData = new FormData();
-    formData.append("id_user", $("#kode_pegawai").val());
+    formData.append("kode_pegawai", $("#kode_pegawai").val());
     formData.append("dayoff_for", $("#dayoff_for").val());
     formData.append("tgl_dari", $("#start-time").val());
     formData.append("tgl_hingga", $("#end-time").val());
@@ -23,15 +23,67 @@ export function addDataHandler() {
       success: function () {
         Swal.fire({
           icon: "success",
-          title: "Laporan berhasil ditambahkan!",
+          title: "Permohonan berhasil ditambahkan!",
+          showConfirmButton: false,
+          timer: 1000
+        });
+        setTimeout(() => window.location.href = `${APP_URL}/dashboard/dayoff`, 1000);
+      },
+      error: function (xhr) {
+        handleFormErrors(xhr.responseJSON.errors);
+        $button.prop('disabled', false); // Use the stored button reference
+      }
+    });
+  });
+}
+
+export function editDataHandler() {
+  $('#store').click(function (e) {
+    e.preventDefault();
+
+    const $button = $(this);
+    $button.prop('disabled', true);
+
+    // define var
+    // let formData = new FormData();
+    let id = $('#id').val();
+
+    // formData.append("dayoff_for", $("#dayoff_for").val());
+    // formData.append("tgl_dari", $("#tgl_dari").val());
+    // formData.append("tgl_hingga", $("#tgl_hingga").val());
+    // formData.append("keterangan", $("#keterangan").val());
+    // formData.append("_token", $("meta[name='csrf-token']").attr("content"));
+
+    let dayoff_for = $("#dayoff_for").val();
+    let tgl_dari = $("#tgl_dari").val();
+    let tgl_hingga = $("#tgl_hingga").val();
+    let keterangan = $("#keterangan").val();
+    let token = $("meta[name='csrf-token']").attr("content");
+
+    // ajax request
+    $.ajax({
+      url: `${APP_URL}/api/dayoff-api/${id}`,
+      type: "PATCH",
+      dataType: "json",
+      data: {
+        "dayoff_for": dayoff_for,
+        "tgl_dari": tgl_dari,
+        "tgl_hingga": tgl_hingga,
+        "keterangan": keterangan,
+        "_token": token
+      },
+      success: function () {
+        // tampilkan alert
+        window.Swal.fire({
+          icon: "success",
+          title: "Permohonan berhasil diubah!",
           showConfirmButton: false,
           timer: 1000
         });
 
-        setTimeout(() => window.location.href = `${APP_URL}/dashboard/dayoff`, 1000);
+        setTimeout(() => window.location.reload(), 1000);
       },
       error: function (xhr) {
-        console.log('error');
         handleFormErrors(xhr.responseJSON.errors);
         $button.prop('disabled', false); // Use the stored button reference
       }

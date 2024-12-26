@@ -3,11 +3,9 @@ export function showDatatables() {
         processing: true,
         serverSide: true,
         responsive: true,
-        searching: false,
-        ordering: false,
         "lengthMenu": [10, 25, 50, 75, 100, -1],
         ajax: {
-            url: src,
+            url: collectIndex,
             type: "GET",
             data: function (d) {
                 d.title = $('#title').val();
@@ -18,14 +16,13 @@ export function showDatatables() {
             }
         },
         columns: [{
-            // render nomor, autoIndex
             data: "DT_RowIndex",
             name: "DT_RowIndex",
-            searchable: false,
             orderable: false,
         }, {
             data: 'actions',
             name: 'actions',
+            orderable: false,
         }, {
             data: "kode_pegawai",
             name: "kode_pegawai",
@@ -41,7 +38,16 @@ export function showDatatables() {
         {
             data: "created_at",
             name: "created_at",
+        },
+        {
+            data: "status", // Kolom status untuk sorting
+            name: "status",
+            visible: false, // Tidak ditampilkan di tabel
         }],
+        order: [
+            [6, 'asc'],
+            [5, 'asc'],
+        ],
         dom: `<"absolute top-1 md:left-0 mt-14 lg:mt-0 dark:text-white max-w-xs"B><"text-left lg:text-right dark:text-white"l><"relative overflow-x-auto w-full mt-20 lg:mt-4"t><"grid text-center gap-6 lg:grid-cols-2 mt-4 dark:text-white"<"lg:mt-3 lg:text-left"i><"lg:text-right dark:text-gray-900"p>>`,
         buttons: [{
             extend: "csv",

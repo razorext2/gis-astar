@@ -8,7 +8,7 @@
 				<header class="flex flex-row">
 
 					<form id="index-collector" action="{{ route('collect.index') }}"></form>
-					<x-button.danger class="me-4" form="index-collector" type="submit">
+					<x-button.danger class="my-auto me-4 max-h-10" form="index-collector" type="submit">
 						<x-slot name="icon">
 							<x-icons.angle-left class="icon h-6 w-6 text-red-500 dark:text-white" />
 						</x-slot>
@@ -84,7 +84,7 @@
 					<div class="mb-4 text-sm text-red-500" id="alert-coordinate"></div>
 
 					<div class="relative w-full">
-						<x-button.primary id="store" data-url="{{ route('collectors.store') }}" type="button">
+						<x-button.primary id="store" type="button">
 							<x-slot name="icon">
 								<x-icons.angle-right class="h-5 w-5 text-blue-500 dark:text-white" />
 							</x-slot>
@@ -129,9 +129,7 @@
 @endsection
 @push('script')
 	<script>
-		// kirim kebawah
-
-		const storeUrl = "{{ route('collectors.store') }}";
+		const storeUrl = "{{ route('collect-api.store') }}";
 	</script>
 	@vite(['resources/js/collect/add.js'])
 @endpush

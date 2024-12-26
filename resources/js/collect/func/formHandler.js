@@ -35,11 +35,9 @@ export function addDataHandler() {
           showConfirmButton: false,
           timer: 1000
         });
-
         setTimeout(() => window.location.href = `${APP_URL}/dashboard/collect`, 1000);
       },
       error: function (xhr) {
-        console.log('error');
         handleFormErrors(xhr.responseJSON.errors);
         $button.prop('disabled', false); // Use the stored button reference
       }
@@ -63,7 +61,7 @@ export function editDataHandler() {
 
     // ajax request
     $.ajax({
-      url: `${APP_URL}/api/collectors/${id}`,
+      url: `${APP_URL}/api/collect-api/${id}`,
       type: "PATCH",
       dataType: "json",
       data: {
@@ -90,7 +88,6 @@ export function editDataHandler() {
     });
   });
 }
-
 
 function handleFormErrors(errors) {
   for (let field in errors) {

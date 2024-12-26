@@ -1,9 +1,7 @@
 import { quillEditor } from "./func/quillEditor";
-import { zoomImage } from "./func/zoomImage";
 import { editDataHandler } from "./func/formHandler";
 
 document.addEventListener("DOMContentLoaded", function () {
   quillEditor(data, true);
-  zoomImage();
   editDataHandler();
 })

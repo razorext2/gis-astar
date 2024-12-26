@@ -14,7 +14,7 @@ export function deleteData() {
       if (result.isConfirmed) {
         // fetch data to ajax
         $.ajax({
-          url: `${APP_URL}/api/collect-api/${id}`,
+          url: `${APP_URL}/api/dayoff-api/${id}`,
           type: "DELETE",
           cache: false,
           data: {
@@ -28,7 +28,7 @@ export function deleteData() {
               timer: 1000
             });
 
-            $('#table-collector').DataTable().ajax.reload(null, false);
+            $('#table-dayoff').DataTable().ajax.reload(null, false);
           }
         })
       }

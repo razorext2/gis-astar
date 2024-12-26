@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Api\ApiCollectController;
 use App\Http\Controllers\Api\ApiDayoffController;
-use App\Http\Controllers\PegawaiController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -10,12 +9,14 @@ use Illuminate\Support\Facades\Http;
 
 
 // laporan kolektor
-Route::apiResource('collectors', ApiCollectController::class);
-Route::patch('collectors/{collector}/confirm', [ApiCollectController::class, 'confirmCollect']);
-Route::patch('collectors/{collector}/deny', [ApiCollectController::class, 'denyCollect']);
+Route::apiResource('collect-api', ApiCollectController::class);
+Route::patch('collect-api/{id}/confirm', [ApiCollectController::class, 'confirmCollect']);
+Route::patch('collect-api/{id}/deny', [ApiCollectController::class, 'denyCollect']);
 
 // pengajuan off
 Route::apiResource('dayoff-api', ApiDayoffController::class);
+Route::patch('dayoff-api/{id}/approve', [ApiDayoffController::class, 'approve']);
+Route::patch('dayoff-api/{id}/deny', [ApiDayoffController::class, 'deny']);
 
 // api ke server utama
 Route::post('proxy/server/attendance', function (Request $request) {
