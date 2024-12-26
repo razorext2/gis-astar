@@ -9,6 +9,7 @@ use App\Models\Pegawai;
 use yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class DayoffController extends Controller
 {
@@ -27,12 +28,15 @@ class DayoffController extends Controller
 	public function index(Request $request)
 	{
 		if ($request->ajax()) {
+			$query = Cache::remember('dayoff_all_datas', 300, function () {
+				$data = Dayoff::with('pegawaiRelasi:kode_pegawai,full_name');
 
-			$query = Dayoff::with('pegawaiRelasi:kode_pegawai,full_name');
+				if (!Auth::user()->can('dayoff-confirm')) {
+					$data->where('kode_pegawai', Auth::user()->kode_pegawai);
+				}
 
-			if (!Auth::user()->can('dayoff-confirm')) {
-				$query->where('kode_pegawai', Auth::user()->kode_pegawai);
-			}
+				return $data->latest()->get();
+			});
 
 			// Fetch the filtered data with pagination for DataTables
 			return DataTables::of($query)
@@ -86,7 +90,7 @@ class DayoffController extends Controller
 						$query->whereBetween('created_at', [$request->startDate, $request->endDate]);
 					}
 				})
-				->orderColumn('created_at', '-created_at $1')
+				// ->orderColumn('created_at', '-created_at $1')
 				->rawColumns(['status', 'kode_pegawai', 'created_at', 'tgl_dari', 'actions'])
 				->make(true);
 		}
@@ -136,7 +140,10 @@ class DayoffController extends Controller
 	 */
 	public function show($id)
 	{
-		$data = Dayoff::with('pegawaiRelasi')->findOrFail($id);
+		$data = Cache::remember('dayoff_data_' . $id, 300, function () use ($id) {
+			return Dayoff::with('pegawaiRelasi')->findOrFail($id);
+		});
+
 		return view('dashboard.dayoff.detail', compact('data'));
 	}
 
@@ -145,7 +152,9 @@ class DayoffController extends Controller
 	 */
 	public function edit($id)
 	{
-		$data = Dayoff::with('pegawaiRelasi')->findOrFail($id);
+		$data = Cache::remember('dayoff_data_' . $id, 300, function () use ($id) {
+			return Dayoff::with('pegawaiRelasi')->findOrFail($id);
+		});
 
 		return view('dashboard.dayoff.edit', compact('data'));
 	}
@@ -155,7 +164,6 @@ class DayoffController extends Controller
 	 */
 	public function destroy($id)
 	{
-		//
 		$dayoff = Dayoff::find($id);
 		$dayoff->delete();
 

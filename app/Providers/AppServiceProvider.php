@@ -2,12 +2,9 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\View;
-use App\Models\Attendance;
-use App\Models\AttendanceOut;
-use Carbon\Carbon;
+use App\Models\Dayoff;
+use App\Observers\DayoffObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Dayoff::observe(DayoffObserver::class);
         $this->app['url']->forceRootUrl($this->app['config']->get('app.url'));
     }
 }

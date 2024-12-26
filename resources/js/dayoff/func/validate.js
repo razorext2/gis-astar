@@ -63,7 +63,7 @@ export async function confirmAction() {
             "validate_by": validate_by
           },
           success: function (response) {
-            Swal.fire("Laporan telah ditolak!", "", "error");
+            Swal.fire("Permohonan telah ditolak!", "", "error");
             setTimeout(() => {
               window.location.href = `${APP_URL}/dashboard/dayoff`;
             }, 1000);

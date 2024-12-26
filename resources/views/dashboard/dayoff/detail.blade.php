@@ -6,8 +6,8 @@
 			<div class="w-full">
 				<header class="flex flex-row">
 
-					<form id="index-collector" action="{{ route('collect.index') }}"></form>
-					<x-button.danger class="my-auto me-4 max-h-10" id="back-button" form="index-collector" type="submit">
+					<form id="index-dayoff" action="{{ route('dayoff.index') }}"></form>
+					<x-button.danger class="my-auto me-4 max-h-10" id="back-button" form="index-dayoff" type="submit">
 						<x-slot name="icon">
 							<x-icons.angle-left class="icon h-6 w-6 text-red-500 dark:text-white" />
 						</x-slot>
