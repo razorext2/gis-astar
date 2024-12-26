@@ -28,14 +28,14 @@ class DayoffController extends Controller
 	public function index(Request $request)
 	{
 		if ($request->ajax()) {
-			$query = Cache::remember('dayoff_all_datas', 300, function () {
+			$query = Cache::remember('dayoff_all_datas', 1800, function () {
 				$data = Dayoff::with('pegawaiRelasi:kode_pegawai,full_name');
 
 				if (!Auth::user()->can('dayoff-confirm')) {
 					$data->where('kode_pegawai', Auth::user()->kode_pegawai);
 				}
 
-				return $data->latest()->get();
+				return $data->get();
 			});
 
 			// Fetch the filtered data with pagination for DataTables

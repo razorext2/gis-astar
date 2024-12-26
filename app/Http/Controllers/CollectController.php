@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Collector;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Yajra\DataTables\Facades\DataTables;
 
 class CollectController extends Controller
@@ -22,13 +23,17 @@ class CollectController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Collector::with('pegawaiRelasi:kode_pegawai,full_name');
+            $query = Cache::remember('collector_all_datas', 1800, function () {
+                $data = Collector::with('pegawaiRelasi:kode_pegawai,full_name');
 
-            if (!Auth::user()->can('collect-approve')) {
-                $query->where('kode_pegawai', Auth::user()->kode_pegawai);
-            }
+                if (!Auth::user()->can('collect-approve')) {
+                    $data->where('kode_pegawai', Auth::user()->kode_pegawai);
+                }
 
-            return DataTables::eloquent($query)
+                return $data->get();
+            });
+
+            return DataTables::of($query)
                 ->addIndexColumn()
                 ->editColumn('kode_pegawai', function ($data) {
                     return view('components.dashboard.name-w-code', [
@@ -80,7 +85,6 @@ class CollectController extends Controller
                         $query->whereBetween('created_at', [$request->startDate, $request->endDate]);
                     }
                 })
-                ->orderColumn('created_at', '-created_at $1')
                 ->rawColumns(['kode_pegawai', 'title', 'actions', 'latitude', 'created_at'])
                 ->toJson();
         }
@@ -101,7 +105,10 @@ class CollectController extends Controller
      */
     public function show($id)
     {
-        $data = Collector::findOrFail($id);
+        $data = Cache::remember('collector_data_' . $id, 1800, function () use ($id) {
+            return Collector::findOrFail($id);
+        });
+
         return view('dashboard.collect.detail', compact('data'));
     }
 
@@ -110,7 +117,10 @@ class CollectController extends Controller
      */
     public function edit($id)
     {
-        $data = Collector::findOrFail($id);
+        $data = Cache::remember('collector_data_' . $id, 1800, function () use ($id) {
+            return Collector::findOrFail($id);
+        });
+
         return view('dashboard.collect.edit', compact('data'));
     }
 }
