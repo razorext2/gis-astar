@@ -23,15 +23,11 @@ class CollectController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Cache::remember('collector_all_datas', 1800, function () {
-                $data = Collector::with('pegawaiRelasi:kode_pegawai,full_name');
+            $query = Collector::with('pegawaiRelasi:kode_pegawai,full_name');
 
-                if (!Auth::user()->can('collect-approve')) {
-                    $data->where('kode_pegawai', Auth::user()->kode_pegawai);
-                }
-
-                return $data->get();
-            });
+            if (!Auth::user()->can('collect-approve')) {
+                $query->where('kode_pegawai', Auth::user()->kode_pegawai);
+            }
 
             return DataTables::of($query)
                 ->addIndexColumn()

@@ -6,10 +6,10 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\Dayoff;
 use App\Models\Pegawai;
-use yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Yajra\DataTables\Facades\DataTables;
 
 class DayoffController extends Controller
 {
@@ -28,17 +28,12 @@ class DayoffController extends Controller
 	public function index(Request $request)
 	{
 		if ($request->ajax()) {
-			$query = Cache::remember('dayoff_all_datas', 1800, function () {
-				$data = Dayoff::with('pegawaiRelasi:kode_pegawai,full_name');
+			$query = Dayoff::with('pegawaiRelasi:kode_pegawai,full_name');
 
-				if (!Auth::user()->can('dayoff-confirm')) {
-					$data->where('kode_pegawai', Auth::user()->kode_pegawai);
-				}
+			if (!Auth::user()->can('dayoff-confirm')) {
+				$query->where('kode_pegawai', Auth::user()->kode_pegawai);
+			}
 
-				return $data->get();
-			});
-
-			// Fetch the filtered data with pagination for DataTables
 			return DataTables::of($query)
 				->addIndexColumn()
 				->editColumn('kode_pegawai', function ($data) {
@@ -73,26 +68,26 @@ class DayoffController extends Controller
 						'delete' => ['show' => Auth::user()->can('dayoff-delete')]
 					])->render();
 				})
-				->filter(function ($query) use ($request) {
-					if ($request->filled("dayoff_for")) {
-						$query->where('dayoff_for', "=", $request->dayoff_for);
-					}
+				// ->filter(function ($query) use ($request) {
+				// 	if ($request->filled("dayoff_for")) {
+				// 		$query->where('dayoff_for', "=", $request->dayoff_for);
+				// 	}
 
-					if ($request->filled("kode_pegawai")) {
-						$query->where('kode_pegawai', "LIKE", "%{$request->kode_pegawai}%");
-					}
+				// 	if ($request->filled("kode_pegawai")) {
+				// 		$query->where('kode_pegawai', "LIKE", "%{$request->kode_pegawai}%");
+				// 	}
 
-					if ($request->filled("status")) {
-						$query->where('status', "=", $request->status);
-					}
+				// 	if ($request->filled("status")) {
+				// 		$query->where('status', "=", $request->status);
+				// 	}
 
-					if ($request->filled("startDate") && $request->filled("endDate")) {
-						$query->whereBetween('created_at', [$request->startDate, $request->endDate]);
-					}
-				})
+				// 	if ($request->filled("startDate") && $request->filled("endDate")) {
+				// 		$query->whereBetween('created_at', [$request->startDate, $request->endDate]);
+				// 	}
+				// })
 				// ->orderColumn('created_at', '-created_at $1')
 				->rawColumns(['status', 'kode_pegawai', 'created_at', 'tgl_dari', 'actions'])
-				->make(true);
+				->toJson();
 		}
 
 		return view('dashboard.dayoff.index');

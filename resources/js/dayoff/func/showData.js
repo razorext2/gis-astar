@@ -1,11 +1,10 @@
 export function showDatatables() {
-  let minDate, maxDate;
-
   // Initialize DataTable
   let table = $('#table-dayoff').DataTable({
     processing: true,
     serverSide: true,
     responsive: true,
+    paging: true,
     "lengthMenu": [15, 25, 50, 75, 100, -1],
     ajax: {
       url: dayoffIndex,
@@ -44,9 +43,9 @@ export function showDatatables() {
       name: 'created_at'
     },
     {
-      data: "status", // Kolom status untuk sorting
+      data: "status",
       name: "status",
-      visible: false, // Tidak ditampilkan di tabel
+      visible: false,
     }],
     order: [
       [5, 'desc'],

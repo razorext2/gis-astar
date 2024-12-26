@@ -12,7 +12,7 @@ class CollectObserver
      */
     public function created(Collector $collector): void
     {
-        Cache::forget('collector_all_datas');
+        //
     }
 
     /**
@@ -23,8 +23,6 @@ class CollectObserver
         if (Cache::get('collector_data_' . $collector->id)) {
             Cache::forget('collector_data_' . $collector->id);
         }
-
-        Cache::forget('collector_all_datas');
     }
 
     /**
@@ -35,7 +33,5 @@ class CollectObserver
         if (Cache::get('collector_data_' . $collector->id)) {
             Cache::forget('collector_data_' . $collector->id);
         }
-
-        Cache::forget('collector_all_datas');
     }
 }

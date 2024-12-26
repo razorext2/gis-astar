@@ -12,7 +12,7 @@ class DayoffObserver
      */
     public function created(Dayoff $dayoff): void
     {
-        Cache::forget('dayoff_all_datas');
+        //
     }
 
     /**
@@ -23,8 +23,6 @@ class DayoffObserver
         if (Cache::get('dayoff_data_' . $dayoff->id)) {
             Cache::forget('dayoff_data_' . $dayoff->id);
         }
-
-        Cache::forget('dayoff_all_datas');
     }
 
     /**
@@ -35,7 +33,5 @@ class DayoffObserver
         if (Cache::get('dayoff_data_' . $dayoff->id)) {
             Cache::forget('dayoff_data_' . $dayoff->id);
         }
-
-        Cache::forget('dayoff_all_datas');
     }
 }
