@@ -27,7 +27,13 @@ export default defineConfig({
                 "resources/js/collect/index.js",
                 "resources/js/collect/add.js",
                 "resources/js/collect/edit.js",
-                "resources/js/collect/detail.js"
+                "resources/js/collect/detail.js",
+
+                // collect task
+                "resources/js/collect-task/index.js",
+                "resources/js/collect-task/add.js",
+                // "resources/js/collect-task/edit.js",
+                // "resources/js/collect-task/detail.js",
             ],
             refresh: true,
         }),

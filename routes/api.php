@@ -1,12 +1,15 @@
 <?php
 
 use App\Http\Controllers\Api\ApiCollectController;
+use App\Http\Controllers\Api\ApiCollectTaskController;
 use App\Http\Controllers\Api\ApiDayoffController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
 
+// collect task
+Route::apiResource('collect-task-api', ApiCollectTaskController::class);
 
 // laporan kolektor
 Route::apiResource('collect-api', ApiCollectController::class);

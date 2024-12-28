@@ -8,9 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CollectResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Cache;
 
 // class ApiCollectorController extends Controller
 class ApiCollectController extends Controller

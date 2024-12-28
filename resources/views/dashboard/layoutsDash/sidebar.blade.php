@@ -1,6 +1,14 @@
 @php
 	$sidebarLinks = [
 	    [
+	        'route' => 'collect-task.index',
+	        'check' => 'collect-task.*',
+	        'label' => 'Surat Jalan',
+	        'icon' => 'collect-task',
+	        'permission' => 'collect-task-list',
+	        'sublinks' => [],
+	    ],
+	    [
 	        'route' => 'collect.index',
 	        'check' => 'collect.*',
 	        'label' => 'Laporan Kolektor',
@@ -159,6 +167,11 @@
 
 										@case('log')
 											<x-icons.window class="{{ $isActive ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
+										@break
+
+										@case('collect-task')
+											<x-icons.file-pen
+												class="{{ $isActive ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
 										@break
 									@endswitch
 

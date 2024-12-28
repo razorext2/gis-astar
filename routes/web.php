@@ -18,9 +18,12 @@ use App\Http\Controllers\CaptureController;
 use App\Http\Controllers\AllowanceController;
 use App\Http\Controllers\DeductionController;
 use App\Http\Controllers\CollectController;
+use App\Http\Controllers\CollectTaskController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 // breeze for regist, verif, login and logout
 Route::get('/foo', function () {
@@ -43,6 +46,39 @@ Route::middleware('auth')->group(function () {
     // pegawai
     Route::get('api/get-attendance-data', [PegawaiController::class, 'getAttendanceData'])->name('pegawai.getattendance');
 
+    Route::prefix('proxy')->as('')->group(function () {
+        Route::get('fetchSR', function (Request $request) {
+            $no_sr = $request->query('NomorPermintaanJual');
+
+            if (!$no_sr) {
+                return response()->json([
+                    'error' => 'NomorPermintaanJual is required.'
+                ], 400);
+            }
+
+            $url = "https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSR&NomorPermintaanJual=" . $no_sr;
+
+            try {
+                $response = Http::get($url);
+
+                if ($response->successful()) {
+                    return $response->json(); // Return the JSON response directly
+                }
+
+                return response()->json([
+                    'error' => 'Failed to fetch data from external API.',
+                    'status' => $response->status(),
+                    'body' => $response->body()
+                ], $response->status());
+            } catch (\Exception $e) {
+                return response()->json([
+                    'error' => 'An error occurred while processing the request.',
+                    'message' => $e->getMessage()
+                ], 500);
+            }
+        });
+    });
+
     // ini dulu ya brader yang digrouping
     Route::prefix('dashboard')->as('')->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('dashboard');
@@ -64,6 +100,10 @@ Route::middleware('auth')->group(function () {
 
         // route kolektor
         Route::resource('collect', CollectController::class);
+
+        // route collect task
+        Route::resource('collect-task', CollectTaskController::class);
+        Route::get('collect-task/assign', [CollectTaskController::class, 'assign'])->name('collect-task.assign');
 
         // route dayoff
         Route::get('dayoff/autocomplete/', [DayoffController::class, 'autocomplete'])->name('dayoff.autocomplete');

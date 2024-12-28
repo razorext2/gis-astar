@@ -63,29 +63,45 @@ class DayoffController extends Controller
 				->addColumn('actions', function ($data) {
 					return view('components.dashboard.action-buttons', [
 						'id' => $data->id,
-						'edit' => ['show' => Auth::user()->can('dayoff-edit'), 'url' => route('dayoff.edit', $data->id)],
-						'show' => ['show' => Auth::user()->can('dayoff-list'), 'url' => route('dayoff.show', $data->id)],
-						'delete' => ['show' => Auth::user()->can('dayoff-delete')]
+						'datas' => [
+							[
+								'id' => 'show-btn',
+								'permission' => Auth::user()->can('dayoff-list'),
+								'action' => route('dayoff.show', $data->id),
+								'label' => 'Detail',
+							],
+							[
+								'id' => 'edit-btn',
+								'permission' => Auth::user()->can('dayoff-edit'),
+								'action' => route('dayoff.edit', $data->id),
+								'label' => 'Edit',
+							],
+							[
+								'id' => 'delete-btn',
+								'permission' => Auth::user()->can('dayoff-delete'),
+								'action' => 'javascript:void(0)',
+								'label' => 'Hapus',
+							]
+						],
 					])->render();
 				})
-				// ->filter(function ($query) use ($request) {
-				// 	if ($request->filled("dayoff_for")) {
-				// 		$query->where('dayoff_for', "=", $request->dayoff_for);
-				// 	}
+				->filter(function ($query) use ($request) {
+					if ($request->filled("dayoff_for")) {
+						$query->where('dayoff_for', "=", $request->dayoff_for);
+					}
 
-				// 	if ($request->filled("kode_pegawai")) {
-				// 		$query->where('kode_pegawai', "LIKE", "%{$request->kode_pegawai}%");
-				// 	}
+					if ($request->filled("kode_pegawai")) {
+						$query->where('kode_pegawai', "LIKE", "%{$request->kode_pegawai}%");
+					}
 
-				// 	if ($request->filled("status")) {
-				// 		$query->where('status', "=", $request->status);
-				// 	}
+					if ($request->filled("status")) {
+						$query->where('status', "=", $request->status);
+					}
 
-				// 	if ($request->filled("startDate") && $request->filled("endDate")) {
-				// 		$query->whereBetween('created_at', [$request->startDate, $request->endDate]);
-				// 	}
-				// })
-				// ->orderColumn('created_at', '-created_at $1')
+					if ($request->filled("startDate") && $request->filled("endDate")) {
+						$query->whereBetween('created_at', [$request->startDate, $request->endDate]);
+					}
+				})
 				->rawColumns(['status', 'kode_pegawai', 'created_at', 'tgl_dari', 'actions'])
 				->toJson();
 		}

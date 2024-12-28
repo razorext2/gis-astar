@@ -11,26 +11,15 @@
 		x-transition:leave-start="transform opacity-100 translate-y-0"
 		x-transition:leave-end="transform opacity-0 -translate-y-5">
 		<ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
-			@if ($show['show'])
+			@foreach ($datas as $item)
 				<li>
-					<a class="block px-4 py-2 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-						href="{{ $show['url'] }}">Show</a>
+					<a
+						class="{{ $item['id'] == 'delete-btn' ? 'text-red-500 hover:bg-red-500 hover:text-white' : 'hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-white' }} block px-4 py-2"
+						id="{{ $item['id'] }}" data-id="{{ $id }}" href="{{ $item['action'] }}">
+						{{ $item['label'] }}
+					</a>
 				</li>
-			@endif
-
-			@if ($edit['show'])
-				<li>
-					<a class="block px-4 py-2 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-						href="{{ $edit['url'] }}">Edit</a>
-				</li>
-			@endif
-
-			@if ($delete['show'])
-				<li>
-					<a class="block px-4 py-2 font-medium text-red-500 hover:bg-red-300 hover:text-red-700" id="delete-btn"
-						data-id="{{ $id }}" href="javascript:void(0)">Delete</a>
-				</li>
-			@endif
+			@endforeach
 		</ul>
 	</div>
 </div>

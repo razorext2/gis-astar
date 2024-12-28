@@ -52,9 +52,27 @@ class CollectController extends Controller
                 ->addColumn('actions', function ($data) {
                     return view('components.dashboard.action-buttons', [
                         'id' => $data->id,
-                        'edit' => ['show' => Auth::user()->can('collect-edit'), 'url' => route('collect.edit', $data->id)],
-                        'show' => ['show' => Auth::user()->can('collect-list'), 'url' => route('collect.show', $data->id)],
-                        'delete' => ['show' => Auth::user()->can('collect-delete')]
+                        'datas' => [
+                            [
+                                'id' => 'show-btn',
+                                'permission' => Auth::user()->can('collect-list'),
+                                'action' => route('collect.show', $data->id),
+                                'label' => 'Detail'
+                            ],
+                            [
+                                'id' => 'edit-btn',
+                                'permission' => Auth::user()->can('collect-edit'),
+                                'action' => route('collect.edit', $data->id),
+                                'label' => 'Edit'
+                            ],
+                            [
+                                'id' => 'delete-btn',
+                                'permission' => Auth::user()->can('collect-delete'),
+                                'action' => 'javascript:void(0)',
+                                'label' => 'Hapus',
+
+                            ]
+                        ],
                     ])->render();
                 })
                 ->editColumn('latitude', function ($data) {
