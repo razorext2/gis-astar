@@ -106,14 +106,15 @@ class RoleController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|unique:roles,name',
-            'permission' => 'required',
+            'permission' => 'required|array',
+            'permission.*' => 'integer',
         ]);
 
         $permissionsID = array_map(
             function ($value) {
                 return (int)$value;
             },
-            $request->input('permission')
+            $request->input('permission', [])
         );
 
         $role = Role::create(['name' => $request->input('name')]);
@@ -128,7 +129,7 @@ class RoleController extends Controller
     public function edit(string $id)
     {
         $role = Role::find($id);
-        $permission = Permission::get();
+        $permission = Permission::orderBy('name')->get();
         $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id", $id)
             ->pluck('role_has_permissions.permission_id', 'role_has_permissions.permission_id')
             ->all();
