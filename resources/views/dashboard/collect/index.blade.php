@@ -1,6 +1,6 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-	<form id="add-collector" action="{{ route('collect.create') }}"></form>
+	{{-- <form id="add-collector" action="{{ route('collect.create') }}"></form> --}}
 	<div class="relative grid grid-cols-1 gap-6">
 
 		{{-- @can('collect-create')
