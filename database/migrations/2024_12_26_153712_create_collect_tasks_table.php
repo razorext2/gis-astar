@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('customer_name', 128);
             $table->string('customer_recipient', 128)->nullable();
             $table->string('customer_address', 128)->nullable();
-            $table->string('customer_telp', 15)->nullable();
+            $table->string('customer_telp', 128)->nullable();
             $table->integer('customer_fax')->nullable();
             $table->string('shipping_address')->nullable();
             $table->float('total_bill')->nullable();

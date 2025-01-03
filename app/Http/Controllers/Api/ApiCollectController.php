@@ -4,55 +4,63 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Collector;
 use App\Models\PhotoCollect;
+use App\Models\CollectTask;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CollectResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 // class ApiCollectorController extends Controller
 class ApiCollectController extends Controller
 {
     /**
-     * Display spesicif list of the resource.
+     * Update resource from database.
      */
-    public function show($id)
+    public function update(Request $request, $id)
     {
-        $query = Collector::with('pegawaiRelasi')->find($id);
-        return new CollectResource(true, 'Detail data', $query);
-    }
-
-    /**
-     * Save resource to database.
-     */
-    public function store(Request $request)
-    {
-        // Mendefinisikan validator
+        // define validation rules
         $validator = Validator::make($request->all(), [
-            'kode_pegawai' => 'required|integer|max_digits:12',
             'title' => 'required|string|max:128|min:5',
             'keterangan' => 'required|string|min:5',
-            'longitude' => 'required|string',
-            'latitude' => 'required|string',
             'location' => 'required|string|min:1',
+            'latitude' => 'required|string|min:1',
+            'longitude' => 'required|string|min:1',
+            'have_paid' => 'required|integer|min_digits:1',
+            'payment_type' => 'required|string|min:1|max:12',
+            'payment_amount' => 'required|integer|min_digits:1',
             'images' => 'required|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Validasi data
         if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422); // Mengirim status 422 untuk validasi gagal
+            return response()->json($validator->errors(), 422);
         }
 
-        // Menambah data jika validasi berhasil
-        $data = $validator->validated();
-        $collector = Collector::create($data);
+        $query = Collector::find($id);
 
-        // Memastikan folder 'public/collector' ada, buat jika belum ada
+        // dd($query->no_sr);
 
+        $query->update([
+            'title' => $request->title,
+            'keterangan' => $request->keterangan,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'have_paid' => $request->have_paid,
+            'payment_type' => $request->payment_type,
+            'payment_amount' => $request->payment_amount,
+            'status' => 2,
+            'location' => $request->location
+        ]);
+
+        $task = CollectTask::where('no_sr', '=', $query->no_sr)->first();
+
+        $task->update([
+            'remaining_bill' => $task->remaining_bill - $request->payment_amount,
+        ]);
+
+        // image upload process
         $folderPath = "public/collectors"; // Consistent path
 
         // Always use public disk
@@ -78,47 +86,11 @@ class ApiCollectController extends Controller
 
                 // Menyimpan informasi gambar ke tabel tb_photo_collect
                 PhotoCollect::create([
-                    'id_collect' => $collector->id,
+                    'id_collect' => $id,
                     'photourl' => $imageUrl,
                 ]);
             }
         }
-
-        // Jika request JSON, kembalikan response JSON
-        if ($request->isJson()) {
-            return new CollectResource(true, 'Data berhasil ditambah!', $collector);
-        }
-
-        // Response default jika bukan request JSON
-        return response()->json([
-            'success' => true,
-            'message' => 'Data berhasil ditambah!',
-            'data' => $collector
-        ]);
-    }
-
-    /**
-     * Update resource from database.
-     */
-    public function update(Request $request, $id)
-    {
-        // define validation rules
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:128|min:5',
-            'keterangan' => 'required|string|min:5',
-            'location' => 'required|string|min:1',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $query = Collector::find($id);
-        $query->update([
-            'title' => $request->title,
-            'keterangan' => $request->keterangan,
-            'location' => $request->location,
-        ]);
 
         // Jika request JSON, kembalikan response JSON
         if ($request->isJson()) {
@@ -141,6 +113,14 @@ class ApiCollectController extends Controller
         $query = Collector::find($id);
         $query->update([
             'status' => 1,
+        ]);
+
+        $noSr = $query->no_sr;
+
+        $task = CollectTask::where('no_sr', $noSr)->first();
+
+        $task->update([
+            'bill_status' => 1,
         ]);
 
         return new CollectResource(true, 'Data berhasil dikonfirmasi', null);
@@ -166,6 +146,11 @@ class ApiCollectController extends Controller
     public function destroy($id)
     {
         $query = Collector::find($id);
+
+        if (!$query) {
+            return response()->json(['success' => false, 'message' => 'Data tidak ditemukan'], 404);
+        }
+
         $query->delete();
 
         return new CollectResource(true, 'Data berhasil dihapus', null);

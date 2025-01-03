@@ -99,16 +99,26 @@ Route::middleware('auth')->group(function () {
         Route::get('capture', [CaptureController::class, 'index'])->name('capture.index');
 
         // route kolektor
-        Route::resource('collect', CollectController::class);
+        Route::resource('collect', CollectController::class)->except(['store', 'update', 'destroy']);
 
         // route collect task
-        Route::resource('collect-task', CollectTaskController::class);
+        // tampilkan semua data where assign_to = null
+        Route::get('collect-task/show', [CollectTaskController::class, 'showdata'])->name('collect-task.showdata');
+        // tampilkan semua data where status = 1 (berjalan)
+        Route::get('collect-task/on-progress', [CollectTaskController::class, 'onProgress'])->name('collect-task.onprogress');
+        // tampilkan semua data where status = 2 (selesai)
+        Route::get('collect-task/completed', [CollectTaskController::class, 'completed'])->name('collect-task.completed');
+        // tampilkan semua data where status = 3 (tertunda)
+        Route::get('collect-task/pending', [CollectTaskController::class, 'pending'])->name('collect-task.pending');
+
+        Route::get('collect-task/autocomplete', [CollectTaskController::class, 'autocomplete'])->name('collect-task.autocomplete');
         Route::get('collect-task/assign', [CollectTaskController::class, 'assign'])->name('collect-task.assign');
+        Route::get('collect-task/mass-assign', [CollectTaskController::class, 'massAssign'])->name('collect-task.mass-assign');
+        Route::resource('collect-task', CollectTaskController::class)->except(['store', 'update', 'destroy']);
 
         // route dayoff
-        Route::get('dayoff/autocomplete/', [DayoffController::class, 'autocomplete'])->name('dayoff.autocomplete');
         Route::post('dayoff/upload-image', [DayoffController::class, 'uploadImage'])->name('dayoff.uploadimage');
-        Route::resource('dayoff', DayoffController::class);
+        Route::resource('dayoff', DayoffController::class)->except(['store', 'update', 'destroy']);
 
         // route permission
         Route::resource('permissions', PermissionController::class);
@@ -132,6 +142,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('jabatan', JabatanController::class);
 
         // route pegawai
+        Route::get('pegawai/autocomplete/', [PegawaiController::class, 'autocomplete'])->name('pegawai.autocomplete');
         Route::get('pegawai/{pegawai}/detail', [PegawaiController::class, 'detail'])->name('pegawai.detail');
         Route::get('pegawai/{pegawai}/attendance', [PegawaiController::class, 'attendanceList'])->name('pegawai.attendancelist');
         Route::get('pegawai/{pegawai}/payroll', [PegawaiController::class, 'payrollInfo'])->name('pegawai.payrollinfo');

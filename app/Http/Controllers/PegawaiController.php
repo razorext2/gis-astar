@@ -189,6 +189,19 @@ class PegawaiController extends Controller
         return redirect()->route('pegawai.index')->with('status', 'Berhasil mengubah data Pegawai');
     }
 
+    public function autocomplete(Request $request)
+    {
+        $search = $request->input('query'); // Mengambil input dari request
+
+        // Cari nama pengguna berdasarkan input
+        $users = Pegawai::select(['id', 'kode_pegawai', 'full_name'])
+            ->where('full_name', 'LIKE', "%{$search}%")
+            ->limit(10)
+            ->get();
+
+        return response()->json($users); // Kembalikan hasil sebagai JSON
+    }
+
     public function showImages(Pegawai $pegawai)
     {
         $path = public_path('storage/' . $pegawai->storage);

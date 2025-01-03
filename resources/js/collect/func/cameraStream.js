@@ -23,44 +23,50 @@ export function backCameraStream() {
     }
   }
 
-  captureButton.addEventListener("click", startCamera);
+  if (captureButton) {
+    captureButton.addEventListener("click", startCamera);
+  }
 
-  captureImageButton.addEventListener("click", function () {
+  captureImageButton.addEventListener("click", () => {
     const canvas = document.createElement("canvas");
     canvas.width = videoElement.videoWidth;
     canvas.height = videoElement.videoHeight;
     canvas.getContext("2d").drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
     const imgData = canvas.toDataURL("image/png");
-
     capturedImages.push(imgData);
-    const imageWrapper = document.createElement("div");
-    imageWrapper.classList.add("relative", "me-2", "flex-none", "items-center", "gap-4", "p-2");
 
-    const imgElement = document.createElement("img");
-    imgElement.src = imgData;
-    imgElement.classList.add("w-36", "h-36", "object-cover", "rounded-lg", "border");
+    // HTML untuk gambar dan tombol hapus
+    const imageHTML = `
+        <div class="relative me-2 flex-none items-center gap-4">
+            <img src="${imgData}" class="w-36 h-36 object-cover rounded-xl border">
+            <button class="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-700" title="Hapus gambar">×</button>
+        </div>
+    `;
 
-    const removeButton = document.createElement("button");
-    removeButton.classList.add("absolute", "top-0", "right-0", "bg-red-500", "text-white", "rounded-full", "w-6", "h-6", "flex", "items-center", "justify-center", "hover:bg-red-700");
-    removeButton.innerHTML = "×";
-    removeButton.title = "Hapus gambar";
+    // Sisipkan ke dalam container
+    capturedImagesContainer.insertAdjacentHTML("beforeend", imageHTML);
+    capturedImagesContainer.classList.add('mt-2');
 
-    removeButton.addEventListener("click", function () {
-      capturedImagesContainer.removeChild(imageWrapper);
+    // Tambahkan event listener ke tombol hapus
+    const removeButton = capturedImagesContainer.lastElementChild.querySelector("button");
+    removeButton.addEventListener("click", () => {
+      removeButton.parentElement.remove();
       capturedImages = capturedImages.filter(image => image !== imgData);
+
+      if (capturedImagesContainer.childElementCount === 0) {
+        capturedImagesContainer.classList.remove('mt-2'); // Hapus kelas jika tidak ada gambar
+      }
     });
 
-    imageWrapper.appendChild(imgElement);
-    imageWrapper.appendChild(removeButton);
-    capturedImagesContainer.appendChild(imageWrapper);
-    capturedImagesContainer.classList.add("mb-2");
-
-    stream.getTracks().forEach(track => track.stop());
-    modal.hide();
+    stopStreamAndHideModal();
   });
 
-  closeModalButton.addEventListener("click", function () {
+  closeModalButton.addEventListener("click", stopStreamAndHideModal);
+
+  function stopStreamAndHideModal() {
     stream.getTracks().forEach(track => track.stop());
     modal.hide();
-  });
+  }
+
 }

@@ -117,19 +117,6 @@ class DayoffController extends Controller
 		return view('dashboard.dayoff.add');
 	}
 
-	public function autocomplete(Request $request)
-	{
-		$search = $request->input('query'); // Mengambil input dari request
-
-		// Cari nama pengguna berdasarkan input
-		$users = Pegawai::select(['id', 'kode_pegawai', 'full_name'])
-			->where('full_name', 'LIKE', "%{$search}%")
-			->limit(10)
-			->get();
-
-		return response()->json($users); // Kembalikan hasil sebagai JSON
-	}
-
 	public function uploadImage(Request $request)
 	{
 		$request->validate([

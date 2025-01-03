@@ -24,7 +24,6 @@ class Pegawai extends Model
         'tgl_lahir',
     ];
 
-    // In Pegawai.php (Model)
     public function collectorReportRelasi()
     {
         return $this->hasMany(Collector::class, 'kode_pegawai', 'kode_pegawai');

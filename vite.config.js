@@ -32,8 +32,9 @@ export default defineConfig({
                 // collect task
                 "resources/js/collect-task/index.js",
                 "resources/js/collect-task/add.js",
+                "resources/js/collect-task/mass-assign.js",
                 // "resources/js/collect-task/edit.js",
-                // "resources/js/collect-task/detail.js",
+                "resources/js/collect-task/detail.js",
             ],
             refresh: true,
         }),

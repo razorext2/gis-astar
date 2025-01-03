@@ -7,9 +7,12 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class CollectResource extends JsonResource
 {
-    // Tidak perlu mendeklarasikan $resource lagi karena sudah ada pada parent class
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
 
-    // Properti untuk status dan message
     public $status;
     public $message;
 

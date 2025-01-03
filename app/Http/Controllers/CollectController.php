@@ -23,31 +23,72 @@ class CollectController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Collector::with('pegawaiRelasi:kode_pegawai,full_name');
+            $query = Collector::with(['pegawaiRelasi:kode_pegawai,full_name', 'collectTaskRelasi'])
+                ->whereNull('deleted_at');
 
             if (!Auth::user()->can('collect-approve')) {
                 $query->where('kode_pegawai', Auth::user()->kode_pegawai);
             }
 
-            return DataTables::of($query)
+            $query->orderBy('status', 'desc');
+
+            return DataTables::of($query->latest())
                 ->addIndexColumn()
-                ->editColumn('kode_pegawai', function ($data) {
+                ->editColumn('no_sr', function ($data) {
                     return view('components.dashboard.name-w-code', [
-                        'name' => $data->pegawaiRelasi->full_name,
-                        'code' => $data->kode_pegawai
+                        'code' => $data->short_title,
+                        'name' => $data->no_sr
+                    ]);
+                })
+                ->editColumn('title', function ($data) {
+                    return view('components.dashboard.title-w-status', [
+                        'title' => $data->collectTaskRelasi->customer_name,
+                        'status' => $data->status,
+                        'item3' => $data->collectTaskRelasi->short_customer_address
+                    ]);
+                })
+                ->editColumn('payment_type', function ($data) {
+                    if ($data->have_paid == 0) {
+                        $status = 'Belum bayar';
+                    } elseif ($data->have_paid == 1) {
+                        $status = 'Cicilan';
+                    } elseif ($data->have_paid == 2) {
+                        $status = 'Lunas';
+                    }
+
+                    if ($data->payment_type == 0) {
+                        $type = 'Tidak ada';
+                    } elseif ($data->payment_type == 1) {
+                        $type = 'Cash';
+                    } elseif ($data->payment_type == 2) {
+                        $type = 'Transfer';
+                    } elseif ($data->payment_type == 3) {
+                        $type = 'Giro';
+                    }
+
+                    return view('components.table-component.payment-detail', [
+                        'data' => [
+                            [
+                                'title' => 'Status',
+                                'data' => $status,
+                            ],
+                            [
+                                'title' => 'Metode',
+                                'data' => $type,
+                            ],
+                            [
+                                'title' => 'Bayar',
+                                'data' => 'Rp. ' . number_format($data->payment_amount, 0, ',', '.')
+                            ],
+
+                        ]
                     ]);
                 })
                 ->editColumn('created_at', function ($data) {
                     return view('components.dashboard.custom-date', [
                         'date' => $data->created_at->locale('id')->isoFormat('D MMMM YYYY'),
                         'time' => $data->created_at->locale('id')->isoFormat('HH:mm:ss')
-                    ])->render();
-                })
-                ->editColumn('title', function ($data) {
-                    return view('components.dashboard.title-w-status', [
-                        'title' => $data->short_title,
-                        'status' => $data->status
-                    ])->render();
+                    ]);
                 })
                 ->addColumn('actions', function ($data) {
                     return view('components.dashboard.action-buttons', [
@@ -70,48 +111,32 @@ class CollectController extends Controller
                                 'permission' => Auth::user()->can('collect-delete'),
                                 'action' => 'javascript:void(0)',
                                 'label' => 'Hapus',
-
                             ]
                         ],
-                    ])->render();
+                    ]);
                 })
-                ->editColumn('latitude', function ($data) {
-                    return view('components.dashboard.location-w-coordinate', [
-                        'lat' => $data->latitude,
-                        'long' => $data->longitude,
-                        'location' => $data->location
-                    ])->render();
-                })
-                ->filter(function ($query) use ($request) {
-                    if ($request->filled("title")) {
-                        $query->where('title', "LIKE", "%{$request->title}%");
-                    }
+                // ->filter(function ($query) use ($request) {
+                //     if ($request->filled("title")) {
+                //         $query->where('title', "LIKE", "%{$request->title}%");
+                //     }
 
-                    if ($request->filled("kode_pegawai")) {
-                        $query->where('kode_pegawai', "LIKE", "%{$request->kode_pegawai}%");
-                    }
+                //     if ($request->filled("no_sr")) {
+                //         $query->where('no_sr', "LIKE", "%{$request->no_sr}%");
+                //     }
 
-                    if ($request->filled("status")) {
-                        $query->where('status', "LIKE", "%{$request->status}%");
-                    }
+                //     if ($request->filled("status")) {
+                //         $query->where('status', "LIKE", "%{$request->status}%");
+                //     }
 
-                    if ($request->filled("startDate") && $request->filled("endDate")) {
-                        $query->whereBetween('created_at', [$request->startDate, $request->endDate]);
-                    }
-                })
-                ->rawColumns(['kode_pegawai', 'title', 'actions', 'latitude', 'created_at'])
+                //     if ($request->filled("startDate") && $request->filled("endDate")) {
+                //         $query->whereBetween('created_at', [$request->startDate, $request->endDate]);
+                //     }
+                // })
+                ->rawColumns(['actions', 'no_sr', 'title',  'payment_type', 'created_at'])
                 ->toJson();
         }
 
         return view('dashboard.collect.index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('dashboard.collect.add');
     }
 
     /**
@@ -120,7 +145,7 @@ class CollectController extends Controller
     public function show($id)
     {
         $data = Cache::remember('collector_data_' . $id, 1800, function () use ($id) {
-            return Collector::findOrFail($id);
+            return Collector::with('photoCollectRelasi', 'pegawaiRelasi')->findOrFail($id);
         });
 
         return view('dashboard.collect.detail', compact('data'));
@@ -132,7 +157,7 @@ class CollectController extends Controller
     public function edit($id)
     {
         $data = Cache::remember('collector_data_' . $id, 1800, function () use ($id) {
-            return Collector::findOrFail($id);
+            return Collector::with('photoCollectRelasi', 'pegawaiRelasi', 'collectTaskRelasi')->findOrFail($id);
         });
 
         return view('dashboard.collect.edit', compact('data'));

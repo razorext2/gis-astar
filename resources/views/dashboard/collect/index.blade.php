@@ -3,7 +3,7 @@
 	<form id="add-collector" action="{{ route('collect.create') }}"></form>
 	<div class="relative grid grid-cols-1 gap-6">
 
-		@can('collect-create')
+		{{-- @can('collect-create')
 			<div class="max-w-xs">
 				<x-button.success id="add-button" form="add-collector" type="submit">
 					<x-slot name="icon">
@@ -12,7 +12,7 @@
 					Tambah Data
 				</x-button.success>
 			</div>
-		@endcan
+		@endcan --}}
 
 		<div class="flex h-auto items-center justify-center">
 			<div
@@ -23,14 +23,14 @@
 					<x-filter.filter-bar>
 						@can('collect-approve')
 							<div class="col-span-2 mx-auto flex w-full items-center lg:col-span-1">
-								<x-filter.filter-input-text id="kode-pegawai" name="kode-pegawai" :text="'kode pegawai'">
+								<x-filter.filter-input-text id="no_sr" name="no_sr" :text="'no SR'">
 									<x-icons.fingerprint class="h-4 w-4 text-gray-500 dark:text-gray-400" />
 								</x-filter.filter-input-text>
 							</div>
 						@endcan
 
 						<div class="col-span-2 mx-auto flex w-full items-center lg:col-span-1">
-							<x-filter.filter-input-text id="title" name="title" :text="'judul laporan'">
+							<x-filter.filter-input-text id="customer_name" name="customer_name" :text="'nama customer'">
 								<x-icons.font-case class="h-4 w-4 text-gray-500 dark:text-gray-400" />
 							</x-filter.filter-input-text>
 						</div>
@@ -51,10 +51,10 @@
 					<x-dashboard.table id="table-collector" :tablename="[
 					    '0' => '#',
 					    '1' => 'Aksi',
-					    '2' => 'Nama Pegawai',
-					    '3' => 'Judul',
-					    '4' => 'Lokasi',
-					    '5' => 'Tanggal Laporan',
+					    '2' => 'No SR',
+					    '3' => 'Customer',
+					    '4' => 'Detail Tagihan',
+					    '5' => 'Tanggal Penagihan',
 					]" />
 				</div>
 			</div>

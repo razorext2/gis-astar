@@ -12,6 +12,7 @@ class CollectTaskResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+
     public $status;
     public $message;
 

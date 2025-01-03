@@ -3,49 +3,80 @@ export function searchDataHandler() {
   $('#no_sr_submit').on('click', function () {
     clearTimeout(debounceTimer);
 
-    debounceTimer = setTimeout(() => {
+    debounceTimer = setTimeout(async () => {
       let no_sr = $('#no_sr').val();
-      $.ajax({
-        url: `/proxy/fetchSR`,
-        type: "GET",
-        data: { NomorPermintaanJual: no_sr },
-        success: function (response) {
-          if (response && response.data) {
-            $('#sr_date').val(response.data[0].TanggalPermintaanJual.date);
-            $('#customer_name').val(response.data[0].NamaCustomer);
-            $('#customer_recipient').val(response.data[0].CustomerContact);
-            $('#customer_address').val(response.data[0].AlamatContact);
-            $('#customer_telp').val(response.data[0].TeleponContact);
-            $('#customer_fax').val(response.data[0].FaxContact);
-            $('#shipping_address').val(response.data[0].AlamatKirim);
-            $('#total_bill').val(response.data[0].Total);
-          } else {
+
+      // Cari data SR di API BSI
+      try {
+        const responseBSI = await axios.get(`/proxy/fetchSR`, {
+          params: { NomorPermintaanJual: no_sr }
+        });
+
+        if (responseBSI.data && responseBSI.data.data) {
+          const data = responseBSI.data.data[0];
+          $('#sr_date').val(data.TanggalPermintaanJual.date);
+          $('#customer_name').val(data.NamaCustomer);
+          $('#customer_recipient').val(data.CustomerContact);
+          $('#customer_address').val(data.AlamatContact);
+          $('#customer_telp').val(data.TeleponContact);
+          $('#customer_fax').val(data.FaxContact);
+          $('#shipping_address').val(data.AlamatKirim);
+
+          // Cari data SR di database
+          try {
+            const responseDB = await axios.get(`/api/collect-task-api/getSR/${no_sr}`);
+
+            if (responseDB.data && responseDB.data.data) {
+              console.log('dari db')
+              $('#remaining_bill').val(responseBSI.data.data[0].Total);
+              $('#total_bill').val(responseDB.data.data.total_bill);
+            } else {
+              console.log('dari bsi')
+              $('#remaining_bill').val(responseBSI.data.data[0].Total);
+              $('#total_bill').val(responseBSI.data.data[0].Total);
+            }
+          } catch (error) {
+            console.error("Error fetching data from database:", error);
             Swal.fire({
               icon: "error",
-              title: "No SR tidak ditemukan!",
+              title: error.message || "Terjadi kesalahan saat mengambil data!",
               showConfirmButton: false,
               timer: 1000,
             });
-            clear();
           }
-        },
-      });
+
+
+        } else {
+          throw new Error("No SR tidak ditemukan!");
+        }
+      } catch (error) {
+        console.error("Error fetching data from BSI:", error);
+        Swal.fire({
+          icon: "error",
+          title: error.message || "Terjadi kesalahan saat mengambil data!",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+        clear();
+      }
     }, 300);
   });
-}
 
-function clear() {
-  $('#no_sr').val('');
-  $('#sr_date').val('');
-  $('#customer_name').val('');
-  $('#customer_recipient').val('');
-  $('#customer_address').val('');
-  $('#customer_telp').val('');
-  $('#customer_fax').val('');
-  $('#shipping_address').val('');
-  $('#total_bill').val('');
-}
+  function clear() {
+    $('#no_sr').val('');
+    $('#sr_date').val('');
+    $('#customer_name').val('');
+    $('#customer_recipient').val('');
+    $('#customer_address').val('');
+    $('#customer_telp').val('');
+    $('#customer_fax').val('');
+    $('#shipping_address').val('');
+    $('#remaining_bill').val('');
 
-$('#no_sr_reset').on('click', function () {
-  clear();
-})
+    $('#store').prop('disabled', false);
+  }
+
+  $('#no_sr_reset').on('click', function () {
+    clear();
+  })
+}

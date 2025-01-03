@@ -54,8 +54,7 @@
 @endsection
 @push('script')
 	<script>
-		const index = "{{ route('collect-task.showdata') }}";
-		const assign_by = "{{ Auth::user()->kode_pegawai ?? '0' }}"
+		const index = "{{ route('collect-task.showdata') }}?status=completed";
 	</script>
 	@vite(['resources/js/collect-task/index.js'])
 @endpush

@@ -1,13 +1,13 @@
 @php
 	$sidebarLinks = [
-	    [
-	        'route' => 'collect-task.index',
-	        'check' => 'collect-task.*',
-	        'label' => 'Surat Jalan',
-	        'icon' => 'collect-task',
-	        'permission' => 'collect-task-list',
-	        'sublinks' => [],
-	    ],
+	    // [
+	    //     'route' => 'collect-task.index',
+	    //     'check' => 'collect-task.*',
+	    //     'label' => 'Surat Jalan',
+	    //     'icon' => 'collect-task',
+	    //     'permission' => 'collect-task-list',
+	    //     'sublinks' => [],
+	    // ],
 	    [
 	        'route' => 'collect.index',
 	        'check' => 'collect.*',
@@ -123,6 +123,50 @@
 				</ul>
 			</li>
 
+			@if (auth()->user()->hasAnyPermission(['collect-task-list']))
+				<li x-data="{ lokasi: {{ Route::is('collect-task.*') ? 'true' : 'false' }} }">
+					<button
+						class="{{ Route::is('collect-task.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-[#18181b] hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
+						type="button" aria-controls="lokasi-dropdown" @click="lokasi = !lokasi" :aria-expanded="lokasi">
+
+						<x-icons.wallet
+							class="{{ Route::is('collect-task.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
+
+						<span class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">Piutang</span>
+
+						<x-icons.carred-down class="ml-1 mt-1 inline h-4 w-4 transform transition-transform group-hover:text-red-600"
+							x-bind:class="{ 'rotate-180 duration-200': lokasi }" />
+					</button>
+
+					<ul class="space-y-4 py-4" id="lokasi-dropdown" x-show="lokasi"
+						x-transition:enter="transition ease-in duration-200" x-transition:enter-start="transform opacity-0 -translate-y-5"
+						x-transition:leave="transition ease-out duration-200" x-transition:leave-end="transform opacity-0 -translate-y-5">
+						@can('collect-task-list')
+							<li>
+								<a
+									class="{{ Route::is('collect-task.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									href="{{ route('collect-task.index') }}">
+									<x-icons.sale-percent
+										class="{{ Route::is('collect-task.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
+									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">IDC Non PPN (SR)</span>
+								</a>
+							</li>
+						@endcan
+
+						{{-- @can('collect-task-list') --}}
+						<li>
+							<a
+								class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
+								href="#">
+								<x-icons.landmark class="h-6 w-6 text-gray-400 group-hover:text-red-600" />
+								<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">IDC PPN (FP)</span>
+							</a>
+						</li>
+						{{-- @endcan --}}
+					</ul>
+				</li>
+			@endif
+
 			@foreach ($sidebarLinks as $link)
 				@php
 					$isActive = Route::is($link['check']);
@@ -169,10 +213,10 @@
 											<x-icons.window class="{{ $isActive ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
 										@break
 
-										@case('collect-task')
+										{{-- @case('collect-task')
 											<x-icons.file-pen
 												class="{{ $isActive ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
-										@break
+										@break --}}
 									@endswitch
 
 								</x-slot>
@@ -244,7 +288,8 @@
 
 					<ul class="space-y-4 py-4" id="user-dropdown" x-show="usermanage"
 						x-transition:enter="transition ease-in duration-200" x-transition:enter-start="transform opacity-0 -translate-y-5"
-						x-transition:leave="transition ease-out duration-200" x-transition:leave-end="transform opacity-0 -translate-y-5">
+						x-transition:leave="transition ease-out duration-200"
+						x-transition:leave-end="transform opacity-0 -translate-y-5">
 
 						@can('users-list')
 							<li>

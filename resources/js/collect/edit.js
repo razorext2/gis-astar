@@ -1,9 +1,13 @@
 import { quillEditor } from "./func/quillEditor";
-import { zoomImage } from "./func/zoomImage";
+import { backCameraStream } from './func/cameraStream';
 import { editDataHandler } from "./func/formHandler";
+import { zoomImage } from "./func/zoomImage";
+import { getLocation } from './func/geoLocation';
 
 document.addEventListener("DOMContentLoaded", function () {
   quillEditor(data, true);
-  zoomImage();
+  backCameraStream();
   editDataHandler();
+  zoomImage();
+  getLocation();
 })

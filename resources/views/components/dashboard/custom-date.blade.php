@@ -1,4 +1,4 @@
-<div class="flex flex-col">
+<div class="flex flex-col text-wrap">
 	<span class="font-medium">
 		{{ $date }}
 	</span>

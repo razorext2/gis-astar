@@ -16,6 +16,7 @@ export function addDataHandler() {
     formData.append("customer_fax", $("#customer_fax").val());
     formData.append("shipping_address", $("#shipping_address").val());
     formData.append("total_bill", $("#total_bill").val());
+    formData.append("remaining_bill", $("#remaining_bill").val());
     formData.append("assign_by", $("#assign_by").val());
     formData.append("assign_to", $("#assign_to").val());
     formData.append("assign_date", $("#assign_date").val());

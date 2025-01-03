@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CollectTaskResource;
 use App\Models\CollectTask;
+use App\Models\Collector;
+use Carbon\Traits\Timestamp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,19 +15,18 @@ class ApiCollectTaskController extends Controller
 {
     public function store(Request $request)
     {
-        // definisikan validator
         $validator = Validator::make($request->all(), [
-            'no_sr' => 'required|min:3|max:16',
+            'no_sr' => 'required|string|min:3|max:16',
             'sr_type' => 'required|string',
             'sr_date' => 'required|date',
             'customer_name' => 'required|string|min:5',
-            'customer_recipient' => 'string|max:128',
+            'customer_recipient' => 'nullable|string|max:128',
             'customer_address' => 'required|string|max:256',
-            'customer_telp' => 'required|string|min:3|max:15',
-            'customer_fax' => 'string|min:2|max:15',
-            'shipping_address' => 'string|min:5',
-            'total_bill' => 'string|min:3',
-            'assign_by' => 'required|string',
+            'customer_telp' => 'required|string|min:1|max:64',
+            'customer_fax' => 'nullable|string|min:1|max:15',
+            'shipping_address' => 'nullable|string',
+            'total_bill' => 'required|numeric|min:0',
+            'remaining_bill' => 'required|numeric|min:0',
             'assign_date' => 'required|date',
         ]);
 
@@ -37,23 +38,149 @@ class ApiCollectTaskController extends Controller
         }
 
         $data = $validator->validated();
-        $query = CollectTask::create($data);
 
-        if ($request->isJson()) {
-            return new CollectTaskResource(true, 'Data berhasil ditambah!', $query);
+        // Check jika data dengan no_sr sudah ada
+        $task = CollectTask::where('no_sr', '=', $data['no_sr'])->first();
+
+        if ($task) {
+            // Jika ditemukan, update
+            $task->update([
+                'remaining_bill' => $data['remaining_bill'],
+                'bill_status' => 0,
+                'assign_to' => null,
+                'assign_by' => null,
+                'assign_date' => $request->assign_date
+            ]);
+            $query = $task;
+        } else {
+            // Jika tidak ditemukan, tambahkan
+            $query = CollectTask::create($data);
         }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Data berhasil ditambah!',
-            'data' => $query
+        // Kembalikan response
+        return new CollectTaskResource(true, 'Data berhasil diproses!', $query);
+    }
+
+    public function getSR($id)
+    {
+        $query = CollectTask::select('*')
+            ->where('no_sr', $id)
+            ->first(); // Eksekusi query untuk mendapatkan data pertama
+
+        if ($query) {
+            return new CollectTaskResource(true, 'Data ditemukan!', $query);
+        } else {
+            return new CollectTaskResource(false, 'Data tidak ditemukan!', null);
+        }
+    }
+
+    public function validateTask(Request $request, $id)
+    {
+        $query = CollectTask::find($id);
+
+        $query->update([
+            // set jadi status selesai
+            'bill_status' => 2,
+            // set siapa yg validasi
+            'validate_by' => $request->validate_by,
         ]);
+    }
+
+    public function assignProcess(Request $request, $id)
+    {
+        $query = CollectTask::find($id);
+
+        // dd($query->no_sr);
+        $query->update([
+            'bill_status' => 3,
+            'assign_to' => $request->assign_to,
+            'assign_by' => $request->assign_by,
+        ]);
+
+        $type = $query->sr_type;
+
+        if ($type == 'TTT') {
+            $sr_type = 'Tanda Terima Tagihan';
+        } elseif ($type == 'TTST') {
+            $sr_type = 'Tanda Terima Sertifikat Tera';
+        } elseif ($type == 'AT') {
+            $sr_type = 'Ambil Tagihan';
+        } elseif ($type == 'ABL') {
+            $sr_type = 'Antar Bon Lunas';
+        } else {
+            $sr_type = NULL;
+        }
+
+        // tambahkan laporan tb_collect secara otomatis
+        Collector::create([
+            'no_sr' => $query->no_sr,
+            'kode_pegawai' => $request->assign_to,
+            'title' => $sr_type,
+            'location' => $query->customer_address,
+            'assign_at' => $query->assign_date,
+        ]);
+
+        return new CollectTaskResource(true, 'Data berhasil di assign', null);
+    }
+
+    public function massAssignProcess(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'kode_pegawai' => 'required|integer',
+            'sr_data' => 'required|array',
+            'sr_data.*' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // mass update
+        $query = CollectTask::whereIn('no_sr', $request->sr_data);
+        $query->update([
+            'bill_status' => 3,
+            'assign_to' => $request->kode_pegawai,
+            'assign_by' => $request->assign_by,
+        ]);
+
+        $type = $query->sr_type;
+
+        if ($type == 'TTT') {
+            $sr_type = 'Tanda Terima Tagihan';
+        } elseif ($type == 'TTST') {
+            $sr_type = 'Tanda Terima Sertifikat Tera';
+        } elseif ($type == 'AT') {
+            $sr_type = 'Ambil Tagihan';
+        } elseif ($type == 'ABL') {
+            $sr_type = 'Antar Bon Lunas';
+        } else {
+            $sr_type = NULL;
+        }
+
+        // tambahkan laporan tb_collect secara otomatis
+        Collector::create([
+            'no_sr' => $request->sr_data,
+            'kode_pegawai' => $request->kode_pegawai,
+            'title' => $sr_type,
+            'location' => $query->customer_address,
+            'assign_at' => $query->assign_date,
+        ]);
+
+        return new CollectTaskResource(true, 'Berhasil menambah assigment', null);
     }
 
     public function destroy(string $id)
     {
         $query = CollectTask::find($id);
-        $query->delete();
+
+        if (!$query) {
+            return response()->json(['success' => false, 'message' => 'Data tidak ditemukan'], 404);
+        }
+
+        $query->delete(); // Menggunakan soft delete bawaan Laravel
 
         return new CollectTaskResource(true, 'Data berhasil dihapus', null);
     }

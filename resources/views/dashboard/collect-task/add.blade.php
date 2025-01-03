@@ -42,7 +42,7 @@
 						<div class="w-full">
 							<x-input.select id="sr_type" name="sr_type" :options="[
 							    'TTT' => 'Tanda Terima Tagihan',
-							    'TTSA' => 'Tanda Terima Sertifikat Area',
+							    'TTST' => 'Tanda Terima Sertifikat Tera',
 							    'AT' => 'Ambil Tagihan',
 							    'ABL' => 'Antar Bon Lunas',
 							]" default-option="Pilih tipe SR">
@@ -73,18 +73,11 @@
 							<div class="mt-2 hidden text-sm text-red-500" id="alert-customer_name"></div>
 						</div>
 
-						<div class="w-full">
+						<div class="col-span-2 w-full">
 							<x-input.basic id="customer_recipient" name="customer_recipient" placeholder="Bp. Samsudin" required>
 								Nama Penerima
 							</x-input.basic>
 							<div class="mt-2 hidden text-sm text-red-500" id="alert-customer_recipient"></div>
-						</div>
-
-						<div class="w-full">
-							<x-input.phone-number id="customer_telp" name="customer_telp" placeholder="08123456XXXX" required>
-								Telepon
-							</x-input.phone-number>
-							<div class="mt-2 hidden text-sm text-red-500" id="alert-customer_telp"></div>
 						</div>
 
 						<div class="col-span-2 w-full">
@@ -109,10 +102,24 @@
 						</div>
 
 						<div class="w-full">
+							<x-input.phone-number id="customer_telp" name="customer_telp" placeholder="08123456XXXX" required>
+								Telepon
+							</x-input.phone-number>
+							<div class="mt-2 hidden text-sm text-red-500" id="alert-customer_telp"></div>
+						</div>
+
+						<div class="w-full">
 							<x-input.currency id="total_bill" name="total_bill" placeholder="Rp. XXX.XXX,-" required>
 								Total Tagihan
 							</x-input.currency>
 							<div class="mt-2 hidden text-sm text-red-500" id="alert-total_bill"></div>
+						</div>
+
+						<div class="w-full">
+							<x-input.currency id="remaining_bill" name="remaining_bill" placeholder="Rp. XXX.XXX,-" required>
+								Sisa Tagihan
+							</x-input.currency>
+							<div class="mt-2 hidden text-sm text-red-500" id="alert-remaining_bill"></div>
 						</div>
 
 						<div class="col-span-2 w-full">

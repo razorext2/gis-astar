@@ -7,17 +7,22 @@
 				<li>
 					<a
 						class="{{ Route::is('collect-task.index') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-gray-600 dark:hover:text-gray-300"
-						href="#">Belum Tagih</a>
+						href="{{ route('collect-task.index') }}">Belum Tagih</a>
 				</li>
 				<li>
 					<a
-						class="{{ Route::is('pegawai.attendancelist') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-gray-600 dark:hover:text-gray-300"
-						href="#">Berjalan</a>
+						class="{{ Route::is('collect-task.pending') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-gray-600 dark:hover:text-gray-300"
+						href="{{ route('collect-task.pending') }}">Tertunda</a>
 				</li>
 				<li>
 					<a
-						class="{{ Route::is('pegawai.attendancelist') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-gray-600 dark:hover:text-gray-300"
-						href="#">Selesai</a>
+						class="{{ Route::is('collect-task.onprogress') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-gray-600 dark:hover:text-gray-300"
+						href="{{ route('collect-task.onprogress') }}">Berjalan</a>
+				</li>
+				<li>
+					<a
+						class="{{ Route::is('collect-task.completed') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-gray-600 dark:hover:text-gray-300"
+						href="{{ route('collect-task.completed') }}">Selesai</a>
 				</li>
 			</ul>
 		</div>
@@ -39,8 +44,8 @@
 
 				@can('collect-task-assign')
 					<div>
-						<form id="assign-task" action="{{ route('collect-task.assign') }}"></form>
-						<x-button.primary id="assign-button" form="assign-task" type="submit">
+						<form id="mass-assign-collect" action="{{ route('collect-task.mass-assign') }}"></form>
+						<x-button.primary id="assign-button" form="mass-assign-collect" type="submit">
 							<x-slot name="icon">
 								<x-icons.file-circle-plus class="h-6 w-6 text-green-500 dark:text-white" />
 							</x-slot>

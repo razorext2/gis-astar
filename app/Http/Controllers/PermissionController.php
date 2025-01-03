@@ -108,6 +108,8 @@ class PermissionController extends Controller
             Permission::create(['name' => $permissionName]);
         }
 
+        
+
         return redirect()->route('permissions.index')->with('status', 'Berhasil menambah data role');;
     }
 
