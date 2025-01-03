@@ -38,16 +38,7 @@ export function showDatatables() {
         {
             data: "created_at",
             name: "created_at",
-        },
-        {
-            data: "status", // Kolom status untuk sorting
-            name: "status",
-            // visible: false, // Tidak ditampilkan di tabel
         }],
-        // order: [
-        //     [6, 'desc'],
-        //     // [5, 'desc'],
-        // ],
         dom: `<"absolute top-1 md:left-0 mt-14 lg:mt-0 dark:text-white max-w-xs"B><"text-left lg:text-right dark:text-white"l><"relative overflow-x-auto w-full mt-20 lg:mt-4"t><"grid text-center gap-6 lg:grid-cols-2 mt-4 dark:text-white"<"lg:mt-3 lg:text-left"i><"lg:text-right dark:text-gray-900"p>>`,
         buttons: [{
             extend: "csv",
@@ -66,11 +57,6 @@ export function showDatatables() {
             $(row).addClass('border-b-[0.5px] h-14 dark:border-gray-800 border-gray-200 hover:bg-gray-50 dark:hover:bg-[#222226]'); // Replace 'custom-class' with your desired class name
         }
     });
-
-    // set autorefresh
-    setInterval(() => {
-        $('#table-collector').DataTable().ajax.reload(null, false);
-    }, 300000);
 
     $('#cari').click(function () {
         // Ambil nilai dari semua input filter
