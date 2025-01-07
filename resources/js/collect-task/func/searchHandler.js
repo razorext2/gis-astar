@@ -8,7 +8,7 @@ export function searchDataHandler() {
 
       // Cari data SR di API BSI
       try {
-        const responseBSI = await axios.get(`/proxy/fetchSR`, {
+        const responseBSI = await axios.get(`${APP_URL}/proxy/fetchSR`, {
           params: { NomorPermintaanJual: no_sr }
         });
 
@@ -24,7 +24,7 @@ export function searchDataHandler() {
 
           // Cari data SR di database
           try {
-            const responseDB = await axios.get(`/api/collect-task-api/getSR/${no_sr}`);
+            const responseDB = await axios.get(`${APP_URL}/api/collect-task-api/getSR/${no_sr}`);
 
             if (responseDB.data && responseDB.data.data) {
               // console.log('dari db')

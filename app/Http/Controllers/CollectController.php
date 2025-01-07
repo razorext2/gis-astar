@@ -47,7 +47,7 @@ class CollectController extends Controller
             $query->where('kode_pegawai', Auth::user()->kode_pegawai);
         }
 
-        $status = $request->get('statuses');
+        $status = $request->get('s');
 
         if ($status == 'approved') {
             // filter status = 1 (disetujui)

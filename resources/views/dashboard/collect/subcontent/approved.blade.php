@@ -13,7 +13,7 @@
 @endsection
 @push('script')
 	<script>
-		const index = "{{ route('collect.showdata') }}?statuses=approved";
+		const index = "{{ route('collect.showdata') }}?s=approved";
 	</script>
 	@vite(['resources/js/collect/index.js'])
 @endpush
