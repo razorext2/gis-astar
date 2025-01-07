@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\TaskAssigned;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CollectTaskResource;
 use App\Models\CollectTask;
 use App\Models\Collector;
-use Carbon\Traits\Timestamp;
+use App\Models\User;
+use App\Notifications\CollectorTaskAssign;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -90,26 +92,33 @@ class ApiCollectTaskController extends Controller
     {
         $query = CollectTask::find($id);
 
-        // dd($query->no_sr);
-        $query->update([
-            'bill_status' => 3,
-            'assign_to' => $request->assign_to,
-            'assign_by' => $request->assign_by,
-        ]);
+        if ($query) {
+            $query->update([
+                'bill_status' => 3,
+                'assign_to' => $request->assign_to,
+                'assign_by' => $request->assign_by,
+            ]);
+
+            // // cari pegawai sesuai assign_to (kode_jari dari field)
+            // $pegawai = User::where('kode_pegawai', $request->assign_to)->first();
+
+            // if ($pegawai) {
+            //     // kirim notifikasi
+            //     $pegawai->notify(new CollectorTaskAssign($query));
+            // }
+
+            event(new TaskAssigned($query));
+        }
 
         $type = $query->sr_type;
 
-        if ($type == 'TTT') {
-            $sr_type = 'Tanda Terima Tagihan';
-        } elseif ($type == 'TTST') {
-            $sr_type = 'Tanda Terima Sertifikat Tera';
-        } elseif ($type == 'AT') {
-            $sr_type = 'Ambil Tagihan';
-        } elseif ($type == 'ABL') {
-            $sr_type = 'Antar Bon Lunas';
-        } else {
-            $sr_type = NULL;
-        }
+        $sr_type = match ($type) {
+            'TTT' => 'Tanda Terima Tagihan',
+            'TTST' => 'Tanda Terima Sertifikat Tera',
+            'AT' => 'Ambil Tagihan',
+            'ABL' => 'Antar Bon Lunas',
+            default => null,
+        };
 
         // tambahkan laporan tb_collect secara otomatis
         Collector::create([

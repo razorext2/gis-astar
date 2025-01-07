@@ -1,15 +1,15 @@
 export function showDatatables() {
-    let table = $('#table-collector').DataTable({
+    let table = $('#dataTable').DataTable({
         processing: true,
         serverSide: true,
         responsive: true,
         "lengthMenu": [10, 25, 50, 75, 100, -1],
         ajax: {
-            url: collectIndex,
+            url: index,
             type: "GET",
             data: function (d) {
-                d.title = $('#title').val();
                 d.no_sr = $('#no_sr').val();
+                d.title = $('#title').val();
                 d.status = $('#status').val();
                 d.startDate = $('#datepicker-range-start').val();
                 d.endDate = $('#datepicker-range-end').val();
@@ -60,7 +60,7 @@ export function showDatatables() {
 
     $('#cari').click(function () {
         // Ambil nilai dari semua input filter
-        const filters = ['#title', '#no_sr', '#status', '#datepicker-range-start',
+        const filters = ['#title', '#title', '#no_sr', '#status', '#datepicker-range-start',
             '#datepicker-range-end'
         ].map(selector => $(
             selector).val());

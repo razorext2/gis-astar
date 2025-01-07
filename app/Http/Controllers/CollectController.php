@@ -17,21 +17,54 @@ class CollectController extends Controller
         $this->middleware('permission:collect-edit', ['only' => 'edit']);
     }
 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
+    public function index()
     {
+        return view('dashboard.collect.subcontent.main');
+    }
+
+    public function approved()
+    {
+        return view('dashboard.collect.subcontent.approved');
+    }
+
+    public function submitted()
+    {
+        return view('dashboard.collect.subcontent.submitted');
+    }
+
+    public function rejected()
+    {
+        return view('dashboard.collect.subcontent.rejected');
+    }
+
+    public function showdata(Request $request)
+    {
+        $query = Collector::query()
+            ->with(['pegawaiRelasi:kode_pegawai,full_name', 'collectTaskRelasi'])
+            ->whereNull('deleted_at');
+
+        if (!Auth::user()->can('collect-approve')) {
+            $query->where('kode_pegawai', Auth::user()->kode_pegawai);
+        }
+
+        $status = $request->get('statuses');
+
+        if ($status == 'approved') {
+            // filter status = 1 (disetujui)
+            $query->where('status', '=', 1);
+        } elseif ($status == 'submitted') {
+            // filter status = 2 (diajukan)
+            $query->where('status', '=', 2);
+        } elseif ($status == 'rejected') {
+            // filter status = 3 (ditolak)
+            $query->where('status', '=', 3);
+        } else {
+            $query->where('status', '=', 0);
+        }
+
+        $query->latest();
+
         if ($request->ajax()) {
-            $query = Collector::with(['pegawaiRelasi:kode_pegawai,full_name', 'collectTaskRelasi'])
-                ->whereNull('deleted_at');
-
-            if (!Auth::user()->can('collect-approve')) {
-                $query->where('kode_pegawai', Auth::user()->kode_pegawai);
-            }
-
-            $query->orderBy('status', 'desc');
-
             return DataTables::of($query->latest())
                 ->addIndexColumn()
                 ->editColumn('no_sr', function ($data) {
@@ -115,28 +148,26 @@ class CollectController extends Controller
                         ],
                     ]);
                 })
-                // ->filter(function ($query) use ($request) {
-                //     if ($request->filled("title")) {
-                //         $query->where('title', "LIKE", "%{$request->title}%");
-                //     }
+                ->filter(function ($query) use ($request) {
+                    if ($request->filled("customer_name")) {
+                        $query->where('title', "LIKE", "%{$request->customer_name}%");
+                    }
 
-                //     if ($request->filled("no_sr")) {
-                //         $query->where('no_sr', "LIKE", "%{$request->no_sr}%");
-                //     }
+                    if ($request->filled("no_sr")) {
+                        $query->where('no_sr', "LIKE", "%{$request->no_sr}%");
+                    }
 
-                //     if ($request->filled("status")) {
-                //         $query->where('status', "LIKE", "%{$request->status}%");
-                //     }
+                    if ($request->filled("status")) {
+                        $query->where('status', "LIKE", "%{$request->status}%");
+                    }
 
-                //     if ($request->filled("startDate") && $request->filled("endDate")) {
-                //         $query->whereBetween('created_at', [$request->startDate, $request->endDate]);
-                //     }
-                // })
+                    if ($request->filled("startDate") && $request->filled("endDate")) {
+                        $query->whereBetween('created_at', [$request->startDate, $request->endDate]);
+                    }
+                })
                 ->rawColumns(['actions', 'no_sr', 'title',  'payment_type', 'created_at'])
                 ->toJson();
         }
-
-        return view('dashboard.collect.index');
     }
 
     /**

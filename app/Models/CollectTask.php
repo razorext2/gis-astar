@@ -41,6 +41,11 @@ class CollectTask extends Model
         return $this->belongsTo(Pegawai::class, 'assign_to', 'kode_pegawai');
     }
 
+    public function userRelasi()
+    {
+        return $this->belongsTo(User::class, 'assign_to', 'kode_pegawai');
+    }
+
     public function getShortCustomerNameAttribute()
     {
         $words = explode(' ', $this->customer_name);

@@ -13,6 +13,7 @@
         "laravel/breeze": "^2.1",
         "laravel/framework": "^11.9",
         "laravel/octane": "^2.6",
+        "laravel/reverb": "^1.4",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "spatie/laravel-permission": "^6.9",

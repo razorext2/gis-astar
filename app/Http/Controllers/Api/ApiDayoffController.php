@@ -35,17 +35,8 @@ class ApiDayoffController extends Controller
         $data = $validator->validated();
         $query = Dayoff::create($data);
 
-        // Jika request JSON, kembalikan response JSON
-        if ($request->isJson()) {
-            return new DayoffResource(true, 'Data berhasil ditambah!', $query);
-        }
-
-        // Response default jika bukan request JSON
-        return response()->json([
-            'success' => true,
-            'message' => 'Data berhasil ditambah!',
-            'data' => $query
-        ]);
+        // kembalikan response JSON
+        return new DayoffResource(true, 'Data berhasil ditambah!', $query);
     }
 
     public function update(Request $request, $id)

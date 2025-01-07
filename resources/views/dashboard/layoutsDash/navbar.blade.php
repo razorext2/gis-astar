@@ -15,10 +15,13 @@
 			<!-- Notifications -->
 			<button
 				class="mr-1 rounded-xl p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 focus:ring-2 focus:ring-gray-300 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-600"
-				data-dropdown-toggle="notification-dropdown" type="button">
+				id="notificationButton" data-dropdown-toggle="notification-dropdown" type="button">
 				<span class="sr-only">View notifications</span>
 				<!-- Bell icon -->
-				<x-icons.bell class="h-6 w-6 text-gray-800 dark:text-white" />
+				<div class="relative w-full" id="notifications-bell">
+					<x-icons.bell class="h-6 w-6 text-gray-800 dark:text-white" />
+
+				</div>
 			</button>
 			<!-- Dropdown menu -->
 			<div
@@ -26,38 +29,40 @@
 				id="notification-dropdown">
 				<div
 					class="block bg-gray-50 px-4 py-2 text-center text-base font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-400">
-					Notifications
+					Notifikasi
 				</div>
-				<div>
+				<div class="py-2.5">
 
-					<span class="flex px-4 py-3 text-xs text-gray-800 dark:text-white"> You have nothing here. </span>
+					{{-- @if (count(auth()->user()->unreadNotifications) > 0)
+						@foreach (auth()->user()->unreadNotifications as $notification)
+							<a class="flex border-b px-4 py-3 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600"
+								href="{{ route('notification.mark-as-read', $notification->id) }}">
+								<div class="flex-shrink-0">
 
-					{{-- notification will look like --}}
-					{{-- <a class="flex border-b px-4 py-3 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600" href="#">
-						<div class="flex-shrink-0">
-							<img class="h-11 w-11 rounded-full"
-								src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png" alt="Bonnie Green avatar">
-							<div
-								class="bg-primary-700 absolute -mt-5 ml-6 flex h-5 w-5 items-center justify-center rounded-full border border-white dark:border-gray-700">
-								<svg class="h-2 w-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-									viewBox="0 0 18 18">
-									<path
-										d="M15.977.783A1 1 0 0 0 15 0H3a1 1 0 0 0-.977.783L.2 9h4.239a2.99 2.99 0 0 1 2.742 1.8 1.977 1.977 0 0 0 3.638 0A2.99 2.99 0 0 1 13.561 9H17.8L15.977.783ZM6 2h6a1 1 0 1 1 0 2H6a1 1 0 0 1 0-2Zm7 5H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Z" />
-									<path
-										d="M1 18h16a1 1 0 0 0 1-1v-6h-4.439a.99.99 0 0 0-.908.6 3.978 3.978 0 0 1-7.306 0 .99.99 0 0 0-.908-.6H0v6a1 1 0 0 0 1 1Z" />
-								</svg>
-							</div>
-						</div>
-						<div class="w-full pl-3">
-							<div class="mb-1.5 text-sm font-normal text-gray-500 dark:text-gray-400">New message from <span
-									class="font-semibold text-gray-900 dark:text-white">Bonnie Green</span>: "Hey, what's up? All set for the
-								presentation?"</div>
-							<div class="text-primary-700 dark:text-primary-400 text-xs font-medium">a few moments ago</div>
-						</div>
-					</a> --}}
+									<img class="h-11 w-11 rounded-full"
+										src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png"
+										alt="Bonnie Green avatar">
+
+								</div>
+								<div class="w-full pl-3">
+									<div class="mb-1.5 text-sm font-normal text-gray-500 dark:text-gray-400">
+										<span class="font-semibold text-gray-900 dark:text-white">
+											{{ $notification->data['message'] }}
+										</span>
+									</div>
+									<div class="text-xs font-medium text-gray-700 dark:text-gray-400">{{ $notification->data['created_at'] }}
+									</div>
+								</div>
+							</a>
+						@endforeach
+					@else
+						<span class="w-full p-4 text-sm text-gray-800 dark:text-white">
+							Tidak ada notifikasi baru.
+						</span>
+					@endif --}}
 
 				</div>
-				<a
+				{{-- <a
 					class="block bg-gray-50 py-2 text-center text-base font-medium text-gray-900 hover:bg-gray-100 dark:bg-gray-700 dark:text-white dark:hover:underline"
 					href="#">
 					<div class="inline-flex items-center">
@@ -70,7 +75,7 @@
 						</svg>
 						View all
 					</div>
-				</a>
+				</a> --}}
 			</div>
 
 			<button class="ms-3 flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"

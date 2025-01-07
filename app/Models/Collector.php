@@ -79,4 +79,9 @@ class Collector extends Model
     {
         return $this->belongsTo(CollectTask::class, 'no_sr', 'no_sr');
     }
+
+    public function userRelasi()
+    {
+        return $this->belongsTo(User::class, 'kode_pegawai', 'kode_pegawai');
+    }
 }

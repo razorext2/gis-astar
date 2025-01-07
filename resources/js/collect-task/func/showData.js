@@ -62,11 +62,6 @@ export function showDatatables() {
     }
   });
 
-  // set autorefresh
-  setInterval(() => {
-    $('#dataTable').DataTable().ajax.reload(null, false);
-  }, 300000);
-
   $('#cari').click(function () {
     // Ambil nilai dari semua input filter
     const filters = ['#customer_name', '#no_sr', '#sr_type', '#datepicker-range-start',

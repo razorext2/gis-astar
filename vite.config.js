@@ -9,10 +9,10 @@ export default defineConfig({
                 "resources/css/app.css",
                 // js
                 "resources/js/app.js",
+                "resources/js/bootstrap.js",
 
                 // global
                 "resources/js/global/alpine.js",
-                "resources/js/global/bootstrap.js",
                 "resources/js/global/chart.js",
                 "resources/js/global/leaflet.js",
                 "resources/js/global/simpleTables.js",
@@ -25,7 +25,7 @@ export default defineConfig({
 
                 // collect
                 "resources/js/collect/index.js",
-                "resources/js/collect/add.js",
+                // "resources/js/collect/add.js",
                 "resources/js/collect/edit.js",
                 "resources/js/collect/detail.js",
 

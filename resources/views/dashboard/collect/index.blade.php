@@ -1,18 +1,31 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-	{{-- <form id="add-collector" action="{{ route('collect.create') }}"></form> --}}
 	<div class="relative grid grid-cols-1 gap-6">
 
-		{{-- @can('collect-create')
-			<div class="max-w-xs">
-				<x-button.success id="add-button" form="add-collector" type="submit">
-					<x-slot name="icon">
-						<x-icons.angle-right class="h-6 w-6 text-green-500 dark:text-white" />
-					</x-slot>
-					Tambah Data
-				</x-button.success>
-			</div>
-		@endcan --}}
+		<div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b]">
+			<ul class="flex flex-wrap text-center text-sm font-medium">
+				<li>
+					<a
+						class="{{ Route::is('collect.index') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-gray-600 dark:hover:text-gray-300"
+						href="{{ route('collect.index') }}">Belum Dilengkapi</a>
+				</li>
+				<li>
+					<a
+						class="{{ Route::is('collect.submitted') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-gray-600 dark:hover:text-gray-300"
+						href="{{ route('collect.submitted') }}">Diajukan</a>
+				</li>
+				<li>
+					<a
+						class="{{ Route::is('collect.approved') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-gray-600 dark:hover:text-gray-300"
+						href="{{ route('collect.approved') }}">Disetujui</a>
+				</li>
+				<li>
+					<a
+						class="{{ Route::is('collect.rejected') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-gray-600 dark:hover:text-gray-300"
+						href="{{ route('collect.rejected') }}">Ditolak</a>
+				</li>
+			</ul>
+		</div>
 
 		<div class="flex h-auto items-center justify-center">
 			<div
@@ -30,13 +43,13 @@
 						@endcan
 
 						<div class="col-span-2 mx-auto flex w-full items-center lg:col-span-1">
-							<x-filter.filter-input-text id="customer_name" name="customer_name" :text="'nama customer'">
+							<x-filter.filter-input-text id="title" name="title" :text="'nama customer'">
 								<x-icons.font-case class="h-4 w-4 text-gray-500 dark:text-gray-400" />
 							</x-filter.filter-input-text>
 						</div>
 
 						<div class="col-span-2 mx-auto w-full items-center lg:col-span-1">
-							<x-filter.filter-input-select id="status" name="status" :options="['0' => 'Pending', '1' => 'Approved', '2' => 'Rejected']" default-option="Filter by status" />
+							<x-filter.filter-input-select id="status" name="status" :options="['0' => 'Belum di lengkapi', '1' => 'Disetujui', '2' => 'Diajukan', '3' => 'Ditolak']" default-option="Filter by status" />
 						</div>
 
 						<div class="col-span-2 mx-auto w-full items-center lg:col-span-1">
@@ -47,23 +60,10 @@
 				</div>
 				{{-- end filter --}}
 
-				<div class="col-span-2" x-data="{ openRow: null }">
-					<x-dashboard.table id="table-collector" :tablename="[
-					    '0' => '#',
-					    '1' => 'Aksi',
-					    '2' => 'No SR',
-					    '3' => 'Customer',
-					    '4' => 'Detail Tagihan',
-					    '5' => 'Tanggal Penagihan',
-					]" />
-				</div>
+				{{-- subcontent --}}
+				@yield('subcontent')
+
 			</div>
 		</div>
 	</div>
 @endsection
-@push('script')
-	<script>
-		const collectIndex = "{{ route('collect.index') }}";
-	</script>
-	@vite(['resources/js/collect/index.js'])
-@endpush

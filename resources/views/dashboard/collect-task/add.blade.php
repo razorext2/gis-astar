@@ -60,9 +60,6 @@
 								Tanggal SR
 							</x-input.date>
 
-							{{-- <x-input.basic id="sr_date" name="sr_date" placeholder="YYYY-MM-DD" required>
-								Tanggal SR
-							</x-input.basic> --}}
 							<div class="mt-2 hidden text-sm text-red-500" id="alert-sr_date"></div>
 						</div>
 

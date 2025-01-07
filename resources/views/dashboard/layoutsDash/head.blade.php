@@ -26,7 +26,6 @@
 	@vite(['resources/js/global/leaflet.js'])
 @endif
 
-
 <link href="https://cdn.datatables.net/2.1.8/css/dataTables.tailwindcss.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/datetime/1.5.4/css/dataTables.dateTime.min.css" rel="stylesheet">
 {{-- datatables button --}}

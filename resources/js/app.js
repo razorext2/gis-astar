@@ -1,4 +1,4 @@
-import "./global/bootstrap";
+import "./bootstrap";
 import "flowbite";
 import Swal from "sweetalert2";
 import Quill from "quill";

@@ -42,7 +42,9 @@ class CollectTaskController extends Controller
 
     public function showdata(Request $request)
     {
-        $query = CollectTask::query()->with(['pegawaiRelasi:id,kode_pegawai,full_name']);
+        $query = CollectTask::query()
+            ->with(['pegawaiRelasi:id,kode_pegawai,full_name']);
+
         $status = $request->get('status');
 
         if ($status == 'on-progress') {

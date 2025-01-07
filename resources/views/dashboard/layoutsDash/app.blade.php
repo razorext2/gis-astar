@@ -6,6 +6,7 @@
 	</head>
 
 	<body class="bg-gray-50 dark:bg-[#09090b]">
+
 		@if (session('status'))
 			<div
 				class="fixed right-0 top-[4.5rem] z-50 flex w-full max-w-sm scale-90 transform items-center divide-x transition duration-300"
@@ -52,6 +53,10 @@
 				</div>
 
 				<x-card.card-carousel />
+
+				<div class="w-full" id="notification">
+					
+				</div>
 
 				@yield('content')
 			</div>

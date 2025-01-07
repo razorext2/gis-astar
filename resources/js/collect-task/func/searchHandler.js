@@ -27,11 +27,11 @@ export function searchDataHandler() {
             const responseDB = await axios.get(`/api/collect-task-api/getSR/${no_sr}`);
 
             if (responseDB.data && responseDB.data.data) {
-              console.log('dari db')
+              // console.log('dari db')
               $('#remaining_bill').val(responseBSI.data.data[0].Total);
               $('#total_bill').val(responseDB.data.data.total_bill);
             } else {
-              console.log('dari bsi')
+              // console.log('dari bsi')
               $('#remaining_bill').val(responseBSI.data.data[0].Total);
               $('#total_bill').val(responseBSI.data.data[0].Total);
             }

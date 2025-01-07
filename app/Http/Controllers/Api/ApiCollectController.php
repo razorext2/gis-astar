@@ -7,6 +7,7 @@ use App\Models\PhotoCollect;
 use App\Models\CollectTask;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CollectResource;
+use App\Notifications\CollectorNew;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -40,19 +41,20 @@ class ApiCollectController extends Controller
 
         $query = Collector::find($id);
 
-        // dd($query->no_sr);
-
-        $query->update([
-            'title' => $request->title,
-            'keterangan' => $request->keterangan,
-            'latitude' => $request->latitude,
-            'longitude' => $request->longitude,
-            'have_paid' => $request->have_paid,
-            'payment_type' => $request->payment_type,
-            'payment_amount' => $request->payment_amount,
-            'status' => 2,
-            'location' => $request->location
-        ]);
+        if ($query) {
+            $query->update([
+                'title' => $request->title,
+                'keterangan' => $request->keterangan,
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
+                'have_paid' => $request->have_paid,
+                'payment_type' => $request->payment_type,
+                'payment_amount' => $request->payment_amount,
+                'status' => 2,
+                'updated_at' => now(),
+                'location' => $request->location
+            ]);
+        }
 
         $task = CollectTask::where('no_sr', '=', $query->no_sr)->first();
 
@@ -92,17 +94,8 @@ class ApiCollectController extends Controller
             }
         }
 
-        // Jika request JSON, kembalikan response JSON
-        if ($request->isJson()) {
-            return new CollectResource(true, 'Data berhasil diubah!', $query);
-        }
-
-        // Response default jika bukan request JSON
-        return response()->json([
-            'success' => true,
-            'message' => 'Data berhasil diubah!',
-            'data' => $query
-        ]);
+        // kembalikan response JSON
+        return new CollectResource(true, 'Data berhasil diubah!', $query);
     }
 
     /**

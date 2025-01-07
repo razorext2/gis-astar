@@ -46,6 +46,14 @@ Route::middleware('auth')->group(function () {
     // pegawai
     Route::get('api/get-attendance-data', [PegawaiController::class, 'getAttendanceData'])->name('pegawai.getattendance');
 
+    // notifikasi
+    Route::get('notifications/{id}/mark-as-read', function ($id) {
+        $notification = auth()->user()->unreadNotifications->find($id);
+        $notification->markAsRead();
+
+        return back()->with('success', 'Notification has readed');
+    })->name('notification.mark-as-read');
+
     Route::prefix('proxy')->as('')->group(function () {
         Route::get('fetchSR', function (Request $request) {
             $no_sr = $request->query('NomorPermintaanJual');
@@ -98,6 +106,15 @@ Route::middleware('auth')->group(function () {
         // record attendance
         Route::get('capture', [CaptureController::class, 'index'])->name('capture.index');
 
+        // route collect 
+        // tampilkan semua data where status = 0 (belum dilengkapi)
+        Route::get('collect/show', [CollectController::class, 'showdata'])->name('collect.showdata');
+        // tampilkan semua data where status = 1 (approved)
+        Route::get('collect/approved', [CollectController::class, 'approved'])->name('collect.approved');
+        // tampilkan semua data where status = 2 (diajukan)
+        Route::get('collect/submitted', [CollectController::class, 'submitted'])->name('collect.submitted');
+        // tampilkan semua data where status = 3 (ditolak)
+        Route::get('collect/rejected', [CollectController::class, 'rejected'])->name('collect.rejected');
         // route kolektor
         Route::resource('collect', CollectController::class)->except(['store', 'update', 'destroy']);
 
@@ -110,7 +127,7 @@ Route::middleware('auth')->group(function () {
         Route::get('collect-task/completed', [CollectTaskController::class, 'completed'])->name('collect-task.completed');
         // tampilkan semua data where status = 3 (tertunda)
         Route::get('collect-task/pending', [CollectTaskController::class, 'pending'])->name('collect-task.pending');
-
+        // route collect task
         Route::get('collect-task/autocomplete', [CollectTaskController::class, 'autocomplete'])->name('collect-task.autocomplete');
         Route::get('collect-task/assign', [CollectTaskController::class, 'assign'])->name('collect-task.assign');
         Route::get('collect-task/mass-assign', [CollectTaskController::class, 'massAssign'])->name('collect-task.mass-assign');
