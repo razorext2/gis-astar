@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Yajra\DataTables\Facades\DataTables;
+use Carbon\Carbon;
 
 class CollectController extends Controller
 {
@@ -118,9 +119,16 @@ class CollectController extends Controller
                     ]);
                 })
                 ->editColumn('created_at', function ($data) {
+
+                    if (is_null($data->assign_at)) {
+                        $date = $data->collectTaskRelasi->assign_date;
+                    } else {
+                        $date = $data->assign_at;
+                    }
+
                     return view('components.dashboard.custom-date', [
-                        'date' => $data->created_at->locale('id')->isoFormat('D MMMM YYYY'),
-                        'time' => $data->created_at->locale('id')->isoFormat('HH:mm:ss')
+                        'date' => Carbon::parse($date)->locale('id')->isoFormat('D MMMM YYYY'),
+                        'time' => Carbon::parse($date)->locale('id')->isoFormat('HH:mm:ss')
                     ]);
                 })
                 ->addColumn('actions', function ($data) {
