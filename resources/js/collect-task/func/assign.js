@@ -73,12 +73,9 @@ export function massAssign() {
       assign_by: assign_by,
       _token: token
     }).then(function () {
-      Swal.fire({
-        icon: "success",
-        title: "Laporan berhasil diubah!",
-        showConfirmButton: false,
-        timer: 1000
-      });
+
+      Swal.fire(`SR berhasil di assign ke kode jari ${kode_pegawai}`, "", "success");
+      $('#dataTable').DataTable().ajax.reload(null, false);
 
       setTimeout(() => window.location.href = `${APP_URL}/dashboard/collect-task`, 1000);
     }).catch(function (error) {

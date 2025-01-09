@@ -107,7 +107,7 @@ class ApiCollectTaskController extends Controller
             //     $pegawai->notify(new CollectorTaskAssign($query));
             // }
 
-            event(new TaskAssigned($query));
+            // event(new TaskAssigned($query));
         }
 
         $type = $query->sr_type;
@@ -147,36 +147,26 @@ class ApiCollectTaskController extends Controller
             ], 422);
         }
 
-        // mass update
-        $query = CollectTask::whereIn('no_sr', $request->sr_data);
-        $query->update([
+        // Mass update
+        CollectTask::whereIn('no_sr', $request->sr_data)->update([
             'bill_status' => 3,
             'assign_to' => $request->kode_pegawai,
             'assign_by' => $request->assign_by,
         ]);
 
-        $type = $query->sr_type;
+        // Retrieve the updated records
+        $tasks = CollectTask::whereIn('no_sr', $request->sr_data)->get();
 
-        if ($type == 'TTT') {
-            $sr_type = 'Tanda Terima Tagihan';
-        } elseif ($type == 'TTST') {
-            $sr_type = 'Tanda Terima Sertifikat Tera';
-        } elseif ($type == 'AT') {
-            $sr_type = 'Ambil Tagihan';
-        } elseif ($type == 'ABL') {
-            $sr_type = 'Antar Bon Lunas';
-        } else {
-            $sr_type = NULL;
+        foreach ($tasks as $task) {
+            // Create Collector record for each task
+            Collector::create([
+                'no_sr' => $task->no_sr,
+                'kode_pegawai' => $request->kode_pegawai,
+                'title' => $task->customer_name,
+                'location' => $task->customer_address,
+                'assign_at' => $task->assign_date,
+            ]);
         }
-
-        // tambahkan laporan tb_collect secara otomatis
-        Collector::create([
-            'no_sr' => $request->sr_data,
-            'kode_pegawai' => $request->kode_pegawai,
-            'title' => $sr_type,
-            'location' => $query->customer_address,
-            'assign_at' => $query->assign_date,
-        ]);
 
         return new CollectTaskResource(true, 'Berhasil menambah assigment', null);
     }
