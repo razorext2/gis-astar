@@ -69,7 +69,7 @@ class CollectController extends Controller
                 ->addIndexColumn()
                 ->editColumn('no_sr', function ($data) {
                     return view('components.dashboard.name-w-code', [
-                        'code' => $data->short_title,
+                        'code' => $data->collectTaskRelasi->sr_type . ' / ' . $data->short_title,
                         'name' => $data->no_sr
                     ]);
                 })
