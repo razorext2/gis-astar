@@ -63,22 +63,24 @@ class CollectController extends Controller
             $query->where('status', '=', 0);
         }
 
+        $query->whereDate('created_at', Carbon::yesterday());
+
         $query->latest();
 
         if ($request->ajax()) {
-            return DataTables::of($query->latest())
+            return DataTables::of($query)
                 ->addIndexColumn()
                 ->editColumn('no_sr', function ($data) {
                     return view('components.dashboard.name-w-code', [
-                        'code' => $data->collectTaskRelasi->sr_type . ' / ' . $data->short_title,
+                        'code' => $data->collectTaskRelasi->sr_type ?? 'NULL' . ' / ' . $data->short_title,
                         'name' => $data->no_sr
                     ]);
                 })
                 ->editColumn('title', function ($data) {
                     return view('components.dashboard.title-w-status', [
-                        'title' => $data->collectTaskRelasi->customer_name,
+                        'title' => $data->collectTaskRelasi->customer_name ?? 'NULL',
                         'status' => $data->status,
-                        'item3' => $data->collectTaskRelasi->short_customer_address
+                        'item3' => $data->collectTaskRelasi->short_customer_address ?? 'NULL'
                     ]);
                 })
                 ->editColumn('payment_type', function ($data) {
@@ -122,7 +124,7 @@ class CollectController extends Controller
                 ->editColumn('created_at', function ($data) {
 
                     if (is_null($data->assign_at)) {
-                        $date = $data->collectTaskRelasi->assign_date;
+                        $date = $data->collectTaskRelasi->assign_date ?? '00:00:00';
                     } else {
                         $date = $data->assign_at;
                     }
@@ -155,14 +157,25 @@ class CollectController extends Controller
                             ],
                         ]);
                     } else {
-                        return view('components.dashboard.single-button', [
-                            'id' => $data->id,
-                            'data' => [
-                                'id' => 'editBtn' . $data->id,
-                                'action' => route('collect.edit', $data->id),
-                                'label' => 'Lengkapi',
-                            ]
-                        ]);
+                        if ($data->status == 0) {
+                            return view('components.dashboard.single-button', [
+                                'id' => $data->id,
+                                'data' => [
+                                    'id' => 'editBtn' . $data->id,
+                                    'action' => route('collect.edit', $data->id),
+                                    'label' => 'Lengkapi',
+                                ]
+                            ]);
+                        } else {
+                            return view('components.dashboard.single-button', [
+                                'id' => $data->id,
+                                'data' => [
+                                    'id' => 'detailBtn' . $data->id,
+                                    'action' => route('collect.show', $data->id),
+                                    'label' => 'Detail',
+                                ]
+                            ]);
+                        }
                     }
                 })
                 ->filter(function ($query) use ($request) {
