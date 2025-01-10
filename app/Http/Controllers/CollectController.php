@@ -158,7 +158,7 @@ class CollectController extends Controller
                         return view('components.dashboard.single-button', [
                             'id' => $data->id,
                             'data' => [
-                                'id' => 'lengkapi',
+                                'id' => 'editBtn' . $data->id,
                                 'action' => route('collect.edit', $data->id),
                                 'label' => 'Lengkapi',
                             ]
