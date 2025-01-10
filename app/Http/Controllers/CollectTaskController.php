@@ -68,18 +68,19 @@ class CollectTaskController extends Controller
                 ->addIndexColumn()
                 ->editColumn('sr_type', function ($data) {
                     return view('components.dashboard.name-w-code', [
-                        'name' => $data->no_sr,
-                        'code' => $data->sr_type
+                        'name' => $data->no_sr ?? 'N/A',
+                        'code' => $data->sr_type ?? 'N/A'
                     ]);
                 })
                 ->editColumn('customer_name', function ($data) {
                     return view('components.dashboard.custom-date', [
-                        'date' => $data->customer_recipient,
-                        'time' => $data->short_customer_name
+                        'date' => $data->customer_recipient ?? 'N/A',
+                        'time' => $data->short_customer_name ?? 'N/A'
                     ]);
                 })
                 ->editColumn('total_bill', function ($data) {
                     return view('components.table-component.payment-detail', [
+                        'status' => 1,
                         'data' => [
                             [
                                 'title' => 'Total',
@@ -100,12 +101,6 @@ class CollectTaskController extends Controller
                             'action' => route('collect-task.show', $data->id),
                             'label' => 'Detail'
                         ],
-                        // [
-                        //     'id' => 'edit-btn',
-                        //     'permission' => Auth::user()->can('collect-task-edit'),
-                        //     'action' => route('collect-task.edit', $data->id),
-                        //     'label' => 'Edit'
-                        // ],
                     ];
 
                     if ($data->bill_status == 0) {
