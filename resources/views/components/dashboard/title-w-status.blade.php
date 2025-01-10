@@ -1,4 +1,4 @@
-<div class="flex flex-row">
+<div class="flex w-72 flex-row md:w-full">
 	@if ($status == 0)
 		<x-dashboard.status :color="'yellow'">
 			<span class="absolute mx-auto inline-flex h-full w-full animate-ping rounded-md bg-yellow-400 opacity-75"></span>

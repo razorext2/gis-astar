@@ -101,6 +101,7 @@ class CollectController extends Controller
                     }
 
                     return view('components.table-component.payment-detail', [
+                        'status' => $data->have_paid,
                         'data' => [
                             [
                                 'title' => 'Status',
@@ -132,29 +133,37 @@ class CollectController extends Controller
                     ]);
                 })
                 ->addColumn('actions', function ($data) {
-                    return view('components.dashboard.action-buttons', [
-                        'id' => $data->id,
-                        'datas' => [
-                            [
-                                'id' => 'show-btn',
-                                'permission' => Auth::user()->can('collect-list'),
-                                'action' => route('collect.show', $data->id),
-                                'label' => 'Detail'
+                    if (Auth::user()->can('collect-approve')) {
+                        return view('components.dashboard.action-buttons', [
+                            'id' => $data->id,
+                            'datas' => [
+                                [
+                                    'id' => 'show-btn',
+                                    'action' => route('collect.show', $data->id),
+                                    'label' => 'Detail'
+                                ],
+                                [
+                                    'id' => 'edit-btn',
+                                    'action' => route('collect.edit', $data->id),
+                                    'label' => 'Edit'
+                                ],
+                                [
+                                    'id' => 'delete-btn',
+                                    'action' => 'javascript:void(0)',
+                                    'label' => 'Hapus',
+                                ]
                             ],
-                            [
-                                'id' => 'edit-btn',
-                                'permission' => Auth::user()->can('collect-edit'),
+                        ]);
+                    } else {
+                        return view('components.dashboard.single-button', [
+                            'id' => $data->id,
+                            'data' => [
+                                'id' => 'lengkapi',
                                 'action' => route('collect.edit', $data->id),
-                                'label' => 'Edit'
-                            ],
-                            [
-                                'id' => 'delete-btn',
-                                'permission' => Auth::user()->can('collect-delete'),
-                                'action' => 'javascript:void(0)',
-                                'label' => 'Hapus',
+                                'label' => 'Lengkapi',
                             ]
-                        ],
-                    ]);
+                        ]);
+                    }
                 })
                 ->filter(function ($query) use ($request) {
                     if ($request->filled("customer_name")) {
