@@ -63,7 +63,9 @@ class CollectController extends Controller
             $query->where('status', '=', 0);
         }
 
-        $query->whereDate('created_at', Carbon::yesterday());
+        if (!Auth::user()->can('collect-approve')) {
+            $query->whereDate('created_at', Carbon::yesterday());
+        }
 
         $query->latest();
 
