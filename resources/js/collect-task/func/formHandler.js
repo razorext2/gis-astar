@@ -36,7 +36,7 @@ export function addDataHandler() {
           showConfirmButton: false,
           timer: 1000
         });
-        setTimeout(() => window.location.href = `${APP_URL}/dashboard/collect-task`, 1000);
+        setTimeout(() => window.location.reload(), 1000);
       },
       error: function (xhr) {
         handleFormErrors(xhr.responseJSON.errors);
