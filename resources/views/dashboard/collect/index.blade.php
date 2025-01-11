@@ -24,6 +24,16 @@
 						class="{{ Route::is('collect.rejected') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-gray-600 dark:hover:text-gray-300"
 						href="{{ route('collect.rejected') }}">Ditolak</a>
 				</li>
+				<li>
+					<x-button.success class="max-h-10" id="getCollectorExcel" type="button">
+						<x-slot name="icon">
+							<x-icons.angle-right class="icon h-6 w-6 text-red-500 dark:text-white" />
+						</x-slot>
+						Tarik Laporan
+					</x-button.success>
+
+					</button>
+				</li>
 			</ul>
 		</div>
 
@@ -67,3 +77,40 @@
 		</div>
 	</div>
 @endsection
+@push('script')
+	<script>
+		$('#getCollectorExcel').click(async function() {
+			const {
+				value: date
+			} = await Swal.fire({
+				title: "Pilih tanggal laporan",
+				showCancelButton: true,
+				input: "date",
+				didOpen: () => {
+					const today = (new Date()).toISOString();
+				}
+			});
+
+			if (date) {
+				// jika tanggal diisi
+
+				Swal.fire({
+					title: "Berhasil, data kamu sedang diexport",
+					icon: "success",
+					timer: 1000,
+				});
+
+				// Redirect browser untuk mendownload file
+				window.location.href = `{{ route('export.collector') }}/?date=${date}`;
+			} else {
+				// jika tanggal tidak diisi
+				Swal.fire({
+					title: 'Tanggal tidak boleh kosong!',
+					icon: 'error',
+					showConfirmButton: false,
+					timer: 1000,
+				});
+			}
+		})
+	</script>
+@endpush

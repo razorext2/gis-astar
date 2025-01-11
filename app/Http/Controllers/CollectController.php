@@ -6,6 +6,7 @@ use App\Models\Collector;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Number;
 use Yajra\DataTables\Facades\DataTables;
 use Carbon\Carbon;
 
@@ -64,7 +65,7 @@ class CollectController extends Controller
         }
 
         if (!Auth::user()->can('collect-approve')) {
-            $query->whereDate('created_at', Carbon::yesterday());
+            $query->whereDate('assign_date', Carbon::now());
         }
 
         $query->latest();
@@ -74,15 +75,15 @@ class CollectController extends Controller
                 ->addIndexColumn()
                 ->editColumn('no_sr', function ($data) {
                     return view('components.dashboard.name-w-code', [
-                        'code' => $data->collectTaskRelasi->sr_type ?? 'NULL' . ' / ' . $data->short_title,
+                        'code' => $data->title ?? 'N/A' . ' / ' . $data->short_title ?? 'N/A',
                         'name' => $data->no_sr
                     ]);
                 })
                 ->editColumn('title', function ($data) {
                     return view('components.dashboard.title-w-status', [
-                        'title' => $data->collectTaskRelasi->customer_name ?? 'NULL',
+                        'title' => $data->collectTaskRelasi->customer_name ?? 'N/A',
                         'status' => $data->status,
-                        'item3' => $data->collectTaskRelasi->short_customer_address ?? 'NULL'
+                        'item3' => $data->location ?? 'N/A'
                     ]);
                 })
                 ->editColumn('payment_type', function ($data) {
@@ -117,7 +118,7 @@ class CollectController extends Controller
                             ],
                             [
                                 'title' => 'Bayar',
-                                'data' => 'Rp. ' . number_format($data->payment_amount, 0, ',', '.')
+                                'data' => Number::currency($data->payment_amount ?? 0, 'IDR', 'id')
                             ],
 
                         ]
@@ -126,7 +127,7 @@ class CollectController extends Controller
                 ->editColumn('created_at', function ($data) {
 
                     if (is_null($data->assign_at)) {
-                        $date = $data->collectTaskRelasi->assign_date ?? '00:00:00';
+                        $date = $data->assign_date ?? '00:00:00';
                     } else {
                         $date = $data->assign_at;
                     }
@@ -137,26 +138,33 @@ class CollectController extends Controller
                     ]);
                 })
                 ->addColumn('actions', function ($data) {
+                    $actions = [
+                        [
+                            'id' => 'show-btn',
+                            'action' => route('collect.show', $data->id),
+                            'label' => 'Detail'
+                        ]
+                    ];
+
+                    if (Auth::user()->hasRole('Admin')) {
+                        $actions[] = [
+                            [
+                                'id' => 'edit-btn',
+                                'action' => route('collect.edit', $data->id),
+                                'label' => 'Edit'
+                            ],
+                            [
+                                'id' => 'delete-btn',
+                                'action' => 'javascript:void(0)',
+                                'label' => 'Hapus',
+                            ]
+                        ];
+                    }
+
                     if (Auth::user()->can('collect-approve')) {
                         return view('components.dashboard.action-buttons', [
                             'id' => $data->id,
-                            'datas' => [
-                                [
-                                    'id' => 'show-btn',
-                                    'action' => route('collect.show', $data->id),
-                                    'label' => 'Detail'
-                                ],
-                                [
-                                    'id' => 'edit-btn',
-                                    'action' => route('collect.edit', $data->id),
-                                    'label' => 'Edit'
-                                ],
-                                [
-                                    'id' => 'delete-btn',
-                                    'action' => 'javascript:void(0)',
-                                    'label' => 'Hapus',
-                                ]
-                            ],
+                            'datas' => $actions,
                         ]);
                     } else {
                         if ($data->status == 0) {

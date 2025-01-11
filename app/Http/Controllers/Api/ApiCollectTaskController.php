@@ -126,7 +126,7 @@ class ApiCollectTaskController extends Controller
             'kode_pegawai' => $request->assign_to,
             'title' => $sr_type,
             'location' => $query->customer_address,
-            'assign_at' => $query->assign_date,
+            'assign_date' => $query->assign_date,
         ]);
 
         return new CollectTaskResource(true, 'Data berhasil di assign', null);
@@ -155,16 +155,16 @@ class ApiCollectTaskController extends Controller
         ]);
 
         // Retrieve the updated records
-        $tasks = CollectTask::whereIn('no_sr', $request->sr_data)->get();
+        $query = CollectTask::whereIn('no_sr', $request->sr_data)->get();
 
-        foreach ($tasks as $task) {
-            // Create Collector record for each task
+        foreach ($query as $data) {
+            // Create Collector record for each data
             Collector::create([
-                'no_sr' => $task->no_sr,
+                'no_sr' => $data->no_sr,
                 'kode_pegawai' => $request->kode_pegawai,
-                'title' => $task->customer_name,
-                'location' => $task->customer_address,
-                'assign_at' => $task->assign_date,
+                'title' => $data->customer_name,
+                'location' => $data->customer_address,
+                'assign_date' => $data->assign_date,
             ]);
         }
 

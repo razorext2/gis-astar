@@ -59,7 +59,7 @@
 						class="flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
 						<p class="text-sm text-gray-600 dark:text-gray-300">Waktu Dibuat</p>
 						<p class="text-navy-700 text-base font-medium dark:text-white">
-							{{ $data->created_at->locale('id')->isoFormat('D MMM YYYY HH:m:s') ?? 'N/A' }}
+							{{ $data->created_at->locale('id')->isoFormat('D MMM YYYY HH:mm:s') ?? 'N/A' }}
 						</p>
 					</div>
 
@@ -67,7 +67,7 @@
 						class="flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
 						<p class="text-sm text-gray-600 dark:text-gray-300">Waktu Diupdate</p>
 						<p class="text-navy-700 text-base font-medium dark:text-white">
-							{{ $data->updated_at->locale('id')->isoFormat('D MMM YYYY HH:m:s') ?? 'N/A' }}
+							{{ $data->updated_at->locale('id')->isoFormat('D MMM YYYY HH:mm:s') ?? 'N/A' }}
 						</p>
 					</div>
 

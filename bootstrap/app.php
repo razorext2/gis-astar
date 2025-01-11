@@ -17,9 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
         api: __DIR__ . '/../routes/api.php',
         commands: __DIR__ . '/../routes/console.php',
         // use /up when on development
-        health: '/up',
+        // health: '/up',
         // use /status when on production
-        // health: '/status',
+        health: '/status',
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->trustProxies(at: '*');

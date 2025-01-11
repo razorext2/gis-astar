@@ -7,11 +7,9 @@ use App\Models\PhotoCollect;
 use App\Models\CollectTask;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CollectResource;
-use App\Notifications\CollectorNew;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
 
 // class ApiCollectorController extends Controller
 class ApiCollectController extends Controller
@@ -43,7 +41,6 @@ class ApiCollectController extends Controller
 
         if ($query) {
             $query->update([
-                'title' => $request->title,
                 'keterangan' => $request->keterangan,
                 'latitude' => $request->latitude,
                 'longitude' => $request->longitude,
@@ -51,7 +48,7 @@ class ApiCollectController extends Controller
                 'payment_type' => $request->payment_type,
                 'payment_amount' => $request->payment_amount,
                 'status' => 2,
-                'updated_at' => now(),
+                'assign_at' => now(),
                 'location' => $request->location
             ]);
         }

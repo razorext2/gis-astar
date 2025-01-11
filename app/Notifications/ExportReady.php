@@ -3,22 +3,20 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Models\CollectTask;
 
-class CollectorTaskAssign extends Notification
+class ExportReady extends Notification
 {
     use Queueable;
 
-    protected $collectorTask;
+    public $fileName;
+
     /**
      * Create a new notification instance.
      */
-    public function __construct(CollectTask $collectTask)
+    public function __construct(string $fileName)
     {
-        $this->collectorTask = $collectTask;
+        $this->fileName = $fileName;
     }
 
     /**
@@ -39,8 +37,9 @@ class CollectorTaskAssign extends Notification
     public function toDatabase(object $notifiable): array
     {
         return [
-            'created_at' => $this->collectorTask->created_at,
-            'message' => "Ada tagihan baru dengan kode '{$this->collectorTask->no_sr}' yang harus kamu tagih!",
+            'message' => 'Proses ekspor telah selesai. Silahkan download berkas dengan klik tombol berikut.',
+            'url' => $this->fileName,
+            'created_at' => now()->toDateTimeString(),
         ];
     }
 }

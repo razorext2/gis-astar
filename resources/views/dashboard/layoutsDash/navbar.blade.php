@@ -20,12 +20,14 @@
 				<!-- Bell icon -->
 				<div class="relative w-full" id="notifications-bell">
 					<x-icons.bell class="h-6 w-6 text-gray-800 dark:text-white" />
-
+					@if (count(auth()->user()->unreadNotifications) > 0)
+						<span class="absolute bottom-0 left-0 h-1 w-1 rounded-full bg-red-500"></span>
+					@endif
 				</div>
 			</button>
 			<!-- Dropdown menu -->
 			<div
-				class="z-50 my-4 hidden max-w-sm list-none divide-y divide-gray-100 overflow-hidden rounded-lg bg-white text-base shadow-lg dark:divide-gray-600 dark:bg-gray-700"
+				class="z-50 my-4 hidden max-w-sm list-none divide-y divide-gray-100 overflow-hidden rounded-lg bg-white text-base shadow-lg dark:divide-gray-600 dark:bg-[#1d1d20]"
 				id="notification-dropdown">
 				<div
 					class="block bg-gray-50 px-4 py-2 text-center text-base font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-400">
@@ -33,35 +35,49 @@
 				</div>
 				<div class="py-2.5">
 
-					{{-- @if (count(auth()->user()->unreadNotifications) > 0)
+					{{-- notifikasi --}}
+					@if (count(auth()->user()->unreadNotifications) > 0)
 						@foreach (auth()->user()->unreadNotifications as $notification)
-							<a class="flex border-b px-4 py-3 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600"
-								href="{{ route('notification.mark-as-read', $notification->id) }}">
-								<div class="flex-shrink-0">
+							<div class="flex border-b px-4 py-3 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600">
 
-									<img class="h-11 w-11 rounded-full"
-										src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png"
-										alt="Bonnie Green avatar">
-
-								</div>
 								<div class="w-full pl-3">
 									<div class="mb-1.5 text-sm font-normal text-gray-500 dark:text-gray-400">
-										<span class="font-semibold text-gray-900 dark:text-white">
+										{{-- show notification message --}}
+										<span class="font-medium text-gray-800 dark:text-white">
 											{{ $notification->data['message'] }}
 										</span>
+
+										<div class="inline-flex">
+											{{-- show notification additional button --}}
+											@if ($notification->data['url'])
+												<form id="formDownload" action="{{ route('export.collector.download', $notification->data['url']) }}">
+												</form>
+												<button class="me-2 font-semibold text-blue-600 underline" id="btnDownload" form="formDownload"
+													type="submit">
+													Dowload </button>
+											@endif
+
+											{{-- mark as read --}}
+											<form id="markAsRead" action="{{ route('notification.mark-as-read', $notification->id) }}"></form>
+											<button class="font-semibold text-blue-600 underline" id="btnMarkAsRead" form="markAsRead" type="submit">
+												Mark as Read
+											</button>
+										</div>
 									</div>
 									<div class="text-xs font-medium text-gray-700 dark:text-gray-400">{{ $notification->data['created_at'] }}
 									</div>
 								</div>
-							</a>
+							</div>
 						@endforeach
 					@else
 						<span class="w-full p-4 text-sm text-gray-800 dark:text-white">
 							Tidak ada notifikasi baru.
 						</span>
-					@endif --}}
+					@endif
 
 				</div>
+
+				{{-- read all notifications --}}
 				{{-- <a
 					class="block bg-gray-50 py-2 text-center text-base font-medium text-gray-900 hover:bg-gray-100 dark:bg-gray-700 dark:text-white dark:hover:underline"
 					href="#">
@@ -76,6 +92,7 @@
 						View all
 					</div>
 				</a> --}}
+				
 			</div>
 
 			<button class="ms-3 flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"

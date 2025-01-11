@@ -97,28 +97,24 @@ class CollectTaskController extends Controller
                     $actions = [
                         [
                             'id' => 'show-btn',
-                            'permission' => Auth::user()->can('collect-task-list'),
                             'action' => route('collect-task.show', $data->id),
                             'label' => 'Detail'
                         ],
                     ];
 
                     if ($data->bill_status == 0) {
-                        $actions[] =
+                        $actions[] = [
                             [
                                 'id' => 'assign-btn',
-                                'permission' => Auth::user()->can('collect-task-assign'),
                                 'action' => 'javascript:void(0)',
                                 'label' => 'Assign to'
-                            ];
-
-                        $actions[] =
+                            ],
                             [
                                 'id' => 'delete-btn',
-                                'permission' => Auth::user()->can('collect-task-delete'),
                                 'action' => 'javascript:void(0)',
                                 'label' => 'Hapus',
-                            ];
+                            ]
+                        ];
                     }
 
                     return view('components.dashboard.action-buttons', [

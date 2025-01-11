@@ -19,11 +19,13 @@ use App\Http\Controllers\AllowanceController;
 use App\Http\Controllers\DeductionController;
 use App\Http\Controllers\CollectController;
 use App\Http\Controllers\CollectTaskController;
+use App\Http\Controllers\Report\CollectorReportController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Auth;
 
 // breeze for regist, verif, login and logout
 Route::get('/foo', function () {
@@ -48,11 +50,21 @@ Route::middleware('auth')->group(function () {
 
     // notifikasi
     Route::get('notifications/{id}/mark-as-read', function ($id) {
-        $notification = auth()->user()->unreadNotifications->find($id);
+        $notification = Auth::user()->unreadNotifications->find($id);
         $notification->markAsRead();
-
         return back()->with('success', 'Notification has readed');
     })->name('notification.mark-as-read');
+
+    // export
+    Route::prefix('export')->as('')->group(function () {
+        // laporan kolektor
+        Route::get('collector/', [CollectorReportController::class, 'export'])->name('export.collector');
+        
+        Route::get('collector/{filename}', function (String $filename) {
+            return redirect('storage/export/' . $filename);
+        })->name('export.collector.download');
+        // end laporan kolektor
+    });
 
     Route::prefix('proxy')->as('')->group(function () {
         Route::get('fetchSR', function (Request $request) {

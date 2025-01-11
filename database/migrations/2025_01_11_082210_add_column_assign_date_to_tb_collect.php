@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tb_collect', function (Blueprint $table) {
-            $table->dateTime('assign_at')->nullable()->after('validate_by');
+            $table->date('assign_date')->after('assign_at')->nullable()->index();
         });
     }
 

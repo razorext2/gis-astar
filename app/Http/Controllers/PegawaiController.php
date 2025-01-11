@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Number;
-use Carbon\Carbon;
-use Carbon\CarbonPeriod;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\App;
+use Spatie\Permission\Models\Role;
+use Yajra\DataTables\Facades\DataTables;
 use App\Models\Attendance;
 use App\Models\AttendanceOut;
 use App\Models\Pegawai;
@@ -19,11 +24,7 @@ use App\Models\User;
 use App\Models\Allowance;
 use App\Models\Deduction;
 use App\Models\Collector;
-use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
-use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\App;
+
 
 class PegawaiController extends Controller
 {
@@ -258,15 +259,15 @@ class PegawaiController extends Controller
             return response()->json(['error' => 'Directory not found'], 404);
         }
 
-        $images = glob($directoryPath . '\*.{png,jpg,jpeg,webp}', GLOB_BRACE);
+        $images = glob($directoryPath . '/*.{png,jpg,jpeg,webp}', GLOB_BRACE);
         // dd($images);
 
         if (!empty($images)) {
-            $relativeImagePaths = array_map(function ($path) use ($directoryPath) {
+            $relativeImagePaths = array_map(function ($path) {
                 return App::environment('production')
                     // ganti nanti disini juga
                     // ? str_replace(public_path(), '/attendance', $path)
-                    ? str_replace(public_path(), '/dev', $path)
+                    ? str_replace(public_path(), '/attendance', $path)
                     : str_replace(public_path(), '', $path);
             }, $images);
 

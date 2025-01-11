@@ -8,7 +8,7 @@ export async function singleAssign() {
     const {
       value: input
     } = await Swal.fire({
-      input: "text",
+      input: "number",
       title: "Mau assign ke siapa?",
       inputPlaceholder: "Ketik kode jari...",
       inputAttributes: {

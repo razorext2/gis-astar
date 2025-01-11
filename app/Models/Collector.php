@@ -16,6 +16,7 @@ class Collector extends Model
         'kode_pegawai',
         'title',
         'keterangan',
+        'location',
         'longitude',
         'latitude',
         'status',
@@ -25,6 +26,8 @@ class Collector extends Model
         'payment_type',
         'payment_amount',
         'validate_by',
+        'assign_at',
+        'assign_date'
     ];
 
     protected $dates = ['deleted_at'];

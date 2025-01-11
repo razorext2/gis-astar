@@ -46,14 +46,9 @@
 			.addEventListener("click", (() => toggleTheme(!1)));
 	</script>
 
-	<script type="module">
+	{{-- <script type="module">
 		window.Echo.channel('collectorNewAssign')
 			.listen('TaskAssigned', (data) => {
-				// var d1 = document.getElementById('notification');
-				// d1.insertAdjacentHTML('beforeend',
-				// 	'<div class="mb-4 rounded-lg bg-green-500 text-gray-800 dark:text-white"><span>  ' +
-				// 	data.messages + '</span></div>');
-
 				$('#notifications-bell').append(`
 						<span class="absolute right-0 top-0 flex h-2 w-2">
 								<span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
@@ -62,6 +57,6 @@
 				`);
 
 			});
-	</script>
+	</script> --}}
 @endpush
 @stack('script')

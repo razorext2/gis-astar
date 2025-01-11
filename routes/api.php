@@ -3,7 +3,6 @@
 use App\Http\Controllers\Api\ApiCollectController;
 use App\Http\Controllers\Api\ApiCollectTaskController;
 use App\Http\Controllers\Api\ApiDayoffController;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
@@ -27,7 +26,6 @@ Route::apiResource('dayoff-api', ApiDayoffController::class)->except(['index', '
 
 // api ke server utama
 Route::post('proxy/server/attendance', function (Request $request) {
-    // 
     $response = Http::post('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendance', [
         'kode_jari' => $request->input('kode_jari'),
     ]);

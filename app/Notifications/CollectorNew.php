@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Models\CollectorTask;
+use App\Models\Collector;
 
 class CollectorNew extends Notification
 {
@@ -38,7 +38,6 @@ class CollectorNew extends Notification
     public function toDatabase(object $notifiable)
     {
         return [
-            'no_sr' => $this->collector->no_sr,
             'created_at' => $this->collector->created_at,
             'message' => "Ada tagihan baru dengan kode '{$this->collector->no_sr} yang harus anda tagih!'"
         ];
