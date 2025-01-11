@@ -104,16 +104,15 @@ class CollectTaskController extends Controller
 
                     if ($data->bill_status == 0) {
                         $actions[] = [
-                            [
-                                'id' => 'assign-btn',
-                                'action' => 'javascript:void(0)',
-                                'label' => 'Assign to'
-                            ],
-                            [
-                                'id' => 'delete-btn',
-                                'action' => 'javascript:void(0)',
-                                'label' => 'Hapus',
-                            ]
+                            'id' => 'assign-btn',
+                            'action' => 'javascript:void(0)',
+                            'label' => 'Assign to'
+                        ];
+
+                        $actions[] = [
+                            'id' => 'delete-btn',
+                            'action' => 'javascript:void(0)',
+                            'label' => 'Hapus',
                         ];
                     }
 

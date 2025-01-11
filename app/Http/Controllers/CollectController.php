@@ -148,16 +148,15 @@ class CollectController extends Controller
 
                     if (Auth::user()->hasRole('Admin')) {
                         $actions[] = [
-                            [
-                                'id' => 'edit-btn',
-                                'action' => route('collect.edit', $data->id),
-                                'label' => 'Edit'
-                            ],
-                            [
-                                'id' => 'delete-btn',
-                                'action' => 'javascript:void(0)',
-                                'label' => 'Hapus',
-                            ]
+                            'id' => 'edit-btn',
+                            'action' => route('collect.edit', $data->id),
+                            'label' => 'Edit'
+                        ];
+
+                        $actions[] = [
+                            'id' => 'delete-btn',
+                            'action' => 'javascript:void(0)',
+                            'label' => 'Hapus',
                         ];
                     }
 
