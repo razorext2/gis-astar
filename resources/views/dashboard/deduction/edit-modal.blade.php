@@ -105,7 +105,7 @@
 			//open deductionEditModal
 			let deduction_id = $(this).data('id');
 			$.ajax({
-				url: `/dashboard/pegawai/deductions/${deduction_id}`,
+				url: `${APP_URL}/dashboard/pegawai/deductions/${deduction_id}`,
 				type: 'GET',
 				cache: false,
 				success: function(response) {
@@ -181,7 +181,7 @@
 
 			// Ajax call
 			$.ajax({
-				url: `/dashboard/pegawai/deductions/${deduction_id}`,
+				url: `${APP_URL}/dashboard/pegawai/deductions/${deduction_id}`,
 				type: "PUT",
 				cache: false,
 				data: {

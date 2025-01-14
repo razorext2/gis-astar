@@ -16,7 +16,7 @@
 			if (result.isConfirmed) {
 				//fetch to delete data
 				$.ajax({
-					url: `/dashboard/pegawai/allowances/${allowance_id}`,
+					url: `${APP_URL}/dashboard/pegawai/allowances/${allowance_id}`,
 					type: "DELETE",
 					cache: false,
 					data: {

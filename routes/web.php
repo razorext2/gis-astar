@@ -28,15 +28,15 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 
 // breeze for regist, verif, login and logout
-Route::get('/foo', function () {
-    Artisan::call('storage:link');
-});
+// Route::get('/foo', function () {
+//     Artisan::call('storage:link');
+// });
 
 // landing page
 // turn off for a while, redirect to dashboard
 Route::get('/', function () {
-    return view('home', ['title' => 'Take attendance']);
-    // return redirect('login');
+    // return view('home', ['title' => 'Take attendance']);
+    return redirect('login');
 })->name('landing.page');
 
 Route::get('photo-regist', function () {
@@ -59,9 +59,9 @@ Route::middleware('auth')->group(function () {
     Route::prefix('export')->as('')->group(function () {
         // laporan kolektor
         Route::get('collector/', [CollectorReportController::class, 'export'])->name('export.collector');
-        
+
         Route::get('collector/{filename}', function (String $filename) {
-            return redirect('storage/export/' . $filename);
+            return Storage::download("export/$filename");
         })->name('export.collector.download');
         // end laporan kolektor
     });

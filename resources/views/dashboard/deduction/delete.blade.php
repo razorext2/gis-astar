@@ -19,7 +19,7 @@
 
 				//fetch to delete data
 				$.ajax({
-					url: `/dashboard/pegawai/deductions/${deduction_id}`,
+					url: `${APP_URL}/dashboard/pegawai/deductions/${deduction_id}`,
 					type: "DELETE",
 					cache: false,
 					data: {
