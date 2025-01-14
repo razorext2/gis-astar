@@ -124,7 +124,7 @@
 							@elseif ($status == 1)
 								<span
 									class="rounded-xl bg-green-100 px-4 py-2 text-sm font-medium text-green-800 ring-1 ring-gray-300 dark:bg-green-900 dark:text-green-300 dark:ring-gray-700">
-									Disetujui.
+									Disetujui. (divalidasi oleh: {{ $user->name }})
 								</span>
 							@elseif ($status == 2)
 								<span
@@ -134,7 +134,7 @@
 							@else
 								<span
 									class="rounded-xl bg-red-100 px-4 py-2 text-sm font-medium text-red-800 ring-1 ring-gray-300 dark:bg-red-900 dark:text-red-300 dark:ring-gray-700">
-									Laporan di Tolak!
+									Laporan di Tolak! (divalidasi oleh: {{ $user->name }})
 								</span>
 							@endif
 
@@ -196,11 +196,12 @@
 					</div>
 
 					@can('collect-approve')
-						@if ($data->status = 2)
+						@if ($data->status == 2)
 							<div class="col-span-2 mt-2 flex flex-col justify-end" id="action">
 								<div class="text-right">
 
-									<x-button.success class="confirm-btn float-right" id="confirm-btn" data-id="{{ $data->id }}" type="button">
+									<x-button.success class="confirm-btn float-right" id="confirm-btn" data-id="{{ $data->id }}"
+										data-validateby="{{ Crypt::encryptString(auth()->user()->id) }}" type="button">
 										<x-slot name="icon">
 											<x-icons.angle-right class="h-5 w-5" />
 										</x-slot>

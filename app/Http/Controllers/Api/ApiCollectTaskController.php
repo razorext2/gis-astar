@@ -47,6 +47,7 @@ class ApiCollectTaskController extends Controller
         if ($task) {
             // Jika ditemukan, update
             $task->update([
+                'sr_type' => $request->sr_type,
                 'remaining_bill' => $data['remaining_bill'],
                 'bill_status' => 0,
                 'assign_to' => null,
@@ -63,10 +64,10 @@ class ApiCollectTaskController extends Controller
         return new CollectTaskResource(true, 'Data berhasil diproses!', $query);
     }
 
-    public function getSR($id)
+    public function getSR($no_sr)
     {
         $query = CollectTask::select('*')
-            ->where('no_sr', $id)
+            ->where('no_sr', $no_sr)
             ->first(); // Eksekusi query untuk mendapatkan data pertama
 
         if ($query) {
@@ -98,16 +99,6 @@ class ApiCollectTaskController extends Controller
                 'assign_to' => $request->assign_to,
                 'assign_by' => $request->assign_by,
             ]);
-
-            // // cari pegawai sesuai assign_to (kode_jari dari field)
-            // $pegawai = User::where('kode_pegawai', $request->assign_to)->first();
-
-            // if ($pegawai) {
-            //     // kirim notifikasi
-            //     $pegawai->notify(new CollectorTaskAssign($query));
-            // }
-
-            // event(new TaskAssigned($query));
         }
 
         $type = $query->sr_type;

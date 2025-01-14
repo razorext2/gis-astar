@@ -2,10 +2,6 @@
 
 use Illuminate\Support\Facades\Broadcast;
 
-Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
+Broadcast::channel('exportFiles.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
-});
-
-Broadcast::channel('collectorNewAssign', function () {
-    return true;
 });

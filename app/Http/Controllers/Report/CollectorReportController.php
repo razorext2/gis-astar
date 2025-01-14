@@ -3,25 +3,25 @@
 namespace App\Http\Controllers\Report;
 
 use App\Http\Controllers\Controller;
-use App\Exports\CollectorExport;
-use App\Jobs\NotifyUserOfCompletedExport;
+use App\Jobs\ExportToExcelJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class CollectorReportController extends Controller
 {
 
     public function export(Request $request)
     {
+        $rand = Str::random(8);
         $date = $request->get('date');
-        $fileName = Str::random(8) . '-laporanKolektor-' . $date . '.xlsx';
+        $fileName = "$rand-laporanKolektor-$date.xlsx";
+        $userId = request()->user()->id;
 
-        (new CollectorExport($date))
-            ->queue('public/export/' . $fileName)
-            ->chain([
-                new NotifyUserOfCompletedExport(request()->user(), $fileName)
-            ]);
-
-        return back()->with('status', 'Export Started!');
+        try {
+            ExportToExcelJob::dispatch($date, $fileName, $userId)->delay(now()->addSeconds(5));
+        } catch (\Exception $e) {
+            Log::error('Export failed for user: ' . $userId . ' - Error: ' . $e->getMessage());
+        }
     }
 }

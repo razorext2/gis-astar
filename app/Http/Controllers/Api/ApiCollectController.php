@@ -8,6 +8,7 @@ use App\Models\CollectTask;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CollectResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -98,11 +99,15 @@ class ApiCollectController extends Controller
     /**
      * Confirm laporan.
      */
-    public function confirmCollect($id)
+    public function confirmCollect($id, Request $request)
     {
         $query = Collector::find($id);
+
+        $validate_by = Crypt::decryptString($request->input('user_id'));
+
         $query->update([
             'status' => 1,
+            'validate_by' => $validate_by,
         ]);
 
         $noSr = $query->no_sr;
@@ -122,9 +127,13 @@ class ApiCollectController extends Controller
     public function denyCollect(Request $request, $id)
     {
         $query = Collector::find($id);
+
+        $validate_by = Crypt::decryptString($request->input('user_id'));
+
         $query->update([
             'status' => 2,
             'notes' => $request->notes,
+            'validate_by' => $validate_by,
         ]);
 
         return new CollectResource(true, 'Data berhasil ditolak', null);

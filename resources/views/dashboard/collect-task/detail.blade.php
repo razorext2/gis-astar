@@ -102,7 +102,7 @@
 								@elseif ($bill_status == 2)
 									<span
 										class="rounded-lg bg-green-100 px-4 py-2 text-sm font-medium text-green-800 ring-1 ring-gray-300 dark:bg-green-900 dark:text-green-300 dark:ring-gray-700">
-										Tagihan selesai.
+										Tagihan selesai. (divalidasi oleh: {{ $user->name }})
 									</span>
 								@else
 									<span
@@ -115,7 +115,7 @@
 						</div>
 
 						@can('collect-task-validate')
-							@if ($data->bill_status != 2)
+							@if ($data->bill_status == 1)
 								<div class="col-span-2 mt-2 flex flex-col justify-end" id="action">
 									<div class="text-right">
 

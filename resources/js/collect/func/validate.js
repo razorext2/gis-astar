@@ -1,6 +1,7 @@
 export async function confirmAction() {
   $('body').on('click', '#confirm-btn', async function () { // Make the handler async to use await
     let id = $(this).data("id");
+    let userID = $(this).data("validateby");
     let token = $("meta[name='csrf-token']").attr("content");
 
     // Display SweetAlert2 dialog
@@ -22,7 +23,8 @@ export async function confirmAction() {
         type: 'PATCH',
         cache: false,
         data: {
-          "_token": token
+          "_token": token,
+          "user_id": userID,
         },
         success: function (response) {
           Swal.fire("Laporan berhasil diapprove!", "", "success");

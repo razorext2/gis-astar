@@ -67,8 +67,9 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('proxy')->as('')->group(function () {
+        // fetchSR IDC NON PPN
         Route::get('fetchSR', function (Request $request) {
-            $no_sr = $request->query('NomorPermintaanJual');
+            $no_sr = $request->query('no_sr');
 
             if (!$no_sr) {
                 return response()->json([
@@ -97,9 +98,15 @@ Route::middleware('auth')->group(function () {
                 ], 500);
             }
         });
+
+        // fetchSR IDC PPN
+
+        // fetchSR IDY NON PPN
+
+        // fetchSR IDY PPN
     });
 
-    // ini dulu ya brader yang digrouping
+    // group ke rute dashboard.
     Route::prefix('dashboard')->as('')->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('dashboard');
         Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CollectTask;
 use App\Models\Collector;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -169,7 +170,9 @@ class CollectTaskController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
-        return view('dashboard.collect-task.detail', compact('data', 'collect'));
+        $user = User::select('kode_pegawai', 'name')->where('kode_pegawai', $data->validate_by)->first();
+
+        return view('dashboard.collect-task.detail', compact('data', 'collect', 'user'));
     }
 
     public function massAssign()

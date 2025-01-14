@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Http;
 Route::patch('collect-task-api/{id}/validate', [ApiCollectTaskController::class, 'validateTask'])->name('collect-task-api.validate');
 Route::patch('collect-task-api/{id}/assign', [ApiCollectTaskController::class, 'assignProcess'])->name('collect-task-api.assign');
 Route::patch('collect-task-api/mass-assign', [ApiCollectTaskController::class, 'massAssignProcess'])->name('collect-task-api.mass-assign');
-Route::get('collect-task-api/getSR/{id}', [ApiCollectTaskController::class, 'getSR'])->name('collect-task-api.getsr');
+Route::get('collect-task-api/getSR/{no_sr}', [ApiCollectTaskController::class, 'getSR'])->name('collect-task-api.getsr');
 Route::apiResource('collect-task-api', ApiCollectTaskController::class)->except(['index', 'show']);
 
 // laporan kolektor

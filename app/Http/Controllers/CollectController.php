@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Collector;
 use Illuminate\Http\Request;
+use Illuminate\Support\Number;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Number;
 use Yajra\DataTables\Facades\DataTables;
-use Carbon\Carbon;
 
 class CollectController extends Controller
 {
@@ -76,7 +77,8 @@ class CollectController extends Controller
                 ->editColumn('no_sr', function ($data) {
                     return view('components.dashboard.name-w-code', [
                         'code' => $data->title ?? 'N/A' . ' / ' . $data->short_title ?? 'N/A',
-                        'name' => $data->no_sr
+                        'name' => $data->no_sr,
+                        'item3' => $data->pegawaiRelasi->full_name,
                     ]);
                 })
                 ->editColumn('title', function ($data) {
@@ -218,7 +220,11 @@ class CollectController extends Controller
             return Collector::with('photoCollectRelasi', 'pegawaiRelasi')->findOrFail($id);
         });
 
-        return view('dashboard.collect.detail', compact('data'));
+        $user = Cache::remember('collector_validate_by_' . $data->validate_by, 1800, function () use ($data) {
+            return User::select('id', 'name')->where('id', $data->validate_by)->first();
+        });
+
+        return view('dashboard.collect.detail', compact('data', 'user'));
     }
 
     /**

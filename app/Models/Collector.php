@@ -21,13 +21,12 @@ class Collector extends Model
         'latitude',
         'status',
         'notes',
-        'location',
         'have_paid',
         'payment_type',
         'payment_amount',
         'validate_by',
+        'assign_date',
         'assign_at',
-        'assign_date'
     ];
 
     protected $dates = ['deleted_at'];

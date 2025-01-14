@@ -6,22 +6,22 @@
 			<ul class="flex flex-wrap text-center text-sm font-medium">
 				<li>
 					<a
-						class="{{ Route::is('collect.index') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-gray-600 dark:hover:text-gray-300"
+						class="{{ Route::is('collect.index') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600' }} inline-block rounded-t-lg px-4 py-2 hover:text-red-600 dark:hover:text-gray-300"
 						href="{{ route('collect.index') }}">Belum Dilengkapi</a>
 				</li>
 				<li>
 					<a
-						class="{{ Route::is('collect.submitted') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-gray-600 dark:hover:text-gray-300"
+						class="{{ Route::is('collect.submitted') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600' }} inline-block rounded-t-lg px-4 py-2 hover:text-red-600 dark:hover:text-gray-300"
 						href="{{ route('collect.submitted') }}">Diajukan</a>
 				</li>
 				<li>
 					<a
-						class="{{ Route::is('collect.approved') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-gray-600 dark:hover:text-gray-300"
+						class="{{ Route::is('collect.approved') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600' }} inline-block rounded-t-lg px-4 py-2 hover:text-red-600 dark:hover:text-gray-300"
 						href="{{ route('collect.approved') }}">Disetujui</a>
 				</li>
 				<li>
 					<a
-						class="{{ Route::is('collect.rejected') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-gray-600 dark:hover:text-gray-300"
+						class="{{ Route::is('collect.rejected') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600' }} inline-block rounded-t-lg px-4 py-2 hover:text-red-600 dark:hover:text-gray-300"
 						href="{{ route('collect.rejected') }}">Ditolak</a>
 				</li>
 				<li>
@@ -93,15 +93,22 @@
 
 			if (date) {
 				// jika tanggal diisi
-
-				Swal.fire({
-					title: "Berhasil, data kamu sedang diexport",
-					icon: "success",
-					timer: 1000,
-				});
-
-				// Redirect browser untuk mendownload file
-				window.location.href = `{{ route('export.collector') }}/?date=${date}`;
+				axios.get(`{{ route('export.collector') }}/?date=${date}`)
+					.then(function() {
+						Swal.fire({
+							title: "Berhasil, data kamu sedang diexport",
+							icon: "success",
+							timer: 1000,
+						});
+					})
+					.catch(function(error) {
+						Swal.fire({
+							title: `Gagal`,
+							text: error,
+							icon: "error",
+							timer: 1000,
+						});
+					});
 			} else {
 				// jika tanggal tidak diisi
 				Swal.fire({

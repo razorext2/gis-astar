@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
         // URL::forceScheme('https');
 
         // force root url
-        // $this->app['url']->forceRootUrl($this->app['config']->get('app.url'));
+        $this->app['url']->forceRootUrl($this->app['config']->get('app.url'));
 
         // oberserver
         Dayoff::observe(DayoffObserver::class);

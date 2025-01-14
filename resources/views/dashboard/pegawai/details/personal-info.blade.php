@@ -125,7 +125,7 @@
 					</div>
 
 					<div
-						class="grid grid-cols-7 gap-2 rounded-xl border border-gray-200 bg-[#242427] p-4 text-center dark:border-gray-700">
+						class="grid grid-cols-7 gap-2 rounded-xl border border-gray-200 p-4 text-center dark:border-gray-700 dark:bg-[#242427]">
 						<!-- Nama-nama hari -->
 						<div class="font-medium text-gray-900 dark:text-white">Min</div>
 						<div class="font-medium text-gray-900 dark:text-white">Sen</div>
