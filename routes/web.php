@@ -73,7 +73,7 @@ Route::middleware('auth')->group(function () {
 
             if (!$no_sr) {
                 return response()->json([
-                    'error' => 'NomorPermintaanJual is required.'
+                    'error' => 'No. SR is required.'
                 ], 400);
             }
 

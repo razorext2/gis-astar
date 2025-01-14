@@ -6,14 +6,21 @@ export function searchDataHandler() {
     debounceTimer = setTimeout(async () => {
       let no_sr = $('#no_sr').val();
 
+      if (no_sr == '') { // jika no_sr kosong, berikan prompt
+        Swal.fire({
+          icon: "error",
+          title: "Terjadi kesalahan.",
+          html: "No. SR <b>tidak boleh kosong!</b>"
+        })
+        return
+      }
+
       try { // menggunakan blok try catch untuk penanganan error
         const database = await axios.get(`${APP_URL}/api/collect-task-api/getSR/${no_sr}`); // ambil data dari endpoint database
         let check = database.data.success // ambil kondisi dari value 'success'
 
         // check jika ada data di database
         if (check) { // jika data ditemukan dari database, fetch data dari database.
-          console.log('Data ditemukan.');
-
           let status = database.data.data.bill_status; // ambil nilai bill_status
 
           if (status != 2) { // jika bill_status != 2, maka:
@@ -49,7 +56,6 @@ export function searchDataHandler() {
             let check = BSI.data.status;  // ambil kondisi dari value 'success'
 
             if (check == 'success') { // jika data ditemukan di BSI
-              console.log('data ditemukan dari bsi');
               // fetch data ke masing masing input form
               const data = BSI.data.data[0];
               $('#sr_date').val(data.TanggalPermintaanJual.date);
