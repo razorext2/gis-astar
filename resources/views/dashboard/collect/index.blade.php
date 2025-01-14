@@ -6,22 +6,22 @@
 			<ul class="flex flex-wrap text-center text-sm font-medium">
 				<li>
 					<a
-						class="{{ Route::is('collect.index') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600' }} inline-block rounded-t-lg px-4 py-2 hover:text-red-600 dark:hover:text-gray-300"
+						class="{{ Route::is('collect.index') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-red-600 dark:hover:text-red-600"
 						href="{{ route('collect.index') }}">Belum Dilengkapi</a>
 				</li>
 				<li>
 					<a
-						class="{{ Route::is('collect.submitted') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600' }} inline-block rounded-t-lg px-4 py-2 hover:text-red-600 dark:hover:text-gray-300"
+						class="{{ Route::is('collect.submitted') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-red-600 dark:hover:text-red-600"
 						href="{{ route('collect.submitted') }}">Diajukan</a>
 				</li>
 				<li>
 					<a
-						class="{{ Route::is('collect.approved') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600' }} inline-block rounded-t-lg px-4 py-2 hover:text-red-600 dark:hover:text-gray-300"
+						class="{{ Route::is('collect.approved') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-red-600 dark:hover:text-red-600"
 						href="{{ route('collect.approved') }}">Disetujui</a>
 				</li>
 				<li>
 					<a
-						class="{{ Route::is('collect.rejected') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600' }} inline-block rounded-t-lg px-4 py-2 hover:text-red-600 dark:hover:text-gray-300"
+						class="{{ Route::is('collect.rejected') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-red-600 dark:hover:text-red-600"
 						href="{{ route('collect.rejected') }}">Ditolak</a>
 				</li>
 				<li>
