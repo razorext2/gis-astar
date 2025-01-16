@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Jobs\NotifyCollectorHasUpdatedReportJob;
 use App\Models\Collector;
 use App\Models\PhotoCollect;
 use App\Models\CollectTask;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CollectResource;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
@@ -90,6 +92,12 @@ class ApiCollectController extends Controller
                     'photourl' => $imageUrl,
                 ]);
             }
+        }
+
+        // Kirim notifikasi ke user yang memiliki permission 'collect-approve'
+        if ($query) {
+            NotifyCollectorHasUpdatedReportJob::dispatch($query->no_sr, $query->id, now())
+                ->delay(now()->addSeconds(5));
         }
 
         // kembalikan response JSON
