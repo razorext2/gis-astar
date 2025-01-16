@@ -43,9 +43,14 @@ class CollectorUpdatedReport extends Notification
      */
     public function toDatabase(object $notifiable): array
     {
+        $date = Carbon::parse($this->date)->locale("id")->isoFormat("DD MMMM YYYY");
+
         return [
-            "message" => "Laporan dengan kode tagihan: $this->no_sr telah diperbarui pada tanggal: $this->date. Silahkan diperiksa!",
-            "url" => route("collect.show", $this->collect_id),
+            "message" => "Laporan dengan kode: $this->no_sr telah diperbarui pada tanggal $date. Silahkan diperiksa!",
+            "button" => [
+                'url' => route('collect.show', $this->collect_id),
+                'label' => 'Periksa Laporan',
+            ],
             "created_at" => Carbon::now()->locale("id")->isoFormat("DD MMM YYYY HH:mm:ss"),
         ];
     }

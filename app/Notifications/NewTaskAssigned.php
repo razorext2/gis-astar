@@ -44,7 +44,10 @@ class NewTaskAssigned extends Notification
     {
         return [
             "message" => "Anda memiliki tagihan baru dengan kode tagihan: $this->no_sr yang harus anda tagih. Cek detail:",
-            "url" => route("collect.show", $this->collect_id),
+            "button" => [
+                "url" => route("collect.show", $this->collect_id),
+                "label" => "Lihat Detail"
+            ],
             "created_at" => Carbon::now()->locale("id")->isoFormat("DD MMM YYYY HH:mm:ss"),
         ];
     }

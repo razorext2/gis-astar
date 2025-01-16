@@ -57,7 +57,7 @@
 									<div class="grid gap-1 text-sm text-gray-500 dark:text-gray-400">
 										<div class="grid grid-cols-2 text-xs font-medium text-gray-700 dark:text-gray-400">
 											<div class="text-left">
-												{{ Carbon\Carbon::parse($notification->data['created_at'])->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss') }}
+												{{ $notification->data['created_at'] }}
 											</div>
 										</div>
 
@@ -68,15 +68,13 @@
 
 										<div class="inline-flex">
 											{{-- show notification additional button --}}
-											@if ($notification->data['url'])
-												<form id="formNotification-{{ $notification->id }}"
-													action="{{ route('export.collector.download', $notification->data['url']) }}">
-												</form>
-												<button class="me-4 rounded-md bg-blue-200 px-2 py-0.5 font-semibold text-blue-600 hover:bg-blue-400"
-													id="btnNotification" form="formNotification-{{ $notification->id }}" type="submit">
-													Dowload
-												</button>
-											@endif
+
+											<form id="formNotification-{{ $notification->id }}" action="{{ $notification->data['button']['url'] }}">
+											</form>
+											<button class="me-4 rounded-md bg-blue-200 px-2 py-0.5 font-semibold text-blue-600 hover:bg-blue-400"
+												id="btnNotification" form="formNotification-{{ $notification->id }}" type="submit">
+												{{ $notification->data['button']['label'] }}
+											</button>
 
 											{{-- mark as read --}}
 											<form id="markAsRead-{{ $notification->id }}"

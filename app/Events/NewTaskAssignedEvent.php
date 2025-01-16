@@ -3,9 +3,7 @@
 namespace App\Events;
 
 use Carbon\Carbon;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -48,11 +46,11 @@ class NewTaskAssignedEvent implements ShouldBroadcast
         return 'newTaskAssigned';
     }
 
-    public function broadcastWith(): array
+    public function broadcastWith()
     {
         return [
             "id" => $this->notification_id,
-            "message" => "Anda memiliki tagihan baru dengan kode tagihan: $this->no_sr yang harus anda tagih. Cek detail:",
+            "message" => "Anda memiliki tagihan baru dengan kode: $this->no_sr yang harus ditagih. Cek detail:",
             "button" => [
                 "url" => route("collect.show", $this->collect_id),
                 "label" => "Lihat Detail",

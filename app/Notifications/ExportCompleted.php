@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
@@ -38,9 +39,14 @@ class ExportCompleted extends Notification
      */
     public function toDatabase(object $notifiable): array
     {
+        $date = Carbon::parse($this->date)->locale("id")->isoFormat("DD MMMM YYYY");
+
         return [
-            'message' => "Proses ekspor telah selesai. Laporan penagihan untuk tanggal $this->date telah berhasil diekspor. Silahkan download berkas dengan klik tombol berikut.",
-            'url' => $this->fileName,
+            'message' => "Proses ekspor telah selesai. Laporan penagihan untuk tanggal $date telah berhasil diekspor. Silahkan download berkas dengan klik tombol berikut.",
+            'button' => [
+                'url' => route('export.collector.download', $this->fileName),
+                'label' => 'Download Laporan',
+            ],
             'created_at' => now()->toDateTimeString(),
         ];
     }

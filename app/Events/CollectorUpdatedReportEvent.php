@@ -50,9 +50,11 @@ class CollectorUpdatedReportEvent implements ShouldBroadcast
 
     public function broadcastWith()
     {
+        $date = Carbon::parse($this->date)->locale("id")->isoFormat("DD MMMM YYYY");
+
         return [
             "id" => $this->notification_id,
-            "message" => "Laporan dengan kode tagihan: $this->no_sr telah diperbarui pada tanggal: $this->date. Silahkan diperiksa!",
+            "message" => "Laporan dengan kode: $this->no_sr telah diperbarui pada tanggal: $date. Silahkan diperiksa!",
             "button" => [
                 "url" => route("collect.show", $this->collect_id),
                 "label" => "Periksa Laporan",
