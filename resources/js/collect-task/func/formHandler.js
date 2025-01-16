@@ -1,12 +1,12 @@
 export function addDataHandler() {
   $('#store').click(function (e) {
-    e.preventDefault();
+    e.preventDefault(); // Jangan submit form
 
-    const $button = $(this);
-    $button.prop('disabled', true); // Disable the button to prevent multiple clicks
+    const $button = $(this); // Tombol submit
+    $button.prop('disabled', true); // Matikan tombol submit
 
-    let formData = new FormData();
-    formData.append("no_sr", $("#no_sr").val());
+    let formData = new FormData(); // FormData untuk mengirim file dan data
+    formData.append("no_sr", $("#no_sr").val()); // Ambil value dari input dengan id no_sr
     formData.append("sr_type", $("#sr_type").val());
     formData.append("sr_date", $("#sr_date").val());
     formData.append("customer_name", $("#customer_name").val());
@@ -20,48 +20,43 @@ export function addDataHandler() {
     formData.append("assign_by", $("#assign_by").val());
     formData.append("assign_to", $("#assign_to").val());
     formData.append("assign_date", $("#assign_date").val());
-    formData.append("_token", $("meta[name='csrf-token']").attr("content"));
+    formData.append("_token", $("meta[name='csrf-token']").attr("content")); // CSRF token
 
-    $.ajax({
-      url: storeUrl,
-      type: "POST",
-      dataType: "json",
-      data: formData,
-      processData: false,
-      contentType: false,
-      success: function () {
-        Swal.fire({
+    axios.post(storeUrl, formData) // Kirim data ke server
+      .then(function () { // Jika sukses
+        Swal.fire({ // Tampilkan notifikasi sukses
           icon: "success",
           title: "Surat Jalan berhasil ditambahkan!",
           showConfirmButton: false,
           timer: 1000
         });
-        setTimeout(() => window.location.reload(), 1000);
-      },
-      error: function (xhr) {
-        handleFormErrors(xhr.responseJSON.errors);
-        $button.prop('disabled', false);
-      }
-    });
+        setTimeout(() => window.location.reload(), 1000); // Reload halaman setelah 1 detik
+      })
+      .catch(function (error) { // Jika gagal
+        if (error.response && error.response.data && error.response.data.errors) { // Jika ada error validasi
+          handleFormErrors(error.response.data.errors); // Tampilkan error validasi
+        }
+        $button.prop('disabled', false); // Hidupkan tombol submit
+      });
   });
 
-  $('input, textarea, select').on('input change', function () {
-    const field = $(this).attr('id');
-    const alertElement = document.getElementById(`alert-${field}`);
-    if (alertElement) {
-      alertElement.classList.add('hidden');
-      alertElement.innerHTML = '';
+  $('input, textarea, select').on('input change', function () { // Hapus pesan error saat input berubah
+    const field = $(this).attr('id'); // Ambil id dari field
+    const alertElement = document.getElementById(`alert-${field}`); // Cari element alert
+    if (alertElement) { // Jika element alert ada
+      alertElement.classList.add('hidden'); // Sembunyikan alert
+      alertElement.innerHTML = ''; // Kosongkan isi alert
     }
   });
 }
 
-function handleFormErrors(errors) {
-  for (let field in errors) {
-    const alertElement = document.getElementById(`alert-${field}`);
-    if (alertElement) {
+function handleFormErrors(errors) { // Tampilkan error validasi
+  for (let field in errors) { // Loop semua error
+    const alertElement = document.getElementById(`alert-${field}`); // Cari element alert
+    if (alertElement) { // Jika element alert ada
       // Tampilkan pesan error hanya untuk field yang memiliki error
-      alertElement.classList.remove('hidden');
-      alertElement.innerHTML = errors[field][0];
+      alertElement.classList.remove('hidden'); // Tampilkan alert
+      alertElement.innerHTML = errors[field][0]; // Tampilkan pesan error pertama
     }
   }
 }

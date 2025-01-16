@@ -28,7 +28,7 @@ export function deleteData() {
               timer: 1000
             });
 
-            $('#table-collector').DataTable().ajax.reload(null, false);
+            $('#dataTable').DataTable().ajax.reload(null, false);
           }
         })
       }

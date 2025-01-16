@@ -39,18 +39,24 @@ class ApiCollectTaskController extends Controller
 
         $data = $validator->validated(); // Ambil data yang sudah divalidasi
 
-        $task = CollectTask::where('no_sr', '=', $data['no_sr'])->first(); // Cek apakah data sudah ada
+        $task = CollectTask::withTrashed()->where('no_sr', '=', $data['no_sr'])->first(); // Cek apakah data sudah ada
 
         if ($task) { // Jika data ditemukan
-            $task->update([ // Update data yang sudah ada
-                'sr_type' => $request->sr_type,
+            if ($task->trashed()) { // Jika data sudah dihapus
+                $task->restore(); // Restore data yang sudah dihapus
+            }
+
+            $task->update([ // Update data
+                'sr_type' => $data['sr_type'],
                 'remaining_bill' => $data['remaining_bill'],
                 'bill_status' => 0,
                 'assign_to' => null,
                 'assign_by' => null,
-                'assign_date' => $request->assign_date
-            ]);
+                'assign_date' => $data['assign_date']
+            ]); // Update data
+
             $query = $task; // Set data yang diupdate ke variabel $query
+
         } else {
             $query = CollectTask::create($data); // Buat data baru
         }

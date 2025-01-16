@@ -76,14 +76,14 @@ class CollectController extends Controller
                 ->addIndexColumn()
                 ->editColumn('no_sr', function ($data) {
                     return view('components.dashboard.name-w-code', [
-                        'code' => $data->title ?? 'N/A' . ' / ' . $data->short_title ?? 'N/A',
+                        'code' => $data->short_title ?? 'N/A',
                         'name' => $data->no_sr,
                         'item3' => $data->pegawaiRelasi->full_name,
                     ]);
                 })
                 ->editColumn('title', function ($data) {
                     return view('components.dashboard.title-w-status', [
-                        'title' => $data->collectTaskRelasi->customer_name ?? 'N/A',
+                        'title' => $data->collectTaskRelasi->customer_recipient ?? 'N/A',
                         'status' => $data->status,
                         'item3' => $data->location ?? 'N/A'
                     ]);
