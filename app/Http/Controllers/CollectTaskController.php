@@ -74,9 +74,10 @@ class CollectTaskController extends Controller
                     ]);
                 })
                 ->editColumn('customer_name', function ($data) {
-                    return view('components.dashboard.custom-date', [
-                        'date' => $data->customer_recipient ?? 'N/A',
-                        'time' => $data->short_customer_name ?? 'N/A'
+                    return view('components.dashboard.custom-view-name-w-address', [
+                        'recipient' => $data->customer_recipient ?? 'N/A',
+                        'name' => $data->short_customer_name ?? 'N/A',
+                        'address' => $data->customer_address ?? 'N/A',
                     ]);
                 })
                 ->editColumn('total_bill', function ($data) {
@@ -123,15 +124,15 @@ class CollectTaskController extends Controller
                     ]);
                 })
                 ->editColumn('assign_date', function ($data) {
-                    return view('components.dashboard.custom-date', [
+                    return view('components.dashboard.date-w-name', [
                         'date' => Carbon::parse($data->assign_date)->locale('id')->isoFormat('DD MMM YYYY'),
-                        'time' => $data->assign_to ? 'Oleh: ' . $data->pegawaiRelasi->full_name : 'Belum ditentukan'
+                        'name' => $data->assign_to ? 'Oleh: ' . $data->pegawaiRelasi->full_name : 'Belum ditentukan',
                     ]);
                 })
                 ->editColumn('customer_telp', function ($data) {
-                    return view('components.dashboard.custom-date', [
-                        'date' => 'Tel: ' . $data->customer_telp,
-                        'time' => 'Fax: ' . $data->customer_fax
+                    return view('components.dashboard.custom-tel-and-fax', [
+                        'tel' => 'Tel: ' . $data->customer_telp,
+                        'fax' => 'Fax: ' . $data->customer_fax
                     ]);
                 })
                 ->filter(function ($query) use ($request) {
