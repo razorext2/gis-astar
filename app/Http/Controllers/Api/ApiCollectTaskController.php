@@ -8,15 +8,14 @@ use App\Jobs\NotifyCollectorNewAssignedJob;
 use App\Models\CollectTask;
 use App\Models\Collector;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use illuminate\Support\Facades\Log;
-
 
 class ApiCollectTaskController extends Controller
 {
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [ // Validasi data
             'no_sr' => 'required|string|min:3|max:16',
             'sr_type' => 'required|string',
             'sr_date' => 'required|date',
@@ -31,21 +30,19 @@ class ApiCollectTaskController extends Controller
             'assign_date' => 'required|date',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
+        if ($validator->fails()) { // Jika validasi gagal
+            return response()->json([ // Kembalikan response
                 'success' => false,
                 'errors' => $validator->errors()
-            ], 422);
+            ], 422); // Kode status 422 untuk validasi gagal
         }
 
-        $data = $validator->validated();
+        $data = $validator->validated(); // Ambil data yang sudah divalidasi
 
-        // Check jika data dengan no_sr sudah ada
-        $task = CollectTask::where('no_sr', '=', $data['no_sr'])->first();
+        $task = CollectTask::where('no_sr', '=', $data['no_sr'])->first(); // Cek apakah data sudah ada
 
-        if ($task) {
-            // Jika ditemukan, update
-            $task->update([
+        if ($task) { // Jika data ditemukan
+            $task->update([ // Update data yang sudah ada
                 'sr_type' => $request->sr_type,
                 'remaining_bill' => $data['remaining_bill'],
                 'bill_status' => 0,
@@ -53,10 +50,9 @@ class ApiCollectTaskController extends Controller
                 'assign_by' => null,
                 'assign_date' => $request->assign_date
             ]);
-            $query = $task;
+            $query = $task; // Set data yang diupdate ke variabel $query
         } else {
-            // Jika tidak ditemukan, tambahkan
-            $query = CollectTask::create($data);
+            $query = CollectTask::create($data); // Buat data baru
         }
 
         // Kembalikan response
@@ -65,22 +61,22 @@ class ApiCollectTaskController extends Controller
 
     public function getSR($no_sr)
     {
-        $query = CollectTask::select('*')
+        $query = CollectTask::select('*') // Query untuk mengambil data
             ->where('no_sr', $no_sr)
             ->first(); // Eksekusi query untuk mendapatkan data pertama
 
-        if ($query) {
-            return new CollectTaskResource(true, 'Data ditemukan!', $query);
+        if ($query) { // Jika data ditemukan
+            return new CollectTaskResource(true, 'Data ditemukan!', $query); // Kembalikan response
         } else {
-            return new CollectTaskResource(false, 'Data tidak ditemukan!', null);
+            return new CollectTaskResource(false, 'Data tidak ditemukan!', null); // Kembalikan response
         }
     }
 
     public function validateTask(Request $request, $id)
     {
-        $query = CollectTask::find($id);
+        $query = CollectTask::find($id); // Cari data berdasarkan ID
 
-        $query->update([
+        $query->update([ // Update data
             // set jadi status selesai
             'bill_status' => 2,
             // set siapa yg validasi
@@ -90,19 +86,19 @@ class ApiCollectTaskController extends Controller
 
     public function assignProcess(Request $request, $id)
     {
-        $query = CollectTask::find($id);
+        $query = CollectTask::find($id); // Cari data berdasarkan ID
 
-        if ($query) {
-            $query->update([
+        if ($query) { // Jika data ditemukan
+            $query->update([ // Update data
                 'bill_status' => 3,
                 'assign_to' => $request->assign_to,
                 'assign_by' => $request->assign_by,
             ]);
         }
 
-        $type = $query->sr_type;
+        $type = $query->sr_type; // Ambil tipe SR
 
-        $sr_type = match ($type) {
+        $sr_type = match ($type) { // Cek tipe SR
             'TTT' => 'Tanda Terima Tagihan',
             'TTST' => 'Tanda Terima Sertifikat Tera',
             'AT' => 'Ambil Tagihan',
@@ -110,7 +106,7 @@ class ApiCollectTaskController extends Controller
             default => null,
         };
 
-        // tambahkan laporan tb_collect secara otomatis
+        // Tambahkan data ke tb_collect
         $collector = Collector::create([
             'no_sr' => $query->no_sr,
             'kode_pegawai' => $request->assign_to,
@@ -119,70 +115,86 @@ class ApiCollectTaskController extends Controller
             'assign_date' => $query->assign_date,
         ]);
 
-        if ($collector) {
-            try {
-
-                $data = Collector::where('kode_pegawai', $request->assign_to)->latest()->first();
+        // Kirim notifikasi ke user yang di assign
+        if ($collector) { // Jika data berhasil ditambahkan
+            try { // Coba kirim notifikasi
+                $data = Collector::where('kode_pegawai', $request->assign_to)->latest()->first(); // Ambil data terbaru
 
                 NotifyCollectorNewAssignedJob::dispatch($request->assign_to, $data->id, $query->no_sr)
-                    ->delay(now()->addSeconds(5));
+                    ->delay(now()->addSeconds(5)); // Kirim notifikasi ke user yang di assign
             } catch (\Exception $e) {
-                Log::error('Notify new assigned job failed for user: ' . $request->assign_to . ' - Error: ' . $e->getMessage());
+                Log::error('Notify new assigned job failed for user: ' . $request->assign_to . ' - Error: ' . $e->getMessage()); // Log error jika gagal
             }
         }
 
+        // Kembalikan response
         return new CollectTaskResource(true, 'Data berhasil di assign', null);
     }
 
     public function massAssignProcess(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [ // Validasi data
             'kode_pegawai' => 'required|integer',
             'sr_data' => 'required|array',
             'sr_data.*' => 'required|string',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
+        if ($validator->fails()) { // Jika validasi gagal
+            return response()->json([ // Kembalikan response
                 'success' => false,
                 'errors' => $validator->errors()
-            ], 422);
+            ], 422); // Kode status 422 untuk validasi gagal
         }
 
-        // Mass update
-        CollectTask::whereIn('no_sr', $request->sr_data)->update([
+        // Update banyak data sekaligus
+        CollectTask::whereIn('no_sr', $request->sr_data)->update([ // Update data
             'bill_status' => 3,
             'assign_to' => $request->kode_pegawai,
             'assign_by' => $request->assign_by,
-        ]);
+        ]); // Menggunakan whereIn untuk mengupdate banyak data sekaligus
 
-        // Retrieve the updated records
+        // Ambil data yang sudah di update
         $query = CollectTask::whereIn('no_sr', $request->sr_data)->get();
 
-        foreach ($query as $data) {
-            // Create Collector record for each data
-            Collector::create([
+        // Looping data yang sudah di update
+        foreach ($query as $data) { // Looping data
+            $collector = Collector::create([
                 'no_sr' => $data->no_sr,
                 'kode_pegawai' => $request->kode_pegawai,
                 'title' => $data->customer_name,
                 'location' => $data->customer_address,
                 'assign_date' => $data->assign_date,
-            ]);
+            ]); // Tambahkan data ke tb_collect
+
+            // Kirim notifikasi ke user yang di assign
+            if ($collector) { // Jika data berhasil ditambahkan
+                try { // Coba kirim notifikasi
+                    $data = Collector::where('kode_pegawai', $request->kode_pegawai)->latest()->first(); // Ambil data terbaru
+
+                    NotifyCollectorNewAssignedJob::dispatch($request->kode_pegawai, $data->id, $data->no_sr)
+                        ->delay(now()->addSeconds(5)); // Kirim notifikasi ke user yang di assign
+                } catch (\Exception $e) {
+                    // Log error jika gagal
+                    Log::error('Notify new assigned job failed for user: ' . $request->kode_pegawai . ' - Error: ' . $e->getMessage());
+                }
+            }
         }
 
+        // Kembalikan response
         return new CollectTaskResource(true, 'Berhasil menambah assigment', null);
     }
 
     public function destroy(string $id)
     {
-        $query = CollectTask::find($id);
+        $query = CollectTask::find($id); // Cari data berdasarkan ID
 
-        if (!$query) {
-            return response()->json(['success' => false, 'message' => 'Data tidak ditemukan'], 404);
+        if (!$query) { // Jika data tidak ditemukan
+            return response()->json(['success' => false, 'message' => 'Data tidak ditemukan'], 404); // Kembalikan response
         }
 
         $query->delete(); // Menggunakan soft delete bawaan Laravel
 
+        // Kembalikan response
         return new CollectTaskResource(true, 'Data berhasil dihapus', null);
     }
 }
