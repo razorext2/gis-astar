@@ -16,7 +16,7 @@
 			<button
 				class="mr-1 rounded-xl p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 focus:ring-2 focus:ring-gray-300 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-600"
 				id="notificationButton" data-dropdown-toggle="notification-dropdown" data-dropdown-placement="bottom-end"
-				type="button">
+				data-dropdown-offset-distance="11" type="button">
 				<span class="sr-only">View notifications</span>
 				<!-- Bell icon -->
 				<div class="relative w-full" id="notifications-bell">
@@ -39,71 +39,78 @@
 
 			<!-- Dropdown menu -->
 			<div
-				class="z-50 my-4 me-4 hidden max-h-96 min-h-36 max-w-xs list-none items-center divide-y divide-gray-100 overflow-y-auto rounded-lg bg-white shadow-md dark:divide-gray-600 dark:bg-[#1d1d20]"
+				class="z-50 my-4 me-4 hidden max-w-full list-none items-center overflow-y-auto rounded-b-lg bg-white shadow-md dark:border-x dark:border-b dark:border-gray-700 dark:bg-[#18181b] md:max-w-xl"
 				id="notification-dropdown">
-				<div
-					class="block rounded-t-lg bg-gray-50 px-4 py-2 text-center font-medium text-gray-700 dark:bg-gray-800 dark:text-white">
+				<div class="block bg-gray-50 p-4 font-medium text-gray-700 dark:bg-gray-800 dark:text-white">
 					Notifikasi
 				</div>
-				<div class="py-2.5" id="notificationContainer">
-					{{-- notifikasi --}}
-					@if (count(auth()->user()->unreadNotifications) > 0)
-						@foreach (auth()->user()->unreadNotifications as $notification)
-							<div class="flex border-b hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600">
 
-								<div class="w-full p-2">
-									<div class="flex-row text-sm text-gray-500 dark:text-gray-400">
+				{{-- notifikasi --}}
+
+				<div class="max-h-72 md:max-h-96" id="notificationContainer">
+					@if (count(auth()->user()->unreadNotifications) > 0)
+
+						@foreach (auth()->user()->unreadNotifications as $notification)
+							<div class="flex border-t hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700">
+
+								<div class="w-full px-3.5 py-3 md:p-4">
+									<div class="grid gap-1 text-sm text-gray-500 dark:text-gray-400">
+										<div class="grid grid-cols-2 text-xs font-medium text-gray-700 dark:text-gray-400">
+											<div class="text-left">
+												{{ Carbon\Carbon::parse($notification->data['created_at'])->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss') }}
+											</div>
+										</div>
+
 										{{-- show notification message --}}
-										<div class="mb-1 font-medium text-gray-800 dark:text-white">
+										<div class="font-base mb-1 text-gray-800 dark:text-white">
 											{{ $notification->data['message'] }}
 										</div>
 
 										<div class="inline-flex">
 											{{-- show notification additional button --}}
 											@if ($notification->data['url'])
-												<form id="formDownload-{{ $notification->id }}"
+												<form id="formNotification-{{ $notification->id }}"
 													action="{{ route('export.collector.download', $notification->data['url']) }}">
 												</form>
-												<button class="me-2 rounded-md bg-blue-200 px-2 py-0.5 font-semibold text-blue-600 hover:bg-blue-400"
-													id="btnDownload" form="formDownload-{{ $notification->id }}" type="submit">
-													Dowload </button>
+												<button class="me-4 rounded-md bg-blue-200 px-2 py-0.5 font-semibold text-blue-600 hover:bg-blue-400"
+													id="btnNotification" form="formNotification-{{ $notification->id }}" type="submit">
+													Dowload
+												</button>
 											@endif
 
 											{{-- mark as read --}}
 											<form id="markAsRead-{{ $notification->id }}"
 												action="{{ route('notification.mark-as-read', $notification->id) }}"></form>
-											<button class="font-semibold text-blue-600 underline" id="btnMarkAsRead"
-												form="markAsRead-{{ $notification->id }}" type="submit">
+											<button class="font-semibold text-blue-600" id="btnMarkAsRead" form="markAsRead-{{ $notification->id }}"
+												type="submit">
 												Mark as Read
 											</button>
 										</div>
+
 									</div>
-									<div class="text-xs font-medium text-gray-700 dark:text-gray-400">
-										{{ Carbon\Carbon::parse($notification->data['created_at'])->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss') }}
-									</div>
+
 								</div>
 							</div>
 						@endforeach
 					@else
-						<span class="w-full p-4 text-sm text-gray-800 dark:text-white" id="noNotification">
+						<div class="w-full px-3.5 py-3 text-sm text-gray-800 dark:text-white md:p-4" id="noNotification">
 							Tidak ada notifikasi baru.
-						</span>
+						</div>
 					@endif
-
 				</div>
 
 			</div>
 
 			<button class="ms-3 flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"
-				id="user-menu-button" data-dropdown-toggle="dropdown" data-dropdown-placement="bottom-end" type="button"
-				aria-expanded="false">
+				id="user-menu-button" data-dropdown-toggle="dropdown" data-dropdown-placement="bottom-end"
+				data-dropdown-offset-distance="13" type="button" aria-expanded="false">
 				<span class="sr-only">Open user menu</span>
 				<img class="h-9 w-9 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
 					alt="user photo">
 			</button>
 
 			<div
-				class="z-50 my-4 hidden w-56 list-none divide-y divide-gray-100 rounded-lg bg-white text-base shadow-md dark:divide-gray-600 dark:bg-gray-700"
+				class="z-50 my-4 hidden w-56 list-none divide-y divide-gray-100 rounded-b-lg bg-white text-base shadow-md dark:divide-gray-600 dark:border-x dark:border-b dark:border-gray-700 dark:bg-[#18181b]"
 				id="dropdown">
 				<div class="px-4 py-3">
 					<span class="block text-sm font-semibold text-gray-900 dark:text-white">{{ auth()->user()->name }}</span>

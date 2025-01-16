@@ -10,6 +10,7 @@ export default defineConfig({
                 // js
                 "resources/js/app.js",
                 "resources/js/bootstrap.js",
+                "resources/js/main.js",
 
                 // global
                 "resources/js/global/alpine.js",

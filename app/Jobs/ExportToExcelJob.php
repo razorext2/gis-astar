@@ -5,7 +5,7 @@ namespace App\Jobs;
 use App\Models\User;
 use App\Events\ExportCompletedEvent;
 use App\Exports\CollectorExport;
-use App\Notifications\ExportReady;
+use App\Notifications\ExportCompleted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
@@ -42,13 +42,13 @@ class ExportToExcelJob implements ShouldQueue
             (new CollectorExport($this->date))->store("export/$this->fileName");
 
             // berikan notifikasi ke user yang melakukan request
-            $user->notify(new ExportReady($this->fileName));
+            $user->notify(new ExportCompleted($this->fileName, $this->date));
 
             // ambil data notifikasi terakhir
-            $notification_id = $user->notifications()->latest()->first();
+            $notification = $user->notifications()->latest()->first();
 
             // broadcast jika export selesai
-            broadcast(new ExportCompletedEvent($notification_id->id, $this->userId, $this->fileName));
+            broadcast(new ExportCompletedEvent($notification->id, $this->userId, $this->fileName, $this->date));
         } catch (\Exception $e) {
             Log::error('Export failed for user: ' . $this->userId . ' - Error: ' . $e->getMessage());
         }

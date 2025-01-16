@@ -5,18 +5,20 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
-class ExportReady extends Notification
+class ExportCompleted extends Notification
 {
     use Queueable;
 
-    public $fileName;
+    protected $fileName;
+    protected $date;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(string $fileName)
+    public function __construct(string $fileName, $date)
     {
         $this->fileName = $fileName;
+        $this->date = $date;
     }
 
     /**
@@ -37,7 +39,7 @@ class ExportReady extends Notification
     public function toDatabase(object $notifiable): array
     {
         return [
-            'message' => 'Proses ekspor telah selesai. Silahkan download berkas dengan klik tombol berikut.',
+            'message' => "Proses ekspor telah selesai. Laporan penagihan untuk tanggal $this->date telah berhasil diekspor. Silahkan download berkas dengan klik tombol berikut.",
             'url' => $this->fileName,
             'created_at' => now()->toDateTimeString(),
         ];

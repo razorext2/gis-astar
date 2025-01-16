@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\TaskAssigned;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CollectTaskResource;
+use App\Jobs\NotifyCollectorNewAssignedJob;
 use App\Models\CollectTask;
 use App\Models\Collector;
-use App\Models\User;
-use App\Notifications\CollectorTaskAssign;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use illuminate\Support\Facades\Log;
 
 
 class ApiCollectTaskController extends Controller
@@ -112,13 +111,25 @@ class ApiCollectTaskController extends Controller
         };
 
         // tambahkan laporan tb_collect secara otomatis
-        Collector::create([
+        $collector = Collector::create([
             'no_sr' => $query->no_sr,
             'kode_pegawai' => $request->assign_to,
             'title' => $sr_type,
             'location' => $query->customer_address,
             'assign_date' => $query->assign_date,
         ]);
+
+        if ($collector) {
+            try {
+
+                $data = Collector::where('kode_pegawai', $request->assign_to)->latest()->first();
+
+                NotifyCollectorNewAssignedJob::dispatch($request->assign_to, $data->id, $query->no_sr)
+                    ->delay(now()->addSeconds(5));
+            } catch (\Exception $e) {
+                Log::error('Notify new assigned job failed for user: ' . $request->assign_to . ' - Error: ' . $e->getMessage());
+            }
+        }
 
         return new CollectTaskResource(true, 'Data berhasil di assign', null);
     }
