@@ -2,10 +2,10 @@
 	<thead>
 		<tr>
 			<th style="border: 1px solid black; font-weight: bold;">
-				{{ $date->locale('id')->isoFormat('dddd') }}
+				{{ $date }}
 			</th>
 			<th style="border: 1px solid black; font-weight: bold;">
-				{{ $date->locale('id')->isoFormat('DD/MM/YYYY') }}
+				{{ $date }}
 			</th>
 			<th style="border: 1px solid black; font-weight: bold;" colspan="11">IDC Non</th>
 		</tr>
@@ -27,13 +27,13 @@
 			<th style="border: 1px solid black; font-weight: bold; text-align:center">Nilai</th>
 		</tr>
 		@php
-			$i = 0;
+			$i = 1;
 		@endphp
 		@foreach ($items as $item)
 			<tr>
 				<td style="border:1px solid black; text-align:center">{{ $i++ }}</td>
 				<td style="border:1px solid black;">{{--  --}}</td>
-				<td style="border:1px solid black; word-wrap:normal">{{ $item->title ?? '' }}</td>
+				<td style="border:1px solid black; word-wrap:normal">{{ $item->collectTaskRelasi->customer_name ?? '' }}</td>
 				<td style="border:1px solid black; text-align:center">{{ $item->no_sr ?? '' }}</td>
 				<td style="border:1px solid black;">{{ $item->payment_amount ?? '' }}</td>
 				<td style="border:1px solid black;">{{--  --}}</td>

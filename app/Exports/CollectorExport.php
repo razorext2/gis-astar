@@ -3,13 +3,13 @@
 namespace App\Exports;
 
 use App\Models\Collector;
+use Carbon\Carbon;
+use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 
-// class CollectorExport implements FromView, ShouldAutoSize
-class CollectorExport implements FromQuery, ShouldAutoSize, WithHeadings
+class CollectorExport implements FromView, ShouldAutoSize
 {
     use Exportable;
 
@@ -20,29 +20,16 @@ class CollectorExport implements FromQuery, ShouldAutoSize, WithHeadings
         $this->date = $date;
     }
 
-    public function query()
+    public function view(): View
     {
-        return Collector::query()
+        $collectors = Collector::query()
             ->with('collectTaskRelasi')
-            ->whereDate('created_at', $this->date);
-    }
+            ->whereDate('assign_date', $this->date)
+            ->all();
 
-    public function headings(): array
-    {
-        return [
-            '#',
-            'TT Bawa Bon',
-            'Nama Cust',
-            'No. Bukti',
-            'Nilai',
-            'TT',
-            'Keterangan',
-            'Cara Byr',
-            'Jenis Giro',
-            'No. Giro',
-            'Tgl Cair',
-            'Pot(PPH23, Adm)',
-            'Nilai'
-        ];
+        return view('report.collector', [
+            'items' => $collectors,
+            'date' => Carbon::parse($this->date)->locale('id_ID')->isoFormat('dddd, D MMMM Y'),
+        ]);
     }
 }
