@@ -39,15 +39,15 @@
 
 			<!-- Dropdown menu -->
 			<div
-				class="z-50 my-4 me-4 hidden max-w-full list-none items-center overflow-y-auto rounded-b-lg bg-white shadow-md dark:border-x dark:border-b dark:border-gray-700 dark:bg-[#18181b] md:max-w-xl"
+				class="z-50 my-4 me-4 hidden max-w-full items-center rounded-b-lg bg-white shadow-md dark:border-x dark:border-b dark:border-gray-700 dark:bg-[#18181b] md:max-w-xl"
 				id="notification-dropdown">
-				<div class="block bg-gray-50 p-4 font-medium text-gray-700 dark:bg-gray-800 dark:text-white">
+				<div class="bg-gray-50 p-4 font-medium text-gray-700 dark:bg-gray-800 dark:text-white">
 					Notifikasi
 				</div>
 
 				{{-- notifikasi --}}
 
-				<div class="max-h-72 md:max-h-96" id="notificationContainer">
+				<div class="max-h-72 overflow-y-auto md:max-h-96" id="notificationContainer">
 					@if (count(auth()->user()->unreadNotifications) > 0)
 
 						@foreach (auth()->user()->unreadNotifications as $notification)
@@ -97,10 +97,12 @@
 					@endif
 
 				</div>
-				<a class="block bg-gray-50 p-4 font-medium text-gray-700 dark:bg-gray-800 dark:text-white"
-					href="{{ route('notifications.index') }}">
-					Lihat semua notifikasi
-				</a>
+				<div class="w-full rounded-b-lg bg-gray-50 p-4 font-medium text-gray-700 dark:bg-gray-800 dark:text-white">
+					<a class="p-4" href="{{ route('notifications.index') }}">
+						Lihat semua notifikasi
+					</a>
+				</div>
+
 			</div>
 
 			<button class="ms-3 flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"
