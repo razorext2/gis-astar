@@ -91,12 +91,16 @@
 							</div>
 						@endforeach
 					@else
-						<div class="w-full px-3.5 py-3 text-sm text-gray-800 dark:text-white md:p-4" id="noNotification">
+						<div class="w-full px-3.5 text-sm text-gray-800 dark:text-white md:p-32" id="notificationEmpty">
 							Tidak ada notifikasi baru.
 						</div>
 					@endif
-				</div>
 
+				</div>
+				<a class="block bg-gray-50 p-4 font-medium text-gray-700 dark:bg-gray-800 dark:text-white"
+					href="{{ route('notifications.index') }}">
+					Lihat semua notifikasi
+				</a>
 			</div>
 
 			<button class="ms-3 flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"

@@ -22,7 +22,7 @@ if (userId) {
 
 }
 
-// defina quill dan swal sebagai global variable  
+// define quill dan swal sebagai global variable  
 window.Quill = Quill;
 window.Swal = Swal;
 

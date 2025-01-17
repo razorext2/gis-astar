@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DayoffController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\AttendanceController;
@@ -112,6 +113,10 @@ Route::middleware('auth')->group(function () {
         Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+        // notifikasi
+        Route::resource('notifications', NotificationController::class)->only(['index']);
+        Route::get('notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
 
         // attendanceIn
         Route::get('attendanceIn', [AttendanceController::class, 'index'])->name('attendanceIn.index');
