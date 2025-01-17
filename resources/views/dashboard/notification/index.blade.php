@@ -65,7 +65,7 @@
 						</div>
 					</div>
 				@empty
-					<div class="w-full px-3.5 text-sm text-gray-800 dark:text-white md:p-32" id="notificationEmpty">
+					<div class="w-full px-3.5 text-center text-sm text-gray-800 dark:text-white md:p-32" id="notificationEmpty">
 						Tidak ada notifikasi.
 					</div>
 				@endforelse

@@ -16,15 +16,17 @@ class ExportToExcelJob implements ShouldQueue
 
     public $timeout = 300;
     protected $date;
+    protected $status;
     protected string $fileName;
     protected $userId;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($date, $fileName, $userId)
+    public function __construct($date, $status, $fileName, $userId)
     {
         $this->date = $date;
+        $this->status = $status;
         $this->fileName = $fileName;
         $this->userId = $userId;
     }
@@ -39,7 +41,7 @@ class ExportToExcelJob implements ShouldQueue
             $user = User::find($this->userId);
 
             // lakukan export di background
-            (new CollectorExport($this->date))->store("export/$this->fileName");
+            (new CollectorExport($this->date, $this->status))->store("export/$this->fileName");
 
             // berikan notifikasi ke user yang melakukan request
             $user->notify(new ExportCompleted($this->fileName, $this->date));

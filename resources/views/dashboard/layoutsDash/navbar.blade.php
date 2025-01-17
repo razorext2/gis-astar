@@ -91,7 +91,7 @@
 							</div>
 						@endforeach
 					@else
-						<div class="w-full px-3.5 text-sm text-gray-800 dark:text-white md:p-32" id="notificationEmpty">
+						<div class="w-full px-10 py-20 text-sm text-gray-800 dark:text-white md:p-32" id="notificationEmpty">
 							Tidak ada notifikasi baru.
 						</div>
 					@endif

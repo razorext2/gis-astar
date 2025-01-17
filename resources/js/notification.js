@@ -1,6 +1,22 @@
 export function handleNotification(data) {
 	// print data untuk testing
-	console.log('Pesan broadcast: ', data);
+	// console.log('Pesan broadcast: ', data);
+	const Toast = Swal.mixin({
+		toast: true,
+		position: "bottom-end",
+		showConfirmButton: false,
+		timer: 4000,
+		timerProgressBar: true,
+		didOpen: (toast) => {
+			toast.onmouseenter = Swal.stopTimer;
+			toast.onmouseleave = Swal.resumeTimer;
+		}
+	});
+
+	Toast.fire({
+		icon: "info",
+		title: "Kamu punya notifikasi baru.",
+	});
 
 	// sembunyikan notificationEmpty
 	$('#notificationEmpty').addClass('hidden');

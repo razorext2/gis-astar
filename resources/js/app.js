@@ -7,6 +7,10 @@ import { handleNotification } from './notification';
 // define userID, ambil dari metatag user-id
 const userId = document.querySelector('meta[name="user-id"]');
 
+// define quill dan swal sebagai global variable  
+window.Quill = Quill;
+window.Swal = Swal;
+
 if (userId) {
   // define Echo sebagai global variable
   window.Echo.private(`notifications.${userId.content}`)
@@ -21,8 +25,3 @@ if (userId) {
     });
 
 }
-
-// define quill dan swal sebagai global variable  
-window.Quill = Quill;
-window.Swal = Swal;
-

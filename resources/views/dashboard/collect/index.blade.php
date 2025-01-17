@@ -2,39 +2,91 @@
 @section('content')
 	<div class="relative grid grid-cols-1 gap-6">
 
-		<div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b]">
-			<ul class="flex flex-wrap text-center text-sm font-medium">
-				<li>
-					<a
-						class="{{ Route::is('collect.index') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-red-600 dark:hover:text-red-600 x"
-						href="{{ route('collect.index') }}">Belum Dilengkapi</a>
-				</li>
-				<li>
-					<a
-						class="{{ Route::is('collect.submitted') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-red-600 dark:hover:text-red-600 x"
-						href="{{ route('collect.submitted') }}">Diajukan</a>
-				</li>
-				<li>
-					<a
-						class="{{ Route::is('collect.approved') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-red-600 dark:hover:text-red-600 x"
-						href="{{ route('collect.approved') }}">Disetujui</a>
-				</li>
-				<li>
-					<a
-						class="{{ Route::is('collect.rejected') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-red-600 dark:hover:text-red-600 x"
-						href="{{ route('collect.rejected') }}">Ditolak</a>
-				</li>
-				<li>
-					<x-button.success class="max-h-10" id="getCollectorExcel" type="button">
+		<div class="rounded-xl border border-gray-200 bg-white p-2 dark:border-gray-700 dark:bg-[#18181b] md:p-6">
+
+			{{-- desktop view --}}
+			<div class="hidden items-center lg:flex">
+				<ul class="flex flex-wrap gap-6 text-sm font-medium">
+					<li>
+						<a
+							class="{{ Route::is('collect.index') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg py-2 hover:text-red-600 dark:hover:text-red-600"
+							href="{{ route('collect.index') }}">Belum Dilengkapi</a>
+					</li>
+					<li>
+						<a
+							class="{{ Route::is('collect.submitted') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg py-2 hover:text-red-600 dark:hover:text-red-600"
+							href="{{ route('collect.submitted') }}">Diajukan</a>
+					</li>
+					<li>
+						<a
+							class="{{ Route::is('collect.approved') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg py-2 hover:text-red-600 dark:hover:text-red-600"
+							href="{{ route('collect.approved') }}">Disetujui</a>
+					</li>
+					<li>
+						<a
+							class="{{ Route::is('collect.rejected') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg py-2 hover:text-red-600 dark:hover:text-red-600"
+							href="{{ route('collect.rejected') }}">Ditolak</a>
+					</li>
+				</ul>
+
+				<div class="absolute right-6 float-right">
+					<x-button.success class="getCollectorExcel max-h-10" id="getCollectorExcel" type="button">
 						<x-slot name="icon">
 							<x-icons.angle-right class="icon h-6 w-6 text-red-500 dark:text-white" />
 						</x-slot>
 						Tarik Laporan
 					</x-button.success>
+				</div>
+			</div>
 
+			{{-- mobile view --}}
+			<div class="lg:hidden" id="sub-navbar" x-data="{ open: false }">
+				{{-- button --}}
+				<button
+					class="flex w-full items-center justify-between gap-3 rounded-lg border border-gray-200 p-2.5 font-medium text-gray-500 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
+					type="button" @click="open = ! open">
+					<span>Actions...</span>
+					<svg class="h-3 w-3 shrink-0 transform transition-transform duration-300" aria-hidden="true"
+						:class="{ 'rotate-180 ': open }" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+						<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
+					</svg>
+				</button>
+
+				{{-- list --}}
+				<div class="mt-2 grid w-full gap-2 md:mt-4 md:gap-4" x-show="open" x-transition>
+					<ul class="rounded-lg bg-white text-gray-700 shadow dark:bg-gray-800 dark:text-gray-200">
+						<li>
+							<a
+								class="{{ Route::is('collect.index') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} will-change-transformduration-300 inline-block w-full rounded-lg border-none p-3 text-sm transition-all ease-in-out hover:scale-105 hover:dark:bg-gray-500"
+								href="{{ route('collect.index') }}">Belum Dilengkapi</a>
+							</a>
+						</li>
+						<li>
+							<a
+								class="{{ Route::is('collect.submitted') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block w-full rounded-lg border-none p-3 text-sm transition-all duration-300 ease-in-out will-change-transform hover:scale-105 hover:dark:bg-gray-500"
+								href="{{ route('collect.submitted') }}">Diajukan</a>
+						</li>
+						<li>
+							<a
+								class="{{ Route::is('collect.approved') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block w-full rounded-lg border-none p-3 text-sm transition-all duration-300 ease-in-out will-change-transform hover:scale-105 hover:dark:bg-gray-500"
+								href="{{ route('collect.approved') }}">Disetujui</a>
+						</li>
+						<li>
+							<a
+								class="{{ Route::is('collect.rejected') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block w-full rounded-lg border-none p-3 text-sm transition-all duration-300 ease-in-out will-change-transform hover:scale-105 hover:dark:bg-gray-500"
+								href="{{ route('collect.rejected') }}">Ditolak</a>
+						</li>
+					</ul>
+					<button
+						class="getCollectorExcel flex w-full items-center rounded-lg bg-gray-50 p-3 text-center text-sm font-medium text-white transition-all duration-300 ease-in-out will-change-transform hover:scale-105 hover:bg-green-100 dark:border-gray-600 dark:bg-green-700 dark:hover:bg-green-600"
+						type="button">
+						<x-slot name="icon">
+							<x-icons.angle-right class="icon h-6 w-6 text-red-500 dark:text-white" />
+						</x-slot>
+						Tarik Laporan
 					</button>
-				</li>
-			</ul>
+				</div>
+			</div>
 		</div>
 
 		<div class="flex h-auto items-center justify-center">
@@ -78,46 +130,6 @@
 	</div>
 @endsection
 @push('script')
-	<script>
-		$('#getCollectorExcel').click(async function() {
-			const {
-				value: date
-			} = await Swal.fire({
-				title: "Pilih tanggal laporan",
-				showCancelButton: true,
-				input: "date",
-				didOpen: () => {
-					const today = (new Date()).toISOString();
-				}
-			});
-
-			if (date) {
-				// jika tanggal diisi
-				axios.get(`{{ route('export.collector') }}/?date=${date}`)
-					.then(function() {
-						Swal.fire({
-							title: "Berhasil, data kamu sedang diexport",
-							icon: "success",
-							timer: 1000,
-						});
-					})
-					.catch(function(error) {
-						Swal.fire({
-							title: `Gagal`,
-							text: error,
-							icon: "error",
-							timer: 1000,
-						});
-					});
-			} else {
-				// jika tanggal tidak diisi
-				Swal.fire({
-					title: 'Tanggal tidak boleh kosong!',
-					icon: 'error',
-					showConfirmButton: false,
-					timer: 1000,
-				});
-			}
-		})
-	</script>
+	@yield('scripts')
+	@vite(['resources/js/collect/index.js'])
 @endpush

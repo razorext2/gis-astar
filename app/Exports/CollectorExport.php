@@ -14,10 +14,12 @@ class CollectorExport implements FromView, ShouldAutoSize
     use Exportable;
 
     protected $date;
+    protected $status;
 
-    public function __construct($date)
+    public function __construct($date, $status)
     {
         $this->date = $date;
+        $this->status = $status;
     }
 
     public function view(): View
@@ -25,7 +27,8 @@ class CollectorExport implements FromView, ShouldAutoSize
         $collectors = Collector::query()
             ->with('collectTaskRelasi')
             ->whereDate('assign_date', $this->date)
-            ->all();
+            ->where('status', $this->status)
+            ->get();
 
         return view('report.collector', [
             'items' => $collectors,
