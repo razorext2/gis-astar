@@ -36,8 +36,8 @@ use Illuminate\Support\Facades\Auth;
 // landing page
 // turn off for a while, redirect to dashboard
 Route::get('/', function () {
-    // return view('home', ['title' => 'Take attendance']);
-    return redirect('login');
+    return view('home', ['title' => 'Take attendance']);
+    // return redirect('login');
 })->name('landing.page');
 
 Route::get('photo-regist', function () {
@@ -46,9 +46,6 @@ Route::get('photo-regist', function () {
 
 // route bisa diakses jika login
 Route::middleware('auth')->group(function () {
-    // pegawai
-    Route::get('api/get-attendance-data', [PegawaiController::class, 'getAttendanceData'])->name('pegawai.getattendance');
-
     // notifikasi
     Route::get('notifications/{id}/mark-as-read', function ($id) {
         $notification = Auth::user()->unreadNotifications->find($id);
@@ -185,6 +182,7 @@ Route::middleware('auth')->group(function () {
         // route pegawai
         Route::get('pegawai/autocomplete/', [PegawaiController::class, 'autocomplete'])->name('pegawai.autocomplete');
         Route::get('pegawai/{pegawai}/detail', [PegawaiController::class, 'detail'])->name('pegawai.detail');
+        Route::get('pegawai/attendance', [PegawaiController::class, 'getAttendanceDate'])->name('pegawai.get.attendance.date');
         Route::get('pegawai/{pegawai}/attendance', [PegawaiController::class, 'attendanceList'])->name('pegawai.attendancelist');
         Route::get('pegawai/{pegawai}/payroll', [PegawaiController::class, 'payrollInfo'])->name('pegawai.payrollinfo');
         Route::get('pegawai/{pegawai}/timeline', [PegawaiController::class, 'timeline'])->name('pegawai.timeline');
@@ -200,19 +198,12 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 // api for get pegawai data
-Route::get('api/getPegawai', [PegawaiController::class, 'getPegawai']);
-Route::get('api/getPegawai/{id}', [PegawaiController::class, 'getPegawaiByKode']);
-Route::get('api/pegawai-images/{id}', [PegawaiController::class, 'getPegawaiImages']);
+Route::get('api/getPegawai/{id}', [PegawaiController::class, 'getPegawaiByCode']);
 Route::post('api/saveImage', [PegawaiController::class, 'storeImage']);
-Route::get('api/getPegawaiData/{id}', [PegawaiController::class, 'getPegawaiDataByLabel']);
 
 // absen
-Route::post('check-attendance', [PegawaiController::class, 'checkAttendance']);
 Route::post('store-attendance', [AttendanceController::class, 'storeAttendance']);
 Route::post('store-attendance-out', [AttendanceOutController::class, 'storeAttendance']);
-
-// daftar
-Route::post('photo-regist-process', [PegawaiController::class, 'photoRegistProcess'])->name('photo.registProcess');
 
 // route untuk manipulasi url pemanggilan foto
 $libs = sha1('libs');

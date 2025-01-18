@@ -2,10 +2,10 @@
 	data-aos-delay="100">
 	<div class="h-full w-full rounded-lg md:rounded-lg lg:w-full lg:object-fill">
 		<img
-			class="dark:ring-gray-700 h-60 w-full rounded-lg object-cover ring-1 ring-black md:h-auto lg:h-full lg:object-fill"
+			class="h-60 w-full rounded-lg border border-gray-200 object-cover dark:border-gray-700 md:h-auto lg:h-full lg:object-fill"
 			id="{{ $imgID }}" src="{{ asset('assets/img/noImage.webp') }}" alt="">
 		<canvas
-			class="dark:ring-gray-700 absolute left-0 top-0 h-60 w-full rounded-lg object-cover ring-1 ring-black md:h-full lg:h-full"
+			class="absolute left-0 top-0 h-60 w-full rounded-lg border border-gray-200 object-cover dark:border-gray-700 md:h-full lg:h-full"
 			id="{{ $canvID }}"></canvas>
 	</div>
 </div>

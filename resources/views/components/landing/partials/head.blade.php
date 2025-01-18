@@ -20,7 +20,7 @@
 <!-- Vendor CSS -->
 @vite('resources/css/app.css')
 @vite('resources/js/app.js')
-@vite('resources/js/global/alpine.js');
+@vite('resources/js/global/alpine.js')
 
 <link href="{{ asset('assets/vendor/aos/aos.css') }}" rel="stylesheet" />
 <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet" />
@@ -34,5 +34,5 @@
 	} else {
 		document.documentElement.classList.remove('dark');
 	}
-	const APP_URL = "{{ env('APP_URL') }}"
+	const APP_URL = "{{ env('APP_URL') }}";
 </script>

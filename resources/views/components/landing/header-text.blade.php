@@ -4,13 +4,13 @@
 			{{ $title }}
 		</x-landing.heading-text>
 
-		<x-landing.paragraph class="hidden text-lg md:block">
+		<x-landing.paragraph class="text-sm md:text-lg">
 			{!! $slot !!}
 		</x-landing.paragraph>
 
-		<x-landing.paragraph class="hidden md:block">
+		<x-landing.paragraph class="text-sm md:text-base">
 			Tekan tombol
-			<span class="dark:text-white text-xl font-bold text-black">
+			<span class="text-lg font-bold text-black dark:text-white md:text-xl">
 				[-]
 			</span>
 			untuk melihat tutorial

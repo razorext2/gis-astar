@@ -29,7 +29,7 @@
 		</script>
 	</head>
 
-	<body class="dark:to-red-500 dark:from-gray-800 bg-gradient-to-t from-red-500 to-white antialiased">
+	<body class="bg-gradient-to-t from-red-500 to-white antialiased dark:from-gray-800 dark:to-red-500">
 		@if (session('status'))
 			<div
 				class="fixed bottom-5 right-5 z-50 flex w-full max-w-xs scale-90 transform items-center divide-x rounded-lg transition duration-300"
@@ -38,10 +38,10 @@
 				x-transition:enter-end="transform scale-100 opacity-100" x-transition:leave="transition ease-out duration-300"
 				x-transition:leave-start="transform scale-100 opacity-100" x-transition:leave-end="transform scale-90 opacity-0">
 				<div
-					class="dark:bg-[#18181b] dark:text-white dark:ring-gray-700 mb-4 flex w-full max-w-xs items-center rounded-lg bg-white p-4 text-gray-500 shadow ring-1 ring-gray-200"
+					class="mb-4 flex w-full max-w-xs items-center rounded-lg bg-white p-4 text-gray-500 shadow ring-1 ring-gray-200 dark:bg-[#18181b] dark:text-white dark:ring-gray-700"
 					id="toast-success" role="alert">
 					<div
-						class="dark:text-white inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500">
+						class="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:text-white">
 						<svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
 							viewBox="0 0 20 20">
 							<path
@@ -53,7 +53,7 @@
 							:status="session('status')" />
 					</div>
 					<button
-						class="dark:bg-gray-500 dark:text-gray-300 dark:ring-gray-700 dark:hover:bg-gray-300 -mx-1.5 -my-1.5 ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-900 focus:ring-2 focus:ring-gray-300"
+						class="-mx-1.5 -my-1.5 ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-900 focus:ring-2 focus:ring-gray-300 dark:bg-gray-500 dark:text-gray-300 dark:ring-gray-700 dark:hover:bg-gray-300"
 						type="button" aria-label="Close" @click="showToast = false">
 						<span class="sr-only">Close</span>
 						<svg class="h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -66,18 +66,18 @@
 		@endif
 
 		<div class="container mx-auto px-6">
-			<div class="flex h-screen flex-col justify-evenly md:flex-row md:items-center md:text-left">
+			<div class="flex h-screen flex-col justify-evenly gap-4 md:flex-row md:items-center md:text-left">
 				<div class="flex w-full flex-col text-center md:text-left">
-					<div>
-						<svg class="fill-stroke dark:text-white mx-auto h-20 w-20 text-gray-800 md:float-left" fill="none"
+					<div class="hidden md:block">
+						<svg class="fill-stroke mx-auto h-20 w-20 text-gray-800 dark:text-white md:float-left" fill="none"
 							stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
 								d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4">
 							</path>
 						</svg>
 					</div>
-					<h1 class="dark:text-white text-5xl font-bold text-gray-800">Indodacin Presisi Utama</h1>
-					<p class="dark:text-white mx-auto w-5/12 text-gray-500 md:mx-0">
+					<h1 class="text-5xl font-bold text-gray-800 dark:text-white">Indodacin Presisi Utama</h1>
+					<p class="mx-auto mt-5 w-full text-gray-500 dark:text-white md:mx-0 md:mt-3">
 						Jl. Glugur No.18-D, Petisah Tengah, Kota Medan
 					</p>
 				</div>

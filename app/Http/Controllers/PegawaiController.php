@@ -237,44 +237,10 @@ class PegawaiController extends Controller
         }
     }
 
-    public function getPegawai()
-    {
-        // cek data pegawai yang kolom storagenya tidak kosong
-        $data = Pegawai::whereNotNull('storage')->pluck('kode_pegawai');
-        return response()->json($data);
-    }
-
-    public function getPegawaiByKode()
+    public function getPegawaiByCode()
     {
         $data = Pegawai::where('kode_pegawai', Auth::user()->kode_pegawai)->pluck('kode_pegawai');
         return response()->json($data);
-    }
-
-    public function getPegawaiImages($storage)
-    {
-        $sanitizedStorage = basename($storage);
-        $directoryPath = public_path('storage/labels/' . $sanitizedStorage);
-
-        if (!is_dir($directoryPath)) {
-            return response()->json(['error' => 'Directory not found'], 404);
-        }
-
-        $images = glob($directoryPath . '/*.{png,jpg,jpeg,webp}', GLOB_BRACE);
-        // dd($images);
-
-        if (!empty($images)) {
-            $relativeImagePaths = array_map(function ($path) {
-                return App::environment('production')
-                    // ganti nanti disini juga
-                    // ? str_replace(public_path(), '/attendance', $path)
-                    ? str_replace(public_path(), '/attendance', $path)
-                    : str_replace(public_path(), '', $path);
-            }, $images);
-
-            // dd($relativeImagePaths);
-
-            return response()->json($relativeImagePaths);
-        }
     }
 
     public function storeImage(Request $request)
@@ -299,35 +265,6 @@ class PegawaiController extends Controller
         } else {
             return response()->json(['error' => 'No image or label received'], 400);
         }
-    }
-
-    public function getPegawaiDataByLabel($label)
-    {
-        $pegawai = Pegawai::with(['attendanceRelasi', 'jabatanRelasi', 'golonganRelasi'])
-            ->where('kode_pegawai', $label)
-            ->first();
-
-        if ($pegawai) {
-            return response()->json($pegawai);
-        } else {
-            return response()->json(['error' => 'Pegawai not found'], 404);
-        }
-    }
-
-    public function checkAttendance(Request $request)
-    {
-        $kodePegawai = $request->input('kode_pegawai');
-        $today = now()->startOfDay();
-
-        $attendance = DB::table('tb_attendance')
-            ->where('kode_pegawai', $kodePegawai)
-            ->whereDate('jam_masuk', $today)
-            ->first();
-
-        return response()->json([
-            'hasClockedIn' => $attendance ? true : false,
-            'jam_masuk' => $attendance ? $attendance->jam_masuk : null,
-        ]);
     }
 
     public function saveImages(Request $request)
@@ -362,28 +299,18 @@ class PegawaiController extends Controller
             ]);
     }
 
-    public function photoRegistProcess(Request $request)
+    public function detail(Request $request, $id)
     {
-        // Validate the request
-        $request->validate([
-            'kode_pegawai' => 'required|exists:tb_pegawai,kode_pegawai',
-            'photo1' => 'required|string',
-            'photo2' => 'required|string',
-        ]);
+        $pegawai = Pegawai::with('jabatanRelasi:id,nama_jabatan')->findOrFail($id);
 
-        $this->saveImages($request);
-        return redirect()->to(route('landing.page') . '/#Scan')->with('success', 'Data berhasil diperbarui!');
-    }
+        if ($request->has('period')) {
+            $currentDate = Carbon::parse($request->query('period'));
+        } else {
+            $currentDate = Carbon::now();
+        }
 
-    public function detail($id)
-    {
-        $pegawai = Pegawai::with('jabatanRelasi')->findOrFail($id);
-
-        // Get the start and end dates for the current month and set locale for formatting
-        $currentDate = Carbon::now();
         $startOfMonth = $currentDate->copy()->startOfMonth();
         $endOfMonth = $currentDate->copy()->endOfMonth();
-        $startOfMonthFormatted = $startOfMonth->locale('id')->isoFormat('MMMM Y');
 
         // Create an array of dates with padding for the start day
         $dd = array_fill(0, $startOfMonth->dayOfWeek, null);
@@ -393,9 +320,8 @@ class PegawaiController extends Controller
         $attendanceData = Attendance::where('kode_pegawai', $pegawai->kode_pegawai)->get();
         $images = $this->showImages($pegawai);
 
-        return view('dashboard.pegawai.details.personal-info', compact('pegawai', 'dd', 'startOfMonthFormatted', 'images', 'attendanceData'));
+        return view('dashboard.pegawai.details.personal-info', compact('pegawai', 'dd', 'images', 'attendanceData'));
     }
-
 
     public function attendanceList($id)
     {
@@ -470,7 +396,6 @@ class PegawaiController extends Controller
     public function timeline($id, Request $request)
     {
         // Ambil tanggal dari query parameter, atau gunakan tanggal sekarang jika tidak ada
-        // $date = $request->query('date') ? Carbon::parse($request->query('date'))->toDateString() : Carbon::now()->toDateString();
         if ($request->query('date')) {
             $date = Carbon::parse($request->query('date'))->isoFormat('YYYY-MM-DD');
         } else {
@@ -522,24 +447,5 @@ class PegawaiController extends Controller
 
         // Kembalikan view dengan data $pegawai
         return view('dashboard.pegawai.details.laporan', compact('pegawai', 'report'));
-    }
-
-    public function getAttendanceData(Request $request)
-    {
-        $date = $request->query('date') ? Carbon::parse($request->query('date'))->format('Y-m-d') : Carbon::now()->format('Y-m-d');
-        $kode_pegawai = $request->query('id');
-
-        $attendance = Attendance::whereDate('jam_masuk', $date)
-            ->where('kode_pegawai', $kode_pegawai)
-            ->get();
-
-        $attendanceOut = AttendanceOut::whereDate('jam_keluar', $date)
-            ->where('kode_pegawai', $kode_pegawai)
-            ->get();
-
-        return response()->json([
-            'attendance' => $attendance,
-            'attendanceOut' => $attendanceOut,
-        ]);
     }
 }

@@ -197,7 +197,7 @@
 				@foreach ($images as $image)
 					@if (!is_null($image))
 						<div class="dark:bg-[#18181b] dark:ring-gray-700 rounded-xl bg-white p-1 ring-1 ring-gray-200">
-							<img class="border-1 h-56 w-full rounded-xl border-gray-500 object-cover blur-sm hover:blur-none"
+							<img class="border h-56 w-full rounded-xl border-gray-500 object-cover blur-sm hover:blur-none"
 								src="{{ asset('storage/' . $pegawai->storage . $image) }}" alt="">
 						</div>
 					@endif

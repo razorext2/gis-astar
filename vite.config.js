@@ -35,11 +35,14 @@ export default defineConfig({
                 "resources/js/collect-task/mass-assign.js",
                 "resources/js/collect-task/detail.js",
 
-                // dayoff task
+                // dayoff 
                 "resources/js/dayoff/index.js",
                 "resources/js/dayoff/add.js",
                 "resources/js/dayoff/edit.js",
                 "resources/js/dayoff/detail.js",
+
+                // pegawai
+                "resources/js/pegawai/personalInfo.js",
             ],
             refresh: true,
         }),

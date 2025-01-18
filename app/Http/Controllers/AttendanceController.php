@@ -30,7 +30,6 @@ class AttendanceController extends Controller
     {
         try {
             $kodePegawai = $request->input('kode_pegawai');
-            $nikPegawai = $request->input('nik_pegawai');
             $timestamp = Session::get('current_date');
             $photoURL = $kodePegawai . $timestamp;
             if (!is_null($request->input('longitude'))) {
@@ -40,7 +39,6 @@ class AttendanceController extends Controller
                 $longitude = NULL;
                 $latitude = NULL;
             }
-
 
             Attendance::create([
                 'kode_pegawai' => $kodePegawai,
@@ -57,21 +55,6 @@ class AttendanceController extends Controller
                 'photoURL' => $photoURL,
                 'created_at' => now(),
             ]);
-
-            // Logabsensi::create([
-            //     'nik' => $nikPegawai,
-            //     'kodejari' => $kodePegawai,
-            //     'waktu' => now(),
-            //     'lokasifoto' => $photoURL,
-            //     'upl' => 0,
-            //     'upl68' => 0,
-            //     'uplm68' => 0,
-            //     'upljam' => 0,
-            //     'jenis' => 'Wajah',
-            //     'waktuori' => now(),
-            //     'KodeBarcode' => null,
-            //     'status' => 'Masuk',
-            // ]);
 
             return response()->json(['success' => true, 'message' => 'Attendance recorded successfully.']);
         } catch (\Exception $e) {

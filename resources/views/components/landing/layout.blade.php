@@ -8,7 +8,7 @@
 	</head>
 
 	<body>
-		<x-landing.navbar></x-landing.navbar>
+		<x-landing.navbar />
 
 		{{ $slot }}
 
@@ -16,8 +16,8 @@
 			<x-alert></x-alert>
 		@endif
 
-		<x-landing.footer></x-landing.footer>
-		<x-landing.mobile-drawer></x-landing.mobile-drawer>
+		<x-landing.footer />
+		<x-landing.mobile-drawer />
 
 		<div class="fixed inset-0 z-50 bg-white dark:bg-gray-800 md:z-[100]" id="preloader">
 		</div>

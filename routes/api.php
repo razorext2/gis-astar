@@ -1,11 +1,24 @@
 <?php
 
+use App\Http\Controllers\Api\ApiAttendanceController;
 use App\Http\Controllers\Api\ApiCollectController;
 use App\Http\Controllers\Api\ApiCollectTaskController;
 use App\Http\Controllers\Api\ApiDayoffController;
+use App\Http\Controllers\Api\ApiPegawaiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
+
+// attendance
+Route::get('get-attendance-data', [ApiAttendanceController::class, 'getAttendanceData'])->name('pegawai.getattendance');
+Route::post('photo-regist-process', [ApiAttendanceController::class, 'photoRegistProcess'])->name('photo.registProcess');
+Route::post('check-attendance', [ApiAttendanceController::class, 'checkAttendance']);
+
+// pegawai
+Route::get('getSixMonthsBefore', [ApiPegawaiController::class, 'getSixMonthsBefore']);
+Route::get('getPegawai', [ApiPegawaiController::class, 'getPegawai']);
+Route::get('pegawai-images/{id}', [ApiPegawaiController::class, 'getPegawaiImages']);
+Route::get('getPegawaiData/{id}', [ApiPegawaiController::class, 'getPegawaiDataByLabel']);
 
 // collect task
 Route::patch('collect-task-api/{id}/validate', [ApiCollectTaskController::class, 'validateTask'])->name('collect-task-api.validate');
