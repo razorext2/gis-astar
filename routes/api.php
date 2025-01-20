@@ -22,6 +22,7 @@ Route::get('pegawai-images/{id}', [ApiPegawaiController::class, 'getPegawaiImage
 Route::get('getPegawaiData/{id}', [ApiPegawaiController::class, 'getPegawaiDataByLabel']);
 
 // collect task
+Route::patch('collect-task-api/{id}/reschedule', [ApiCollectTaskController::class, 'reschedule'])->name('collect-task-api.reschedule');
 Route::patch('collect-task-api/{id}/validate', [ApiCollectTaskController::class, 'validateTask'])->name('collect-task-api.validate');
 Route::patch('collect-task-api/{id}/assign', [ApiCollectTaskController::class, 'assignProcess'])->name('collect-task-api.assign');
 Route::patch('collect-task-api/mass-assign', [ApiCollectTaskController::class, 'massAssignProcess'])->name('collect-task-api.mass-assign');

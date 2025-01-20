@@ -190,6 +190,32 @@ class ApiCollectTaskController extends Controller
         return new CollectTaskResource(true, 'Berhasil menambah assigment', null);
     }
 
+    public function reschedule(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|integer',
+            'date' => 'required|date',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $data = $request->all();
+
+        $query = CollectTask::find($id);
+
+        $query->update([
+            'assign_date' => $data['date']
+        ]);
+
+        return new CollectTaskResource(true, 'Berhasil melakukan reschedule', null);
+    }
+
+
     public function destroy(string $id)
     {
         $query = CollectTask::find($id); // Cari data berdasarkan ID

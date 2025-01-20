@@ -113,10 +113,18 @@ class CollectTaskController extends Controller
                         ];
 
                         $actions[] = [
-                            'id' => 'delete-btn',
+                            'id' => 'reschedule-btn',
                             'action' => 'javascript:void(0)',
-                            'label' => 'Hapus',
+                            'label' => 'Ubah jadwal'
                         ];
+
+                        if (auth()->user()->can('collect-task-delete')) {
+                            $actions[] = [
+                                'id' => 'delete-btn',
+                                'action' => 'javascript:void(0)',
+                                'label' => 'Hapus',
+                            ];
+                        }
                     }
 
                     return view('components.dashboard.action-buttons', [

@@ -1,5 +1,3 @@
-import Swal from "sweetalert2";
-
 export async function singleAssign() {
   $('body').on('click', "#assign-btn", async function () {
     let id = $(this).data("id");
