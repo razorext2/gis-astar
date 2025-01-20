@@ -17,6 +17,7 @@
 	    'roles.*' => 'Roles',
 	    'permissions.*' => 'Permissions',
 	    'notifications.*' => 'Pusat Notifikasi',
+	    'sales.*' => 'Laporan Sales',
 	];
 
 	// Temukan judul berdasarkan rute dengan wildcard
