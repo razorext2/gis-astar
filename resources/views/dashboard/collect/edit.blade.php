@@ -50,14 +50,14 @@
 
 					<div class="col-span-2 w-full lg:col-span-1">
 						<x-input.basic class="cursor-not-allowed" id="total_bill" name="total_bill"
-							value="Rp. {{ number_format($data->collectTaskRelasi->total_bill, 2, ',', '.') ?? 'N/A' }}" readonly>
+							value="{{ Number::currency($data->collectTaskRelasi->total_bill, 'IDR', 'id') }}" readonly>
 							Total Tagihan
 						</x-input.basic>
 					</div>
 
 					<div class="col-span-2 w-full lg:col-span-1">
 						<x-input.basic class="cursor-not-allowed" id="remaining_bill" name="remaining_bill"
-							value="Rp. {{ number_format($data->collectTaskRelasi->remaining_bill, 2, ',', '.') ?? 'N/A' }}" readonly>
+							value="{{ Number::currency($data->collectTaskRelasi->remaining_bill, 'IDR', 'id') }}" readonly>
 							Sisa Tagihan
 						</x-input.basic>
 					</div>

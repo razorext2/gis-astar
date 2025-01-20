@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Number;
 use Yajra\DataTables\Facades\DataTables;
 use Carbon\Carbon;
 
@@ -86,11 +87,11 @@ class CollectTaskController extends Controller
                         'data' => [
                             [
                                 'title' => 'Total',
-                                'data' => 'Rp. ' . number_format($data->total_bill, 0, ',', '.'),
+                                'data' => Number::currency($data->total_bill, 'IDR', 'id'),
                             ],
                             [
                                 'title' => 'Sisa',
-                                'data' => 'Rp. ' . number_format($data->remaining_bill, 0, ',', '.'),
+                                'data' => Number::currency($data->remaining_bill, 'IDR', 'id'),
                             ]
                         ]
                     ]);

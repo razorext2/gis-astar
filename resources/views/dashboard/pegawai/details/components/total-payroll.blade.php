@@ -5,7 +5,7 @@
 				Total
 			</h2>
 		</header>
-		<h2 class="dark:text-white text-xl font-medium text-gray-900">
+		<h2 class="text-xl font-medium text-gray-900 dark:text-white">
 			Payroll
 		</h2>
 	</div>
@@ -95,13 +95,13 @@
 							let salaryPeriod =
 								"{{ isset($pegawai->salaryRelasi)? \Carbon\Carbon::parse($pegawai->salaryRelasi->period)->locale('id')->isoFormat('MMMM YYYY'): 'N/A' }}";
 							let salaryFee =
-								"{{ isset($pegawai->salaryRelasi) ? number_format($pegawai->salaryRelasi->salary_fee, 0, ',', '.') : '0' }}";
+								"{{ isset($pegawai->salaryRelasi) ? Number::currency($pegawai->salaryRelasi->salary_fee, 'IDR', 'id') : '0' }}";
 							let previousMonth =
 								"{{ isset($pegawai->salaryRelasi)? \Carbon\Carbon::parse($pegawai->salaryRelasi->period)->subMonth()->locale('id')->isoFormat('MMMM YYYY'): 'N/A' }}";
 
 							let allowances = @json($allowances);
 							let deductions = @json($deductions);
-							let total = "{{ number_format($total, 0, ',', '.') }}"; // Final total amount
+							let total = "{{ Number::currency($total, 'IDR', 'id')"; // Final total amount
 
 							// Build the custom print content
 							let allowancesContent = allowances.length ? allowances.map((data) =>
