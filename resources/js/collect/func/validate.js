@@ -60,6 +60,7 @@ export async function confirmAction() {
           cache: false,
           data: {
             "_token": token,
+            "user_id": userID,
             "notes": text // Send the message with the request
           },
           success: function (response) {
