@@ -3,7 +3,7 @@
 	<div class="mb-4 grid grid-cols-1 gap-4 xl:gap-6">
 
 		<div
-			class="dark:bg-[#18181b] dark:border-gray-700 grid max-h-36 w-full grid-cols-3 rounded-xl border border-gray-200 bg-white p-4 xl:p-6">
+			class="grid max-h-36 w-full grid-cols-3 rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b] xl:p-6">
 			<div class="col-span-2">
 				<div>
 					<div class="flex flex-row">
@@ -11,12 +11,12 @@
 							Jadwal Kamu
 						</h2>
 					</div>
-					<h2 class="dark:text-white text-md font-medium text-gray-900 md:text-lg">
+					<h2 class="text-md font-medium text-gray-900 dark:text-white md:text-lg">
 						{{ $getDay }}, 12 November 2024
 					</h2>
 				</div>
 				<div>
-					<p class="dark:text-white text-2xl font-medium text-gray-900 lg:text-4xl">
+					<p class="text-2xl font-medium text-gray-900 dark:text-white lg:text-4xl">
 						@if ($getJadwal)
 							{{ $getJadwal->jam_masuk }} - {{ $getJadwal->jam_keluar }}
 						@else
@@ -40,30 +40,30 @@
 		</div>
 
 		<div
-			class="dark:bg-[#18181b] dark:border-gray-700 hidden w-full rounded-xl border border-gray-200 bg-white p-4 lg:block xl:p-6">
+			class="hidden w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b] lg:block xl:p-6">
 			<div>
 				<div class="flex flex-row">
 					<h2 class="font-base text-sm text-gray-400">
 						History
 					</h2>
 				</div>
-				<h2 class="dark:text-white text-lg font-medium text-gray-900">
+				<h2 class="text-lg font-medium text-gray-900 dark:text-white">
 					Absensi Kamu
 				</h2>
 			</div>
 			<div class="pl-4 pt-4">
 
-				<ol class="dark:border-gray-700 relative border-s border-gray-200">
+				<ol class="relative border-s border-gray-200 dark:border-gray-700">
 					@foreach ($attendance_all as $index => $attendance)
 						@if ($attendance['jam_masuk'])
 							<li class="mb-5 ms-6">
 								<span
-									class="dark:ring-gray-900 dark:bg-blue-900 absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 ring-8 ring-white">
+									class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 ring-8 ring-white dark:bg-blue-900 dark:ring-gray-900">
 									<img class="rounded-full shadow-lg" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
 										alt="Bonnie image" />
 								</span>
 								<div
-									class="dark:bg-gray-700 dark:border-gray-600 items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:flex">
+									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-600 dark:bg-gray-700 sm:flex">
 									<time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">
 										@php
 											$input = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $attendance['jam_masuk']);
@@ -79,18 +79,18 @@
 											}
 										@endphp
 									</time>
-									<div class="dark:text-gray-300 text-sm font-normal text-gray-500">
+									<div class="text-sm font-normal text-gray-500 dark:text-gray-300">
 										Kamu melakukan
-										<a class="dark:text-green-500 font-semibold text-green-600 hover:underline" href="#">
+										<a class="font-semibold text-green-600 hover:underline dark:text-green-500" href="#">
 											Clock-in
 										</a>
 										pada tanggal
 										<span
-											class="dark:bg-gray-600 dark:text-gray-300 rounded bg-gray-100 px-0.5 py-0.5 text-xs font-normal text-gray-800">
+											class="rounded bg-gray-100 px-0.5 py-0.5 text-xs font-normal text-gray-800 dark:bg-gray-600 dark:text-gray-300">
 											{{ \Carbon\Carbon::parse($attendance['jam_masuk'])->locale('id')->isoFormat('DD MMMM YYYY') }}
 										</span>, jam
 										<span
-											class="dark:bg-gray-600 dark:text-gray-300 rounded bg-gray-100 px-0.5 py-0.5 text-xs font-normal text-gray-800">
+											class="rounded bg-gray-100 px-0.5 py-0.5 text-xs font-normal text-gray-800 dark:bg-gray-600 dark:text-gray-300">
 											{{ \Carbon\Carbon::parse($attendance['jam_masuk'])->format('H:i:s') }}
 										</span>
 
@@ -98,17 +98,17 @@
 								</div>
 							</li>
 						@else
-							<span class="dark:text-white ml-2 text-gray-900"> Data tidak ditemukan </span>
+							<span class="ml-2 text-gray-900 dark:text-white"> Data tidak ditemukan </span>
 						@endif
 						@if ($attendance['latest_jam_keluar'])
 							<li class="mb-5 ms-6">
 								<span
-									class="dark:ring-gray-900 dark:bg-blue-900 absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 ring-8 ring-white">
+									class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 ring-8 ring-white dark:bg-blue-900 dark:ring-gray-900">
 									<img class="rounded-full shadow-lg" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
 										alt="Bonnie image" />
 								</span>
 								<div
-									class="dark:bg-gray-700 dark:border-gray-600 items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:flex">
+									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-600 dark:bg-gray-700 sm:flex">
 									<time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">
 										@php
 											$input = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $attendance['latest_jam_keluar']);
@@ -124,18 +124,18 @@
 											}
 										@endphp
 									</time>
-									<div class="dark:text-gray-300 text-sm font-normal text-gray-500">
+									<div class="text-sm font-normal text-gray-500 dark:text-gray-300">
 										Kamu melakukan
-										<a class="dark:text-red-500 font-semibold text-red-600 hover:underline" href="#">
+										<a class="font-semibold text-red-600 hover:underline dark:text-red-500" href="#">
 											Clock-out
 										</a>
 										pada tanggal
 										<span
-											class="dark:bg-gray-600 dark:text-gray-300 rounded bg-gray-100 px-0.5 py-1 text-xs font-normal text-gray-800">
+											class="rounded bg-gray-100 px-0.5 py-1 text-xs font-normal text-gray-800 dark:bg-gray-600 dark:text-gray-300">
 											{{ \Carbon\Carbon::parse($attendance['latest_jam_keluar'])->locale('id')->isoFormat('DD MMMM YYYY') }}
 										</span>, jam
 										<span
-											class="dark:bg-gray-600 dark:text-gray-300 rounded bg-gray-100 px-0.5 py-1 text-xs font-normal text-gray-800">
+											class="rounded bg-gray-100 px-0.5 py-1 text-xs font-normal text-gray-800 dark:bg-gray-600 dark:text-gray-300">
 											{{ \Carbon\Carbon::parse($attendance['latest_jam_keluar'])->format('H:i:s') }}
 										</span>
 
@@ -152,14 +152,14 @@
 
 		{{-- All Menu --}}
 		<div
-			class="dark:bg-[#18181b] dark:border-gray-700 w-full rounded-xl border border-gray-200 bg-white p-4 md:hidden lg:col-span-2 xl:col-span-3 xl:p-6">
+			class="w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b] md:hidden lg:col-span-2 xl:col-span-3 xl:p-6">
 			<div>
 				<div class="flex flex-row">
 					<h2 class="font-base text-sm text-gray-400">
 						All
 					</h2>
 				</div>
-				<h2 class="dark:text-white text-lg font-medium text-gray-900">
+				<h2 class="text-lg font-medium text-gray-900 dark:text-white">
 					Menu
 				</h2>
 			</div>
@@ -168,9 +168,9 @@
 
 					@can('capture')
 						<a
-							class="dark:bg-gray-700 dark:border-gray-700 dark:text-white hover:dark:bg-gray-800 group mb-2 flex h-full w-auto transform cursor-pointer flex-col items-center justify-center rounded-xl border border-gray-200 bg-gray-50 p-2 text-blue-700 shadow transition duration-75 ease-in hover:scale-95 hover:bg-gray-100 hover:shadow-md"
+							class="group mb-2 flex h-full w-auto transform cursor-pointer flex-col items-center justify-center rounded-xl border border-gray-200 bg-gray-50 p-2 text-blue-700 shadow transition duration-75 ease-in hover:scale-95 hover:bg-gray-100 hover:shadow-md dark:border-gray-700 dark:bg-gray-700 dark:text-white hover:dark:bg-gray-800"
 							href="{{ route('capture.index') }}">
-							<svg class="fi-sidebar-item-icon dark:stroke-white h-7 w-7 stroke-blue-500" viewBox="0 0 24 24" fill="none"
+							<svg class="fi-sidebar-item-icon h-7 w-7 stroke-blue-500 dark:stroke-white" viewBox="0 0 24 24" fill="none"
 								xmlns="http://www.w3.org/2000/svg">
 								<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
 								<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -186,9 +186,9 @@
 
 					@can('collect-list')
 						<a
-							class="dark:bg-gray-700 dark:border-gray-700 dark:text-white hover:dark:bg-gray-800 group mb-2 flex h-full w-auto transform cursor-pointer flex-col items-center justify-center rounded-xl border border-gray-200 bg-gray-50 p-2 text-blue-700 shadow transition duration-75 ease-in hover:scale-95 hover:bg-gray-100 hover:shadow-md"
+							class="group mb-2 flex h-full w-auto transform cursor-pointer flex-col items-center justify-center rounded-xl border border-gray-200 bg-gray-50 p-2 text-blue-700 shadow transition duration-75 ease-in hover:scale-95 hover:bg-gray-100 hover:shadow-md dark:border-gray-700 dark:bg-gray-700 dark:text-white hover:dark:bg-gray-800"
 							href="{{ route('collect.index') }}">
-							<svg class="fi-sidebar-item-icon dark:stroke-white h-7 w-7 stroke-blue-700" viewBox="0 0 24 24" fill="none"
+							<svg class="fi-sidebar-item-icon h-7 w-7 stroke-blue-700 dark:stroke-white" viewBox="0 0 24 24" fill="none"
 								xmlns="http://www.w3.org/2000/svg">
 								<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
 								<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -198,14 +198,32 @@
 										stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path>
 								</g>
 							</svg>
-							<p class="mt-1 text-center text-xs">Laporan </p>
+							<p class="mt-1 text-center text-xs">Laporan Kolektor</p>
+						</a>
+					@endcan
+
+					@can('collect-task-list')
+						<a
+							class="group mb-2 flex h-full w-auto transform cursor-pointer flex-col items-center justify-center rounded-xl border border-gray-200 bg-gray-50 p-2 text-blue-700 shadow transition duration-75 ease-in hover:scale-95 hover:bg-gray-100 hover:shadow-md dark:border-gray-700 dark:bg-gray-700 dark:text-white hover:dark:bg-gray-800"
+							href="{{ route('collect-task.index') }}">
+							<x-icons.sale-percent class="mb-1 h-6 w-6" />
+							<p class="mt-1 text-center text-xs">IDC Non PPN (SR)</p>
+						</a>
+					@endcan
+
+					@can('sales-list')
+						<a
+							class="group mb-2 flex h-full w-auto transform cursor-pointer flex-col items-center justify-center rounded-xl border border-gray-200 bg-gray-50 p-2 text-blue-700 shadow transition duration-75 ease-in hover:scale-95 hover:bg-gray-100 hover:shadow-md dark:border-gray-700 dark:bg-gray-700 dark:text-white hover:dark:bg-gray-800"
+							href="{{ route('sales.index') }}">
+							<x-icons.receipt class="mb-1 h-6 w-6" />
+							<p class="mt-1 text-center text-xs">Laporan Sales</p>
 						</a>
 					@endcan
 
 					<a
-						class="dark:bg-gray-700 dark:border-gray-700 dark:text-white hover:dark:bg-gray-800 group mb-2 flex h-full w-auto transform cursor-pointer flex-col items-center justify-center rounded-xl border border-gray-200 bg-gray-50 p-2 text-blue-700 shadow transition duration-75 ease-in hover:scale-95 hover:bg-gray-100 hover:shadow-md"
+						class="group mb-2 flex h-full w-auto transform cursor-pointer flex-col items-center justify-center rounded-xl border border-gray-200 bg-gray-50 p-2 text-blue-700 shadow transition duration-75 ease-in hover:scale-95 hover:bg-gray-100 hover:shadow-md dark:border-gray-700 dark:bg-gray-700 dark:text-white hover:dark:bg-gray-800"
 						href="{{ route('attendanceIn.index') }}">
-						<svg class="dark:fill-white mb-1 h-6 w-6 rotate-180 fill-blue-700" aria-hidden="true"
+						<svg class="mb-1 h-6 w-6 rotate-180 fill-blue-700 dark:fill-white" aria-hidden="true"
 							xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
 							<path fill-rule="evenodd"
 								d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75V4.25Z"
@@ -218,9 +236,9 @@
 					</a>
 
 					<a
-						class="dark:bg-gray-700 dark:border-gray-700 dark:text-white hover:dark:bg-gray-800 group mb-2 flex h-full w-auto transform cursor-pointer flex-col items-center justify-center rounded-xl border border-gray-200 bg-gray-50 p-2 text-blue-700 shadow transition duration-75 ease-in hover:scale-95 hover:bg-gray-100 hover:shadow-md"
+						class="group mb-2 flex h-full w-auto transform cursor-pointer flex-col items-center justify-center rounded-xl border border-gray-200 bg-gray-50 p-2 text-blue-700 shadow transition duration-75 ease-in hover:scale-95 hover:bg-gray-100 hover:shadow-md dark:border-gray-700 dark:bg-gray-700 dark:text-white hover:dark:bg-gray-800"
 						href="{{ route('attendanceOut.index') }}">
-						<svg class="dark:fill-white mb-1 h-6 w-6 fill-blue-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+						<svg class="mb-1 h-6 w-6 fill-blue-700 dark:fill-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 20 20">
 							<path fill-rule="evenodd"
 								d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75V4.25Z"
@@ -234,9 +252,9 @@
 
 					@can('dayoff-list')
 						<a
-							class="dark:bg-gray-700 dark:border-gray-700 dark:text-white hover:dark:bg-gray-800 group mb-2 flex h-full w-auto transform cursor-pointer flex-col items-center justify-center rounded-xl border border-gray-200 bg-gray-50 p-2 text-blue-700 shadow transition duration-75 ease-in hover:scale-95 hover:bg-gray-100 hover:shadow-md"
+							class="group mb-2 flex h-full w-auto transform cursor-pointer flex-col items-center justify-center rounded-xl border border-gray-200 bg-gray-50 p-2 text-blue-700 shadow transition duration-75 ease-in hover:scale-95 hover:bg-gray-100 hover:shadow-md dark:border-gray-700 dark:bg-gray-700 dark:text-white hover:dark:bg-gray-800"
 							href="{{ route('dashboard.dayoff') }}">
-							<svg class="fi-sidebar-item-icon dark:stroke-white h-7 w-7 stroke-blue-700" viewBox="0 0 24 24" fill="none"
+							<svg class="fi-sidebar-item-icon h-7 w-7 stroke-blue-700 dark:stroke-white" viewBox="0 0 24 24" fill="none"
 								xmlns="http://www.w3.org/2000/svg">
 								<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
 								<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -252,9 +270,9 @@
 					@endcan
 
 					<a
-						class="dark:bg-gray-700 dark:border-gray-700 dark:text-white hover:dark:bg-gray-800 group mb-2 flex h-full w-auto transform cursor-pointer flex-col items-center justify-center rounded-xl border border-gray-200 bg-gray-50 p-2 text-blue-700 shadow transition duration-75 ease-in hover:scale-95 hover:bg-gray-100 hover:shadow-md"
+						class="group mb-2 flex h-full w-auto transform cursor-pointer flex-col items-center justify-center rounded-xl border border-gray-200 bg-gray-50 p-2 text-blue-700 shadow transition duration-75 ease-in hover:scale-95 hover:bg-gray-100 hover:shadow-md dark:border-gray-700 dark:bg-gray-700 dark:text-white hover:dark:bg-gray-800"
 						href="{{ route('profile.edit') }}">
-						<svg class="dark:fill-white mb-1 h-5 w-5 fill-blue-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+						<svg class="mb-1 h-5 w-5 fill-blue-700 dark:fill-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 20 20">
 							<path
 								d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 13a8.949 8.949 0 0 1-4.951-1.488A3.987 3.987 0 0 1 9 13h2a3.987 3.987 0 0 1 3.951 3.512A8.949 8.949 0 0 1 10 18Z" />
@@ -268,31 +286,31 @@
 		{{-- All Menu --}}
 
 		<div
-			class="dark:bg-[#18181b] dark:border-gray-700 w-full rounded-xl border border-gray-200 bg-white p-4 lg:hidden xl:p-6">
+			class="w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b] lg:hidden xl:p-6">
 			<div>
 				<div class="flex flex-row">
 					<h2 class="font-base text-sm text-gray-400">
 						History
 					</h2>
 				</div>
-				<h2 class="dark:text-white text-lg font-medium text-gray-900">
+				<h2 class="text-lg font-medium text-gray-900 dark:text-white">
 					Absensi Kamu
 				</h2>
 			</div>
 
 			<div class="pl-4 pt-4">
 
-				<ol class="dark:border-gray-700 relative border-s border-gray-200">
+				<ol class="relative border-s border-gray-200 dark:border-gray-700">
 					@foreach ($attendance_all as $index => $attendance)
 						@if ($attendance['jam_masuk'])
 							<li class="mb-5 ms-6">
 								<span
-									class="dark:ring-gray-900 dark:bg-blue-900 absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 ring-8 ring-white">
+									class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 ring-8 ring-white dark:bg-blue-900 dark:ring-gray-900">
 									<img class="rounded-full shadow-lg" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
 										alt="Bonnie image" />
 								</span>
 								<div
-									class="dark:bg-gray-700 dark:border-gray-600 items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:flex">
+									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-600 dark:bg-gray-700 sm:flex">
 									<time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">
 										@php
 											$input = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $attendance['jam_masuk']);
@@ -308,18 +326,18 @@
 											}
 										@endphp
 									</time>
-									<div class="dark:text-gray-300 text-sm font-normal text-gray-500">
+									<div class="text-sm font-normal text-gray-500 dark:text-gray-300">
 										Kamu melakukan
-										<a class="dark:text-green-500 font-semibold text-green-600 hover:underline" href="#">
+										<a class="font-semibold text-green-600 hover:underline dark:text-green-500" href="#">
 											Clock-in
 										</a>
 										pada tanggal
 										<span
-											class="dark:bg-gray-600 dark:text-gray-300 rounded bg-gray-100 px-0.5 py-1 text-xs font-normal text-gray-800">
+											class="rounded bg-gray-100 px-0.5 py-1 text-xs font-normal text-gray-800 dark:bg-gray-600 dark:text-gray-300">
 											{{ \Carbon\Carbon::parse($attendance['jam_masuk'])->locale('id')->isoFormat('DD MMMM YYYY') }}
 										</span>, jam
 										<span
-											class="dark:bg-gray-600 dark:text-gray-300 rounded bg-gray-100 px-0.5 py-1 text-xs font-normal text-gray-800">
+											class="rounded bg-gray-100 px-0.5 py-1 text-xs font-normal text-gray-800 dark:bg-gray-600 dark:text-gray-300">
 											{{ \Carbon\Carbon::parse($attendance['jam_masuk'])->format('H:i:s') }}
 										</span>
 
@@ -327,17 +345,17 @@
 								</div>
 							</li>
 						@else
-							<span class="dark:text-white ml-2 text-gray-900"> Data tidak ditemukan </span>
+							<span class="ml-2 text-gray-900 dark:text-white"> Data tidak ditemukan </span>
 						@endif
 						@if ($attendance['latest_jam_keluar'])
 							<li class="mb-5 ms-6">
 								<span
-									class="dark:ring-gray-900 dark:bg-blue-900 absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 ring-8 ring-white">
+									class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 ring-8 ring-white dark:bg-blue-900 dark:ring-gray-900">
 									<img class="rounded-full shadow-lg" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
 										alt="Bonnie image" />
 								</span>
 								<div
-									class="dark:bg-gray-700 dark:border-gray-600 items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:flex">
+									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-600 dark:bg-gray-700 sm:flex">
 									<time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">
 										@php
 											$input = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $attendance['latest_jam_keluar']);
@@ -353,18 +371,18 @@
 											}
 										@endphp
 									</time>
-									<div class="dark:text-gray-300 text-sm font-normal text-gray-500">
+									<div class="text-sm font-normal text-gray-500 dark:text-gray-300">
 										Kamu melakukan
-										<a class="dark:text-red-500 font-semibold text-red-600 hover:underline" href="#">
+										<a class="font-semibold text-red-600 hover:underline dark:text-red-500" href="#">
 											Clock-out
 										</a>
 										pada tanggal
 										<span
-											class="dark:bg-gray-600 dark:text-gray-300 rounded bg-gray-100 px-0.5 py-0.5 text-xs font-normal text-gray-800">
+											class="rounded bg-gray-100 px-0.5 py-0.5 text-xs font-normal text-gray-800 dark:bg-gray-600 dark:text-gray-300">
 											{{ \Carbon\Carbon::parse($attendance['latest_jam_keluar'])->locale('id')->isoFormat('DD MMMM YYYY') }}
 										</span>, jam
 										<span
-											class="dark:bg-gray-600 dark:text-gray-300 rounded bg-gray-100 px-0.5 py-0.5 text-xs font-normal text-gray-800">
+											class="rounded bg-gray-100 px-0.5 py-0.5 text-xs font-normal text-gray-800 dark:bg-gray-600 dark:text-gray-300">
 											{{ \Carbon\Carbon::parse($attendance['latest_jam_keluar'])->format('H:i:s') }}
 										</span>
 

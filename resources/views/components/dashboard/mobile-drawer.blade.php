@@ -57,6 +57,20 @@
 			        'icon' => 'collect',
 			    ],
 			    [
+			        'permission' => 'collect-task-list',
+			        'link' => 'collect-task.index',
+			        'check' => 'collect-task.*',
+			        'label' => 'IDC Non PPN (SR)',
+			        'icon' => 'collect-task',
+			    ],
+			    [
+			        'permission' => 'sales-list',
+			        'link' => 'sales.index',
+			        'check' => 'sales.*',
+			        'label' => 'Laporan Sales',
+			        'icon' => 'sales',
+			    ],
+			    [
 			        'permission' => 'capture',
 			        'link' => 'capture.index',
 			        'check' => 'capture.*',
@@ -154,6 +168,14 @@
 
 							@case('collect')
 								<x-icons.clipboard class="{{ $iconClass }} {{ $iconSize }}" />
+							@break
+
+							@case('collect-task')
+								<x-icons.sale-percent class="{{ $iconClass }} {{ $iconSize }}" />
+							@break
+
+							@case('sales')
+								<x-icons.receipt class="{{ $iconClass }} {{ $iconSize }}" />
 							@break
 
 							@case('capture')
