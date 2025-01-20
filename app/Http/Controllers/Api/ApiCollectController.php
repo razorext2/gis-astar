@@ -150,7 +150,7 @@ class ApiCollectController extends Controller
         $validate_by = Crypt::decryptString($request->input('user_id')); // Decrypt user_id
 
         $query->update([ // Update data
-            'status' => 2,
+            'status' => 3,
             'notes' => $request->notes,
             'validate_by' => $validate_by,
         ]);
