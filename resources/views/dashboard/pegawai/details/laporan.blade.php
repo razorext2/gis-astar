@@ -51,13 +51,17 @@
 										</a>
 										@if ($data->status == 0)
 											<span
-												class="me-2 ms-3 rounded bg-yellow-100 p-0.5 text-sm font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">Unapproved</span>
+												class="me-2 ms-3 rounded bg-yellow-100 p-0.5 text-sm font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">Belum
+												dilengkapi</span>
 										@elseif($data->status == 1)
 											<span
 												class="me-2 ms-3 rounded bg-green-100 p-0.5 text-sm font-medium text-green-800 dark:bg-green-900 dark:text-green-300">Approved</span>
+										@elseif($data->status == 2)
+											<span
+												class="me-2 ms-3 rounded bg-green-100 p-0.5 text-sm font-medium text-green-800 dark:bg-green-900 dark:text-green-300">Diajukan</span>
 										@else
 											<span
-												class="me-2 ms-3 rounded bg-red-100 p-0.5 text-sm font-medium text-red-800 dark:bg-red-900 dark:text-red-300">Declined</span>
+												class="me-2 ms-3 rounded bg-red-100 p-0.5 text-sm font-medium text-red-800 dark:bg-red-900 dark:text-red-300">Rejected</span>
 										@endif
 
 									</h3>
