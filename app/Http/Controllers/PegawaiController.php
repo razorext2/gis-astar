@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Sales;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
@@ -447,5 +448,24 @@ class PegawaiController extends Controller
 
         // Kembalikan view dengan data $pegawai
         return view('dashboard.pegawai.details.laporan', compact('pegawai', 'report'));
+    }
+
+    public function reportSales($id, Request $request)
+    {
+        if ($request->query('date')) {
+            $date = Carbon::parse($request->query('date'))->isoFormat('YYYY-MM-DD');
+        } else {
+            $date = Carbon::today(); // Ambil tanggal dari query string
+
+        }
+
+        $pegawai = Pegawai::where('kode_pegawai', $id)->firstOrFail();
+
+        $report = Sales::where('kode_pegawai', $id)
+            ->whereDate('created_at', $date)
+            ->get();
+
+        // Kembalikan view dengan data $pegawai
+        return view('dashboard.pegawai.details.laporan-sales', compact('pegawai', 'report'));
     }
 }

@@ -40,7 +40,8 @@
 @elseif (Route::is('pegawai.timeline') ||
 		Route::is('placement.create') ||
 		Route::is('placement.edit') ||
-		Route::is('pegawai.collectors'))
+		Route::is('pegawai.collectors') ||
+		Route::is('pegawai.sales'))
 	@vite('resources/js/global/leaflet.js')
 @endif
 

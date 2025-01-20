@@ -48,6 +48,6 @@
 	</div>
 	@push('script')
 		<script defer src="{{ asset('face-api.min.js') }}"></script>
-		<script defer src="{{ asset('script.min.js') }}"></script>
+		@vite('resources/js/landing/faceDetection.js')
 	@endpush
 </x-landing.layout>

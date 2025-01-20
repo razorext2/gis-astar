@@ -1,6 +1,5 @@
-document.addEventListener('DOMContentLoaded', function () {
+$(document).ready(function () {
     const lokasiSpan = document.getElementById('lokasi'); // Get the span element
-    let scriptsLoaded = false;
 
     if (navigator.geolocation) {
         navigator.geolocation.watchPosition(
@@ -56,13 +55,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Save current position for the next check
                 lastLat = lat;
                 lastLng = lng;
-
-                if (!scriptsLoaded) { // Load scripts only if not loaded
-                    scriptsLoaded = true; // Set flag to prevent reloading
-                    loadScript(faceApiUrl, function () {
-                        loadScript(selfDetectUrl);
-                    });
-                }
             },
 
             function (error) {
@@ -86,9 +78,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         })
                     })
 
-                    // setTimeout(() => {
-                    //   window.location.href = redirectUrl;
-                    // }, 1000);
+                    setTimeout(() => {
+                        window.location.href = redirectUrl;
+                    }, 3000);
                 });
             }, {
             enableHighAccuracy: true,
@@ -107,19 +99,11 @@ document.addEventListener('DOMContentLoaded', function () {
             pegawaiInfo.style.display = "none";
 
             setTimeout(() => {
-                window.location.href = "{{ route('dashboard') }}";
+                window.location.href = `${APP_URL}/dashboard`;
             }, 1000);
         });
     }
 });
-
-function loadScript(url, callback) {
-    const script = document.createElement("script");
-    script.src = url;
-    script.defer = true;
-    script.onload = callback;
-    document.head.appendChild(script);
-}
 
 // Function to calculate distance between two coordinates using Haversine formula
 function calculateDistance(lat1, lng1, lat2, lng2) {

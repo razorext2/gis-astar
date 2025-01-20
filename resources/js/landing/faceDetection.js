@@ -1,4 +1,3 @@
-
 let videoStream = null,
   webcamStarted = !1,
   modelsLoaded = !1,
@@ -13,15 +12,16 @@ const labels = [],
   csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
   canvInfo = document.getElementById("canvAttend"),
   pegawaiKosong = document.getElementById("pegawaiKosong"),
-
-  //  = document.getElementById("
-  // "),
-  lokasi = "Titi Kuning",
   originalConsoleLog = console.log;
 
+
+
 fetch(`${APP_URL}/api/getPegawai`).then((e => e.json())).then((e => {
-  console.log("Initializing application"), labels.push(...e), initializeFaceAPI()
-})).catch((e => console.error("Error fetching data", e)));
+  console.log("Initializing application"),
+    labels.push(...e),
+    initializeFaceAPI()
+}))
+  .catch((e => console.error("Error fetching data", e)));
 
 function initializeFaceAPI() {
   Promise.all([

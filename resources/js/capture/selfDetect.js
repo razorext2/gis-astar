@@ -1,6 +1,5 @@
 let videoStream = null,
   webcamStarted = !1,
-  modelsLoaded = !1,
   detectionInterval = null;
 
 const video = document.getElementById("video"),
@@ -23,8 +22,7 @@ function initializeFaceAPI() {
     faceapi.nets.faceLandmark68Net.loadFromUri("../models")     // Load Face Landmark model
   ])
     .then(() => {
-      isModelsLoaded = true; // Flag to indicate models have been loaded
-      console.log("FaceAPI models loaded successfully.");
+      console.log("Models loaded successfully.");
     })
     .catch((error) => {
       console.error("Error loading FaceAPI models:", error);

@@ -1,12 +1,12 @@
 @extends('dashboard.pegawai.detail')
 @section('menus')
-	<div class="rounded-lg" id="collectors" role="tabpanel" aria-labelledby="collectors-tab">
+	<div class="rounded-lg" id="sales" role="tabpanel" aria-labelledby="sales-tab">
 		<div class="w-full">
 			<div class="grid gap-6 md:grid-cols-2">
 
 				{{-- search --}}
 				<div class="w-full md:col-span-2">
-					<form id="dateForm" action="{{ route('pegawai.collectors', ['pegawai' => $pegawai->kode_pegawai]) }}" method="GET">
+					<form id="dateForm" action="{{ route('pegawai.sales', ['pegawai' => $pegawai->kode_pegawai]) }}" method="GET">
 						@csrf
 						<x-dashboard.date-picker id="datepicker-actions" name="date" form="dateForm" :text="'Filter tanggal'" />
 					</form>
@@ -29,7 +29,7 @@
 						</p>
 					</div>
 
-					<ol class="relative ml-3 border-s border-gray-200 dark:border-gray-700" id="collectorsContent">
+					<ol class="relative ml-3 border-s border-gray-200 dark:border-gray-700" id="salesContent">
 
 						@if ($report->isNotEmpty())
 							@foreach ($report as $data)
@@ -43,7 +43,7 @@
 										</svg>
 									</span>
 									<h3 class="mb-1 flex items-center text-sm text-gray-900 dark:text-white">
-										<a class="group" href="{{ route('collect.show', $data->id) }}" target="_blank">
+										<a class="group" href="{{ route('sales.show', $data->id) }}" target="_blank">
 											{{ $data->title }}
 											<span class="text-blue-500 group-hover:underline">
 												[ 👁 ]

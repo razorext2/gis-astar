@@ -13,6 +13,7 @@ use App\Http\Controllers\GolonganController;
 use App\Http\Controllers\PlacementController;
 use App\Http\Controllers\LoghistoryController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SalesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\CaptureController;
@@ -127,6 +128,9 @@ Route::middleware('auth')->group(function () {
         // record attendance
         Route::get('capture', [CaptureController::class, 'index'])->name('capture.index');
 
+        // route salesman
+        Route::resource('sales', SalesController::class)->except(['store', 'update', 'destroy']);
+
         // route collect 
         // tampilkan semua data where status = 0 (belum dilengkapi)
         Route::get('collect/show', [CollectController::class, 'showdata'])->name('collect.showdata');
@@ -187,6 +191,7 @@ Route::middleware('auth')->group(function () {
         Route::get('pegawai/{pegawai}/payroll', [PegawaiController::class, 'payrollInfo'])->name('pegawai.payrollinfo');
         Route::get('pegawai/{pegawai}/timeline', [PegawaiController::class, 'timeline'])->name('pegawai.timeline');
         Route::get('pegawai/{pegawai}/collectors', [PegawaiController::class, 'reportCollectors'])->name('pegawai.collectors');
+        Route::get('pegawai/{pegawai}/sales', [PegawaiController::class, 'reportSales'])->name('pegawai.sales');
         Route::resource('pegawai', PegawaiController::class);
 
         // route pegawai allowance & deductions

@@ -20,9 +20,11 @@ export default defineConfig({
 
                 // landing page
                 "resources/js/landing/main.js",
+                "resources/js/landing/faceDetection.js",
 
                 // capture
                 "resources/js/capture/index.js",
+                "resources/js/capture/selfDetect.js",
 
                 // collect
                 "resources/js/collect/index.js",
@@ -34,6 +36,12 @@ export default defineConfig({
                 "resources/js/collect-task/add.js",
                 "resources/js/collect-task/mass-assign.js",
                 "resources/js/collect-task/detail.js",
+
+                // sales
+                "resources/js/sales/index.js",
+                "resources/js/sales/add.js",
+                "resources/js/sales/edit.js",
+                "resources/js/sales/detail.js",
 
                 // dayoff 
                 "resources/js/dayoff/index.js",

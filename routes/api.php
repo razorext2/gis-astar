@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\ApiCollectController;
 use App\Http\Controllers\Api\ApiCollectTaskController;
 use App\Http\Controllers\Api\ApiDayoffController;
 use App\Http\Controllers\Api\ApiPegawaiController;
+use App\Http\Controllers\Api\ApiSalesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
@@ -31,6 +32,11 @@ Route::apiResource('collect-task-api', ApiCollectTaskController::class)->except(
 Route::patch('collect-api/{id}/confirm', [ApiCollectController::class, 'confirmCollect'])->name('collect-api.confirm');
 Route::patch('collect-api/{id}/deny', [ApiCollectController::class, 'denyCollect'])->name('collect-api.deny');
 Route::apiResource('collect-api', ApiCollectController::class)->except(['index', 'store', 'show']);
+
+// laporan sales
+Route::patch('sales-api/{id}/confirm', [ApiSalesController::class, 'confirm'])->name('sales-api.confirm');
+Route::patch('sales-api/{id}/deny', [ApiSalesController::class, 'deny'])->name('sales-api.deny');
+Route::apiResource('sales-api', ApiSalesController::class)->only(['store', 'update', 'destroy']);
 
 // pengajuan off
 Route::patch('dayoff-api/{id}/approve', [ApiDayoffController::class, 'approve'])->name('dayoff-api.approve');

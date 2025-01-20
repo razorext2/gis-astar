@@ -45,15 +45,7 @@ export function editDataHandler() {
     $button.prop('disabled', true);
 
     // define var
-    // let formData = new FormData();
     let id = $('#id').val();
-
-    // formData.append("dayoff_for", $("#dayoff_for").val());
-    // formData.append("tgl_dari", $("#tgl_dari").val());
-    // formData.append("tgl_hingga", $("#tgl_hingga").val());
-    // formData.append("keterangan", $("#keterangan").val());
-    // formData.append("_token", $("meta[name='csrf-token']").attr("content"));
-
     let dayoff_for = $("#dayoff_for").val();
     let tgl_dari = $("#tgl_dari").val();
     let tgl_hingga = $("#tgl_hingga").val();
