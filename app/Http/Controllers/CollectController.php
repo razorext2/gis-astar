@@ -220,9 +220,7 @@ class CollectController extends Controller
             return Collector::with('photoCollectRelasi', 'pegawaiRelasi')->findOrFail($id);
         });
 
-        $user = Cache::remember('collector_validate_by_' . $data->validate_by, 1800, function () use ($data) {
-            return User::select('id', 'name')->where('id', $data->validate_by)->first();
-        });
+        $user =  User::select('id', 'name')->where('id', $data->validate_by)->first();
 
         return view('dashboard.collect.detail', compact('data', 'user'));
     }

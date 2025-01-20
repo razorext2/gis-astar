@@ -150,40 +150,52 @@
 					</div>
 
 					@php
-						if ($data->have_paid == 0) {
-						    $status = 'Belum bayar';
-						} elseif ($data->have_paid == 1) {
-						    $status = 'Cicilan';
-						} elseif ($data->have_paid == 2) {
-						    $status = 'Lunas';
+
+						if (is_null($data->have_paid)) {
+						    $status = 'Belum ada update pembayaran';
+						} else {
+						    if ($data->have_paid == 0) {
+						        $status = 'Belum bayar';
+						    } elseif ($data->have_paid == 1) {
+						        $status = 'Cicilan';
+						    } elseif ($data->have_paid == 2) {
+						        $status = 'Lunas';
+						    }
 						}
+
 					@endphp
 
 					<div
 						class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700 lg:col-span-1">
 						<p class="text-sm text-gray-600 dark:text-gray-300">Status Pembayaran</p>
 						<p class="text-navy-700 text-base font-medium dark:text-white">
-							{{ $data->have_paid ? $status : 'Belum ada update status pembayaran.' }}
+							{{ $status }}
 						</p>
 					</div>
 
 					@php
-						if ($data->payment_type == 0) {
-						    $type = 'Tidak ada';
-						} elseif ($data->payment_type == 1) {
-						    $type = 'Cash';
-						} elseif ($data->payment_type == 2) {
-						    $type = 'Transfer';
-						} elseif ($data->payment_type == 3) {
-						    $type = 'Giro';
+
+						if (is_null($data->payment_type)) {
+						    $status = 'Belum pilih tipe pembayaran.';
+						} else {
+						    if ($data->payment_type == 0) {
+						        $type = 'Tidak ada';
+						    } elseif ($data->payment_type == 1) {
+						        $type = 'Cash';
+						    } elseif ($data->payment_type == 2) {
+						        $type = 'Transfer';
+						    } elseif ($data->payment_type == 3) {
+						        $type = 'Giro';
+						    }
 						}
+
 					@endphp
 
 					<div
 						class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700 lg:col-span-1">
 						<p class="text-sm text-gray-600 dark:text-gray-300">Tipe Pembayaran</p>
 						<p class="text-navy-700 text-base font-medium dark:text-white">
-							{{ $data->payment_type ? $type : 'Belum pilih tipe pembayaran.' }}
+							{{ $type }}
 						</p>
 					</div>
 
