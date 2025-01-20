@@ -24,8 +24,8 @@ export function exportHandler() {
         input: "select",
         inputOptions: {
           0: 'Belum Dilengkapi',
-          1: 'Diajukan',
-          2: 'Disetujui',
+          1: 'Disetujui',
+          2: 'Diajukan',
           3: 'Ditolak'
         },
         inputPlaceholder: 'Pilih status laporan',
