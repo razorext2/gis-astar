@@ -87,11 +87,11 @@ class CollectTaskController extends Controller
                         'data' => [
                             [
                                 'title' => 'Total',
-                                'data' => Number::currency($data->total_bill, 'IDR', 'id'),
+                                'data' => Number::currency($data->total_bill ?? 0, 'IDR', 'id'),
                             ],
                             [
                                 'title' => 'Sisa',
-                                'data' => Number::currency($data->remaining_bill, 'IDR', 'id'),
+                                'data' => Number::currency($data->remaining_bill ?? 0, 'IDR', 'id'),
                             ]
                         ]
                     ]);

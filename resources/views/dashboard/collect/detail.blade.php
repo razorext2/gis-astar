@@ -75,7 +75,7 @@
 						class="flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
 						<p class="text-sm text-gray-600 dark:text-gray-300">Total Tagihan</p>
 						<p class="text-navy-700 text-base font-medium dark:text-white">
-							{{ Number::currency($data->collectTaskRelasi->total_bill, 'IDR', 'id') ?? 'N/A' }}
+							{{ Number::currency($data->collectTaskRelasi->total_bill ?? 0, 'IDR', 'id') ?? 'N/A' }}
 						</p>
 					</div>
 
@@ -83,7 +83,7 @@
 						class="flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
 						<p class="text-sm text-gray-600 dark:text-gray-300">Sisa Tagihan</p>
 						<p class="text-navy-700 text-base font-medium dark:text-white">
-							{{ Number::currency($data->collectTaskRelasi->remaining_bill, 'IDR', 'id') ?? 'N/A' }}
+							{{ Number::currency($data->collectTaskRelasi->remaining_bill ?? 0, 'IDR', 'id') ?? 'N/A' }}
 						</p>
 					</div>
 
@@ -219,7 +219,7 @@
 						class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
 						<p class="text-sm text-gray-600 dark:text-gray-300">Jumlah Pembayaran</p>
 						<p class="text-navy-700 text-base font-medium dark:text-white">
-							{{ Number::currency($data->payment_amount, 'IDR', 'id') ?? 'N/A' }}
+							{{ Number::currency($data->payment_amount ?? 0, 'IDR', 'id') }}
 						</p>
 					</div>
 

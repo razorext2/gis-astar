@@ -77,7 +77,7 @@
 							class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
 							<p class="text-sm text-gray-600 dark:text-gray-300">Total Tagihan</p>
 							<p class="text-navy-700 text-base font-medium dark:text-white">
-								{{ Number::currency($data->total_bill, 'IDR', 'id') }}
+								{{ Number::currency($data->total_bill ?? 0, 'IDR', 'id') }}
 							</p>
 						</div>
 
@@ -202,7 +202,7 @@
 											</tr>
 											<tr>
 												<th>Jumlah:</th>
-												<td>{{ Number::currency($item->payment_amount, 'IDR', 'id') }}</td>
+												<td>{{ Number::currency($item->payment_amount ?? 0, 'IDR', 'id') }}</td>
 											</tr>
 
 										</table>
@@ -214,7 +214,7 @@
 
 						<div class="col-span-2 rounded-xl px-1 text-right dark:text-gray-200">
 							<p class="font-bold">
-								Total Pembayaran: {{ Number::currency($total, 'IDR', 'id') }}
+								Total Pembayaran: {{ Number::currency($total ?? 0, 'IDR', 'id') }}
 							</p>
 
 						</div>

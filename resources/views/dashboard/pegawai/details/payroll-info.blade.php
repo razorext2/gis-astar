@@ -57,7 +57,7 @@
 								class="dark:bg-gray-700 dark:border-gray-700 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-gray-100 p-3">
 								<p class="dark:text-gray-300 text-sm text-gray-600">Base Salary</p>
 								<p class="text-navy-700 dark:text-white text-base font-medium">
-									{{ $pegawai->salaryRelasi ? Number::currency($pegawai->salaryRelasi->salary_fee, 'IDR', 'id') : 'N/A' }}
+									{{ $pegawai->salaryRelasi ? Number::currency($pegawai->salaryRelasi->salary_fee ?? 0, 'IDR', 'id') : 'N/A' }}
 								</p>
 							</div>
 

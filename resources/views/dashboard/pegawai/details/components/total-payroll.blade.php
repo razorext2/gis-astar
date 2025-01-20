@@ -34,7 +34,7 @@
 				<td class="text-right text-green-500">+ {{ Number::currency($pegawai->salaryRelasi->salary_fee ?? 0, 'IDR', 'id') }}
 				</td>
 				<td class="!text-right">-</td>
-				<td class="!text-right">{{ Number::currency($total, 'IDR', 'id') }}</td> <!-- Initial total as base salary -->
+				<td class="!text-right">{{ Number::currency($total ?? 0, 'IDR', 'id') }}</td> <!-- Initial total as base salary -->
 			</tr>
 
 			<!-- Allowances Loop -->
@@ -45,9 +45,9 @@
 				<tr>
 					<td class="text-center">{{ $counter++ }}</td>
 					<td>{{ $data->allowance_name }}</td>
-					<td class="!text-right text-green-500">+ {{ Number::currency($data->allowance_fee, 'IDR', 'id') }}</td>
+					<td class="!text-right text-green-500">+ {{ Number::currency($data->allowance_fee ?? 0, 'IDR', 'id') }}</td>
 					<td class="!text-right">-</td>
-					<td class="!text-right">{{ Number::currency($total, 'IDR', 'id') }}</td>
+					<td class="!text-right">{{ Number::currency($total ?? 0, 'IDR', 'id') }}</td>
 					<!-- Updated total after each addition -->
 				</tr>
 			@endforeach
@@ -61,8 +61,8 @@
 					<td class="text-center">{{ $counter++ }}</td>
 					<td>{{ $data->deduction_name }}</td>
 					<td class="!text-right">-</td>
-					<td class="!text-right text-red-500">- {{ Number::currency($data->deduction_fee, 'IDR', 'id') }}</td>
-					<td class="!text-right">{{ Number::currency($total, 'IDR', 'id') }}</td>
+					<td class="!text-right text-red-500">- {{ Number::currency($data->deduction_fee ?? 0, 'IDR', 'id') }}</td>
+					<td class="!text-right">{{ Number::currency($total ?? 0, 'IDR', 'id') }}</td>
 					<!-- Updated total after each subtraction -->
 				</tr>
 			@endforeach
@@ -71,7 +71,7 @@
 		<tfoot>
 			<tr>
 				<td class="font-semibold" colspan="4">Total salary:</td>
-				<td class="!text-right font-semibold">{{ Number::currency($total, 'IDR', 'id') }}</td>
+				<td class="!text-right font-semibold">{{ Number::currency($total ?? 0, 'IDR', 'id') }}</td>
 			</tr>
 		</tfoot>
 
@@ -95,13 +95,14 @@
 							let salaryPeriod =
 								"{{ isset($pegawai->salaryRelasi)? \Carbon\Carbon::parse($pegawai->salaryRelasi->period)->locale('id')->isoFormat('MMMM YYYY'): 'N/A' }}";
 							let salaryFee =
-								"{{ isset($pegawai->salaryRelasi) ? Number::currency($pegawai->salaryRelasi->salary_fee, 'IDR', 'id') : '0' }}";
+								"{{ isset($pegawai->salaryRelasi) ? Number::currency($pegawai->salaryRelasi->salary_fee ?? 0, 'IDR', 'id') : '0' }}";
 							let previousMonth =
 								"{{ isset($pegawai->salaryRelasi)? \Carbon\Carbon::parse($pegawai->salaryRelasi->period)->subMonth()->locale('id')->isoFormat('MMMM YYYY'): 'N/A' }}";
 
 							let allowances = @json($allowances);
 							let deductions = @json($deductions);
-							let total = "{{ Number::currency($total, 'IDR', 'id')"; // Final total amount
+							let total =
+							"{{ Number::currency($total ?? 0, 'IDR', 'id')"; // Final total amount
 
 							// Build the custom print content
 							let allowancesContent = allowances.length ? allowances.map((data) =>
