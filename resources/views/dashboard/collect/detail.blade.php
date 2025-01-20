@@ -176,7 +176,7 @@
 					@php
 
 						if (is_null($data->payment_type)) {
-						    $status = 'Belum pilih tipe pembayaran.';
+						    $type = 'Belum pilih tipe pembayaran.';
 						} else {
 						    if ($data->payment_type == 0) {
 						        $type = 'Tidak ada';
