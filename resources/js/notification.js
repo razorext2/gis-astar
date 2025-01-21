@@ -1,6 +1,7 @@
 export function handleNotification(data) {
 	// print data untuk testing
-	// console.log('Pesan broadcast: ', data);
+	console.log('Pesan broadcast: ', data);
+
 	const Toast = Swal.mixin({
 		toast: true,
 		position: "bottom-end",
