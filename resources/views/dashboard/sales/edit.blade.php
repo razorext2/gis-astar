@@ -16,7 +16,7 @@
 					</x-button.danger>
 
 					<h2 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
-						{{ __('Tambah Laporan Sales') }}
+						{{ __('Ubah Laporan Sales') }}
 					</h2>
 
 				</header>

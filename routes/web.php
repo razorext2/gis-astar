@@ -12,6 +12,7 @@ use App\Http\Controllers\DivisionController;
 use App\Http\Controllers\GolonganController;
 use App\Http\Controllers\PlacementController;
 use App\Http\Controllers\LoghistoryController;
+use App\Http\Controllers\ProxyController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\UserController;
@@ -67,36 +68,8 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('proxy')->as('')->group(function () {
         // fetchSR IDC NON PPN
-        Route::get('fetchSR', function (Request $request) {
-            $no_sr = $request->query('no_sr');
-
-            if (!$no_sr) {
-                return response()->json([
-                    'error' => 'No. SR is required.'
-                ], 400);
-            }
-
-            $url = "https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSR&NomorPermintaanJual=" . $no_sr;
-
-            try {
-                $response = Http::get($url);
-
-                if ($response->successful()) {
-                    return $response->json(); // Return the JSON response directly
-                }
-
-                return response()->json([
-                    'error' => 'Failed to fetch data from external API.',
-                    'status' => $response->status(),
-                    'body' => $response->body()
-                ], $response->status());
-            } catch (\Exception $e) {
-                return response()->json([
-                    'error' => 'An error occurred while processing the request.',
-                    'message' => $e->getMessage()
-                ], 500);
-            }
-        });
+        Route::get('idc/tagihan', [ProxyController::class, 'fetchIDCNon'])->name('fetch.idc.nonppn');
+        // Route::get('idc/piutang', [ProxyController::class, 'fetchIDCNonPiutang'])->name('fetch.icd.nonppn.piutang');
 
         // fetchSR IDC PPN
 

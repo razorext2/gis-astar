@@ -22,6 +22,13 @@ export function addDataHandler() {
     formData.append("assign_date", $("#assign_date").val());
     formData.append("_token", $("meta[name='csrf-token']").attr("content")); // CSRF token
 
+    // jika data sisa tagihan dari BSI dan Database tidak sama
+    if ($('#remaining_bill').val() != $('#remaining_bill_bsi').val()) {
+      $button.prop('disabled', false); // Hidupkan tombol submit
+      Swal.fire('Sisa tagihan tidak sama.', 'Sisa tagihan dari Database dan BSI tidak sama. Silahkan hubungi IT untuk pengecekan data.', 'error');
+      return;
+    }
+
     axios.post(storeUrl, formData) // Kirim data ke server
       .then(function () { // Jika sukses
         Swal.fire({ // Tampilkan notifikasi sukses

@@ -22,7 +22,7 @@
 					{{ __('Silahkan sesuaikan data dibawah ini dengan data yang benar.') }}
 				</p>
 
-				<form class="mt-4" method="POST">
+				<form class="mt-4" id="collect-task" method="POST">
 					@csrf
 					<div class="mb-4 grid grid-cols-2 gap-6 sm:mb-5 sm:gap-6">
 
@@ -105,18 +105,30 @@
 							<div class="mt-2 hidden text-sm text-red-500" id="alert-customer_telp"></div>
 						</div>
 
-						<div class="w-full">
-							<x-input.currency id="total_bill" name="total_bill" placeholder="Rp. XXX.XXX,-" required>
+						<div class="col-span-2 w-full">
+							<x-input.currency id="total_bill" name="total_bill" placeholder="Rp. XXX.XXX,-" readonly required>
 								Total Tagihan
 							</x-input.currency>
 							<div class="mt-2 hidden text-sm text-red-500" id="alert-total_bill"></div>
 						</div>
 
 						<div class="w-full">
+
 							<x-input.currency id="remaining_bill" name="remaining_bill" placeholder="Rp. XXX.XXX,-" required>
-								Sisa Tagihan
+								Sisa Tagihan (Database)
+
+								<x-popover id="popover-remaining_bill">
+									Jika sisa tagihan di sistem dan BSI berbeda, silahkan kontak IT terlebih dahulu untuk pengecekan.
+								</x-popover>
+
 							</x-input.currency>
 							<div class="mt-2 hidden text-sm text-red-500" id="alert-remaining_bill"></div>
+						</div>
+
+						<div class="w-full">
+							<x-input.currency id="remaining_bill_bsi" name="remaining_bill_bsi" placeholder="Rp. XXX.XXX,-">
+								Sisa Tagihan (BSI)
+							</x-input.currency>
 						</div>
 
 						<div class="col-span-2 w-full">

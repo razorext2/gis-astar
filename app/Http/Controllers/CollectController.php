@@ -84,7 +84,7 @@ class CollectController extends Controller
                 ->editColumn('title', function ($data) {
                     return view('components.dashboard.title-w-status', [
                         'title' => $data->collectTaskRelasi->customer_recipient ?? 'N/A',
-                        'status' => $data->status,
+                        'status' => $data->status ?? 'N/A',
                         'item3' => $data->location ?? 'N/A'
                     ]);
                 })
@@ -95,6 +95,8 @@ class CollectController extends Controller
                         $status = 'Cicilan';
                     } elseif ($data->have_paid == 2) {
                         $status = 'Lunas';
+                    } elseif ($data->have_paid == 3) {
+                        $status = 'Tanda Terima';
                     }
 
                     if ($data->payment_type == 0) {
@@ -107,24 +109,28 @@ class CollectController extends Controller
                         $type = 'Giro';
                     }
 
-                    return view('components.table-component.payment-detail', [
-                        'status' => $data->have_paid,
-                        'data' => [
-                            [
-                                'title' => 'Status',
-                                'data' => $status,
-                            ],
-                            [
-                                'title' => 'Metode',
-                                'data' => $type,
-                            ],
-                            [
-                                'title' => 'Bayar',
-                                'data' => Number::currency($data->payment_amount ?? 0, 'IDR', 'id')
-                            ],
+                    if ($data->have_paid == 1 || $data->have_paid == 2) {
+                        return view('components.table-component.payment-detail', [
+                            'status' => $data->have_paid,
+                            'data' => [
+                                [
+                                    'title' => 'Status',
+                                    'data' => $status,
+                                ],
+                                [
+                                    'title' => 'Metode',
+                                    'data' => $type,
+                                ],
+                                [
+                                    'title' => 'Bayar',
+                                    'data' => Number::currency($data->payment_amount ?? 0, 'IDR', 'id')
+                                ],
 
-                        ]
-                    ]);
+                            ]
+                        ]);
+                    } else {
+                        return $status;
+                    }
                 })
                 ->editColumn('created_at', function ($data) {
 

@@ -11,7 +11,7 @@ export async function validate() {
       icon: "info",
       showCancelButton: true,
       showDenyButton: false,
-      cancelButtonText: "Ya",
+      cancelButtonText: "Batal",
     });
 
     if (result.isConfirmed) {

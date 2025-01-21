@@ -58,13 +58,6 @@ class ApiCollectController extends Controller
             ]);
         }
 
-        // Mengurangi sisa tagihan pada tabel tb_collect_task
-        $task = CollectTask::where('no_sr', '=', $query->no_sr)->first(); // Cari data berdasarkan no_sr
-
-        $task->update([ // Update data
-            'remaining_bill' => $task->remaining_bill - $request->payment_amount, // Kurangi sisa tagihan
-        ]);
-
         // Membuat folder 'public/collectors' jika belum ada
         $folderPath = "public/collectors";
 
@@ -129,12 +122,12 @@ class ApiCollectController extends Controller
             'validate_by' => $validate_by,
         ]);
 
-        $noSr = $query->no_sr; // Ambil no_sr
-
-        $task = CollectTask::where('no_sr', $noSr)->first(); // Cari data berdasarkan no_sr
+        // Mengurangi sisa tagihan pada tabel tb_collect_task
+        $task = CollectTask::where('no_sr', $query->no_sr)->first(); // Cari data berdasarkan no_sr
 
         $task->update([ // Update data
             'bill_status' => 1,
+            'remaining_bill' => $task->remaining_bill - $query->payment_amount, // Kurangi sisa tagihan
         ]);
 
         return new CollectResource(true, 'Data berhasil dikonfirmasi', null); // Kembalikan response JSON

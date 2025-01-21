@@ -1,13 +1,13 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
 	<div class="w-full space-y-6">
-		<div class="dark:bg-[#18181b] dark:ring-gray-700 rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 sm:p-6">
+		<div class="rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 sm:p-6">
 			<form id="photoForm" action="{{ route('pegawai.store') }}" method="POST" enctype="multipart/form-data">
 				<div class="grid gap-6 lg:grid-cols-2">
 					<div>
 						<header class="flex flex-row">
 							<a
-								class="dark:bg-red-800 dark:hover:bg-red-900 dark:text-white dark:ring-gray-700 mb-4 mr-3 flex flex-row rounded-lg px-2.5 py-2.5 align-middle ring-1 ring-red-700 hover:bg-red-300 md:px-4"
+								class="mb-4 mr-3 flex flex-row rounded-lg px-2.5 py-2.5 align-middle ring-1 ring-red-700 hover:bg-red-300 dark:bg-red-800 dark:text-white dark:ring-gray-700 dark:hover:bg-red-900 md:px-4"
 								href="{{ route('pegawai.index') }}">
 								<svg class="dark:fill-white" class="icon" xmlns="http://www.w3.org/2000/svg" width="25" height="25"
 									viewBox="0 0 1024 1024" fill="#000000" version="1.1">
@@ -17,19 +17,19 @@
 								</svg>
 								Kembali
 							</a>
-							<h2 class="dark:text-white mt-2 text-lg font-medium text-gray-900">
+							<h2 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
 								{{ __('Tambah Data Pegawai') }}
 							</h2>
 
 						</header>
-						<p class="dark:text-gray-300 mt-1 text-sm text-gray-600">
+						<p class="mt-1 text-sm text-gray-600 dark:text-gray-300">
 							{{ __('Silahkan sesuaikan data dibawah ini dengan data yang benar.') }}
 						</p>
 
 						@csrf
 						<div class="mb-4 grid gap-6 sm:mb-5 sm:grid-cols-2 sm:gap-6">
 							<div class="sm:col-span-2">
-								<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="kode_pegawai">Kode
+								<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="kode_pegawai">Kode
 									Pegawai</label>
 								<input
 									class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900"
@@ -37,27 +37,27 @@
 									pattern="[0-9]{1,12}" max="999999999999">
 							</div>
 							<div class="sm:col-span-2">
-								<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="nik_pegawai">NIK</label>
+								<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="nik_pegawai">NIK</label>
 								<input
 									class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900"
 									id="nik_pegawai" name="nik_pegawai" type="text" placeholder="NIK" required="" pattern="[0-9]{1,17}">
 							</div>
 							<div class="w-full">
-								<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="full_name">Nama
+								<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="full_name">Nama
 									Lengkap</label>
 								<input
 									class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
 									id="full_name" name="full_name" type="text" placeholder="Nama lengkap" required="">
 							</div>
 							<div class="w-full">
-								<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="nick_name">Nama
+								<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="nick_name">Nama
 									Panggilan</label>
 								<input
 									class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
 									id="nick_name" name="nick_name" type="text" placeholder="Nama panggilan" required="">
 							</div>
 							<div class="w-full">
-								<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="jabatan">Posisi</label>
+								<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="jabatan">Posisi</label>
 								<select
 									class="focus:ring-primary-500 focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
 									id="jabatan" name="jabatan">
@@ -71,7 +71,7 @@
 								</select>
 							</div>
 							<div class="w-full">
-								<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="golongan">Golongan</label>
+								<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="golongan">Golongan</label>
 								<select
 									class="focus:ring-primary-500 focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
 									id="golongan" name="golongan">
@@ -85,7 +85,7 @@
 								</select>
 							</div>
 							<div class="w-full">
-								<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="no_telp">Nomor Telepon</label>
+								<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="no_telp">Nomor Telepon</label>
 								<input
 									class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
 									id="no_telp" name="no_telp" type="tel" title="Nomor telepon harus terdiri dari 10 hingga 13 digit"
@@ -93,9 +93,9 @@
 							</div>
 
 							<div class="relative max-w-sm">
-								<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="tgl_lahir">Tanggal Lahir</label>
+								<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="tgl_lahir">Tanggal Lahir</label>
 								<div class="pointer-events-none absolute inset-y-0 start-0 top-7 flex items-center ps-3">
-									<svg class="dark:text-gray-400 h-4 w-4 text-gray-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+									<svg class="h-4 w-4 text-gray-700 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
 										fill="currentColor" viewBox="0 0 20 20">
 										<path
 											d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
@@ -108,11 +108,11 @@
 							</div>
 
 							<div class="w-full sm:col-span-2">
-								<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="make_user">Buat akun
+								<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="make_user">Buat akun
 									login?</label>
 								<select
-									class="focus:ring-primary-500 focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
-									id="make_user" name="make_user" onchange="addRoles()">
+									class="focus:ring-primary-500 focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 transition-all duration-300 ease-in-out"
+									id="make_user" name="make_user">
 									<option value="t" selected>Tidak</option>
 									<option value="y">Ya</option>
 								</select>
@@ -120,7 +120,7 @@
 
 							<div class="col-span-2 hidden max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out"
 								id="rolesSection">
-								<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="roles">Roles</label>
+								<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="roles">Roles</label>
 								<select
 									class="focus:ring-primary-500 focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
 									id="roles" name="roles[]">
@@ -134,7 +134,7 @@
 							</div>
 
 							<div class="sm:col-span-2">
-								<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="alamat">Alamat</label>
+								<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="alamat">Alamat</label>
 								<textarea
 								 class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
 								 id="alamat" name="alamat" rows="4" placeholder="Masukkan alamat lengkap" required></textarea>
@@ -142,7 +142,7 @@
 						</div>
 						<div class="flex items-center">
 							<button
-								class="dark:bg-blue-800 dark:hover:bg-blue-900 dark:text-white dark:ring-gray-700 inline-flex items-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-gray-900 ring-1 ring-blue-700 hover:bg-blue-800 hover:text-white focus:text-white focus:ring-4 focus:ring-blue-300"
+								class="inline-flex items-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-gray-900 ring-1 ring-blue-700 hover:bg-blue-800 hover:text-white focus:text-white focus:ring-4 focus:ring-blue-300 dark:bg-blue-800 dark:text-white dark:ring-gray-700 dark:hover:bg-blue-900"
 								type="submit">
 								Submit
 								<svg class="ms-2 h-3.5 w-3.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -171,7 +171,7 @@
 
 								<div class="absolute bottom-2 right-2 z-50" data-aos="fade-right" data-aos-delay="150">
 									<button
-										class="focus:text-gray-90 dark:bg-blue-800 dark:hover:bg-blue-900 dark:text-white dark:ring-gray-700 w-full items-center rounded-lg bg-white px-5 py-2.5 text-center text-sm font-medium text-gray-900 ring-1 ring-blue-700 hover:bg-blue-800 hover:text-white focus:bg-red-600 focus:text-white"
+										class="focus:text-gray-90 w-full items-center rounded-lg bg-white px-5 py-2.5 text-center text-sm font-medium text-gray-900 ring-1 ring-blue-700 hover:bg-blue-800 hover:text-white focus:bg-red-600 focus:text-white dark:bg-blue-800 dark:text-white dark:ring-gray-700 dark:hover:bg-blue-900"
 										id="capturePhoto" type="button">Start Kamera</button>
 									<input id="photo1Data" name="photo1" type="hidden">
 									<input id="photo2Data" name="photo2" type="hidden">
@@ -205,123 +205,103 @@
 	</div>
 
 	<script>
-		const video = document.getElementById('video');
-		const canvas = document.getElementById('canvRegist');
-		const canvass = document.getElementById('canvRegistt');
-		const photo1Data = document.getElementById('photo1Data');
-		const photo2Data = document.getElementById('photo2Data');
-		const captureButton = document.getElementById('capturePhoto');
-		const overlay = document.getElementById('overlay');
+		$(document).ready(function() {
+			const video = $('#video')[0];
+			const canvas = $('#canvRegist')[0];
+			const canvass = $('#canvRegistt')[0];
+			const photo1Data = $('#photo1Data')[0];
+			const photo2Data = $('#photo2Data')[0];
+			const overlay = $('#overlay')[0];
+			let stream = null;
 
-		const originalConsoleLog = console.log;
+			function startCamera() {
+				navigator.mediaDevices.getUserMedia({
+						video: true
+					})
+					.then(userStream => {
+						stream = userStream;
+						video.srcObject = stream;
+						video.play();
+						console.log("Camera started");
+					})
+					.catch(err => console.error('Error accessing camera: ', err));
+			}
 
-		let stream = null;
+			function capturePhoto(targetCanvas, targetWidth, targetHeight) {
+				const context = targetCanvas.getContext('2d');
+				targetCanvas.width = targetWidth;
+				targetCanvas.height = targetHeight;
+				context.drawImage(video, 0, 0, targetWidth, targetHeight);
+				return targetCanvas.toDataURL('image/jpeg');
+			}
 
-		function startCamera() {
-			navigator.mediaDevices.getUserMedia({
-					video: true
-				})
-				.then(userStream => {
-					stream = userStream;
-					video.srcObject = stream;
-					video.play();
-					console.log("Camera started");
-				})
-				.catch(err => console.error('Error accessing camera: ', err));
-		}
-
-		function capturePhoto(targetCanvas, targetWidth, targetHeight) {
-			const context = targetCanvas.getContext('2d');
-			targetCanvas.width = targetWidth;
-			targetCanvas.height = targetHeight;
-			context.drawImage(video, 0, 0, targetWidth, targetHeight);
-			return targetCanvas.toDataURL('image/jpeg');
-		}
-
-		function displayTimer(seconds, callback) {
-			let remainingTime = seconds;
-			overlay.textContent = remainingTime; // Menampilkan waktu awal
-			console.log(`Foto diambil dalam: ${remainingTime} detik`);
-
-			// Menampilkan timer di consoleOutput
-
-			const timerInterval = setInterval(() => {
-				remainingTime--;
+			function displayTimer(seconds, callback) {
+				let remainingTime = seconds;
 				overlay.textContent = remainingTime;
-				console.log(`${remainingTime} `);
+				console.log(`Foto diambil dalam: ${remainingTime} detik`);
 
-				// Menampilkan waktu tersisa di consoleOutput
-				if (remainingTime <= 0) {
-					clearInterval(timerInterval);
-					overlay.textContent = ''; // Hapus teks overlay
-					console.log('Captured.');
-					if (callback) callback();
-				}
-			}, 1000);
-		}
+				const timerInterval = setInterval(() => {
+					remainingTime--;
+					overlay.textContent = remainingTime;
+					console.log(`${remainingTime} `);
 
-		function captureTwoPhotos() {
-			// Menyusun kamera jika belum dimulai
-			if (!stream) {
-				startCamera();
-				setTimeout(() => {
+					if (remainingTime <= 0) {
+						clearInterval(timerInterval);
+						overlay.textContent = '';
+						console.log('Captured.');
+						if (callback) callback();
+					}
+				}, 1000);
+			}
+
+			function captureTwoPhotos() {
+				if (!stream) {
+					startCamera();
+					setTimeout(() => {
+						displayTimer(3, () => {
+							const photo1 = capturePhoto(canvas, 1280, 720);
+							photo1Data.value = photo1;
+
+							setTimeout(() => {
+								displayTimer(3, () => {
+									const photo2 = capturePhoto(canvass, 1280, 720);
+									photo2Data.value = photo2;
+								});
+							}, 3000);
+						});
+					}, 3000);
+				} else {
 					displayTimer(3, () => {
 						const photo1 = capturePhoto(canvas, 1280, 720);
 						photo1Data.value = photo1;
 
-						// Menunggu 3 detik sebelum menangkap foto kedua
 						setTimeout(() => {
 							displayTimer(3, () => {
 								const photo2 = capturePhoto(canvass, 1280, 720);
 								photo2Data.value = photo2;
 							});
-						}, 3000); // Jeda sebelum menangkap foto kedua
+						}, 3000);
 					});
-				}, 3000); // Jeda sebelum menangkap foto pertama
+				}
+			}
 
-			} else {
-				// Jika kamera sudah dimulai, langsung menangkap foto
-				displayTimer(3, () => {
-					const photo1 = capturePhoto(canvas, 1280, 720);
-					photo1Data.value = photo1;
+			$('#make_user').change(function() {
+				let makeUser = $(this).val();
+				let roles = $('#rolesSection');
 
+				if (makeUser === 'y') {
+					roles.removeClass('hidden opacity-0 max-h-0').addClass('opacity-100 max-h-screen');
+				} else {
+					roles.addClass('opacity-0 max-h-0').removeClass('opacity-100 max-h-screen');
 					setTimeout(() => {
-						displayTimer(3, () => {
-							const photo2 = capturePhoto(canvass, 1280, 720);
-							photo2Data.value = photo2;
-						});
-					}, 3000); // Jeda sebelum menangkap foto kedua
-				});
-			}
-		}
+						roles.addClass('hidden');
+					}, 500);
+				}
+			});
 
-		function addRoles() {
-			let makeUser = document.getElementById('make_user').value;
-			let roles = document.getElementById('rolesSection');
-
-			if (makeUser === 'y') {
-				roles.classList.remove('hidden');
-				setTimeout(function() {
-					roles.classList.remove("opacity-0", "max-h-0");
-					roles.classList.add("opacity-100", "max-h-screen");
-				}, 10)
-			} else {
-				roles.classList.add("opacity-0", "max-h-0");
-				roles.classList.remove("opacity-100", "max-h-screen");
-				setTimeout(function() {
-					roles.classList.add('hidden');
-				}, 500)
-
-			}
-		}
-
-		window.onload = function() {
-			addRoles();
-		}
-
-		// Event listener untuk tombol capture
-		captureButton.addEventListener('click', () => {
-			captureTwoPhotos();
+			$('#capturePhoto').click(function() {
+				captureTwoPhotos();
+			});
 		});
 	</script>
 @endsection

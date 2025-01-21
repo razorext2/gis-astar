@@ -74,10 +74,18 @@
 						</div>
 
 						<div
-							class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
+							class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700 lg:col-span-1">
 							<p class="text-sm text-gray-600 dark:text-gray-300">Total Tagihan</p>
 							<p class="text-navy-700 text-base font-medium dark:text-white">
 								{{ Number::currency($data->total_bill ?? 0, 'IDR', 'id') }}
+							</p>
+						</div>
+
+						<div
+							class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700 lg:col-span-1">
+							<p class="text-sm text-gray-600 dark:text-gray-300">Sisa Tagihan</p>
+							<p class="text-navy-700 text-base font-medium dark:text-white">
+								{{ Number::currency($data->remaining_bill ?? 0, 'IDR', 'id') }}
 							</p>
 						</div>
 
@@ -151,18 +159,25 @@
 				</div>
 
 				<div class="w-full">
-					<div class="grid gap-4 md:grid-cols-2">
+					<div class="grid gap-6 md:grid-cols-2">
 
 						@php
 							$total = 0;
 						@endphp
-						@foreach ($collect as $item)
+						@foreach ($collect->where('status', 1) as $item)
 							@php
 								$total += $item->payment_amount;
 							@endphp
-							<a class="col-span-2 transition-all duration-200 ease-in-out hover:scale-[1.01]"
+							<a class="group col-span-2 transition-all duration-200 ease-in-out hover:scale-105"
 								href="{{ route('collect.show', $item->id) }}" target="_blank">
-								<div class="flex flex-col rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
+								<div
+									class="relative flex flex-col rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
+
+									<div
+										class="absolute -top-3 max-w-fit self-center rounded-full bg-green-500 p-0.5 ring-1 ring-gray-200 group-hover:animate-spin dark:ring-gray-700">
+										<x-icons.badge-check class="h-5 w-5 text-white" />
+									</div>
+
 									<p class="text-sm text-gray-600 dark:text-gray-300">
 										Tanggal: {{ \Carbon\carbon::parse($item->updated_at)->locale('id')->isoFormat('DD MMMM YYYY, HH:MM:ss') }}
 									</p>
@@ -177,6 +192,10 @@
 										    $status = 'Cicilan';
 										} elseif ($item->have_paid == 2) {
 										    $status = 'Lunas';
+										} elseif ($item->have_paid == 3) {
+										    $status = 'Tanda terima';
+										} else {
+										    $status = 'Tidak diketahui';
 										}
 
 										if ($item->payment_type == 0) {
@@ -187,6 +206,8 @@
 										    $type = 'Transfer';
 										} elseif ($item->payment_type == 3) {
 										    $type = 'Giro';
+										} else {
+										    $type = 'Tidak diketahui';
 										}
 									@endphp
 

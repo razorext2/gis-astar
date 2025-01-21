@@ -30,32 +30,29 @@ export function editDataHandler() {
     });
 
     // Permintaan AJAX
-    $.ajax({
-      url: `${APP_URL}/api/collect-api/${id}`,
-      type: "POST",
-      data: formData,
-      processData: false,
-      contentType: false,
-      success: function () {
-        // Tampilkan alert sukses
+    axios.post(`${APP_URL}/api/collect-api/${id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    })
+      .then(() => {
         Swal.fire({
           icon: "success",
           title: "Laporan berhasil diubah!",
           showConfirmButton: false,
           timer: 1000
         });
-
         setTimeout(() => window.location.href = `${APP_URL}/dashboard/collect`, 1000);
-      },
-      error: function (xhr) {
-        if (typeof handleFormErrors === "function") {
-          handleFormErrors(xhr.responseJSON);
+      })
+      .catch((error) => {
+        if (error.response && typeof handleFormErrors === "function") {
+          handleFormErrors(error.response.data);
         } else {
-          console.error(xhr.responseJSON);
+          console.error(error.response ? error.response.data : error);
         }
         $button.prop('disabled', false); // Aktifkan tombol kembali
-      }
-    });
+      });
   });
 
 }

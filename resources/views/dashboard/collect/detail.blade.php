@@ -2,7 +2,7 @@
 @section('content')
 	<div class="w-full space-y-6">
 		<div
-			class="grid gap-6 rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 sm:p-6">
+			class="grid gap-4 rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 sm:p-6">
 			<div class="w-full">
 				<header class="flex flex-row">
 
@@ -18,6 +18,17 @@
 						Detail: <span class="font-bold text-white">{{ $data->title ?? 'N/A' }}</span>
 					</h2>
 				</header>
+			</div>
+
+			<div class="flex w-full justify-between">
+				<p class="text-sm text-gray-600 dark:text-gray-300">Mohon periksa terlebih dahulu laporan berikut sebelum memutuskan
+					untuk disetujui.</p>
+				@if ($data->status != 1)
+					@can('collect-approve')
+						<a class="text-blue-500 hover:text-blue-600 hover:underline" href="{{ route('collect.edit', $data->id) }}"> Edit
+						</a>
+					@endcan
+				@endif
 			</div>
 
 			<div class="w-full">
@@ -176,6 +187,10 @@
 						        $status = 'Cicilan';
 						    } elseif ($data->have_paid == 2) {
 						        $status = 'Lunas';
+						    } elseif ($data->have_paid == 3) {
+						        $status = 'Tanda Terima';
+						    } else {
+						        $status = 'Tidak ditemukan';
 						    }
 						}
 

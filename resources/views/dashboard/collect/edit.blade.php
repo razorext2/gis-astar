@@ -3,24 +3,23 @@
 	<div class="w-full space-y-6">
 		<div
 			class="grid gap-6 rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 sm:p-6">
-			@can('collect-create')
-				<div class="w-full">
-					<header class="flex flex-row">
 
-						<form id="index-collector" action="{{ route('collect.index') }}"></form>
-						<x-button.danger class="my-auto me-4 max-h-10" form="index-collector" type="submit">
-							<x-slot name="icon">
-								<x-icons.angle-left class="icon h-6 w-6 text-red-500 dark:text-white" />
-							</x-slot>
-							Kembali
-						</x-button.danger>
+			<div class="w-full">
+				<header class="flex flex-row">
 
-						<h2 class="font-base mt-2 text-lg text-gray-900 dark:text-gray-300">
-							Ubah: <span class="font-bold lowercase text-white">{{ $data->title ?? 'N/A' }}</span>
-						</h2>
-					</header>
-				</div>
-			@endcan
+					<form id="index-collector" action="{{ route('collect.show', $data->id) }}"></form>
+					<x-button.danger class="my-auto me-4 max-h-10" form="index-collector" type="submit">
+						<x-slot name="icon">
+							<x-icons.angle-left class="icon h-6 w-6 text-red-500 dark:text-white" />
+						</x-slot>
+						Kembali
+					</x-button.danger>
+
+					<h2 class="font-base mt-2 text-lg text-gray-900 dark:text-gray-300">
+						Ubah: <span class="font-bold lowercase text-white">{{ $data->title ?? 'N/A' }}</span>
+					</h2>
+				</header>
+			</div>
 
 			<div class="w-full">
 
@@ -103,11 +102,12 @@
 						<div class="mt-2 hidden text-sm text-red-500" id="alert-images"></div>
 					</div>
 
-					<div class="col-span-2 w-full lg:col-span-1">
+					<div class="col-span-2 w-full lg:col-span-1" id="have_paid_container">
 						<x-input.select id="have_paid" name="have_paid" :options="[
+						    '3' => 'Tanda Terima',
 						    '0' => 'Belum bayar',
 						    '1' => 'Cicil',
-						    '2' => 'Sudah lunas',
+						    '2' => 'Lunas',
 						]" default-option="Pilih status">
 							<x-slot name="textLabel">
 								Status Pembayaran
@@ -116,7 +116,7 @@
 						<div class="mt-2 hidden text-sm text-red-500" id="alert-have_paid"></div>
 					</div>
 
-					<div class="col-span-2 w-full lg:col-span-1">
+					<div class="col-span-2 w-full lg:col-span-1" id="payment_type_container">
 						<x-input.select id="payment_type" name="payment_type" :options="[
 						    '0' => 'Tidak ada',
 						    '1' => 'Cash',
@@ -130,7 +130,7 @@
 						<div class="mt-2 hidden text-sm text-red-500" id="alert-payment_type"></div>
 					</div>
 
-					<div class="col-span-2 w-full">
+					<div class="col-span-2 w-full" id="payment_amount_container">
 						<x-input.currency id="payment_amount" name="payment_amount" :values="$data->payment_amount" required>
 							Total Bayar
 						</x-input.currency>
