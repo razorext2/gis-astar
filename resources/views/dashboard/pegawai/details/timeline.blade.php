@@ -82,7 +82,7 @@
 										{{ Carbon\Carbon::parse($data->time)->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss') }}
 									</time>
 									<img class="absolute !-top-2.5 right-0 h-16 w-16 rounded-lg object-cover" src="{{ $path }}"
-										alt="Foto">
+										alt="" loading="lazy">
 								</li>
 							@endforeach
 						@else

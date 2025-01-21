@@ -89,7 +89,7 @@
 												<img
 													class="h-36 w-36 rounded-xl object-cover blur-sm transition duration-300 ease-in-out hover:scale-105 hover:blur-0"
 													id="documentations" data-url="{{ asset($photo->photourl) }}" src="{{ asset($photo->photourl) }}"
-													alt="" onclick="javascript:void(0)">
+													alt="" onclick="javascript:void(0)" loading="lazy">
 											</div>
 										@endforeach
 									@endif

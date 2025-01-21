@@ -183,7 +183,7 @@
 									data-aos-delay="100">
 									<div class="h-auto w-full rounded-lg md:rounded-lg lg:w-full">
 										<img class="h-[184px] w-full rounded-lg object-cover ring-1 ring-gray-200" id="canvLogo"
-											src="{{ asset('assets/img/noImage.webp') }}" alt="">
+											src="{{ asset('assets/img/noImage.webp') }}" alt="" loading="lazy">
 										<canvas class="absolute left-0 top-0 h-full w-full rounded-lg object-cover" id="canvRegist"></canvas>
 									</div>
 								</div>
@@ -192,7 +192,7 @@
 									data-aos-delay="100">
 									<div class="h-auto w-full rounded-lg md:rounded-lg lg:w-full">
 										<img class="h-[184px] w-full rounded-lg object-cover ring-1 ring-gray-200" id="canvLogo"
-											src="{{ asset('assets/img/noImage.webp') }}" alt="">
+											src="{{ asset('assets/img/noImage.webp') }}" alt="" loading="lazy">
 										<canvas class="absolute left-0 top-0 h-full w-full rounded-lg object-cover" id="canvRegistt"></canvas>
 									</div>
 								</div>

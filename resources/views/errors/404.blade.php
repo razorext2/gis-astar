@@ -30,7 +30,7 @@
 		<div class="container mx-auto px-8">
 			<div class="grid md:grid-cols-2">
 				<div class="flex flex-col justify-evenly md:h-screen md:flex-row">
-					<img class="w-64 md:w-full" src="{{ asset('assets/img/404.svg') }}" alt="">
+					<img class="w-64 md:w-full" src="{{ asset('assets/img/404.svg') }}" alt="" loading="lazy">
 				</div>
 
 				<div class="flex flex-col justify-evenly md:h-screen md:flex-row md:items-center">

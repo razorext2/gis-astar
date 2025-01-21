@@ -26,12 +26,12 @@
 		</script>
 	</head>
 
-	<body class="dark:bg-gray-900 bg-white antialiased">
+	<body class="bg-white antialiased dark:bg-gray-900">
 		<div class="container mx-auto px-8">
 			<div class="grid h-screen md:grid-cols-2">
 				<!-- Left section (Image) -->
 				<div class="flex items-center justify-center">
-					<img class="w-64 md:w-full" src="{{ asset('assets/img/503.png') }}" alt="503 Image">
+					<img class="w-64 md:w-full" src="{{ asset('assets/img/503.png') }}" alt="503 Image" loading="lazy">
 				</div>
 
 				<!-- Right section (Text) -->
@@ -39,10 +39,10 @@
 					<div class="mx-auto max-w-screen-xl lg:px-6 lg:py-16">
 						<div class="mx-auto max-w-screen-sm">
 							<span class="mb-4 text-8xl font-bold text-blue-500">503</span>
-							<p class="dark:text-white mb-4 text-3xl font-extrabold tracking-tight text-gray-900 md:text-4xl">
+							<p class="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white md:text-4xl">
 								Sorry! we're currently on maintenance mode.
 							</p>
-							<p class="dark:text-gray-400 mb-4 text-lg font-light text-gray-500">
+							<p class="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">
 								We'll be back soon as possible, grab your coffee while waiting for us to come back.
 							</p>
 						</div>

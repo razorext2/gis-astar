@@ -27,8 +27,8 @@
 						@foreach ($images as $image)
 							@if (!is_null($image))
 								<div class="mt-4 rounded-xl">
-									<img class="border h-56 w-full rounded-xl border-gray-500 object-cover blur-sm hover:blur-none"
-										src="{{ asset('storage/' . $pegawai->storage . $image) }}" alt="">
+									<img class="h-56 w-full rounded-xl border border-gray-500 object-cover blur-sm hover:blur-none"
+										src="{{ asset('storage/' . $pegawai->storage . $image) }}" alt="" loading="lazy">
 								</div>
 							@endif
 						@endforeach

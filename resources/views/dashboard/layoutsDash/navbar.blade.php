@@ -4,7 +4,7 @@
 		<div class="flex items-center justify-start">
 
 			<a class="flex items-center" href="#">
-				<img class="h-8" src="{{ asset('assets/img/logo.png') }}" alt="Indodacin Logo" />
+				<img class="h-8" src="{{ asset('assets/img/logo.png') }}" alt="Indodacin Logo" loading="lazy" />
 				<span class="text-md self-center whitespace-nowrap font-semibold italic dark:text-white">attendance</span>
 			</a>
 
@@ -110,7 +110,7 @@
 				data-dropdown-offset-distance="13" type="button" aria-expanded="false">
 				<span class="sr-only">Open user menu</span>
 				<img class="h-9 w-9 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-					alt="user photo">
+					alt="user photo" loading="lazy">
 			</button>
 
 			<div

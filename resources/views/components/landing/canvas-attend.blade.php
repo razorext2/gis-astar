@@ -3,7 +3,7 @@
 	<div class="h-full w-full rounded-lg md:rounded-lg lg:w-full lg:object-fill">
 		<img
 			class="h-60 w-full rounded-lg border border-gray-200 object-cover dark:border-gray-700 md:h-auto lg:h-full lg:object-fill"
-			id="{{ $imgID }}" src="{{ asset('assets/img/noImage.webp') }}" alt="">
+			id="{{ $imgID }}" src="{{ asset('assets/img/noImage.webp') }}" alt="" loading="lazy">
 		<canvas
 			class="absolute left-0 top-0 h-60 w-full rounded-lg border border-gray-200 object-cover dark:border-gray-700 md:h-full lg:h-full"
 			id="{{ $canvID }}"></canvas>

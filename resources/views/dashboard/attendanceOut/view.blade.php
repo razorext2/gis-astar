@@ -63,10 +63,10 @@
 								@if (file_exists(public_path(
 											'storage/labels/' . $data->pegawaiRelasi->kode_pegawai . '/capturedImg/' . $data->photoURL . '.png')))
 									<img class="w-32 rounded-lg blur-sm transition-all duration-300 hover:blur-none" src="{{ $path . '.png' }}"
-										alt="image description">
+										alt="image description" loading="lazy">
 								@else
 									<img class="w-32 rounded-lg blur-sm transition-all duration-300 hover:blur-none" src="{{ $defaultImage }}"
-										alt="default image description">
+										alt="default image description" loading="lazy">
 								@endif
 							<td>{{ $data->pegawaiRelasi->kode_pegawai ?? 'N/A' }}</td>
 							<td>{{ $data->pegawaiRelasi->full_name ?? 'N/A' }}</td>

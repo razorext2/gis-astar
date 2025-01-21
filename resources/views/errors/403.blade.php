@@ -31,7 +31,7 @@
 			<div class="grid h-screen md:grid-cols-2">
 				<!-- Left section (Image) -->
 				<div class="flex items-center justify-center">
-					<img class="w-64 md:w-full" src="{{ asset('assets/img/403.png') }}" alt="403 Image">
+					<img class="w-64 md:w-full" src="{{ asset('assets/img/403.png') }}" alt="403 Image" loading="lazy">
 				</div>
 
 				<!-- Right section (Text) -->

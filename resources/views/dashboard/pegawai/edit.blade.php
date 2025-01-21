@@ -165,7 +165,7 @@
 									data-aos-delay="100">
 									<div class="h-auto w-full rounded-lg md:rounded-lg lg:w-full">
 										<img class="h-[184px] w-full rounded-lg object-cover ring-1 ring-gray-200" id="canvLogo"
-											src="{{ asset('assets/img/noImage.webp') }}" alt="">
+											src="{{ asset('assets/img/noImage.webp') }}" loading="lazy" alt="">
 										<canvas class="absolute left-0 top-0 h-full w-full rounded-lg object-cover" id="canvRegist"></canvas>
 									</div>
 								</div>
@@ -174,7 +174,7 @@
 									data-aos-delay="100">
 									<div class="h-auto w-full rounded-lg md:rounded-lg lg:w-full">
 										<img class="h-[184px] w-full rounded-lg object-cover ring-1 ring-gray-200" id="canvLogo"
-											src="{{ asset('assets/img/noImage.webp') }}" alt="">
+											src="{{ asset('assets/img/noImage.webp') }}" loading="lazy" alt="">
 										<canvas class="absolute left-0 top-0 h-full w-full rounded-lg object-cover" id="canvRegistt"></canvas>
 									</div>
 								</div>
@@ -198,7 +198,7 @@
 					@if (!is_null($image))
 						<div class="dark:bg-[#18181b] dark:ring-gray-700 rounded-xl bg-white p-1 ring-1 ring-gray-200">
 							<img class="border h-56 w-full rounded-xl border-gray-500 object-cover blur-sm hover:blur-none"
-								src="{{ asset('storage/' . $pegawai->storage . $image) }}" alt="">
+								src="{{ asset('storage/' . $pegawai->storage . $image) }}" loading="lazy" alt="">
 						</div>
 					@endif
 				@endforeach

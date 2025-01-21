@@ -60,7 +60,7 @@
 							<li>
 								<p
 									class="my-2 flex rounded-lg bg-green-500 bg-none p-2 text-xs text-white hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800">
-									<img class="me-3 h-6 w-6 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+									<img class="me-3 h-6 w-6 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" loading="lazy"
 										alt="Jese image">
 									<span class="leading-relaxed">
 										{{ $at->pegawaiRelasi->full_name ?? 'N/A' }}, melakukan absensi <b
@@ -94,7 +94,7 @@
 					@foreach ($attendance_out_today as $at)
 						<p
 							class="my-2 flex rounded-lg bg-red-500 bg-none p-2 text-xs text-white hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800">
-							<img class="me-3 h-6 w-6 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+							<img class="me-3 h-6 w-6 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" loading="lazy"
 								alt="Jese image">
 							<span class="leading-relaxed">
 								{{ $at->pegawaiRelasi->full_name ?? 'N/A' }}, melakukan absensi <b
