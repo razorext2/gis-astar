@@ -3,7 +3,7 @@ export function getAttendancePeriod() {
 
   $('#getAttendancePeriod').click(async function () {
     try {
-      const inputOptions = attendancePeriodsCache || await axios.get('/api/getSixMonthsBefore')
+      const inputOptions = attendancePeriodsCache || await axios.get(`${APP_URL}/api/getSixMonthsBefore`)
         .then(response => {
           if (!response.data.success) {
             throw new Error('Data tidak valid.');

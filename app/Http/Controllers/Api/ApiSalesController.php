@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SalesResource;
+use App\Jobs\NotifySalesNewReportJob;
 use App\Models\PhotoCollect;
 use App\Models\Sales;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -73,6 +75,14 @@ class ApiSalesController extends Controller
                     'id_sales' => $query->id,
                     'photourl' => $imageUrl,
                 ]);
+            }
+        }
+
+        if ($query) {
+            try {
+                NotifySalesNewReportJob::dispatch($query->id, $query->created_at)->delay(now()->addSecons(5));
+            } catch (\Exception $e) {
+                Log::error('Notify sales has new report failed' . $e->getMessage());
             }
         }
 

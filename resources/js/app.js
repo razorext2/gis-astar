@@ -22,6 +22,9 @@ if (userId) {
     })
     .listen('.collectorUpdatedReport', (data) => {
       handleNotification(data);
+    })
+    .listen('.salesNewReport', (data) => {
+      handleNotification(data);
     });
 
 }
