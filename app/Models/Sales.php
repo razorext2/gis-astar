@@ -95,6 +95,6 @@ class Sales extends Model
      */
     public function userRelasi()
     {
-        return $this->belongsTo(User::class, 'kode_pegawai', 'kode_pegawai');
+        return $this->belongsTo(User::class, 'validate_by', 'id');
     }
 }

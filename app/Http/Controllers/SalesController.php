@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sales;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -110,7 +111,7 @@ class SalesController extends Controller
      */
     public function show($id)
     {
-        $data = Sales::with(['pegawaiRelasi:kode_pegawai,full_name', 'photoCollectRelasi', 'userRelasi'])->findOrFail($id);
+        $data = Sales::with(['pegawaiRelasi:kode_pegawai,full_name', 'photoCollectRelasi', 'userRelasi:id,name'])->findOrFail($id);
 
         return view('dashboard.sales.detail', compact('data'));
     }
