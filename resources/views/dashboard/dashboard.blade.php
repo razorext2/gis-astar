@@ -1,116 +1,116 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-	<form id="attend-in" action="{{ route('attendanceIn.index') }}"></form>
-	<form id="attend-out" action="{{ route('attendanceOut.index') }}"></form>
+	<div class="grid grid-cols-1 gap-y-4">
+		<div class="grid grid-cols-1 gap-x-4 gap-y-4 lg:grid-cols-3 lg:gap-y-0">
 
-	<div class="mb-4 grid grid-cols-1 gap-0 xl:grid-cols-3 xl:gap-4">
+			<form id="attend-in" action="{{ route('attendanceIn.index') }}"></form>
+			<form id="attend-out" action="{{ route('attendanceOut.index') }}"></form>
 
-		<!-- Chart -->
-		<div class="col-span-2 mb-4 flex items-center justify-center xl:mb-0">
-			<div class="w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b] md:p-6">
-				<div class="mb-5 flex justify-between">
-					<div>
-						<p class="mb-2 text-3xl font-bold leading-none text-gray-900 dark:text-white">{{ $yearNow }}
-						</p>
-						<p class="text-base font-normal text-gray-500 dark:text-gray-300">Data 7 hari kebelakang</p>
+			<!-- Chart -->
+			<div class="flex items-center justify-center lg:col-span-2">
+				<div class="w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b] md:p-6">
+					<div class="mb-5 flex justify-between">
+						<div>
+							<p class="mb-2 text-3xl font-bold leading-none text-gray-900 dark:text-white">{{ $yearNow }}
+							</p>
+							<p class="text-base font-normal text-gray-500 dark:text-gray-300">Data 7 hari kebelakang</p>
+						</div>
+						<div class="flex items-center px-2.5 py-0.5 text-center text-base font-semibold text-green-500 dark:text-white">
+							{{ $formattedDateRange }}
+						</div>
 					</div>
-					<div class="flex items-center px-2.5 py-0.5 text-center text-base font-semibold text-green-500 dark:text-white">
-						{{ $formattedDateRange }}
-					</div>
-				</div>
-				<div id="tooltip-chart" data-late-counts='[2,3,1]' data-ontime-counts='[0,2,3]' data-outtime-counts="[2,0,2]"
-					data-fast-counts='[0,5,0]' data-dates='[1,4,2]'></div>
-				<div class="mt-5 grid grid-cols-1 items-center justify-between border-t border-gray-200 dark:border-gray-700">
-					<div class="flex items-center justify-between pt-5">
+					<div id="tooltip-chart" data-late-counts='[2,3,1]' data-ontime-counts='[0,2,3]' data-outtime-counts="[2,0,2]"
+						data-fast-counts='[0,5,0]' data-dates='[1,4,2]'></div>
+					<div class="mt-5 grid grid-cols-1 items-center justify-between border-t border-gray-200 dark:border-gray-700">
+						<div class="flex items-center justify-between pt-5">
 
-						<x-button.primary form="attend-in" type="submit">
-							<x-slot name="icon">
-								<x-icons.angle-right class="icon h-6 w-6 text-green-500 dark:text-white" />
-							</x-slot>
-							Absen masuk
-						</x-button.primary>
+							<x-button.primary form="attend-in" type="submit">
+								<x-slot name="icon">
+									<x-icons.angle-right class="icon h-6 w-6 text-green-500 dark:text-white" />
+								</x-slot>
+								Absen masuk
+							</x-button.primary>
 
-						<x-button.danger form="attend-out" type="submit">
-							<x-slot name="icon">
-								<x-icons.angle-left class="icon h-6 w-6 text-green-500 dark:text-white" />
-							</x-slot>
-							Absen keluar
-						</x-button.danger>
+							<x-button.danger form="attend-out" type="submit">
+								<x-slot name="icon">
+									<x-icons.angle-left class="icon h-6 w-6 text-green-500 dark:text-white" />
+								</x-slot>
+								Absen keluar
+							</x-button.danger>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<!-- End Chart -->
+			<!-- End Chart -->
 
-		<!-- Notification -->
-		<div class="grid grid-cols-1">
+			<!-- Notification -->
+			<div class="grid grid-cols-1 gap-y-4">
 
-			<div class="flex flex-col rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b]">
+				<div class="flex flex-col rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b]">
 
-				<p class="font-base text-sm text-gray-500 dark:text-gray-400">
-					Absen Masuk
-				</p>
-				<p class="text-md font-medium text-gray-900 dark:text-white">
-					{{ \Carbon\Carbon::today()->locale('id')->isoFormat('D MMMM YYYY') }}
-				</p>
-				<ul class="h-44 overflow-y-auto text-gray-700" aria-labelledby="dropdownUsersButton">
+					<p class="font-base text-sm text-gray-500 dark:text-gray-400">
+						Absen Masuk
+					</p>
+					<p class="text-md font-medium text-gray-900 dark:text-white">
+						{{ \Carbon\Carbon::today()->locale('id')->isoFormat('D MMMM YYYY') }}
+					</p>
+					<ul class="h-44 overflow-y-auto text-gray-700" aria-labelledby="dropdownUsersButton">
 
-					@if (!empty($attendance_today))
-						@foreach ($attendance_today as $at)
+						@if (!empty($attendance_today))
+							@foreach ($attendance_today as $at)
+								<li>
+									<p
+										class="my-2 flex rounded-lg bg-green-500 bg-none p-2 text-xs text-white hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800">
+										<img class="me-3 h-6 w-6 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+											alt="Jese image" loading="lazy">
+										<span class="leading-relaxed">
+											{{ $at->pegawaiRelasi->full_name ?? 'N/A' }}, melakukan absensi <b
+												class="rounded bg-green-800 px-1 py-0.5 text-white">Masuk</b> pada
+											pukul
+											{{ \Carbon\Carbon::parse($at->jam_masuk)->format('H:i') }}
+										</span>
+									</p>
+								</li>
+							@endforeach
+						@else
 							<li>
-								<p
-									class="my-2 flex rounded-lg bg-green-500 bg-none p-2 text-xs text-white hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800">
-									<img class="me-3 h-6 w-6 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" loading="lazy"
-										alt="Jese image">
-									<span class="leading-relaxed">
-										{{ $at->pegawaiRelasi->full_name ?? 'N/A' }}, melakukan absensi <b
-											class="rounded bg-green-800 px-1 py-0.5 text-white">Masuk</b> pada
-										pukul
-										{{ \Carbon\Carbon::parse($at->jam_masuk)->format('H:i') }}
-									</span>
-								</p>
+								<span class="my-2 flex items-center rounded-xl">
+									Belum ada absensi hari ini
+								</span>
 							</li>
+						@endif
+
+					</ul>
+				</div>
+
+				<div class="flex flex-col rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b]">
+
+					<p class="font-base text-sm text-gray-400">
+						Absen Keluar
+					</p>
+					<p class="text-md font-medium text-gray-900 dark:text-white">
+						{{ \Carbon\Carbon::today()->locale('id')->isoFormat('D MMMM YYYY') }}
+					</p>
+					<ul class="h-44 overflow-y-auto text-gray-700" aria-labelledby="dropdownUsersButton">
+						@foreach ($attendance_out_today as $at)
+							<p
+								class="my-2 flex rounded-lg bg-red-500 bg-none p-2 text-xs text-white hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800">
+								<img class="me-3 h-6 w-6 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+									alt="Jese image" loading="lazy">
+								<span class="leading-relaxed">
+									{{ $at->pegawaiRelasi->full_name ?? 'N/A' }}, melakukan absensi <b
+										class="rounded bg-red-800 px-1 py-0.5 text-white">Keluar</b> pada
+									pukul
+									{{ \Carbon\Carbon::parse($at->jam_keluar)->format('H:i') }}
+								</span>
+							</p>
 						@endforeach
-					@else
-						<li>
-							<span class="my-2 flex items-center rounded-xl">
-								Belum ada absensi hari ini
-							</span>
-						</li>
-					@endif
-
-				</ul>
+					</ul>
+				</div>
 			</div>
-
-			<div class="mt-3 flex flex-col rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b]">
-
-				<p class="font-base text-sm text-gray-400">
-					Absen Keluar
-				</p>
-				<p class="text-md font-medium text-gray-900 dark:text-white">
-					{{ \Carbon\Carbon::today()->locale('id')->isoFormat('D MMMM YYYY') }}
-				</p>
-				<ul class="h-44 overflow-y-auto text-gray-700" aria-labelledby="dropdownUsersButton">
-					@foreach ($attendance_out_today as $at)
-						<p
-							class="my-2 flex rounded-lg bg-red-500 bg-none p-2 text-xs text-white hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800">
-							<img class="me-3 h-6 w-6 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" loading="lazy"
-								alt="Jese image">
-							<span class="leading-relaxed">
-								{{ $at->pegawaiRelasi->full_name ?? 'N/A' }}, melakukan absensi <b
-									class="rounded bg-red-800 px-1 py-0.5 text-white">Keluar</b> pada
-								pukul
-								{{ \Carbon\Carbon::parse($at->jam_keluar)->format('H:i') }}
-							</span>
-						</p>
-					@endforeach
-				</ul>
-			</div>
+			<!-- End Notification -->
 		</div>
-		<!-- End Notification -->
-	</div>
 
-	<div class="grid grid-cols-1 gap-6">
 		<div
 			class="flex h-auto items-center justify-center rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-[#18181b]">
 			<!-- Table -->

@@ -2,7 +2,7 @@ import "./bootstrap";
 import "flowbite";
 import Swal from "sweetalert2";
 import Quill from "quill";
-import { handleNotification } from './notification';
+import { handleNotification, handleAnnouncement } from './notification';
 
 // define userID, ambil dari metatag user-id
 const userId = document.querySelector('meta[name="user-id"]');
@@ -25,6 +25,12 @@ if (userId) {
     })
     .listen('.salesNewReport', (data) => {
       handleNotification(data);
+    });
+
+  window.Echo.private(`announcements.${userId.content}`)
+    .listen('.newAnnouncement', (data) => {
+      console.log(data);
+      handleAnnouncement(data);
     });
 
 }

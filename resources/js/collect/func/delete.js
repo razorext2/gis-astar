@@ -1,7 +1,6 @@
 export function deleteData() {
   $("body").on("click", "#delete-btn", function () {
     let id = $(this).data("id");
-    let token = $("meta[name='csrf-token']").attr("content");
 
     Swal.fire({
       title: "Apakah Kamu Yakin?",
@@ -10,27 +9,37 @@ export function deleteData() {
       showCancelButton: true,
       cancelButtonText: "Tidak",
       confirmButtonText: "Ya, Hapus!"
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         // fetch data to ajax
-        $.ajax({
-          url: `${APP_URL}/api/collect-api/${id}`,
-          type: "DELETE",
-          cache: false,
-          data: {
-            "_token": token
-          },
-          success: function (response) {
+        try {
+          const response = await axios.delete(`${APP_URL}/api/collect-api/${id}`);
+
+          if (response.data.success) {
             Swal.fire({
               icon: "success",
-              title: response.message,
+              title: response.data.message,
               showConfirmButton: false,
-              timer: 1000
+              timer: 1500
             });
 
             $('#dataTable').DataTable().ajax.reload(null, false);
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: response.data.message,
+              showConfirmButton: false,
+              timer: 1500
+            });
           }
-        })
+        } catch (error) {
+          Swal.fire({
+            icon: "error",
+            title: error.message,
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }
       }
     })
   })

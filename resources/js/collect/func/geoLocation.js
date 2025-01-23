@@ -6,22 +6,22 @@ export function getLocation() {
         $('#latitude').val(position.coords.latitude);
       },
       function () {
-        window.Swal.fire({
+        Swal.fire({
           title: "Gagal!",
-          html: "Anda harus mengaktifkan izin lokasi.",
+          text: "Anda harus mengaktifkan izin lokasi.",
           timer: 1500,
           icon: "error",
           showConfirmButton: false,
-        }).then(() => setTimeout(() => window.location.href = `${APP_URL}/dashboard/collect`, 1000));
+        }).then(() => setTimeout(() => window.location.href = `${APP_URL}/dashboard/collect`, 1500));
       }
     );
   } else {
-    window.Swal.fire({
+    Swal.fire({
       title: "Gagal!",
-      html: "Browser anda tidak memiliki support Geolocation.",
+      text: "Browser anda tidak memiliki support Geolocation.",
       timer: 1500,
       icon: "error",
       showConfirmButton: false,
-    }).then(() => setTimeout(() => window.location.href = `${APP_URL}/dashboard/collect`, 1000));
+    }).then(() => setTimeout(() => window.location.href = `${APP_URL}/dashboard/collect`, 1500));
   }
 }

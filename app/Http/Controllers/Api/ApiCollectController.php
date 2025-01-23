@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Jobs\NotifyCollectorHasUpdatedReportJob;
 use App\Models\Collector;
-use App\Models\PhotoCollect;
 use App\Models\CollectTask;
+use App\Models\PhotoCollect;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CollectResource;
+use App\Http\Resources\ApiResource;
+use App\Jobs\NotifyCollectorHasUpdatedReportJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 // class ApiCollectorController extends Controller
 class ApiCollectController extends Controller
@@ -38,13 +39,19 @@ class ApiCollectController extends Controller
 
         // Jika validasi gagal, kembalikan response JSON
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return new ApiResource(false, 'Validasi gagal', $validator->errors());
         }
 
         // Update data
-        $query = Collector::find($id); // Cari data berdasarkan ID
+        $query = Collector::find($id);
 
-        if ($query) { // Jika data ditemukan
+        if (!$query) { // Jika data tidak ditemukan
+            return new ApiResource(false, 'Laporan tidak ditemukan', null);
+        }
+
+        try {
+            DB::beginTransaction();
+
             $query->update([ // Update data
                 'keterangan' => $request->keterangan,
                 'latitude' => $request->latitude,
@@ -56,81 +63,94 @@ class ApiCollectController extends Controller
                 'assign_at' => now(),
                 'location' => $request->location
             ]);
-        }
 
-        // Membuat folder 'public/collectors' jika belum ada
-        $folderPath = "public/collectors";
+            $folderPath = 'collectors';
 
-        // Jika folder belum ada, maka buat folder
-        if (!Storage::disk('public')->exists($folderPath)) { // Jika folder belum ada
-            Storage::disk('public')->makeDirectory($folderPath); // Buat folder
-
-            // Mengatur permission folder
-            chmod(storage_path('app/public/' . $folderPath), 0755);
-        }
-
-        // Jika request memiliki file 'images'
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) { // Looping setiap gambar
-                // Membuat nama gambar baru
-                $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
-
-                // Menyimpan gambar ke storage
-                $imagePath = $folderPath . "/" . $imageName; // Path gambar
-                Storage::put($imagePath, file_get_contents($image)); // Simpan gambar
-
-                // Mendapatkan URL gambar
-                $imageUrl = Storage::url('collectors/' . $imageName); // URL gambar
-
-                // Menyimpan informasi gambar ke tabel tb_photo_collect
-                PhotoCollect::create([ // Simpan data
-                    'id_collect' => $id,
-                    'photourl' => $imageUrl,
-                ]);
+            if (!Storage::disk('public')->exists($folderPath)) {
+                Storage::disk('public')->makeDirectory($folderPath);
             }
-        }
 
-        // Kirim notifikasi ke user yang memiliki permission 'collect-approve'
-        if ($query) { // Jika data ditemukan
-            try { // Coba kirim notifikasi
-                // Kirim notifikasi ke user yang memiliki permission 'collect-approve'
-                NotifyCollectorHasUpdatedReportJob::dispatch($query->no_sr, $query->id, now())
-                    ->delay(now()->addSeconds(5));
-            } catch (\Exception $e) { // Jika gagal kirim notifikasi
-                Log::error('Notify collector has updated report failed for user: ' . $query->kode_pegawai . ' - Error: ' . $e->getMessage()); // Log error
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
+                    $path = Storage::disk('public')->putFileAs($folderPath, $image, $imageName);
+
+                    $imageUrl = '/storage/' . $folderPath . '/' . $imageName;
+
+                    PhotoCollect::create([
+                        'id_collect' => $id,
+                        'photourl' => $imageUrl,
+                    ]);
+                }
             }
-        }
 
-        // Kembalikan response JSON
-        return new CollectResource(true, 'Data berhasil diubah!', $query);
+            NotifyCollectorHasUpdatedReportJob::dispatch($query->no_sr, $query->id, now())
+                ->delay(now()->addSeconds(5));
+
+            DB::commit();
+            return new ApiResource(true, 'Laporan berhasil diubah!', $query);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return new ApiResource(false, 'Terjadi kesalahan saat memproses request', $e->getMessage());
+        }
     }
 
     /**
      * Confirm laporan.
      */
-    public function confirmCollect($id, Request $request)
+    public function confirmCollect($id, Request $request): ApiResource
     {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return new ApiResource(false, 'Validasi gagal', $validator->errors());
+        }
+
         // Cari data berdasarkan ID
         $query = Collector::find($id);
+
+        if (!$query) {
+            return new ApiResource(false, 'Laporan tidak ditemukan', null);
+        }
 
         // Decrypt user_id
         $validate_by = Crypt::decryptString($request->input('user_id'));
 
-        // Update data
-        $query->update([
-            'status' => 1,
-            'validate_by' => $validate_by,
-        ]);
+        // Cari data task
+        $task = CollectTask::where('no_sr', $query->no_sr)->first();
 
-        // Mengurangi sisa tagihan pada tabel tb_collect_task
-        $task = CollectTask::where('no_sr', $query->no_sr)->first(); // Cari data berdasarkan no_sr
+        if (!$task) {
+            return new ApiResource(false, 'Nomor tagihan tidak ditemukan', null);
+        }
 
-        $task->update([ // Update data
-            'bill_status' => 1,
-            'remaining_bill' => $task->remaining_bill - $query->payment_amount, // Kurangi sisa tagihan
-        ]);
+        // Validasi jumlah pembayaran
+        if ($task->remaining_bill < $query->payment_amount) {
+            return new ApiResource(false, 'Jumlah pembayaran melebihi sisa tagihan', null);
+        }
 
-        return new CollectResource(true, 'Data berhasil dikonfirmasi', null); // Kembalikan response JSON
+        try {
+            DB::beginTransaction();
+
+            // Update collector
+            $query->update([
+                'status' => 1,
+                'validate_by' => $validate_by,
+            ]);
+
+            // Update task
+            $task->update([
+                'bill_status' => 1,
+                'remaining_bill' => $task->remaining_bill - $query->payment_amount,
+            ]);
+
+            DB::commit();
+            return new ApiResource(true, 'Laporan berhasil dikonfirmasi', null);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return new ApiResource(false, 'Terjadi kesalahan saat memproses request', $e->getMessage());
+        }
     }
 
     /**
@@ -140,15 +160,36 @@ class ApiCollectController extends Controller
     {
         $query = Collector::find($id); // Cari data berdasarkan ID
 
+        if (!$query) {
+            return new ApiResource(false, 'Laporan tidak ditemukan', null);
+        }
+
         $validate_by = Crypt::decryptString($request->input('user_id')); // Decrypt user_id
 
-        $query->update([ // Update data
-            'status' => 3,
-            'notes' => $request->notes,
-            'validate_by' => $validate_by,
+        $validator = Validator::make($request->all(), [
+            'notes' => 'required|string',
+            'validate_by' => 'required',
         ]);
 
-        return new CollectResource(true, 'Data berhasil ditolak', null); // Kembalikan response JSON
+        if ($validator->fails()) {
+            return new ApiResource(false, 'Validasi gagal', $validator->errors());
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $query->update([ // Update data
+                'status' => 3,
+                'notes' => $request->notes,
+                'validate_by' => $validate_by,
+            ]);
+
+            DB::commit();
+            return new ApiResource(true, 'Laporan berhasil ditolak', null); // Kembalikan response JSON
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return new ApiResource(false, 'Terjadi kesalahan saat memproses request', $e->getMessage());
+        }
     }
 
     /**
@@ -156,14 +197,17 @@ class ApiCollectController extends Controller
      */
     public function destroy($id)
     {
-        $query = Collector::find($id); // Cari data berdasarkan ID
+        try {
+            DB::beginTransaction();
 
-        if (!$query) { // Jika data tidak ditemukan
-            return response()->json(['success' => false, 'message' => 'Data tidak ditemukan'], 404); // Kembalikan response JSON
+            $query = Collector::findOrFail($id);
+            $query->delete();
+
+            DB::commit();
+            return new ApiResource(true, 'Laporan berhasil dihapus', null);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return new ApiResource(false, 'Terjadi kesalahan saat menghapus laporan', null);
         }
-
-        $query->delete(); // Hapus data
-
-        return new CollectResource(true, 'Data berhasil dihapus', null); // Kembalikan response JSON
     }
 }

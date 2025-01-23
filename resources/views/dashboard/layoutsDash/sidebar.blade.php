@@ -56,14 +56,6 @@
 	        'permission' => 'golongan-list',
 	        'sublinks' => [],
 	    ],
-	    [
-	        'route' => 'log.index',
-	        'check' => 'log.*',
-	        'label' => 'Log Aktivitas',
-	        'icon' => 'log',
-	        'permission' => 'log-list',
-	        'sublinks' => [],
-	    ],
 	];
 @endphp
 
@@ -209,10 +201,6 @@
 												class="{{ $isActive ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
 										@break
 
-										@case('log')
-											<x-icons.window class="{{ $isActive ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
-										@break
-
 										@case('sales')
 											<x-icons.receipt class="{{ $isActive ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
 										@break
@@ -322,6 +310,54 @@
 									<x-icons.adjustment
 										class="{{ Route::is('permissions.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
 									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Permissions</span>
+								</a>
+							</li>
+						@endcan
+
+					</ul>
+				</li>
+			@endif
+
+			@if (auth()->user()->hasAnyPermission(['announcement-list', 'log-list']))
+				<li x-data="{ system: {{ Route::is('announcement.*') || Route::is('log.*') ? 'true' : 'false' }} }">
+					<button
+						class="{{ Route::is('announcement.*') || Route::is('log.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-[#18181b] hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
+						type="button" aria-controls="system-dropdown" @click="system = !system" :aria-expanded="system">
+						<x-icons.computer
+							class="{{ Route::is('announcement.*') || Route::is('log.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
+
+						<span class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">System Settings</span>
+
+						<x-icons.carred-down class="ml-1 mt-1 inline h-4 w-4 transform transition-transform group-hover:text-red-600"
+							x-bind:class="{ 'rotate-180 duration-200': system }" />
+					</button>
+
+					<ul class="space-y-4 py-4" id="system-dropdown" x-show="system"
+						x-transition:enter="transition ease-in duration-200"
+						x-transition:enter-start="transform opacity-0 -translate-y-5"
+						x-transition:leave="transition ease-out duration-200"
+						x-transition:leave-end="transform opacity-0 -translate-y-5">
+
+						@can('announcement-list')
+							<li>
+								<a
+									class="{{ Route::is('announcement.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									href="{{ route('announcement.index') }}">
+									<x-icons.bullhorn
+										class="{{ Route::is('announcement.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 -rotate-45 group-hover:text-red-600" />
+									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Pemberitahuan</span>
+								</a>
+							</li>
+						@endcan
+
+						@can('log-list')
+							<li>
+								<a
+									class="{{ Route::is('log.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									href="{{ route('log.index') }}">
+									<x-icons.window
+										class="{{ Route::is('log.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
+									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Log Aktivitas</span>
 								</a>
 							</li>
 						@endcan

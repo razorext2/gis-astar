@@ -18,6 +18,7 @@
 	    'permissions.*' => 'Permissions',
 	    'notifications.*' => 'Pusat Notifikasi',
 	    'sales.*' => 'Laporan Sales',
+	    'announcement.*' => 'Pusat Pengumuman',
 	];
 
 	// Temukan judul berdasarkan rute dengan wildcard
@@ -27,7 +28,7 @@
 	    }) ?? 'Default Title';
 @endphp
 
-<div class="mb-6 mt-2 text-gray-800 dark:text-white">
+<div class="py-6 text-gray-800 dark:text-white">
 	<h2 class="text-2xl font-bold tracking-tight text-gray-950 dark:text-white sm:text-3xl">
 		{{ $pageTitle }}
 	</h2>

@@ -43,10 +43,13 @@
 		@endif
 
 		@include('dashboard.layoutsDash.navbar')
-		@include('dashboard.layoutsDash.sidebar')
-		<div class="mb-20 mt-14 max-w-screen-xl p-2 sm:ml-72 sm:mt-0 sm:p-4 xl:ml-[420px]">
 
-			<div class="rounded-lg p-2 sm:p-4 md:mb-0 md:mt-16">
+		@include('dashboard.layoutsDash.sidebar')
+
+		<div class="mb-20 max-w-screen-xl p-2 sm:ml-72 sm:mt-0 sm:p-4 xl:ml-[420px]">
+
+			<div class="mt-10 rounded-lg p-2 sm:p-4 md:mt-6">
+
 				<!-- carousel for cards -->
 				<div class="grid grid-cols-1">
 					@include('dashboard.layoutsDash.title')
@@ -54,8 +57,21 @@
 
 				<x-card.card-carousel />
 
-				<div class="w-full" id="notification">
-					
+				@php
+					$announcement = App\Models\Announcement::where('status', 1)->latest()->first();
+				@endphp
+
+				<div id="announcement-container">
+					@if ($announcement)
+						<x-notification-alert class="mb-4" :id="'notification-alert'">
+							<x-slot name="title">
+								{{ $announcement->title }}
+							</x-slot>
+							<x-slot name="desc">
+								{{ $announcement->description }}
+							</x-slot>
+						</x-notification-alert>
+					@endif
 				</div>
 
 				@yield('content')

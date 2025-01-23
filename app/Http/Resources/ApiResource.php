@@ -5,17 +5,30 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CollectTaskResource extends JsonResource
+class ApiResource extends JsonResource
 {
     /**
-     * Transform the resource into an array.
+     * Status dari response
      *
-     * @return array<string, mixed>
+     * @var bool
      */
-
     public $status;
+
+    /**
+     * Pesan dari response
+     *
+     * @var string
+     */
     public $message;
 
+    /**
+     * Create a new resource instance.
+     *
+     * @param  bool  $status
+     * @param  string  $message
+     * @param  mixed  $resource
+     * @return void
+     */
     public function __construct($status, $message, $resource)
     {
         parent::__construct($resource);
@@ -23,6 +36,12 @@ class CollectTaskResource extends JsonResource
         $this->message = $message;
     }
 
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array<string, mixed>
+     */
     public function toArray(Request $request): array
     {
         return [

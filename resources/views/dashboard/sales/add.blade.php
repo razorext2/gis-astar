@@ -76,7 +76,7 @@
 					</div>
 
 					<div class="col-span-2 w-full">
-						<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="keterangan}">Keterangan</label>
+						<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="keterangan">Keterangan</label>
 						</p>
 						<div class="h-32 w-full dark:bg-white" id="editor"></div>
 						<input id="keterangan" name="keterangan" type="hidden">

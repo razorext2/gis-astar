@@ -2,7 +2,7 @@ import { showDatatables } from "./func/showData";
 import { deleteData } from "./func/delete";
 import { exportHandler } from "./func/exportLaporan";
 
-document.addEventListener("DOMContentLoaded", function () {
+$(document).ready(function () {
   showDatatables();
   deleteData();
   exportHandler();

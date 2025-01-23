@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CollectTaskResource;
+use App\Http\Resources\ApiResource;
 use App\Jobs\NotifyCollectorNewAssignedJob;
 use App\Models\CollectTask;
 use App\Models\Collector;
@@ -31,10 +31,7 @@ class ApiCollectTaskController extends Controller
         ]);
 
         if ($validator->fails()) { // Jika validasi gagal
-            return response()->json([ // Kembalikan response
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422); // Kode status 422 untuk validasi gagal
+            return new ApiResource(false, 'Validasi gagal', $validator->errors());
         }
 
         $data = $validator->validated(); // Ambil data yang sudah divalidasi
@@ -62,7 +59,7 @@ class ApiCollectTaskController extends Controller
         }
 
         // Kembalikan response
-        return new CollectTaskResource(true, 'Data berhasil diproses!', $query);
+        return new ApiResource(true, 'Data berhasil diproses!', $query);
     }
 
     public function getSR($no_sr)
@@ -72,9 +69,9 @@ class ApiCollectTaskController extends Controller
             ->first(); // Eksekusi query untuk mendapatkan data pertama
 
         if ($query) { // Jika data ditemukan
-            return new CollectTaskResource(true, 'Data ditemukan!', $query); // Kembalikan response
+            return new ApiResource(true, 'Data ditemukan!', $query); // Kembalikan response
         } else {
-            return new CollectTaskResource(false, 'Data tidak ditemukan!', null); // Kembalikan response
+            return new ApiResource(false, 'Data tidak ditemukan!', null); // Kembalikan response
         }
     }
 
@@ -134,7 +131,7 @@ class ApiCollectTaskController extends Controller
         }
 
         // Kembalikan response
-        return new CollectTaskResource(true, 'Data berhasil di assign', null);
+        return new ApiResource(true, 'Data berhasil di assign', null);
     }
 
     public function massAssignProcess(Request $request)
@@ -146,10 +143,7 @@ class ApiCollectTaskController extends Controller
         ]);
 
         if ($validator->fails()) { // Jika validasi gagal
-            return response()->json([ // Kembalikan response
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422); // Kode status 422 untuk validasi gagal
+            return new ApiResource(false, 'Validasi gagal', $validator->errors());
         }
 
         // Update banyak data sekaligus
@@ -187,7 +181,7 @@ class ApiCollectTaskController extends Controller
         }
 
         // Kembalikan response
-        return new CollectTaskResource(true, 'Berhasil menambah assigment', null);
+        return new ApiResource(true, 'Berhasil menambah assigment', null);
     }
 
     public function reschedule(Request $request, $id)
@@ -198,10 +192,7 @@ class ApiCollectTaskController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422);
+            return new ApiResource(false, 'Validasi gagal', $validator->errors());
         }
 
         $data = $request->all();
@@ -212,7 +203,7 @@ class ApiCollectTaskController extends Controller
             'assign_date' => $data['date']
         ]);
 
-        return new CollectTaskResource(true, 'Berhasil melakukan reschedule', null);
+        return new ApiResource(true, 'Berhasil melakukan reschedule', null);
     }
 
 
@@ -221,12 +212,12 @@ class ApiCollectTaskController extends Controller
         $query = CollectTask::find($id); // Cari data berdasarkan ID
 
         if (!$query) { // Jika data tidak ditemukan
-            return response()->json(['success' => false, 'message' => 'Data tidak ditemukan'], 404); // Kembalikan response
+            return new ApiResource(false, 'Data tidak ditemukan', null);
         }
 
         $query->delete(); // Menggunakan soft delete bawaan Laravel
 
         // Kembalikan response
-        return new CollectTaskResource(true, 'Data berhasil dihapus', null);
+        return new ApiResource(true, 'Data berhasil dihapus', null);
     }
 }

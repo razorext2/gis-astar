@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ApiAnnouncementController;
 use App\Http\Controllers\Api\ApiAttendanceController;
 use App\Http\Controllers\Api\ApiCollectController;
 use App\Http\Controllers\Api\ApiCollectTaskController;
@@ -43,6 +44,10 @@ Route::apiResource('sales-api', ApiSalesController::class)->only(['store', 'upda
 Route::patch('dayoff-api/{id}/approve', [ApiDayoffController::class, 'approve'])->name('dayoff-api.approve');
 Route::patch('dayoff-api/{id}/deny', [ApiDayoffController::class, 'deny'])->name('dayoff-api.deny');
 Route::apiResource('dayoff-api', ApiDayoffController::class)->except(['index', 'show']);
+
+// announcement
+Route::patch('announcement-api/{id}/state', [ApiAnnouncementController::class, 'changeState'])->name('announcement-api.change-state');
+Route::apiResource('announcement-api', ApiAnnouncementController::class)->only(['store', 'update', 'destroy']);
 
 // api ke server utama
 Route::post('proxy/server/attendance', function (Request $request) {

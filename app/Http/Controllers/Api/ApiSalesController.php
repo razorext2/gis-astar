@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\SalesResource;
+use App\Http\Resources\ApiResource;
 use App\Jobs\NotifySalesNewReportJob;
 use App\Models\PhotoCollect;
 use App\Models\Sales;
@@ -87,7 +87,7 @@ class ApiSalesController extends Controller
         }
 
 
-        return new SalesResource(true, 'Berhasil menambah data laporan', $query);
+        return new ApiResource(true, 'Berhasil menambah data laporan', $query);
     }
 
     public function update(Request $request, $id)
@@ -112,7 +112,7 @@ class ApiSalesController extends Controller
 
         $query->update($data);
 
-        return new SalesResource(true, 'Berhasil mengubah data laporan', $query);
+        return new ApiResource(true, 'Berhasil mengubah data laporan', $query);
     }
 
     public function confirm(Request $request,  $id)
@@ -128,7 +128,7 @@ class ApiSalesController extends Controller
                     'validate_by' => $validateBy,
                 ]);
 
-                return new SalesResource(true, 'Data berhasil dikonfirmasi', $query);
+                return new ApiResource(true, 'Data berhasil dikonfirmasi', $query);
             } catch (\Exception $e) {
                 return response()->json([
                     'success' => false,
@@ -170,6 +170,6 @@ class ApiSalesController extends Controller
 
         $query->delete();
 
-        return new SalesResource(false, 'Berhasil menghapus data laporan', $query);
+        return new ApiResource(false, 'Berhasil menghapus data laporan', $query);
     }
 }

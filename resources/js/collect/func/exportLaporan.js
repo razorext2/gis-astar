@@ -14,6 +14,14 @@ export function exportHandler() {
         const lastWeek = new Date();
         lastWeek.setDate(lastWeek.getDate() - 3);
         Swal.getInput().min = lastWeek.toISOString().split("T")[0];
+      },
+      preConfirm: (date) => {
+        if (!date) {
+          Swal.showValidationMessage("Tanggal tidak boleh kosong!");
+          return false;
+        }
+
+        return date;
       }
     });
 
@@ -30,41 +38,52 @@ export function exportHandler() {
         },
         inputPlaceholder: 'Pilih status laporan',
         showCancelButton: true,
+        preConfirm: (value) => {
+          if (!value) {
+            Swal.showValidationMessage("Status laporan harus dipilih!");
+            return false;
+          }
+
+          return value;
+        }
       });
 
       if (reportStatus) {
-        // If both date and report type are selected, proceed with the export
-        axios.get(`${APP_URL}/export/collector/`,
-          {
+        try {
+          const response = await axios.get(`${APP_URL}/export/collector/`, {
             params: {
-              date: date,
-              status: reportStatus,
+              date,
+              reportStatus,
             }
-          }
-        )
-          .then(function () {
-            Swal.fire({
-              title: "Berhasil, data kamu sedang diexport",
-              icon: "success",
-              timer: 1000,
-            });
-          })
-          .catch(function (error) {
-            Swal.fire({
-              title: `Gagal`,
-              text: error.message,
-              icon: "error",
-              timer: 1000,
-            });
           });
-      } else {
-        // If report type is not selected, show an error message
-        Swal.fire({
-          title: 'Jenis laporan tidak boleh kosong!',
-          icon: 'error',
-          showConfirmButton: false,
-          timer: 1000,
-        });
+
+          if (response.data.success) {
+            Swal.fire({
+              title: response.data.message,
+              text: response.data.data,
+              showConfirmButton: false,
+              icon: "success",
+              timer: 1500,
+            });
+          } else {
+            Swal.fire({
+              title: response.data.message,
+              text: response.data.data,
+              showConfirmButton: false,
+              icon: "error",
+              timer: 1500,
+            });
+          }
+        } catch (error) {
+          Swal.fire({
+            title: error.message,
+            showConfirmButton: false,
+            icon: "error",
+            timer: 1500,
+          });
+        }
+
+
       }
     }
   });

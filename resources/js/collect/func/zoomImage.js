@@ -5,7 +5,10 @@ export function zoomImage() {
     Swal.fire({
       showCancelButton: false,
       showConfirmButton: false,
-      html: `<img src="${url}" class="w-full mx-auto rounded-xl "/>`,
+      html: `
+      <span class="text-sm font-semibold text-gray-700 mb-4"> Dokumentasi: </span>
+      <img src="${url}" class="w-full mx-auto rounded-xl "/>
+      `,
     })
   })
 }

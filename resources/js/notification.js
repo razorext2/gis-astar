@@ -104,3 +104,32 @@ export function handleNotification(data) {
 		`);
 	}
 }
+
+export function handleAnnouncement(data) {
+	const container = $('#announcement-container');
+
+	$('#notification-alert').addClass('hidden');
+
+	container.prepend(`
+		<div class="relative mb-6 flex items-center gap-x-2 rounded-xl border-x border-b border-t-4 border-x-gray-200 border-b-gray-200 border-t-red-300 bg-white p-2 text-gray-600 dark:border-x-gray-700 dark:border-b-gray-700 dark:border-t-red-800 dark:bg-[#18181b] dark:text-white md:gap-x-4 md:p-4" id="broadcast-alert" role="alert">
+			<div class="absolute -top-3.5 left-4 items-center justify-center rounded-lg border-t border-red-300 bg-white px-2 py-1 text-xs font-semibold text-red-700 dark:border-red-800">
+				<span class="capitalize" id="announcement-title">${data.title}</span>
+			</div>
+
+			<div class="flex w-full flex-row items-center gap-x-2 text-sm font-medium md:gap-x-4">
+				<div>
+					<x-icons.bell class="h-5 w-5" />
+				</div>
+				<div class="w-full text-wrap capitalize" id="announcement-description">
+					${data.description}
+				</div>
+
+				<button class="flex flex-row items-center gap-2 rounded-lg p-2 ring-1 ring-red-700 transition-transform duration-300 ease-in-out will-change-transform hover:scale-105 hover:bg-red-300 focus:scale-105 dark:bg-red-800 dark:text-white dark:ring-gray-700 dark:hover:bg-red-900" data-dismiss-target="#broadcast-alert" id="close" type="button" aria-label="Close">
+					<svg aria-hidden="true" class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+						<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6" />
+					</svg>
+				</button>
+			</div>
+		</div>
+		`)
+}

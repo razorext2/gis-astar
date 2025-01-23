@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\DayoffController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
@@ -134,6 +135,9 @@ Route::middleware('auth')->group(function () {
         // route dayoff
         Route::post('dayoff/upload-image', [DayoffController::class, 'uploadImage'])->name('dayoff.uploadimage');
         Route::resource('dayoff', DayoffController::class)->except(['store', 'update', 'destroy']);
+
+        // route announcement
+        Route::resource('announcement', AnnouncementController::class)->only(['index']);
 
         // route permission
         Route::resource('permissions', PermissionController::class);

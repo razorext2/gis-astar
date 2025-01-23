@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Dayoff;
-use App\Http\Resources\DayoffResource;
+use App\Http\Resources\ApiResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -36,7 +36,7 @@ class ApiDayoffController extends Controller
         $query = Dayoff::create($data);
 
         // kembalikan response JSON
-        return new DayoffResource(true, 'Data berhasil ditambah!', $query);
+        return new ApiResource(true, 'Data berhasil ditambah!', $query);
     }
 
     public function update(Request $request, $id)
@@ -62,7 +62,7 @@ class ApiDayoffController extends Controller
         ]);
 
         if ($request->isJson()) {
-            return new DayoffResource(true, 'Data berhasil diubah!', $query);
+            return new ApiResource(true, 'Data berhasil diubah!', $query);
         }
 
         return response()->json([
@@ -80,7 +80,7 @@ class ApiDayoffController extends Controller
             'validate_by' => $request->validate_by,
         ]);
 
-        return new DayoffResource(true, 'Data berhasil dikonfirmasi', null);
+        return new ApiResource(true, 'Data berhasil dikonfirmasi', null);
     }
 
     public function deny(Request $request, $id)
@@ -92,7 +92,7 @@ class ApiDayoffController extends Controller
             'validate_by' => $request->validate_by,
         ]);
 
-        return new DayoffResource(true, 'Data berhasil dikonfirmasi', null);
+        return new ApiResource(true, 'Data berhasil dikonfirmasi', null);
     }
 
     public function destroy(string $id)
@@ -100,6 +100,6 @@ class ApiDayoffController extends Controller
         $query = Dayoff::find($id);
         $query->delete();
 
-        return new DayoffResource(true, 'Data berhasil dihapus!', null);
+        return new ApiResource(true, 'Data berhasil dihapus!', null);
     }
 }
