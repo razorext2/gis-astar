@@ -1,5 +1,4 @@
-import { DataTable } from "simple-datatables";
-import Swal from "sweetalert2";
+import { showAlert } from "../../utils/alert";
 
 /**
  * @function reschedule
@@ -10,7 +9,6 @@ import Swal from "sweetalert2";
 export function reschedule() {
   $('body').on('click', '#reschedule-btn', async function () {
     let id = $(this).data("id");
-    let token = $("meta[name='csrf-token']").attr("content");
 
     const { value: confirmed } = await Swal.fire({
       icon: 'info',
@@ -42,38 +40,21 @@ export function reschedule() {
 
       if (date) {
         try {
-          axios.patch(`${APP_URL}/api/collect-task-api/${id}/reschedule`, {
+          const response = await axios.patch(`${APP_URL}/api/collect-task-api/${id}/reschedule`, {
             date: date,
             id: id,
-            _token: token
-          }).then(response => {
-            Swal.fire({
-              icon: "success",
-              title: "Tagihan berhasil direschedule!",
-              showConfirmButton: false,
-              timer: 1000
-            });
-
-            $('#dataTable').DataTable().ajax.reload(null, false);
-          }).catch(error => {
-            console.log(error);
-            Swal.fire({
-              icon: "error",
-              title: "Ada kegagalan pada server.",
-              text: error,
-              showConfirmButton: false,
-              timer: 1000
-            })
           });
+
+          if (response.data.success) {
+            showAlert('success', response.data.message);
+            $('#dataTable').DataTable().ajax.reload(null, false);
+          } else {
+            console.error(response.data.message);
+            showAlert('error', response.data.message, response.data.data);
+          }
         } catch (error) {
           console.log(error);
-          Swal.fire({
-            icon: "error",
-            title: "Ada kegagalan pada server.",
-            text: error,
-            showConfirmButton: false,
-            timer: 1000
-          });
+          showAlert('error', 'Ada kegagalan pada server.', error.message)
         }
       }
     }

@@ -196,9 +196,10 @@ class PegawaiController extends Controller
         $search = $request->input('query'); // Mengambil input dari request
 
         // Cari nama pengguna berdasarkan input
-        $users = Pegawai::select(['id', 'kode_pegawai', 'full_name'])
-            ->where('full_name', 'LIKE', "%{$search}%")
-            ->limit(10)
+        $users = User::select(['id', 'kode_pegawai', 'name'])
+            ->where('name', 'LIKE', "%{$search}%")
+            ->role('Collector')
+            ->limit(5)
             ->get();
 
         return response()->json($users); // Kembalikan hasil sebagai JSON

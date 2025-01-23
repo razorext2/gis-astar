@@ -1,15 +1,11 @@
-import Swal from "sweetalert2";
+import { showAlert } from './../../utils/alert';
 
 export function searchDataHandler() {
   $('#no_sr_submit').on('click', async function () {
     let no_sr = $('#no_sr').val();
 
     if (no_sr == '') {
-      Swal.fire({
-        icon: "error",
-        title: "Terjadi kesalahan.",
-        html: "No. SR <b>tidak boleh kosong!</b>"
-      });
+      showAlert('error', 'Terjadi kesalahan!', 'No. SR tidak boleh kosong!');
       return;
     }
 
@@ -50,11 +46,7 @@ export function searchDataHandler() {
 
           Swal.close();
         } else {
-          Swal.fire({
-            icon: "error",
-            title: "Terjadi kesalahan.",
-            html: `Tagihan dengan kode: <b> ${no_sr} </b> ditemukan, namun statusnya sudah ditutup.`
-          });
+          showAlert('error', 'Terjadi kesalahan saat mengambil data!', `Tagihan dengan kode: ${no_sr} ditemukan, namun statusnya sudah ditutup.`);
         }
       } else {
         let check = BSI.data.status;
@@ -79,21 +71,12 @@ export function searchDataHandler() {
           Swal.close();
         } else {
           clear();
-
-          Swal.fire({
-            icon: "error",
-            title: "Terjadi kesalahan.",
-            html: `Tagihan dengan kode: <b> ${no_sr} </b> tidak ditemukan.`
-          })
+          showAlert('error', 'Terjadi kesalahan saat mengambil data!', `Tagihan dengan kode: ${no_sr} tidak ditemukan.`);
         }
       }
     } catch (error) {
       console.error("Error fetching data:", error);
-      Swal.fire({
-        icon: "error",
-        title: error.message || "Terjadi kesalahan saat mengambil data!",
-        showConfirmButton: true
-      });
+      showAlert('error', 'Terjadi kesalahan saat mengambil data!', error.message)
     }
   });
 

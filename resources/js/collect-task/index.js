@@ -3,7 +3,7 @@ import { deleteData } from "./func/delete";
 import { singleAssign } from "./func/assign";
 import { reschedule } from "./func/reschedule";
 
-document.addEventListener("DOMContentLoaded", function () {
+$(document).ready(function () {
   showDatatables();
   deleteData();
   singleAssign();

@@ -110,7 +110,7 @@
 								@elseif ($bill_status == 2)
 									<span
 										class="rounded-lg bg-green-100 px-4 py-2 text-sm font-medium text-green-800 ring-1 ring-gray-300 dark:bg-green-900 dark:text-green-300 dark:ring-gray-700">
-										Tagihan selesai. (divalidasi oleh: {{ $user->name }})
+										Tagihan selesai. (divalidasi oleh: {{ $user->name ?? 'N/A' }})
 									</span>
 								@else
 									<span

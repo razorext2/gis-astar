@@ -54,7 +54,7 @@ export function editDataHandler() {
       console.error('Error:', error);
       Swal.fire({
         icon: "error",
-        title: error.response?.data?.message || 'An error occurred',
+        title: error.response?.data?.message || 'Terjadi kesalahan.',
         showConfirmButton: false,
         timer: 1500
       });

@@ -1,9 +1,8 @@
-import Swal from "sweetalert2";
+import { showAlert } from './../../utils/alert';
 
 export async function validate() {
   $('body').on('click', '#confirm-btn', async function () {
     let id = $(this).data("id");
-    let token = $("meta[name='csrf-token']").attr("content");
 
     const result = await Swal.fire({
       title: "Konfirmasi",
@@ -15,26 +14,19 @@ export async function validate() {
     });
 
     if (result.isConfirmed) {
-      axios.patch(`${APP_URL}/api/collect-task-api/${id}/validate`, {
-        validate_by: validate_by,
-        _token: token,
-      })
-        .then(function () {
-          Swal.fire({
-            icon: "success",
-            title: "Tagihan berhasil ditutup!",
-            showConfirmButton: false,
-            timer: 1000,
-          })
+      try {
+        const response = await axios.patch(`${APP_URL}/api/collect-task-api/${id}/validate`, { validate_by: validate_by });
 
+        if (response.data.success) {
+          showAlert('success', response.data.message);
           setTimeout(() => window.location.reload(), 1000);
-        })
-        .catch(function (error) {
-          Swal.fire({
-            icon: "error",
-            title: "Ada kegagalan pada server. " + error
-          })
-        })
+        } else {
+          showAlert('error', response.data.message, response.data.data);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        showAlert('error', 'Terjadi kesalahan.', error.message);
+      }
     }
-  })
+  });
 }

@@ -78,13 +78,6 @@
 							Submit
 						</x-button.primary>
 
-						<x-button.danger id="no_sr_reset" type="submit">
-							<x-slot name="icon">
-								<x-icons.close class="h-5 w-5 text-blue-500 dark:text-white" />
-							</x-slot>
-							Reset
-						</x-button.danger>
-
 					</div>
 
 				</form>

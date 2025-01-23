@@ -164,8 +164,5 @@
 	</div>
 @endsection
 @push('script')
-	<script>
-		const storeUrl = "{{ route('collect-task-api.store') }}";
-	</script>
 	@vite(['resources/js/collect-task/add.js'])
 @endpush
