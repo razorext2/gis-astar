@@ -80,7 +80,7 @@ class ApiSalesController extends Controller
 
         if ($query) {
             try {
-                NotifySalesNewReportJob::dispatch($query->id, $query->created_at)->delay(now()->addSecons(5));
+                NotifySalesNewReportJob::dispatch($query->id, $query->created_at)->delay(now()->addSeconds(5));
             } catch (\Exception $e) {
                 Log::error('Notify sales has new report failed' . $e->getMessage());
             }
