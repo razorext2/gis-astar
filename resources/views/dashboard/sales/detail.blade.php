@@ -66,6 +66,14 @@
 
 					<div
 						class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
+						<p class="text-sm text-gray-600 dark:text-gray-300">Customer</p>
+						<p class="text-navy-700 text-base font-medium dark:text-white">
+							{{ $data->customer_name ?? 'N/A' }} ({{ $data->customer_telp ?? 'N/A' }})
+						</p>
+					</div>
+
+					<div
+						class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
 						<p class="text-sm text-gray-600 dark:text-gray-300">Lokasi checkpoint</p>
 
 						<span class="text-navy-700 text-base font-medium dark:text-white">{{ $data->lokasi }}</span>

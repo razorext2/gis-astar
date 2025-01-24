@@ -1,3 +1,5 @@
+import { showAlert } from "../../utils/alert";
+
 export function changeState() {
   $('body').on('click', '#state-btn', async function () {
     let id = $(this).data('id');
@@ -42,26 +44,13 @@ export function changeState() {
           });
 
           if (response.data.success) {
-            Swal.fire({
-              icon: 'success',
-              title: 'Sukses',
-              text: 'Status berhasil diubah',
-            });
-
+            showAlert('success', response.data.message);
             $('#dataTable').DataTable().ajax.reload(null, false);
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Terjadi kesalahan',
-              text: response.data.message ?? 'Terjadi kesalahan saat mengubah status',
-            });
+            showAlert('error', response.data.message ?? 'Terjadi kesalahan saat mengubah status');
           }
         } catch (error) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Terjadi kesalahan',
-            text: error.message,
-          });
+          showAlert('error', 'Terjadi kesalahan.', error.message);
         }
       }
     }

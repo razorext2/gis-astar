@@ -47,7 +47,7 @@ Route::apiResource('dayoff-api', ApiDayoffController::class)->except(['index', '
 
 // announcement
 Route::patch('announcement-api/{id}/state', [ApiAnnouncementController::class, 'changeState'])->name('announcement-api.change-state');
-Route::apiResource('announcement-api', ApiAnnouncementController::class)->only(['store', 'update', 'destroy']);
+Route::apiResource('announcement-api', ApiAnnouncementController::class)->only(['store', 'show', 'update', 'destroy']);
 
 // api ke server utama
 Route::post('proxy/server/attendance', function (Request $request) {
