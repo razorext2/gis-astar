@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\Dayoff;
-use App\Models\Pegawai;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -27,13 +26,14 @@ class DayoffController extends Controller
 
 	public function index(Request $request)
 	{
+
+		$query = Dayoff::with('pegawaiRelasi:kode_pegawai,full_name');
+
+		if (!Auth::user()->can('dayoff-confirm')) {
+			$query->where('kode_pegawai', Auth::user()->kode_pegawai);
+		}
+
 		if ($request->ajax()) {
-			$query = Dayoff::with('pegawaiRelasi:kode_pegawai,full_name');
-
-			if (!Auth::user()->can('dayoff-confirm')) {
-				$query->where('kode_pegawai', Auth::user()->kode_pegawai);
-			}
-
 			return DataTables::of($query)
 				->addIndexColumn()
 				->editColumn('kode_pegawai', function ($data) {
