@@ -36,6 +36,10 @@ export function showData() {
       name: "title",
     },
     {
+      data: "customer_name",
+      name: "customer_name",
+    },
+    {
       data: "lokasi",
       name: "lokasi",
     },

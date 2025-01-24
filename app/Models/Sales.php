@@ -15,6 +15,8 @@ class Sales extends Model
     protected $fillable = [
         "kode_pegawai",
         "title",
+        "customer_name",
+        "customer_telp",
         "lokasi",
         "keterangan",
         "longitude",
@@ -95,6 +97,6 @@ class Sales extends Model
      */
     public function userRelasi()
     {
-        return $this->belongsTo(User::class, 'validate_by', 'id');
+        return $this->belongsTo(User::class, 'kode_pegawai', 'kode_pegawai');
     }
 }

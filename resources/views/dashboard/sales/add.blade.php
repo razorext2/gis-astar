@@ -42,10 +42,24 @@
 					</div>
 
 					<div class="col-span-2 w-full">
-						<x-input.basic id="title" name="title" placeholder="Judul laporan" required>
+						<x-input.basic id="title" name="title" placeholder="Kunjungan ke toko xxx" required>
 							Judul Laporan
 						</x-input.basic>
 						<div class="mt-2 hidden text-sm text-red-500" id="alert-title"></div>
+					</div>
+
+					<div class="col-span-2 w-full">
+						<x-input.basic id="customer_name" name="customer_name" placeholder="Bp. Samsudin" required>
+							Nama Calon Customer
+						</x-input.basic>
+						<div class="mt-2 hidden text-sm text-red-500" id="alert-customer_name"></div>
+					</div>
+
+					<div class="col-span-2 w-full">
+						<x-input.basic id="customer_telp" name="customer_telp" placeholder="08xxxxxxx" required>
+							No. Telp / Contact Person
+						</x-input.basic>
+						<div class="mt-2 hidden text-sm text-red-500" id="alert-customer_telp"></div>
 					</div>
 
 					<div class="col-span-2 w-full">

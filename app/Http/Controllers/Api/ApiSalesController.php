@@ -20,6 +20,8 @@ class ApiSalesController extends Controller
         $validator = Validator::make($request->all(), [
             'kode_pegawai' => 'required|integer',
             'title' => 'required|string|max:128|min:3',
+            'customer_name' => 'required|string|max:128|min:3',
+            'customer_telp' => 'required|string|max:128|min:3',
             'lokasi' => 'required|string|max:128|min:3',
             'keterangan' => 'required|string|min:3',
             'latitude' => 'required|string|max:128|min:3',
@@ -41,6 +43,8 @@ class ApiSalesController extends Controller
         $query = Sales::create([
             'kode_pegawai' => $data['kode_pegawai'],
             'title' => $data['title'],
+            'customer_name' => $data['customer_name'],
+            'customer_telp' => $data['customer_telp'],
             'lokasi' => $data['lokasi'],
             'keterangan' => $data['keterangan'],
             'latitude' => $data['latitude'],
@@ -95,6 +99,8 @@ class ApiSalesController extends Controller
         $validator = Validator::make($request->all(), [
             'id' => 'required|integer',
             'title' => 'string|max:128|min:3',
+            'customer_name' => 'string|max:128|min:3',
+            'customer_telp' => 'string|max:128|min:3',
             'lokasi' => 'string|max:128|min:3',
             'keterangan' => 'string|min:3',
         ]);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pegawai;
 use App\Models\Sales;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -78,6 +79,12 @@ class SalesController extends Controller
                         'title' => $data->short_title,
                     ])->render();
                 })
+                ->editColumn('customer_name', function ($data) {
+                    return view('components.dashboard.name-w-code', [
+                        'code' => $data->customer_telp ?? 'N/A',
+                        'name' => $data->customer_name ?? 'N/A',
+                    ])->render();
+                })
                 ->editColumn('lokasi', function ($data) {
                     return view('components.dashboard.location-w-coordinate', [
                         'location' => $data->lokasi ?? 'N/A',
@@ -91,7 +98,7 @@ class SalesController extends Controller
                         'updated' => $data->updated_at->locale('id')->isoFormat('D MMM YYYY / HH:MM:ss') ?? 'N/A',
                     ])->render();
                 })
-                ->rawColumns(['actions', 'title', 'kode_pegawai', 'lokasi', 'created_at'])
+                ->rawColumns(['actions', 'title', 'customer_name', 'kode_pegawai', 'lokasi', 'created_at'])
                 ->toJson();
         }
 
@@ -111,9 +118,11 @@ class SalesController extends Controller
      */
     public function show($id)
     {
-        $data = Sales::with(['pegawaiRelasi:kode_pegawai,full_name', 'photoCollectRelasi', 'userRelasi:id,name'])->findOrFail($id);
+        $data = Sales::with(['pegawaiRelasi:kode_pegawai,full_name', 'photoCollectRelasi'])->findOrFail($id);
 
-        return view('dashboard.sales.detail', compact('data'));
+        $user = User::select('id', 'name')->where('id', $data->validate_by)->first();
+
+        return view('dashboard.sales.detail', compact('data', 'user'));
     }
 
     /**

@@ -54,8 +54,9 @@
 					    '1' => 'Aksi',
 					    '2' => 'Pegawai',
 					    '3' => 'Judul Laporan',
-					    '4' => 'Lokasi',
-					    '5' => 'Created / Updated',
+					    '4' => 'Customer',
+					    '5' => 'Lokasi',
+					    '6' => 'Created / Updated',
 					]" />
 				</div>
 

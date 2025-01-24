@@ -11,11 +11,12 @@ export function addDataHandler() {
 
     formData.append("kode_pegawai", $("#kode_pegawai").val());
     formData.append("title", $("#title").val());
+    formData.append("customer_name", $("#customer_name").val());
+    formData.append("customer_telp", $("#customer_telp").val());
     formData.append("keterangan", $("#keterangan").val());
     formData.append("lokasi", $("#lokasi").val());
     formData.append("latitude", $("#latitude").val());
     formData.append("longitude", $("#longitude").val());
-    formData.append("_token", $("meta[name='csrf-token']").attr("content"));
 
     capturedImages.forEach((image, index) => {
       const blob = dataURItoBlob(image);
@@ -49,17 +50,19 @@ export function editDataHandler() {
     // define variable
     let id = $('#id').val();
     let title = $("#title").val();
+    let customer_name = $("#customer_name").val();
+    let customer_telp = $("#customer_telp").val();
     let lokasi = $('#lokasi').val();
     let keterangan = $("#keterangan").val();
-    let token = $("meta[name='csrf-token']").attr("content");
 
     // axios request
     axios.patch(`${APP_URL}/api/sales-api/${id}`, {
       id: id,
       title: title,
+      customer_name: customer_name,
+      customer_telp: customer_telp,
       lokasi: lokasi,
       keterangan: keterangan,
-      _token: token
     })
       .then(response => {
         Swal.fire({
