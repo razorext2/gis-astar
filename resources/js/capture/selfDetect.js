@@ -17,9 +17,9 @@ const video = document.getElementById("video"),
 function initializeFaceAPI() {
   // Load necessary models from the specified URI
   Promise.all([
-    faceapi.nets.ssdMobilenetv1.loadFromUri("../models"),       // Load SSD MobileNet model
-    faceapi.nets.faceRecognitionNet.loadFromUri("../models"),   // Load Face Recognition model
-    faceapi.nets.faceLandmark68Net.loadFromUri("../models")     // Load Face Landmark model
+    faceapi.nets.ssdMobilenetv1.loadFromUri(`${APP_URL}/models`),       // Load SSD MobileNet model
+    faceapi.nets.faceRecognitionNet.loadFromUri(`${APP_URL}/models`),   // Load Face Recognition model
+    faceapi.nets.faceLandmark68Net.loadFromUri(`${APP_URL}/models`)     // Load Face Landmark model
   ])
     .then(() => {
       console.log("Models loaded successfully.");
@@ -286,7 +286,7 @@ function showAttendanceAlert() {
 async function getEmployeeImagePaths(label) {
   try {
     // Fetch data from the server with the encoded label
-    const response = await fetch(`../api/pegawai-images/${encodeURIComponent(label)}`);
+    const response = await fetch(`${APP_URL}/api/pegawai-images/${encodeURIComponent(label)}`);
 
     // Check if the response was successful
     if (!response.ok) throw new Error("Network response was not ok");
@@ -339,7 +339,7 @@ async function getLabeledFaceDescriptions() {
 async function getEmployeeDataByLabel(label) {
   try {
     // Make an API call to fetch employee data by label
-    const response = await fetch(`../api/getPegawaiData/${encodeURIComponent(label)}`);
+    const response = await fetch(`${APP_URL}/api/getPegawaiData/${encodeURIComponent(label)}`);
 
     // Check if the response is okay
     if (!response.ok) {
@@ -454,7 +454,7 @@ async function saveImageToServer(image, label) {
 
   try {
     // Mengirim request POST untuk menyimpan gambar ke server
-    const response = await fetch("../api/saveImage", {
+    const response = await fetch("${APP_URL}/api/saveImage", {
       method: "POST",
       headers: {
         "X-CSRF-TOKEN": csrfToken // Token CSRF untuk keamanan
@@ -482,7 +482,7 @@ async function saveImageToServer(image, label) {
 async function saveAttendance(kodePegawai, nikPegawai, lokasi) {
   try {
     // Mengecek apakah pegawai sudah melakukan absensi masuk (clock-in)
-    const response = await fetch("../api/check-attendance", {
+    const response = await fetch("${APP_URL}/api/check-attendance", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -504,7 +504,7 @@ async function saveAttendance(kodePegawai, nikPegawai, lokasi) {
       updateJamKeluar();
 
       // Mengirim data absensi keluar (clock-out)
-      const clockOutResponse = await fetch("../store-attendance-out", {
+      const clockOutResponse = await fetch("${APP_URL}/store-attendance-out", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -544,7 +544,7 @@ async function saveAttendance(kodePegawai, nikPegawai, lokasi) {
       document.getElementById("waktu-keluar").textContent = "Jam Keluar: Belum ada data";
 
       // Mengirim data absensi masuk (clock-in)
-      const clockInResponse = await fetch("../store-attendance", {
+      const clockInResponse = await fetch("${APP_URL}/store-attendance", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -573,7 +573,7 @@ async function saveAttendance(kodePegawai, nikPegawai, lokasi) {
   }
 }
 
-fetch(`../api/getPegawai/${kodePegawai}`)
+fetch(`${APP_URL}/api/getPegawai/${kodePegawai}`)
   .then(response => response.json())
   .then(data => {
     console.log("Initializing application");
