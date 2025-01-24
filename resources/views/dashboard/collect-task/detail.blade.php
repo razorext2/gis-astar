@@ -194,6 +194,8 @@
 										    $status = 'Lunas';
 										} elseif ($item->have_paid == 3) {
 										    $status = 'Tanda terima';
+										} elseif ($item->have_paid == 4) {
+										    $status = 'Belum sempat';
 										} else {
 										    $status = 'Tidak diketahui';
 										}

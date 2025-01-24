@@ -104,10 +104,11 @@
 
 					<div class="col-span-2 w-full lg:col-span-1" id="have_paid_container">
 						<x-input.select id="have_paid" name="have_paid" :options="[
-						    '3' => 'Tanda Terima',
+						    '3' => 'Tanda terima',
 						    '0' => 'Belum bayar',
 						    '1' => 'Cicil',
 						    '2' => 'Lunas',
+						    '4' => 'Belum sempat',
 						]" default-option="Pilih status">
 							<x-slot name="textLabel">
 								Status Pembayaran

@@ -97,6 +97,8 @@ class CollectController extends Controller
                         $status = 'Lunas';
                     } elseif ($data->have_paid == 3) {
                         $status = 'Tanda Terima';
+                    } elseif ($data->have_paid == 4) {
+                        $status = 'Belum sempat';
                     }
 
                     if ($data->payment_type == 0) {

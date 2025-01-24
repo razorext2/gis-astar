@@ -51,9 +51,6 @@ export default defineConfig({
 
                 // announcement 
                 "resources/js/announcement/index.js",
-                // "resources/js/announcement/add.js",
-                // "resources/js/announcement/edit.js",
-                // "resources/js/announcement/detail.js",
 
                 // pegawai
                 "resources/js/pegawai/personalInfo.js",
