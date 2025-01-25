@@ -25,23 +25,23 @@ class ApiDayoffController extends Controller
 
         // Validasi data
         if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422); // Mengirim status 422 untuk validasi gagal
+            return new ApiResource(false, 'Validasi gagal', $validator->errors()->first());
         }
 
-        // Menambah data jika validasi berhasil
         $data = $validator->validated();
-        $query = Dayoff::create($data);
 
-        // kembalikan response JSON
-        return new ApiResource(true, 'Data berhasil ditambah!', $query);
+        try {
+            Dayoff::create($data);
+
+            // kembalikan response JSON
+            return new ApiResource(true, 'Data berhasil ditambah!', null);
+        } catch (\Exception $e) {
+            return new ApiResource(false, 'Terjadi kesalahan saat menyimpan data', $e->getMessage());
+        }
     }
 
     public function update(Request $request, $id)
     {
-        // define validation rules
         $validator = Validator::make($request->all(), [
             'dayoff_for' => 'required|string',
             'tgl_dari' => 'required|date',
@@ -50,56 +50,101 @@ class ApiDayoffController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return new ApiResource(false, 'Validasi gagal', $validator->errors()->first());
         }
 
         $query = Dayoff::find($id);
-        $query->update([
-            'dayoff_for' => $request->dayoff_for,
-            'tgl_dari' => $request->tgl_dari,
-            'tgl_hingga' => $request->tgl_hingga,
-            'keterangan' => $request->keterangan,
-        ]);
 
-        if ($request->isJson()) {
-            return new ApiResource(true, 'Data berhasil diubah!', $query);
+        if (!$query) {
+            return new ApiResource(false, 'Data tidak ditemukan', null);
         }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Data berhasil diubah!',
-            'data' => $query
-        ]);
+        try {
+            $query->update([
+                'dayoff_for' => $request->dayoff_for,
+                'tgl_dari' => $request->tgl_dari,
+                'tgl_hingga' => $request->tgl_hingga,
+                'keterangan' => $request->keterangan,
+            ]);
+
+            return new ApiResource(true, 'Data berhasil diubah!', null);
+        } catch (\Exception $e) {
+            return new ApiResource(false, 'Terjadi kesalahan saat memperbarui data', $e->getMessage());
+        }
     }
 
     public function approve(Request $request, $id)
     {
-        $query = Dayoff::find($id);
-        $query->update([
-            'status' => 1,
-            'validate_by' => $request->validate_by,
+        $validator = Validator::make($request->all(), [
+            'validate_by' => 'required|integer',
         ]);
 
-        return new ApiResource(true, 'Data berhasil dikonfirmasi', null);
+        if ($validator->fails()) {
+            return new ApiResource(false, 'Validasi gagal', $validator->errors()->first());
+        }
+
+        $query = Dayoff::find($id);
+
+        if (!$query) {
+            return new ApiResource(false, 'Data tidak ditemukan', null);
+        }
+
+        try {
+            $query->update([
+                'status' => 1,
+                'validate_by' => $request->validate_by,
+            ]);
+
+            return new ApiResource(true, 'Data berhasil dikonfirmasi', null);
+        } catch (\Exception $e) {
+            return new ApiResource(false, 'Terjadi kesalahan saat memperbarui data', $e->getMessage());
+        }
     }
 
     public function deny(Request $request, $id)
     {
-        $query = Dayoff::find($id);
-        $query->update([
-            'status' => 2,
-            'notes' => $request->notes,
-            'validate_by' => $request->validate_by,
+        $validator = Validator::make($request->all(), [
+            'notes' => 'required|string',
+            'validate_by' => 'required|integer',
         ]);
 
-        return new ApiResource(true, 'Data berhasil dikonfirmasi', null);
+        if ($validator->fails()) {
+            return new ApiResource(false, 'Validasi gagal', $validator->errors()->first());
+        }
+
+        $query = Dayoff::find($id);
+
+        if (!$query) {
+            return new ApiResource(false, 'Data tidak ditemukan', null);
+        }
+
+        try {
+            $query->update([
+                'status' => 2,
+                'notes' => $request->notes,
+                'validate_by' => $request->validate_by,
+            ]);
+
+            return new ApiResource(true, 'Data berhasil dikonfirmasi', null);
+        } catch (\Exception $e) {
+            return new ApiResource(false, 'Terjadi kesalahan saat memperbarui data', $e->getMessage());
+        }
     }
 
     public function destroy(string $id)
     {
         $query = Dayoff::find($id);
-        $query->delete();
 
-        return new ApiResource(true, 'Data berhasil dihapus!', null);
+        if (!$query) {
+            return new ApiResource(false, 'Data tidak ditemukan', null);
+        }
+
+        try {
+            $query->delete();
+
+            return new ApiResource(true, 'Data berhasil dihapus!', null);
+        } catch (\Exception $e) {
+            return new ApiResource(false, 'Terjadi kesalahan saat menghapus data', $e->getMessage());
+        }
     }
 }

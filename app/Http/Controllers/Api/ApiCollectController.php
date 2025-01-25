@@ -73,7 +73,8 @@ class ApiCollectController extends Controller
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
                     $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
-                    $path = Storage::disk('public')->putFileAs($folderPath, $image, $imageName);
+
+                    Storage::disk('public')->putFileAs($folderPath, $image, $imageName);
 
                     $imageUrl = '/storage/' . $folderPath . '/' . $imageName;
 
@@ -88,7 +89,7 @@ class ApiCollectController extends Controller
                 ->delay(now()->addSeconds(5));
 
             DB::commit();
-            return new ApiResource(true, 'Laporan berhasil diubah!', $query);
+            return new ApiResource(true, 'Laporan berhasil diubah!', null);
         } catch (\Exception $e) {
             DB::rollBack();
             return new ApiResource(false, 'Terjadi kesalahan saat memproses request', $e->getMessage());
@@ -168,17 +169,23 @@ class ApiCollectController extends Controller
 
         $validator = Validator::make($request->all(), [
             'notes' => 'required|string',
-            'validate_by' => 'required',
+            'user_id' => 'required|string',
         ]);
 
         if ($validator->fails()) {
-            return new ApiResource(false, 'Validasi gagal', $validator->errors());
+            return new ApiResource(false, 'Validasi gagal', $validator->errors()->first());
         }
 
         try {
             DB::beginTransaction();
 
-            $query->update([ // Update data
+            CollectTask::where('no_sr', $query->no_sr)->update([
+                'assign_by' => null,
+                'assign_to' => null,
+                'bill_status' => 0,
+            ]);
+
+            $query->update([
                 'status' => 3,
                 'notes' => $request->notes,
                 'validate_by' => $validate_by,
@@ -197,16 +204,17 @@ class ApiCollectController extends Controller
      */
     public function destroy($id)
     {
-        try {
-            DB::beginTransaction();
+        $query = Collector::findOrFail($id);
 
-            $query = Collector::findOrFail($id);
+        if (!$query) {
+            return new ApiResource(false, 'Data tidak ditemukan', null);
+        }
+
+        try {
             $query->delete();
 
-            DB::commit();
             return new ApiResource(true, 'Laporan berhasil dihapus', null);
         } catch (\Exception $e) {
-            DB::rollBack();
             return new ApiResource(false, 'Terjadi kesalahan saat menghapus laporan', null);
         }
     }

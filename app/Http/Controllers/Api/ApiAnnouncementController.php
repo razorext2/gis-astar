@@ -24,34 +24,42 @@ class ApiAnnouncementController extends Controller
             return new ApiResource(false, 'Validasi gagal', $validator->errors()->first());
         }
 
-        $announcement = Announcement::create($request->all());
+        try {
+            DB::beginTransaction();
+            $announcement = Announcement::create($request->all());
 
-        if (!$announcement) {
-            return new ApiResource(false, 'Pengumuman gagal ditambahkan', null);
+            if (!$announcement) {
+                return new ApiResource(false, 'Pengumuman gagal ditambahkan', null);
+            }
+
+            BroadcastNewAnnouncementJob::dispatch($announcement)
+                ->delay(now()
+                    ->addSeconds(5));
+
+            Announcement::where('id', '!=', $announcement->id)
+                ->update([
+                    'status' => 0,
+                ]);
+
+            $count = Announcement::count();
+
+            if ($count > 20) {
+                Announcement::orderBy('created_at', 'asc')
+                    ->limit(10)
+                    ->delete();
+            }
+
+            DB::commit();
+            return new ApiResource(true, 'Pengumuman berhasil ditambahkan', $announcement);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return new ApiResource(false, 'Terjadi kesalahan saat menambahkan pengumuman', $e->getMessage());
         }
-
-        BroadcastNewAnnouncementJob::dispatch($announcement)
-            ->delay(now()
-                ->addSeconds(5));
-
-        Announcement::where('id', '!=', $announcement->id)
-            ->update([
-                'status' => 0,
-            ]);
-
-        $count = Announcement::count();
-
-        if ($count > 20) {
-            Announcement::orderBy('created_at', 'asc')
-                ->limit(10)
-                ->delete();
-        }
-
-        return new ApiResource(true, 'Pengumuman berhasil ditambahkan', $announcement);
     }
 
     public function show($id)
     {
+
         $announcement = Announcement::find($id);
 
         if (!$announcement) {
@@ -75,15 +83,13 @@ class ApiAnnouncementController extends Controller
             return new ApiResource(false, 'Gagal mengubah status pengumuman', $validator->errors()->first());
         }
 
+        $announcement = Announcement::where('status', 1);
+
         try {
             DB::beginTransaction();
 
-            $announcement = Announcement::where('status', 1);
-
             if ($announcement->count() > 0) {
-                $announcement->update([
-                    'status' => 0,
-                ]);
+                $announcement->where('id', '!=', $id)->update(['status' => 0]);
             }
 
             $query = Announcement::findOrFail($id);
@@ -103,7 +109,7 @@ class ApiAnnouncementController extends Controller
             }
 
             DB::commit();
-            return new ApiResource(true, 'Status pengumuman berhasil diubah', $query);
+            return new ApiResource(true, 'Status pengumuman berhasil diubah', null);
         } catch (\Exception $e) {
             DB::rollBack();
             return new ApiResource(false, 'Terjadi kesalahan saat mengubah status pengumuman', $e->getMessage());
@@ -121,29 +127,25 @@ class ApiAnnouncementController extends Controller
             return new ApiResource(false, 'Validasi gagal', $validator->errors()->first());
         }
 
+        $announcement = Announcement::find($id);
+
+        if (!$announcement) {
+            return new ApiResource(false, 'Data pengumuman tidak ditemukan', null);
+        }
+
         try {
-            DB::beginTransaction();
-
-            $announcement = Announcement::find($id);
-
-            if (!$announcement) {
-                return new ApiResource(false, 'Data pengumuman tidak ditemukan', null);
-            }
-
             $data = $validator->validated();
 
             $announcement->update($data);
 
-            DB::commit();
-            return new ApiResource(true, 'Data pengumuman berhasil diperbarui', $announcement);
+            return new ApiResource(true, 'Data pengumuman berhasil diperbarui', null);
         } catch (\Exception $e) {
-            DB::rollBack();
             Log::error($e->getMessage());
             return new ApiResource(false, 'Terjadi kesalahan saat mengubah pengumuman', $e->getMessage());
         }
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
         $query = Announcement::findOrFail($id);
 
@@ -151,8 +153,12 @@ class ApiAnnouncementController extends Controller
             return new ApiResource(false, 'Data tidak ditemukan', null);
         }
 
-        $query->delete();
+        try {
+            $query->delete();
 
-        return new ApiResource(true, 'Data berhasil dihapus', null);
+            return new ApiResource(true, 'Data berhasil dihapus', null);
+        } catch (\Exception $e) {
+            return new ApiResource(false, 'Terjadi kesalahan saat menghapus data', $e->getMessage());
+        }
     }
 }

@@ -7,9 +7,9 @@ use App\Http\Resources\ApiResource;
 use App\Jobs\NotifyCollectorNewAssignedJob;
 use App\Models\CollectTask;
 use App\Models\Collector;
+use App\Models\Pegawai;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class ApiCollectTaskController extends Controller
@@ -32,16 +32,15 @@ class ApiCollectTaskController extends Controller
         ]);
 
         if ($validator->fails()) {
-            Log::error('Validation failed: ' . $validator->errors()->first());
-            return new ApiResource(false, 'Validasi gagal', $validator->errors()->first());
+            return new ApiResource(false, 'Validasi gagal', $validator->errors());
         }
 
         $data = $validator->validated();
 
+        $task = CollectTask::withTrashed()->where('no_sr', '=', $data['no_sr'])->first();
+
         try {
             DB::beginTransaction();
-
-            $task = CollectTask::withTrashed()->where('no_sr', '=', $data['no_sr'])->first();
 
             if ($task) {
                 if ($task->trashed()) {
@@ -63,10 +62,9 @@ class ApiCollectTaskController extends Controller
             }
 
             DB::commit();
-            return new ApiResource(true, 'Tagihan berhasil diproses!', $query);
+            return new ApiResource(true, 'Tagihan berhasil diproses!', null);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error processing bill: ' . $e->getMessage());
             return new ApiResource(false, 'Terjadi kesalahan saat memproses tagihan', $e->getMessage());
         }
     }
@@ -78,7 +76,6 @@ class ApiCollectTaskController extends Controller
             ->first();
 
         if (!$query) {
-            Log::warning('Tagihan tidak ditemukan untuk no_sr: ' . $no_sr);
             return new ApiResource(false, 'Tagihan tidak ditemukan', null);
         }
 
@@ -92,30 +89,23 @@ class ApiCollectTaskController extends Controller
         ]);
 
         if ($validator->fails()) {
-            Log::error('Validation failed: ' . $validator->errors()->first());
             return new ApiResource(false, 'Validasi gagal', $validator->errors()->first());
         }
 
+        $query = CollectTask::find($id);
+
+        if (!$query) {
+            return new ApiResource(false, 'Tagihan tidak ditemukan', null);
+        }
+
         try {
-            DB::beginTransaction();
-
-            $query = CollectTask::find($id);
-
-            if (!$query) {
-                Log::error('Bill not found for id: ' . $id);
-                return new ApiResource(false, 'Tagihan tidak ditemukan', null);
-            }
-
             $query->update([
                 'bill_status' => 2,
                 'validate_by' => $request->validate_by,
             ]);
 
-            DB::commit();
             return new ApiResource(true, 'Tagihan berhasil ditutup', null);
         } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Error validating bill: ' . $e->getMessage());
             return new ApiResource(false, 'Terjadi kesalahan saat memvalidasi tagihan', $e->getMessage());
         }
     }
@@ -128,19 +118,23 @@ class ApiCollectTaskController extends Controller
         ]);
 
         if ($validator->fails()) {
-            Log::error('Validation failed: ' . $validator->errors()->first());
             return new ApiResource(false, 'Validasi gagal', $validator->errors()->first());
+        }
+
+        $collector = Pegawai::where('kode_pegawai', $request->assign_to)->first();
+
+        if (!$collector) {
+            return new ApiResource(false, "Kolektor dengan kode jari $request->assign_to, tidak ditemukan.", null);
+        }
+
+        $query = CollectTask::find($id);
+
+        if (!$query) {
+            return new ApiResource(false, "Tagihan dengan kode $id tidak ditemukan", null);
         }
 
         try {
             DB::beginTransaction();
-
-            $query = CollectTask::find($id);
-
-            if (!$query) {
-                Log::error('Bill not found for id: ' . $id);
-                return new ApiResource(false, 'Tagihan tidak ditemukan', null);
-            }
 
             $query->update([
                 'bill_status' => 3,
@@ -175,7 +169,6 @@ class ApiCollectTaskController extends Controller
             return new ApiResource(true, 'Tagihan berhasil di assign', null);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error assigning bill: ' . $e->getMessage());
             return new ApiResource(false, 'Terjadi kesalahan saat assign tagihan', $e->getMessage());
         }
     }
@@ -189,7 +182,6 @@ class ApiCollectTaskController extends Controller
         ]);
 
         if ($validator->fails()) {
-            Log::error('Validation failed: ' . json_encode($validator->errors()));
             return new ApiResource(false, 'Validasi gagal', $validator->errors());
         }
 
@@ -214,7 +206,6 @@ class ApiCollectTaskController extends Controller
                 ]);
 
                 if (!$collector) {
-                    Log::error('Error creating collector for no_sr: ' . $data->no_sr);
                     return new ApiResource(false, 'Terjadi kesalahan saat assign tagihan', null);
                 }
 
@@ -228,7 +219,6 @@ class ApiCollectTaskController extends Controller
             return new ApiResource(true, 'Berhasil menambah assigment', null);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error mass assigning bills: ' . $e->getMessage());
             return new ApiResource(false, 'Terjadi kesalahan saat assign tagihan', $e->getMessage());
         }
     }
@@ -236,36 +226,28 @@ class ApiCollectTaskController extends Controller
     public function reschedule(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'id' => 'required|integer',
             'date' => 'required|date',
         ]);
 
         if ($validator->fails()) {
-            Log::error('Validation failed: ' . json_encode($validator->errors()));
             return new ApiResource(false, 'Validasi gagal', $validator->errors());
         }
 
         $data = $request->all();
 
+        $query = CollectTask::find($id);
+
+        if (!$query) {
+            return new ApiResource(false, 'Tagihan tidak ditemukan', 'Tagihan yang ingin direschedule tidak ditemukan');
+        }
+
         try {
-            DB::beginTransaction();
-
-            $query = CollectTask::find($id);
-
-            if (!$query) {
-                Log::error('Bill not found for id: ' . $id);
-                return new ApiResource(false, 'Tagihan tidak ditemukan', 'Tagihan yang ingin direschedule tidak ditemukan');
-            }
-
             $query->update([
                 'assign_date' => $data['date']
             ]);
 
-            DB::commit();
             return new ApiResource(true, 'Berhasil melakukan reschedule', null);
         } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Error rescheduling bill: ' . $e->getMessage());
             return new ApiResource(false, 'Terjadi kesalahan saat melakukan reschedule', $e->getMessage());
         }
     }
@@ -273,20 +255,16 @@ class ApiCollectTaskController extends Controller
     public function destroy(string $id)
     {
         $query = CollectTask::find($id);
+
         if (!$query) {
-            Log::error('Bill not found for id: ' . $id);
             return new ApiResource(false, 'Tagihan tidak ditemukan', null);
         }
-        try {
-            DB::beginTransaction();
 
+        try {
             $query->delete();
 
-            DB::commit();
             return new ApiResource(true, 'Tagihan berhasil dihapus', null);
         } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Error deleting bill: ' . $e->getMessage());
             return new ApiResource(false, 'Terjadi kesalahan saat menghapus tagihan', $e->getMessage());
         }
     }

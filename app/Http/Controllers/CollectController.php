@@ -77,8 +77,8 @@ class CollectController extends Controller
                 ->editColumn('no_sr', function ($data) {
                     return view('components.dashboard.name-w-code', [
                         'code' => $data->short_title ?? 'N/A',
-                        'name' => $data->no_sr,
-                        'item3' => $data->pegawaiRelasi->full_name,
+                        'name' => $data->no_sr ?? 'N/A',
+                        'item3' => $data->pegawaiRelasi->full_name ?? 'N/A',
                     ]);
                 })
                 ->editColumn('title', function ($data) {

@@ -9,7 +9,7 @@ use App\Models\PhotoCollect;
 use App\Models\Sales;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -30,68 +30,56 @@ class ApiSalesController extends Controller
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // validasi
-        if ($validator->fails()) { // Jika validasi gagal
-            return response()->json([ // Kembalikan response
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422); // Kode status 422 untuk validasi gagal
+        if ($validator->fails()) {
+            return new ApiResource(false, 'Validasi gagal', $validator->errors()->first());
         }
 
         $data = $validator->validated();
 
-        $query = Sales::create([
-            'kode_pegawai' => $data['kode_pegawai'],
-            'title' => $data['title'],
-            'customer_name' => $data['customer_name'],
-            'customer_telp' => $data['customer_telp'],
-            'lokasi' => $data['lokasi'],
-            'keterangan' => $data['keterangan'],
-            'latitude' => $data['latitude'],
-            'longitude' => $data['longitude'],
-        ]);
+        try {
+            DB::beginTransaction();
 
-        $folderPath = "public/sales";
+            $query = Sales::create([
+                'kode_pegawai' => $data['kode_pegawai'],
+                'title' => $data['title'],
+                'customer_name' => $data['customer_name'],
+                'customer_telp' => $data['customer_telp'],
+                'lokasi' => $data['lokasi'],
+                'keterangan' => $data['keterangan'],
+                'latitude' => $data['latitude'],
+                'longitude' => $data['longitude'],
+            ]);
 
-        // Jika folder belum ada, maka buat folder
-        if (!Storage::disk('public')->exists($folderPath)) { // Jika folder belum ada
-            Storage::disk('public')->makeDirectory($folderPath); // Buat folder
+            $folderPath = "sales";
 
-            // Mengatur permission folder
-            chmod(storage_path('app/public/' . $folderPath), 0755);
-        }
-
-        // Jika request memiliki file 'images'
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) { // Looping setiap gambar
-                // Membuat nama gambar baru
-                $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
-
-                // Menyimpan gambar ke storage
-                $imagePath = $folderPath . "/" . $imageName; // Path gambar
-                Storage::put($imagePath, file_get_contents($image)); // Simpan gambar
-
-                // Mendapatkan URL gambar
-                $imageUrl = Storage::url('sales/' . $imageName); // URL gambar
-
-                // Menyimpan informasi gambar ke tabel tb_photo_collect
-                PhotoCollect::create([ // Simpan data
-                    'id_sales' => $query->id,
-                    'photourl' => $imageUrl,
-                ]);
+            if (!Storage::disk('public')->exists($folderPath)) {
+                Storage::disk('public')->makeDirectory($folderPath);
             }
-        }
 
-        if ($query) {
-            try {
-                NotifySalesNewReportJob::dispatch($query->id, $query->created_at)->delay(now()->addSeconds(5));
-            } catch (\Exception $e) {
-                Log::error('Notify sales has new report failed' . $e->getMessage());
+            // save images
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
+
+                    Storage::disk('public')->putFileAs($folderPath, $image, $imageName);
+
+                    $imageUrl = '/storage/' . $folderPath . '/' . $imageName;
+
+                    PhotoCollect::create([
+                        'id_collect' => $query->id,
+                        'photourl' => $imageUrl,
+                    ]);
+                }
             }
+
+            NotifySalesNewReportJob::dispatch($query->id, $query->created_at)->delay(now()->addSeconds(5));
+
+            DB::commit();
+            return new ApiResource(true, 'Berhasil menambah data laporan', null);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return new ApiResource(false, 'Terjadi kesalahan saat menambah data', $e->getMessage());
         }
-
-
-        return new ApiResource(true, 'Berhasil menambah data laporan', $query);
     }
 
     public function update(Request $request, $id)
@@ -105,20 +93,25 @@ class ApiSalesController extends Controller
             'keterangan' => 'string|min:3',
         ]);
 
-        if ($validator->fails()) { // Jika validasi gagal
-            return response()->json([ // Kembalikan response
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422); // Kode status 422 untuk validasi gagal
+        if ($validator->fails()) {
+            return new ApiResource(false, 'Validasi gagal', $validator->errors()->first());
         }
 
         $data = $validator->validated();
 
         $query = Sales::find($id);
 
-        $query->update($data);
+        if (!$query) {
+            return new ApiResource(false, 'Data tidak ditemukan', null);
+        }
 
-        return new ApiResource(true, 'Berhasil mengubah data laporan', $query);
+        try {
+            $query->update($data);
+
+            return new ApiResource(true, 'Berhasil mengubah data laporan', null);
+        } catch (\Exception $e) {
+            return new ApiResource(false, 'Terjadi kesalahan saat mengubah data', $e->getMessage());
+        }
     }
 
     public function confirm(Request $request,  $id)
@@ -127,20 +120,19 @@ class ApiSalesController extends Controller
 
         $query = Sales::findOrFail($id);
 
-        if ($query) {
-            try {
-                $query->update([
-                    'status' => 1,
-                    'validate_by' => $validateBy,
-                ]);
+        if (!$query) {
+            return new ApiResource(false, 'Data tidak ditemukan', null);
+        }
 
-                return new ApiResource(true, 'Data berhasil dikonfirmasi', $query);
-            } catch (\Exception $e) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $e->getMessage()
-                ], 500);
-            }
+        try {
+            $query->update([
+                'status' => 1,
+                'validate_by' => $validateBy,
+            ]);
+
+            return new ApiResource(true, 'Data berhasil dikonfirmasi', null);
+        } catch (\Exception $e) {
+            return new ApiResource(false, 'Terjadi kesalahan saat mengonfirmasi data', $e->getMessage());
         }
     }
 
@@ -150,19 +142,20 @@ class ApiSalesController extends Controller
 
         $query = Sales::findOrFail($id);
 
-        if ($query) {
-            try {
-                $query->update([
-                    'status' => 2,
-                    'validate_by' => $validateBy,
-                    'notes' => $request->notes
-                ]);
-            } catch (\Exception $e) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $e->getMessage()
-                ], 500);
-            }
+        if (!$query) {
+            return new ApiResource(false, 'Data tidak ditemukan', null);
+        }
+
+        try {
+            $query->update([
+                'status' => 2,
+                'validate_by' => $validateBy,
+                'notes' => $request->notes
+            ]);
+
+            return new ApiResource(true, 'Data berhasil ditolak', null);
+        } catch (\Exception $e) {
+            return new ApiResource(false, 'Terjadi kesalahan saat menolak data', $e->getMessage());
         }
     }
 
@@ -171,11 +164,15 @@ class ApiSalesController extends Controller
         $query = Sales::findOrFail($id);
 
         if (!$query) { // Jika data tidak ditemukan
-            return response()->json(['success' => false, 'message' => 'Data tidak ditemukan'], 404); // Kembalikan response
+            return new ApiResource(false, 'Data tidak ditemukan', null);
         }
 
-        $query->delete();
+        try {
+            $query->delete();
 
-        return new ApiResource(false, 'Berhasil menghapus data laporan', $query);
+            return new ApiResource(true, 'Berhasil menghapus data laporan', null);
+        } catch (\Exception $e) {
+            return new ApiResource(false, 'Terjadi kesalahan saat menghapus data', $e->getMessage());
+        }
     }
 }
