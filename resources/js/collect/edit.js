@@ -27,9 +27,6 @@ $(document).ready(function () {
       payment_amount_container.removeClass('hidden');
       payment_type_container.removeClass('hidden');
     }
-
-    console.log(`amount: ${payment_amount.val()}`);
-    console.log(`type: ${payment_type.val()}`);
   });
 
   quillEditor(data, true);
