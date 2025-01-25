@@ -1,3 +1,5 @@
+import { showAlert } from "../../utils/alert";
+
 export function deleteData() {
   $('body').on('click', '#delete-btn', async function () {
     let id = $(this).data('id');
@@ -21,30 +23,15 @@ export function deleteData() {
         const response = await axios.delete(`${APP_URL}/api/announcement-api/${id}`);
 
         if (response.data.success) {
-          Swal.fire({
-            icon: 'success',
-            title: response.data.message,
-            showConfirmButton: false,
-            timer: 1000
-          })
+          showAlert('success', response.data.message);
 
           $('#dataTable').DataTable().ajax.reload(null, false);
 
         } else {
-          Swal.fire({
-            icon: 'error',
-            title: response.data.message,
-            showConfirmButton: false,
-            timer: 1000
-          })
+          showAlert('error', response.data.message);
         }
       } catch (error) {
-        Swal.fire({
-          icon: 'error',
-          title: error.message,
-          showConfirmButton: false,
-          timer: 1000
-        })
+        showAlert('error', 'Terjadi kesalahan.', error.message);
       }
     }
 
