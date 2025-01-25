@@ -129,7 +129,3 @@
 		</div>
 	</div>
 @endsection
-@push('script')
-	@yield('scripts')
-	@vite(['resources/js/collect/index.js'])
-@endpush

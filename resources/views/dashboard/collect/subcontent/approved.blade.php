@@ -11,8 +11,9 @@
 		]" />
 	</div>
 @endsection
-@section('scripts')
+@push('script')
 	<script>
 		const index = "{{ route('collect.showdata') }}?s=approved";
 	</script>
-@endsection
+	@vite(['resources/js/collect/index.js'])
+@endpush
