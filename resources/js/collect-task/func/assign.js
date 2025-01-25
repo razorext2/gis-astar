@@ -27,7 +27,7 @@ export async function singleAssign() {
     if (input) {
       try {
         // Mengirim permintaan assign ke server
-        const response = await axios.patch(`${APP_URL}/api/collect-task-api/${id}/assigns`, {
+        const response = await axios.patch(`${APP_URL}/api/collect-task-api/${id}/assign`, {
           assign_to: input,
           assign_by: assign_by
         })
