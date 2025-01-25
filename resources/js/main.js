@@ -1,45 +1,34 @@
-$(document).ready(function () {
-  const $preloader = $("#preloader");
-  $preloader.length && $(window).on("load", () => {
-    $preloader.remove();
-  });
+const preloader = document.querySelector("#preloader");
+preloader && window.addEventListener("load", (() => {
+  preloader.remove()
+}));
+const scrollContainer = document.getElementById("scrollContainer"),
+  nextButton = document.getElementById("nextButton"),
+  prevButton = document.getElementById("prevButton");
 
-  const $scrollContainer = $("#scrollContainer");
-  const $nextButton = $("#nextButton");
-  const $prevButton = $("#prevButton");
+function scrollContent(e) {
+  scrollContainer.scrollBy({
+    left: 300 * e,
+    behavior: "smooth"
+  })
+}
 
-  function scrollContent(direction) {
-    $scrollContainer.animate({
-      scrollLeft: '+=' + (300 * direction)
-    }, 'smooth');
-  }
+function updateButtonVisibility() {
+  const e = scrollContainer.scrollWidth > scrollContainer.clientWidth;
+  nextButton.style.display = prevButton.style.display = e ? "block" : "none"
+}
+nextButton.addEventListener("click", (() => scrollContent(1))), prevButton.addEventListener("click", (() =>
+  scrollContent(-1))), updateButtonVisibility(), window.addEventListener("resize", updateButtonVisibility);
+const themeToggleDarkBtn = document.getElementById("theme-toggle-dark"),
+  themeToggleLightBtn = document.getElementById("theme-toggle-light");
 
-  function updateButtonVisibility() {
-    const isOverflowing = $scrollContainer[0].scrollWidth > $scrollContainer.width();
-    $nextButton.toggle(isOverflowing);
-    $prevButton.toggle(isOverflowing);
-  }
-
-  $nextButton.on("click", () => scrollContent(1));
-  $prevButton.on("click", () => scrollContent(-1));
-
-  updateButtonVisibility();
-  $(window).on("resize", updateButtonVisibility);
-
-  const $themeToggleDarkBtn = $("#theme-toggle-dark");
-  const $themeToggleLightBtn = $("#theme-toggle-light");
-
-  function toggleTheme(isDark) {
-    $("html").toggleClass("dark", isDark);
-    localStorage.setItem("color-theme", isDark ? "dark" : "light");
-    $themeToggleDarkBtn.toggleClass("text-gray-300", isDark).toggleClass("text-gray-200", !isDark);
-    $themeToggleLightBtn.toggleClass("text-gray-700", isDark).toggleClass("text-red-400", !isDark);
-  }
-
-  const isDarkMode = localStorage.getItem("color-theme") === "dark" ||
-    (!("color-theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches);
-
-  toggleTheme(isDarkMode);
-  $themeToggleDarkBtn.on("click", () => toggleTheme(true));
-  $themeToggleLightBtn.on("click", () => toggleTheme(false));
-});
+function toggleTheme(e) {
+  document.documentElement.classList.toggle("dark", e), localStorage.setItem("color-theme", e ? "dark" : "light"),
+    themeToggleDarkBtn.classList.toggle("text-gray-300", e), themeToggleDarkBtn.classList.toggle("text-gray-200", !
+      e), themeToggleLightBtn.classList.toggle("text-gray-700", e), themeToggleLightBtn.classList.toggle(
+        "text-red-400", !e)
+}
+const isDarkMode = "dark" === localStorage.getItem("color-theme") || !("color-theme" in localStorage) && window
+  .matchMedia("(prefers-color-scheme: dark)").matches;
+toggleTheme(isDarkMode), themeToggleDarkBtn.addEventListener("click", (() => toggleTheme(!0))), themeToggleLightBtn
+  .addEventListener("click", (() => toggleTheme(!1)));
