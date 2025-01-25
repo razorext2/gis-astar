@@ -16,11 +16,12 @@ export function changeState() {
       showCancelButton: true,
       confirmButtonText: 'Ubah',
       cancelButtonText: 'Batal',
-      inputValidator: function (value) {
+      preConfirm: (value) => {
         if (!value) {
-          return 'Status harus diisi!';
+          Swal.showValidationMessage('Status harus dipilih!');
+          return false;
         }
-      }
+      },
     });
 
     if (state) {
