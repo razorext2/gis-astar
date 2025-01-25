@@ -11,6 +11,6 @@
 
 	<div class="relative w-full">
 		<x-input.basic class="z-20 rounded-s-none border-s-0" id="{{ $id }}" name="{{ $name }}" type="number"
-			value="{{ $values }}" placeholder="9999999" :labels="false" required />
+			value="{{ $values }}" placeholder="9999999" :labels="false" {{ $attributes }} />
 	</div>
 </div>
