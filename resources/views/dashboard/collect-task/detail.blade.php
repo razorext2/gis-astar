@@ -35,7 +35,7 @@
 
 						<div
 							class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700 lg:col-span-1">
-							<p class="text-sm text-gray-600 dark:text-gray-300">Tanggal Penagihan</p>
+							<p class="text-sm text-gray-600 dark:text-gray-300">Tanggal SR Dibuat</p>
 							<p class="text-navy-700 text-base font-medium dark:text-white">
 								{{ \Carbon\carbon::parse($data->sr_date)->locale('id')->isoFormat('D MMMM YYYY hh:mm:ss') ?? 'N/A' }}
 							</p>
@@ -179,7 +179,8 @@
 									</div>
 
 									<p class="text-sm text-gray-600 dark:text-gray-300">
-										Tanggal: {{ \Carbon\carbon::parse($item->updated_at)->locale('id')->isoFormat('DD MMMM YYYY, HH:MM:ss') }}
+										{{ \Carbon\carbon::parse($item->updated_at)->locale('id')->isoFormat('DD MMMM YYYY, HH:MM:ss') }} |
+										{{ $item->title ?? 'N/A' }}
 									</p>
 									<p class="text-navy-700 text-base font-medium dark:text-white">
 										Oleh: {{ $item->pegawaiRelasi->full_name ?? 'N/A' }}
