@@ -40,7 +40,7 @@ export async function confirmAction() {
               timer: 1500,
             });
             setTimeout(() => {
-              window.location.href = `${APP_URL}/dashboard/collect`;
+              window.location.href = `${APP_URL}/dashboard/collect/submitted`;
             }, 1000);
           } else {
             Swal.fire({
@@ -83,9 +83,8 @@ export async function confirmAction() {
         // For now, just display the message
         try {
           const response = await axios.patch(`${APP_URL}/api/collect-api/${id}/deny`, {
-            "_token": token,
-            "user_id": userID,
-            "notes": text // Send the message with the request
+            user_id: userID,
+            notes: text // Send the message with the request
           });
 
           if (response.data.success) {
@@ -95,7 +94,7 @@ export async function confirmAction() {
               showConfirmButton: false,
               timer: 1500
             });
-            setTimeout(() => window.location.href = `${APP_URL}/dashboard/collect`, 1500);
+            setTimeout(() => window.location.href = `${APP_URL}/dashboard/collect/submitted`, 1500);
           } else {
             Swal.fire({
               icon: "error",
