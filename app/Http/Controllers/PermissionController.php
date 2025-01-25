@@ -25,16 +25,9 @@ class PermissionController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            // Function to clean the date string
-            function cleanDate($dateString)
-            {
-                // Use regex to remove timezone name in parentheses, leaving the GMT offset intact
-                return preg_replace('/\s\(.+\)$/', '', $dateString);
-            }
-
             // Parse the minDate and maxDate from the request after cleaning
-            $minDate = cleanDate($request->input('minDate'));
-            $maxDate = cleanDate($request->input('maxDate'));
+            $minDate = $request->input('minDate');
+            $maxDate = $request->input('maxDate');
 
             // Start building the query
             $query = Permission::get();
@@ -108,7 +101,7 @@ class PermissionController extends Controller
             Permission::create(['name' => $permissionName]);
         }
 
-        
+
 
         return redirect()->route('permissions.index')->with('status', 'Berhasil menambah data role');;
     }

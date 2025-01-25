@@ -41,12 +41,8 @@ class PegawaiController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            function cleanDate($dateString)
-            {
-                return preg_replace('/\s\(.+\)$/', '', $dateString);
-            }
-            $minDate = cleanDate($request->input('minDate'));
-            $maxDate = cleanDate($request->input('maxDate'));
+            $minDate = $request->input('minDate');
+            $maxDate = $request->input('maxDate');
 
             $query = Pegawai::with('golonganRelasi', 'jabatanRelasi')
                 ->select('id', 'kode_pegawai', 'nik_pegawai', 'full_name', 'no_telp', 'jabatan', 'golongan')->get();
