@@ -142,7 +142,6 @@
 
 					<div class="col-span-2 w-full lg:col-span-1" id="payment_type_container">
 						<x-input.select id="payment_type" name="payment_type" :options="[
-						    '0' => 'Tidak ada',
 						    '1' => 'Cash',
 						    '2' => 'Transfer',
 						    '3' => 'Giro',
@@ -152,6 +151,13 @@
 							</x-slot>
 						</x-input.select>
 						<div class="mt-2 hidden text-sm text-red-500" id="alert-payment_type"></div>
+					</div>
+
+					<div class="col-span-2 hidden w-full" id="no_giro_container">
+						<x-input.basic id="no_giro" name="no_giro" :values="$data->no_giro ?? 'N/A'" required placeholder="cth: 1234567890">
+							No. Giro
+						</x-input.basic>
+						<div class="mt-2 hidden text-sm text-red-500" id="alert-no_giro"></div>
 					</div>
 
 					<div class="col-span-2 w-full" id="payment_amount_container">

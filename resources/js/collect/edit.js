@@ -29,6 +29,18 @@ $(document).ready(function () {
     }
   });
 
+  $('#payment_type').on('change', function () {
+    const payment_type = $(this).val();
+    const no_giro_container = $('#no_giro_container');
+
+    if (payment_type == 3) {
+      no_giro_container.removeClass('hidden');
+    } else {
+      no_giro_container.addClass('hidden');
+      $('#no_giro').val('NULL');
+    }
+  });
+
   quillEditor(data, true);
   backCameraStream();
   editDataHandler();

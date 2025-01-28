@@ -25,6 +25,7 @@ class Collector extends Model
         'have_paid',
         'payment_type',
         'payment_amount',
+        'no_giro',
         'validate_by',
         'assign_date',
         'assign_at',

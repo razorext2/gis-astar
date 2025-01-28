@@ -1,4 +1,5 @@
 import { capturedImages } from './cameraStream'; // import capturedImages array
+import { showAlert } from '../../utils/alert';
 
 export function editDataHandler() {
   $('#store').click(async function (e) {
@@ -20,6 +21,7 @@ export function editDataHandler() {
     formData.append("payment_type", $("#payment_type").val());
     formData.append("remaining_bill", $("#remaining_bill").val());
     formData.append("payment_amount", $("#payment_amount").val());
+    formData.append("no_giro", $("#no_giro").val());
     formData.append('_method', 'PATCH');
 
     // Tambahkan gambar ke FormData
@@ -32,32 +34,16 @@ export function editDataHandler() {
       const response = await axios.post(`${APP_URL}/api/collect-api/${id}`, formData);
 
       if (response.data.success) {
-        Swal.fire({
-          icon: "success",
-          title: response.data.message,
-          showConfirmButton: false,
-          timer: 1500
-        });
+        showAlert('success', response.data.message);
         setTimeout(() => window.location.href = `${APP_URL}/dashboard/collect`, 1500);
       } else {
         handleFormErrors(response.data.data);
-        Swal.fire({
-          icon: "error",
-          title: response.data.message,
-          text: "Kamu harus mengisi semua form yang ada.",
-          showConfirmButton: false,
-          timer: 1500
-        });
+        showAlert('error', response.data.message, 'Kamu harus mengisi semua form yang ada.');
         $button.prop('disabled', false);
       }
     } catch (error) {
       console.error('Error:', error);
-      Swal.fire({
-        icon: "error",
-        title: error.response?.data?.message || 'Terjadi kesalahan.',
-        showConfirmButton: false,
-        timer: 1500
-      });
+      showAlert('error', 'Terjadi kesalahan.', error.message);
       $button.prop('disabled', false);
     }
   });

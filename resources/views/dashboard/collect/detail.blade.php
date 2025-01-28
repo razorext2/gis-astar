@@ -250,7 +250,7 @@
 						    } elseif ($data->payment_type == 2) {
 						        $type = 'Transfer';
 						    } elseif ($data->payment_type == 3) {
-						        $type = 'Giro';
+						        $type = "Giro ( $data->no_giro )";
 						    }
 						}
 

@@ -34,6 +34,7 @@ class ApiCollectController extends Controller
             'have_paid' => 'required|integer|min_digits:1',
             'payment_type' => 'required|string|min:1|max:12',
             'payment_amount' => 'required|integer|min_digits:1',
+            'no_giro' => 'nullable|string|min:1|max:128',
             'images' => 'required|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -60,6 +61,7 @@ class ApiCollectController extends Controller
                 'have_paid' => $request->have_paid,
                 'payment_type' => $request->payment_type,
                 'payment_amount' => $request->payment_amount,
+                'no_giro' => $request->no_giro,
                 'status' => 2,
                 'assign_at' => now(),
                 'location' => $request->location
