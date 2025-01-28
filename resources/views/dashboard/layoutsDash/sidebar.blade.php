@@ -152,7 +152,7 @@
 									href="{{ route('collect-task-ppn.index') }}">
 									<x-icons.sale-percent
 										class="{{ Route::is('collect-task-ppn.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
-									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">IDC PPN (SR)</span>
+									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">IDC PPN (FP)</span>
 								</a>
 							</li>
 						@endcan

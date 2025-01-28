@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Report;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CollectResource;
+use App\Http\Resources\ApiResource;
 use App\Jobs\ExportToExcelJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -21,7 +21,7 @@ class CollectorReportController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return new CollectResource(false, 'Validasi gagal', $validator->errors()->first());
+            return new ApiResource(false, 'Validasi gagal', $validator->errors()->first());
         }
 
         $rand = Str::random(8);
@@ -35,7 +35,7 @@ class CollectorReportController extends Controller
         try {
             ExportToExcelJob::dispatch($date, $status, $fileName, $userId)->delay(now()->addSeconds(5));
 
-            return new CollectResource(true, 'Data berhasil di export', 'Proses export sedang berjalan');
+            return new ApiResource(true, 'Data berhasil di export', 'Proses export sedang berjalan');
         } catch (\Exception $e) {
             Log::error('Export failed for user: ' . $userId . ' - Error: ' . $e->getMessage());
         }

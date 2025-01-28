@@ -1,3 +1,5 @@
+import { showAlert } from "../../utils/alert";
+
 export function searchPegawaiHandler() {
   let debounceTimer;
   $('#full_name').on('input', function () {
@@ -16,8 +18,8 @@ export function searchPegawaiHandler() {
               data.forEach((pegawai, index) => {
                 let roundedClass = (index === data.length - 1) ? 'rounded-b-lg' : '';
                 $('#autocomplete-pegawai-results').append(`
-                  <div class="autocomplete-result bg-white border border-gray-300 dark:bg-white p-2.5 divide-y w-full ${roundedClass}" data-fullname="${pegawai.name}" data-id="${pegawai.kode_pegawai}">
-                    ${pegawai.name}
+                  <div class="autocomplete-result bg-white border border-gray-300 dark:bg-white p-2.5 divide-y w-full ${roundedClass}" data-fullname="${pegawai.full_name}" data-id="${pegawai.kode_pegawai}">
+                    ${pegawai.full_name}
                   </div>
                 `);
               });

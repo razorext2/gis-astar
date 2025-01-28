@@ -14,7 +14,7 @@
 					</x-button.danger>
 
 					<h2 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
-						{{ __('Assign Surat Jalan (SR)') }}
+						{{ __('Assign Surat Jalan (FP)') }}
 					</h2>
 
 				</header>
@@ -46,8 +46,8 @@
 
 						<div class="col-span-2 w-full">
 
-							<x-input.basic id="no_sr" name="no_sr" placeholder="SR-XXXXXX">
-								No. SR
+							<x-input.basic id="no_sr" name="no_sr" placeholder="8 digit terakhir faktur pajak...">
+								No. Faktur Pajak
 							</x-input.basic>
 
 							<div class="autocomplete-collect-task-ppn-container" id="autocomplete-collect-task-ppn-container"></div>
@@ -56,9 +56,9 @@
 
 						<div class="col-span-2 w-full">
 
-							<p class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> List SR yang dipilih </p>
+							<p class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> List FP yang dipilih </p>
 							<div class="grid w-full gap-2" id="selected-container">
-								<x-input.basic id="empty" name="empty" value="Belum ada SR yang dipilih..." :labels="false"
+								<x-input.basic id="empty" name="empty" value="Belum ada FP yang dipilih..." :labels="false"
 									readonly></x-input.basic>
 								{{-- disini harusnya --}}
 							</div>
