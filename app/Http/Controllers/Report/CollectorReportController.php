@@ -27,13 +27,15 @@ class CollectorReportController extends Controller
         $rand = Str::random(8);
 
         $date = $request->input("date");
-        $status = $request->input("status");
+        $status = $request->input("reportStatus");
+        $type = $request->input("type");
 
         $fileName = "$rand-laporanKolektor-$date.xlsx";
         $userId = request()->user()->id;
 
         try {
-            ExportToExcelJob::dispatch($date, $status, $fileName, $userId)->delay(now()->addSeconds(5));
+
+            ExportToExcelJob::dispatch($date, $status, $type, $fileName, $userId)->delay(now()->addSeconds(5));
 
             return new ApiResource(true, 'Data berhasil di export', 'Proses export sedang berjalan');
         } catch (\Exception $e) {

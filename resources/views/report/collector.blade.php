@@ -7,7 +7,14 @@
 			<th style="border: 1px solid black; font-weight: bold;">
 				{{ $date }}
 			</th>
-			<th style="border: 1px solid black; font-weight: bold;" colspan="11">IDC Non</th>
+			<th style="border: 1px solid black; font-weight: bold;" colspan="11">
+
+				{{ match ($type) {
+				    'idcppn' => 'IDC PPN ',
+				    'idcnonppn' => 'IDC Non PPN',
+				} }}
+
+			</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -33,12 +40,23 @@
 			<tr>
 				<td style="border:1px solid black; text-align:center">{{ $i++ }}</td>
 				<td style="border:1px solid black;">{{--  --}}</td>
-				<td style="border:1px solid black; word-wrap:normal">{{ $item->collectTaskRelasi->customer_name ?? '' }}</td>
+				<td style="border:1px solid black; word-wrap:normal">
+					{{ match ($type) {
+					    'idcppn' => $item->collectTaskPpnRelasi->customer_name,
+					    'idcnonppn' => $item->collectTaskRelasi->customer_name,
+					} }}
+				</td>
 				<td style="border:1px solid black; text-align:center">{{ $item->no_sr ?? '' }}</td>
 				<td style="border:1px solid black;">{{ $item->payment_amount ?? '' }}</td>
 				<td style="border:1px solid black;">{{--  --}}</td>
 				<td style="border:1px solid black;">{{ $item->keterangan }}</td>
-				<td style="border:1px solid black;">{{ $item->payment_type }}</td>
+				<td style="border:1px solid black;">
+					{{ match ($item->payment_type) {
+					    0 => 'Cash',
+					    1 => 'Transfer',
+					    2 => 'Giro/cek',
+					} }}
+				</td>
 				<td style="border:1px solid black;">{{--  --}}</td>
 				<td style="border:1px solid black;">{{--  --}}</td>
 				<td style="border:1px solid black;">{{--  --}}</td>

@@ -1,3 +1,5 @@
+import { showAlert } from "../../utils/alert";
+
 /**
  * Handles the export functionality for the report.
  * Prompts the user to select a date and report type, then exports the report.
@@ -15,14 +17,6 @@ export function exportHandler() {
         lastWeek.setDate(lastWeek.getDate() - 3);
         Swal.getInput().min = lastWeek.toISOString().split("T")[0];
       },
-      preConfirm: (date) => {
-        if (!date) {
-          Swal.showValidationMessage("Tanggal tidak boleh kosong!");
-          return false;
-        }
-
-        return date;
-      }
     });
 
     if (date) {
@@ -49,40 +43,43 @@ export function exportHandler() {
       });
 
       if (reportStatus) {
-        try {
-          const response = await axios.get(`${APP_URL}/export/collector/`, {
-            params: {
-              date,
-              reportStatus,
+        const { value: type } = await Swal.fire({
+          input: "select",
+          title: "Pilih tipe tagihan",
+          inputOptions: {
+            'idcnonppn': 'IDC Non PPn',
+            'idcppn': 'IDC PPn',
+          },
+          inputPlaceholder: 'Pilih tipe tagihan',
+          showCancelButton: true,
+          preConfirm: (value) => {
+            if (!value) {
+              Swal.showValidationMessage("Tipe tagihan harus dipilih!");
+              return false;
             }
-          });
 
-          if (response.data.success) {
-            Swal.fire({
-              title: response.data.message,
-              text: response.data.data,
-              showConfirmButton: false,
-              icon: "success",
-              timer: 1500,
-            });
-          } else {
-            Swal.fire({
-              title: response.data.message,
-              text: response.data.data,
-              showConfirmButton: false,
-              icon: "error",
-              timer: 1500,
-            });
           }
-        } catch (error) {
-          Swal.fire({
-            title: error.message,
-            showConfirmButton: false,
-            icon: "error",
-            timer: 1500,
-          });
-        }
+        })
 
+        if (type) {
+          try {
+            const response = await axios.get(`${APP_URL}/export/collector/`, {
+              params: {
+                date,
+                reportStatus,
+                type,
+              }
+            });
+
+            if (response.data.success) {
+              showAlert('success', response.data.message, response.data.data);
+            } else {
+              showAlert('success', response.data.message, response.data.data);
+            }
+          } catch (error) {
+            showAlert('error', error.message, null);
+          }
+        }
 
       }
     }
