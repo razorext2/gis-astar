@@ -23,7 +23,9 @@ use App\Http\Controllers\AllowanceController;
 use App\Http\Controllers\DeductionController;
 use App\Http\Controllers\CollectController;
 use App\Http\Controllers\CollectTaskController;
+use App\Http\Controllers\CollectTaskPpnController;
 use App\Http\Controllers\Report\CollectorReportController;
+use App\Models\CollectTaskPpn;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Artisan;
@@ -70,9 +72,9 @@ Route::middleware('auth')->group(function () {
     Route::prefix('proxy')->as('')->group(function () {
         // fetchSR IDC NON PPN
         Route::get('idc/tagihan', [ProxyController::class, 'fetchIDCNon'])->name('fetch.idc.nonppn');
-        // Route::get('idc/piutang', [ProxyController::class, 'fetchIDCNonPiutang'])->name('fetch.icd.nonppn.piutang');
 
         // fetchSR IDC PPN
+        Route::get('idc/ppn', [ProxyController::class, 'fetchIDCPpn'])->name('fetch.idc.ppn');
 
         // fetchSR IDY NON PPN
 
@@ -131,6 +133,21 @@ Route::middleware('auth')->group(function () {
         Route::get('collect-task/assign', [CollectTaskController::class, 'assign'])->name('collect-task.assign');
         Route::get('collect-task/mass-assign', [CollectTaskController::class, 'massAssign'])->name('collect-task.mass-assign');
         Route::resource('collect-task', CollectTaskController::class)->except(['store', 'update', 'destroy']);
+
+        // route collect task ppn (idc ppn)
+        // tampilkan semua data where assign_to = null
+        Route::get('collect-task-ppn/show', [CollectTaskPpnController::class, 'showdata'])->name('collect-task-ppn.showdata');
+        // tampilkan semua data where status = 1 (berjalan)
+        Route::get('collect-task-ppn/on-progress', [CollectTaskPpnController::class, 'onProgress'])->name('collect-task-ppn.onprogress');
+        // tampilkan semua data where status = 2 (selesai)
+        Route::get('collect-task-ppn/completed', [CollectTaskPpnController::class, 'completed'])->name('collect-task-ppn.completed');
+        // tampilkan semua data where status = 3 (tertunda)
+        Route::get('collect-task-ppn/pending', [CollectTaskPpnController::class, 'pending'])->name('collect-task-ppn.pending');
+        // route collect task
+        Route::get('collect-task-ppn/autocomplete', [CollectTaskPpnController::class, 'autocomplete'])->name('collect-task-ppn.autocomplete');
+        Route::get('collect-task-ppn/assign', [CollectTaskPpnController::class, 'assign'])->name('collect-task-ppn.assign');
+        Route::get('collect-task-ppn/mass-assign', [CollectTaskPpnController::class, 'massAssign'])->name('collect-task-ppn.mass-assign');
+        Route::resource('collect-task-ppn', CollectTaskPpnController::class)->except(['store', 'update', 'destroy']);
 
         // route dayoff
         Route::post('dayoff/upload-image', [DayoffController::class, 'uploadImage'])->name('dayoff.uploadimage');

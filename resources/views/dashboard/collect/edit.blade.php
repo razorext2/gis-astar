@@ -35,7 +35,12 @@
 
 					<div class="col-span-2 w-full lg:col-span-1">
 						<x-input.basic class="cursor-not-allowed" id="title" name="title"
-							value="{{ $data->collectTaskRelasi->customer_name ?? 'N/A' }}" readonly>
+							value="{{ match ($data->bill_type) {
+							    'idcnonppn' => $data->collectTaskRelasi->customer_name,
+							    'idcppn' => $data->collectTaskPpnRelasi->customer_name,
+							    default => 'N/A',
+							} }}"
+							readonly>
 							Nama Customer
 						</x-input.basic>
 					</div>
@@ -49,14 +54,32 @@
 
 					<div class="col-span-2 w-full lg:col-span-1">
 						<x-input.basic class="cursor-not-allowed" id="total_bill" name="total_bill"
-							value="{{ Number::currency($data->collectTaskRelasi->total_bill ?? 0, 'IDR', 'id') }}" readonly>
+							value="{{ Number::currency(
+							    match ($data->bill_type) {
+							        'idcnonppn' => $data->collectTaskRelasi->total_bill,
+							        'idcppn' => $data->collectTaskPpnRelasi->total_bill,
+							        default => 0,
+							    },
+							    'IDR',
+							    'id',
+							) }}"
+							readonly>
 							Total Tagihan
 						</x-input.basic>
 					</div>
 
 					<div class="col-span-2 w-full lg:col-span-1">
 						<x-input.basic class="cursor-not-allowed" id="remaining_bill" name="remaining_bill"
-							value="{{ Number::currency($data->collectTaskRelasi->remaining_bill ?? 0, 'IDR', 'id') }}" readonly>
+							value="{{ Number::currency(
+							    match ($data->bill_type) {
+							        'idcnonppn' => $data->collectTaskRelasi->remaining_bill,
+							        'idcppn' => $data->collectTaskPpnRelasi->remaining_bill,
+							        default => 0,
+							    },
+							    'IDR',
+							    'id',
+							) }}"
+							readonly>
 							Sisa Tagihan
 						</x-input.basic>
 					</div>

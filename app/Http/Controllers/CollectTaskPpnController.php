@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CollectTask;
+use App\Models\CollectTaskPpn;
 use App\Models\Collector;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -10,39 +10,39 @@ use Illuminate\Support\Number;
 use Yajra\DataTables\Facades\DataTables;
 use Carbon\Carbon;
 
-class CollectTaskController extends Controller
+class CollectTaskPpnController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:collect-task-list', ['only' => 'index']);
-        $this->middleware('permission:collect-task-create', ['only' => 'create']);
-        $this->middleware('permission:collect-task-edit', ['only' => 'edit']);
-        $this->middleware('permission:collect-task-assign', ['only' => 'assign']);
+        $this->middleware('permission:collect-task-ppn-list', ['only' => 'index']);
+        $this->middleware('permission:collect-task-ppn-create', ['only' => 'create']);
+        $this->middleware('permission:collect-task-ppn-edit', ['only' => 'edit']);
+        $this->middleware('permission:collect-task-ppn-assign', ['only' => 'assign']);
     }
 
     public function index()
     {
-        return view('dashboard.collect-task.subcontent.main');
+        return view('dashboard.collect-task-ppn.subcontent.main');
     }
 
     public function onProgress()
     {
-        return view('dashboard.collect-task.subcontent.on-progress');
+        return view('dashboard.collect-task-ppn.subcontent.on-progress');
     }
 
     public function pending()
     {
-        return view('dashboard.collect-task.subcontent.pending');
+        return view('dashboard.collect-task-ppn.subcontent.pending');
     }
 
     public function completed()
     {
-        return view('dashboard.collect-task.subcontent.completed');
+        return view('dashboard.collect-task-ppn.subcontent.completed');
     }
 
     public function showdata(Request $request)
     {
-        $query = CollectTask::query()
+        $query = CollectTaskPpn::query()
             ->with(['pegawaiRelasi:id,kode_pegawai,full_name']);
 
         $status = $request->get('status');
@@ -68,8 +68,9 @@ class CollectTaskController extends Controller
                 ->addIndexColumn()
                 ->editColumn('sr_type', function ($data) {
                     return view('components.dashboard.name-w-code', [
-                        'name' => $data->no_sr ?? 'N/A',
-                        'code' => $data->sr_type ?? 'N/A'
+                        'name' => $data->tax_invoice ?? 'N/A',
+                        'code' => $data->sr_type ?? 'N/A',
+                        'item3' => $data->sales_invoice ?? 'N/A',
                     ]);
                 })
                 ->editColumn('customer_name', function ($data) {
@@ -98,7 +99,7 @@ class CollectTaskController extends Controller
                     $actions = [
                         [
                             'id' => 'show-btn',
-                            'action' => route('collect-task.show', $data->id),
+                            'action' => route('collect-task-ppn.show', $data->id),
                             'label' => 'Detail'
                         ],
                     ];
@@ -116,7 +117,7 @@ class CollectTaskController extends Controller
                             'label' => 'Ubah jadwal'
                         ];
 
-                        if (auth()->user()->can('collect-task-delete')) {
+                        if (auth()->user()->can('collect-task-ppn-delete')) {
                             $actions[] = [
                                 'id' => 'delete-btn',
                                 'action' => 'javascript:void(0)',
@@ -133,7 +134,7 @@ class CollectTaskController extends Controller
                 ->editColumn('assign_date', function ($data) {
                     return view('components.dashboard.date-w-name', [
                         'date' => Carbon::parse($data->assign_date)->locale('id')->isoFormat('DD MMM YYYY'),
-                        'name' => $data->assign_to ? 'Oleh: ' . $data->pegawaiRelasi->full_name : 'Belum ditentukan',
+                        'name' => $data->assign_to ? 'Oleh: ' . $data->userRelasi->name : 'Belum ditentukan',
                     ]);
                 })
                 ->editColumn('customer_telp', function ($data) {
@@ -166,13 +167,13 @@ class CollectTaskController extends Controller
 
     public function create()
     {
-        return view('dashboard.collect-task.add');
+        return view('dashboard.collect-task-ppn.add');
     }
 
     public function show($id)
     {
-        $data = CollectTask::findOrFail($id);
-        $no_sr = $data->no_sr;
+        $data = CollectTaskPpn::findOrFail($id);
+        $no_sr = $data->tax_invoice;
 
         $collect = Collector::where('no_sr', '=', $no_sr)
             ->orderBy('created_at', 'asc')
@@ -180,12 +181,12 @@ class CollectTaskController extends Controller
 
         $user = User::select('kode_pegawai', 'name')->where('kode_pegawai', $data->validate_by)->first();
 
-        return view('dashboard.collect-task.detail', compact('data', 'collect', 'user'));
+        return view('dashboard.collect-task-ppn.detail', compact('data', 'collect', 'user'));
     }
 
     public function massAssign()
     {
-        return view('dashboard.collect-task.mass-assign');
+        return view('dashboard.collect-task-ppn.mass-assign');
     }
 
     public function autocomplete(Request $request)
@@ -193,7 +194,7 @@ class CollectTaskController extends Controller
         $search = $request->input('query'); // Mengambil input dari request
 
         // Cari nama pengguna berdasarkan input
-        $data = CollectTask::select(['id', 'no_sr', 'customer_name', 'customer_address'])
+        $data = CollectTaskPpn::select(['id', 'no_sr', 'customer_name', 'customer_address'])
             ->where('no_sr', 'LIKE', "%{$search}%")
             ->where('assign_to', '=', null)
             ->limit(10)

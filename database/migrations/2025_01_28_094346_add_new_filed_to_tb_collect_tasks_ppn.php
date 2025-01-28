@@ -1,0 +1,29 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('tb_collect_tasks_ppn', function (Blueprint $table) {
+            $table->string('sales_invoice')->nullable()->after('no_sr');
+            $table->string('tax_invoice')->nullable()->after('sales_invoice');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('tb_collect_tasks_ppn', function (Blueprint $table) {
+            //
+        });
+    }
+};

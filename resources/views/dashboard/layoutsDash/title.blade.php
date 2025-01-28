@@ -6,6 +6,7 @@
 	    'division.*' => 'Divisi',
 	    'collect.*' => 'Laporan Kolektor',
 	    'collect-task.*' => 'Tagihan IDC Non PPN',
+	    'collect-task-ppn.*' => 'Tagihan IDC PPN',
 	    'placement.*' => 'Penempatan',
 	    'dayoff.*' => 'Pengajuan Off',
 	    'attendanceIn.*' => 'Absen Masuk',

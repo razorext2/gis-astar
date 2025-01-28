@@ -13,6 +13,7 @@ class Collector extends Model
     protected $table = 'tb_collect';
     protected $fillable = [
         'no_sr',
+        'bill_type',
         'kode_pegawai',
         'title',
         'keterangan',
@@ -135,8 +136,12 @@ class Collector extends Model
      */
     public function collectTaskRelasi()
     {
-
         return $this->belongsTo(CollectTask::class, 'no_sr', 'no_sr');
+    }
+
+    public function collectTaskPpnRelasi()
+    {
+        return $this->belongsTo(CollectTaskPpn::class, 'no_sr', 'tax_invoice');
     }
 
     /**

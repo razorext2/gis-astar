@@ -36,9 +36,15 @@
 				<div class="grid gap-2 md:grid-cols-2">
 					<div
 						class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
-						<p class="text-sm text-gray-600 dark:text-gray-300">No. SR</p>
+						<p class="text-sm text-gray-600 dark:text-gray-300">No. Tagihan</p>
 						<p class="text-navy-700 text-base font-medium dark:text-white">
 							{{ $data->no_sr ?? 'N/A' }}
+							(
+							{{ match ($data->bill_type) {
+							    'idcppn' => $data->collectTaskPpnRelasi->sales_invoice,
+							    default => 'N/A',
+							} }}
+							)
 						</p>
 					</div>
 
@@ -46,7 +52,17 @@
 						class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
 						<p class="text-sm text-gray-600 dark:text-gray-300">Nama Customer</p>
 						<p class="text-navy-700 text-base font-medium dark:text-white">
-							{{ $data->collectTaskRelasi->customer_name ?? 'N/A' }} / {{ $data->collectTaskRelasi->sr_type ?? 'N/A' }}
+							{{ match ($data->bill_type) {
+							    'idcnonppn' => $data->collectTaskRelasi->customer_name,
+							    'idcppn' => $data->collectTaskPpnRelasi->customer_name,
+							    default => 'N/A',
+							} }}
+							/
+							{{ match ($data->bill_type) {
+							    'idcnonppn' => $data->collectTaskRelasi->sr_type,
+							    'idcppn' => $data->collectTaskPpnRelasi->sr_type,
+							    default => 'N/A',
+							} }}
 						</p>
 					</div>
 
@@ -86,7 +102,15 @@
 						class="flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
 						<p class="text-sm text-gray-600 dark:text-gray-300">Total Tagihan</p>
 						<p class="text-navy-700 text-base font-medium dark:text-white">
-							{{ Number::currency($data->collectTaskRelasi->total_bill ?? 0, 'IDR', 'id') ?? 'N/A' }}
+							{{ Number::currency(
+							    match ($data->bill_type) {
+							        'idcnonppn' => $data->collectTaskRelasi->total_bill,
+							        'idcppn' => $data->collectTaskPpnRelasi->total_bill,
+							        default => 0,
+							    },
+							    'IDR',
+							    'id',
+							) }}
 						</p>
 					</div>
 
@@ -94,7 +118,15 @@
 						class="flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
 						<p class="text-sm text-gray-600 dark:text-gray-300">Sisa Tagihan</p>
 						<p class="text-navy-700 text-base font-medium dark:text-white">
-							{{ Number::currency($data->collectTaskRelasi->remaining_bill ?? 0, 'IDR', 'id') ?? 'N/A' }}
+							{{ Number::currency(
+							    match ($data->bill_type) {
+							        'idcnonppn' => $data->collectTaskRelasi->remaining_bill,
+							        'idcppn' => $data->collectTaskPpnRelasi->remaining_bill,
+							        default => 0,
+							    },
+							    'IDR',
+							    'id',
+							) }}
 						</p>
 					</div>
 

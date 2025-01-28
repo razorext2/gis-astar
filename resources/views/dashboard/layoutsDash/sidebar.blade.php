@@ -115,14 +115,14 @@
 				</ul>
 			</li>
 
-			@if (auth()->user()->hasAnyPermission(['collect-task-list']))
-				<li x-data="{ lokasi: {{ Route::is('collect-task.*') ? 'true' : 'false' }} }">
+			@if (auth()->user()->hasAnyPermission(['collect-task-list', 'collect-task-list-ppn']))
+				<li x-data="{ lokasi: {{ Route::is('collect-task.*') || Route::is('collect-task-ppn.*') ? 'true' : 'false' }} }">
 					<button
-						class="{{ Route::is('collect-task.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-[#18181b] hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
+						class="{{ Route::is('collect-task.*') || Route::is('collect-task-ppn.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-[#18181b] hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
 						type="button" aria-controls="lokasi-dropdown" @click="lokasi = !lokasi" :aria-expanded="lokasi">
 
 						<x-icons.wallet
-							class="{{ Route::is('collect-task.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
+							class="{{ Route::is('collect-task.*') || Route::is('collect-task-ppn.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
 
 						<span class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">Piutang</span>
 
@@ -138,23 +138,24 @@
 								<a
 									class="{{ Route::is('collect-task.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
 									href="{{ route('collect-task.index') }}">
-									<x-icons.sale-percent
+									<x-icons.cash
 										class="{{ Route::is('collect-task.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
 									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">IDC Non PPN (SR)</span>
 								</a>
 							</li>
 						@endcan
 
-						{{-- @can('collect-task-list') --}}
-						<li>
-							<a
-								class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
-								href="#">
-								<x-icons.landmark class="h-6 w-6 text-gray-400 group-hover:text-red-600" />
-								<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">IDC PPN (FP)</span>
-							</a>
-						</li>
-						{{-- @endcan --}}
+						@can('collect-task-ppn-list')
+							<li>
+								<a
+									class="{{ Route::is('collect-task-ppn.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									href="{{ route('collect-task-ppn.index') }}">
+									<x-icons.sale-percent
+										class="{{ Route::is('collect-task-ppn.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
+									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">IDC PPN (SR)</span>
+								</a>
+							</li>
+						@endcan
 					</ul>
 				</li>
 			@endif

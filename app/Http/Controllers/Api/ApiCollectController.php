@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Collector;
 use App\Models\CollectTask;
+use App\Models\CollectTaskPpn;
 use App\Models\PhotoCollect;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApiResource;
@@ -119,8 +120,11 @@ class ApiCollectController extends Controller
         // Decrypt user_id
         $validate_by = Crypt::decryptString($request->input('user_id'));
 
-        // Cari data task
-        $task = CollectTask::where('no_sr', $query->no_sr)->first();
+        $task = match ($query->bill_type) {
+            'idcnonppn' => CollectTask::where('no_sr', $query->no_sr)->first(),
+            'idcppn' => CollectTaskPpn::where('tax_invoice', $query->no_sr)->first(),
+            default => null,
+        };
 
         if (!$task) {
             return new ApiResource(false, 'Nomor tagihan tidak ditemukan', null);
@@ -179,11 +183,19 @@ class ApiCollectController extends Controller
         try {
             DB::beginTransaction();
 
-            CollectTask::where('no_sr', $query->no_sr)->update([
-                'assign_by' => null,
-                'assign_to' => null,
-                'bill_status' => 0,
-            ]);
+            match ($query->bill_type) {
+                'idcnonppn' => CollectTask::where('no_sr', $query->no_sr)->update([
+                    'assign_by' => null,
+                    'assign_to' => null,
+                    'bill_status' => 0,
+                ]),
+                'idcppn' => CollectTaskPpn::where('tax_invoice', $query->no_sr)->update([
+                    'assign_by' => null,
+                    'assign_to' => null,
+                    'bill_status' => 0,
+                ]),
+                default => null,
+            };
 
             $query->update([
                 'status' => 3,

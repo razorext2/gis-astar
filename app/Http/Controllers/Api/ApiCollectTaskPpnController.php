@@ -5,19 +5,21 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApiResource;
 use App\Jobs\NotifyCollectorNewAssignedJob;
-use App\Models\CollectTask;
+use App\Models\CollectTaskPpn;
 use App\Models\Collector;
 use App\Models\Pegawai;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class ApiCollectTaskController extends Controller
+class ApiCollectTaskPpnController extends Controller
 {
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'no_sr' => 'required|string|min:3|max:16',
+            'sales_invoice' => 'required|string|min:3',
+            'tax_invoice' => 'required|string|min:3',
             'sr_type' => 'required|string',
             'sr_date' => 'required|date',
             'customer_name' => 'required|string|min:5',
@@ -37,7 +39,7 @@ class ApiCollectTaskController extends Controller
 
         $data = $validator->validated();
 
-        $task = CollectTask::withTrashed()->where('no_sr', '=', $data['no_sr'])->first();
+        $task = CollectTaskPpn::withTrashed()->where('no_sr', '=', $data['no_sr'])->first();
 
         try {
             DB::beginTransaction();
@@ -58,7 +60,7 @@ class ApiCollectTaskController extends Controller
 
                 $query = $task;
             } else {
-                $query = CollectTask::create($data);
+                $query = CollectTaskPpn::create($data);
             }
 
             DB::commit();
@@ -71,7 +73,7 @@ class ApiCollectTaskController extends Controller
 
     public function getSR($no_sr)
     {
-        $query = CollectTask::select('*')
+        $query = CollectTaskPpn::select('*')
             ->where('no_sr', $no_sr)
             ->first();
 
@@ -92,7 +94,7 @@ class ApiCollectTaskController extends Controller
             return new ApiResource(false, 'Validasi gagal', $validator->errors()->first());
         }
 
-        $query = CollectTask::find($id);
+        $query = CollectTaskPpn::find($id);
 
         if (!$query) {
             return new ApiResource(false, 'Tagihan tidak ditemukan', null);
@@ -127,7 +129,7 @@ class ApiCollectTaskController extends Controller
             return new ApiResource(false, "Kolektor dengan kode jari $request->assign_to, tidak ditemukan.", null);
         }
 
-        $query = CollectTask::find($id);
+        $query = CollectTaskPpn::find($id);
 
         if (!$query) {
             return new ApiResource(false, "Tagihan dengan kode $id tidak ditemukan", null);
@@ -153,8 +155,8 @@ class ApiCollectTaskController extends Controller
             };
 
             Collector::create([
-                'bill_type' => 'idcnonppn',
-                'no_sr' => $query->no_sr,
+                'bill_type' => 'idcppn',
+                'no_sr' => $query->tax_invoice,
                 'kode_pegawai' => $request->assign_to,
                 'title' => $sr_type,
                 'location' => $query->customer_address,
@@ -189,18 +191,18 @@ class ApiCollectTaskController extends Controller
         try {
             DB::beginTransaction();
 
-            CollectTask::whereIn('no_sr', $request->sr_data)->update([
+            CollectTaskPpn::whereIn('no_sr', $request->sr_data)->update([
                 'bill_status' => 3,
                 'assign_to' => $request->kode_pegawai,
                 'assign_by' => $request->assign_by,
             ]);
 
-            $query = CollectTask::whereIn('no_sr', $request->sr_data)->get();
+            $query = CollectTaskPpn::whereIn('no_sr', $request->sr_data)->get();
 
             foreach ($query as $data) {
                 $collector = Collector::create([
-                    'bill_type' => 'idcnonppn',
-                    'no_sr' => $data->no_sr,
+                    'bill_type' => 'idcppn',
+                    'no_sr' => $data->tax_invoice,
                     'kode_pegawai' => $request->kode_pegawai,
                     'title' => $data->customer_name,
                     'location' => $data->customer_address,
@@ -237,7 +239,7 @@ class ApiCollectTaskController extends Controller
 
         $data = $request->all();
 
-        $query = CollectTask::find($id);
+        $query = CollectTaskPpn::find($id);
 
         if (!$query) {
             return new ApiResource(false, 'Tagihan tidak ditemukan', 'Tagihan yang ingin direschedule tidak ditemukan');
@@ -256,7 +258,7 @@ class ApiCollectTaskController extends Controller
 
     public function destroy(string $id)
     {
-        $query = CollectTask::find($id);
+        $query = CollectTaskPpn::find($id);
 
         if (!$query) {
             return new ApiResource(false, 'Tagihan tidak ditemukan', null);

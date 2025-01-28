@@ -43,7 +43,7 @@ class CollectController extends Controller
     public function showdata(Request $request)
     {
         $query = Collector::query()
-            ->with(['pegawaiRelasi:kode_pegawai,full_name', 'collectTaskRelasi'])
+            ->with(['pegawaiRelasi:kode_pegawai,full_name', 'collectTaskRelasi', 'collectTaskPpnRelasi'])
             ->whereNull('deleted_at');
 
         if (!Auth::user()->can('collect-approve')) {
@@ -83,7 +83,12 @@ class CollectController extends Controller
                 })
                 ->editColumn('title', function ($data) {
                     return view('components.dashboard.title-w-status', [
-                        'title' => $data->collectTaskRelasi->customer_recipient ?? 'N/A',
+                        'title' =>
+                        match ($data->bill_type) {
+                            'idcnonppn' => $data->collectTaskRelasi->customer_recipient ?? 'nonPpn',
+                            'idcppn' => $data->collectTaskPpnRelasi->customer_recipient,
+                            default => 'N/A'
+                        },
                         'status' => $data->status ?? 'N/A',
                         'item3' => $data->location ?? 'N/A'
                     ]);
@@ -239,7 +244,7 @@ class CollectController extends Controller
     public function edit($id)
     {
         $data = Cache::remember('collector_data_' . $id, 1800, function () use ($id) {
-            return Collector::with('photoCollectRelasi', 'pegawaiRelasi', 'collectTaskRelasi')->findOrFail($id);
+            return Collector::with('photoCollectRelasi', 'pegawaiRelasi', 'collectTaskRelasi', 'collectTaskPpnRelasi')->findOrFail($id);
         });
 
         return view('dashboard.collect.edit', compact('data'));

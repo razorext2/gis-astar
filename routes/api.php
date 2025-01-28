@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\ApiAnnouncementController;
 use App\Http\Controllers\Api\ApiAttendanceController;
 use App\Http\Controllers\Api\ApiCollectController;
 use App\Http\Controllers\Api\ApiCollectTaskController;
+use App\Http\Controllers\Api\ApiCollectTaskPpnController;
 use App\Http\Controllers\Api\ApiDayoffController;
 use App\Http\Controllers\Api\ApiPegawaiController;
 use App\Http\Controllers\Api\ApiSalesController;
@@ -29,6 +30,14 @@ Route::patch('collect-task-api/{id}/assign', [ApiCollectTaskController::class, '
 Route::patch('collect-task-api/mass-assign', [ApiCollectTaskController::class, 'massAssignProcess'])->name('collect-task-api.mass-assign');
 Route::get('collect-task-api/getSR/{no_sr}', [ApiCollectTaskController::class, 'getSR'])->name('collect-task-api.getsr');
 Route::apiResource('collect-task-api', ApiCollectTaskController::class)->except(['index', 'show']);
+
+// collect task ppn
+Route::patch('collect-task-ppn-api/{id}/reschedule', [ApiCollectTaskPpnController::class, 'reschedule'])->name('collect-task-ppn-api.reschedule');
+Route::patch('collect-task-ppn-api/{id}/validate', [ApiCollectTaskPpnController::class, 'validateTask'])->name('collect-task-ppn-api.validate');
+Route::patch('collect-task-ppn-api/{id}/assign', [ApiCollectTaskPpnController::class, 'assignProcess'])->name('collect-task-ppn-api.assign');
+Route::patch('collect-task-ppn-api/mass-assign', [ApiCollectTaskPpnController::class, 'massAssignProcess'])->name('collect-task-ppn-api.mass-assign');
+Route::get('collect-task-ppn-api/getSR/{no_sr}', [ApiCollectTaskPpnController::class, 'getSR'])->name('collect-task-ppn-api.getsr');
+Route::apiResource('collect-task-ppn-api', ApiCollectTaskPpnController::class)->except(['index', 'show']);
 
 // laporan kolektor
 Route::patch('collect-api/{id}/confirm', [ApiCollectController::class, 'confirmCollect'])->name('collect-api.confirm');

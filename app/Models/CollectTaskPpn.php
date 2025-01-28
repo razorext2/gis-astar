@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class CollectTask extends Model
+class CollectTaskPpn extends Model
 {
-    // soft delete
     use SoftDeletes;
-
-    protected $table = "tb_collect_tasks";
+    protected $table = "tb_collect_tasks_ppn";
     protected $fillable = [
         'no_sr',
+        'sales_invoice',
+        'tax_invoice',
         'collect_type',
         'sr_type',
         'sr_date',
@@ -28,14 +28,13 @@ class CollectTask extends Model
         'assign_to',
         'assign_date',
         'bill_status',
-        'validate_by'
+        'validate_by',
     ];
+
     protected $attributes = [
-        // set nilai default setiap insert
         'assign_by' => null,
         'bill_status' => 0,
     ];
-    protected $dates = ['deleted_at'];
 
     public function pegawaiRelasi()
     {
