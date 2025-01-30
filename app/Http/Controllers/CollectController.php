@@ -85,8 +85,8 @@ class CollectController extends Controller
                     return view('components.dashboard.title-w-status', [
                         'title' =>
                         match ($data->bill_type) {
-                            'idcnonppn' => $data->collectTaskRelasi->customer_recipient ?? 'nonPpn',
-                            'idcppn' => $data->collectTaskPpnRelasi->customer_recipient,
+                            'idcnonppn' => $data->collectTaskRelasi->customer_recipient ?? 'N/A',
+                            'idcppn' => $data->collectTaskPpnRelasi->customer_recipient ?? 'N/A',
                             default => 'N/A'
                         },
                         'status' => $data->status ?? 'N/A',
