@@ -83,13 +83,12 @@ class CollectController extends Controller
                 })
                 ->editColumn('title', function ($data) {
                     return view('components.dashboard.title-w-status', [
-                        'title' =>
-                        match ($data->bill_type) {
-                            'idcnonppn' => $data->collectTaskRelasi->customer_recipient ?? 'N/A',
-                            'idcppn' => $data->collectTaskPpnRelasi->customer_recipient ?? 'N/A',
-                            'idyppn' => $data->collectIdyPpnRelasi->customer_recipient ?? 'N/A',
-                            default => 'N/A'
-                        },
+                        'title' => match ($data->bill_type) {
+                            'idcnonppn' => strtoupper($data->collectTaskRelasi->customer_recipient ?? 'N/A'),
+                            'idcppn' => strtoupper($data->collectTaskPpnRelasi->customer_recipient ?? 'N/A'),
+                            'idyppn' => strtoupper($data->collectIdyPpnRelasi->customer_recipient ?? 'N/A'),
+                            default => 'N/A',
+                        } . " ( " . strtoupper($data->bill_type ?? 'N/A') . " )",
                         'status' => $data->status ?? 'N/A',
                         'item3' => $data->location ?? 'N/A'
                     ]);
