@@ -110,7 +110,7 @@
 						{
 							coords: L.latLng({{ $data->latitude ? $data->latitude : '3.591516090416829' }},
 								{{ $data->longitude ? $data->longitude : '98.66902828216554' }}),
-							name: '{{ $data->location ?? 'N/A' }}' // Ganti 'location_name' dengan nama lokasi atau deskripsi lain
+							name: '{{ $data->title ?? 'N/A' }}' // Ganti 'location_name' dengan nama lokasi atau deskripsi lain
 						},
 					@endforeach
 				];
