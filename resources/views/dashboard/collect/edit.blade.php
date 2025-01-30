@@ -38,6 +38,7 @@
 							value="{{ match ($data->bill_type) {
 							    'idcnonppn' => $data->collectTaskRelasi->customer_name,
 							    'idcppn' => $data->collectTaskPpnRelasi->customer_name,
+							    'idyppn' => $data->collectIdyPpnRelasi->customer_name,
 							    default => 'N/A',
 							} }}"
 							readonly>
@@ -58,6 +59,7 @@
 							    match ($data->bill_type) {
 							        'idcnonppn' => $data->collectTaskRelasi->total_bill,
 							        'idcppn' => $data->collectTaskPpnRelasi->total_bill,
+							        'idyppn' => $data->collectIdyPpnRelasi->total_bill,
 							        default => 0,
 							    },
 							    'IDR',
@@ -74,6 +76,7 @@
 							    match ($data->bill_type) {
 							        'idcnonppn' => $data->collectTaskRelasi->remaining_bill,
 							        'idcppn' => $data->collectTaskPpnRelasi->remaining_bill,
+							        'idyppn' => $data->collectIdyPpnRelasi->remaining_bill,
 							        default => 0,
 							    },
 							    'IDR',
@@ -142,6 +145,7 @@
 
 					<div class="col-span-2 w-full lg:col-span-1" id="payment_type_container">
 						<x-input.select id="payment_type" name="payment_type" :options="[
+						    '0' => 'Tidak ada',
 						    '1' => 'Cash',
 						    '2' => 'Transfer',
 						    '3' => 'Giro',

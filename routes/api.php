@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ApiAnnouncementController;
 use App\Http\Controllers\Api\ApiAttendanceController;
 use App\Http\Controllers\Api\ApiCollectController;
+use App\Http\Controllers\Api\ApiCollectIdyPpnController;
 use App\Http\Controllers\Api\ApiCollectTaskController;
 use App\Http\Controllers\Api\ApiCollectTaskPpnController;
 use App\Http\Controllers\Api\ApiDayoffController;
@@ -38,6 +39,14 @@ Route::patch('collect-task-ppn-api/{id}/assign', [ApiCollectTaskPpnController::c
 Route::patch('collect-task-ppn-api/mass-assign', [ApiCollectTaskPpnController::class, 'massAssignProcess'])->name('collect-task-ppn-api.mass-assign');
 Route::get('collect-task-ppn-api/getSR/{no_sr}', [ApiCollectTaskPpnController::class, 'getSR'])->name('collect-task-ppn-api.getsr');
 Route::apiResource('collect-task-ppn-api', ApiCollectTaskPpnController::class)->except(['index', 'show']);
+
+// collect idy ppn
+Route::patch('collect-idy-ppn-api/{id}/reschedule', [ApiCollectIdyPpnController::class, 'reschedule'])->name('collect-idy-ppn-api.reschedule');
+Route::patch('collect-idy-ppn-api/{id}/validate', [ApiCollectIdyPpnController::class, 'validateTask'])->name('collect-idy-ppn-api.validate');
+Route::patch('collect-idy-ppn-api/{id}/assign', [ApiCollectIdyPpnController::class, 'assignProcess'])->name('collect-idy-ppn-api.assign');
+Route::patch('collect-idy-ppn-api/mass-assign', [ApiCollectIdyPpnController::class, 'massAssignProcess'])->name('collect-idy-ppn-api.mass-assign');
+Route::get('collect-idy-ppn-api/getSR/{no_sr}', [ApiCollectIdyPpnController::class, 'getSR'])->name('collect-idy-ppn-api.getsr');
+Route::apiResource('collect-idy-ppn-api', ApiCollectIdyPpnController::class)->except(['index', 'show']);
 
 // laporan kolektor
 Route::patch('collect-api/{id}/confirm', [ApiCollectController::class, 'confirmCollect'])->name('collect-api.confirm');

@@ -22,6 +22,7 @@ use App\Http\Controllers\CaptureController;
 use App\Http\Controllers\AllowanceController;
 use App\Http\Controllers\DeductionController;
 use App\Http\Controllers\CollectController;
+use App\Http\Controllers\CollectIdyPpnController;
 use App\Http\Controllers\CollectTaskController;
 use App\Http\Controllers\CollectTaskPpnController;
 use App\Http\Controllers\Report\CollectorReportController;
@@ -76,9 +77,8 @@ Route::middleware('auth')->group(function () {
         // fetchSR IDC PPN
         Route::get('idc/ppn', [ProxyController::class, 'fetchIDCPpn'])->name('fetch.idc.ppn');
 
-        // fetchSR IDY NON PPN
-
         // fetchSR IDY PPN
+        Route::get('idy/ppn', [ProxyController::class, 'fetchIDYPpn'])->name('fetch.idy.ppn');
     });
 
     // group ke rute dashboard.
@@ -148,6 +148,21 @@ Route::middleware('auth')->group(function () {
         Route::get('collect-task-ppn/assign', [CollectTaskPpnController::class, 'assign'])->name('collect-task-ppn.assign');
         Route::get('collect-task-ppn/mass-assign', [CollectTaskPpnController::class, 'massAssign'])->name('collect-task-ppn.mass-assign');
         Route::resource('collect-task-ppn', CollectTaskPpnController::class)->except(['store', 'update', 'destroy']);
+
+        // route collect idy ppn
+        // tampilkan semua data where assign_to = null
+        Route::get('collect-idy-ppn/show', [CollectIdyPpnController::class, 'showdata'])->name('collect-idy-ppn.showdata');
+        // tampilkan semua data where status = 1 (berjalan)
+        Route::get('collect-idy-ppn/on-progress', [CollectIdyPpnController::class, 'onProgress'])->name('collect-idy-ppn.onprogress');
+        // tampilkan semua data where status = 2 (selesai)
+        Route::get('collect-idy-ppn/completed', [CollectIdyPpnController::class, 'completed'])->name('collect-idy-ppn.completed');
+        // tampilkan semua data where status = 3 (tertunda)
+        Route::get('collect-idy-ppn/pending', [CollectIdyPpnController::class, 'pending'])->name('collect-idy-ppn.pending');
+        // route collect idy
+        Route::get('collect-idy-ppn/autocomplete', [CollectIdyPpnController::class, 'autocomplete'])->name('collect-idy-ppn.autocomplete');
+        Route::get('collect-idy-ppn/assign', [CollectIdyPpnController::class, 'assign'])->name('collect-idy-ppn.assign');
+        Route::get('collect-idy-ppn/mass-assign', [CollectIdyPpnController::class, 'massAssign'])->name('collect-idy-ppn.mass-assign');
+        Route::resource('collect-idy-ppn', CollectIdyPpnController::class)->except(['store', 'update', 'destroy']);
 
         // route dayoff
         Route::post('dayoff/upload-image', [DayoffController::class, 'uploadImage'])->name('dayoff.uploadimage');

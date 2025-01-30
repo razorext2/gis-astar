@@ -7,6 +7,7 @@
 				{{ match ($type) {
 				    'idcppn' => 'IDC PPN',
 				    'idcnonppn' => 'IDC Non PPN',
+				    'idyppn' => 'IDY PPN',
 				    default => 'N/A',
 				} }}
 			</th>
@@ -34,8 +35,9 @@
 				<td style="border: 1px solid black; text-align: center;"></td>
 				<td style="border: 1px solid black; text-align: left;">
 					{{ match ($type) {
-					    'idcppn' => $item->collectTaskPpnRelasi->customer_name ?? 'N/A',
 					    'idcnonppn' => $item->collectTaskRelasi->customer_name ?? 'N/A',
+					    'idcppn' => $item->collectTaskPpnRelasi->customer_name ?? 'N/A',
+					    'idyppn' => $item->collectIdyPpnRelasi->customer_name ?? 'N/A',
 					    default => 'N/A',
 					} }}
 				</td>
@@ -44,8 +46,9 @@
 				</td>
 				<td style="border: 1px solid black; text-align: right; font-size: 9px;">
 					{{ match ($type) {
-					    'idcppn' => Number::currency($item->collectTaskPpnRelasi->remaining_bill ?? 0, 'IDR', 'id') ?? 'N/A',
 					    'idcnonppn' => Number::currency($item->collectTaskRelasi->remaining_bill ?? 0, 'IDR', 'id') ?? 'N/A',
+					    'idcppn' => Number::currency($item->collectTaskPpnRelasi->remaining_bill ?? 0, 'IDR', 'id') ?? 'N/A',
+					    'idyppn' => Number::currency($item->collectIdyPpnRelasi->remaining_bill ?? 0, 'IDR', 'id') ?? 'N/A',
 					    default => 'N/A',
 					} }}
 				</td>

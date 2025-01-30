@@ -87,6 +87,7 @@ class CollectController extends Controller
                         match ($data->bill_type) {
                             'idcnonppn' => $data->collectTaskRelasi->customer_recipient ?? 'N/A',
                             'idcppn' => $data->collectTaskPpnRelasi->customer_recipient ?? 'N/A',
+                            'idyppn' => $data->collectIdyPpnRelasi->customer_recipient ?? 'N/A',
                             default => 'N/A'
                         },
                         'status' => $data->status ?? 'N/A',

@@ -42,6 +42,7 @@
 							(
 							{{ match ($data->bill_type) {
 							    'idcppn' => $data->collectTaskPpnRelasi->sales_invoice,
+							    'idyppn' => $data->collectIdyPpnRelasi->sales_invoice,
 							    default => 'N/A',
 							} }}
 							)
@@ -55,12 +56,14 @@
 							{{ match ($data->bill_type) {
 							    'idcnonppn' => $data->collectTaskRelasi->customer_name,
 							    'idcppn' => $data->collectTaskPpnRelasi->customer_name,
+							    'idyppn' => $data->collectIdyPpnRelasi->customer_name,
 							    default => 'N/A',
 							} }}
 							/
 							{{ match ($data->bill_type) {
 							    'idcnonppn' => $data->collectTaskRelasi->sr_type,
 							    'idcppn' => $data->collectTaskPpnRelasi->sr_type,
+							    'idyppn' => $data->collectIdyPpnRelasi->sr_type,
 							    default => 'N/A',
 							} }}
 						</p>
@@ -106,6 +109,7 @@
 							    match ($data->bill_type) {
 							        'idcnonppn' => $data->collectTaskRelasi->total_bill,
 							        'idcppn' => $data->collectTaskPpnRelasi->total_bill,
+							        'idyppn' => $data->collectIdyPpnRelasi->total_bill,
 							        default => 0,
 							    },
 							    'IDR',
@@ -122,6 +126,7 @@
 							    match ($data->bill_type) {
 							        'idcnonppn' => $data->collectTaskRelasi->remaining_bill,
 							        'idcppn' => $data->collectTaskPpnRelasi->remaining_bill,
+							        'idyppn' => $data->collectIdyPpnRelasi->remaining_bill,
 							        default => 0,
 							    },
 							    'IDR',

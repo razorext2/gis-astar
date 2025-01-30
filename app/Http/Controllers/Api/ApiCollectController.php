@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\CollectIdyPpn;
 use App\Models\Collector;
 use App\Models\CollectTask;
 use App\Models\CollectTaskPpn;
@@ -34,7 +35,7 @@ class ApiCollectController extends Controller
             'have_paid' => 'required|integer|min_digits:1',
             'payment_type' => 'required|string|min:1|max:12',
             'payment_amount' => 'required|integer|min_digits:1',
-            'no_giro' => 'nullable|string|min:1|max:128',
+            'no_giro' => 'required|string|min:1|max:128',
             'images' => 'required|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -125,6 +126,7 @@ class ApiCollectController extends Controller
         $task = match ($query->bill_type) {
             'idcnonppn' => CollectTask::where('no_sr', $query->no_sr)->first(),
             'idcppn' => CollectTaskPpn::where('tax_invoice', $query->no_sr)->first(),
+            'idyppn' => CollectIdyPpn::where('tax_invoice', $query->no_sr)->first(),
             default => null,
         };
 
@@ -192,6 +194,11 @@ class ApiCollectController extends Controller
                     'bill_status' => 0,
                 ]),
                 'idcppn' => CollectTaskPpn::where('tax_invoice', $query->no_sr)->update([
+                    'assign_by' => null,
+                    'assign_to' => null,
+                    'bill_status' => 0,
+                ]),
+                'idyppn' => CollectIdyPpn::where('tax_invoice', $query->no_sr)->update([
                     'assign_by' => null,
                     'assign_to' => null,
                     'bill_status' => 0,

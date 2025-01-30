@@ -7,6 +7,7 @@
 	    'collect.*' => 'Laporan Kolektor',
 	    'collect-task.*' => 'Tagihan IDC Non PPN',
 	    'collect-task-ppn.*' => 'Tagihan IDC PPN',
+	    'collect-idy-ppn.*' => 'Tagihan IDY PPN',
 	    'placement.*' => 'Penempatan',
 	    'dayoff.*' => 'Pengajuan Off',
 	    'attendanceIn.*' => 'Absen Masuk',

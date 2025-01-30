@@ -115,14 +115,14 @@
 				</ul>
 			</li>
 
-			@if (auth()->user()->hasAnyPermission(['collect-task-list', 'collect-task-list-ppn']))
-				<li x-data="{ lokasi: {{ Route::is('collect-task.*') || Route::is('collect-task-ppn.*') ? 'true' : 'false' }} }">
+			@if (auth()->user()->hasAnyPermission(['collect-task-list', 'collect-task-list-ppn', 'collect-idy-ppn-list']))
+				<li x-data="{ lokasi: {{ Route::is('collect-task.*') || Route::is('collect-task-ppn.*') || Route::is('collect-idy-ppn.*') ? 'true' : 'false' }} }">
 					<button
-						class="{{ Route::is('collect-task.*') || Route::is('collect-task-ppn.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-[#18181b] hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
+						class="{{ Route::is('collect-task.*') || Route::is('collect-task-ppn.*') || Route::is('collect-idy-ppn.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-[#18181b] hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
 						type="button" aria-controls="lokasi-dropdown" @click="lokasi = !lokasi" :aria-expanded="lokasi">
 
 						<x-icons.wallet
-							class="{{ Route::is('collect-task.*') || Route::is('collect-task-ppn.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
+							class="{{ Route::is('collect-task.*') || Route::is('collect-task-ppn.*') || Route::is('collect-idy-ppn.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
 
 						<span class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">Piutang</span>
 
@@ -153,6 +153,18 @@
 									<x-icons.sale-percent
 										class="{{ Route::is('collect-task-ppn.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
 									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">IDC PPN (FP)</span>
+								</a>
+							</li>
+						@endcan
+
+						@can('collect-idy-ppn-list')
+							<li>
+								<a
+									class="{{ Route::is('collect-idy-ppn.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									href="{{ route('collect-idy-ppn.index') }}">
+									<x-icons.cash-register
+										class="{{ Route::is('collect-idy-ppn.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
+									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">IDY PPN (FP)</span>
 								</a>
 							</li>
 						@endcan
@@ -275,7 +287,8 @@
 					</button>
 
 					<ul class="space-y-4 py-4" id="user-dropdown" x-show="usermanage"
-						x-transition:enter="transition ease-in duration-200" x-transition:enter-start="transform opacity-0 -translate-y-5"
+						x-transition:enter="transition ease-in duration-200"
+						x-transition:enter-start="transform opacity-0 -translate-y-5"
 						x-transition:leave="transition ease-out duration-200"
 						x-transition:leave-end="transform opacity-0 -translate-y-5">
 

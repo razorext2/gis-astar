@@ -145,6 +145,11 @@ class Collector extends Model
         return $this->belongsTo(CollectTaskPpn::class, 'no_sr', 'tax_invoice');
     }
 
+    public function collectIdyPpnRelasi()
+    {
+        return $this->belongsTo(CollectIdyPpn::class, 'no_sr', 'tax_invoice');
+    }
+
     /**
      * Define a relationship between the Collector model and the User model.
      *

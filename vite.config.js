@@ -43,6 +43,12 @@ export default defineConfig({
                 "resources/js/collect-task-ppn/mass-assign.js",
                 "resources/js/collect-task-ppn/detail.js",
 
+                // collect idy ppn
+                "resources/js/collect-idy-ppn/index.js",
+                "resources/js/collect-idy-ppn/add.js",
+                "resources/js/collect-idy-ppn/mass-assign.js",
+                "resources/js/collect-idy-ppn/detail.js",
+
                 // sales
                 "resources/js/sales/index.js",
                 "resources/js/sales/add.js",

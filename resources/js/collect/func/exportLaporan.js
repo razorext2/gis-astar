@@ -49,6 +49,7 @@ export function exportHandler() {
           inputOptions: {
             'idcnonppn': 'IDC Non PPn',
             'idcppn': 'IDC PPn',
+            'idyppn': 'IDY PPn',
           },
           inputPlaceholder: 'Pilih tipe tagihan',
           showCancelButton: true,

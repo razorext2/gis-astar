@@ -12,15 +12,18 @@ $(document).ready(function () {
     const payment_type_container = $('#payment_type_container');
     const payment_amount = $('#payment_amount');
     const payment_type = $('#payment_type');
+    const no_giro_container = $('#no_giro_container');
 
     if (have_paid != 1 && have_paid != 2) {
 
       have_paid_container.removeClass('lg:col-span-1 ');
       payment_amount_container.addClass('hidden');
       payment_type_container.addClass('hidden');
+      no_giro_container.addClass('hidden');
 
       payment_amount.val('0');
       payment_type.val('0');
+      $('#no_giro').val('0');
 
     } else {
       have_paid_container.addClass('lg:col-span-1 ');
@@ -37,7 +40,7 @@ $(document).ready(function () {
       no_giro_container.removeClass('hidden');
     } else {
       no_giro_container.addClass('hidden');
-      $('#no_giro').val('NULL');
+      $('#no_giro').val('0');
     }
   });
 
