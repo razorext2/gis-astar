@@ -56,7 +56,7 @@
 						<div class="w-full">
 
 							<x-input.date id="sr_date" name="sr_date" placeholder="{{ Carbon\Carbon::now()->isoFormat('YYYY-MM-DD') }}"
-								required readonly>
+								required>
 								Tanggal SR
 							</x-input.date>
 
@@ -64,21 +64,21 @@
 						</div>
 
 						<div class="col-span-2 w-full">
-							<x-input.basic id="customer_name" name="customer_name" placeholder="PT XXX" required readonly>
+							<x-input.basic id="customer_name" name="customer_name" placeholder="PT XXX" required>
 								Nama Customer
 							</x-input.basic>
 							<div class="mt-2 hidden text-sm text-red-500" id="alert-customer_name"></div>
 						</div>
 
 						<div class="col-span-2 w-full">
-							<x-input.basic id="customer_recipient" name="customer_recipient" placeholder="Bp. Samsudin" required readonly>
+							<x-input.basic id="customer_recipient" name="customer_recipient" placeholder="Bp. Samsudin" required>
 								Nama Penerima
 							</x-input.basic>
 							<div class="mt-2 hidden text-sm text-red-500" id="alert-customer_recipient"></div>
 						</div>
 
 						<div class="col-span-2 w-full">
-							<x-input.textarea id="customer_address" name="customer_address" placeholder="Jl. XXX, XXX, XXX" required readonly>
+							<x-input.textarea id="customer_address" name="customer_address" placeholder="Jl. XXX, XXX, XXX" required>
 								Alamat Customer
 							</x-input.textarea>
 							<div class="mt-2 hidden text-sm text-red-500" id="alert-customer_address"></div>
@@ -106,7 +106,7 @@
 						</div>
 
 						<div class="col-span-2 w-full">
-							<x-input.currency id="total_bill" name="total_bill" placeholder="Rp. XXX.XXX,-" readonly required>
+							<x-input.currency id="total_bill" name="total_bill" placeholder="Rp. XXX.XXX,-" required>
 								Total Tagihan
 							</x-input.currency>
 							<div class="mt-2 hidden text-sm text-red-500" id="alert-total_bill"></div>
@@ -114,7 +114,7 @@
 
 						<div class="w-full">
 
-							<x-input.currency id="remaining_bill" name="remaining_bill" placeholder="Rp. XXX.XXX,-" required readonly>
+							<x-input.currency id="remaining_bill" name="remaining_bill" placeholder="Rp. XXX.XXX,-" required>
 								Sisa Tagihan (Database)
 
 								<x-popover id="popover-remaining_bill">
@@ -133,7 +133,7 @@
 
 						<div class="col-span-2 w-full">
 							<x-input.date id="assign_date" name="assign_date"
-								placeholder="{{ Carbon\Carbon::now()->isoFormat('YYYY-MM-DD') }}" required readonly>
+								placeholder="{{ Carbon\Carbon::now()->isoFormat('YYYY-MM-DD') }}" required>
 								Jadwal
 							</x-input.date>
 							<div class="mt-2 hidden text-sm text-red-500" id="alert-assign_date"></div>

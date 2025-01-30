@@ -5,7 +5,7 @@ $(document).ready(function () {
   searchDataHandler();
   addDataHandler();
 
-  $('#remaining_bill, #remaining_bill_bsi, #total_bill')
-    .addClass('cursor-not-allowed')
-    .prop('readonly', true);
+  // $('#remaining_bill, #remaining_bill_bsi, #total_bill')
+  //   .addClass('cursor-not-allowed')
+  //   .prop('readonly', true);
 });
