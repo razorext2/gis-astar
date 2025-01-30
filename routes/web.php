@@ -58,6 +58,7 @@ Route::middleware('auth')->group(function () {
         $notification->markAsRead();
         return back()->with('success', 'Notification has readed');
     })->name('notification.mark-as-read');
+    Route::get('notifications/fetch', [NotificationController::class, 'fetch'])->name('notification.fetch');
 
     // export
     Route::prefix('export')->as('')->group(function () {
