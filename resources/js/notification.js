@@ -43,16 +43,16 @@ export function fetchNotification() {
 
 										<div class="inline-flex">
 
-											<form id="formNotification-${d.id}" action="${d.button.url}">
+											<form id="formNotification-${item.id}" action="${d.button.url}">
 											</form>
 											<button class="me-4 rounded-md bg-blue-200 px-2 py-0.5 font-semibold text-blue-600 hover:bg-blue-400"
-												id="btnNotification" form="formNotification-${d.id}" type="submit">
+												id="btnNotification" form="formNotification-${item.id}" type="submit">
 												${d.button.label}
 											</button>
 
-											<form id="markAsRead-${d.id}"
-												action="${APP_URL}/notifications/mark-as-read/${d.id}"></form>
-											<button class="font-semibold text-blue-600" id="btnMarkAsRead" form="markAsRead-${d.id}"
+											<form id="markAsRead-${item.id}"
+												action="${APP_URL}/notifications/${item.id}/mark-as-read/"></form>
+											<button class="font-semibold text-blue-600" id="btnMarkAsRead" form="markAsRead-${item.id}"
 												type="submit">
 												Mark as Read
 											</button>
