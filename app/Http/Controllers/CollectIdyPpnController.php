@@ -14,10 +14,9 @@ class CollectIdyPpnController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:collect-idy-ppn-list', ['only' => 'index']);
-        $this->middleware('permission:collect-idy-ppn-create', ['only' => 'create']);
-        $this->middleware('permission:collect-idy-ppn-edit', ['only' => 'edit']);
-        $this->middleware('permission:collect-idy-ppn-assign', ['only' => 'assign']);
+        $this->middleware('permission:collect-idy-ppn-list', ['index', 'onProgress', 'pending', 'completed', 'show']);
+        $this->middleware('permission:collect-idy-ppn-create', ['create']);
+        $this->middleware('permission:collect-idy-ppn-assign', ['massAssign']);
     }
 
     public function index()

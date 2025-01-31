@@ -15,9 +15,8 @@ class CollectController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:collect-list', ['only' => 'index']);
-        $this->middleware('permission:collect-create', ['only' => 'create']);
-        $this->middleware('permission:collect-edit', ['only' => 'edit']);
+        $this->middleware('permission:collect-list', ['index', 'approved', 'submitted', 'rejected', 'show']);
+        $this->middleware('permission:collect-edit', ['edit']);
     }
 
     public function index()

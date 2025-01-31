@@ -14,10 +14,9 @@ class CollectTaskController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:collect-task-list', ['only' => 'index']);
-        $this->middleware('permission:collect-task-create', ['only' => 'create']);
-        $this->middleware('permission:collect-task-edit', ['only' => 'edit']);
-        $this->middleware('permission:collect-task-assign', ['only' => 'assign']);
+        $this->middleware('permission:collect-task-list', ['index', 'onProgress', 'pending', 'completed', 'show']);
+        $this->middleware('permission:collect-task-create', ['create']);
+        $this->middleware('permission:collect-task-assign', ['massAssign']);
     }
 
     public function index()

@@ -14,10 +14,9 @@ class CollectTaskPpnController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:collect-task-ppn-list', ['only' => 'index']);
-        $this->middleware('permission:collect-task-ppn-create', ['only' => 'create']);
-        $this->middleware('permission:collect-task-ppn-edit', ['only' => 'edit']);
-        $this->middleware('permission:collect-task-ppn-assign', ['only' => 'assign']);
+        $this->middleware('permission:collect-task-ppn-list', ['index','onProgress', 'pending', 'completed', 'show']);
+        $this->middleware('permission:collect-task-ppn-create', ['create']);
+        $this->middleware('permission:collect-task-ppn-assign', ['massAssign']);
     }
 
     public function index()

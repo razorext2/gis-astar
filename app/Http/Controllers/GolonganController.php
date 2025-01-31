@@ -12,10 +12,10 @@ class GolonganController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:golongan-list', ['only' => ['index']]);
-        $this->middleware('permission:golongan-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:golongan-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:golongan-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:golongan-list', ['index']);
+        $this->middleware('permission:golongan-create', ['create']);
+        $this->middleware('permission:golongan-edit', ['edit']);
+        $this->middleware('permission:golongan-delete', ['destroy']);
     }
 
     public function index(Request $request)

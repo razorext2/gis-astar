@@ -31,7 +31,6 @@ class NotificationController extends Controller
         $notifications = Auth::user()
             ->unreadNotifications()
             ->take(5)
-            ->latest()
             ->get();
 
         if (!$notifications) {

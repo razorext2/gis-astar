@@ -11,10 +11,10 @@ class PlacementController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:placement-list', ['only' => ['index']]);
-        $this->middleware('permission:placement-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:placement-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:placement-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:placement-list', ['index']);
+        $this->middleware('permission:placement-create', ['create']);
+        $this->middleware('permission:placement-edit', ['edit']);
+        $this->middleware('permission:placement-delete', ['destroy']);
     }
 
     public function index(Request $request)

@@ -14,10 +14,10 @@ class JabatanController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:jabatan-list', ['only' => ['index']]);
-        $this->middleware('permission:jabatan-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:jabatan-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:jabatan-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:jabatan-list', ['index']);
+        $this->middleware('permission:jabatan-create', ['create']);
+        $this->middleware('permission:jabatan-edit', ['edit']);
+        $this->middleware('permission:jabatan-delete', ['destroy']);
     }
 
     public function index(Request $request)

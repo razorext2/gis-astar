@@ -23,10 +23,10 @@ class UserController extends Controller
      */
     function __construct()
     {
-        $this->middleware('permission:users-list', ['only' => ['index']]);
-        $this->middleware('permission:users-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:users-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:users-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:users-list', ['index']);
+        $this->middleware('permission:users-create', ['create']);
+        $this->middleware('permission:users-edit', ['edit']);
+        $this->middleware('permission:users-delete', ['destroy']);
     }
 
     public function index(Request $request)

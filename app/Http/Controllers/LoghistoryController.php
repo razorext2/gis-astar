@@ -9,7 +9,7 @@ class LoghistoryController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:log-list', ['only' => ['index']]);
+        $this->middleware('permission:log-list', ['index']);
     }
     public function index()
     {

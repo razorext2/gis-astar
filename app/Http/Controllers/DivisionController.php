@@ -11,19 +11,11 @@ class DivisionController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:divisi-list', ['only' => ['index']]);
-        $this->middleware('permission:divisi-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:divisi-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:divisi-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:divisi-list', ['index']);
+        $this->middleware('permission:divisi-create', ['create']);
+        $this->middleware('permission:divisi-edit', ['edit']);
+        $this->middleware('permission:divisi-delete', ['destroy']);
     }
-
-    // public function index()
-    // {
-    //     //
-    //     $division = Division::all();
-
-    //     return view('dashboard.division.index', compact('division'));
-    // }
 
     public function index(Request $request)
     {

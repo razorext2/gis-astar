@@ -8,9 +8,11 @@ use Yajra\DataTables\Facades\DataTables;
 
 class AnnouncementController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        $this->middleware('permission:announcement-list', ['index']);
+    }
+
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -54,31 +56,6 @@ class AnnouncementController extends Controller
                 ->make(true);
         }
 
-
         return view('dashboard.announcement.index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Announcement $announcement)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Announcement $announcement)
-    {
-        //
     }
 }
