@@ -1,3 +1,6 @@
+import Quill from "quill";
+import "quill/dist/quill.snow.css";
+
 export function quillEditor(data = null, editable = true) {
   const BlockEmbed = Quill.import('blots/block/embed');
 

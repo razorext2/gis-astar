@@ -14,21 +14,6 @@
 <!-- Jquery -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-<!-- Theme -->
-<script>
-	if (
-		localStorage.getItem("color-theme") === "dark" ||
-		(!("color-theme" in localStorage) &&
-			window.matchMedia("(prefers-color-scheme: dark)").matches)
-	) {
-		document.documentElement.classList.add("dark");
-	} else {
-		document.documentElement.classList.remove("dark");
-	}
-
-	const APP_URL = "{{ env('APP_URL') }}";
-</script>
-
 <!-- Vite Files -->
 @vite('resources/css/app.css')
 @vite('resources/js/app.js')
@@ -51,5 +36,14 @@
 <!-- Datatables Button -->
 <link href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.dataTables.css" rel="stylesheet">
-<!-- Quill -->
-<link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+
+<!-- Theme -->
+<script>
+	if (localStorage.getItem("color-theme") === "dark" || (!("color-theme" in localStorage) && window.matchMedia(
+			"(prefers-color-scheme: dark)").matches)) {
+		document.documentElement.classList.add("dark");
+	} else {
+		document.documentElement.classList.remove("dark");
+	}
+	const APP_URL = "{{ env('APP_URL') }}";
+</script>

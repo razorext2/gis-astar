@@ -1,9 +1,7 @@
 import "./bootstrap";
 import "flowbite";
 import Swal from "sweetalert2";
-import Quill from "quill";
 import { handleNotification, handleAnnouncement, fetchNotification } from './notification';
-
 
 $(document).ready(function () {
 
@@ -12,8 +10,7 @@ $(document).ready(function () {
   // define userID, ambil dari metatag user-id
   const userId = document.querySelector('meta[name="user-id"]');
 
-  // define quill dan swal sebagai global variable  
-  window.Quill = Quill;
+  // define swal sebagai global variable  
   window.Swal = Swal;
 
   if (userId) {
