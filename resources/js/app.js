@@ -1,10 +1,12 @@
+import $ from "jquery";
 import "./bootstrap";
 import "flowbite";
 import Swal from "sweetalert2";
 import { handleNotification, handleAnnouncement, fetchNotification } from './notification';
 
-$(document).ready(function () {
+window.$ = window.jQuery = $;
 
+$(function () {
   fetchNotification();
 
   // define userID, ambil dari metatag user-id

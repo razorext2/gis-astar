@@ -11,9 +11,6 @@
 <link href="{{ asset('assets/img/logo.ico') }}" rel="icon" />
 <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon" />
 
-<!-- Jquery -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
 <!-- Vite Files -->
 @vite('resources/css/app.css')
 @vite('resources/js/app.js')
