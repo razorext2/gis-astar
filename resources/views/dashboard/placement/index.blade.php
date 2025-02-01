@@ -133,17 +133,17 @@
 	</div>
 
 	@include('dashboard.layoutsDash.modals')
-	<script>
+	<script type="module">
 		function showDatatables() {
 			let minDate, maxDate;
 
 			// Initialize DateTime pickers for min and max date inputs
-			minDate = new DateTime($('#min'), {
-				format: 'DDD'
-			});
-			maxDate = new DateTime($('#max'), {
-				format: 'DDD'
-			});
+			// minDate = new DateTime($('#min'), {
+			// 	format: 'DDD'
+			// });
+			// maxDate = new DateTime($('#max'), {
+			// 	format: 'DDD'
+			// });
 
 			// Initialize DataTable
 			let table = $('#table-placement').DataTable({
@@ -154,8 +154,8 @@
 				ajax: {
 					url: "placement",
 					data: function(d) {
-						d.minDate = minDate.val();
-						d.maxDate = maxDate.val();
+						// d.minDate = minDate.val();
+						// d.maxDate = maxDate.val();
 					}
 				},
 				columns: [{
