@@ -31,11 +31,7 @@ class PegawaiController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:pegawai-list', ['index']);
-        $this->middleware('permission:pegawai-create', ['create']);
-        $this->middleware('permission:pegawai-edit', ['edit']);
-        $this->middleware('permission:pegawai-delete', ['destroy']);
-        $this->middleware('permission:pegawai-timeline', ['timeline']);
+        $this->middleware('permission:pegawai-list|pegawai-create|pegawai-edit|pegawai-delete|pegawai-timeline', ['only' => ['index', 'create', 'edit', 'destroy', 'timeline']]);
     }
 
     public function index(Request $request)
