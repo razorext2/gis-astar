@@ -13,10 +13,10 @@
 				</div>
 				{{-- endsearch --}}
 
-				<div class="dark:bg-[#18181b] dark:border-gray-700 w-full rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+				<div class="w-full rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-[#18181b]">
 					<div class="mb-4">
-						<p class="dark:text-white text-xl font-bold leading-none text-gray-900 md:text-2xl">{{ $pegawai->full_name }}</p>
-						<p class="dark:text-white text-lg font-semibold leading-none text-gray-900 md:text-xl">
+						<p class="text-xl font-bold leading-none text-gray-900 dark:text-white md:text-2xl">{{ $pegawai->full_name }}</p>
+						<p class="text-lg font-semibold leading-none text-gray-900 dark:text-white md:text-xl">
 							@if (Request::query('date'))
 								Lini masa,
 								{{ \Carbon\Carbon::parse(Request::query('date'))->locale('id')->isoFormat('D MMMM YYYY') }}
@@ -27,7 +27,7 @@
 						</p>
 					</div>
 
-					<ol class="dark:border-gray-700 relative ml-3 border-s border-gray-200" id="timelineContent">
+					<ol class="relative ml-3 border-s border-gray-200 dark:border-gray-700" id="timelineContent">
 						@if ($attendances->isNotEmpty())
 							@foreach ($attendances as $data)
 								@php
@@ -45,8 +45,8 @@
 
 									@if ($data->type == 'Check-in')
 										<span
-											class="dark:bg-green-900 absolute -start-11 flex h-6 w-6 items-center justify-center rounded-full bg-green-800">
-											<svg class="dark:text-green-300 h-2.5 w-2.5 text-green-100" aria-hidden="true"
+											class="absolute -start-11 flex h-6 w-6 items-center justify-center rounded-full bg-green-800 dark:bg-green-900">
+											<svg class="h-2.5 w-2.5 text-green-100 dark:text-green-300" aria-hidden="true"
 												xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
 												<path
 													d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
@@ -54,8 +54,8 @@
 										</span>
 									@elseif ($data->type == 'Checkpoint')
 										<span
-											class="dark:bg-yellow-900 absolute -start-11 flex h-6 w-6 items-center justify-center rounded-full bg-yellow-800">
-											<svg class="dark:text-yellow-300 h-2.5 w-2.5 text-yellow-100" aria-hidden="true"
+											class="absolute -start-11 flex h-6 w-6 items-center justify-center rounded-full bg-yellow-800 dark:bg-yellow-900">
+											<svg class="h-2.5 w-2.5 text-yellow-100 dark:text-yellow-300" aria-hidden="true"
 												xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
 												<path
 													d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
@@ -63,8 +63,8 @@
 										</span>
 									@else
 										<span
-											class="dark:bg-red-900 absolute -start-11 flex h-6 w-6 items-center justify-center rounded-full bg-red-800">
-											<svg class="dark:text-red-300 h-2.5 w-2.5 text-red-100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+											class="absolute -start-11 flex h-6 w-6 items-center justify-center rounded-full bg-red-800 dark:bg-red-900">
+											<svg class="h-2.5 w-2.5 text-red-100 dark:text-red-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
 												fill="currentColor" viewBox="0 0 20 20">
 												<path
 													d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
@@ -72,13 +72,13 @@
 										</span>
 									@endif
 
-									<h3 class="dark:text-white mb-1 flex items-center text-lg font-semibold text-gray-900">
+									<h3 class="mb-1 flex items-center text-lg font-semibold text-gray-900 dark:text-white">
 										{{ $data->type }}
 									</h3>
-									<span class="dark:text-gray-300 text-md mb-2 block font-normal leading-none text-gray-400">
+									<span class="text-md mb-2 block font-normal leading-none text-gray-400 dark:text-gray-300">
 										{{ $isOnsite ? 'Tidak ada data koordinat' : $data->longitude . ', ' . $data->latitude }}
 									</span>
-									<time class="dark:text-gray-500 mb-2 block text-sm font-normal leading-none text-gray-400">
+									<time class="mb-2 block text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
 										{{ Carbon\Carbon::parse($data->time)->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss') }}
 									</time>
 									<img class="absolute !-top-2.5 right-0 h-16 w-16 rounded-lg object-cover" src="{{ $path }}"
@@ -94,9 +94,9 @@
 				</div>
 
 				<div
-					class="dark:bg-[#18181b] dark:border-gray-700 h-max w-full rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+					class="h-max w-full rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-[#18181b]">
 					<div class="mb-4">
-						<p class="dark:text-white text-xl font-bold leading-none text-gray-900 md:text-2xl">
+						<p class="text-xl font-bold leading-none text-gray-900 dark:text-white md:text-2xl">
 							Mapping
 						</p>
 					</div>
@@ -108,7 +108,7 @@
 	</div>
 @endsection
 @push('script')
-	<script>
+	<script type="module">
 		document.addEventListener('DOMContentLoaded', function() {
 			// Fungsi untuk inisialisasi peta dengan koordinat yang diberikan
 			function initializeMap() {

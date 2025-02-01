@@ -1,4 +1,4 @@
-<script>
+<script type="module">
 	//button create allowance event
 	$('body').on('click', '#btn-delete-allowance', function() {
 

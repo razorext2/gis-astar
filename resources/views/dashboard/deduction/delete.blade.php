@@ -1,4 +1,4 @@
-<script>
+<script type="module">
 	//button create deduction event
 	$('body').on('click', '#btn-delete-deduction', function() {
 

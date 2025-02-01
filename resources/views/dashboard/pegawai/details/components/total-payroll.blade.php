@@ -78,7 +78,7 @@
 	</table>
 </div>
 @push('script')
-	<script>
+	<script type="module">
 		let table = new DataTable('#salary-counter', {
 			responsive: true,
 			paging: false,
@@ -93,16 +93,16 @@
 							// Get required data from the backend (ensure these values are defined globally or passed as needed)
 							let pegawaiName = "{{ $pegawai->full_name }}";
 							let salaryPeriod =
-								"{{ isset($pegawai->salaryRelasi)? \Carbon\Carbon::parse($pegawai->salaryRelasi->period)->locale('id')->isoFormat('MMMM YYYY'): 'N/A' }}";
+								"{{ isset($pegawai->salaryRelasi) ? \Carbon\Carbon::parse($pegawai->salaryRelasi->period)->locale('id')->isoFormat('MMMM YYYY') : 'N/A' }}";
 							let salaryFee =
 								"{{ isset($pegawai->salaryRelasi) ? Number::currency($pegawai->salaryRelasi->salary_fee ?? 0, 'IDR', 'id') : '0' }}";
 							let previousMonth =
-								"{{ isset($pegawai->salaryRelasi)? \Carbon\Carbon::parse($pegawai->salaryRelasi->period)->subMonth()->locale('id')->isoFormat('MMMM YYYY'): 'N/A' }}";
+								"{{ isset($pegawai->salaryRelasi) ? \Carbon\Carbon::parse($pegawai->salaryRelasi->period)->subMonth()->locale('id')->isoFormat('MMMM YYYY') : 'N/A' }}";
 
 							let allowances = @json($allowances);
 							let deductions = @json($deductions);
 							let total =
-							"{{ Number::currency($total ?? 0, 'IDR', 'id')"; // Final total amount
+								"{{ Number::currency($total ?? 0, 'IDR', 'id')"; // Final total amount
 
 							// Build the custom print content
 							let allowancesContent = allowances.length ? allowances.map((data) =>

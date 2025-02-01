@@ -204,7 +204,7 @@
 		</div>
 	</div>
 
-	<script>
+	<script type="module">
 		$(document).ready(function() {
 			const video = $('#video')[0];
 			const canvas = $('#canvRegist')[0];

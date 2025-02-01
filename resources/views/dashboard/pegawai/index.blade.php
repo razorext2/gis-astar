@@ -129,16 +129,6 @@
 
 	<script type="module">
 		function showDatatables() {
-			let minDate, maxDate;
-
-			// Initialize DateTime pickers for min and max date inputs
-			// minDate = new DateTime($('#min'), {
-			// 	format: 'DDD'
-			// });
-			// maxDate = new DateTime($('#max'), {
-			// 	format: 'DDD'
-			// });
-
 			// Initialize DataTable
 			let table = $('#table-pegawai').DataTable({
 				processing: true,
@@ -147,10 +137,6 @@
 				perPageSelect: [5, 25, 50, 100],
 				ajax: {
 					url: "pegawai",
-					data: function(d) {
-						// d.minDate = minDate.val();
-						// d.maxDate = maxDate.val();
-					}
 				},
 				columns: [{
 						data: 'action',
@@ -277,35 +263,6 @@
 				}
 			});
 
-			// Custom filtering function for date range
-			$.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-				let min = minDate.val() ? new Date(minDate.val()) : null;
-				let max = maxDate.val() ? new Date(maxDate.val()) : null;
-
-				// Convert updated_at (data[4]) to date object
-				let updatedDate = new Date(data[4]).setHours(0, 0, 0, 0); // Strip time for comparison
-
-				// Strip time for min and max dates
-				if (min) min = new Date(min).setHours(0, 0, 0, 0);
-				if (max) max = new Date(max).setHours(0, 0, 0, 0);
-
-				// Filter logic: Check if updatedDate falls within the range
-				if (
-					(!min && !max) ||
-					(!min && updatedDate <= max) ||
-					(min <= updatedDate && !max) ||
-					(min <= updatedDate && updatedDate <= max)
-				) {
-					return true;
-				}
-				return false;
-			});
-
-			// Trigger table redraw when the date inputs change
-			$('#min, #max').on('change', function() {
-				table.draw();
-			});
-
 			// Bind the submit event of the form
 			$('#searchForm').on('submit', function(e) {
 				e.preventDefault(); // Prevent the default form submission
@@ -340,7 +297,6 @@
 			}
 		}
 		// end datatables //
-		///////////////////
 
 		function deleteModal() {
 
@@ -368,7 +324,6 @@
 			}
 		}
 		// end delete modal //
-		/////////////////////
 
 		$(document).ready(function() {
 			showDatatables();

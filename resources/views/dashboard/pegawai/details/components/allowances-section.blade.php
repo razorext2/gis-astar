@@ -4,7 +4,7 @@
 			Detail
 		</h2>
 	</header>
-	<h2 class="dark:text-white text-xl font-medium text-gray-900">
+	<h2 class="text-xl font-medium text-gray-900 dark:text-white">
 		Allowances
 	</h2>
 
@@ -59,7 +59,7 @@
 @include('dashboard.allowance.delete')
 
 @push('script')
-	<script type="text/javascript">
+	<script type="module">
 		function showAllowanceData() {
 			// Initialize DataTable
 			let table = $('#table-allowance').DataTable({
