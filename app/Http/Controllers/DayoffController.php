@@ -44,7 +44,7 @@ class DayoffController extends Controller
 				->editColumn('status', function ($data) {
 					return view('components.dashboard.title-w-status', [
 						'title' => $data->dayoff_for,
-						'status' => $data->status
+						'status' => $data->status == 2 ? '3' : $data->status,
 					])->render();
 				})
 				->editColumn('created_at', function ($data) {

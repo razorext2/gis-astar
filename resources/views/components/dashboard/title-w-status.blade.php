@@ -21,7 +21,7 @@
 
 	<div class="max-w-sm text-wrap text-left">
 		<p>{{ $title }}</p>
-		<p class="text-xs text-gray-400">{{ $item3 ?? 'N/A' }}</p>
+		<p class="text-xs text-gray-400">{{ $item3 ?? '' }}</p>
 	</div>
 
 </div>
