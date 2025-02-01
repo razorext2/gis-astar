@@ -1,7 +1,8 @@
 import { capturedImages } from './cameraStream';
+import { showAlert } from "../../utils/alert";
 
 export function addDataHandler() {
-  $('#store').click(function (e) {
+  $('#store').click(async function (e) {
     e.preventDefault();
 
     const $button = $(this);
@@ -18,25 +19,28 @@ export function addDataHandler() {
     formData.append("latitude", $("#latitude").val());
     formData.append("longitude", $("#longitude").val());
 
-    capturedImages.forEach((image, index) => {
-      const blob = dataURItoBlob(image);
+    for (const [index, image] of capturedImages.entries()) {
+      const blob = await dataURItoBlob(image);
       formData.append("images[]", blob, `image${index}.png`);
-    });
+    }
 
-    axios.post(storeUrl, formData)
-      .then(response => {
-        Swal.fire({
-          icon: "success",
-          title: "Laporan berhasil ditambahkan!",
-          showConfirmButton: false,
-          timer: 1000
-        });
-        setTimeout(() => window.location.href = `${APP_URL}/dashboard/sales`, 1000);
-      })
-      .catch(error => {
-        handleFormErrors(error.response.data.errors);
+    try {
+      const response = await axios.post(`${APP_URL}/api/sales-api`, formData);
+
+      if (response.data.success) {
+        showAlert('success', response.data.message);
+        setTimeout(() => window.location.href = `${APP_URL}/dashboard/sales`, 1500);
+      } else {
+        handleFormErrors(response.data.data);
+        showAlert('error', response.data.message, 'Kamu harus mengisi semua form yang ada.');
         $button.prop('disabled', false);
-      });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      showAlert('error', 'Terjadi kesalahan.', error.message);
+      $button.prop('disabled', false);
+    }
+
   });
 }
 
@@ -80,27 +84,20 @@ export function editDataHandler() {
   })
 }
 
-
 function handleFormErrors(errors) {
-  for (let field in errors) {
-    const alertElement = document.getElementById(`alert-${field}`);
-    if (errors[field]) {
-      alertElement.classList.remove('hidden');
-      alertElement.classList.add('block');
-      alertElement.innerHTML = errors[field][0];
-    } else {
-      alertElement.classList.remove('block');
-      alertElement.classList.add('hidden');
-    }
+  if (typeof errors === 'object') {
+    $.each(errors, function (field, errorMessages) {
+      var $alertElement = $(`#alert-${field}`);
+      if (errorMessages && errorMessages.length) {
+        $alertElement.removeClass('hidden').html(errorMessages[0]);
+      } else {
+        $alertElement.removeClass('block').addClass('hidden');
+      }
+    });
   }
 }
 
-function dataURItoBlob(dataURI) {
-  const byteString = atob(dataURI.split(',')[1]);
-  const arrayBuffer = new ArrayBuffer(byteString.length);
-  const uintArray = new Uint8Array(arrayBuffer);
-  for (let i = 0; i < byteString.length; i++) {
-    uintArray[i] = byteString.charCodeAt(i);
-  }
-  return new Blob([uintArray], { type: 'image/png' });
+async function dataURItoBlob(dataURI) {
+  const response = await axios.get(dataURI, { responseType: 'blob' });
+  return response.data;
 }

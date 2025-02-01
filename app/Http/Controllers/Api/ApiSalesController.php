@@ -31,7 +31,7 @@ class ApiSalesController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return new ApiResource(false, 'Validasi gagal', $validator->errors()->first());
+            return new ApiResource(false, 'Validasi gagal', $validator->errors());
         }
 
         $data = $validator->validated();
@@ -66,7 +66,7 @@ class ApiSalesController extends Controller
                     $imageUrl = '/storage/' . $folderPath . '/' . $imageName;
 
                     PhotoCollect::create([
-                        'id_collect' => $query->id,
+                        'id_sales' => $query->id,
                         'photourl' => $imageUrl,
                     ]);
                 }

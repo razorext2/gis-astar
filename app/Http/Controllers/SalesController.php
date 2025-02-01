@@ -11,11 +11,11 @@ use Yajra\DataTables\Facades\DataTables;
 
 class SalesController extends Controller
 {
-    public function __construct()
+    function __construct()
     {
         $this->middleware("permission:sales-list", ['index', 'show']);
-        $this->middleware("permission:sales-create", ['create']);
-        $this->middleware("permission:sales-edit", ['edit']);
+        $this->middleware("permission:sales-create", ['only' => 'create']);
+        $this->middleware("permission:sales-edit", ['only' => 'edit']);
     }
 
     /**
