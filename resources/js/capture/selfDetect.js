@@ -454,7 +454,7 @@ async function saveImageToServer(image, label) {
 
   try {
     // Mengirim request POST untuk menyimpan gambar ke server
-    const response = await fetch("${APP_URL}/api/saveImage", {
+    const response = await fetch(`${APP_URL}/api/saveImage`, {
       method: "POST",
       headers: {
         "X-CSRF-TOKEN": csrfToken // Token CSRF untuk keamanan
@@ -482,7 +482,7 @@ async function saveImageToServer(image, label) {
 async function saveAttendance(kodePegawai, nikPegawai, lokasi) {
   try {
     // Mengecek apakah pegawai sudah melakukan absensi masuk (clock-in)
-    const response = await fetch("${APP_URL}/api/check-attendance", {
+    const response = await fetch(`${APP_URL}/api/check-attendance`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -504,7 +504,7 @@ async function saveAttendance(kodePegawai, nikPegawai, lokasi) {
       updateJamKeluar();
 
       // Mengirim data absensi keluar (clock-out)
-      const clockOutResponse = await fetch("${APP_URL}/store-attendance-out", {
+      const clockOutResponse = await fetch(`${APP_URL}/store-attendance-out`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -544,7 +544,7 @@ async function saveAttendance(kodePegawai, nikPegawai, lokasi) {
       document.getElementById("waktu-keluar").textContent = "Jam Keluar: Belum ada data";
 
       // Mengirim data absensi masuk (clock-in)
-      const clockInResponse = await fetch("${APP_URL}/store-attendance", {
+      const clockInResponse = await fetch(`${APP_URL}/store-attendance`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
