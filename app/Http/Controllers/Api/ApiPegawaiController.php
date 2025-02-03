@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Pegawai;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
+use DirectoryIterator;
 
 class ApiPegawaiController extends Controller
 {
@@ -41,8 +42,13 @@ class ApiPegawaiController extends Controller
             return response()->json(['error' => 'Directory not found'], 404);
         }
 
-        $images = glob($directoryPath . '/*.{png,jpg,jpeg,webp}', GLOB_BRACE);
-        // dd($images);
+        $images = [];
+        $dirIterator = new DirectoryIterator($directoryPath);
+        foreach ($dirIterator as $fileinfo) {
+            if ($fileinfo->isFile() && in_array($fileinfo->getExtension(), ['png', 'jpg', 'jpeg', 'webp'])) {
+                $images[] = $fileinfo->getPathname();
+            }
+        }
 
         if (!empty($images)) {
             $relativeImagePaths = array_map(function ($path) {
