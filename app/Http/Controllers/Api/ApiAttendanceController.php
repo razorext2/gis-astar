@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 use App\Models\AttendanceOut;
+use App\Models\Pegawai;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ApiAttendanceController extends Controller
 {
@@ -54,5 +56,37 @@ class ApiAttendanceController extends Controller
 
         $this->saveImages($request);
         return redirect()->to(route('landing.page') . '/#Scan')->with('success', 'Data berhasil diperbarui!');
+    }
+
+    public function saveImages(Request $request)
+    {
+        $kodePegawai = $request->input('kode_pegawai');
+
+        $folderPath = "public/labels/{$kodePegawai}";
+        $folderToDB = "labels/{$kodePegawai}/";
+
+        if (!Storage::exists($folderPath)) {
+            Storage::makeDirectory($folderPath);
+            chmod(storage_path("app/public/labels"), 0755);
+            chmod(storage_path("app/{$folderPath}"), 0755);
+        }
+
+        $photo1Data = $request->input('photo1');
+        $photo2Data = $request->input('photo2');
+
+        $photo1Data = str_replace('data:image/jpeg;base64,', '', $photo1Data);
+        $photo1Data = base64_decode($photo1Data);
+        $photo1Path = "{$folderPath}/photo1.png";
+        Storage::put($photo1Path, $photo1Data);
+
+        $photo2Data = str_replace('data:image/jpeg;base64,', '', $photo2Data);
+        $photo2Data = base64_decode($photo2Data);
+        $photo2Path = "{$folderPath}/photo2.png";
+        Storage::put($photo2Path, $photo2Data);
+
+        Pegawai::where('kode_pegawai', $kodePegawai)
+            ->update([
+                'storage' => $folderToDB,
+            ]);
     }
 }
