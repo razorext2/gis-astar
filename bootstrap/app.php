@@ -31,6 +31,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append(TrackUserActivity::class);
         $middleware->append(LogUserActions::class);
     })
+
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

@@ -26,20 +26,10 @@ use App\Http\Controllers\CollectIdyPpnController;
 use App\Http\Controllers\CollectTaskController;
 use App\Http\Controllers\CollectTaskPpnController;
 use App\Http\Controllers\Report\CollectorReportController;
-use App\Models\CollectTaskPpn;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 
-// breeze for regist, verif, login and logout
-// Route::get('/foo', function () {
-//     Artisan::call('storage:link');
-// });
-
-// landing page
 // turn off for a while, redirect to dashboard
 Route::get('/', function () {
     return view('home', ['title' => 'Take attendance']);
@@ -51,7 +41,7 @@ Route::get('photo-regist', function () {
 })->name('photo.regist');
 
 // route bisa diakses jika login
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth'])->group(function () {
     // notifikasi
     Route::get('notifications/{id}/mark-as-read', function ($id) {
         $notification = Auth::user()->unreadNotifications->find($id);

@@ -13,23 +13,34 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
 
-// attendance
-Route::get('get-attendance-data', [ApiAttendanceController::class, 'getAttendanceData'])->name('pegawai.getattendance');
+// public API
 Route::post('photo-regist-process', [ApiAttendanceController::class, 'photoRegistProcess'])->name('photo.registProcess');
 Route::post('check-attendance', [ApiAttendanceController::class, 'checkAttendance']);
+Route::get('getPegawai', [ApiPegawaiController::class, 'getPegawai']); // harusnya ini gausah
+Route::get('pegawai-images/{id}', [ApiPegawaiController::class, 'getPegawaiImages']); // sama ini, soalnya ini api public
+Route::get('getPegawaiData/{id}', [ApiPegawaiController::class, 'getPegawaiDataByLabel']);
+
+// public API post attendance ke server utama
+Route::post('proxy/server/attendance', function (Request $request) {
+    $response = Http::post('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendance', [
+        'kode_jari' => $request->input('kode_jari'),
+    ]);
+
+    return $response->json();
+});
+
+// private API using token, harus auth. 
+Route::get('get-attendance-data', [ApiAttendanceController::class, 'getAttendanceData'])->name('pegawai.getattendance');
 
 // pegawai
 Route::get('getSixMonthsBefore', [ApiPegawaiController::class, 'getSixMonthsBefore']);
-Route::get('getPegawai', [ApiPegawaiController::class, 'getPegawai']);
-Route::get('pegawai-images/{id}', [ApiPegawaiController::class, 'getPegawaiImages']);
-Route::get('getPegawaiData/{id}', [ApiPegawaiController::class, 'getPegawaiDataByLabel']);
 
 // collect task
 Route::patch('collect-task-api/{id}/reschedule', [ApiCollectTaskController::class, 'reschedule'])->name('collect-task-api.reschedule');
 Route::patch('collect-task-api/{id}/validate', [ApiCollectTaskController::class, 'validateTask'])->name('collect-task-api.validate');
 Route::patch('collect-task-api/{id}/assign', [ApiCollectTaskController::class, 'assignProcess'])->name('collect-task-api.assign');
 Route::patch('collect-task-api/mass-assign', [ApiCollectTaskController::class, 'massAssignProcess'])->name('collect-task-api.mass-assign');
-Route::get('collect-task-api/getSR/{no_sr}', [ApiCollectTaskController::class, 'getSR'])->name('collect-task-api.getsr');
+Route::get('collect-task-api/getSR/{no_sr}', [ApiCollectTaskController::class, 'getSR'])->name('collect-task-api.getsr')->middleware('auth:sanctum');
 Route::apiResource('collect-task-api', ApiCollectTaskController::class)->except(['index', 'show']);
 
 // collect task ppn
@@ -66,12 +77,3 @@ Route::apiResource('dayoff-api', ApiDayoffController::class)->except(['index', '
 // announcement
 Route::patch('announcement-api/{id}/state', [ApiAnnouncementController::class, 'changeState'])->name('announcement-api.change-state');
 Route::apiResource('announcement-api', ApiAnnouncementController::class)->only(['store', 'show', 'update', 'destroy']);
-
-// api ke server utama
-Route::post('proxy/server/attendance', function (Request $request) {
-    $response = Http::post('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendance', [
-        'kode_jari' => $request->input('kode_jari'),
-    ]);
-
-    return $response->json();
-});
