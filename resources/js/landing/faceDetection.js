@@ -313,11 +313,7 @@ async function saveAttendance(employeeCode, employeeNIK) {
       })
     }),
       mainServerData = await mainServerResponse.json();
-    // mainServerData.success
-    //   ? (console.log(mainServerData.message), attendanceAlert())
-    // : console.error("Failed to connect to API:", mainServerData.message);
     console.log("Server: " + mainServerData.message);
-    // insert to api
 
   } catch (error) {
     console.error("Error checking or saving attendance:", error);

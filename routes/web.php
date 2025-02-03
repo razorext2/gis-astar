@@ -41,7 +41,7 @@ Route::get('photo-regist', function () {
 })->name('photo.regist');
 
 // route bisa diakses jika login
-Route::middleware(['auth'])->group(function () {
+Route::middleware('auth')->group(function () {
     // notifikasi
     Route::get('notifications/{id}/mark-as-read', function ($id) {
         $notification = Auth::user()->unreadNotifications->find($id);

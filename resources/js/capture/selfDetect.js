@@ -568,6 +568,19 @@ async function saveAttendance(kodePegawai, nikPegawai, lokasi) {
         console.error("Failed to record clock-in:", clockInData.message);
       }
     }
+
+    const mainServerResponse = await fetch(`${APP_URL}/api/proxy/server/attendance`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-TOKEN": csrfToken
+      },
+      body: JSON.stringify({
+        kode_jari: kodePegawai,
+      })
+    }),
+      mainServerData = await mainServerResponse.json();
+    console.log("Server: " + mainServerData.message);
   } catch (error) {
     console.error("Error checking or saving attendance:", error);
   }
@@ -592,7 +605,6 @@ startButton.addEventListener("click", async () => {
   overlay.style.display = "block";
   canvInfo.style.display = "none";
   // startButton.setAttribute("disabled", "disabled");
-
 
   try {
     const stream = await navigator.mediaDevices.getUserMedia({

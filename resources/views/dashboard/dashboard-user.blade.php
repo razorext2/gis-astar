@@ -59,8 +59,8 @@
 							<li class="mb-5 ms-6">
 								<span
 									class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 ring-8 ring-white dark:bg-blue-900 dark:ring-gray-900">
-									<img class="rounded-full shadow-lg" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" loading="lazy"
-										alt="Bonnie image" />
+									<img class="rounded-full shadow-lg" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+										alt="Bonnie image" loading="lazy" />
 								</span>
 								<div
 									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-600 dark:bg-gray-700 sm:flex">
@@ -104,8 +104,8 @@
 							<li class="mb-5 ms-6">
 								<span
 									class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 ring-8 ring-white dark:bg-blue-900 dark:ring-gray-900">
-									<img class="rounded-full shadow-lg" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" loading="lazy"
-										alt="Bonnie image" />
+									<img class="rounded-full shadow-lg" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+										alt="Bonnie image" loading="lazy" />
 								</span>
 								<div
 									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-600 dark:bg-gray-700 sm:flex">
@@ -253,7 +253,7 @@
 					@can('dayoff-list')
 						<a
 							class="group mb-2 flex h-full w-auto transform cursor-pointer flex-col items-center justify-center rounded-xl border border-gray-200 bg-gray-50 p-2 text-blue-700 shadow transition duration-75 ease-in hover:scale-95 hover:bg-gray-100 hover:shadow-md dark:border-gray-700 dark:bg-gray-700 dark:text-white hover:dark:bg-gray-800"
-							href="{{ route('dashboard.dayoff') }}">
+							href="{{ route('dayoff.index') }}">
 							<svg class="fi-sidebar-item-icon h-7 w-7 stroke-blue-700 dark:stroke-white" viewBox="0 0 24 24" fill="none"
 								xmlns="http://www.w3.org/2000/svg">
 								<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -306,8 +306,8 @@
 							<li class="mb-5 ms-6">
 								<span
 									class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 ring-8 ring-white dark:bg-blue-900 dark:ring-gray-900">
-									<img class="rounded-full shadow-lg" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" loading="lazy"
-										alt="Bonnie image" />
+									<img class="rounded-full shadow-lg" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+										alt="Bonnie image" loading="lazy" />
 								</span>
 								<div
 									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-600 dark:bg-gray-700 sm:flex">
@@ -351,8 +351,8 @@
 							<li class="mb-5 ms-6">
 								<span
 									class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 ring-8 ring-white dark:bg-blue-900 dark:ring-gray-900">
-									<img class="rounded-full shadow-lg" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" loading="lazy"
-										alt="Bonnie image" />
+									<img class="rounded-full shadow-lg" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+										alt="Bonnie image" loading="lazy" />
 								</span>
 								<div
 									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-600 dark:bg-gray-700 sm:flex">
