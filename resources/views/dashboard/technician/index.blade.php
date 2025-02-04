@@ -56,9 +56,9 @@
 					<x-dashboard.table id="dataTable" :tablename="[
 					    '0' => '#',
 					    '1' => 'Aksi',
-					    '2' => 'Pegawai',
-					    '3' => 'Judul Laporan',
-					    '4' => 'Customer',
+					    '2' => 'Kunjungan',
+					    '3' => 'Customer',
+					    '4' => 'Tools',
 					    '5' => 'Created / Updated',
 					]" />
 				</div>
