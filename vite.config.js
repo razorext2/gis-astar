@@ -55,6 +55,10 @@ export default defineConfig({
                 "resources/js/sales/edit.js",
                 "resources/js/sales/detail.js",
 
+                // technician
+                "resources/js/technician/index.js",
+                "resources/js/technician/add.js",
+
                 // dayoff 
                 "resources/js/dayoff/index.js",
                 "resources/js/dayoff/add.js",

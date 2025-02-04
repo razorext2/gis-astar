@@ -16,6 +16,7 @@ use App\Http\Controllers\LoghistoryController;
 use App\Http\Controllers\ProxyController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\TechnicianController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\CaptureController;
@@ -97,6 +98,9 @@ Route::middleware('auth')->group(function () {
 
         // route salesman
         Route::resource('sales', SalesController::class)->except(['store', 'update', 'destroy']);
+
+        // route technician
+        Route::resource('technician', TechnicianController::class)->only(['index', 'create']);
 
         // route collect 
         // tampilkan semua data where status = 0 (belum dilengkapi)

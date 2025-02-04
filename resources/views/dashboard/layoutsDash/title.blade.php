@@ -20,6 +20,7 @@
 	    'permissions.*' => 'Permissions',
 	    'notifications.*' => 'Pusat Notifikasi',
 	    'sales.*' => 'Laporan Sales',
+	    'technician.*' => 'Laporan Teknisi',
 	    'announcement.*' => 'Pusat Pengumuman',
 	];
 

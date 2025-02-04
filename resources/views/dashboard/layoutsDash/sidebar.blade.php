@@ -17,6 +17,14 @@
 	        'sublinks' => [],
 	    ],
 	    [
+	        'route' => 'technician.index',
+	        'check' => 'technician.*',
+	        'label' => 'Laporan Teknisi',
+	        'icon' => 'technician',
+	        'permission' => 'technician-list',
+	        'sublinks' => [],
+	    ],
+	    [
 	        'route' => 'capture.index',
 	        'check' => 'capture.*',
 	        'label' => 'Record Attendance',
@@ -216,6 +224,10 @@
 
 										@case('sales')
 											<x-icons.receipt class="{{ $isActive ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
+										@break
+
+										@case('technician')
+											<x-icons.hammer class="{{ $isActive ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
 										@break
 									@endswitch
 
