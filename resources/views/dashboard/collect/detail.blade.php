@@ -23,7 +23,7 @@
 			<div class="flex w-full justify-between">
 				<p class="text-sm text-gray-600 dark:text-gray-300">Mohon periksa terlebih dahulu laporan berikut sebelum memutuskan
 					untuk disetujui.</p>
-				@if ($data->status != 1)
+				@if ($data->status == 0 || $data->status == 3)
 					@can('collect-approve')
 						<a class="text-blue-500 hover:text-blue-600 hover:underline" href="{{ route('collect.edit', $data->id) }}"> Edit
 						</a>
