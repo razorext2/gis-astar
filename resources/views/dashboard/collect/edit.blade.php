@@ -29,7 +29,7 @@
 					<div class="col-span-2 w-full lg:col-span-1">
 						<x-input.basic class="cursor-not-allowed" id="no_sr" name="no_sr" value="{{ $data->no_sr ?? 'N/A' }}"
 							readonly>
-							No. SR
+							No. Tagihan
 						</x-input.basic>
 					</div>
 
@@ -129,13 +129,14 @@
 					</div>
 
 					<div class="col-span-2 w-full lg:col-span-1" id="have_paid_container">
-						<x-input.select id="have_paid" name="have_paid" :options="[
+						<x-input.select id="have_paid" name="have_paid" value="{{ $data->have_paid }}" :options="[
 						    '3' => 'Tanda terima',
 						    '0' => 'Belum bayar',
 						    '1' => 'Cicil',
 						    '2' => 'Lunas',
 						    '4' => 'Belum sempat',
-						]" default-option="Pilih status">
+						]"
+							default-option="Pilih status">
 							<x-slot name="textLabel">
 								Status Pembayaran
 							</x-slot>
@@ -144,12 +145,13 @@
 					</div>
 
 					<div class="col-span-2 w-full lg:col-span-1" id="payment_type_container">
-						<x-input.select id="payment_type" name="payment_type" :options="[
+						<x-input.select id="payment_type" name="payment_type" value="{{ $data->payment_type }}" :options="[
 						    '0' => 'Tidak ada',
 						    '1' => 'Cash',
 						    '2' => 'Transfer',
 						    '3' => 'Giro',
-						]" default-option="Pilih status">
+						]"
+							default-option="Pilih status">
 							<x-slot name="textLabel">
 								Metode Pembayaran
 							</x-slot>
@@ -158,14 +160,14 @@
 					</div>
 
 					<div class="col-span-2 hidden w-full" id="no_giro_container">
-						<x-input.basic id="no_giro" name="no_giro" :values="$data->no_giro ?? 'N/A'" required placeholder="cth: 1234567890">
+						<x-input.basic id="no_giro" name="no_giro" :value="$data->no_giro" placeholder="cth: 1234567890">
 							No. Giro
 						</x-input.basic>
 						<div class="mt-2 hidden text-sm text-red-500" id="alert-no_giro"></div>
 					</div>
 
 					<div class="col-span-2 w-full" id="payment_amount_container">
-						<x-input.currency id="payment_amount" name="payment_amount" :values="$data->payment_amount" required>
+						<x-input.currency id="payment_amount" name="payment_amount" :value="$data->payment_amount" required>
 							Total Bayar
 						</x-input.currency>
 						<div class="mt-2 hidden text-sm text-red-500" id="alert-payment_amount"></div>

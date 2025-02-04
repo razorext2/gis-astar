@@ -25,6 +25,9 @@ class ApiCollectController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // data
+        $query = Collector::find($id);
+
         // Validasi input
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:128|min:5',
@@ -36,7 +39,7 @@ class ApiCollectController extends Controller
             'payment_type' => 'required|string|min:1|max:12',
             'payment_amount' => 'required|integer|min_digits:1',
             'no_giro' => 'required|string|min:1|max:128',
-            'images' => 'required|array',
+            'images' => $query->status != 0 ? 'array' : 'required|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -44,9 +47,6 @@ class ApiCollectController extends Controller
         if ($validator->fails()) {
             return new ApiResource(false, 'Validasi gagal', $validator->errors());
         }
-
-        // Update data
-        $query = Collector::find($id);
 
         if (!$query) { // Jika data tidak ditemukan
             return new ApiResource(false, 'Laporan tidak ditemukan', null);

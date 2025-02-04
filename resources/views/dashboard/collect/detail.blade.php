@@ -23,7 +23,7 @@
 			<div class="flex w-full justify-between">
 				<p class="text-sm text-gray-600 dark:text-gray-300">Mohon periksa terlebih dahulu laporan berikut sebelum memutuskan
 					untuk disetujui.</p>
-				@if ($data->status == 0 || $data->status == 3)
+				@if ($data->status != 1)
 					@can('collect-approve')
 						<a class="text-blue-500 hover:text-blue-600 hover:underline" href="{{ route('collect.edit', $data->id) }}"> Edit
 						</a>
@@ -43,7 +43,7 @@
 							{{ match ($data->bill_type) {
 							    'idcppn' => $data->collectTaskPpnRelasi->sales_invoice,
 							    'idyppn' => $data->collectIdyPpnRelasi->sales_invoice,
-							    default => 'N/A',
+							    default => 'IDCPPN',
 							} }}
 							)
 						</p>
@@ -141,6 +141,14 @@
 						<p class="text-navy-700 text-base font-medium dark:text-white">
 							{{ $data->location ?? 'N/A' }}
 						</p>
+
+						<span class="text-navy-700 text-xs font-medium text-gray-400 dark:text-white">
+							<a class="inline-flex underline"
+								href="https://www.google.com/maps/{{ '@' . $data->latitude }},{{ $data->longitude }},20m/" target="_blank">
+								{{ $data->latitude }}, {{ $data->longitude }}
+								<x-icons.arrow-up class="h-4 w-4 rotate-45" />
+							</a>
+						</span>
 					</div>
 
 					<div
