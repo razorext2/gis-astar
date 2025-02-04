@@ -118,7 +118,8 @@
 	</div>
 
 	@include('dashboard.layoutsDash.modals')
-
+@endsection
+@push('script')
 	<script type="module">
 		function showDatatables() {
 			// Initialize DataTable
@@ -235,4 +236,4 @@
 			deleteModal();
 		});
 	</script>
-@endsection
+@endpush

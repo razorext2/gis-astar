@@ -13,8 +13,9 @@ class LoghistoryController extends Controller
     }
     public function index()
     {
-        $log = LogHistory::get()->sortByDesc('created_at');
+        $log = LogHistory::with('userRelasi')
+            ->orderBy('created_at', 'desc')
+            ->get();
         return view('dashboard.log.index', compact('log'));
-        //
     }
 }

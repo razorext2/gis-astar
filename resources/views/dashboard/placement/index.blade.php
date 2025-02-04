@@ -133,6 +133,8 @@
 	</div>
 
 	@include('dashboard.layoutsDash.modals')
+@endsection
+@push('script')
 	<script type="module">
 		function showDatatables() {
 			let minDate, maxDate;
@@ -307,4 +309,4 @@
 			deleteModal();
 		});
 	</script>
-@endsection
+@endpush
