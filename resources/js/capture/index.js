@@ -1,107 +1,113 @@
-// Constants
-const R = 6371000; // Radius of Earth in meters
-const lokasiSpan = document.getElementById('lokasi'); // Get the span element
-
-// State variables
-let lastLat, lastLng;
-
-// Initialize the application
 $(document).ready(function () {
-    // Check if geolocation is supported
+    const lokasiSpan = document.getElementById('lokasi'); // Get the span element
+
     if (navigator.geolocation) {
-        // Start watching the user's position
-        navigator.geolocation.watchPosition(handleSuccess, handleError, {
+        navigator.geolocation.watchPosition(
+            function (position) {
+                lat = position.coords.latitude;
+                lng = position.coords.longitude;
+
+                // Display the latitude and longitude in the span
+                lokasiSpan.innerHTML = `${lat}, ${lng}`;
+
+                // Calculate distance from the specified point
+                const distance = calculateDistance(specifiedLat, specifiedLng, lat, lng);
+
+                // Check if within the specified radius
+                if (distance > radius) {
+                    Swal.fire({
+                        title: "Gagal!",
+                        html: `Anda berada ${distance.toFixed(2)} meter dari tempat yang ditentukan.`,
+                        timer: 1500,
+                        icon: "error",
+                        showConfirmButton: false,
+                    }).then(() => {
+                        pegawaiKosong.style.display = "block";
+                        pegawaiInfo.style.display = "none";
+
+                        setTimeout(() => {
+                            window.location.href = redirectUrl;
+                        }, 1000);
+                    });
+                } else if (lastLat !== undefined && lastLng !== undefined) {
+                    // Calculate distance moved since last position
+                    const movedDistance = calculateDistance(lastLat, lastLng, lat, lng);
+
+                    if (movedDistance > movementThreshold) {
+                        Swal.fire({
+                            title: "Gagal!",
+                            html: `Fake GPS terdeteksi. Silahkan matikan terlebih dahulu.`,
+                            timer: 1500,
+                            icon: "error",
+                            showConfirmButton: false,
+                        }).then(() => {
+                            pegawaiKosong.style.display = "block";
+                            pegawaiInfo.style.display = "none";
+
+                            setTimeout(() => {
+                                window.location.href = redirectUrl;
+                            }, 2000);
+                        });
+                        return;
+                    }
+                }
+
+                // Save current position for the next check
+                lastLat = lat;
+                lastLng = lng;
+            },
+
+            function (error) {
+                Swal.fire({
+                    title: "Gagal!",
+                    html: `Anda harus mengaktifkan izin Lokasi.`,
+                    timer: 1500,
+                    icon: "error",
+                    showConfirmButton: false,
+                }).then(() => {
+                    pegawaiKosong.style.display = "block";
+                    pegawaiInfo.style.display = "none";
+
+                    $('#startButton').click(function () {
+                        Swal.fire({
+                            title: "Peringatan!",
+                            html: 'Aktifkan izin lokasi terlebih dahulu.',
+                            timer: 1500,
+                            icon: "error",
+                            showConfirmButton: false
+                        })
+                    })
+
+                    setTimeout(() => {
+                        window.location.href = redirectUrl;
+                    }, 3000);
+                });
+            }, {
             enableHighAccuracy: true,
             timeout: 1000,
             maximumAge: 0,
         });
     } else {
-        // Handle the case where geolocation is not supported
-        showAlert("Gagal!", "Browser anda tidak memiliki support Geolocation.");
+        window.Swal.fire({
+            title: "Gagal!",
+            html: `Browser anda tidak memiliki support Geolocation.`,
+            timer: 1500,
+            icon: "error",
+            showConfirmButton: false,
+        }).then(() => {
+            pegawaiKosong.style.display = "block";
+            pegawaiInfo.style.display = "none";
+
+            setTimeout(() => {
+                window.location.href = `${APP_URL}/dashboard`;
+            }, 1000);
+        });
     }
 });
 
-// Handle the success case for geolocation
-function handleSuccess(position) {
-    const lat = position.coords.latitude;
-    const lng = position.coords.longitude;
-    lokasiSpan.innerHTML = `${lat}, ${lng}`;
-
-    // Calculate the distance from the specified location
-    const distance = calculateDistance(SPECIFIED_LAT, SPECIFIED_LNG, lat, lng);
-
-    // Check if the user is within the allowed radius
-    if (distance > RADIUS) {
-        // Handle the case where the user is outside the allowed radius
-        showAlert("Gagal!", `Anda berada ${distance.toFixed(2)} meter dari tempat yang ditentukan.`);
-        disableStartButton(); // Disable the button on failure
-    } else if (lastLat !== undefined && lastLng !== undefined) {
-        // Calculate the distance moved by the user
-        const movedDistance = calculateDistance(lastLat, lastLng, lat, lng);
-
-        // Check if the user has moved more than the allowed threshold
-        if (movedDistance > MOVEMENT_THRESHOLD) {
-            // Handle the case where the user has moved too far
-            showAlert("Gagal!", "Fake GPS terdeteksi. Silahkan matikan terlebih dahulu.");
-            disableStartButton(); // Disable the button on failure
-            return;
-        }
-    } else {
-        // Enable the start button
-        enableStartButton();
-        lastLat = lat;
-        lastLng = lng;
-    }
-}
-
-// Handle the error case for geolocation
-function handleError(error) {
-    // Handle different types of errors
-    switch (error.code) {
-        case error.PERMISSION_DENIED:
-            showAlert("Gagal!", "Anda harus mengaktifkan izin Lokasi.");
-            break;
-        case error.POSITION_UNAVAILABLE:
-            showAlert("Gagal!", "Posisi tidak tersedia.");
-            break;
-        case error.TIMEOUT:
-            showAlert("Gagal!", "Permintaan lokasi telah timeout.");
-            break;
-        case error.UNKNOWN_ERROR:
-            showAlert("Gagal!", "Terjadi kesalahan yang tidak diketahui.");
-            break;
-    }
-
-    // Disable the start button
-    disableStartButton();
-}
-
-// Show an alert to the user
-function showAlert(title, message) {
-    Swal.fire({
-        title: title,
-        html: message,
-        timer: 1500,
-        icon: "error",
-        showConfirmButton: false,
-    }).then(() => {
-        pegawaiKosong.style.display = "block";
-        pegawaiInfo.style.display = "none";
-    });
-}
-
-// Disable the start button
-function disableStartButton() {
-    document.getElementById('startButton').disabled = true;
-}
-
-// Enable the start button
-function enableStartButton() {
-    document.getElementById('startButton').disabled = false;
-}
-
-// Calculate the distance between two points on the Earth's surface
+// Function to calculate distance between two coordinates using Haversine formula
 function calculateDistance(lat1, lng1, lat2, lng2) {
+    const R = 6371000; // Radius of Earth in meters
     const dLat = (lat2 - lat1) * (Math.PI / 180);
     const dLng = (lng2 - lng1) * (Math.PI / 180);
     const a =

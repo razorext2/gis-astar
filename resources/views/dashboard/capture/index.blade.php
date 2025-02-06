@@ -96,18 +96,18 @@
 
 		</div>
 	</div>
-
-	@push('script')
-		<script>
-			let lastLat, lastLng, lat, lng;
-			const SPECIFIED_LAT = parseFloat("{{ $data->latitude ?? 'N/A' }}"); // Latitude of the specified point
-			const SPECIFIED_LNG = parseFloat("{{ $data->longitude ?? 'N/A' }}"); // Longitude of the specified point
-			const RADIUS = parseFloat("{{ $data->radius ?? 'N/A' }}"); // Radius in meters
-			const MOVEMENT_THRESHOLD = 50; // Minimum distance to move (in meters)
-			const kodePegawai = "{{ $data->kode_pegawai }}"
-		</script>
-
-		<script defer src="{{ asset('face-api.min.js') }}"></script>
-		@vite(['resources/js/capture/index.js', 'resources/js/capture/selfDetect.js'])
-	@endpush
 @endsection
+@push('script')
+	<script>
+		let lastLat, lastLng, lat, lng;
+		const redirectUrl = "{{ route('capture.index') }}";
+		const specifiedLat = parseFloat("{{ $data->latitude ?? 'N/A' }}"); // Latitude of the specified point
+		const specifiedLng = parseFloat("{{ $data->longitude ?? 'N/A' }}"); // Longitude of the specified point
+		const radius = parseFloat("{{ $data->radius ?? 'N/A' }}"); // Radius in meters
+		const movementThreshold = 50; // Minimum distance to move (in meters)
+		const kodePegawai = "{{ $data->kode_pegawai }}"
+	</script>
+
+	<script defer src="{{ asset('face-api.min.js') }}"></script>
+	@vite(['resources/js/capture/index.js', 'resources/js/capture/selfDetect.js'])
+@endpush
