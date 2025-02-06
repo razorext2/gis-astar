@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\BackupController;
 use App\Http\Controllers\DayoffController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
@@ -71,6 +72,9 @@ Route::middleware('auth')->group(function () {
 
         // fetchSR IDY PPN
         Route::get('idy/ppn', [ProxyController::class, 'fetchIDYPpn'])->name('fetch.idy.ppn');
+
+        // fetchVT
+        Route::get('get/vt', [ProxyController::class, 'getVT'])->name('fetch.vt');
     });
 
     // group ke rute dashboard.
@@ -100,7 +104,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('sales', SalesController::class)->except(['store', 'update', 'destroy']);
 
         // route technician
-        Route::resource('technician', TechnicianController::class)->only(['index', 'create']);
+        Route::resource('technician', TechnicianController::class);
 
         // route collect 
         // tampilkan semua data where status = 0 (belum dilengkapi)
@@ -201,6 +205,9 @@ Route::middleware('auth')->group(function () {
         // route pegawai allowance & deductions
         Route::resource('pegawai/allowances', AllowanceController::class);
         Route::resource('pegawai/deductions', DeductionController::class);
+
+        // backup
+        Route::resource('backup', BackupController::class)->only('index');
     });
 });
 

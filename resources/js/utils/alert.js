@@ -7,3 +7,12 @@ export function showAlert(type, title, text = null) {
     timer: 1500
   });
 }
+
+export function loadingAlert(title) {
+  Swal.fire({
+    title: title,
+    showConfirmButton: false,
+    allowOutsideClick: false,
+    willOpen: () => Swal.showLoading()
+  });
+}

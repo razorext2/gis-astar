@@ -41,6 +41,26 @@
 						</x-input.basic>
 					</div>
 
+					<div class="col-span-2 w-full">
+						<x-input.w-button id="no_vt" name="no_vt" placeholder="VT-XXXXXX">
+							<x-slot name="buttonLabel">
+								Fetch
+							</x-slot>
+							<x-slot name="textLabel">
+								Nomor Kunjungan
+							</x-slot>
+						</x-input.w-button>
+
+						<div class="mt-2 hidden text-sm text-red-500" id="alert-no_vt"></div>
+					</div>
+
+					<div class="col-span-2 hidden w-full" id="partner_parent">
+						<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for=""> Partner Kunjungan
+						</label>
+
+						<div id="partner_child"></div>
+					</div>
+
 					<div class="col-span-2 w-full lg:col-span-1">
 						<x-input.basic id="customer_contact" name="customer_contact" placeholder="PT. XXX" readonly>
 							Customer Contact
@@ -92,8 +112,7 @@
 					</div>
 
 					<div class="col-span-2 w-full">
-						<x-input.basic id="capacity" name="capacity" type="number" min="0" default="0" placeholder="cth: 60000"
-							required>
+						<x-input.basic id="capacity" name="capacity" placeholder="cth: 60000" required>
 							Kapasitas
 						</x-input.basic>
 						<div class="mt-2 hidden text-sm text-red-500" id="alert-capacity"></div>
@@ -164,9 +183,9 @@
 					<div class="col-span-2 w-full">
 						<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="job_update">Update
 							Pekerjaan</label>
-						<div class="h-32 w-full dark:bg-white" id="editor"></div>
-						<input id="keterangan" name="keterangan" type="hidden">
-						<div class="mt-2 hidden text-sm text-red-500" id="alert-keterangan"></div>
+						<textarea
+						 class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+						 id="job_update" rows="10" placeholder="Update pekerjaan..."></textarea>
 					</div>
 
 					<div class="relative col-span-2 w-full">
@@ -184,21 +203,5 @@
 	</div>
 @endsection
 @push('script')
-	<script type="module">
-		$('#weight_type').on('change', function() {
-			$('#other_weight_type').addClass('hidden')
-			$('#other_loadcell_type').addClass('hidden')
-			$('#loadcell_type').removeClass('hidden');
-
-			if (this.value == 'Other') {
-				$('#other_weight_type').removeClass('hidden');
-			}
-
-			if (this.value == 'Timbangan Jembatan') {
-				$('#other_loadcell_type').removeClass('hidden');
-				$('#loadcell_type').addClass('hidden');
-			}
-		})
-	</script>
 	@vite(['resources/js/technician/add.js'])
 @endpush

@@ -1,5 +1,7 @@
-import { quillEditor } from "./../sales/func/quillEditor";
+import { fetchDataHandler } from "./func/fetchData";
+import { submitHandler } from "./func/submitHandler";
 
 $(function () {
-  quillEditor();
-});
+  fetchDataHandler();
+  submitHandler();
+})

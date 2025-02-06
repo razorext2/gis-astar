@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ApiResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Number;
 
 class ProxyController extends Controller
@@ -149,6 +152,57 @@ class ProxyController extends Controller
                 'error' => 'An error occurred while processing the request.',
                 'message' => $e->getMessage()
             ], 500);
+        }
+    }
+
+    public function getVT(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'no_vt' => 'required|string|min:3|max:12',
+        ]);
+
+        if ($validator->fails()) {
+            return new ApiResource(false, 'Validasi gagal', $validator->errors()->first());
+        }
+
+        $no_vt = $request->query('no_vt');
+
+        try {
+            $url = 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchKunjungan&NomorKunjungan=' . $no_vt;
+
+            $response = Http::get($url);
+
+            $result = $response->json();
+
+            if ($result['status'] == 'success') {
+
+                $no_identitas = $result['data'][0]['NomorIdentitasTeknisi'];
+
+                if ($no_identitas != Auth::user()->kode_pegawai) {
+                    return new ApiResource(false, 'Anda tidak memiliki akses untuk mengambil data ini', null);
+                }
+
+                $id = rawurlencode($result['data'][0]['IDPermintaanKunjungan']);
+                $date = $result['data'][0]['TanggalKunjungan'];
+
+                $url = 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchKunjunganRelasi&IDPermintaanKunjungan=' . $id  . '&TanggalKunjungan=' . $date;
+
+                $response = Http::get($url);
+
+                $partner = $response->json();
+
+                if ($partner['status'] == 'success') {
+                    $result['data'][0]['partner'] = $partner['data'];
+
+                    return new ApiResource(true, 'Berhasil mengambil data', $result);
+                }
+
+                return new ApiResource(false, 'Terjadi kegagalan saat mengambil data', $partner['message']);
+            }
+
+            return new ApiResource(false, 'Terjadi kegagalan saat mengambil data', $result['message']);
+        } catch (\Exception $e) {
+            return new ApiResource(false, 'Terjadi kesalahan saat memproses data', $e->getMessage());
         }
     }
 }
