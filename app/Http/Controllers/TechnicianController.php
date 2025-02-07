@@ -10,6 +10,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
@@ -35,28 +36,53 @@ class TechnicianController extends Controller
                 return new ApiResource(false, "Terjadi kesalahan saat mengambil data laporan", null);
             }
 
-            $filteredData = array_merge(
-                array_filter($data["data"], function ($item) {
-                    return $item["NomorIdentitasTeknisi"] == Auth::user()->kode_pegawai && $item["UpdateTeknisi"] == '';
-                }),
-                array_filter($data["data"], function ($item) {
-                    return $item["NomorIdentitasTeknisi"] == Auth::user()->kode_pegawai && $item["UpdateTeknisi"] != '';
-                })
-            );
+            // $filteredData = array_merge(
+            //     array_filter($data["data"], function ($item) {
+            //         return $item["NomorIdentitasTeknisi"] == Auth::user()->kode_pegawai && $item["UpdateTeknisi"] == '';
+            //     }),
+            //     array_filter($data["data"], function ($item) {
+            //         return $item["NomorIdentitasTeknisi"] == Auth::user()->kode_pegawai && $item["UpdateTeknisi"] != '';
+            //     })
+            // );
 
             if ($request->ajax()) {
+                $filteredData = array_slice(
+                    array_filter($data["data"], function ($item) use ($request) {
+                        $status = $request->status;
+
+                        $data = ($status == 1 ? $item["UpdateTeknisi"] != '' : $item["UpdateTeknisi"] == '');
+
+                        if ($request->filled('no_vt')) {
+                            $data = $item['NomorKunjungan'] == $request->no_vt;
+                            return $data;
+                        }
+
+                        if ($request->filled('customer_name')) {
+                            $data = strpos($item['CustomerContact'], $request->customer_name) !== false;
+                        }
+
+                        if ($request->filled('kode_pegawai')) {
+                            $data = $item['NomorIdentitasTeknisi'] == $request->kode_pegawai;
+                        }
+
+                        return $data;
+                    }),
+                    0,
+                    $request->filled('total_data') ? $request->total_data : 100
+                );
+
                 return Datatables::of(collect($filteredData))
                     ->addIndexColumn()
                     ->addColumn('actions', function ($row) {
                         $actions = [
                             [
                                 'id' => 'show-btn',
-                                'action' => route('technician.show', Crypt::encryptString($row['NomorKunjungan'])),
+                                'action' => route('technician.show', $row['NomorKunjungan']),
                                 'label' => 'Detail'
                             ],
                             [
                                 'id' => 'edit-btn',
-                                'action' => route('technician.create', Crypt::encryptString($row['NomorKunjungan'])),
+                                'action' => route('technician.create', $row['NomorKunjungan']),
                                 'label' => 'Update'
                             ],
                         ];
@@ -67,19 +93,10 @@ class TechnicianController extends Controller
                         ])->render();
                     })
                     ->editColumn('NomorIdentitasTeknisi', function ($row) {
-
-                        $user = Cache::remember('tech_data_' . $row['NomorIdentitasTeknisi'], now()->addHours(6), function () use ($row) {
-                            return User::select('kode_pegawai', 'name')->where('kode_pegawai', $row['NomorIdentitasTeknisi'])->first();
-                        });
-
-                        if (!$user) {
-                            return new ApiResource(false, "Nomor identitas teknisi tidak ditemukan", null);
-                        }
-
                         return view('components.dashboard.name-w-code', [
-                            'code' => $row['NomorKunjungan'],
-                            'name' => $user->name ?? "Teknisi belum terdaftar di sistem",
-                            'item3' => $row['NomorIdentitasTeknisi']
+                            'code' => $row['NomorKunjungan'] ?? 'N/A',
+                            'name' => "Teknisi belum terdaftar di sistem",
+                            'item3' => $row['NomorIdentitasTeknisi'] ?? 'N/A'
                         ])->render();
                     })
                     ->editColumn('AlamatLengkapKunjungan', function ($row) {
@@ -157,5 +174,31 @@ class TechnicianController extends Controller
         } catch (\Exception $e) {
             return new ApiResource(false, 'Gagal memperbarui kunjungan', $e->getMessage());
         }
+    }
+
+    public function show(Request $request, $no_vt)
+    {
+        $user = User::select('kode_pegawai', 'name');
+
+        if ($request->ajax()) {
+            $url = "https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchKunjungan&NomorKunjungan=" . $no_vt;
+
+            try {
+                $response = Http::get($url);
+                $result = $response->json();
+
+                if ($result['status'] != 'success') {
+                    return new ApiResource(false, 'Gagal mengambil data kunjungan', $result['message']);
+                }
+
+                $data = $result['data'][0];
+
+                return new ApiResource(true, 'Data berhasil diambil', $data);
+            } catch (\Exception $e) {
+                return new ApiResource(false, 'Gagal mengambil data kunjungan', $e->getMessage());
+            }
+        }
+
+        return view('dashboard.technician.detail', compact(['user', 'no_vt']));
     }
 }

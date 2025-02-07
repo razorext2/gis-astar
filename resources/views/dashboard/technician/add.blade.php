@@ -94,9 +94,7 @@
 						    'Timbangan Jembatan' => 'Timbangan Jembatan',
 						    'Other' => 'Other',
 						]" default-option="Pilih jenis timbangan">
-							<x-slot name="textLabel">
-								Jenis Timbangan
-							</x-slot>
+							<x-slot name="textLabel">Jenis Timbangan</x-slot>
 						</x-input.select>
 						{{-- other weight type, ditampilkan ketika pilih "other" --}}
 						<x-input.basic class="hidden" id="other_weight_type" name="other_weight_type"

@@ -1,12 +1,26 @@
 export function showData() {
+  // Get the current URL
+  const currentUrl = new URL(window.location.href);
+
+  // Retrieve the status parameter from the URL
+  const status = currentUrl.searchParams.get('status');
+
   let table = $('#dataTable').DataTable({
     processing: true,
     serverSide: true,
     responsive: true,
     lenghtMenu: [10, 25, 50, 75, 100, -1],
     ajax: {
-      url: `${APP_URL}/dashboard/technician`,
+      url: `${APP_URL}/dashboard/technician?status=${status}`,
       type: 'GET',
+      data: function (d) {
+        d.kode_pegawai = $('#kode_pegawai').val();
+        d.no_vt = $('#no_vt').val();
+        d.customer_name = $('#customer_name').val();
+        d.total_data = $('#total_data').val();
+        d.startDate = $('#datepicker-range-start').val();
+        d.endDate = $('#datepicker-range-end').val();
+      }
     },
     columns: [
       {
@@ -56,4 +70,42 @@ export function showData() {
       "infoFiltered": ""
     }
   });
+
+  setInterval(function () {
+    table.ajax.reload();
+  }, 60000);
+
+  $('#cari').click(function () {
+    // Ambil nilai dari semua input filter
+    const filters = ['#total_data', '#datepicker-range-start',
+      '#datepicker-range-end', '#kode_pegawai', '#no_vt', '#customer_name'
+    ].map(selector => $(
+      selector).val());
+
+    // Cek apakah semua filter kosong
+    if (filters.some(value => value !== '')) {
+      table.draw();
+    }
+  });
+
+  $('#clear').click(function () {
+    // Ambil nilai dari semua input filter
+    const filters = ['#total_data', '#datepicker-range-start',
+      '#datepicker-range-end', '#kode_pegawai', '#no_vt', '#customer_name'
+    ].map(selector => $(
+      selector).val());
+    // Cek apakah semua filter kosong
+    if (filters.some(value => value !== '')) {
+
+      // kosongkan semua value
+      $('#total_data').val('');
+      $('#kode_pegawai').val('');
+      $('#no_vt').val('');
+      $('#customer_name').val('');
+      $('#datepicker-range-start').val('');
+      $('#datepicker-range-end').val('');
+
+      table.draw();
+    }
+  })
 }

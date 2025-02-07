@@ -60,7 +60,7 @@ export function showDatatables() {
 
     $('#cari').click(function () {
         // Ambil nilai dari semua input filter
-        const filters = ['#title', '#title', '#no_sr', '#status', '#datepicker-range-start',
+        const filters = ['#title', '#no_sr', '#no_sr', '#status', '#datepicker-range-start',
             '#datepicker-range-end'
         ].map(selector => $(
             selector).val());
