@@ -1,5 +1,10 @@
-<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-	for="{{ $id }}">{{ $slot }}</label>
+@props(['labels' => true, 'id', 'name'])
+
+@if ($labels)
+	<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="{{ $id }}">
+		{{ $slot }}
+	</label>
+@endif
 
 <div class="flex items-center">
 	<div
