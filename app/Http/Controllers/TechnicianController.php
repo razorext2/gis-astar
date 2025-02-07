@@ -27,25 +27,16 @@ class TechnicianController extends Controller
     {
         $url = "https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchKunjunganAll";
 
-        try {
-            $response = Http::get($url);
+        if ($request->ajax()) {
+            try {
+                $response = Http::get($url);
 
-            $data = $response->json();
+                $data = $response->json();
 
-            if ($data['status'] !== "success") {
-                return new ApiResource(false, "Terjadi kesalahan saat mengambil data laporan", null);
-            }
+                if ($data['status'] !== "success") {
+                    return new ApiResource(false, "Terjadi kesalahan saat mengambil data laporan", null);
+                }
 
-            // $filteredData = array_merge(
-            //     array_filter($data["data"], function ($item) {
-            //         return $item["NomorIdentitasTeknisi"] == Auth::user()->kode_pegawai && $item["UpdateTeknisi"] == '';
-            //     }),
-            //     array_filter($data["data"], function ($item) {
-            //         return $item["NomorIdentitasTeknisi"] == Auth::user()->kode_pegawai && $item["UpdateTeknisi"] != '';
-            //     })
-            // );
-
-            if ($request->ajax()) {
                 $filteredData = array_slice(
                     array_filter($data["data"], function ($item) use ($request) {
                         $status = $request->status;
@@ -59,10 +50,12 @@ class TechnicianController extends Controller
 
                         if ($request->filled('customer_name')) {
                             $data = strpos($item['CustomerContact'], $request->customer_name) !== false;
+                            return $data;
                         }
 
                         if ($request->filled('kode_pegawai')) {
                             $data = $item['NomorIdentitasTeknisi'] == $request->kode_pegawai;
+                            return $data;
                         }
 
                         return $data;
@@ -114,12 +107,11 @@ class TechnicianController extends Controller
                     })
                     ->rawColumns(['actions', 'NomorIdentitasTeknisi', 'AlamatLengkapKunjungan', 'UpdateTeknisi'])
                     ->make(true);
+            } catch (\Exception $e) {
+                return new ApiResource(false, "Terjadi kesalahan saat mengambil data laporan", $e->getMessage());
             }
-
-            return view("dashboard.technician.index");
-        } catch (\Exception $e) {
-            return new ApiResource(false, "Terjadi kesalahan saat mengambil data laporan", $e->getMessage());
         }
+        return view("dashboard.technician.index");
     }
 
     public function create()

@@ -58,6 +58,7 @@ export default defineConfig({
                 // technician
                 "resources/js/technician/index.js",
                 "resources/js/technician/add.js",
+                "resources/js/technician/detail.js",
 
                 // dayoff 
                 "resources/js/dayoff/index.js",
