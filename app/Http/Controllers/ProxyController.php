@@ -178,8 +178,11 @@ class ProxyController extends Controller
 
                 $no_identitas = $result['data'][0]['NomorIdentitasTeknisi'];
 
-                if ($no_identitas != Auth::user()->kode_pegawai) {
-                    return new ApiResource(false, 'Anda tidak memiliki akses untuk mengambil data ini', null);
+                // untuk saat ini filter data pakai hasRole = admin, kdepannya harus ubah jadi permission
+                if (!Auth::user()->hasRole('Admin')) {
+                    if ($no_identitas != Auth::user()->kode_pegawai) {
+                        return new ApiResource(false, 'Anda tidak memiliki akses untuk mengambil data ini', null);
+                    }
                 }
 
                 $id = rawurlencode($result['data'][0]['IDPermintaanKunjungan']);

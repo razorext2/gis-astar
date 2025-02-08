@@ -28,6 +28,7 @@
 			<div class="w-full">
 
 				<div class="grid gap-4 md:grid-cols-2" id="laporan-content">
+
 					<div class="col-span-2 w-full lg:col-span-1">
 						<x-input.basic id="kode_pegawai" name="kode_pegawai" value="{{ Auth::user()->kode_pegawai ?? '28101999' }}"
 							readonly>
@@ -42,7 +43,7 @@
 					</div>
 
 					<div class="col-span-2 w-full">
-						<x-input.w-button id="no_vt" name="no_vt" placeholder="VT-XXXXXX">
+						<x-input.w-button id="no_vt" name="no_vt" value="{{ Request::query('id') }}" placeholder="VT-XXXXXX">
 							<x-slot name="buttonLabel">
 								Fetch
 							</x-slot>
@@ -80,7 +81,7 @@
 							Pekerjaan</label>
 						<textarea
 						 class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-						 id="job_detail" rows="10" placeholder="Rincian pekerjaan..." readonly></textarea>
+						 id="job_detail" rows="25" placeholder="Rincian pekerjaan..." readonly></textarea>
 					</div>
 
 					<div class="col-span-2 w-full lg:col-span-1" id="weight_type_container">
@@ -183,7 +184,7 @@
 							Pekerjaan</label>
 						<textarea
 						 class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-						 id="job_update" rows="10" placeholder="Update pekerjaan..."></textarea>
+						 id="job_update" rows="25" placeholder="Update pekerjaan..."></textarea>
 					</div>
 
 					<div class="relative col-span-2 w-full">

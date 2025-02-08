@@ -89,7 +89,7 @@ class TechnicianController extends Controller
                             ],
                             [
                                 'id' => 'edit-btn',
-                                'action' => route('technician.create', $row['NomorKunjungan']),
+                                'action' => route('technician.create', ['id' => $row['NomorKunjungan']]),
                                 'label' => 'Update'
                             ],
                         ];
