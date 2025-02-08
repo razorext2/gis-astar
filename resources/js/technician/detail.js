@@ -23,6 +23,7 @@ async function fetchData() {
     $('#kode_pegawai').append(data.NomorIdentitasTeknisi);
     $('#customer_contact').append(data.CustomerContact);
     $('#customer_address').append(data.AlamatLengkapKunjungan);
+    $('#job_detail').removeClass('hidden');
     $('#job_detail').append(data.RincianPekerjaan);
     $('#weight_type').append(data.JenisTimbangan);
     $('#weight_size').append(data.Ukuran);
@@ -31,12 +32,12 @@ async function fetchData() {
     $('#indicator_sn').append(data.TipeIndikatorSN);
     $('#loadcell_type').append(data.TipeLoadcell);
     $('#loadcell_sn').append(data.TipeLoadcellSN);
-    $('#loadcell_qty').append(data.TipeJunctuionBoxSN);
-    $('#indicator_type').append(data.TipeIndikator);
-    $('#indicator_type').append(data.TipeIndikator);
-    $('#indicator_type').append(data.TipeIndikator);
-    $('#indicator_type').append(data.TipeIndikator);
-
+    $('#loadcell_qty').append(data.TipeJunctionBoxSN);
+    $('#junction_type').append(data.TipeJunctionBox);
+    $('#job_update').removeClass('hidden'); 
+    $('#job_update').append(data.UpdatePekerjaan);
+    $('#update_teknisi').append(data.UpdateTeknisi);
+    $('#teknisi_telp').append(data.TeleponTeknisi);
 
     console.log(data);
 

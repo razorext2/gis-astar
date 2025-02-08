@@ -38,7 +38,12 @@
 
 					<x-detail.label id="customer_address" label="Alamat Customer" />
 
-					<x-detail.label class="lg:col-span-2" id="job_detail" label="Rincian Pekerjaan" />
+					<div class="h-full rounded-lg bg-gray-50 p-3 dark:bg-gray-700 lg:col-span-2">
+						<p class="text-sm text-gray-600 dark:text-gray-300">Rincian pekerjaan</p>
+						<x-skeleton />
+						<x-input.textarea class="hidden" id="job_detail" name="job_detail" placeholder="Rincian pekerjaan"
+							:labels="'Rincian pekerjaan'" rows="25" readonly />
+					</div>
 
 					<x-detail.label class="lg:col-span-2" id="weight_type" label="Jenis Timbangan" />
 
@@ -58,7 +63,16 @@
 
 					<x-detail.label class="lg:col-span-2" id="junction_type" label="Tipe Junctionbox" />
 
-					<x-detail.label class="lg:col-span-2" id="job_update" label="Update Pekerjaan" />
+					<div class="h-full rounded-lg bg-gray-50 p-3 dark:bg-gray-700 lg:col-span-2">
+						<p class="text-sm text-gray-600 dark:text-gray-300">Update pekerjaan</p>
+						<x-skeleton />
+						<x-input.textarea class="hidden" id="job_update" name="job_update" placeholder="Update pekerjaan" :labels="'Update pekerjaan'"
+							rows="25" readonly />
+					</div>
+
+					<x-detail.label id="update_teknisi" label="Waktu update" />
+
+					<x-detail.label id="teknisi_telp" label="Nomor telepon" />
 				</div>
 
 			</div>

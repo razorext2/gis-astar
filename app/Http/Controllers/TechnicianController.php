@@ -44,6 +44,10 @@ class TechnicianController extends Controller
 
                         $data = ($status == 1 ? $item["UpdateTeknisi"] != '' : $item["UpdateTeknisi"] == '');
 
+                        if (Auth::user()->kode_pegawai) {
+                            $data = $item['NomorIdentitasTeknisi'] == Auth::user()->kode_pegawai;
+                        }
+
                         if ($request->filled('no_vt')) {
                             $data = $item['NomorKunjungan'] == $request->no_vt;
                             return $data;
@@ -71,7 +75,7 @@ class TechnicianController extends Controller
                         return $data;
                     }),
                     0,
-                    $request->filled('total_data') ? $request->total_data : 100
+                    $request->filled('total_data') ? $request->total_data : 50
                 );
 
                 return Datatables::of(collect($filteredData))
@@ -98,7 +102,7 @@ class TechnicianController extends Controller
                     ->editColumn('NomorIdentitasTeknisi', function ($row) {
                         return view('components.dashboard.name-w-code', [
                             'code' => $row['NomorKunjungan'] ?? 'N/A',
-                            'name' => "Teknisi belum terdaftar di sistem",
+                            'name' => "Nama Teknisi",
                             'item3' => $row['NomorIdentitasTeknisi'] ?? 'N/A'
                         ])->render();
                     })
@@ -195,7 +199,7 @@ class TechnicianController extends Controller
 
                 $data = $result['data'][0];
 
-                return new ApiResource(true, 'Data berhasil diambil', $data);
+                return new ApiResource(true, 'Berhasil mengambil data', $data);
             } catch (\Exception $e) {
                 return new ApiResource(false, 'Gagal mengambil data kunjungan', $e->getMessage());
             }
