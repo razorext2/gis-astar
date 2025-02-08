@@ -72,18 +72,20 @@
 				{{-- filter --}}
 				<div class="col-span-2 mb-4">
 					<x-filter.filter-bar>
-						<div class="col-span-2 w-full lg:col-span-1">
-							<x-input.basic id="kode_pegawai" name="kode_pegawai" placeholder="Cari kode jari..." required :labels="false" />
-						</div>
 
-						<div class="col-span-2 w-full lg:col-span-1">
-							<div class="grid grid-cols-2 gap-x-2">
-								<div class="w-full">
+						<div class="col-span-2 w-full">
+
+							<div class="grid grid-cols-3 gap-2 md:gap-4">
+								<div class="col-span-3 w-full lg:col-span-1">
+									<x-input.basic id="kode_pegawai" name="kode_pegawai" placeholder="Cari kode jari..." required
+										:labels="false" />
+								</div>
+								<div class="col-span-3 w-full lg:col-span-1">
 									<x-input.basic id="customer_name" name="customer_name" placeholder="Cari nama customer..." required
 										:labels="false" />
 								</div>
 
-								<div class="w-full">
+								<div class="col-span-3 w-full lg:col-span-1">
 									<x-input.basic id="no_vt" name="no_vt" placeholder="Cari nomor kunjungan..." required :labels="false" />
 								</div>
 							</div>

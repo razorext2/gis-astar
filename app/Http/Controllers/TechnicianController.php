@@ -33,6 +33,7 @@ class TechnicianController extends Controller
 
                 $data = $response->json();
 
+
                 if ($data['status'] !== "success") {
                     return new ApiResource(false, "Terjadi kesalahan saat mengambil data laporan", null);
                 }
@@ -55,6 +56,15 @@ class TechnicianController extends Controller
 
                         if ($request->filled('kode_pegawai')) {
                             $data = $item['NomorIdentitasTeknisi'] == $request->kode_pegawai;
+                            return $data;
+                        }
+
+                        if ($request->filled('startDate') && $request->filled('endDate')) {
+                            $startDate = Carbon::parse($request->startDate);
+                            $endDate = Carbon::parse($request->endDate);
+
+                            $data = $item['TanggalKunjungan'] >= $startDate && $item['TanggalKunjungan'] <= $endDate;
+
                             return $data;
                         }
 
