@@ -1,4 +1,5 @@
 @vite(['resources/js/main.js'])
+@livewireScripts
 <script type="module" src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
 <script type="module" src="https://cdn.datatables.net/2.1.8/js/dataTables.tailwindcss.min.js"></script>
 <script type="module" src="https://cdn.jsdelivr.net/npm/luxon@3.5.0/build/global/luxon.min.js"></script>

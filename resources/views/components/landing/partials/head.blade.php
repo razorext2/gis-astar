@@ -5,9 +5,9 @@
 <meta name="description" content="Is a web-based attendance application for Indodacin using face recognition" />
 <meta name="keywords" content="face, attendance, face-attendance, face attendance, indodacin" />
 <meta name="csrf-token" content="{{ csrf_token() }}" />
-
-<!-- Title -->
 <title>{{ $title }}: Attendance System</title>
+
+@livewireStyles
 
 <!-- Favicons -->
 <link href="{{ asset('assets/img/logo.ico') }}" rel="icon" />
@@ -20,7 +20,6 @@
 <!-- Vendor CSS -->
 @vite('resources/css/app.css')
 @vite('resources/js/app.js')
-@vite('resources/js/global/alpine.js')
 
 <link href="{{ asset('assets/vendor/aos/aos.css') }}" rel="stylesheet" />
 <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet" />

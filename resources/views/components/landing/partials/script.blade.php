@@ -1,3 +1,4 @@
+@livewireScripts
 <script src="{{ asset('assets/vendor/php-email-form/validate.js') }}"></script>
 <script src="{{ asset('assets/vendor/aos/aos.js') }}"></script>
 <script src="{{ asset('assets/js/main.js') }}"></script>

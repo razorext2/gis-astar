@@ -22,6 +22,7 @@
 	    'sales.*' => 'Laporan Sales',
 	    'technician.*' => 'Laporan Teknisi',
 	    'announcement.*' => 'Pusat Pengumuman',
+	    'backup.*' => 'Manajemen Cadangan',
 	];
 
 	// Temukan judul berdasarkan rute dengan wildcard

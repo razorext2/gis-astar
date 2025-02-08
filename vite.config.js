@@ -13,7 +13,6 @@ export default defineConfig({
                 "resources/js/main.js",
 
                 // global
-                "resources/js/global/alpine.js",
                 "resources/js/global/chart.js",
                 "resources/js/global/leaflet.js",
                 "resources/js/global/simpleTables.js",
