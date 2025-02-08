@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ApiResource;
 use App\Models\Pegawai;
 use App\Models\Sales;
 use App\Models\User;
@@ -23,90 +24,93 @@ class SalesController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Sales::query()
-            ->with(['pegawaiRelasi']);
-
-        if (!Auth::user()->can('sales-approve')) {
-            $query->where('kode_pegawai', Auth::user()->kode_pegawai);
-        }
-
-        $query->latest();
-
         if ($request->ajax()) {
-            return DataTables::of($query)
-                ->addIndexColumn()
-                ->addColumn('actions', function ($data) {
-                    $actions = [
-                        [
-                            'id' => 'show-btn',
-                            'action' => route('sales.show', $data->id),
-                            'label' => 'Detail'
-                        ]
-                    ];
+            try {
+                $query = Sales::query()->with(['pegawaiRelasi']);
 
-                    if (Auth::user()->hasRole('Admin')) {
-                        $actions[] = [
-                            'id' => 'edit-btn',
-                            'action' => route('sales.edit', $data->id),
-                            'label' => 'Edit'
-                        ];
+                if (!Auth::user()->can('sales-approve')) {
+                    $query->where('kode_pegawai', Auth::user()->kode_pegawai);
+                }
 
-                        $actions[] = [
-                            'id' => 'delete-btn',
-                            'action' => 'javascript:void(0)',
-                            'label' => 'Hapus',
-                        ];
-                    }
+                $query->latest();
 
-                    if (Auth::user()->can('sales-approve')) {
-                        return view('components.dashboard.action-buttons', [
-                            'id' => $data->id,
-                            'datas' => $actions,
-                        ])->render();
-                    } else {
-                        return view('components.dashboard.single-button', [
-                            'id' => $data->id,
-                            'data' => [
-                                'id' => 'detailBtn' . $data->id,
+                return DataTables::of($query)
+                    ->addIndexColumn()
+                    ->addColumn('actions', function ($data) {
+                        $actions = [
+                            [
+                                'id' => 'show-btn',
                                 'action' => route('sales.show', $data->id),
-                                'label' => 'Detail',
+                                'label' => 'Detail'
                             ]
+                        ];
+
+                        if (Auth::user()->hasRole('Admin')) {
+                            $actions[] = [
+                                'id' => 'edit-btn',
+                                'action' => route('sales.edit', $data->id),
+                                'label' => 'Edit'
+                            ];
+
+                            $actions[] = [
+                                'id' => 'delete-btn',
+                                'action' => 'javascript:void(0)',
+                                'label' => 'Hapus',
+                            ];
+                        }
+
+                        if (Auth::user()->can('sales-approve')) {
+                            return view('components.dashboard.action-buttons', [
+                                'id' => $data->id,
+                                'datas' => $actions,
+                            ])->render();
+                        } else {
+                            return view('components.dashboard.single-button', [
+                                'id' => $data->id,
+                                'data' => [
+                                    'id' => 'detailBtn' . $data->id,
+                                    'action' => route('sales.show', $data->id),
+                                    'label' => 'Detail',
+                                ]
+                            ])->render();
+                        }
+                    })
+                    ->editColumn('kode_pegawai', function ($data) {
+                        return view('components.dashboard.name-w-code', [
+                            'code' => $data->kode_pegawai ?? 'N/A',
+                            'name' => $data->pegawaiRelasi->full_name ?? 'N/A',
                         ])->render();
-                    }
-                })
-                ->editColumn('kode_pegawai', function ($data) {
-                    return view('components.dashboard.name-w-code', [
-                        'code' => $data->kode_pegawai ?? 'N/A',
-                        'name' => $data->pegawaiRelasi->full_name ?? 'N/A',
-                    ])->render();
-                })
-                ->editColumn('title', function ($data) {
-                    return view('components.dashboard.title-w-status-two', [
-                        'status' => $data->status,
-                        'title' => $data->short_title,
-                    ])->render();
-                })
-                ->editColumn('customer_name', function ($data) {
-                    return view('components.dashboard.name-w-code', [
-                        'code' => $data->customer_telp ?? 'N/A',
-                        'name' => $data->customer_name ?? 'N/A',
-                    ])->render();
-                })
-                ->editColumn('lokasi', function ($data) {
-                    return view('components.dashboard.location-w-coordinate', [
-                        'location' => $data->lokasi ?? 'N/A',
-                        'long' => $data->longitude ?? 'N/A',
-                        'lat' => $data->latitude ?? 'N/A',
-                    ])->render();
-                })
-                ->editColumn('created_at', function ($data) {
-                    return view('components.dashboard.created-updated', [
-                        'created' => $data->created_at->locale('id')->isoFormat('D MMM YYYY / HH:MM:ss') ?? 'N/A',
-                        'updated' => $data->updated_at->locale('id')->isoFormat('D MMM YYYY / HH:MM:ss') ?? 'N/A',
-                    ])->render();
-                })
-                ->rawColumns(['actions', 'title', 'customer_name', 'kode_pegawai', 'lokasi', 'created_at'])
-                ->toJson();
+                    })
+                    ->editColumn('title', function ($data) {
+                        return view('components.dashboard.title-w-status-two', [
+                            'status' => $data->status,
+                            'title' => $data->short_title,
+                        ])->render();
+                    })
+                    ->editColumn('customer_name', function ($data) {
+                        return view('components.dashboard.name-w-code', [
+                            'code' => $data->customer_telp ?? 'N/A',
+                            'name' => $data->customer_name ?? 'N/A',
+                        ])->render();
+                    })
+                    ->editColumn('lokasi', function ($data) {
+                        return view('components.dashboard.location-w-coordinate', [
+                            'location' => $data->lokasi ?? 'N/A',
+                            'long' => $data->longitude ?? 'N/A',
+                            'lat' => $data->latitude ?? 'N/A',
+                        ])->render();
+                    })
+                    ->editColumn('created_at', function ($data) {
+                        return view('components.dashboard.created-updated', [
+                            'created' => $data->created_at->locale('id')->isoFormat('D MMM YYYY / HH:MM:ss') ?? 'N/A',
+                            'updated' => $data->updated_at->locale('id')->isoFormat('D MMM YYYY / HH:MM:ss') ?? 'N/A',
+                        ])->render();
+                    })
+                    ->rawColumns(['actions', 'title', 'customer_name', 'kode_pegawai', 'lokasi', 'created_at'])
+                    ->toJson();
+            } catch (\Exception $e) {
+                return new ApiResource(false, "Terjadi kesalahan saat mengambil data", $e->getMessage());
+            }
         }
 
         return view("dashboard.sales.index");
