@@ -43,6 +43,17 @@ class ApiCollectController extends Controller
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        $remaining_bill = match ($query->bill_type) {
+            'idcnonppn' => $query->collectTaskRelasi->remaining_bill,
+            'idcppn' => $query->collectTaskPpnRelasi->remaining_bill,
+            'idyppn' => $query->collectIdyPpnRelasi->remaining_bill,
+            default => 0,
+        };
+
+        if ($request->payment_amount > $remaining_bill) {
+            return new ApiResource(false, 'Gagal melakukan update', '<b>Total bayar</b> tidak boleh melebihi <b>sisa tagihan</b>.');
+        }
+
         // Jika validasi gagal, kembalikan response JSON
         if ($validator->fails()) {
             return new ApiResource(false, 'Validasi gagal', $validator->errors());

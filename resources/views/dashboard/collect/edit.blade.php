@@ -87,6 +87,14 @@
 						</x-input.basic>
 					</div>
 
+					<input id="remain" name="remain" type="hidden"
+						value="{{ match ($data->bill_type) {
+						    'idcnonppn' => $data->collectTaskRelasi->remaining_bill,
+						    'idcppn' => $data->collectTaskPpnRelasi->remaining_bill,
+						    'idyppn' => $data->collectIdyPpnRelasi->remaining_bill,
+						    default => 0,
+						} }}">
+
 					<div class="col-span-2 w-full">
 						<p class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Dokumentasi</p>
 						<p class="mb-2 text-xs text-red-500"> *Dokumentasi tidak dapat diubah setelah laporan diinput. </p>

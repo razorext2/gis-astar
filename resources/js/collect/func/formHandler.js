@@ -6,11 +6,15 @@ export function editDataHandler() {
     e.preventDefault();
 
     const $button = $(this);
-    $button.prop('disabled', true);
+    // $button.prop('disabled', true);
 
     // Ambil data form
     let formData = new FormData();
     let id = $('#id').val();
+
+    if ($('#payment_amount').val() > $('#remain').val()) {
+      return showAlert('error', 'Gagal melakukan update', '<b>Total bayar</b> tidak boleh melebihi <b>sisa tagihan</b>.');
+    }
 
     formData.append("title", $("#title").val());
     formData.append("keterangan", $("#keterangan").val());
@@ -19,7 +23,6 @@ export function editDataHandler() {
     formData.append("longitude", $("#longitude").val());
     formData.append("have_paid", $("#have_paid").val());
     formData.append("payment_type", $("#payment_type").val());
-    formData.append("remaining_bill", $("#remaining_bill").val());
     formData.append("payment_amount", $("#payment_amount").val());
     formData.append("no_giro", $("#no_giro").val());
     formData.append('_method', 'PATCH');
@@ -38,13 +41,12 @@ export function editDataHandler() {
         setTimeout(() => window.location.href = `${APP_URL}/dashboard/collect/${id}`, 1500);
       } else {
         handleFormErrors(response.data.data);
-        showAlert('error', response.data.message, 'Kamu harus mengisi semua form yang ada.');
         $button.prop('disabled', false);
+        return showAlert('error', response.data.message, response.data.data);
       }
     } catch (error) {
-      console.error('Error:', error);
-      showAlert('error', 'Terjadi kesalahan.', error.message);
       $button.prop('disabled', false);
+      return showAlert('error', 'Terjadi kesalahan.', error.message);
     }
   });
 }
