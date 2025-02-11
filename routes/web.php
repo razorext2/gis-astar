@@ -115,6 +115,8 @@ Route::middleware('auth')->group(function () {
         Route::get('collect/submitted', [CollectController::class, 'submitted'])->name('collect.submitted');
         // tampilkan semua data where status = 3 (ditolak)
         Route::get('collect/rejected', [CollectController::class, 'rejected'])->name('collect.rejected');
+        // tampilkan semua data where status = 4 (perlu revisi)
+        Route::get('collect/revision', [CollectController::class, 'revision'])->name('collect.revision');
         // route kolektor
         Route::resource('collect', CollectController::class)->except(['store', 'update', 'destroy']);
 

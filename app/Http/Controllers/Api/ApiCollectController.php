@@ -231,6 +231,66 @@ class ApiCollectController extends Controller
         }
     }
 
+    public function revisionCollect(Request $request, $id)
+    {
+        $query = Collector::find($id); // Cari data berdasarkan ID
+
+        if (!$query) {
+            return new ApiResource(false, 'Laporan tidak ditemukan', null);
+        }
+
+        if ($query->total_revision > 0) {
+            return new ApiResource(false, 'Tidak dapat memberikan revisi', 'Laporan sudah mencapai batas revisi');
+        }
+
+        $validate_by = Crypt::decryptString($request->input('user_id')); // Decrypt user_id
+
+        $validator = Validator::make($request->all(), [
+            'notes' => 'required|string',
+            'user_id' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return new ApiResource(false, 'Validasi gagal', $validator->errors()->first());
+        }
+
+        try {
+            DB::beginTransaction();
+
+            match ($query->bill_type) {
+                'idcnonppn' => CollectTask::where('no_sr', $query->no_sr)->update([
+                    'assign_by' => null,
+                    'assign_to' => null,
+                    'bill_status' => 0,
+                ]),
+                'idcppn' => CollectTaskPpn::where('tax_invoice', $query->no_sr)->update([
+                    'assign_by' => null,
+                    'assign_to' => null,
+                    'bill_status' => 0,
+                ]),
+                'idyppn' => CollectIdyPpn::where('tax_invoice', $query->no_sr)->update([
+                    'assign_by' => null,
+                    'assign_to' => null,
+                    'bill_status' => 0,
+                ]),
+                default => null,
+            };
+
+            $query->update([
+                'status' => 4,
+                'notes' => $request->notes,
+                'validate_by' => $validate_by,
+                'total_revision' => $query->total_revision + 1,
+            ]);
+
+            DB::commit();
+            return new ApiResource(true, 'Permintaan revisi sudah dikirim.', null); // Kembalikan response JSON
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return new ApiResource(false, 'Terjadi kesalahan saat memproses request', $e->getMessage());
+        }
+    }
+
     /**
      * Delete the resource.
      */

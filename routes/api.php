@@ -63,6 +63,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // laporan kolektor
     Route::patch('collect-api/{id}/confirm', [ApiCollectController::class, 'confirmCollect'])->name('collect-api.confirm');
     Route::patch('collect-api/{id}/deny', [ApiCollectController::class, 'denyCollect'])->name('collect-api.deny');
+    Route::patch('collect-api/{id}/revision', [ApiCollectController::class, 'revisionCollect'])->name('collect-api.revision');
     Route::apiResource('collect-api', ApiCollectController::class)->except(['index', 'store', 'show']);
 
     // laporan sales

@@ -190,19 +190,31 @@
 
 							@if ($status == 0)
 								<span
-									class="rounded-xl bg-yellow-100 px-4 py-2 text-sm font-medium text-yellow-800 ring-1 ring-gray-300 dark:bg-yellow-900 dark:text-yellow-300 dark:ring-gray-700">
+									class="rounded-lg bg-yellow-100 px-4 py-2 text-sm font-medium text-yellow-800 ring-1 ring-gray-300 dark:bg-yellow-900 dark:text-yellow-300 dark:ring-gray-700">
 									Belum dilengkapi.
 								</span>
 							@elseif ($status == 1)
 								<span
-									class="rounded-xl bg-green-100 px-4 py-2 text-sm font-medium text-green-800 ring-1 ring-gray-300 dark:bg-green-900 dark:text-green-300 dark:ring-gray-700">
+									class="rounded-lg bg-green-100 px-4 py-2 text-sm font-medium text-green-800 ring-1 ring-gray-300 dark:bg-green-900 dark:text-green-300 dark:ring-gray-700">
 									Disetujui. (divalidasi oleh: {{ $user->name ?? 'N/A' }})
 								</span>
 							@elseif ($status == 2)
 								<span
-									class="rounded-xl bg-yellow-100 px-4 py-2 text-sm font-medium text-yellow-800 ring-1 ring-gray-300 dark:bg-yellow-900 dark:text-yellow-300 dark:ring-gray-700">
-									Sedang diajukan.
+									class="rounded-lg bg-yellow-100 px-4 py-2 text-sm font-medium text-yellow-800 ring-1 ring-gray-300 dark:bg-yellow-900 dark:text-yellow-300 dark:ring-gray-700">
+									Sedang diajukan.{{ $data->total_revision > 0 ? ' (direvisi: ' . $data->total_revision . 'x)' : '' }}
 								</span>
+							@elseif ($status == 4)
+								<div class="grid gap-y-2">
+									<span
+										class="rounded-lg bg-yellow-100 px-4 py-2 text-sm font-medium text-yellow-800 ring-1 ring-gray-300 dark:bg-yellow-900 dark:text-yellow-300 dark:ring-gray-700">
+										Perlu direvisi! (divalidasi oleh: {{ $user->name ?? 'N/A' }})
+									</span>
+
+									<x-button.link class="max-h-10 max-w-max ring-red-700 hover:bg-red-300 dark:bg-red-800 dark:hover:bg-red-900"
+										id="revisi" href="{{ route('collect.edit', $data->id) }}">
+										Klik untuk revisi.
+									</x-button.link>
+								</div>
 							@else
 								<span
 									class="rounded-xl bg-red-100 px-4 py-2 text-sm font-medium text-red-800 ring-1 ring-gray-300 dark:bg-red-900 dark:text-red-300 dark:ring-gray-700">

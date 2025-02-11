@@ -29,6 +29,7 @@ class Collector extends Model
         'validate_by',
         'assign_date',
         'assign_at',
+        'total_revision',
     ];
 
     protected $dates = ['deleted_at'];
