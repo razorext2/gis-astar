@@ -33,7 +33,5 @@ class AppServiceProvider extends ServiceProvider
         // oberserver
         Dayoff::observe(DayoffObserver::class);
         Collector::observe(CollectObserver::class);
-
-        $this->app['url']->forceRootUrl($this->app['config']->get('app.url'));
     }
 }

@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Api\ApiAnnouncementController;
 use App\Http\Controllers\Api\ApiAttendanceController;
-use App\Http\Controllers\Api\ApiBackupController;
 use App\Http\Controllers\Api\ApiCollectController;
 use App\Http\Controllers\Api\ApiCollectIdyPpnController;
 use App\Http\Controllers\Api\ApiCollectTaskController;
@@ -79,7 +78,4 @@ Route::middleware('auth:sanctum')->group(function () {
     // announcement
     Route::patch('announcement-api/{id}/state', [ApiAnnouncementController::class, 'changeState'])->name('announcement-api.change-state');
     Route::apiResource('announcement-api', ApiAnnouncementController::class)->only(['store', 'show', 'update', 'destroy']);
-
-    // backup
-    Route::apiResource('backup-api', ApiBackupController::class)->only(['store', 'update', 'destroy', 'show']);
 });

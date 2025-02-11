@@ -1,36 +1,36 @@
 <?php
 
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AllowanceController;
 use App\Http\Controllers\AnnouncementController;
-use App\Http\Controllers\BackupController;
-use App\Http\Controllers\DayoffController;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceOutController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\JabatanController;
+use App\Http\Controllers\BackupController;
+use App\Http\Controllers\CaptureController;
+use App\Http\Controllers\CollectController;
+use App\Http\Controllers\CollectIdyPpnController;
+use App\Http\Controllers\CollectTaskController;
+use App\Http\Controllers\CollectTaskPpnController;
+use App\Http\Controllers\DayoffController;
+use App\Http\Controllers\DeductionController;
 use App\Http\Controllers\DivisionController;
 use App\Http\Controllers\GolonganController;
-use App\Http\Controllers\PlacementController;
+use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\LoghistoryController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\PlacementController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\ProxyController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\TechnicianController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\CaptureController;
-use App\Http\Controllers\AllowanceController;
-use App\Http\Controllers\DeductionController;
-use App\Http\Controllers\CollectController;
-use App\Http\Controllers\CollectIdyPpnController;
-use App\Http\Controllers\CollectTaskController;
-use App\Http\Controllers\CollectTaskPpnController;
 use App\Http\Controllers\Report\CollectorReportController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth;
 
 // turn off for a while, redirect to dashboard
 Route::get('/', function () {
@@ -207,7 +207,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('pegawai/deductions', DeductionController::class);
 
         // backup
-        Route::resource('backup', BackupController::class)->only('index');
+        Route::resource('backup', BackupController::class)->except('create', 'edit', 'show');
+        Route::get('backup/download/{id}', [BackupController::class, 'download'])->name('backup.download');
     });
 });
 

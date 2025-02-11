@@ -1,4 +1,4 @@
-import { showAlert } from "./utils/alert";
+import { showAlert, showToast } from "./utils/alert";
 
 export function fetchNotification() {
 	$('body').on('click', '#notificationButton', async function () {
@@ -88,22 +88,8 @@ export function handleNotification(data) {
 	// print data untuk testing
 	console.log('Pesan broadcast: ', data);
 
-	const Toast = Swal.mixin({
-		toast: true,
-		position: "bottom-end",
-		showConfirmButton: false,
-		timer: 4000,
-		timerProgressBar: true,
-		didOpen: (toast) => {
-			toast.onmouseenter = Swal.stopTimer;
-			toast.onmouseleave = Swal.resumeTimer;
-		}
-	});
-
-	Toast.fire({
-		icon: "info",
-		title: "Kamu punya notifikasi baru.",
-	});
+	let message = data.message.split('.').slice(0, 2).join('. ') + (data.message.split('.').length > 2 ? '...' : '');
+	showToast('info', message);
 
 	// sembunyikan notificationEmpty
 	$('#notificationEmpty').addClass('hidden');

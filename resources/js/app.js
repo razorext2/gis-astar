@@ -3,6 +3,7 @@ import "./bootstrap";
 import "flowbite";
 import Swal from "sweetalert2";
 import { handleNotification, handleAnnouncement, fetchNotification } from './notification';
+import { showToast } from './utils/alert';
 
 window.$ = window.jQuery = $;
 
@@ -29,6 +30,11 @@ $(function () {
       })
       .listen('.salesNewReport', (data) => {
         handleNotification(data);
+      })
+      .listen('.backupReady', () => {
+        showToast('success', 'Cadangan berhasil dibuat.')
+
+        $('#dataTable').DataTable().ajax.reload(null, false);
       });
 
     window.Echo.private(`announcements.${userId.content}`)
