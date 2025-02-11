@@ -197,6 +197,8 @@
 										    $status = 'Tanda terima';
 										} elseif ($item->have_paid == 4) {
 										    $status = 'Belum sempat';
+										} elseif ($item->have_paid == 5) {
+										    $status = 'Antar bon lunas';
 										} else {
 										    $status = 'Tidak diketahui';
 										}

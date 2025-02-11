@@ -100,9 +100,11 @@ class CollectController extends Controller
                     } elseif ($data->have_paid == 2) {
                         $status = 'Lunas';
                     } elseif ($data->have_paid == 3) {
-                        $status = 'Tanda Terima';
+                        $status = 'Tanda terima';
                     } elseif ($data->have_paid == 4) {
                         $status = 'Belum sempat';
+                    } elseif ($data->have_paid == 5) {
+                        $status = 'Antar bon lunas';
                     }
 
                     if ($data->payment_type == 0) {
@@ -161,7 +163,7 @@ class CollectController extends Controller
                     ];
 
                     if (Auth::user()->hasRole('Admin')) {
-                        if($data->status != 1) {
+                        if ($data->status != 1) {
                             $actions[] = [
                                 'id' => 'edit-btn',
                                 'action' => route('collect.edit', $data->id),
