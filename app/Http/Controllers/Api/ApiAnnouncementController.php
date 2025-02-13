@@ -32,9 +32,7 @@ class ApiAnnouncementController extends Controller
                 return new ApiResource(false, 'Pengumuman gagal ditambahkan', null);
             }
 
-            BroadcastNewAnnouncementJob::dispatch($announcement)
-                ->delay(now()
-                    ->addSeconds(5));
+            BroadcastNewAnnouncementJob::dispatch($announcement);
 
             Announcement::where('id', '!=', $announcement->id)
                 ->update([
