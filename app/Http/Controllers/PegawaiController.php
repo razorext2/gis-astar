@@ -426,16 +426,11 @@ class PegawaiController extends Controller
 
     public function reportCollectors($id, Request $request)
     {
-        if ($request->query('date')) {
-            $date = Carbon::parse($request->query('date'))->isoFormat('YYYY-MM-DD');
-        } else {
-            $date = Carbon::today(); // Ambil tanggal dari query string
-
-        }
+        $date = $request->query('date') ?? Carbon::today()->format('Y-m-d');
 
         $pegawai = Pegawai::where('kode_pegawai', $id)->firstOrFail();
-        $report = Collector::where('kode_pegawai', $id)
-            ->whereDate('created_at', $date)
+        $report = Collector::with('pegawaiRelasi')->where('kode_pegawai', $id)
+            ->whereDate('assign_date', $date)
             ->get();
 
         // Kembalikan view dengan data $pegawai
