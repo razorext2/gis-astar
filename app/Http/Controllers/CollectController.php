@@ -47,7 +47,7 @@ class CollectController extends Controller
     public function showdata(Request $request)
     {
         $query = Collector::query()
-            ->with(['pegawaiRelasi:kode_pegawai,full_name', 'collectTaskRelasi', 'collectTaskPpnRelasi'])
+            ->with(['pegawaiRelasi:kode_pegawai,full_name', 'collectTaskRelasi', 'collectTaskPpnRelasi', 'collectIdyPpnRelasi'])
             ->whereNull('deleted_at');
 
         if (!Auth::user()->can('collect-approve')) {
