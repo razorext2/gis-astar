@@ -344,7 +344,7 @@
 				</li>
 			@endif
 
-			@if (auth()->user()->hasAnyPermission(['announcement-list', 'log-list']))
+			@if (auth()->user()->hasAnyPermission(['announcement-list', 'log-list', 'backup-list']))
 				<li x-data="{ system: {{ Route::is('announcement.*') || Route::is('log.*') || Route::is('backup.*') ? 'true' : 'false' }} }">
 					<button
 						class="{{ Route::is('announcement.*') || Route::is('log.*') || Route::is('backup.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-[#18181b] hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
@@ -388,17 +388,17 @@
 							</li>
 						@endcan
 
-						{{-- @can('backup-list') --}}
-						<li>
-							<a
-								class="{{ Route::is('backup.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-								href="{{ route('backup.index') }}">
-								<x-icons.filezip
-									class="{{ Route::is('backup.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
-								<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Manage Backups</span>
-							</a>
-						</li>
-						{{-- @endcan --}}
+						@can('backup-list')
+							<li>
+								<a
+									class="{{ Route::is('backup.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									href="{{ route('backup.index') }}">
+									<x-icons.filezip
+										class="{{ Route::is('backup.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
+									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Manage Backups</span>
+								</a>
+							</li>
+						@endcan
 
 					</ul>
 				</li>
