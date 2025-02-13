@@ -132,8 +132,8 @@
 						</div>
 
 						<div class="col-span-2 w-full">
-							<x-input.date id="assign_date" name="assign_date"
-								placeholder="{{ Carbon\Carbon::now()->isoFormat('YYYY-MM-DD') }}" required>
+							<x-input.date id="assign_date" name="assign_date" value="{{ Carbon\Carbon::tomorrow()->isoFormat('YYYY-MM-DD') }}"
+								placeholder="{{ Carbon\Carbon::tomorrow()->isoFormat('YYYY-MM-DD') }}" required>
 								Jadwal
 							</x-input.date>
 							<div class="mt-2 hidden text-sm text-red-500" id="alert-assign_date"></div>
