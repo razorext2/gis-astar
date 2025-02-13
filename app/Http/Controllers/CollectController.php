@@ -70,10 +70,9 @@ class CollectController extends Controller
             $query->where('status',  4);
         } else {
             $query->where('status',  0);
-        }
-
-        if (!Auth::user()->can('collect-approve')) {
-            $query->whereDate('assign_date', Carbon::now());
+            if (!Auth::user()->can('collect-approve')) {
+                $query->whereDate('assign_date', Carbon::now());
+            }
         }
 
         $query->latest();

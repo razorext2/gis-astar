@@ -38,7 +38,7 @@ export function editDataHandler() {
 
       if (response.data.success) {
         showAlert('success', response.data.message);
-        setTimeout(() => window.location.href = `${APP_URL}/dashboard/collect/${id}`, 1500);
+        setTimeout(() => window.location.href = `${APP_URL}/dashboard/collect`, 1500);
       } else {
         handleFormErrors(response.data.data);
         $button.prop('disabled', false);
