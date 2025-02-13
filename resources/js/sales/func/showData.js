@@ -72,6 +72,10 @@ export function showData() {
     }
   });
 
+  setInterval(function () {
+    table.ajax.reload();
+  }, 60000);
+
   /**
    * Apply filters to the table
    * @param {Object} e event
