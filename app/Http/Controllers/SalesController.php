@@ -28,8 +28,26 @@ class SalesController extends Controller
             try {
                 $query = Sales::query()->with(['pegawaiRelasi']);
 
-                if (!Auth::user()->can('sales-approve')) {
-                    $query->where('kode_pegawai', Auth::user()->kode_pegawai);
+                $user = Auth::user();
+
+                // Jika user tidak memiliki izin 'sales-approve', batasi berdasarkan kode pegawai
+                if (!$user->can('sales-approve')) {
+                    $query->where('kode_pegawai', $user->kode_pegawai);
+                }
+
+                // Filter berdasarkan role menggunakan Spatie
+                if ($user->hasRole('Marketing')) {
+                    $query->whereHas('userRelasi', function ($q) {
+                        $q->whereHas('roles', function ($r) {
+                            $r->where('name', 'Sales'); // Hanya role 'Sales'
+                        });
+                    });
+                } elseif ($user->hasRole('Marketing-JKT')) {
+                    $query->whereHas('userRelasi', function ($q) {
+                        $q->whereHas('roles', function ($r) {
+                            $r->where('name', 'Sales-JKT'); // Hanya role 'Sales-JKT'
+                        });
+                    });
                 }
 
                 $query->latest();
