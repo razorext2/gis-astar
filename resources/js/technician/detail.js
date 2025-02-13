@@ -21,6 +21,7 @@ async function fetchData() {
 
     $('#no_vt_label').append(data.NomorKunjungan);
     $('#kode_pegawai').append(data.NomorIdentitasTeknisi);
+    $('#nama_pegawai').append(data.NamaTeknisi);
     $('#customer_contact').append(data.CustomerContact);
     $('#customer_address').append(data.AlamatLengkapKunjungan);
     $('#job_detail').removeClass('hidden');
@@ -34,7 +35,7 @@ async function fetchData() {
     $('#loadcell_sn').append(data.TipeLoadcellSN);
     $('#loadcell_qty').append(data.TipeJunctionBoxSN);
     $('#junction_type').append(data.TipeJunctionBox);
-    $('#job_update').removeClass('hidden'); 
+    $('#job_update').removeClass('hidden');
     $('#job_update').append(data.UpdatePekerjaan);
     $('#update_teknisi').append(data.UpdateTeknisi);
     $('#teknisi_telp').append(data.TeleponTeknisi);

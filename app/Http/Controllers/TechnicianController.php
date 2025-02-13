@@ -101,8 +101,8 @@ class TechnicianController extends Controller
                     })
                     ->editColumn('NomorIdentitasTeknisi', function ($row) {
                         return view('components.dashboard.name-w-code', [
-                            'code' => $row['NomorKunjungan'] ?? 'N/A',
-                            'name' => "Nama Teknisi",
+                            'code' => '',
+                            'name' => $row['NomorKunjungan'] ?? 'N/A',
                             'item3' => $row['NomorIdentitasTeknisi'] ?? 'N/A'
                         ])->render();
                     })

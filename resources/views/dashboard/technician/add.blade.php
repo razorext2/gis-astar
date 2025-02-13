@@ -30,14 +30,13 @@
 				<div class="grid gap-4 md:grid-cols-2" id="laporan-content">
 
 					<div class="col-span-2 w-full lg:col-span-1">
-						<x-input.basic id="kode_pegawai" name="kode_pegawai" value="{{ Auth::user()->kode_pegawai ?? '28101999' }}"
-							readonly>
+						<x-input.basic id="kode_pegawai" name="kode_pegawai" readonly>
 							Kode Pegawai
 						</x-input.basic>
 					</div>
 
 					<div class="col-span-2 w-full lg:col-span-1">
-						<x-input.basic id="employee_name" name="employee_name" value="{{ Auth::user()->name ?? 'Superadmin' }}" readonly>
+						<x-input.basic id="employee_name" name="employee_name" readonly>
 							Nama Pegawai
 						</x-input.basic>
 					</div>

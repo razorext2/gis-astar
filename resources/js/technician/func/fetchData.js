@@ -55,6 +55,8 @@ async function fetchDataAsync() {
 
     const data = result.data.data[0];
 
+    $('#kode_pegawai').val(data.NomorIdentitasTeknisi);
+    $('#employee_name').val(data.NamaTeknisi);
     $('#customer_contact').val(data.CustomerContact);
     $('#customer_address').val(data.AlamatLengkapKunjungan);
     $('#job_detail').val(data.RincianPekerjaan);
