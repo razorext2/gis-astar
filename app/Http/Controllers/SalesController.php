@@ -42,7 +42,7 @@ class SalesController extends Controller
                             $r->where('name', 'Sales'); // Hanya role 'Sales'
                         });
                     });
-                } elseif ($user->hasRole('Marketing-JKT')) {
+                } elseif ($user->hasAnyRole(['Marketing-JKT', 'Management-JKT'])) {
                     $query->whereHas('userRelasi', function ($q) {
                         $q->whereHas('roles', function ($r) {
                             $r->where('name', 'Sales-JKT'); // Hanya role 'Sales-JKT'
