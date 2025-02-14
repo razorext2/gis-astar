@@ -30,6 +30,7 @@ class Collector extends Model
         'assign_date',
         'assign_at',
         'total_revision',
+        'revised_by',
     ];
 
     protected $dates = ['deleted_at'];

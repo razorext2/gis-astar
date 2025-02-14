@@ -76,7 +76,9 @@ class ApiCollectController extends Controller
                 'no_giro' => $request->no_giro,
                 'status' => 2,
                 'assign_at' => now(),
-                'location' => $request->location
+                'location' => $request->location,
+                'total_revision' => $query->total_revision + 1,
+                'revised_by' => $request->user()->id,
             ]);
 
             $folderPath = 'collectors';
@@ -239,7 +241,7 @@ class ApiCollectController extends Controller
             return new ApiResource(false, 'Laporan tidak ditemukan', null);
         }
 
-        if ($query->total_revision > 0) {
+        if ($query->total_revision > 1) {
             return new ApiResource(false, 'Tidak dapat memberikan revisi', 'Laporan sudah mencapai batas revisi');
         }
 

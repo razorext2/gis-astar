@@ -23,12 +23,12 @@
 			<div class="flex w-full justify-between">
 				<p class="text-sm text-gray-600 dark:text-gray-300">Mohon periksa terlebih dahulu laporan berikut sebelum memutuskan
 					untuk disetujui.</p>
-				@if ($data->status != 1)
-					@can('collect-approve')
+				@can('collect-approve')
+					@if ($data->status != 1 && $data->total_revision == 1)
 						<a class="text-blue-500 hover:text-blue-600 hover:underline" href="{{ route('collect.edit', $data->id) }}"> Edit
 						</a>
-					@endcan
-				@endif
+					@endif
+				@endcan
 			</div>
 
 			<div class="w-full">
