@@ -14,6 +14,7 @@ export function showData() {
       data: function (d) {
         d.kode_pegawai = $('#kode_pegawai').val();
         d.title = $('#title').val();
+        d.customer_name = $('#customer_name').val();
         d.status = $('#status').val();
         d.startDate = $('#datepicker-range-start').val();
         d.endDate = $('#datepicker-range-end').val();
@@ -85,6 +86,7 @@ export function showData() {
     const filters = [
       $('#kode_pegawai').val(),
       $('#title').val(),
+      $('#customer_name').val(),
       $('#status').val(),
       $('#datepicker-range-start').val(),
       $('#datepicker-range-end').val()
@@ -105,6 +107,7 @@ export function showData() {
     const filters = [
       $('#kode_pegawai').val(),
       $('#title').val(),
+      $('#customer_name').val(),
       $('#status').val(),
       $('#datepicker-range-start').val(),
       $('#datepicker-range-end').val()
@@ -114,6 +117,7 @@ export function showData() {
     if (filters.some(value => value !== '')) {
       $('#kode_pegawai').val('');
       $('#title').val('');
+      $('#customer_name').val('');
       $('#status').val('');
       $('#datepicker-range-start').val('');
       $('#datepicker-range-end').val('');

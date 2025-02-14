@@ -124,6 +124,27 @@ class SalesController extends Controller
                             'updated' => $data->updated_at->locale('id')->isoFormat('D MMM YYYY / HH:MM:ss') ?? 'N/A',
                         ])->render();
                     })
+                    ->filter(function ($query) use ($request) {
+                        if ($request->filled("kode_pegawai")) {
+                            $query->where('kode_pegawai', "LIKE", "%{$request->kode_pegawai}%");
+                        }
+
+                        if ($request->filled("title")) {
+                            $query->where('title', "LIKE", "%{$request->title}%");
+                        }
+
+                        if ($request->filled("customer_name")) {
+                            $query->where('customer_name', "LIKE", "%{$request->customer_name}%");
+                        }
+
+                        if ($request->filled("status")) {
+                            $query->where('status', "LIKE", "%{$request->status}%");
+                        }
+
+                        if ($request->filled("startDate") && $request->filled("endDate")) {
+                            $query->whereBetween('created_at', [$request->startDate, $request->endDate]);
+                        }
+                    })
                     ->rawColumns(['actions', 'title', 'customer_name', 'kode_pegawai', 'lokasi', 'created_at'])
                     ->toJson();
             } catch (\Exception $e) {

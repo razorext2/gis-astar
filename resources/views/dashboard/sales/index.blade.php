@@ -35,8 +35,14 @@
 							</x-filter.filter-input-text>
 						</div>
 
+						<div class="col-span-2 mx-auto flex w-full items-center lg:col-span-1">
+							<x-filter.filter-input-text id="customer_name" name="customer_name" :text="'nama customer'">
+								<x-icons.font-case class="h-4 w-4 text-gray-500 dark:text-gray-400" />
+							</x-filter.filter-input-text>
+						</div>
+
 						<div class="col-span-2 mx-auto w-full items-center lg:col-span-1">
-							<x-filter.filter-input-select id="status" name="status" :options="['0' => 'Belum di lengkapi', '1' => 'Disetujui', '2' => 'Diajukan', '3' => 'Ditolak']" default-option="Filter by status" />
+							<x-filter.filter-input-select id="status" name="status" :options="['0' => 'Belum divalidasi', '1' => 'Disetujui', '2' => 'Ditolak']" default-option="Filter by status" />
 						</div>
 
 						<div class="col-span-2 mx-auto w-full items-center lg:col-span-1">
