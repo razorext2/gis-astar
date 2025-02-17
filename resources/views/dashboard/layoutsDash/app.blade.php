@@ -57,11 +57,11 @@
 
 				<x-card.card-carousel />
 
-				@php
+				{{-- @php
 					$announcement = App\Models\Announcement::where('status', 1)->latest()->first();
-				@endphp
+				@endphp --}}
 
-				<div id="announcement-container">
+				{{-- <div id="announcement-container">
 					@if ($announcement)
 						<x-notification-alert class="mb-4" :id="'notification-alert'">
 							<x-slot name="title">
@@ -72,7 +72,7 @@
 							</x-slot>
 						</x-notification-alert>
 					@endif
-				</div>
+				</div> --}}
 
 				@yield('content')
 			</div>

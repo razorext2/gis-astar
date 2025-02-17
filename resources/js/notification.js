@@ -25,7 +25,7 @@ export function fetchNotification() {
 					data.forEach((item) => {
 						let d = item.data;
 
-						$('#notificationContainer').prepend(
+						$('#notificationContainer').append(
 							`
 						<div class="flex border-t hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700">
 

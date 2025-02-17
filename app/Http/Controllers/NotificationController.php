@@ -10,7 +10,7 @@ class NotificationController extends Controller
 {
     public function index()
     {
-        $notifications = Auth::user()
+        $notifications = auth()->user()
             ->notifications()
             ->orderBy('created_at', 'desc')
             ->paginate(5);
@@ -20,7 +20,7 @@ class NotificationController extends Controller
 
     public function markAllAsRead()
     {
-        $user = Auth::user();
+        $user = auth()->user();
         $user->unreadNotifications->markAsRead();
 
         return redirect()->back()->with('success', 'All notifications marked as read.');
@@ -28,9 +28,8 @@ class NotificationController extends Controller
 
     public function fetch()
     {
-        $notifications = Auth::user()
+        $notifications = auth()->user()
             ->unreadNotifications()
-            ->take(5)
             ->get();
 
         if (!$notifications) {
