@@ -68,8 +68,14 @@
 						class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
 						<p class="text-sm text-gray-600 dark:text-gray-300">Customer</p>
 						<p class="text-navy-700 text-base font-medium dark:text-white">
-							{{ $data->customer_name ?? 'N/A' }} ({{ $data->customer_telp ?? 'N/A' }})
+							{{ $data->customer_name ?? 'N/A' }}
 						</p>
+						<a class="text-navy-700 inline-flex text-base font-medium underline dark:text-white"
+							href="https://api.whatsapp.com/send?phone={{ $data->customer_telp }}&text=Halo, %2A{{ ucwords(strtolower($data->title)) }}%2A. %0A%0ASaya %2A{{ auth()->user()->name }}%2A, marketing dari %2APT. Indodacin Presisi Utama%2A. Saya ingin menghubungi Anda terkait pesanan atau layanan yang mungkin Anda butuhkan.%0A%0AJika ada pertanyaan atau ingin berdiskusi lebih lanjut, silakan balas pesan ini.%0A%0ATerima kasih!%F0%9F%98%8A"
+							target="_blank">
+							Chat customer
+							<x-icons.arrow-up class="h-4 w-4 rotate-45" />
+						</a>
 					</div>
 
 					<div
