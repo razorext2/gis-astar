@@ -32,7 +32,9 @@ export function addDataHandler() {
         setTimeout(() => window.location.href = `${APP_URL}/dashboard/sales`, 1500);
       } else {
         handleFormErrors(response.data.data);
-        showAlert('error', response.data.message, 'Kamu harus mengisi semua form yang ada.');
+
+        const firstError = response.data.data[Object.keys(response.data.data)[0]][0];
+        showAlert('error', response.data.message, `Validasi data gagal. <br><b>${firstError}</b>`);
         $button.prop('disabled', false);
       }
     } catch (error) {

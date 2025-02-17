@@ -18,7 +18,7 @@ class ApiSalesController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'kode_pegawai' => 'required|integer',
+            'kode_pegawai' => 'required|string',
             'title' => 'required|string|max:128|min:3',
             'customer_name' => 'required|string|max:128|min:3',
             'customer_telp' => 'required|string|max:128|min:3',
