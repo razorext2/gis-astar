@@ -65,7 +65,7 @@ class SalesController extends Controller
                             ]
                         ];
 
-                        if (auth()->user()->can('sales-delete')) {
+                        if (auth()->user()->can('sales-approve')) {
                             if ($data->status == 0) {
                                 $actions[] = [
                                     'id' => 'confirm-btn',
@@ -74,20 +74,20 @@ class SalesController extends Controller
                                 ];
                             }
 
-                            $actions[] = [
-                                'id' => 'edit-btn',
-                                'action' => route('sales.edit', $data->id),
-                                'label' => 'Edit'
-                            ];
+                            if (auth()->user()->can('sales-delete')) {
+                                $actions[] = [
+                                    'id' => 'edit-btn',
+                                    'action' => route('sales.edit', $data->id),
+                                    'label' => 'Edit'
+                                ];
 
-                            $actions[] = [
-                                'id' => 'delete-btn',
-                                'action' => 'javascript:void(0)',
-                                'label' => 'Hapus',
-                            ];
-                        }
+                                $actions[] = [
+                                    'id' => 'delete-btn',
+                                    'action' => 'javascript:void(0)',
+                                    'label' => 'Hapus',
+                                ];
+                            }
 
-                        if (auth()->user()->can('sales-approve')) {
                             return view('components.dashboard.action-buttons', [
                                 'id' => $data->id,
                                 'datas' => $actions,
