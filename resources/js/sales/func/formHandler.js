@@ -31,16 +31,15 @@ export function addDataHandler() {
         showAlert('success', response.data.message);
         setTimeout(() => window.location.href = `${APP_URL}/dashboard/sales`, 1500);
       } else {
-        handleFormErrors(response.data.data);
-
-        const firstError = response.data.data[Object.keys(response.data.data)[0]][0];
-        showAlert('error', response.data.message, `Validasi data gagal. <br><b>${firstError}</b>`);
         $button.prop('disabled', false);
+        handleFormErrors(response.data.data);
+        const firstError = response.data.data[Object.keys(response.data.data)[0]][0];
+        return showAlert('error', response.data.message, `Validasi data gagal. <br><b>${firstError}</b>`);
       }
     } catch (error) {
-      console.error('Error:', error);
-      showAlert('error', 'Terjadi kesalahan.', error.message);
       $button.prop('disabled', false);
+      console.error('Error:', error);
+      return showAlert('error', 'Terjadi kesalahan.', error.message);
     }
 
   });

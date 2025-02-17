@@ -42,7 +42,9 @@ export function editDataHandler() {
       } else {
         handleFormErrors(response.data.data);
         $button.prop('disabled', false);
-        return showAlert('error', response.data.message, response.data.data);
+
+        const firstError = response.data.data[Object.keys(response.data.data)[0]][0];
+        return showAlert('error', response.data.message, `Validasi data gagal. <br><b>${firstError}</b>`);
       }
     } catch (error) {
       $button.prop('disabled', false);
