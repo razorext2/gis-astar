@@ -38,7 +38,7 @@
 	<div class="cursor-pointer p-4 hover:bg-gray-50 dark:hover:bg-gray-700" data-drawer-toggle="drawer-swipe">
 		<span class="absolute left-1/2 top-3 h-1 w-8 -translate-x-1/2 rounded-xl bg-gray-300 dark:bg-gray-600"></span>
 	</div>
-	<div class="grid grid-cols-3 gap-6 px-4 pb-[60px] pt-4 lg:grid-cols-4">
+	<div class="grid max-h-96 grid-cols-3 gap-6 overflow-y-auto px-4 pb-[60px] pt-4 lg:grid-cols-4">
 
 		@php
 			$drawerLinks = [
@@ -50,6 +50,27 @@
 			        'icon' => 'dayoff',
 			    ],
 			    [
+			        'permission' => 'collect-task-list',
+			        'link' => 'collect-task.index',
+			        'check' => 'collect-task.*',
+			        'label' => 'IDC Non (SR)',
+			        'icon' => 'collect-task',
+			    ],
+			    [
+			        'permission' => 'collect-task-ppn-list',
+			        'link' => 'collect-task-ppn.index',
+			        'check' => 'collect-task-ppn.*',
+			        'label' => 'IDC PPN (FP)',
+			        'icon' => 'collect-task-ppn',
+			    ],
+			    [
+			        'permission' => 'collect-idy-ppn-list',
+			        'link' => 'collect-idy-ppn.index',
+			        'check' => 'collect-idy-ppn.*',
+			        'label' => 'IDY PPN (FP)',
+			        'icon' => 'collect-idy-ppn',
+			    ],
+			    [
 			        'permission' => 'collect-list',
 			        'link' => 'collect.index',
 			        'check' => 'collect.*',
@@ -57,18 +78,18 @@
 			        'icon' => 'collect',
 			    ],
 			    [
-			        'permission' => 'collect-task-list',
-			        'link' => 'collect-task.index',
-			        'check' => 'collect-task.*',
-			        'label' => 'IDC Non PPN (SR)',
-			        'icon' => 'collect-task',
-			    ],
-			    [
 			        'permission' => 'sales-list',
 			        'link' => 'sales.index',
 			        'check' => 'sales.*',
 			        'label' => 'Laporan Sales',
 			        'icon' => 'sales',
+			    ],
+			    [
+			        'permission' => 'technician-list',
+			        'link' => 'technician.index',
+			        'check' => 'technician.*',
+			        'label' => 'Laporan Teknisi',
+			        'icon' => 'technician',
 			    ],
 			    [
 			        'permission' => 'capture',
@@ -130,7 +151,7 @@
 			        'permission' => 'permissions-list',
 			        'link' => 'permissions.index',
 			        'check' => 'permissions.*',
-			        'label' => 'Permissions',
+			        'label' => 'Hak Akses',
 			        'icon' => 'permissions',
 			    ],
 			    [
@@ -139,6 +160,21 @@
 			        'check' => 'log.*',
 			        'label' => 'Log',
 			        'icon' => 'log',
+			    ],
+			    [
+			        'permission' => 'announcement-list',
+			        'link' => 'announcement.index',
+			        'check' => 'announcement.*',
+			        'label' => 'Pusat Notifikasi',
+			        'icon' => 'announcement',
+			    ],
+
+			    [
+			        'permission' => 'backup-list',
+			        'link' => 'backup.index',
+			        'check' => 'backup.*',
+			        'label' => 'Manage Backup',
+			        'icon' => 'backup',
 			    ],
 			];
 		@endphp
@@ -171,11 +207,23 @@
 							@break
 
 							@case('collect-task')
+								<x-icons.cash class="{{ $iconClass }} {{ $iconSize }}" />
+							@break
+
+							@case('collect-task-ppn')
 								<x-icons.sale-percent class="{{ $iconClass }} {{ $iconSize }}" />
+							@break
+
+							@case('collect-idy-ppn')
+								<x-icons.cash-register class="{{ $iconClass }} {{ $iconSize }}" />
 							@break
 
 							@case('sales')
 								<x-icons.receipt class="{{ $iconClass }} {{ $iconSize }}" />
+							@break
+
+							@case('technician')
+								<x-icons.hammer class="{{ $iconClass }} {{ $iconSize }}" />
 							@break
 
 							@case('capture')
@@ -216,6 +264,14 @@
 
 							@case('log')
 								<x-icons.window class="{{ $iconClass }} {{ $iconSize }}" />
+							@break
+
+							@case('announcement')
+								<x-icons.bullhorn class="{{ $iconClass }} {{ $iconSize }}" />
+							@break
+
+							@case('backup')
+								<x-icons.filezip class="{{ $iconClass }} {{ $iconSize }}" />
 							@break
 						@endswitch
 
