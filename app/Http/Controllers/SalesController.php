@@ -50,6 +50,8 @@ class SalesController extends Controller
                     });
                 }
 
+                $query->orderBy('status');
+
                 $query->latest();
 
                 return DataTables::of($query)
@@ -63,7 +65,15 @@ class SalesController extends Controller
                             ]
                         ];
 
-                        if (Auth::user()->hasRole('Admin')) {
+                        if (auth()->user()->can('sales-delete')) {
+                            if ($data->status == 0) {
+                                $actions[] = [
+                                    'id' => 'confirm-btn',
+                                    'action' => 'javascript:void(0)',
+                                    'label' => 'Confirm'
+                                ];
+                            }
+
                             $actions[] = [
                                 'id' => 'edit-btn',
                                 'action' => route('sales.edit', $data->id),
@@ -77,7 +87,7 @@ class SalesController extends Controller
                             ];
                         }
 
-                        if (Auth::user()->can('sales-approve')) {
+                        if (auth()->user()->can('sales-approve')) {
                             return view('components.dashboard.action-buttons', [
                                 'id' => $data->id,
                                 'datas' => $actions,

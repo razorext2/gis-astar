@@ -73,6 +73,7 @@
 @push('script')
 	<script>
 		const showDataUrl = "{{ route('sales.index') }}";
+		const userID = "{{ Crypt::encryptString(auth()->user()->id) }}";
 	</script>
 	@vite('resources/js/sales/index.js');
 @endpush

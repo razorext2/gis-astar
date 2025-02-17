@@ -67,6 +67,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('collect-api', ApiCollectController::class)->except(['index', 'store', 'show']);
 
     // laporan sales
+    Route::get('sales-api/{id}', [ApiSalesController::class, 'getById'])->name('sales-api.getbyid');
     Route::patch('sales-api/{id}/confirm', [ApiSalesController::class, 'confirm'])->name('sales-api.confirm');
     Route::patch('sales-api/{id}/deny', [ApiSalesController::class, 'deny'])->name('sales-api.deny');
     Route::apiResource('sales-api', ApiSalesController::class)->only(['store', 'update', 'destroy']);

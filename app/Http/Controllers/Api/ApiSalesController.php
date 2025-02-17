@@ -118,7 +118,7 @@ class ApiSalesController extends Controller
     {
         $validateBy = Crypt::decryptString($request->user_id);
 
-        $query = Sales::findOrFail($id);
+        $query = Sales::find($id);
 
         if (!$query) {
             return new ApiResource(false, 'Data tidak ditemukan', null);
@@ -140,7 +140,7 @@ class ApiSalesController extends Controller
     {
         $validateBy = Crypt::decryptString($request->user_id);
 
-        $query = Sales::findOrFail($id);
+        $query = Sales::find($id);
 
         if (!$query) {
             return new ApiResource(false, 'Data tidak ditemukan', null);
@@ -161,7 +161,7 @@ class ApiSalesController extends Controller
 
     public function destroy($id)
     {
-        $query = Sales::findOrFail($id);
+        $query = Sales::find($id);
 
         if (!$query) { // Jika data tidak ditemukan
             return new ApiResource(false, 'Data tidak ditemukan', null);
@@ -174,5 +174,16 @@ class ApiSalesController extends Controller
         } catch (\Exception $e) {
             return new ApiResource(false, 'Terjadi kesalahan saat menghapus data', $e->getMessage());
         }
+    }
+
+    public function getById($id)
+    {
+        $query = Sales::with(['photoCollectRelasi:id_sales,photourl', 'pegawaiRelasi:kode_pegawai,full_name'])->find($id);
+
+        if (!$query) {
+            return new ApiResource(false, 'Data tidak ditemukan', null);
+        }
+
+        return new ApiResource(true, 'Berhasil mengambil data', $query);
     }
 }

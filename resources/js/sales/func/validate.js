@@ -33,7 +33,7 @@ export function confirmAction() {
           Swal.fire("ada kegagalan pada server.", `${error}`, "error");
           console.log(error);
         });
-    } else {
+    } else if (result.isDenied) {
       const { value: text } = await Swal.fire({
         input: 'textarea',
         inputPlaceholder: 'Alasan penolakan...',

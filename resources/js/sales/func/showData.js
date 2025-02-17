@@ -5,9 +5,10 @@ export function showData() {
    */
   let table = $('#dataTable').DataTable({
     processing: true,
+    pageLength: 25,
     serverSide: true,
     responsive: true,
-    "lengthMenu": [10, 25, 50, 75, 100, -1],
+    lengthMenu: [10, 25, 50, 75, 100, -1],
     ajax: {
       url: showDataUrl,
       type: "GET",
