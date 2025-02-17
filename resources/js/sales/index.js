@@ -51,7 +51,7 @@ $(document).ready(function () {
 							${row.customer_name}
 						</p>
 						<a class="text-gray-800 inline-flex text-base font-medium underline "
-							href="https://api.whatsapp.com/send?phone=${row.customer_telp}&text=Halo, %2A${row.title}%2A. %0A%0ASaya %2A${row.pegawai_relasi.full_name}%2A, marketing dari %2APT. Indodacin Presisi Utama%2A. Saya ingin menghubungi Anda terkait pesanan atau layanan yang mungkin Anda butuhkan.%0A%0AJika ada pertanyaan atau ingin berdiskusi lebih lanjut, silakan balas pesan ini.%0A%0ATerima kasih!%F0%9F%98%8A"
+							href="https://api.whatsapp.com/send?phone=${row.customer_telp}&text=Halo, %2A${row.title}%2A. %0A%0ASaya %2A${userName}%2A, marketing dari %2APT. Indodacin Presisi Utama%2A. Saya ingin menghubungi Anda terkait pesanan atau layanan yang mungkin Anda butuhkan.%0A%0AJika ada pertanyaan atau ingin berdiskusi lebih lanjut, silakan balas pesan ini.%0A%0ATerima kasih!%F0%9F%98%8A"
 							target="_blank">
 							Chat customer
 						</a>
