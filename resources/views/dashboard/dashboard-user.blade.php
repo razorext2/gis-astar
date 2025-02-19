@@ -39,6 +39,25 @@
 			</div>
 		</div>
 
+		@can('sales-create')
+			<div class="grid w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b] xl:p-6">
+
+				<div>
+					<h2 class="font-base text-sm text-gray-400">
+						Persentase Laporan diterima
+					</h2>
+				</div>
+
+				<div class="mt-2 grid gap-2 lg:grid-cols-3">
+					<x-dashboard.plugin.percentage :label="'Laporan Sales Harian'" :total="$sales_total_daily" :approved="$sales_approved_daily" :percentage="$sales_approved_percentage_daily" />
+
+					<x-dashboard.plugin.percentage :label="'Laporan Sales Bulanan'" :total="$sales_total_monthly" :approved="$sales_approved_monthly" :percentage="$sales_approved_percentage_monthly" />
+
+					<x-dashboard.plugin.percentage :label="'Laporan Sales Total'" :total="$sales_total" :approved="$sales_approved" :percentage="$sales_approved_percentage" />
+				</div>
+			</div>
+		@endcan
+
 		<div
 			class="hidden w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b] lg:block xl:p-6">
 			<div>
@@ -164,135 +183,7 @@
 				</h2>
 			</div>
 			<div class="pt-2">
-				<div class="grid cursor-pointer grid-cols-4 items-center justify-between gap-2 text-gray-500">
-
-					@can('capture')
-						<x-menu.mobile-link href="{{ route('capture.index') }}" :label="'Record'">
-							<x-icons.camera class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
-						</x-menu.mobile-link>
-					@endcan
-
-					<x-menu.mobile-link href="{{ route('attendanceIn.index') }}" :label="'Clock-in'">
-						<x-icons.arrow-left-bracket class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
-					</x-menu.mobile-link>
-
-					<x-menu.mobile-link href="{{ route('attendanceOut.index') }}" :label="'Clock-out'">
-						<x-icons.arrow-right-bracket class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
-					</x-menu.mobile-link>
-
-					@can('collect-list')
-						<x-menu.mobile-link href="{{ route('collect.index') }}" :label="'Laporan Kolektor'">
-							<x-icons.clipboard class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
-						</x-menu.mobile-link>
-					@endcan
-
-					@can('collect-task-list')
-						<x-menu.mobile-link href="{{ route('collect-task.index') }}" :label="'IDC Non PPN (SR)'">
-							<x-icons.cash class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
-						</x-menu.mobile-link>
-					@endcan
-
-					@can('collect-task-ppn-list')
-						<x-menu.mobile-link href="{{ route('collect-task-ppn.index') }}" :label="'IDC PPN (FP)'">
-							<x-icons.sale-percent class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
-						</x-menu.mobile-link>
-					@endcan
-
-					@can('collect-idy-ppn-list')
-						<x-menu.mobile-link href="{{ route('collect-idy-ppn.index') }}" :label="'IDY PPN (FP)'">
-							<x-icons.cash-register class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
-						</x-menu.mobile-link>
-					@endcan
-
-					@can('sales-list')
-						<x-menu.mobile-link href="{{ route('sales.index') }}" :label="'Laporan Sales'">
-							<x-icons.receipt class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
-						</x-menu.mobile-link>
-					@endcan
-
-					@can('technician-list')
-						<x-menu.mobile-link href="{{ route('technician.index') }}" :label="'Laporan Teknisi'">
-							<x-icons.hammer class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
-						</x-menu.mobile-link>
-					@endcan
-
-					@can('dayoff-list')
-						<x-menu.mobile-link href="{{ route('dayoff.index') }}" :label="'Cuti'">
-							<x-icons.lock-time class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
-						</x-menu.mobile-link>
-					@endcan
-
-					@can('pegawai-list')
-						<x-menu.mobile-link href="{{ route('pegawai.index') }}" :label="'Pegawai'">
-							<x-icons.address-book class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
-						</x-menu.mobile-link>
-					@endcan
-
-					@can('jabatan-list')
-						<x-menu.mobile-link href="{{ route('jabatan.index') }}" :label="'Jabatan'">
-							<x-icons.briefcase class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
-						</x-menu.mobile-link>
-					@endcan
-
-					@can('golongan-list')
-						<x-menu.mobile-link href="{{ route('golongan.index') }}" :label="'Golongan'">
-							<x-icons.users-group class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
-						</x-menu.mobile-link>
-					@endcan
-
-					@can('division-list')
-						<x-menu.mobile-link href="{{ route('division.index') }}" :label="'Divisi'">
-							<x-icons.object-column class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
-						</x-menu.mobile-link>
-					@endcan
-
-					@can('placement-list')
-						<x-menu.mobile-link href="{{ route('placement.index') }}" :label="'Penempatan'">
-							<x-icons.landmark class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
-						</x-menu.mobile-link>
-					@endcan
-
-					@can('users-list')
-						<x-menu.mobile-link href="{{ route('users.index') }}" :label="'Users'">
-							<x-icons.profile-card class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
-						</x-menu.mobile-link>
-					@endcan
-
-					@can('roles-list')
-						<x-menu.mobile-link href="{{ route('roles.index') }}" :label="'Roles'">
-							<x-icons.badge-check class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
-						</x-menu.mobile-link>
-					@endcan
-
-					@can('permissions-list')
-						<x-menu.mobile-link href="{{ route('permissions.index') }}" :label="'Hak Akses'">
-							<x-icons.adjustment class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
-						</x-menu.mobile-link>
-					@endcan
-
-					@can('announcement-list')
-						<x-menu.mobile-link href="{{ route('announcement.index') }}" :label="'Pemberitahuan'">
-							<x-icons.bullhorn class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
-						</x-menu.mobile-link>
-					@endcan
-
-					@can('log-list')
-						<x-menu.mobile-link href="{{ route('log.index') }}" :label="'Log Aktivitas'">
-							<x-icons.window class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
-						</x-menu.mobile-link>
-					@endcan
-
-					@can('backup-list')
-						<x-menu.mobile-link href="{{ route('backup.index') }}" :label="'Manage Backup'">
-							<x-icons.filezip class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
-						</x-menu.mobile-link>
-					@endcan
-
-					<x-menu.mobile-link href="{{ route('profile.edit') }}" :label="'Profile'">
-						<x-icons.profile-card class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
-					</x-menu.mobile-link>
-
-				</div>
+				<x-dashboard.user-menu />
 			</div>
 		</div>
 		{{-- All Menu --}}
