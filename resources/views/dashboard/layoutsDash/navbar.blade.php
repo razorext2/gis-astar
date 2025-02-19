@@ -82,14 +82,18 @@
 
 					</li>
 					<li>
-
 						<form id="editProfile" action="{{ route('profile.edit') }}" onclick="event.preventDefault();"></form>
 						<button
 							class="block w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
 							form="editProfile" type="submit">
 							Account settings
 						</button>
-
+					</li>
+					<li>
+						<div class="flex flex-row gap-x-4 px-4 py-2">
+							<x-button-dark />
+							<x-button-light />
+						</div>
 					</li>
 				</ul>
 
