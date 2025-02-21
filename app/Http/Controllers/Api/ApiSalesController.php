@@ -22,7 +22,7 @@ class ApiSalesController extends Controller
             'title' => 'required|string|max:128|min:3',
             'customer_name' => 'required|string|max:128|min:3',
             'customer_telp' => 'required|string|max:128|min:3',
-            'lokasi' => 'required|string|max:128|min:3',
+            'lokasi' => 'required|string|min:3',
             'keterangan' => 'required|string|min:3',
             'latitude' => 'required|string|max:128|min:3',
             'longitude' => 'required|string|max:128|min:3',
