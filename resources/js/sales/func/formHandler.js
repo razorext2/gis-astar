@@ -33,8 +33,20 @@ export function addDataHandler() {
       } else {
         $button.prop('disabled', false);
         handleFormErrors(response.data.data);
-        const firstError = response.data.data[Object.keys(response.data.data)[0]][0];
-        return showAlert('error', response.data.message, `Validasi data gagal. <br><b>${firstError}</b>`);
+        let err = null;
+        let data = response.data.data;
+
+        if (typeof data === 'object' && data !== null) {
+          let firstKey = Object.keys(data)[0];
+          if (firstKey && Array.isArray(data[firstKey])) {
+            err = data[firstKey][0]; // Ambil elemen pertama dari array dalam objek
+          }
+        } else {
+          err = data;
+        }
+
+        return showAlert('error', response.data.message, `Validasi data gagal. <br><b>${err}</b>`);
+
       }
     } catch (error) {
       $button.prop('disabled', false);

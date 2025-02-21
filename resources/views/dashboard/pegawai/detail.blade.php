@@ -37,7 +37,7 @@
 								href="{{ route('pegawai.timeline', $pegawai->kode_pegawai) }}">Timeline</a>
 						</li>
 
-						@if ($pegawai->userRelasi->roles->first()->name == 'Collector')
+						@if ($pegawai->userRelasi->hasRole('Collector'))
 							<li role="presentation">
 								<a
 									class="{{ Route::is('pegawai.collectors') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg p-4 hover:text-gray-600 dark:hover:text-gray-300"
@@ -45,7 +45,7 @@
 							</li>
 						@endif
 
-						@if ($pegawai->userRelasi->roles->first()->name == 'Sales')
+						@if ($pegawai->userRelasi->hasRole(['Sales', 'Sales-JKT']))
 							<li role="presentation">
 								<a
 									class="{{ Route::is('pegawai.sales') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg p-4 hover:text-gray-600 dark:hover:text-gray-300"
