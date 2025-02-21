@@ -24,7 +24,7 @@
 					{{ auth()->user() ? 'Dashboard' : 'Login' }}
 				</x-landing.nav-link>
 			</ul>
-			<div class="md:grid md:grid-cols-2">
+			<div class="ml-4 gap-x-2 md:grid md:grid-cols-2">
 				<x-button-dark />
 				<x-button-light />
 			</div>
