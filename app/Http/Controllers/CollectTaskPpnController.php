@@ -14,7 +14,7 @@ class CollectTaskPpnController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:collect-task-ppn-list', ['index','onProgress', 'pending', 'completed', 'show']);
+        $this->middleware('permission:collect-task-ppn-list', ['index', 'onProgress', 'pending', 'completed', 'show']);
         $this->middleware('permission:collect-task-ppn-create', ['create']);
         $this->middleware('permission:collect-task-ppn-assign', ['massAssign']);
     }
@@ -144,11 +144,13 @@ class CollectTaskPpnController extends Controller
                 })
                 ->filter(function ($query) use ($request) {
                     if ($request->filled("customer_name")) {
-                        $query->where('customer_name', "LIKE", "%{$request->customer_name}%");
+                        $query->where('customer_name', "LIKE", "%{$request->customer_name}%")
+                            ->orWhere('customer_recipient', "LIKE", "%{$request->customer_name}%");
                     }
 
                     if ($request->filled("no_sr")) {
-                        $query->where('no_sr', "LIKE", "%{$request->no_sr}%");
+                        $query->where('no_sr', "LIKE", "%{$request->no_sr}%")
+                            ->orWhere('tax_invoice', "LIKE", "%{$request->no_sr}%");
                     }
 
                     if ($request->filled("sr_type")) {

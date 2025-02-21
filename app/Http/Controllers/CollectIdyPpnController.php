@@ -144,11 +144,13 @@ class CollectIdyPpnController extends Controller
                 })
                 ->filter(function ($query) use ($request) {
                     if ($request->filled("customer_name")) {
-                        $query->where('customer_name', "LIKE", "%{$request->customer_name}%");
+                        $query->where('customer_name', "LIKE", "%{$request->customer_name}%")
+                            ->orWhere('customer_recipient', "LIKE", "%{$request->customer_name}%");
                     }
 
                     if ($request->filled("no_sr")) {
-                        $query->where('no_sr', "LIKE", "%{$request->no_sr}%");
+                        $query->where('no_sr', "LIKE", "%{$request->no_sr}%")
+                            ->orWhere('tax_invoice', "LIKE", "%{$request->no_sr}%");
                     }
 
                     if ($request->filled("sr_type")) {
