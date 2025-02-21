@@ -251,7 +251,9 @@
 								{{ $link['label'] }}
 
 								@if ($link['badge'])
-									<x-dynamic-component :component="'badges.with-popover'" :model="$link['badge']" :clause="$link['condition']" />
+									@if (auth()->user()->hasPermissionTo($link['icon'] . '-approve'))
+										<x-dynamic-component :component="'badges.with-popover'" :model="$link['badge']" :clause="$link['condition']" />
+									@endif
 								@endif
 
 							</x-dashboard.sidebar-link>
