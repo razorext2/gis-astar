@@ -19,8 +19,9 @@ class CollectController extends Controller
         $this->middleware('permission:collect-edit', ['edit']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
+
         return view('dashboard.collect.subcontent.main');
     }
 

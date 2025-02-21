@@ -94,7 +94,7 @@ $(document).ready(function () {
               class="col-span-2 flex flex-col items-start rounded-xl border border-gray-200 bg-gray-50 p-3">
               <p class="mb-2 text-sm text-gray-700">Dokumentasi</p>
               <div class="relative mx-auto flex-none items-center gap-4 rounded-xl p-2">
-                <img class="h-52 w-52 rounded-xl object-cover transition duration-300 ease-in-out hover:scale-[2]" id="documentations" data-url="${row.photo_collect_relasi[0].photourl}" src="${row.photo_collect_relasi[0].photourl}" alt="" onclick="javascript:void(0)" loading="lazy">
+                <img class="h-52 w-52 rounded-xl object-cover transition duration-300 ease-in-out hover:scale-[2]" id="documentations" src="${APP_URL}/${row.photo_collect_relasi[0].photourl}" alt="" onclick="javascript:void(0)" loading="lazy">
               </div>
             </div>
 

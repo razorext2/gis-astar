@@ -41,9 +41,10 @@
 							{{ $data->no_sr ?? 'N/A' }}
 							(
 							{{ match ($data->bill_type) {
+							    'idcnonppn' => 'IDC Non PPN',
 							    'idcppn' => $data->collectTaskPpnRelasi->sales_invoice,
 							    'idyppn' => $data->collectIdyPpnRelasi->sales_invoice,
-							    default => 'IDCPPN',
+							    default => '-',
 							} }}
 							)
 						</p>
