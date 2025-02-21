@@ -15,6 +15,13 @@ $(document).ready(function () {
     }
 
     const row = response.data.data
+
+    let noTelp = row.customer_telp;
+
+    if (row.customer_telp.substr(0, 2) == '08') {
+      noTelp = row.customer_telp.replace(/^08/, "628");
+    }
+
     const result = await Swal.fire({
       html: `
         <div class=" min-w-96 text-left">
@@ -69,10 +76,10 @@ $(document).ready(function () {
               class="col-span-2 flex flex-col items-start rounded-xl border border-gray-200 bg-gray-50 p-3">
               <p class="text-sm text-gray-700">Customer</p>
               <p class="text-gray-800 text-base font-medium ">
-                ${row.customer_name}
+                ${row.customer_name} (${noTelp})
               </p>
               <a class="text-gray-800 inline-flex text-base font-medium underline "
-                href="https://api.whatsapp.com/send?phone=${row.customer_telp}&text=Halo, %2A${row.title}%2A. %0A%0ASaya %2A${userName}%2A, marketing dari %2APT. Indodacin Presisi Utama%2A. Saya ingin menghubungi Anda terkait pesanan atau layanan yang mungkin Anda butuhkan.%0A%0AJika ada pertanyaan atau ingin berdiskusi lebih lanjut, silakan balas pesan ini.%0A%0ATerima kasih!%F0%9F%98%8A"
+                href="https://api.whatsapp.com/send?phone=${noTelp}&text=Halo, %2A${row.title}%2A. %0A%0ASaya %2A${userName}%2A, marketing dari %2APT. Indodacin Presisi Utama%2A. Saya ingin menghubungi Anda terkait pesanan atau layanan yang mungkin Anda butuhkan.%0A%0AJika ada pertanyaan atau ingin berdiskusi lebih lanjut, silakan balas pesan ini.%0A%0ATerima kasih!%F0%9F%98%8A"
                 target="_blank">
                 Chat customer
               </a>
