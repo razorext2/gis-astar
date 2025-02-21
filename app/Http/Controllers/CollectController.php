@@ -214,16 +214,28 @@ class CollectController extends Controller
                     }
                 })
                 ->filter(function ($query) use ($request) {
-                    if ($request->filled("customer_name")) {
-                        $query->where('title', "LIKE", "%{$request->customer_name}%");
+                    if ($request->filled("title")) {
+                        $query->whereHas('collectTaskRelasi', function ($query) use ($request) {
+                            $query->where('customer_name', 'LIKE', "%{$request->title}%");
+                        })
+                            ->orWhereHas('collectTaskPpnRelasi', function ($query) use ($request) {
+                                $query->where('customer_name', 'LIKE', "%{$request->title}%");
+                            })
+                            ->orWhereHas('collectIdyPpnRelasi', function ($query) use ($request) {
+                                $query->where('customer_name', 'LIKE', "%{$request->title}%");
+                            });
                     }
 
                     if ($request->filled("no_sr")) {
                         $query->where('no_sr', "LIKE", "%{$request->no_sr}%");
                     }
 
-                    if ($request->filled("status")) {
-                        $query->where('status', "LIKE", "%{$request->status}%");
+                    if ($request->filled('bill_type')) {
+                        $query->where('bill_type', $request->bill_type);
+                    }
+
+                    if ($request->filled("kode_pegawai")) {
+                        $query->where('kode_pegawai', "LIKE", "%{$request->kode_pegawai}%");
                     }
 
                     if ($request->filled("startDate") && $request->filled("endDate")) {

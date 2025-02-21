@@ -10,7 +10,8 @@ export function showDatatables() {
             data: function (d) {
                 d.no_sr = $('#no_sr').val();
                 d.title = $('#title').val();
-                d.status = $('#status').val();
+                d.kode_pegawai = $('#kode_pegawai').val();
+                d.bill_type = $('#bill_type').val();
                 d.startDate = $('#datepicker-range-start').val();
                 d.endDate = $('#datepicker-range-end').val();
             }
@@ -64,7 +65,7 @@ export function showDatatables() {
 
     $('#cari').click(function () {
         // Ambil nilai dari semua input filter
-        const filters = ['#title', '#no_sr', '#no_sr', '#status', '#datepicker-range-start',
+        const filters = ['#title', '#no_sr', '#kode_pegawai', '#bill_type', '#datepicker-range-start',
             '#datepicker-range-end'
         ].map(selector => $(
             selector).val());
@@ -78,7 +79,7 @@ export function showDatatables() {
     // jika tombol clear diklik
     $('#clear').click(function () {
         // Ambil nilai dari semua input filter
-        const filters = ['#title', '#no_sr', '#status', '#datepicker-range-start',
+        const filters = ['#title', '#no_sr', '#kode_pegawai', '#bill_type', '#datepicker-range-start',
             '#datepicker-range-end'
         ].map(selector => $(
             selector).val());
@@ -88,7 +89,8 @@ export function showDatatables() {
             // kosongkan semua value
             $('#title').val('');
             $('#no_sr').val('');
-            $('#status').prop('selectedIndex', 0);
+            $('#kode_pegawai').val('');
+            $('#bill_type').val('');
             $('#datepicker-range-start').val('');
             $('#datepicker-range-end').val('');
 

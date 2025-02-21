@@ -106,13 +106,17 @@
 				{{-- filter --}}
 				<div class="col-span-2 mb-4">
 					<x-filter.filter-bar>
-						@can('collect-approve')
-							<div class="col-span-2 mx-auto flex w-full items-center lg:col-span-1">
-								<x-filter.filter-input-text id="no_sr" name="no_sr" :text="'no SR'">
-									<x-icons.fingerprint class="h-4 w-4 text-gray-500 dark:text-gray-400" />
-								</x-filter.filter-input-text>
-							</div>
-						@endcan
+						<div class="col-span-2 mx-auto flex w-full items-center lg:col-span-1">
+							<x-filter.filter-input-text id="no_sr" name="no_sr" :text="'no SR'">
+								<x-icons.fingerprint class="h-4 w-4 text-gray-500 dark:text-gray-400" />
+							</x-filter.filter-input-text>
+						</div>
+
+						<div class="col-span-2 mx-auto flex w-full items-center lg:col-span-1">
+							<x-filter.filter-input-text id="kode_pegawai" name="kode_pegawai" :text="'kode jari pegawai'">
+								<x-icons.fingerprint class="h-4 w-4 text-gray-500 dark:text-gray-400" />
+							</x-filter.filter-input-text>
+						</div>
 
 						<div class="col-span-2 mx-auto flex w-full items-center lg:col-span-1">
 							<x-filter.filter-input-text id="title" name="title" :text="'nama customer'">
@@ -121,7 +125,7 @@
 						</div>
 
 						<div class="col-span-2 mx-auto w-full items-center lg:col-span-1">
-							<x-filter.filter-input-select id="status" name="status" :options="['0' => 'Belum di lengkapi', '1' => 'Disetujui', '2' => 'Diajukan', '3' => 'Ditolak']" default-option="Filter by status" />
+							<x-filter.filter-input-select id="bill_type" name="bill_type" :options="['idcnonppn' => 'IDC Non PPN', 'idcppn' => 'IDC PPN', 'idyppn' => 'IDY PPN']" default-option="Filter by tipe" />
 						</div>
 
 						<div class="col-span-2 mx-auto w-full items-center lg:col-span-1">
