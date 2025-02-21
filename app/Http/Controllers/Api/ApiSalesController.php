@@ -89,7 +89,7 @@ class ApiSalesController extends Controller
             'title' => 'string|max:128|min:3',
             'customer_name' => 'string|max:128|min:3',
             'customer_telp' => 'string|max:128|min:3',
-            'lokasi' => 'string|max:128|min:3',
+            'lokasi' => 'string|min:3',
             'keterangan' => 'string|min:3',
         ]);
 
