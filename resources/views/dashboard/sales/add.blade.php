@@ -56,14 +56,14 @@
 					</div>
 
 					<div class="col-span-2 w-full">
-						<x-input.basic id="customer_telp" name="customer_telp" placeholder="08xxxxxxx" required>
+						<x-input.basic id="customer_telp" name="customer_telp" placeholder="62812xxxxxxx" required>
 							No. Telp / Contact Person
 						</x-input.basic>
 						<div class="mt-2 hidden text-sm text-red-500" id="alert-customer_telp"></div>
 					</div>
 
 					<div class="col-span-2 w-full">
-						<x-input.basic id="lokasi" name="lokasi" placeholder="Jl. XXX, XXX, XXX" required>
+						<x-input.basic id="lokasi" name="lokasi" placeholder="Jl. ABC, No 123" required>
 							Alamat Customer
 						</x-input.basic>
 						<div class="mt-2 hidden text-sm text-red-500" id="alert-lokasi"></div>
