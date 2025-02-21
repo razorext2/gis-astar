@@ -7,6 +7,8 @@
 	        'icon' => 'collect',
 	        'permission' => 'collect-list',
 	        'sublinks' => [],
+	        'badge' => 'App\Models\Collector',
+	        'condition' => ['status' => 2],
 	    ],
 	    [
 	        'route' => 'sales.index',
@@ -15,6 +17,8 @@
 	        'icon' => 'sales',
 	        'permission' => 'sales-list',
 	        'sublinks' => [],
+	        'badge' => 'App\Models\Sales',
+	        'condition' => ['status' => 0],
 	    ],
 	    [
 	        'route' => 'technician.index',
@@ -23,6 +27,8 @@
 	        'icon' => 'technician',
 	        'permission' => 'technician-list',
 	        'sublinks' => [],
+	        'badge' => false,
+	        'condition' => null,
 	    ],
 	    [
 	        'route' => 'capture.index',
@@ -31,6 +37,8 @@
 	        'icon' => 'capture',
 	        'permission' => 'capture',
 	        'sublinks' => [],
+	        'badge' => false,
+	        'condition' => null,
 	    ],
 	    [
 	        'route' => 'dayoff.index',
@@ -39,6 +47,8 @@
 	        'icon' => 'dayoff',
 	        'permission' => 'dayoff-list',
 	        'sublinks' => [],
+	        'badge' => false,
+	        'condition' => null,
 	    ],
 	    [
 	        'route' => 'pegawai.index',
@@ -47,6 +57,8 @@
 	        'icon' => 'pegawai',
 	        'permission' => 'pegawai-list',
 	        'sublinks' => [],
+	        'badge' => false,
+	        'condition' => null,
 	    ],
 	    [
 	        'route' => 'jabatan.index',
@@ -55,6 +67,8 @@
 	        'icon' => 'jabatan',
 	        'permission' => 'jabatan-list',
 	        'sublinks' => [],
+	        'badge' => false,
+	        'condition' => null,
 	    ],
 	    [
 	        'route' => 'golongan.index',
@@ -63,6 +77,8 @@
 	        'icon' => 'golongan',
 	        'permission' => 'golongan-list',
 	        'sublinks' => [],
+	        'badge' => false,
+	        'condition' => null,
 	    ],
 	];
 @endphp
@@ -233,6 +249,11 @@
 
 								</x-slot>
 								{{ $link['label'] }}
+
+								@if ($link['badge'])
+									<x-dynamic-component :component="'badges.with-popover'" :model="$link['badge']" :clause="$link['condition']" />
+								@endif
+
 							</x-dashboard.sidebar-link>
 						</li>
 					@endcan

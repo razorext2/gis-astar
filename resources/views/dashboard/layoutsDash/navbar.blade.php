@@ -30,6 +30,12 @@
 						</div>
 					@endif
 
+					<div class="absolute -left-0.5 bottom-0 hidden h-2 w-2" id="notificationDot" aria-live="polite">
+						<span
+							class="absolute mx-auto inline-flex h-full w-full animate-ping rounded-full bg-yellow-400 opacity-75"></span>
+						<span class="absolute h-2 w-2 rounded-full bg-red-500"></span>
+					</div>
+
 				</div>
 			</button>
 
