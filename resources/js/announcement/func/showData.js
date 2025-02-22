@@ -1,13 +1,15 @@
 export function showDatatables() {
-  // Initialize DataTable
+  const url = $('#dataTable').data('url');
+
   let table = $('#dataTable').DataTable({
-    processing: true,
     serverSide: true,
+    processing: true,
     responsive: true,
-    paging: true,
-    "lengthMenu": [15, 25, 50, 75, 100, -1],
+    searching: false,
+    ordering: false,
+    lengthMenu: [10, 25, 50, 75, 100, -1],
     ajax: {
-      url: showData,
+      url: url,
       data: function (d) {
         d.title = $('#title').val();
         d.status = $('#status').val();
@@ -41,9 +43,6 @@ export function showDatatables() {
       data: 'created_at',
       name: 'created_at'
     }],
-    order: [
-      [5, 'desc'],
-    ],
     dom: `<"absolute top-1 md:left-0 mt-14 lg:mt-0 dark:text-white max-w-xs"B><"text-left lg:text-right dark:text-white"l><"relative overflow-x-auto w-full mt-20 lg:mt-4"t><"grid text-center gap-6 lg:grid-cols-2 mt-4 dark:text-white"<"lg:mt-3 lg:text-left"i><"lg:text-right dark:text-gray-900"p>>`,
     buttons: [{
       extend: "csv",
@@ -59,16 +58,12 @@ export function showDatatables() {
       }
     },
       "print",
-    ],
-    "deferRender": true,
-    "language": {
-      "infoFiltered": ""
-    }
+    ]
   });
 
   $('#cari').click(function () {
     // Ambil nilai dari semua input filter
-    const filters = ['#title',  '#status', '#datepicker-range-start',
+    let filters = ['#title', '#status', '#datepicker-range-start',
       '#datepicker-range-end'
     ].map(selector => $(
       selector).val());
@@ -82,7 +77,7 @@ export function showDatatables() {
   // jika tombol clear diklik
   $('#clear').click(function () {
     // Ambil nilai dari semua input filter
-    const filters = ['#title',  '#status', '#datepicker-range-start',
+    let filters = ['#title', '#status', '#datepicker-range-start',
       '#datepicker-range-end'
     ].map(selector => $(
       selector).val());

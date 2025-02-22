@@ -19,9 +19,7 @@
 @vite('resources/js/global/simpleTables.js')
 @vite('resources/js/global/chart.js')
 
-@if (Route::is('dashboard'))
-	{{--  --}}
-@elseif (Route::is('pegawai.timeline') ||
+@if (Route::is('pegawai.timeline') ||
 		Route::is('placement.create') ||
 		Route::is('placement.edit') ||
 		Route::is('pegawai.collectors') ||

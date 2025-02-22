@@ -7,15 +7,17 @@ $(function () {
 });
 
 function showData() {
-  let table = $("#dataTable").DataTable({
-    "serverSide": true,
-    "processing": true,
-    "responsive": true,
-    "lengthMenu": [10, 25, 50, 75, 100, -1],
-    "searching": false,
-    "ordering": false,
+  const url = $('#dataTable').data('url');
+
+  $("#dataTable").DataTable({
+    serverSide: true,
+    processing: true,
+    responsive: true,
+    searching: false,
+    ordering: false,
+    lengthMenu: [10, 25, 50, 75, 100, -1],
     ajax: {
-      url: `${APP_URL}/dashboard/backup`,
+      url: url,
       type: "GET",
     },
     columns: [{

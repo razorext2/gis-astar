@@ -42,7 +42,9 @@
 			</div>
 		@endif
 
-		@include('dashboard.layoutsDash.navbar')
+		@persist('navbar')
+			@include('dashboard.layoutsDash.navbar')
+		@endpersist
 
 		@include('dashboard.layoutsDash.sidebar')
 
@@ -55,7 +57,9 @@
 					@include('dashboard.layoutsDash.title')
 				</div>
 
-				<x-card.card-carousel />
+				@persist('card-carousel')
+					<x-card.card-carousel />
+				@endpersist
 
 				@yield('content')
 			</div>
@@ -63,8 +67,10 @@
 
 		{{-- bikin navigasi ala android --}}
 		<x-dashboard.mobile-drawer></x-dashboard.mobile-drawer>
-		<div class="fixed inset-0 z-50 bg-white dark:bg-[#09090b] md:z-[9999]" id="preloader">
-		</div>
+
+		{{-- preload --}}
+		{{-- <div class="fixed inset-0 z-50 bg-white dark:bg-[#09090b] md:z-[9999]" id="preloader">
+		</div> --}}
 
 		<!-- js -->
 		@include('dashboard.layoutsDash.js')
