@@ -1,7 +1,7 @@
 @extends('dashboard.collect.index')
 @section('subcontent')
 	<div class="col-span-2" x-data="{ openRow: null }">
-		<x-dashboard.table id="dataTable" :tablename="[
+		<x-dashboard.table id="dataTable" data-url="{{ route('collect.showdata') }}?s=revision" :tablename="[
 		    '0' => '#',
 		    '1' => 'Aksi',
 		    '2' => 'No SR',
@@ -12,8 +12,5 @@
 	</div>
 @endsection
 @push('script')
-	<script>
-		const index = "{{ route('collect.showdata') }}?s=revision";
-	</script>
 	@vite(['resources/js/collect/index.js'])
 @endpush

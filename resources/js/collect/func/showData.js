@@ -5,7 +5,7 @@ export function showDatatables() {
         responsive: true,
         "lengthMenu": [10, 25, 50, 75, 100, -1],
         ajax: {
-            url: index,
+            url: $('#dataTable').data('url'),
             type: "GET",
             data: function (d) {
                 d.no_sr = $('#no_sr').val();
