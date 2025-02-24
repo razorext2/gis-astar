@@ -391,7 +391,7 @@
 							<li>
 								<a
 									class="{{ Route::is('announcement.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-									href="{{ route('announcement.index') }}">
+									href="{{ route('announcement.index') }}" wire:navigate>
 									<x-icons.bullhorn
 										class="{{ Route::is('announcement.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 -rotate-45 group-hover:text-red-600" />
 									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Pemberitahuan</span>
@@ -403,7 +403,7 @@
 							<li>
 								<a
 									class="{{ Route::is('log.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-									href="{{ route('log.index') }}">
+									href="{{ route('log.index') }}" wire:navigate>
 									<x-icons.window
 										class="{{ Route::is('log.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
 									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Log Aktivitas</span>
@@ -415,7 +415,7 @@
 							<li>
 								<a
 									class="{{ Route::is('backup.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-									href="{{ route('backup.index') }}">
+									href="{{ route('backup.index') }}" wire:navigate>
 									<x-icons.filezip
 										class="{{ Route::is('backup.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
 									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Manage Backups</span>

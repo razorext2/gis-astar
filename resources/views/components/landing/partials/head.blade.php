@@ -26,12 +26,13 @@
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.1/dist/sweetalert2.min.css" rel="stylesheet" />
 
 <!-- JavaScript -->
-<script defer>
+<script data-navigate-once>
 	if (localStorage.getItem('color-theme') === 'dark' ||
 		(!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
 		document.documentElement.classList.add('dark');
 	} else {
 		document.documentElement.classList.remove('dark');
 	}
+
 	const APP_URL = "{{ env('APP_URL') }}";
 </script>

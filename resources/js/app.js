@@ -4,6 +4,9 @@ import "flowbite";
 import Swal from "sweetalert2";
 import { handleNotification, handleAnnouncement, fetchNotification } from './notification';
 import { showToast } from './utils/alert';
+import './../../vendor/power-components/livewire-powergrid/dist/powergrid'
+import flatpickr from "flatpickr";
+import { showAlert } from './utils/alert';
 
 window.$ = window.jQuery = $;
 
@@ -15,6 +18,16 @@ $(function () {
 
   // define swal sebagai global variable  
   window.Swal = Swal;
+
+  const confirmDelete = (data) => {
+    return Swal.fire({
+      title: "Apa kamu yakin?",
+      html: `Kamu akan menghapus data dengan ID <b>${data.id}</b>`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Ya, hapus!"
+    });
+  };
 
   if (userId) {
     // define Echo sebagai global variable
@@ -43,4 +56,28 @@ $(function () {
         handleAnnouncement(data);
       });
   }
+
+  Livewire.on('confirmDelete', data => {
+    confirmDelete(data).then((result) => {
+      if (result.isConfirmed) {
+        Livewire.dispatch('confirmDeleteAction', {
+          logId: data.id
+        });
+      }
+    });
+  });
+
+  Livewire.on('confirmBulkDelete', data => {
+    confirmDelete(data).then((result) => {
+      if (result.isConfirmed) {
+        Livewire.dispatch(`confirmBulkDeleteAction.${data.tableName}`, {
+          logId: data.id
+        });
+      }
+    });
+  })
+
+  Livewire.on('swal', data => {
+    showAlert(data.icon, data.title, data.text)
+  });
 });

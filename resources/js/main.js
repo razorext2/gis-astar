@@ -28,7 +28,10 @@ function toggleTheme(e) {
       e), themeToggleLightBtn.classList.toggle("text-gray-700", e), themeToggleLightBtn.classList.toggle(
         "text-red-400", !e)
 }
-const isDarkMode = "dark" === localStorage.getItem("color-theme") || !("color-theme" in localStorage) && window
-  .matchMedia("(prefers-color-scheme: dark)").matches;
-toggleTheme(isDarkMode), themeToggleDarkBtn.addEventListener("click", (() => toggleTheme(!0))), themeToggleLightBtn
-  .addEventListener("click", (() => toggleTheme(!1)));
+
+document.addEventListener('livewire:navigated', function () {
+  const isDarkMode = "dark" === localStorage.getItem("color-theme") || !("color-theme" in localStorage) && window
+    .matchMedia("(prefers-color-scheme: dark)").matches;
+  toggleTheme(isDarkMode), themeToggleDarkBtn.addEventListener("click", (() => toggleTheme(!0))), themeToggleLightBtn
+    .addEventListener("click", (() => toggleTheme(!1)));
+})
