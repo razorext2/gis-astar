@@ -23,7 +23,6 @@
 
 <link href="{{ asset('assets/vendor/aos/aos.css') }}" rel="stylesheet" />
 <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.1/dist/sweetalert2.min.css" rel="stylesheet" />
 
 <!-- JavaScript -->
 <script data-navigate-once>
