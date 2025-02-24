@@ -16,8 +16,8 @@ use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 final class LogTable extends PowerGridComponent
 {
     public string $tableName = 'LogTable';
-
     public bool $deferLoading = true;
+    public bool $showFilters = true;
 
     public function setUp(): array
     {
@@ -53,7 +53,7 @@ final class LogTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return LogHistory::query()->with('userRelasi:id,name');
+        return LogHistory::query()->with('userRelasi:id,name,kode_pegawai');
     }
 
     public function relationSearch(): array
@@ -70,6 +70,7 @@ final class LogTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             ->add('user_name', fn($query) => e($query->userRelasi->name))
+            ->add('employee_code', fn($query) => e($query->userRelasi->kode_pegawai ?? '-'))
             ->add('user_action')
             ->add('ip_address')
             ->add('user_agent')
@@ -83,6 +84,7 @@ final class LogTable extends PowerGridComponent
             Column::action('Action'),
             Column::make('ID', 'id')
                 ->sortable(),
+            Column::make('Kode Pegawai', 'employee_code'),
             Column::make('Nama User', 'user_name'),
             Column::make('User Action', 'user_action')
                 ->sortable()
@@ -101,7 +103,24 @@ final class LogTable extends PowerGridComponent
 
     public function filters(): array
     {
-        return [];
+        return [
+            Filter::select('user_name', 'user_id')
+                ->dataSource(\App\Models\User::select('id', 'name')->get())
+                ->optionLabel('name')
+                ->optionValue('id'),
+            Filter::inputText('employee_code', 'employee_code')->placeholder('Kode pegawai'),
+            Filter::select('user_action', 'user_action')
+                ->dataSource([
+                    ['id' => 'login', 'name' => 'Login'],
+                    ['id' => 'logout', 'name' => 'Logout'],
+                    ['id' => 'create', 'name' => 'Create'],
+                    ['id' => 'update', 'name' => 'Update'],
+                    ['id' => 'delete', 'name' => 'Delete'],
+                ])
+                ->optionLabel('name')
+                ->optionValue('id'),
+
+        ];
     }
 
     public function actions(LogHistory $row): array

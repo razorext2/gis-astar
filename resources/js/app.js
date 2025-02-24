@@ -3,10 +3,8 @@ import "./bootstrap";
 import "flowbite";
 import Swal from "sweetalert2";
 import { handleNotification, handleAnnouncement, fetchNotification } from './notification';
-import { showToast } from './utils/alert';
+import { showToast, showAlert } from './utils/alert';
 import './../../vendor/power-components/livewire-powergrid/dist/powergrid'
-import flatpickr from "flatpickr";
-import { showAlert } from './utils/alert';
 
 window.$ = window.jQuery = $;
 
