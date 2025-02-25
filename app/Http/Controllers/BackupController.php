@@ -12,40 +12,9 @@ use Yajra\DataTables\DataTables;
 
 class BackupController extends Controller
 {
-    function __construct()
+    public function index()
     {
-        // $this->middleware("permission:backup-list", ['only' => ['index']]);
-    }
-
-    public function index(Request $request)
-    {
-        $backups = Backup::with('user')
-            ->where('user_id', auth()->user()->id)
-            ->latest()
-            ->get();
-
-        if ($request->ajax()) {
-            return DataTables::of($backups)
-                ->addIndexColumn()
-                ->editColumn('actions', function ($row) {
-                    return view('components.button.actions', ['id' => $row->id])->render();
-                })
-                ->editColumn('status', function ($row) {
-                    $status = $row->status == 'success' ? 1 : 0;
-
-                    return view('components.table-component.state', ['status' => $status])->render();
-                })
-                ->editColumn('created_at', function ($row) {
-                    return Carbon::parse($row->created_at)->diffForHumans();
-                })
-                ->editColumn('user_id', function ($row) {
-                    return $row->user->name ?? 'N/A';
-                })
-                ->rawColumns(['actions', 'status'])
-                ->make(true);
-        }
-
-        return view('dashboard.backup.index', compact('backups'));
+        return view('dashboard.backup.index');
     }
 
     public function store(Request $request)
@@ -71,7 +40,7 @@ class BackupController extends Controller
             'user_id' => $uid,
         ]);
 
-        NotifyBackupReadyJob::dispatch($name, Carbon::now(), $uid)->delay(now()->addSeconds(5));
+        NotifyBackupReadyJob::dispatch($name, Carbon::now(), $uid);
 
         return new ApiResource(true, 'Sedang diproses...', 'Cadangan database dengan nama <b>' . $name . '</b> sedang dibuat.');
     }

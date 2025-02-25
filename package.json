@@ -12,10 +12,10 @@
         "axios": "^1.6.4",
         "chokidar": "^4.0.3",
         "flowbite": "^2.5.2",
-        "laravel-echo": "^1.17.1",
+        "laravel-echo": "^1.19.0",
         "laravel-vite-plugin": "^1.0.5",
         "postcss": "^8.4.47",
-        "pusher-js": "^8.4.0-rc2",
+        "pusher-js": "^8.4.0",
         "tailwindcss": "^3.4.13",
         "vite": "^5.4.2"
     },

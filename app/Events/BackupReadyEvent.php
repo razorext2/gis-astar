@@ -53,12 +53,6 @@ class BackupReadyEvent implements ShouldBroadcast
         return [
             "id" => 123456,
             "message" => "Cadangan dengan nama $this->name, telah selesai dicadangkan. Silahkan unduh.",
-            "button" => [
-                "url" => $data->file,
-                "label" => "Unduh",
-            ],
-            "mark_as_read" => route("notification.mark-as-read", 123456),
-            "created_at" => Carbon::now()->locale("id")->isoFormat("DD MMM YYYY HH:mm:ss"),
         ];
     }
 }

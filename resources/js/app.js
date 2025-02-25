@@ -8,7 +8,7 @@ import './../../vendor/power-components/livewire-powergrid/dist/powergrid'
 
 window.$ = window.jQuery = $;
 
-$(function () {
+document.addEventListener('livewire:navigated', function () {
   fetchNotification();
 
   // define userID, ambil dari metatag user-id
@@ -31,6 +31,7 @@ $(function () {
     // define Echo sebagai global variable
     window.Echo.private(`notifications.${userId.content}`)
       .listen('.exportCompleted', (data) => {
+        console.log(data);
         handleNotification(data);
       })
       .listen('.newTaskAssigned', (data) => {
@@ -42,10 +43,10 @@ $(function () {
       .listen('.salesNewReport', (data) => {
         handleNotification(data);
       })
-      .listen('.backupReady', () => {
-        showToast('success', 'Cadangan berhasil dibuat.')
-
-        $('#dataTable').DataTable().ajax.reload(null, false);
+      .listen('.backupReady', (data) => {
+        console.log(data);
+        showToast('success', 'Cadangan berhasil dibuat.');
+        Livewire.dispatch('pg:eventRefresh-BackupTable');
       });
 
     window.Echo.private(`announcements.${userId.content}`)

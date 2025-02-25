@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Backup;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use PowerComponents\LivewirePowerGrid\Button;
@@ -14,24 +15,28 @@ use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 
 final class BackupTable extends PowerGridComponent
 {
-    public string $tableName = 'backup-table-hbxctu-table';
+    public string $tableName = 'BackupTable';
+    public bool $deferLoading = true;
+    public bool $showFilters = true;
 
     public function setUp(): array
     {
-        $this->showCheckBox();
-
         return [
             PowerGrid::header()
                 ->showSearchInput(),
             PowerGrid::footer()
                 ->showPerPage()
                 ->showRecordCount(),
+            PowerGrid::responsive()
+                ->fixedColumns('name')
         ];
     }
 
     public function datasource(): Builder
     {
-        return Backup::query();
+        return Backup::query()
+            ->with('user')
+            ->latest();
     }
 
     public function relationSearch(): array
@@ -45,79 +50,62 @@ final class BackupTable extends PowerGridComponent
             ->add('id')
             ->add('name')
             ->add('type')
-            ->add('file')
-            ->add('status')
-            ->add('user_id')
-            ->add('created_at');
+            ->add('status', fn($query) => \Illuminate\Support\Facades\Blade::render('components.table-component.state', ['status' => $query->status == 'success' ? 1 : 0]))
+            ->add('user_id', fn($query) => e($query->user->name))
+            ->add('created_at')
+            ->add('created_at_formatted', fn($query) => e(Carbon::parse($query->created_at)->locale('id')->diffForHumans()));
     }
 
     public function columns(): array
     {
         return [
-            Column::make('Id', 'id'),
+            Column::make('#', 'id')
+                ->index(),
+            Column::action('Action'),
             Column::make('Name', 'name')
                 ->sortable()
                 ->searchable(),
-
-            Column::make('Type', 'type')
+            Column::make('Tipe', 'type')
                 ->sortable()
                 ->searchable(),
-
-            Column::make('File', 'file')
-                ->sortable()
-                ->searchable(),
-
             Column::make('Status', 'status')
                 ->sortable()
                 ->searchable(),
-
-            Column::make('User id', 'user_id')
-                ->sortable()
-                ->searchable(),
-
             Column::make('Created at', 'created_at_formatted', 'created_at')
                 ->sortable(),
-
-            Column::make('Created at', 'created_at')
+            Column::make('Oleh', 'user_id')
                 ->sortable()
                 ->searchable(),
-
-            Column::action('Action')
         ];
     }
 
     public function filters(): array
     {
         return [
+            Filter::select('type', 'type')
+                ->dataSource([
+                    ['id' => 'DB', 'name' => 'Database'],
+                    ['id' => 'App', 'name' => 'Application'],
+                    ['id' => 'Full', 'name' => 'Full Backup'],
+                ])
+                ->optionLabel('name')
+                ->optionValue('id'),
         ];
     }
 
     #[\Livewire\Attributes\On('edit')]
     public function edit($rowId): void
     {
-        $this->js('alert('.$rowId.')');
+        $this->js('alert(' . $rowId . ')');
     }
 
     public function actions(Backup $row): array
     {
-        return [
-            Button::add('edit')
-                ->slot('Edit: '.$row->id)
-                ->id()
-                ->class('pg-btn-white dark:ring-pg-primary-600 dark:border-pg-primary-600 dark:hover:bg-pg-primary-700 dark:ring-offset-pg-primary-800 dark:text-pg-primary-300 dark:bg-pg-primary-700')
-                ->dispatch('edit', ['rowId' => $row->id])
-        ];
+        return [];
     }
 
-    /*
-    public function actionRules($row): array
+    public function actionsFromView(Backup $row): View
     {
-       return [
-            // Hide button edit for ID 1
-            Rule::button('edit')
-                ->when(fn($row) => $row->id === 1)
-                ->hide(),
-        ];
+        return view('components.button.actions', ['id' => $row->id]);
     }
-    */
 }

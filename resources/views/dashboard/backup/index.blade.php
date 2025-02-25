@@ -1,10 +1,10 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
 	<div
-		class="relative grid grid-cols-1 gap-4 rounded-xl bg-white shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 lg:p-4">
+		class="relative grid grid-cols-1 rounded-xl bg-white py-2 shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 lg:p-6">
 
-		<div class="flex flex-col gap-4">
-			<div>
+		<div class="flex flex-col px-3 md:mb-2 lg:p-0">
+			<div class="mb-2">
 				<span class="text-xl font-semibold text-gray-900 dark:bg-[#18181b] dark:text-white">
 					Cadangan Database
 				</span>
@@ -24,8 +24,7 @@
 			</div>
 		</div>
 
-		<livewire:backup-table />
-
+		<livewire:table-refresher table-name="BackupTable" />
 	</div>
 @endsection
 @push('script')
