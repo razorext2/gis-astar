@@ -61,6 +61,23 @@
 					<x-card.card-carousel />
 				@endpersist
 
+				@php
+					$announcement = App\Models\Announcement::where('status', 1)->latest()->first();
+				@endphp
+
+				<div id="announcement-container">
+					@if ($announcement)
+						<x-notification-alert class="mb-4" :id="'notification-alert'">
+							<x-slot name="title">
+								{{ $announcement->title }}
+							</x-slot>
+							<x-slot name="desc">
+								{{ $announcement->description }}
+							</x-slot>
+						</x-notification-alert>
+					@endif
+				</div>
+
 				@yield('content')
 			</div>
 		</div>
