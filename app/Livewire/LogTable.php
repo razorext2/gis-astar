@@ -122,6 +122,10 @@ final class LogTable extends PowerGridComponent
                 ])
                 ->optionLabel('name')
                 ->optionValue('id'),
+            Filter::datetimepicker('created_at', 'created_at')
+                ->params([
+                    'timezone' => 'Asia/Jakarta',
+                ]),
         ];
     }
 

@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { handleNotification, handleAnnouncement, fetchNotification } from './notification';
 import { showToast, showAlert } from './utils/alert';
 import './../../vendor/power-components/livewire-powergrid/dist/powergrid'
+import flatpickr from "flatpickr";
 
 window.$ = window.jQuery = $;
 

@@ -11,7 +11,7 @@
         "php": "^8.2",
         "barryvdh/laravel-debugbar": "^3.14",
         "laravel/breeze": "^2.1",
-        "laravel/framework": "^11.9",
+        "laravel/framework": "^11.44",
         "laravel/octane": "^2.6",
         "laravel/reverb": "^1.4",
         "laravel/sanctum": "^4.0",

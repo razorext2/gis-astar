@@ -90,6 +90,10 @@ final class BackupTable extends PowerGridComponent
                 ])
                 ->optionLabel('name')
                 ->optionValue('id'),
+            Filter::datetimepicker('created_at_formatted', 'created_at')
+                ->params([
+                    'timezone' => 'Asia/Jakarta',
+                ]),
         ];
     }
 
