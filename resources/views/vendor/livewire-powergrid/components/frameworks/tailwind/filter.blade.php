@@ -13,7 +13,7 @@
 		@php
 			$customConfig = [];
 		@endphp
-		<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6">
+		<div class="grid grid-cols-1 gap-3 lg:grid-cols-3 2xl:grid-cols-4">
 			@foreach ($filtersFromColumns as $column)
 				@php
 					$filter = data_get($column, 'filters');
@@ -22,7 +22,7 @@
 					$className = str(data_get($filter, 'className'));
 				@endphp
 
-				<div class="{{ $baseClass }} mt-2">
+				<div class="{{ $baseClass }}">
 					@if ($className->contains('FilterMultiSelect'))
 						<x-livewire-powergrid::inputs.select :inline="false" :theme="$theme" :table-name="$tableName" :filter="$filter"
 							:title="$title" :initial-values="data_get(data_get($filter, 'multi_select'), data_get($filter, 'field'), [])" />
