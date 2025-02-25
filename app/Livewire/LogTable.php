@@ -27,7 +27,8 @@ final class LogTable extends PowerGridComponent
             PowerGrid::header()
                 ->showSearchInput()
                 ->showSoftDeletes(true)
-                ->showToggleColumns(),
+                ->showToggleColumns()
+                ->showSearchInput(),
             PowerGrid::responsive()
                 ->fixedColumns('actions', 'user_name'),
             PowerGrid::footer()
@@ -53,7 +54,9 @@ final class LogTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return LogHistory::query()->with('userRelasi:id,name,kode_pegawai');
+        return LogHistory::query()
+            ->with('userRelasi:id,name,kode_pegawai')
+            ->latest();
     }
 
     public function relationSearch(): array
@@ -61,6 +64,7 @@ final class LogTable extends PowerGridComponent
         return [
             'userRelasi' => [
                 'name',
+                'kode_pegawai',
             ]
         ];
     }
@@ -82,8 +86,8 @@ final class LogTable extends PowerGridComponent
     {
         return [
             Column::action('Action'),
-            Column::make('ID', 'id')
-                ->sortable(),
+            Column::make('#', 'id')
+                ->index(),
             Column::make('Kode Pegawai', 'employee_code'),
             Column::make('Nama User', 'user_name'),
             Column::make('User Action', 'user_action')
@@ -108,7 +112,6 @@ final class LogTable extends PowerGridComponent
                 ->dataSource(\App\Models\User::select('id', 'name')->get())
                 ->optionLabel('name')
                 ->optionValue('id'),
-            Filter::inputText('employee_code', 'employee_code')->placeholder('Kode pegawai'),
             Filter::select('user_action', 'user_action')
                 ->dataSource([
                     ['id' => 'login', 'name' => 'Login'],
@@ -119,7 +122,6 @@ final class LogTable extends PowerGridComponent
                 ])
                 ->optionLabel('name')
                 ->optionValue('id'),
-
         ];
     }
 

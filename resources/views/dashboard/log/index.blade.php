@@ -1,20 +1,20 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
 	<div
-		class="relative grid grid-cols-1 gap-4 rounded-xl bg-white shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 lg:p-4">
+		class="relative grid grid-cols-1 rounded-xl bg-white py-2 shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 lg:p-6">
 
-		<div class="flex flex-col gap-4">
+		<div class="flex flex-col px-3 lg:p-0">
 			<div>
 				<span class="text-xl font-semibold text-gray-900 dark:text-white">
 					Log Aktivitas
 				</span>
 
 				<p class="mt-0.5 text-base text-gray-600 dark:text-gray-400">
-					Log aktivitas berisi semua aktivitas yang pengguna di sistem lakukan.
+					Berisi semua aktivitas yang pengguna di sistem lakukan.
 				</p>
 			</div>
 		</div>
 
-		<livewire:table-refresher />
+		<livewire:table-refresher table-name="LogTable" />
 	</div>
 @endsection
