@@ -18,10 +18,12 @@ final class LogTable extends PowerGridComponent
     public string $tableName = 'LogTable';
     public bool $deferLoading = true;
     public bool $showFilters = true;
+    public $users;
 
     public function setUp(): array
     {
         $this->showCheckBox();
+        $this->users = \App\Models\User::select('id', 'name')->whereHas('logs')->get();
 
         return [
             PowerGrid::header()
@@ -109,7 +111,7 @@ final class LogTable extends PowerGridComponent
     {
         return [
             Filter::select('user_name', 'user_id')
-                ->dataSource(\App\Models\User::select('id', 'name')->get())
+                ->dataSource($this->users)
                 ->optionLabel('name')
                 ->optionValue('id'),
             Filter::select('user_action', 'user_action')
