@@ -1,5 +1,5 @@
 import { confirmAction } from "./func/validate";
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("livewire:navigated", function () {
   confirmAction();
 })

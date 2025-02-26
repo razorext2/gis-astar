@@ -6,11 +6,11 @@
 			@method('put')
 			<div class="grid gap-6 lg:grid-cols-2 xl:grid-cols-5">
 				<div class="w-full space-y-6 xl:col-span-2">
-					<div class="dark:bg-[#18181b] dark:ring-gray-700 rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 sm:p-6">
+					<div class="rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 sm:p-6">
 						<div class="max-w-xl">
 							<header class="flex flex-row">
 								<a
-									class="dark:bg-red-800 dark:hover:bg-red-900 dark:text-white dark:ring-gray-700 mb-4 mr-3 flex flex-row rounded-lg px-2.5 py-2.5 align-middle ring-1 ring-red-700 hover:bg-red-300 md:px-4"
+									class="mb-4 mr-3 flex flex-row rounded-lg px-2.5 py-2.5 align-middle ring-1 ring-red-700 hover:bg-red-300 dark:bg-red-800 dark:text-white dark:ring-gray-700 dark:hover:bg-red-900 md:px-4"
 									href="{{ route('placement.index') }}">
 									<svg class="dark:fill-white" class="icon" xmlns="http://www.w3.org/2000/svg" width="25" height="25"
 										viewBox="0 0 1024 1024" fill="#000000" version="1.1">
@@ -20,18 +20,18 @@
 									</svg>
 									Kembali
 								</a>
-								<h2 class="dark:text-white mt-2 text-lg font-medium text-gray-900">
+								<h2 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
 									{{ __('Edit Data Penempatan') }}
 								</h2>
 
 							</header>
-							<p class="dark:text-gray-300 mt-1 text-sm text-gray-600">
+							<p class="mt-1 text-sm text-gray-600 dark:text-gray-300">
 								{{ __('Silahkan sesuaikan data dibawah ini dengan data yang benar.') }}
 							</p>
 
 							<div class="mb-4 grid gap-6 sm:mb-5 sm:gap-6">
 								<div class="w-full">
-									<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="kode_penempatan">Kode
+									<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="kode_penempatan">Kode
 										Penempatan</label>
 									<input
 										class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900"
@@ -39,7 +39,7 @@
 										placeholder="Kode Penempatan" required="">
 								</div>
 								<div class="w-full">
-									<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="penempatan">Nama
+									<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="penempatan">Nama
 										Penempatan</label>
 									<input
 										class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
@@ -48,7 +48,7 @@
 								</div>
 
 								<div class="w-full">
-									<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="restrict_app">Pembatasan
+									<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="restrict_app">Pembatasan
 										Akses</label>
 									<select
 										class="focus:ring-primary-500 focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
@@ -62,14 +62,14 @@
 								</div>
 
 								<div class="w-full">
-									<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="alamat">Alamat</label>
+									<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="alamat">Alamat</label>
 									<textarea
 									 class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
 									 id="alamat" name="alamat" rows="4" placeholder="Masukkan alamat lengkap penempatan" required>{{ old('alamat', $placement->alamat) }}</textarea>
 								</div>
 
 								<div class="mb-4 w-full">
-									<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="radius">Radius
+									<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="radius">Radius
 										(Meter)</label>
 									<div class="mb-4 flex">
 										<div class="relative w-full">
@@ -80,28 +80,28 @@
 										</div>
 									</div>
 									<div class="relative">
-										<input class="dark:bg-white h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200" id="radius-input"
+										<input class="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200 dark:bg-white" id="radius-input"
 											type="range" value="{{ old('radius', $placement->radius ?? 35) }}" min="10" max="150">
-										<span class="dark:text-gray-400 absolute -bottom-6 start-0 text-sm text-gray-500">Min
+										<span class="absolute -bottom-6 start-0 text-sm text-gray-500 dark:text-gray-400">Min
 											10M</span>
 										<span
-											class="dark:text-gray-400 absolute -bottom-6 start-1/3 -translate-x-1/2 text-sm text-gray-500 rtl:translate-x-1/2">55M</span>
+											class="absolute -bottom-6 start-1/3 -translate-x-1/2 text-sm text-gray-500 dark:text-gray-400 rtl:translate-x-1/2">55M</span>
 										<span
-											class="dark:text-gray-400 absolute -bottom-6 start-2/3 -translate-x-1/2 text-sm text-gray-500 rtl:translate-x-1/2">105M</span>
-										<span class="dark:text-gray-400 absolute -bottom-6 end-0 text-sm text-gray-500">Max
+											class="absolute -bottom-6 start-2/3 -translate-x-1/2 text-sm text-gray-500 dark:text-gray-400 rtl:translate-x-1/2">105M</span>
+										<span class="absolute -bottom-6 end-0 text-sm text-gray-500 dark:text-gray-400">Max
 											150M</span>
 									</div>
 								</div>
 
 								<div class="mb-6 grid gap-6 md:grid-cols-2">
 									<div>
-										<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="longitude">Longitude</label>
+										<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="longitude">Longitude</label>
 										<input
 											class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
 											id="longitude" name="longitude" type="text" value="{{ old('radius', $placement->longitude) }}" required />
 									</div>
 									<div>
-										<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="latitude">Latitude</label>
+										<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="latitude">Latitude</label>
 										<input
 											class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
 											id="latitude" name="latitude" type="text" value="{{ old('radius', default: $placement->latitude) }}"
@@ -112,7 +112,7 @@
 							</div>
 							<div class="flex items-center">
 								<button
-									class="dark:bg-blue-800 dark:text-white dark:hover:bg-blue-900 dark:ring-gray-700 inline-flex items-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-gray-900 ring-1 ring-blue-700 hover:bg-blue-800 hover:text-white focus:text-white focus:ring-4 focus:ring-blue-300"
+									class="inline-flex items-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-gray-900 ring-1 ring-blue-700 hover:bg-blue-800 hover:text-white focus:text-white focus:ring-4 focus:ring-blue-300 dark:bg-blue-800 dark:text-white dark:ring-gray-700 dark:hover:bg-blue-900"
 									type="submit">
 									Submit
 									<svg class="ms-2 h-3.5 w-3.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -128,15 +128,15 @@
 				</div>
 
 				<div class="w-full space-y-6 xl:col-span-2">
-					<div class="dark:bg-[#18181b] dark:ring-gray-700 rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 sm:p-6">
+					<div class="rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 sm:p-6">
 						<div class="max-w-xl">
 							<header class="flex flex-row">
-								<h2 class="dark:text-white mt-2 text-lg font-medium text-gray-900">
+								<h2 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
 									{{ __('Tentukan titik lokasi') }}
 								</h2>
 
 							</header>
-							<p class="dark:text-gray-300 mt-1 text-sm text-gray-600">
+							<p class="mt-1 text-sm text-gray-600 dark:text-gray-300">
 								{{ __('Silahkan sesuaikan data dibawah ini dengan data yang benar.') }}
 							</p>
 
@@ -162,7 +162,7 @@
 		// Add event listener to the range input
 		rangeInput.addEventListener('input', updateCurrencyInput);
 
-		document.addEventListener('DOMContentLoaded', function() {
+		document.addEventListener('livewire:navigated', function() {
 			// Inisialisasi peta pada posisi awal
 			var lng = "{{ $placement->longitude }}";
 			var lat = "{{ $placement->latitude }}"

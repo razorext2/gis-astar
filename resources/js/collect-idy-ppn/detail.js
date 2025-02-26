@@ -1,5 +1,5 @@
 import { validate } from "./func/validate";
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("livewire:navigated", function () {
   validate();
 })
