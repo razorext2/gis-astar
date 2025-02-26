@@ -84,10 +84,10 @@
 @endphp
 
 <!-- Sidebar Navigation -->
-<aside
-	class="fixed left-0 top-0 z-40 hidden h-full w-72 -translate-x-full bg-gray-50 pt-16 transition-transform dark:bg-[#09090b] sm:translate-x-0 md:block"
-	id="logo-sidebar" aria-label="Sidebar">
-	<div class="relative mt-3 max-h-[87.5%] overflow-y-auto p-5">
+<aside class="fixed left-0 top-0 flex h-screen flex-col bg-gray-50 pb-16 pt-16 dark:bg-[#09090b]" id="logo-sidebar"
+	aria-label="Sidebar">
+
+	<div class="overflow-y-scroll p-5" wire:scroll>
 		<ul class="space-y-2 font-medium">
 
 			<li>
@@ -390,10 +390,11 @@
 						@can('announcement-list')
 							<li>
 								<a
-									class="{{ Route::is('announcement.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-									href="{{ route('announcement.index') }}" wire:navigate>
-									<x-icons.bullhorn
-										class="{{ Route::is('announcement.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 -rotate-45 group-hover:text-red-600" />
+									class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
+									href="{{ route('announcement.index') }}" wire:navigate
+									wire:current.exact="text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]">
+									<x-icons.bullhorn class="h-6 w-6 -rotate-45 text-gray-400 group-hover:text-red-600"
+										wire:current.exact="text-red-600" />
 									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Pemberitahuan</span>
 								</a>
 							</li>
@@ -402,10 +403,10 @@
 						@can('log-list')
 							<li>
 								<a
-									class="{{ Route::is('log.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-									href="{{ route('log.index') }}" wire:navigate>
-									<x-icons.window
-										class="{{ Route::is('log.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
+									class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
+									href="{{ route('log.index') }}" wire:navigate
+									wire:current.exact="text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]">
+									<x-icons.window class="h-6 w-6 text-gray-400 group-hover:text-red-600" wire:current.exact="text-red-600" />
 									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Log Aktivitas</span>
 								</a>
 							</li>
@@ -414,10 +415,10 @@
 						@can('backup-list')
 							<li>
 								<a
-									class="{{ Route::is('backup.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-									href="{{ route('backup.index') }}" wire:navigate>
-									<x-icons.filezip
-										class="{{ Route::is('backup.*') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
+									class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
+									href="{{ route('backup.index') }}" wire:current.exact="text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]"
+									wire:navigate>
+									<x-icons.filezip class="h-6 w-6 text-gray-400 group-hover:text-red-600" wire:current.exact="text-red-600" />
 									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Manage Backups</span>
 								</a>
 							</li>
@@ -430,9 +431,7 @@
 		</ul>
 	</div>
 
-	<div class="h-content absolute bottom-0 left-0 grid w-auto grid-cols-1 px-5 py-3 dark:bg-[#09090b]">
-		<!-- start footer -->
-		@include('dashboard.layoutsDash.footer')
-		<!-- footer -->
-	</div>
+	<!-- start footer -->
+	@include('dashboard.layoutsDash.footer')
+	<!-- footer -->
 </aside>
