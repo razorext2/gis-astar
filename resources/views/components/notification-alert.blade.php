@@ -14,11 +14,6 @@
 		<div class="w-full text-wrap capitalize" id="announcement-description">
 			{{ $desc }}
 		</div>
-
-		<x-button.danger class="!p-2" id="close" data-dismiss-target="#{{ $id }}" type="button"
-			aria-label="Close">
-			<x-icons.close class="h-3 w-3" />
-		</x-button.danger>
 	</div>
 
 </div>
