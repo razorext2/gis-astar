@@ -6,7 +6,6 @@
 	</head>
 
 	<body class="bg-gray-50 dark:bg-[#09090b]">
-
 		@if (session('status'))
 			<div
 				class="fixed right-0 top-[4.5rem] z-50 flex w-full max-w-sm scale-90 transform items-center divide-x transition duration-300"
@@ -46,7 +45,9 @@
 			@include('dashboard.layoutsDash.navbar')
 		@endpersist
 
-		@include('dashboard.layoutsDash.sidebar')
+		@persist('sidebar')
+			@include('dashboard.layoutsDash.sidebar')
+		@endpersist
 
 		<div class="mb-20 max-w-screen-xl p-2 sm:ml-72 sm:mt-0 sm:p-4 xl:ml-[420px]">
 

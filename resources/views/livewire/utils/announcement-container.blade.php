@@ -9,4 +9,13 @@
 			</x-slot>
 		</x-notification-alert>
 	@endif
+
+	<x-notification-alert class="mb-4 hidden" :id="'offline-alert'" wire:offline.class.remove="hidden">
+		<x-slot name="title">
+			Peringatan
+		</x-slot>
+		<x-slot name="desc">
+			Kamu sedang dalam kondisi offline.
+		</x-slot>
+	</x-notification-alert>
 </div>
