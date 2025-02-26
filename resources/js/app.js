@@ -32,7 +32,6 @@ document.addEventListener('livewire:navigated', function () {
     // define Echo sebagai global variable
     window.Echo.private(`notifications.${userId.content}`)
       .listen('.exportCompleted', (data) => {
-        console.log(data);
         handleNotification(data);
       })
       .listen('.newTaskAssigned', (data) => {
@@ -45,14 +44,12 @@ document.addEventListener('livewire:navigated', function () {
         handleNotification(data);
       })
       .listen('.backupReady', (data) => {
-        console.log(data);
-        showToast('success', 'Cadangan berhasil dibuat.');
+        showToast('success', data.message);
         Livewire.dispatch('pg:eventRefresh-BackupTable');
       });
 
     window.Echo.private(`announcements.${userId.content}`)
       .listen('.newAnnouncement', (data) => {
-        console.log(data);
         handleAnnouncement(data);
       });
   }

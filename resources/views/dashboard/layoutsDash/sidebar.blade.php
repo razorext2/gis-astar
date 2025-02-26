@@ -252,7 +252,7 @@
 
 								@if ($link['badge'])
 									@if (auth()->user()->hasPermissionTo($link['icon'] . '-approve'))
-										<x-dynamic-component :component="'badges.with-popover'" :model="$link['badge']" :clause="$link['condition']" />
+										@livewire('utils.report-counter', ['model' => $link['badge']])
 									@endif
 								@endif
 

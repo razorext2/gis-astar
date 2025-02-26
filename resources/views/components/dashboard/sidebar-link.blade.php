@@ -5,5 +5,5 @@
 	{{ $attributes }}>
 
 	{{ $icon }}
-	<span class="ms-3 text-sm group-hover:text-red-600">{{ $slot }}</span>
+	<span class="ms-3 inline-flex text-sm group-hover:text-red-600">{{ $slot }}</span>
 </a>
