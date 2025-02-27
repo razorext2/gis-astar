@@ -23,7 +23,8 @@ final class BackupTable extends PowerGridComponent
     {
         return [
             PowerGrid::header()
-                ->showSearchInput(),
+                ->showSearchInput()
+                ->showToggleColumns(),
             PowerGrid::footer()
                 ->showPerPage()
                 ->showRecordCount(),
@@ -95,12 +96,6 @@ final class BackupTable extends PowerGridComponent
                     'timezone' => 'Asia/Jakarta',
                 ]),
         ];
-    }
-
-    #[\Livewire\Attributes\On('edit')]
-    public function edit($rowId): void
-    {
-        $this->js('alert(' . $rowId . ')');
     }
 
     public function actions(Backup $row): array

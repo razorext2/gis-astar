@@ -29,13 +29,12 @@ final class LogTable extends PowerGridComponent
             PowerGrid::header()
                 ->showSearchInput()
                 ->showSoftDeletes(true)
-                ->showToggleColumns()
-                ->showSearchInput(),
+                ->showToggleColumns(),
             PowerGrid::responsive()
                 ->fixedColumns('actions', 'user_name'),
             PowerGrid::footer()
                 ->showPerPage(perPage: 10, perPageValues: [10, 25, 50, 100, 500, 0])
-                ->showRecordCount('full'),
+                ->showRecordCount(),
         ];
     }
 
