@@ -49,7 +49,7 @@ export function addDataHandler() {
         axios.post(`${APP_URL}/api/announcement-api`, newAnnouncement)
           .then(response => {
             showAlert('success', response.data.message);
-            $('#dataTable').DataTable().ajax.reload(null, false);
+            Livewire.dispatch('pg:eventRefresh-AnnouncementTable')
           })
       } catch (error) {
         showAlert('error', 'Terjadi kesalahan.', error.message);
@@ -113,7 +113,7 @@ export function editDataHandler() {
 
           if (response.data.success) {
             showAlert('success', response.data.message);
-            $('#dataTable').DataTable().ajax.reload(null, false);
+            Livewire.dispatch('pg:eventRefresh-AnnouncementTable');
           } else {
             showAlert('error', response.data.message);
           }

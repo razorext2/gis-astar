@@ -4,13 +4,13 @@
 	</x-button.primary>
 
 	<!-- Dropdown menu -->
-	<div class="relative z-[999]" x-show="open" @click.outside="open = false"
-		x-transition:enter="transition ease-in duration-200" x-transition:enter-start="transform opacity-0 -translate-x-2"
+	<div class="relative" x-show="open" @click.outside="open = false" x-transition:enter="transition ease-in duration-200"
+		x-transition:enter-start="transform opacity-0 -translate-x-2"
 		x-transition:enter-end="transform opacity-100 translate-x-0" x-transition:leave="transition ease-in duration-150"
 		x-transition:leave-start="transform opacity-100 translate-x-0"
 		x-transition:leave-end="transform opacity-0 -translate-x-2">
 		<ul
-			class="absolute -top-10 left-2 inline-flex w-auto rounded-lg bg-white text-sm text-gray-700 shadow-md ring-1 ring-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:ring-0">
+			class="absolute -top-10 left-2 flex w-auto flex-col rounded-lg bg-white text-sm text-gray-700 shadow-md ring-1 ring-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:ring-0 md:flex-row">
 			@foreach ($datas as $item)
 				<li>
 					<a

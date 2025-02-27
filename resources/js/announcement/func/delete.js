@@ -24,9 +24,7 @@ export function deleteData() {
 
         if (response.data.success) {
           showAlert('success', response.data.message);
-
-          $('#dataTable').DataTable().ajax.reload(null, false);
-
+          Livewire.dispatch('pg:eventRefresh-AnnouncementTable');
         } else {
           showAlert('error', response.data.message);
         }

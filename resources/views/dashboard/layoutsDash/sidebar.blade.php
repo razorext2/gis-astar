@@ -392,9 +392,8 @@
 								<a
 									class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
 									href="{{ route('announcement.index') }}" wire:navigate
-									wire:current.exact="text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]">
-									<x-icons.bullhorn class="h-6 w-6 -rotate-45 text-gray-400 group-hover:text-red-600"
-										wire:current.exact="text-red-600" />
+									wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-[#18181b]">
+									<x-icons.bullhorn class="h-6 w-6 -rotate-45 text-gray-400 group-hover:text-red-600" />
 									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Pemberitahuan</span>
 								</a>
 							</li>
@@ -405,8 +404,8 @@
 								<a
 									class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
 									href="{{ route('log.index') }}" wire:navigate
-									wire:current.exact="text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]">
-									<x-icons.window class="h-6 w-6 text-gray-400 group-hover:text-red-600" wire:current.exact="text-red-600" />
+									wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-[#18181b]">
+									<x-icons.window class="h-6 w-6 text-gray-400 group-hover:text-red-600" />
 									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Log Aktivitas</span>
 								</a>
 							</li>
@@ -416,10 +415,11 @@
 							<li>
 								<a
 									class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
-									href="{{ route('backup.index') }}" wire:current.exact="text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]"
+									href="{{ route('backup.index') }}"
+									wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-[#18181b]"
 									wire:navigate>
-									<x-icons.filezip class="h-6 w-6 text-gray-400 group-hover:text-red-600" wire:current.exact="text-red-600" />
-									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Manage Backups</span>
+									<x-icons.filezip class="h-6 w-6" wire:current.exact="text-red-600" />
+									<span class="ms-3 flex-1 whitespace-nowrap text-sm">Manage Backups</span>
 								</a>
 							</li>
 						@endcan

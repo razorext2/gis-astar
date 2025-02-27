@@ -64,9 +64,7 @@
 				@endpersist
 
 				{{-- announcement --}}
-				@persist('announcement-container')
-					@livewire('utils.announcement-container')
-				@endpersist
+				@livewire('utils.announcement-container')
 
 				{{-- main content --}}
 				@yield('content')

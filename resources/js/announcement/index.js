@@ -1,10 +1,8 @@
-import { showDatatables } from "./func/showData";
 import { addDataHandler, editDataHandler } from "./func/formHandler";
 import { changeState } from "./func/changeState";
 import { deleteData } from "./func/delete";
 
-$(document).ready(function () {
-  showDatatables();
+document.addEventListener('livewire:navigated', function () {
   addDataHandler();
   editDataHandler();
   changeState();
