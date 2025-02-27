@@ -53,25 +53,30 @@
 
 			<div class="mt-10 rounded-lg p-2 sm:p-4 md:mt-6">
 
-				<!-- carousel for cards -->
+				{{-- title --}}
 				<div class="grid grid-cols-1">
 					@include('dashboard.layoutsDash.title')
 				</div>
 
+				{{-- carousel for cards --}}
 				@persist('card-carousel')
 					<x-card.card-carousel />
 				@endpersist
 
+				{{-- announcement --}}
 				@persist('announcement-container')
 					@livewire('utils.announcement-container')
 				@endpersist
 
+				{{-- main content --}}
 				@yield('content')
 			</div>
 		</div>
 
 		{{-- bikin navigasi ala android --}}
-		<x-dashboard.mobile-drawer></x-dashboard.mobile-drawer>
+		@persist('mobile-drawer')
+			<x-dashboard.mobile-drawer></x-dashboard.mobile-drawer>
+		@endpersist
 
 		{{-- preload --}}
 		{{-- <div class="fixed inset-0 z-50 bg-white dark:bg-[#09090b] md:z-[9999]" id="preloader">
