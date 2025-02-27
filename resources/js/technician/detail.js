@@ -1,6 +1,6 @@
 import * as alert from './../utils/alert';
 
-$(function () {
+document.addEventListener('livewire:navigated', function () {
   fetchData();
 })
 

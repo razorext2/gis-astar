@@ -1,5 +1,5 @@
 import { showData } from "./func/showData";
 
-$(function () {
+document.addEventListener('livewire:navigated', function () {
   showData();
 })
