@@ -1,3 +1,5 @@
+@props(['class' => null, 'id' => null])
+
 <div
 	class="{{ $class }} relative mb-6 flex items-center gap-x-2 rounded-xl border-x border-b border-t-4 border-x-gray-200 border-b-gray-200 border-t-red-300 bg-white p-2 text-gray-600 dark:border-x-gray-700 dark:border-b-gray-700 dark:border-t-red-800 dark:bg-[#18181b] dark:text-white md:gap-x-4 md:p-4"
 	id="{{ $id }}" role="alert" {{ $attributes }}>
