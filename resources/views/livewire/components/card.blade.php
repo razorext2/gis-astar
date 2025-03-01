@@ -1,0 +1,11 @@
+<div class="{{ $totalData > 2 ? 'pb-4 mb-4 lg:mb-0' : 'mb-4' }}  relative w-full overflow-x-auto">
+	<div
+		class="{{ $totalData > 2 && $totalData ? 'flex flex-row lg:grid lg:grid-cols-' . $totalData : 'grid grid-cols-' . $totalData }} gap-4"
+		wire:poll.visible.10s>
+
+		@foreach ($data as $row)
+			<x-card.card-carousel-item :totalData="$totalData" :label="$row['label']" :count="$row['count']" :indicator="$row['indicator']" />
+		@endforeach
+
+	</div>
+</div>
