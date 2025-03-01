@@ -39,14 +39,10 @@ const globalOptions = {
 };
 
 const bigChart = document.getElementById("tooltip-chart");
-const cardLate = document.getElementById("cardLate-chart");
-const cardOntime = document.getElementById("cardOntime-chart");
-const cardOuttime = document.getElementById("cardOuttime-chart");
-const cardKecepatan = document.getElementById("cardKecepatan-chart");
 
 function renderChart(element, options) {
     const chart = new ApexCharts(element, options);
-    chart.render(); // Render langsung tanpa requestAnimationFrame
+    chart.render();
 }
 
 function createOptions(seriesData, colors, seriesName, categories) {
@@ -130,47 +126,6 @@ const observer = new IntersectionObserver(
                     };
                     renderChart(bigChart, options);
                 }
-
-                if (element === cardLate) {
-                    const lateCounts = JSON.parse(cardLate.dataset.lateCounts);
-                    options = createOptions(lateCounts, "#f05252", "Terlambat");
-                    renderChart(cardLate, options);
-                }
-
-                if (element === cardOntime) {
-                    const ontimeCounts = JSON.parse(
-                        cardOntime.dataset.ontimeCounts
-                    );
-                    options = createOptions(
-                        ontimeCounts,
-                        "#0e9f6e",
-                        "Tepat Waktu"
-                    );
-                    renderChart(cardOntime, options);
-                }
-
-                if (element === cardOuttime) {
-                    const outtimeCounts = JSON.parse(
-                        cardOuttime.dataset.outtimeCounts
-                    );
-                    options = createOptions(
-                        outtimeCounts,
-                        "#06b5d4",
-                        "Keluar Tepat Waktu"
-                    );
-                    renderChart(cardOuttime, options);
-                }
-
-                if (element === cardKecepatan) {
-                    const fastCounts = JSON.parse(cardKecepatan.dataset.fastCounts);
-                    options = createOptions(
-                        fastCounts,
-                        "#f43f5d",
-                        "Kecepatan Pulang"
-                    );
-                    renderChart(cardKecepatan, options);
-                }
-
                 observer.unobserve(element); // Stop observing once the chart is rendered
             }
         });
@@ -180,7 +135,3 @@ const observer = new IntersectionObserver(
 
 // Attach observer to each chart element
 if (bigChart) observer.observe(bigChart);
-if (cardLate) observer.observe(cardLate);
-if (cardOntime) observer.observe(cardOntime);
-if (cardOuttime) observer.observe(cardOuttime);
-if (cardKecepatan) observer.observe(cardKecepatan);
