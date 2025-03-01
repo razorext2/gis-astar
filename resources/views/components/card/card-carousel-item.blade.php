@@ -1,5 +1,5 @@
 <div
-	class="{{ $totalData > 2 ? 'min-w-60' : 'null' }} group w-full rounded-lg border border-t-4 border-gray-200 border-t-red-300 bg-white p-4 shadow-sm transition-transform duration-500 ease-in-out hover:translate-y-2 dark:border-gray-700 dark:border-t-red-800 dark:bg-[#18181b] lg:min-w-full lg:px-6 xl:px-8">
+	class="{{ $total > 2 ? 'min-w-60' : 'null' }} group w-full rounded-lg border border-t-4 border-gray-200 border-t-red-300 bg-white p-4 shadow-sm transition-transform duration-500 ease-in-out hover:translate-y-2 dark:border-gray-700 dark:border-t-red-800 dark:bg-[#18181b] lg:min-w-full lg:px-6 xl:px-8">
 	<div class="flex h-full w-full items-center justify-between gap-x-2">
 		<div>
 			<h5 class="pb-2 text-3xl font-bold leading-none text-gray-900 dark:text-white">{{ $count }} <sup

@@ -60,7 +60,7 @@
 
 				{{-- carousel for cards --}}
 				@persist('card-carousel')
-					<x-card.card-carousel />
+					@livewire('components.card')
 				@endpersist
 
 				{{-- announcement --}}

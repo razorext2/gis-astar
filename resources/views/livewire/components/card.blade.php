@@ -4,7 +4,7 @@
 		wire:poll.visible.10s>
 
 		@foreach ($data as $row)
-			<x-card.card-carousel-item :totalData="$totalData" :label="$row['label']" :count="$row['count']" :indicator="$row['indicator']" />
+			<x-card.card-carousel-item :total="$totalData" :label="$row['label']" :count="$row['count']" :indicator="$row['indicator']" />
 		@endforeach
 
 	</div>
