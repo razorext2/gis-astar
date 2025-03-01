@@ -195,5 +195,7 @@
 		</div>
 
 	</div>
-
 @endsection
+@push('script')
+	@vite('resources/js/global/chart.js')
+@endpush

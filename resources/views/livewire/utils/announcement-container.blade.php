@@ -1,6 +1,6 @@
 <div id="announcement-container" >
 	@if ($row)
-		<x-notification-alert class="mt-2" :id="'notification-alert'" wire:poll.300s>
+		<x-notification-alert class="mt-4 lg:mt-2" :id="'notification-alert'" wire:poll.300s>
 			<x-slot name="title">
 				{{ $row->title }}
 			</x-slot>
@@ -10,7 +10,7 @@
 		</x-notification-alert>
 	@endif
 
-	<x-notification-alert class="hidden mt-2" :id="'offline-alert'" wire:offline.class.remove="hidden">
+	<x-notification-alert class="hidden mt-4 lg:mt-2" :id="'offline-alert'" wire:offline.class.remove="hidden">
 		<x-slot name="title">
 			Peringatan
 		</x-slot>

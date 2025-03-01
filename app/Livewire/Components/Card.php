@@ -20,16 +20,16 @@ class Card extends Component
                     ->count(),
                     'indicator' => 'Orang',
             ],
-            [
-                'label' => 'Lap. kolektor blm acc',
-                'count' => \App\Models\Collector::where('status', 2)->count(),
-                'indicator' => 'Data',
-            ],
-            [
-                'label' => 'Lap. sales blm acc',
-                'count' => \App\Models\Sales::where('status', 0)->count(),
-                'indicator' => 'Data',
-            ],
+            // [
+            //     'label' => 'Lap. kolektor blm acc',
+            //     'count' => \App\Models\Collector::where('status', 2)->count(),
+            //     'indicator' => 'Data',
+            // ],
+            // [
+            //     'label' => 'Lap. sales blm acc',
+            //     'count' => \App\Models\Sales::where('status', 0)->count(),
+            //     'indicator' => 'Data',
+            // ],
         ];
 
         return view('livewire.components.card', ['data' => $datas, 'totalData' => count($datas)]);

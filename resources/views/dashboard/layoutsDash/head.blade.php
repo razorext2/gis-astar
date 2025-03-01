@@ -16,10 +16,6 @@
 @vite('resources/js/app.js')
 @vite('resources/js/global/simpleTables.js')
 
-@if (Route::is('dashboard'))
-	@vite('resources/js/global/chart.js')
-@endif
-
 @if (Route::is('pegawai.timeline') ||
 		Route::is('placement.create') ||
 		Route::is('placement.edit') ||
