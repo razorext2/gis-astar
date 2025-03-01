@@ -8,7 +8,7 @@
 	        'permission' => 'collect-list',
 	        'sublinks' => [],
 	        'badge' => 'App\Models\Collector',
-	        'condition' => ['status' => 2],
+	        'condition' => '2',
 	    ],
 	    [
 	        'route' => 'sales.index',
@@ -18,7 +18,7 @@
 	        'permission' => 'sales-list',
 	        'sublinks' => [],
 	        'badge' => 'App\Models\Sales',
-	        'condition' => ['status' => 0],
+	        'condition' => '0',
 	    ],
 	    [
 	        'route' => 'technician.index',
@@ -84,7 +84,7 @@
 @endphp
 
 <!-- Sidebar Navigation -->
-<aside class="left-0 top-0 hidden h-screen flex-col bg-gray-50 pb-16 pt-16 dark:bg-[#09090b] md:fixed md:flex"
+<aside class="left-0 top-0 hidden h-screen flex-col bg-gray-50 pb-16 pt-16 md:fixed md:flex dark:bg-[#09090b]"
 	id="logo-sidebar" aria-label="Sidebar">
 
 	<div class="overflow-y-scroll p-5" wire:scroll>
@@ -252,7 +252,10 @@
 
 								@if ($link['badge'])
 									@if (auth()->user()->hasPermissionTo($link['icon'] . '-approve'))
-										@livewire('utils.report-counter', ['model' => $link['badge']])
+										@livewire('utils.report-counter', [
+										    'model' => $link['badge'],
+										    'params' => $link['condition'],
+										])
 									@endif
 								@endif
 
