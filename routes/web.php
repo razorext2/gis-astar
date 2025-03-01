@@ -33,17 +33,17 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
 // turn off for a while, redirect to dashboard
-Route::get('/', function () {
+Route::middleware('throttle:high')->get('/', function () {
     return view('home', ['title' => 'Take attendance']);
     // return redirect('login');
 })->name('landing.page');
 
-Route::get('photo-regist', function () {
+Route::middleware('throttle:high')->get('photo-regist', function () {
     return view('regist', ['title' => 'Register your face.']);
 })->name('photo.regist');
 
 // route bisa diakses jika login
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'throttle:medium'])->group(function () {
     // notifikasi
     Route::get('notifications/{id}/mark-as-read', function ($id) {
         $notification = Auth::user()->unreadNotifications->find($id);
@@ -57,7 +57,7 @@ Route::middleware('auth')->group(function () {
         // laporan kolektor
         Route::get('collector/', [CollectorReportController::class, 'export'])->name('export.collector');
 
-        Route::get('collector/{filename}', function (String $filename) {
+        Route::get('collector/{filename}', function (string $filename) {
             return Storage::download("export/$filename");
         })->name('export.collector.download');
         // end laporan kolektor

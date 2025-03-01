@@ -1,11 +1,10 @@
 <?php
 
+use App\Http\Middleware\LogUserActivity;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-// user cookies
 use App\Http\Middleware\TrackUserActivity;
-// track log
 use App\Http\Middleware\LogUserActions;
 use Spatie\Permission\Middleware\RoleMiddleware;
 use Spatie\Permission\Middleware\PermissionMiddleware;
@@ -34,6 +33,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role_or_permission' => RoleOrPermissionMiddleware::class
         ]);
 
+        $middleware->append(LogUserActivity::class);
         // $middleware->append(TrackUserActivity::class);
         // $middleware->append(LogUserActions::class);
     })

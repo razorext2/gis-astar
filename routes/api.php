@@ -29,7 +29,7 @@ Route::post('proxy/server/attendance', function (Request $request) {
     return $response->json();
 });
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:high'])->group(function () {
     // private API using token, harus auth. 
     Route::get('get-attendance-data', [ApiAttendanceController::class, 'getAttendanceData'])->name('pegawai.getattendance');
 
