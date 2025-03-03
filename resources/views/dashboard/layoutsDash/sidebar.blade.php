@@ -84,7 +84,7 @@
 @endphp
 
 <!-- Sidebar Navigation -->
-<aside class="left-0 top-0 hidden h-screen flex-col bg-gray-50 pb-16 pt-16 md:fixed md:flex dark:bg-[#09090b]"
+<aside class="left-0 top-0 hidden h-screen flex-col bg-gray-50 pb-16 pt-16 dark:bg-[#09090b] md:fixed md:flex"
 	id="logo-sidebar" aria-label="Sidebar">
 
 	<div class="overflow-y-scroll p-5" wire:scroll>
@@ -195,6 +195,24 @@
 					</ul>
 				</li>
 			@endif
+
+			<!-- laporan driver -->
+			<li>
+				<x-dashboard.sidebar-link href="{{ route('dashboard') }}" :active="Route::is('dashboard')">
+					<x-slot name="icon">
+						<x-icons.truck
+							class="{{ Route::is('dashboard') ? 'text-red-600' : 'text-gray-400' }} h-6 w-6 group-hover:text-red-600" />
+					</x-slot>
+					Laporan Driver
+
+					{{-- @if (auth()->user()->hasPermissionTo('driver-approve'))
+						@livewire('utils.report-counter', [
+						    'model' => 'App\Models\Driver',
+						    'params' => '0',
+						])
+					@endif --}}
+				</x-dashboard.sidebar-link>
+			</li>
 
 			@foreach ($sidebarLinks as $link)
 				@php
@@ -396,8 +414,8 @@
 									class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
 									href="{{ route('announcement.index') }}" wire:navigate
 									wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-[#18181b]">
-									<x-icons.bullhorn class="h-6 w-6" wire:current.exact="text-red-600" />
-									<span class="ms-3 flex-1 whitespace-nowrap text-sm">Pemberitahuan</span>
+									<x-icons.bullhorn class="h-6 w-6 group-hover:text-red-600" wire:current.exact="text-red-600" />
+									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Pemberitahuan</span>
 								</a>
 							</li>
 						@endcan
@@ -408,8 +426,8 @@
 									class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
 									href="{{ route('log.index') }}" wire:navigate
 									wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-[#18181b]">
-									<x-icons.window class="h-6 w-6" wire:current.exact="text-red-600" />
-									<span class="ms-3 flex-1 whitespace-nowrap text-sm">Log Aktivitas</span>
+									<x-icons.window class="h-6 w-6 group-hover:text-red-600" wire:current.exact="text-red-600" />
+									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Log Aktivitas</span>
 								</a>
 							</li>
 						@endcan
@@ -421,8 +439,8 @@
 									href="{{ route('backup.index') }}"
 									wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-[#18181b]"
 									wire:navigate>
-									<x-icons.filezip class="h-6 w-6" wire:current.exact="text-red-600" />
-									<span class="ms-3 flex-1 whitespace-nowrap text-sm">Manage Backups</span>
+									<x-icons.filezip class="h-6 w-6 group-hover:text-red-600" wire:current.exact="text-red-600" />
+									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Manage Backups</span>
 								</a>
 							</li>
 						@endcan
