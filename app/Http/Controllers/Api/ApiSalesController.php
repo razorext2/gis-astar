@@ -114,8 +114,12 @@ class ApiSalesController extends Controller
         }
     }
 
-    public function confirm(Request $request,  $id)
+    public function confirm(Request $request, $id)
     {
+        if ($request->user()->cannot('sales-approve')) {
+            return abort(403);
+        }
+
         $validateBy = Crypt::decryptString($request->user_id);
 
         $query = Sales::find($id);
@@ -138,6 +142,10 @@ class ApiSalesController extends Controller
 
     public function deny(Request $request, $id)
     {
+        if ($request->user()->cannot('sales-approve')) {
+            return abort(403);
+        }
+
         $validateBy = Crypt::decryptString($request->user_id);
 
         $query = Sales::find($id);
@@ -159,8 +167,12 @@ class ApiSalesController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
+        if ($request->user()->cannot('sales-delete')) {
+            return abort(403);
+        }
+
         $query = Sales::find($id);
 
         if (!$query) { // Jika data tidak ditemukan

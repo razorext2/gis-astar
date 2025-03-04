@@ -170,8 +170,14 @@ class SalesController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->can('sales-create')) {
+            return abort(403);
+        }
+
         return view('dashboard.sales.add');
     }
+
+    /**
 
     /**
      * Display the specified resource.
@@ -179,6 +185,10 @@ class SalesController extends Controller
     public function show($id)
     {
         $data = Sales::with(['pegawaiRelasi:kode_pegawai,full_name', 'photoCollectRelasi'])->findOrFail($id);
+
+        if ($data->kode_pegawai != auth()->user()->kode_pegawai && !auth()->user()->can('sales-approve')) {
+            return abort(403);
+        }
 
         $user = User::select('id', 'name')->where('id', $data->validate_by)->first();
 
@@ -191,6 +201,10 @@ class SalesController extends Controller
     public function edit($id)
     {
         $data = Sales::with(['pegawaiRelasi:kode_pegawai,full_name', 'photoCollectRelasi'])->findOrFail($id);
+
+        if ($data->kode_pegawai != auth()->user()->kode_pegawai && !auth()->user()->can('sales-approve')) {
+            return abort(403);
+        }
 
         return view('dashboard.sales.edit', compact('data'));
     }
