@@ -3,7 +3,7 @@ import { backCameraStream } from "./func/cameraStream";
 import { addDataHandler } from "./func/formHandler";
 import { getLocation } from './func/geoLocation';
 
-document.addEventListener('DOMContentLoaded', function () {
+$(function () {
   quillEditor();
   backCameraStream();
   addDataHandler();
