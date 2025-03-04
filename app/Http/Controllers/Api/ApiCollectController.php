@@ -306,7 +306,6 @@ class ApiCollectController extends Controller
 
         if (!$request->user()->can('collect-delete')) {
             return abort(403);
-            ;
         }
 
         try {
