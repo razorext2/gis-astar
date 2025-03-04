@@ -6,7 +6,7 @@ export function editDataHandler() {
     e.preventDefault();
 
     const $button = $(this);
-    // $button.prop('disabled', true);
+    $button.prop('disabled', true);
 
     // Ambil data form
     let formData = new FormData();
@@ -40,10 +40,11 @@ export function editDataHandler() {
         showAlert('success', response.data.message);
         setTimeout(() => window.location.href = `${APP_URL}/dashboard/collect`, 1500);
       } else {
+        const firstError = response.data.data[Object.keys(response.data.data)[0]][0];
+
         handleFormErrors(response.data.data);
         $button.prop('disabled', false);
 
-        const firstError = response.data.data[Object.keys(response.data.data)[0]][0];
         return showAlert('error', response.data.message, `Validasi data gagal. <br><b>${firstError}</b>`);
       }
     } catch (error) {

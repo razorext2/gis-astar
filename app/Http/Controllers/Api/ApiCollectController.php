@@ -296,7 +296,7 @@ class ApiCollectController extends Controller
     /**
      * Delete the resource.
      */
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
         $query = Collector::findOrFail($id);
 
@@ -304,9 +304,13 @@ class ApiCollectController extends Controller
             return new ApiResource(false, 'Data tidak ditemukan', null);
         }
 
+        if (!$request->user()->can('collect-delete')) {
+            return abort(403);
+            ;
+        }
+
         try {
             $query->delete();
-
             return new ApiResource(true, 'Laporan berhasil dihapus', null);
         } catch (\Exception $e) {
             return new ApiResource(false, 'Terjadi kesalahan saat menghapus laporan', null);

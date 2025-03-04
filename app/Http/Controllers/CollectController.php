@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ApiResource;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Collector;
@@ -59,18 +60,18 @@ class CollectController extends Controller
 
         if ($status == 'approved') {
             // filter status = 1 (disetujui)
-            $query->where('status',  1);
+            $query->where('status', 1);
         } elseif ($status == 'submitted') {
             // filter status = 2 (diajukan)
-            $query->where('status',  2);
+            $query->where('status', 2);
         } elseif ($status == 'rejected') {
             // filter status = 3 (ditolak)
-            $query->where('status',  3);
+            $query->where('status', 3);
         } elseif ($status == 'revision') {
             // filter status = 4 (perlu revisi)
-            $query->where('status',  4);
+            $query->where('status', 4);
         } else {
-            $query->where('status',  0);
+            $query->where('status', 0);
             if (!Auth::user()->can('collect-approve')) {
                 $query->whereDate('assign_date', Carbon::now());
             }
@@ -242,7 +243,7 @@ class CollectController extends Controller
                         $query->whereBetween('created_at', [$request->startDate, $request->endDate]);
                     }
                 })
-                ->rawColumns(['actions', 'no_sr', 'title',  'payment_type', 'created_at'])
+                ->rawColumns(['actions', 'no_sr', 'title', 'payment_type', 'created_at'])
                 ->toJson();
         }
     }
@@ -252,9 +253,17 @@ class CollectController extends Controller
      */
     public function show($id)
     {
-        $data =  Collector::with('photoCollectRelasi', 'pegawaiRelasi')->findOrFail($id);
+        $data = Collector::with('photoCollectRelasi', 'pegawaiRelasi')->findOrFail($id);
 
-        $user =  User::select('id', 'name')->where('id', $data->validate_by)->first();
+        if (
+            !auth()->user()->hasRole('Admin') &&
+            auth()->user()->kode_pegawai != $data->kode_pegawai &&
+            !auth()->user()->can('collect-approve')
+        ) {
+            return abort(403);
+        }
+
+        $user = User::select('id', 'name')->where('id', $data->validate_by)->first();
 
         return view('dashboard.collect.detail', compact('data', 'user'));
     }
@@ -267,6 +276,14 @@ class CollectController extends Controller
         $data = Cache::remember('collector_data_' . $id, 1800, function () use ($id) {
             return Collector::with('photoCollectRelasi', 'pegawaiRelasi', 'collectTaskRelasi', 'collectTaskPpnRelasi')->findOrFail($id);
         });
+
+        if (
+            !auth()->user()->hasRole('Admin')
+            && !auth()->user()->can('collect-approve')
+            && auth()->user()->kode_pegawai != $data->kode_pegawai
+        ) {
+            return abort(403);
+        }
 
         return view('dashboard.collect.edit', compact('data'));
     }

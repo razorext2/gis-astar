@@ -34,8 +34,8 @@ class RateLimiterServiceProvider extends ServiceProvider
         // Custom rate limiter for 'test' route, with different limits per second and per minute.
         RateLimiter::for('high', function (Request $request) {
             return [
-                Limit::perSecond(5)->by($request->ip()), // Limit to 5 requests per second by IP address.
-                Limit::perMinute(10)->by($request->ip()), // Limit to 30 requests per minute by IP address.
+                Limit::perSecond(1)->by($request->ip()), // Limit to 1 requests per second by IP address.
+                Limit::perMinute(10)->by($request->ip()), // Limit to 10 requests per minute by IP address.
             ];
         });
 
