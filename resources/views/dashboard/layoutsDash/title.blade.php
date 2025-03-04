@@ -5,6 +5,7 @@
 	    'jabatan.*' => 'Jabatan',
 	    'division.*' => 'Divisi',
 	    'collect.*' => 'Laporan Kolektor',
+	    'driver.*' => 'Laporan Driver',
 	    'collect-task.*' => 'Tagihan IDC Non PPN',
 	    'collect-task-ppn.*' => 'Tagihan IDC PPN',
 	    'collect-idy-ppn.*' => 'Tagihan IDY PPN',

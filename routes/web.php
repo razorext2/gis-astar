@@ -14,6 +14,7 @@ use App\Http\Controllers\CollectTaskPpnController;
 use App\Http\Controllers\DayoffController;
 use App\Http\Controllers\DeductionController;
 use App\Http\Controllers\DivisionController;
+use App\Http\Controllers\DriverController;
 use App\Http\Controllers\GolonganController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\LoghistoryController;
@@ -192,6 +193,9 @@ Route::middleware(['auth', 'throttle:medium'])->group(function () {
 
         // route jabatan
         Route::resource('jabatan', JabatanController::class);
+
+        // route driver
+        Route::resource('driver', DriverController::class);
 
         // route pegawai
         Route::get('pegawai/autocomplete/', [PegawaiController::class, 'autocomplete'])->name('pegawai.autocomplete');

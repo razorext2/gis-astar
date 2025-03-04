@@ -7,4 +7,5 @@
 <script type="module" src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.dataTables.min.js"></script>
 <script type="module" src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
 <script type="module" src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js"></script>
 @stack('script')

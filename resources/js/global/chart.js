@@ -45,26 +45,6 @@ function renderChart(element, options) {
     chart.render();
 }
 
-function createOptions(seriesData, colors, seriesName, categories) {
-    return {
-        ...globalOptions,
-        series: [
-            {
-                name: seriesName,
-                data: seriesData,
-            },
-        ],
-        fill: {
-            type: "solid",
-            colors: [colors],
-        },
-        stroke: {
-            width: 2,
-            colors: ["#fff"],
-        },
-    };
-}
-
 // Use IntersectionObserver to delay rendering until the element is in view
 const observer = new IntersectionObserver(
     (entries, observer) => {

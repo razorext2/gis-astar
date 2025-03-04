@@ -1,13 +1,13 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
 	<div class="flex flex-col">
-		<div class="flex flex-col lg:grid lg:gap-x-4 lg:grid-cols-3 mb-4">
+		<div class="mb-4 flex flex-col lg:grid lg:grid-cols-3 lg:gap-x-4">
 
 			<form id="attend-in" action="{{ route('attendanceIn.index') }}"></form>
 			<form id="attend-out" action="{{ route('attendanceOut.index') }}"></form>
 
 			<!-- Chart -->
-			<div class="flex items-center justify-center lg:col-span-2 mb-4 lg:mb-0">
+			<div class="mb-4 flex items-center justify-center lg:col-span-2 lg:mb-0">
 				<div class="w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b] md:p-6">
 					<div class="mb-5 flex justify-between">
 						<div>

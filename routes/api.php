@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ApiCollectIdyPpnController;
 use App\Http\Controllers\Api\ApiCollectTaskController;
 use App\Http\Controllers\Api\ApiCollectTaskPpnController;
 use App\Http\Controllers\Api\ApiDayoffController;
+use App\Http\Controllers\Api\ApiDriverController;
 use App\Http\Controllers\Api\ApiPegawaiController;
 use App\Http\Controllers\Api\ApiSalesController;
 use Illuminate\Http\Request;
@@ -30,7 +31,7 @@ Route::post('proxy/server/attendance', function (Request $request) {
 });
 
 Route::middleware(['auth:sanctum', 'throttle:high'])->group(function () {
-    // private API using token, harus auth. 
+    // private API using token, harus auth.
     Route::get('get-attendance-data', [ApiAttendanceController::class, 'getAttendanceData'])->name('pegawai.getattendance');
 
     // pegawai
@@ -41,7 +42,9 @@ Route::middleware(['auth:sanctum', 'throttle:high'])->group(function () {
     Route::patch('collect-task-api/{id}/validate', [ApiCollectTaskController::class, 'validateTask'])->name('collect-task-api.validate');
     Route::patch('collect-task-api/{id}/assign', [ApiCollectTaskController::class, 'assignProcess'])->name('collect-task-api.assign');
     Route::patch('collect-task-api/mass-assign', [ApiCollectTaskController::class, 'massAssignProcess'])->name('collect-task-api.mass-assign');
-    Route::get('collect-task-api/getSR/{no_sr}', [ApiCollectTaskController::class, 'getSR'])->name('collect-task-api.getsr')->middleware('auth:sanctum');
+    Route::get('collect-task-api/getSR/{no_sr}', [ApiCollectTaskController::class, 'getSR'])
+        ->name('collect-task-api.getsr')
+        ->middleware('auth:sanctum');
     Route::apiResource('collect-task-api', ApiCollectTaskController::class)->except(['index', 'show']);
 
     // collect task ppn
@@ -71,6 +74,12 @@ Route::middleware(['auth:sanctum', 'throttle:high'])->group(function () {
     Route::patch('sales-api/{id}/confirm', [ApiSalesController::class, 'confirm'])->name('sales-api.confirm');
     Route::patch('sales-api/{id}/deny', [ApiSalesController::class, 'deny'])->name('sales-api.deny');
     Route::apiResource('sales-api', ApiSalesController::class)->only(['store', 'update', 'destroy']);
+
+    // laporan driver
+    Route::get('driver-api/{id}', [ApiDriverController::class, 'getById'])->name('driver-api.getbyid');
+    Route::patch('driver-api/{id}/confirm', [ApiDriverController::class, 'confirm'])->name('driver-api.confirm');
+    Route::patch('driver-api/{id}/deny', [ApiDriverController::class, 'deny'])->name('driver-api.deny');
+    Route::apiResource('driver-api', ApiDriverController::class)->only(['store', 'update', 'destroy']);
 
     // pengajuan off
     Route::patch('dayoff-api/{id}/approve', [ApiDayoffController::class, 'approve'])->name('dayoff-api.approve');

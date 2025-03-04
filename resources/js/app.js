@@ -4,9 +4,10 @@ import "flowbite";
 import Swal from "sweetalert2";
 import { handleNotification, handleAnnouncement, fetchNotification } from './notification';
 import { showToast, showAlert } from './utils/alert';
-import './../../vendor/power-components/livewire-powergrid/dist/powergrid'
+import './../../vendor/power-components/livewire-powergrid/dist/powergrid';
 import flatpickr from "flatpickr";
 
+window.flatpickr = flatpickr;
 window.$ = window.jQuery = $;
 
 document.addEventListener('livewire:navigated', function () {
