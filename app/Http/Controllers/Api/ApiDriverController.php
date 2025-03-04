@@ -40,6 +40,8 @@ class ApiDriverController extends Controller
                 'kode_pegawai' => $data['kode_pegawai'],
                 'title' => $data['title'],
                 'lokasi' => $data['lokasi'],
+                'longitude' => $data['longitude'],
+                'latitude' => $data['latitude'],
                 'keterangan' => $data['keterangan'],
             ]);
 

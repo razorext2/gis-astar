@@ -2,7 +2,7 @@ import { showAlert } from "../../utils/alert";
 
 export function deleteData() {
   $("body").on("click", "#delete-btn", function () {
-    let id = $('#delete-btn').data("id");
+    let id = $(this).data("id");
 
     console.log(`${APP_URL}/api/driver-api/${id}`);
 

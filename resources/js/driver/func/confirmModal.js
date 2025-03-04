@@ -1,11 +1,9 @@
 import { showAlert } from "./../../utils/alert";
 
 export function confirmModal() {
-  console.log("Script initialized!");
-
   $("body").off("click", "#confirm-btn").on("click", "#confirm-btn", async function () {
-    console.log("clicked");
     const id = $(this).data('id');
+    const userID = $(this).data('userid');
     const response = await axios.get(`${APP_URL}/api/driver-api/${id}`);
 
     if (!response.data.success) {
@@ -79,7 +77,7 @@ export function confirmModal() {
               class="col-span-2 flex flex-col items-start rounded-xl border border-gray-200 bg-gray-50 p-3">
               <p class="mb-2 text-sm text-gray-700">Dokumentasi</p>
               <div class="relative mx-auto flex-none items-center gap-4 rounded-xl p-2">
-                <img class="h-52 w-52 rounded-xl object-cover transition duration-300 ease-in-out hover:scale-[2]" id="documentations" src="${APP_URL}${row.photo_collect[0].photourl}" alt="" loading="lazy">
+                <img class="h-52 w-52 rounded-xl object-cover transition duration-300 ease-in-out hover:scale-[2]" id="documentations" src="${APP_URL}${row.photo_collect[0].photourl}" alt="">
               </div>
             </div>
 

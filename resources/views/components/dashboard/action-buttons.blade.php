@@ -16,7 +16,8 @@
 					<a
 						class="{{ $item['id'] == 'delete-btn' ? 'text-red-500 hover:bg-red-500 hover:text-white' : 'hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-white' }} block rounded-md px-4 py-2.5"
 						id="{{ $item['id'] }}" data-id="{{ $id }}" href="{{ $item['action'] }}"
-						{{ $item['id'] == 'edit-btn' || $item['id'] == 'show-btn' ? 'wire:navigate' : '' }}>
+						{{ $item['id'] == 'edit-btn' || $item['id'] == 'show-btn' ? 'wire:navigate' : '' }}
+						data-userid="{{ Crypt::encryptString(auth()->user()->id) }}">
 						{{ $item['label'] }}
 					</a>
 				</li>
