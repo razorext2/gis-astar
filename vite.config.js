@@ -33,7 +33,6 @@ export default defineConfig({
                 "resources/js/collect/detail.js",
 
                 // driver
-                "resources/js/driver/index.js",
                 "resources/js/driver/add.js",
                 "resources/js/driver/detail.js",
                 "resources/js/driver/edit.js",
