@@ -7,37 +7,41 @@
 			<form id="attend-out" action="{{ route('attendanceOut.index') }}"></form>
 
 			<!-- Chart -->
-			<div class="mb-4 flex items-center justify-center lg:col-span-2 lg:mb-0">
-				<div class="w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b] md:p-6">
-					<div class="mb-5 flex justify-between">
-						<div>
-							<p class="mb-2 text-3xl font-bold leading-none text-gray-900 dark:text-white">{{ $yearNow }}
-							</p>
-							<p class="text-base font-normal text-gray-500 dark:text-gray-300">Data 7 hari kebelakang</p>
-						</div>
-						<div class="flex items-center px-2.5 py-0.5 text-center text-base font-semibold text-green-500 dark:text-white">
-							{{ $formattedDateRange }}
-						</div>
+			<div
+				class="col-span-2 flex h-full flex-col rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b] md:p-6">
+				<div class="mb-5 flex justify-between">
+					<div>
+						<p class="mb-2 text-3xl font-bold leading-none text-gray-900 dark:text-white">
+							{{ $yearNow }}
+						</p>
+						<p class="text-base font-normal text-gray-500 dark:text-gray-300">
+							Data 7 hari kebelakang
+						</p>
 					</div>
-					<div id="tooltip-chart" data-late-counts='[2,3,1]' data-ontime-counts='[0,2,3]' data-outtime-counts="[2,0,2]"
-						data-fast-counts='[0,5,0]' data-dates='[1,4,2]'></div>
-					<div class="mt-5 grid grid-cols-1 items-center justify-between border-t border-gray-200 dark:border-gray-700">
-						<div class="flex items-center justify-between pt-5">
+					<div class="flex items-center px-2.5 py-0.5 text-center text-base font-semibold text-green-500 dark:text-white">
+						{{ $formattedDateRange }}
+					</div>
+				</div>
 
-							<x-button.primary form="attend-in" type="submit">
-								<x-slot name="icon">
-									<x-icons.angle-right class="icon h-6 w-6 text-green-500 dark:text-white" />
-								</x-slot>
-								Absen masuk
-							</x-button.primary>
+				{{-- chart here --}}
+				<livewire:chart.line />
 
-							<x-button.danger form="attend-out" type="submit">
-								<x-slot name="icon">
-									<x-icons.angle-left class="icon h-6 w-6 text-green-500 dark:text-white" />
-								</x-slot>
-								Absen keluar
-							</x-button.danger>
-						</div>
+				<div class="justify-between border-t border-gray-200 dark:border-gray-700">
+					<div class="flex items-center justify-between pt-5">
+
+						<x-button.primary form="attend-in" type="submit">
+							<x-slot name="icon">
+								<x-icons.angle-right class="icon h-6 w-6 text-green-500 dark:text-white" />
+							</x-slot>
+							Absen masuk
+						</x-button.primary>
+
+						<x-button.danger form="attend-out" type="submit">
+							<x-slot name="icon">
+								<x-icons.angle-left class="icon h-6 w-6 text-green-500 dark:text-white" />
+							</x-slot>
+							Absen keluar
+						</x-button.danger>
 					</div>
 				</div>
 			</div>
@@ -196,6 +200,3 @@
 
 	</div>
 @endsection
-@push('script')
-	@vite('resources/js/global/chart.js')
-@endpush
