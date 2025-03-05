@@ -11,6 +11,8 @@
 <link href="{{ asset('assets/img/logo.ico') }}" rel="icon" />
 <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon" />
 
+@livewireStyles
+
 <!-- Vite Files -->
 @vite('resources/css/app.css')
 @vite('resources/js/app.js')

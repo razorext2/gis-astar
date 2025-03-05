@@ -1,3 +1,4 @@
+@livewireScripts
 @livewireChartsScripts
 @vite(['resources/js/main.js'])
 <script type="module" src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
