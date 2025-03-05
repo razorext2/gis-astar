@@ -45,9 +45,7 @@
 			@include('dashboard.layoutsDash.navbar')
 		@endpersist
 
-		@persist('sidebar')
-			@include('dashboard.layoutsDash.sidebar')
-		@endpersist
+		@include('dashboard.layoutsDash.sidebar')
 
 		<div class="mb-20 max-w-screen-xl p-2 sm:ml-72 sm:mt-0 sm:p-4 xl:ml-[420px]">
 
