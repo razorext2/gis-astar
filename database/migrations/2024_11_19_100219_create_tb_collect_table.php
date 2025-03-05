@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->string('latitude', 32);
             $table->boolean('status')->default(0);
             $table->text('notes')->nullable();
-            $table->integer('have_paid', 1)->nullable();
+            $table->integer('have_paid')->nullable();
             $table->string('payment_type', 32)->nullable();
             $table->bigInteger('payment_amount')->nullable();
             $table->string('validate_by', 32)->nullable();
