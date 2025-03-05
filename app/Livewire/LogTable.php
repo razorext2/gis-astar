@@ -137,26 +137,26 @@ final class LogTable extends PowerGridComponent
                 ->slot(Blade::render('<x-icons.trash-bin class="h-5 w-5 text-white" />'))
                 ->id()
                 ->class($this->btnClass())
-                ->dispatch('delete', ['logId' => $row->id])
+                ->dispatch('delete', ['id' => $row->id])
         ];
     }
 
     #[\Livewire\Attributes\On('delete')]
-    public function delete($logId): void
+    public function delete($id): void
     {
-        $this->dispatch('confirmDelete', id: $logId);
+        $this->dispatch('confirmDelete', id: $id);
     }
 
     #[\Livewire\Attributes\On('confirmDeleteAction')]
-    public function confirmDelete($logId): void
+    public function confirmDelete($id): void
     {
-        $data = Loghistory::find($logId);
+        $data = Loghistory::find($id);
 
         if (!$data) {
             $this->dispatch(
                 'swal',
                 title: 'Gagal!',
-                text: "Terjadi kesalahan saat menghapus data dengan ID <b>$logId</b>",
+                text: "Terjadi kesalahan saat menghapus data dengan ID <b>$id</b>",
                 icon: 'error'
             );
 

@@ -91,12 +91,9 @@
 		<ul class="space-y-2 font-medium">
 
 			<li>
-				<x-dashboard.sidebar-link href="{{ route('dashboard') }}" :active="Route::is('dashboard')">
+				<x-dashboard.sidebar-link href="{{ route('dashboard') }}" wire:navigate :active="Route::is('dashboard')">
 					<x-slot name="icon">
-
-						<x-icons.home
-							class="{{ Route::is('dashboard') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-
+						<x-icons.home class="{{ Route::is('dashboard') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
 					</x-slot>
 					Dashboard
 				</x-dashboard.sidebar-link>
@@ -232,8 +229,7 @@
 									{{-- for icons to show --}}
 									@switch($link['icon'])
 										@case('collect')
-											<x-icons.clipboard
-												class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+											<x-icons.clipboard class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
 										@break
 
 										@case('capture')
@@ -241,23 +237,19 @@
 										@break
 
 										@case('dayoff')
-											<x-icons.lock-time
-												class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+											<x-icons.lock-time class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
 										@break
 
 										@case('pegawai')
-											<x-icons.address-book
-												class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+											<x-icons.address-book class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
 										@break
 
 										@case('jabatan')
-											<x-icons.briefcase
-												class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+											<x-icons.briefcase class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
 										@break
 
 										@case('golongan')
-											<x-icons.users-group
-												class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+											<x-icons.users-group class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
 										@break
 
 										@case('sales')

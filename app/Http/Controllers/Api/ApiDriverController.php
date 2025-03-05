@@ -75,17 +75,6 @@ class ApiDriverController extends Controller
         }
     }
 
-    public function getById($id)
-    {
-        $query = Driver::with(['photoCollect:id_driver,photourl', 'pegawai:kode_pegawai,full_name'])->find($id);
-
-        if (!$query) {
-            return new ApiResource(false, 'Data tidak ditemukan', null);
-        }
-
-        return new ApiResource(true, 'Berhasil mengambil data', $query);
-    }
-
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -158,23 +147,6 @@ class ApiDriverController extends Controller
             return new ApiResource(true, 'Data berhasil ditolak', null);
         } catch (\Exception $e) {
             return new ApiResource(false, 'Terjadi kesalahan saat menolak data', $e->getMessage());
-        }
-    }
-
-    public function destroy($id)
-    {
-        $query = Driver::find($id);
-
-        if (!$query) { // Jika data tidak ditemukan
-            return new ApiResource(false, 'Data tidak ditemukan', null);
-        }
-
-        try {
-            $query->delete();
-
-            return new ApiResource(true, 'Berhasil menghapus data laporan', null);
-        } catch (\Exception $e) {
-            return new ApiResource(false, 'Terjadi kesalahan saat menghapus data', $e->getMessage());
         }
     }
 }

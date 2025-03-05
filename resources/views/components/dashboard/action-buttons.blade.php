@@ -1,3 +1,5 @@
+@props(['delete' => false, 'detail' => false])
+
 <div class="inline-flex max-w-10" x-data="{ open: false }">
 	<x-button.primary class="h-9 w-9" type="button" @click="open = !open" x-transition="">
 		<x-icons.three-dots class="h-4 w-4 rotate-90" />
@@ -14,14 +16,34 @@
 			@foreach ($datas as $item)
 				<li>
 					<a
-						class="{{ $item['id'] == 'delete-btn' ? 'text-red-500 hover:bg-red-500 hover:text-white' : 'hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-white' }} block rounded-md px-4 py-2.5"
+						class="{{ $item['id'] == 'delete-btn' ? 'text-red-500 hover:bg-red-500 hover:text-white' : 'hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-white' }} block rounded-md px-4 py-2.5 transition-colors duration-300 ease-in-out"
 						id="{{ $item['id'] }}" data-id="{{ $id }}" href="{{ $item['action'] }}"
-						{{ $item['id'] == 'show-btn' ? 'wire:navigate' : '' }}
 						data-userid="{{ Crypt::encryptString(auth()->user()->id) }}">
 						{{ $item['label'] }}
 					</a>
 				</li>
 			@endforeach
+
+			@if ($detail)
+				<li>
+					<button
+						class="block rounded-md px-4 py-2.5 transition-colors duration-300 ease-in-out hover:bg-gray-100 hover:text-white dark:text-white dark:hover:bg-gray-600"
+						id="detail-btn" wire:click="$dispatch('detail', {id: {{ $id }}})"
+						data-userid="{{ Crypt::encryptString(auth()->user()->id) }}">
+						Detail
+					</button>
+				</li>
+			@endif
+
+			@if ($delete)
+				<li>
+					<button
+						class="block rounded-md px-4 py-2.5 text-red-500 transition-colors duration-300 ease-in-out hover:bg-red-500 hover:text-white"
+						id="delete-btn" wire:click="$dispatch('delete', {id: {{ $id }}})">
+						Hapus
+					</button>
+				</li>
+			@endif
 		</ul>
 	</div>
 </div>

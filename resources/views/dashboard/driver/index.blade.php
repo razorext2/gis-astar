@@ -22,6 +22,3 @@
 		</div>
 	</div>
 @endsection
-@push('script')
-	@vite(['resources/js/driver/index.js'])
-@endpush
