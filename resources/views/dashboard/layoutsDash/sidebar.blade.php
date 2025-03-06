@@ -115,21 +115,25 @@
 				<ul class="space-y-4 py-4" id="absensi-dropdown" x-show="absensi"
 					x-transition:enter="transition ease-in duration-200" x-transition:enter-start="transform opacity-0 -translate-y-5"
 					x-transition:leave="transition ease-out duration-200" x-transition:leave-end="transform opacity-0 -translate-y-5">
+
 					<li>
 						<a
-							class="{{ Route::is('attendanceIn.index') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-							href="{{ route('attendanceIn.index') }}">
-							<x-icons.arrow-left-bracket
-								class="{{ Route::is('attendanceIn.index') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+							class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
+							href="{{ route('attendanceIn.index') }}"
+							wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-[#18181b]"
+							wire:navigate>
+							<x-icons.arrow-left-bracket class="h-6 w-6 group-hover:text-red-600" />
 							<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Masuk</span>
 						</a>
 					</li>
+
 					<li>
 						<a
-							class="{{ Route::is('attendanceOut.index') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-							href="{{ route('attendanceOut.index') }}">
-							<x-icons.arrow-right-bracket
-								class="{{ Route::is('attendanceOut.index') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+							class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
+							href="{{ route('attendanceOut.index') }}"
+							wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-[#18181b]"
+							wire:navigate>
+							<x-icons.arrow-right-bracket class="h-6 w-6 group-hover:text-red-600" />
 							<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Keluar</span>
 						</a>
 					</li>

@@ -16,7 +16,6 @@
 <!-- Vite Files -->
 @vite('resources/css/app.css')
 @vite('resources/js/app.js')
-@vite('resources/js/global/simpleTables.js')
 
 @if (Route::is('pegawai.timeline') ||
 		Route::is('placement.create') ||
