@@ -14,7 +14,6 @@ export default defineConfig({
 
                 // global
                 "resources/js/global/leaflet.js",
-                "resources/js/global/simpleTables.js",
 
                 // landing page
                 "resources/js/landing/main.js",
