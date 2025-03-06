@@ -25,7 +25,6 @@ final class DriverTable extends PowerGridComponent
 
     public function setUp(): array
     {
-        $this->showCheckBox();
         $this->pegawai = User::role('Driver')->get();
 
         return [
