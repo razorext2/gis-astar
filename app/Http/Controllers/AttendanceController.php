@@ -12,16 +12,6 @@ class AttendanceController extends Controller
 
     public function index()
     {
-        if (Auth::check() && is_null(Auth::user()->kode_pegawai)) {
-
-            $datas = Attendance::with('pegawaiRelasi')->orderByDesc('jam_masuk')->get();
-        } else {
-            $datas = Attendance::with('pegawaiRelasi')
-                ->where('kode_pegawai', Auth::user()->kode_pegawai)
-                ->orderByDesc('jam_masuk')
-                ->get();
-        }
-
         return view('dashboard.attendanceIn.view', compact('datas'));
     }
 

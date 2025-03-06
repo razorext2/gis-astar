@@ -13,16 +13,6 @@ class AttendanceOutController extends Controller
 
     public function index()
     {
-        if (Auth::check() && is_null(Auth::user()->kode_pegawai)) {
-
-            $datas = AttendanceOut::with('pegawaiRelasi')->orderByDesc('jam_keluar')->get();
-        } else {
-            $datas = AttendanceOut::with('pegawaiRelasi')
-                ->where('kode_pegawai', Auth::user()->kode_pegawai)
-                ->orderByDesc('jam_keluar')
-                ->get();
-        }
-
         return view('dashboard.attendanceOut.view', compact('datas'));
     }
 
