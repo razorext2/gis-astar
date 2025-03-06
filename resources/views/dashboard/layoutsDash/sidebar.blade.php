@@ -194,26 +194,27 @@
 			@endif
 
 			<!-- laporan driver -->
-			<li>
-				<a href="{{ route('driver.index') }}"
-					class="group flex flex-row items-center rounded-xl p-2 text-gray-900 hover:text-red-600 dark:text-gray-300"
-					wire:navigate wire:current.href="!text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]">
+			@can('driver-list')
+				<li>
+					<a href="{{ route('driver.index') }}"
+						class="group flex flex-row items-center rounded-xl p-2 text-gray-900 hover:text-red-600 dark:text-gray-300"
+						wire:navigate wire:current.href="!text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]">
 
-					<x-icons.truck wire:current="!text-red-600" class="h-6 w-6 group-hover:text-red-600" />
-					<span class="ms-3 inline-flex text-sm group-hover:text-red-600">
-						Laporan Driver
+						<x-icons.truck wire:current="!text-red-600" class="h-6 w-6 group-hover:text-red-600" />
+						<span class="ms-3 inline-flex text-sm group-hover:text-red-600">
+							Laporan Driver
 
-						@if (auth()->user()->hasPermissionTo('driver-approve'))
-							@livewire('utils.report-counter', [
-							    'model' => 'App\Models\Driver',
-							    'params' => '0',
-							    'id' => 'driver',
-							])
-						@endif
-					</span>
-				</a>
-
-			</li>
+							@if (auth()->user()->hasPermissionTo('driver-approve'))
+								@livewire('utils.report-counter', [
+								    'model' => 'App\Models\Driver',
+								    'params' => '0',
+								    'id' => 'driver',
+								])
+							@endif
+						</span>
+					</a>
+				</li>
+			@endcan
 
 			@foreach ($sidebarLinks as $link)
 				@php
