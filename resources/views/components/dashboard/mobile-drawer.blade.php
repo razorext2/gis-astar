@@ -71,6 +71,13 @@
 			        'icon' => 'collect-idy-ppn',
 			    ],
 			    [
+			        'permission' => 'driver-list',
+			        'link' => 'driver.index',
+			        'check' => 'driver.*',
+			        'label' => 'Laporan Driver',
+			        'icon' => 'driver',
+			    ],
+			    [
 			        'permission' => 'collect-list',
 			        'link' => 'collect.index',
 			        'check' => 'collect.*',
@@ -216,6 +223,10 @@
 
 							@case('collect-idy-ppn')
 								<x-icons.cash-register class="{{ $iconClass }} {{ $iconSize }}" />
+							@break
+
+							@case('driver')
+								<x-icons.truck class="{{ $iconClass }} {{ $iconSize }}" />
 							@break
 
 							@case('sales')
