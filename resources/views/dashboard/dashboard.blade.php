@@ -8,7 +8,7 @@
 
 			<!-- Chart -->
 			<div
-				class="col-span-2 flex h-full flex-col rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b] md:p-6">
+				class="col-span-2 mb-4 flex h-full flex-col rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b] md:p-6 lg:mb-0">
 				<div class="mb-5 flex justify-between">
 					<div>
 						<p class="mb-2 text-3xl font-bold leading-none text-gray-900 dark:text-white">
