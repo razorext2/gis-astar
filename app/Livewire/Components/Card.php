@@ -37,7 +37,7 @@ class Card extends Component
             ],
             [
                 'permission' => 'sales-edit',
-                'label' => 'Lap. sales blm acc',
+                'label' => 'Total lap. sales blm acc',
                 'count' => auth()->user()->hasRole('Sales')
                     ? Sales::where('status', 0)
                         ->where('kode_pegawai', auth()->user()->kode_pegawai)
@@ -49,7 +49,6 @@ class Card extends Component
         ];
 
         $totalData = 0;
-
 
         foreach ($datas as $data) {
             if (auth()->user()->can($data['permission'])) {
