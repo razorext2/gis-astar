@@ -28,10 +28,10 @@ class Card extends Component
                 'permission' => 'collect-edit',
                 'label' => 'Lap. kolektor blm acc',
                 'count' => auth()->user()->hasRole('Collector')
-                    ? Collector::where('status', 2)
+                    ? Collector::needApprove()
                         ->where('kode_pegawai', auth()->user()->kode_pegawai)
                         ->count()
-                    : Collector::where('status', 2)
+                    : Collector::needApprove()
                         ->count(),
                 'indicator' => 'Laporan',
             ],
@@ -39,10 +39,10 @@ class Card extends Component
                 'permission' => 'sales-edit',
                 'label' => 'Total lap. sales blm acc',
                 'count' => auth()->user()->hasRole('Sales')
-                    ? Sales::where('status', 0)
+                    ? Sales::needApprove()
                         ->where('kode_pegawai', auth()->user()->kode_pegawai)
                         ->count()
-                    : Sales::where('status', 0)
+                    : Sales::needApprove()
                         ->count(),
                 'indicator' => 'Laporan',
             ],

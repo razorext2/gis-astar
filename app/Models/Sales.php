@@ -99,4 +99,9 @@ class Sales extends Model
     {
         return $this->belongsTo(User::class, 'kode_pegawai', 'kode_pegawai');
     }
+
+    public function scopeNeedApprove($query)
+    {
+        return $query->where('status', 0);
+    }
 }

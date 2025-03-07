@@ -13,8 +13,8 @@ class ReportCounter extends Component
         $user = Auth::user();
 
         $models = [
-            'sales' => \App\Models\Sales::query()->where('status', 0),
-            'collect' => \App\Models\Collector::query()->where('status', 2),
+            'sales' => \App\Models\Sales::needApprove(),
+            'collect' => \App\Models\Collector::needApprove(),
             'driver' => \App\Models\Driver::query()->where('status', 0),
         ];
 
