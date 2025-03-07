@@ -7,8 +7,7 @@
 	        'icon' => 'collect',
 	        'permission' => 'collect-list',
 	        'sublinks' => [],
-	        'badge' => 'App\Models\Collector',
-	        'condition' => '2',
+	        'indicator' => true,
 	    ],
 	    [
 	        'route' => 'sales.index',
@@ -17,8 +16,7 @@
 	        'icon' => 'sales',
 	        'permission' => 'sales-list',
 	        'sublinks' => [],
-	        'badge' => 'App\Models\Sales',
-	        'condition' => '0',
+	        'indicator' => true,
 	    ],
 	    [
 	        'route' => 'technician.index',
@@ -27,8 +25,7 @@
 	        'icon' => 'technician',
 	        'permission' => 'technician-list',
 	        'sublinks' => [],
-	        'badge' => false,
-	        'condition' => null,
+	        'indicator' => false,
 	    ],
 	    [
 	        'route' => 'capture.index',
@@ -37,8 +34,7 @@
 	        'icon' => 'capture',
 	        'permission' => 'capture',
 	        'sublinks' => [],
-	        'badge' => false,
-	        'condition' => null,
+	        'indicator' => false,
 	    ],
 	    [
 	        'route' => 'dayoff.index',
@@ -47,8 +43,7 @@
 	        'icon' => 'dayoff',
 	        'permission' => 'dayoff-list',
 	        'sublinks' => [],
-	        'badge' => false,
-	        'condition' => null,
+	        'indicator' => false,
 	    ],
 	    [
 	        'route' => 'pegawai.index',
@@ -57,8 +52,7 @@
 	        'icon' => 'pegawai',
 	        'permission' => 'pegawai-list',
 	        'sublinks' => [],
-	        'badge' => false,
-	        'condition' => null,
+	        'indicator' => false,
 	    ],
 	    [
 	        'route' => 'jabatan.index',
@@ -67,8 +61,7 @@
 	        'icon' => 'jabatan',
 	        'permission' => 'jabatan-list',
 	        'sublinks' => [],
-	        'badge' => false,
-	        'condition' => null,
+	        'indicator' => false,
 	    ],
 	    [
 	        'route' => 'golongan.index',
@@ -77,8 +70,7 @@
 	        'icon' => 'golongan',
 	        'permission' => 'golongan-list',
 	        'sublinks' => [],
-	        'badge' => false,
-	        'condition' => null,
+	        'indicator' => false,
 	    ],
 	];
 @endphp
@@ -209,11 +201,7 @@
 							Laporan Driver
 
 							@if (auth()->user()->hasPermissionTo('driver-approve'))
-								@livewire('utils.report-counter', [
-								    'model' => 'App\Models\Driver',
-								    'params' => '0',
-								    'id' => 'driver',
-								])
+								@livewire('utils.report-counter', ['id' => 'driver'])
 							@endif
 						</span>
 					</a>
@@ -269,13 +257,9 @@
 								</x-slot>
 								{{ $link['label'] }}
 
-								@if ($link['badge'])
+								@if ($link['indicator'])
 									@if (auth()->user()->hasPermissionTo($link['icon'] . '-approve'))
-										@livewire('utils.report-counter', [
-										    'model' => $link['badge'],
-										    'params' => $link['condition'],
-										    'id' => $link['badge'],
-										])
+										@livewire('utils.report-counter', ['id' => $link['icon']])
 									@endif
 								@endif
 
