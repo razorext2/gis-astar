@@ -13,7 +13,7 @@ class AttendanceOutController extends Controller
 
     public function index()
     {
-        return view('dashboard.attendanceOut.view', compact('datas'));
+        return view('dashboard.attendanceOut.view');
     }
 
     public function storeAttendance(Request $request)
