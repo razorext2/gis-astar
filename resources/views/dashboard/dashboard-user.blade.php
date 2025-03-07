@@ -25,18 +25,6 @@
 					</p>
 				</div>
 			</div>
-			<div class="w-full items-center self-center p-0 text-right">
-				<div class="pt-2">
-					<form method="POST" action="{{ route('logout') }}">
-						@csrf
-						<a class="font-base text-md cursor-pointer text-blue-500 hover:underline md:text-lg" :href="route('logout')"
-							onclick="event.preventDefault();
-                            this.closest('form').submit();">
-							Logout
-						</a>
-					</form>
-				</div>
-			</div>
 		</div>
 
 		@can('sales-create')
