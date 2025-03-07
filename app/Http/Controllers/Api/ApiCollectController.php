@@ -259,25 +259,6 @@ class ApiCollectController extends Controller
         try {
             DB::beginTransaction();
 
-            match ($query->bill_type) {
-                'idcnonppn' => CollectTask::where('no_sr', $query->no_sr)->update([
-                    'assign_by' => null,
-                    'assign_to' => null,
-                    'bill_status' => 0,
-                ]),
-                'idcppn' => CollectTaskPpn::where('tax_invoice', $query->no_sr)->update([
-                    'assign_by' => null,
-                    'assign_to' => null,
-                    'bill_status' => 0,
-                ]),
-                'idyppn' => CollectIdyPpn::where('tax_invoice', $query->no_sr)->update([
-                    'assign_by' => null,
-                    'assign_to' => null,
-                    'bill_status' => 0,
-                ]),
-                default => null,
-            };
-
             $query->update([
                 'status' => 4,
                 'notes' => $request->notes,
