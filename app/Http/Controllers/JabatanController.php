@@ -23,12 +23,9 @@ class JabatanController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            // Parse the minDate and maxDate from the request after cleaning
-            $minDate = $request->input('minDate');
-            $maxDate = $request->input('maxDate');
-
             // Start building the query
-            $query = Jabatan::with(['divisionRelasi', 'placementRelasi'])
+            $query = Jabatan::query()
+                ->with(['divisionRelasi', 'placementRelasi'])
                 ->select([
                     'id',
                     'nama_jabatan',
@@ -37,15 +34,7 @@ class JabatanController extends Controller
                     'created_at',
                     'updated_at'
                 ])
-                ->get();
-
-            // Apply date filtering if minDate and maxDate are provided
-            if ($minDate) {
-                $query = $query->where('created_at', '>=', Carbon::parse($minDate)->startOfDay());
-            }
-            if ($maxDate) {
-                $query = $query->where('created_at', '<=', Carbon::parse($maxDate)->endOfDay());
-            }
+                ->orderBy('nama_jabatan', 'asc');
 
             // Fetch the filtered data with pagination for DataTables
             return DataTables::of($query)
@@ -114,7 +103,8 @@ class JabatanController extends Controller
             'penempatan' => $request->input('penempatan')
         ]);
 
-        return redirect()->route('jabatan.index')->with('status', 'Berhasil menambah data Jabatan');;
+        return redirect()->route('jabatan.index')->with('status', 'Berhasil menambah data Jabatan');
+        ;
     }
 
     /**
@@ -140,7 +130,8 @@ class JabatanController extends Controller
             'penempatan' => $request->input('penempatan')
         ]);
 
-        return redirect()->route('jabatan.index')->with('status', 'Berhasil mengubah data Jabatan');;
+        return redirect()->route('jabatan.index')->with('status', 'Berhasil mengubah data Jabatan');
+        ;
     }
 
     /**
@@ -149,6 +140,7 @@ class JabatanController extends Controller
     public function destroy(Jabatan $jabatan)
     {
         $jabatan->delete();
-        return redirect()->route('jabatan.index')->with('status', 'Berhasil menghapus data Jabatan');;
+        return redirect()->route('jabatan.index')->with('status', 'Berhasil menghapus data Jabatan');
+        ;
     }
 }

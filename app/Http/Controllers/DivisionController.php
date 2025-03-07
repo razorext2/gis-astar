@@ -20,20 +20,10 @@ class DivisionController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            // Parse the minDate and maxDate from the request after cleaning
-            $minDate = $request->input('minDate');
-            $maxDate = $request->input('maxDate');
-
             // Start building the query
-            $query = Division::select('id', 'kode_divisi', 'nama_divisi', 'created_at', 'updated_at')->get();
-
-            // Apply date filtering if minDate and maxDate are provided
-            if ($minDate) {
-                $query = $query->where('created_at', '>=', Carbon::parse($minDate)->startOfDay());
-            }
-            if ($maxDate) {
-                $query = $query->where('created_at', '<=', Carbon::parse($maxDate)->endOfDay());
-            }
+            $query = Division::query()
+                ->select('id', 'kode_divisi', 'nama_divisi', 'created_at', 'updated_at')
+                ->orderBy('nama_divisi', 'asc');
 
             // Fetch the filtered data with pagination for DataTables
             return DataTables::of($query)

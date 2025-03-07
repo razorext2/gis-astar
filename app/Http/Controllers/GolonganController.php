@@ -21,20 +21,10 @@ class GolonganController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            // Parse the minDate and maxDate from the request after cleaning
-            $minDate = $request->input('minDate');
-            $maxDate = $request->input('maxDate');
-
             // Start building the query
-            $query = Golongan::get();
-
-            // Apply date filtering if minDate and maxDate are provided
-            if ($minDate) {
-                $query = $query->where('created_at', '>=', Carbon::parse($minDate)->startOfDay());
-            }
-            if ($maxDate) {
-                $query = $query->where('created_at', '<=', Carbon::parse($maxDate)->endOfDay());
-            }
+            $query = Golongan::query()
+                ->with('jadwalRelasi')
+                ->orderBy('nama_golongan', 'asc');
 
             return DataTables::of($query)
                 ->addColumn('action', function ($data) {

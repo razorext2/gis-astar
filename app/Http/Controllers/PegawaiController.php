@@ -37,24 +37,14 @@ class PegawaiController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $minDate = $request->input('minDate');
-            $maxDate = $request->input('maxDate');
-
-            $query = Pegawai::with('golonganRelasi', 'jabatanRelasi')
-                ->select('id', 'kode_pegawai', 'nik_pegawai', 'full_name', 'no_telp', 'jabatan', 'golongan')->get();
-
-            if ($minDate) {
-                $query = $query->where('created_at', '>', Carbon::parse($minDate)->startOfDay());
-            }
-            if ($maxDate) {
-                $query = $query->where('created_at', '<', Carbon::parse($maxDate)->endOfDay());
-            }
+            $query = Pegawai::query()
+                ->with(['golonganRelasi', 'jabatanRelasi'])
+                ->select('id', 'kode_pegawai', 'nik_pegawai', 'full_name', 'no_telp', 'jabatan', 'golongan')
+                ->orderBy('full_name', 'asc');
 
             return DataTables::of($query)
                 ->addColumn('action', function ($data) {
-                    // $editUrl = route('pegawai.edit', $data->id);
                     $dataUrl = route('pegawai.detail', $data->id);
-                    // $timelineUrl = route('pegawai.timeline', $data->id);
                     $actionButtons = '
                 <div class="inline-flex text-center" role="group">
                     <a href="' . $dataUrl .
@@ -81,9 +71,9 @@ class PegawaiController extends Controller
                 ->addIndexColumn()
                 ->rawColumns(['action', 'full_name_nik'])
                 ->make(true);
-        } else {
-            return view('dashboard.pegawai.index');
         }
+
+        return view('dashboard.pegawai.index');
     }
 
     public function create()
@@ -129,7 +119,7 @@ class PegawaiController extends Controller
             $user = User::create([
                 'kode_pegawai' => $request->input('kode_pegawai'),
                 'name' => $request->input('full_name'),
-                'email' =>  strtolower($request->input('nick_name')) . $request->input('kode_pegawai') . '@indodacin.com',
+                'email' => strtolower($request->input('nick_name')) . $request->input('kode_pegawai') . '@indodacin.com',
                 'password' => Hash::make($request->input('kode_pegawai')),
             ]);
 
