@@ -30,6 +30,7 @@ class NotificationController extends Controller
     {
         $notifications = auth()->user()
             ->unreadNotifications()
+            ->take(10)
             ->get();
 
         if (!$notifications) {
