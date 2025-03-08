@@ -66,8 +66,8 @@
 							<li class="mb-5 ms-6">
 								<span
 									class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 ring-8 ring-white dark:bg-blue-900 dark:ring-gray-900">
-									<img class="rounded-full shadow-lg" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-										alt="Bonnie image" loading="lazy" />
+									<img class="rounded-full shadow-lg" src="{{ asset('assets/img/profile-picture-5.jpg') }}" alt="Bonnie image"
+										loading="lazy" />
 								</span>
 								<div
 									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-600 dark:bg-gray-700 sm:flex">
@@ -111,8 +111,8 @@
 							<li class="mb-5 ms-6">
 								<span
 									class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 ring-8 ring-white dark:bg-blue-900 dark:ring-gray-900">
-									<img class="rounded-full shadow-lg" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-										alt="Bonnie image" loading="lazy" />
+									<img class="rounded-full shadow-lg" src="{{ asset('assets/img/profile-picture-5.jpg') }}" alt="Bonnie image"
+										loading="lazy" />
 								</span>
 								<div
 									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-600 dark:bg-gray-700 sm:flex">
@@ -197,8 +197,8 @@
 							<li class="mb-5 ms-6">
 								<span
 									class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 ring-8 ring-white dark:bg-blue-900 dark:ring-gray-900">
-									<img class="rounded-full shadow-lg" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-										alt="Bonnie image" loading="lazy" />
+									<img class="rounded-full shadow-lg" src="{{ asset('assets/img/profile-picture-5.jpg') }}" alt="Bonnie image"
+										loading="lazy" />
 								</span>
 								<div
 									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-600 dark:bg-gray-700 sm:flex">
@@ -226,8 +226,8 @@
 							<li class="mb-5 ms-6">
 								<span
 									class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 ring-8 ring-white dark:bg-blue-900 dark:ring-gray-900">
-									<img class="rounded-full shadow-lg" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-										alt="Bonnie image" loading="lazy" />
+									<img class="rounded-full shadow-lg" src="{{ asset('assets/img/profile-picture-5.jpg') }}" alt="Bonnie image"
+										loading="lazy" />
 								</span>
 								<div
 									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-600 dark:bg-gray-700 sm:flex">

@@ -65,8 +65,8 @@
 								<li>
 									<p
 										class="my-2 flex rounded-lg bg-green-500 bg-none p-2 text-xs text-white hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800">
-										<img class="me-3 h-6 w-6 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-											alt="Jese image" loading="lazy">
+										<img class="me-3 h-6 w-6 rounded-full" src="{{ asset('assets/img/profile-picture-5.jpg') }}" alt="Jese image"
+											loading="lazy">
 										<span class="leading-relaxed">
 											{{ $at->pegawaiRelasi->full_name ?? 'N/A' }}, melakukan absensi <b
 												class="rounded bg-green-800 px-1 py-0.5 text-white">Masuk</b> pada
@@ -99,8 +99,8 @@
 						@foreach ($attendance_out_today as $at)
 							<p
 								class="my-2 flex rounded-lg bg-red-500 bg-none p-2 text-xs text-white hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800">
-								<img class="me-3 h-6 w-6 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-									alt="Jese image" loading="lazy">
+								<img class="me-3 h-6 w-6 rounded-full" src="{{ asset('assets/img/profile-picture-5.jpg') }}" alt="Jese image"
+									loading="lazy">
 								<span class="leading-relaxed">
 									{{ $at->pegawaiRelasi->full_name ?? 'N/A' }}, melakukan absensi <b
 										class="rounded bg-red-800 px-1 py-0.5 text-white">Keluar</b> pada
