@@ -23,7 +23,9 @@ final class LogTable extends PowerGridComponent
     public function setUp(): array
     {
         $this->showCheckBox();
-        $this->users = \App\Models\User::select('id', 'name')->whereHas('logs')->get();
+        $this->users = \App\Models\User::select('id', 'name')
+            ->whereHas('logs')
+            ->get();
 
         return [
             PowerGrid::header()
@@ -37,6 +39,7 @@ final class LogTable extends PowerGridComponent
                 ->showRecordCount(),
         ];
     }
+
 
     public function btnClass()
     {
@@ -110,7 +113,7 @@ final class LogTable extends PowerGridComponent
     {
         return [
             Filter::select('user_name', 'user_id')
-                ->dataSource($this->users)
+                ->dataSource(collect($this->users))
                 ->optionLabel('name')
                 ->optionValue('id'),
             Filter::select('user_action', 'user_action')
@@ -202,5 +205,10 @@ final class LogTable extends PowerGridComponent
             text: 'Data yang dipilih berhasil dihapus.',
             icon: 'success'
         );
+    }
+
+    protected function queryString(): array
+    {
+        return $this->powerGridQueryString();
     }
 }

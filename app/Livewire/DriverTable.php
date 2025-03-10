@@ -19,7 +19,6 @@ use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 final class DriverTable extends PowerGridComponent
 {
     public string $tableName = 'DriverTable';
-    public bool $showFilters = true;
     public bool $deferLoading = true;
     public $pegawai;
 
@@ -141,8 +140,10 @@ final class DriverTable extends PowerGridComponent
     public function filters(): array
     {
         return [
+            Filter::inputText('title', 'title'),
+            Filter::inputText('lokasi', 'lokasi'),
             Filter::select('kode_pegawai', 'kode_pegawai')
-                ->dataSource($this->pegawai)
+                ->dataSource(collect($this->pegawai))
                 ->optionLabel('name')
                 ->optionValue('kode_pegawai'),
             Filter::multiSelect('status', 'status')
@@ -289,5 +290,10 @@ final class DriverTable extends PowerGridComponent
             text: $text,
             icon: $icon
         );
+    }
+
+    public function queryString()
+    {
+        return $this->powerGridQueryString();
     }
 }

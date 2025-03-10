@@ -350,7 +350,7 @@
 							<li>
 								<a
 									class="{{ Route::is('roles.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-									href="{{ route('roles.index') }}">
+									href="{{ route('roles.index') }}" wire:navigate>
 									<x-icons.badge-check
 										class="{{ Route::is('roles.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
 									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Roles</span>
