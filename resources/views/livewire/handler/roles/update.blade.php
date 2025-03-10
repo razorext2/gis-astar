@@ -28,7 +28,7 @@
 						<input
 							class="permission-checkbox h-4 w-4 rounded border-gray-300 bg-gray-100 text-green-600 focus:ring-2 focus:ring-green-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-green-600"
 							id="permission[{{ $id }}]" name="permission[{{ $id }}]" type="checkbox"
-							value="{{ $id }}" wire:model.blur="form.selectedPermissions">
+							value="{{ $id }}" wire:model="form.selectedPermissions">
 						<label class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="permission[{{ $id }}]">
 							{{ $name }}
 						</label>

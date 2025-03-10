@@ -46,21 +46,4 @@ class RoleController extends Controller
     {
         return view('dashboard.user-manage.roles.edit', compact('id'));
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        $query = Role::find($id);
-
-        if (!$query) {
-            return abort(404);
-        }
-
-        $query->delete();
-
-        return redirect()->route('roles.index')
-            ->with('status', 'Berhasil menghapus data role');
-    }
 }
