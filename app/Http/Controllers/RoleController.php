@@ -2,16 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ApiResource;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
-use Illuminate\Support\Facades\DB;
-use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
-use Carbon\Carbon;
-use yajra\DataTables\DataTables;
 
 class RoleController extends Controller
 {
@@ -23,7 +14,6 @@ class RoleController extends Controller
         $this->middleware('permission:roles-list', ['index']);
         $this->middleware('permission:roles-create', ['create']);
         $this->middleware('permission:roles-edit', ['edit']);
-        $this->middleware('permission:roles-delete', ['destroy']);
     }
 
     public function index()

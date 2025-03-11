@@ -2,15 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
-use Illuminate\Support\Facades\DB;
-use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
-use Carbon\Carbon;
-use yajra\DataTables\DataTables;
 
 class PermissionController extends Controller
 {

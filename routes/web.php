@@ -174,10 +174,12 @@ Route::middleware(['auth', 'throttle:medium'])->group(function () {
         Route::resource('announcement', AnnouncementController::class)->only(['index']);
 
         // route permission
-        Route::resource('permissions', PermissionController::class);
+        Route::resource('permissions', PermissionController::class)
+            ->only('index', 'create', 'edit');
 
         // route roles
-        Route::resource('roles', RoleController::class);
+        Route::resource('roles', RoleController::class)
+            ->only('index', 'create', 'edit');
 
         // route users
         Route::resource('users', UserController::class);
@@ -195,7 +197,8 @@ Route::middleware(['auth', 'throttle:medium'])->group(function () {
         Route::resource('jabatan', JabatanController::class);
 
         // route driver
-        Route::resource('driver', DriverController::class);
+        Route::resource('driver', DriverController::class)
+            ->only('index', 'show', 'create', 'edit');
 
         // route pegawai
         Route::get('pegawai/autocomplete/', [PegawaiController::class, 'autocomplete'])->name('pegawai.autocomplete');
@@ -213,7 +216,7 @@ Route::middleware(['auth', 'throttle:medium'])->group(function () {
         Route::resource('pegawai/deductions', DeductionController::class);
 
         // backup
-        Route::resource('backup', BackupController::class)->except('create', 'edit', 'show');
+        Route::resource('backup', BackupController::class)->only('index');
         Route::get('backup/download/{id}', [BackupController::class, 'download'])->name('backup.download');
     });
 });
