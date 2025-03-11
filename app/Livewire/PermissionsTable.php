@@ -3,7 +3,9 @@
 namespace App\Livewire;
 
 use Illuminate\Support\Facades\Blade;
-use \Spatie\Permission\Models\Role;
+use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
+use PowerComponents\LivewirePowerGrid\Traits\WithExport;
+use \Spatie\Permission\Models\Permission;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use PowerComponents\LivewirePowerGrid\Button;
@@ -13,9 +15,10 @@ use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 
-final class RolesTable extends PowerGridComponent
+final class PermissionsTable extends PowerGridComponent
 {
-    public string $tableName = 'RolesTable';
+    use WithExport;
+    public string $tableName = 'PermissionsTable';
     public bool $deferLoading = true;
     public bool $showFilters = true;
 
@@ -26,27 +29,25 @@ final class RolesTable extends PowerGridComponent
         return [
             PowerGrid::header()
                 ->showSoftDeletes()
-                ->showSearchInput(),
+                ->showToggleColumns(),
             PowerGrid::footer()
                 ->showPerPage(25, [0, 10, 25, 50, 500])
                 ->showRecordCount(),
-            PowerGrid::responsive()
-                ->fixedColumns('name', 'guard_name', 'created_at', 'updated_at')
+            PowerGrid::responsive(),
+            PowerGrid::exportable(fileName: now() . '-permissionReport')
+                ->type(Exportable::TYPE_XLS),
         ];
     }
 
     public function datasource(): Builder
     {
-        return Role::query()
-            ->with('permissions')
+        return Permission::query()
             ->orderBy('name', 'asc');
     }
 
     public function relationSearch(): array
     {
-        return [
-
-        ];
+        return [];
     }
 
     public function fields(): PowerGridFields
@@ -55,11 +56,6 @@ final class RolesTable extends PowerGridComponent
             ->add('id')
             ->add('name')
             ->add('guard_name')
-            ->add('permissions', function ($query) {
-                $data = $query->permissions->pluck('name');
-
-                return view('components.table-component.tags', ['items' => $data]);
-            })
             ->add('created_at')
             ->add('created_at_formatted', function ($query) {
                 $date = Carbon::parse($query->created_at)->locale('id')->isoFormat('D MMMM YYYY');
@@ -74,21 +70,21 @@ final class RolesTable extends PowerGridComponent
 
                 return view('components.dashboard.custom-date', ['date' => $date, 'time' => $time]);
             });
+
     }
 
     public function columns(): array
     {
         return [
             Column::action('Action'),
-            Column::make('Nama Role', 'name')
+            Column::make('Name', 'name')
                 ->sortable()
                 ->searchable(),
             Column::make('Guard', 'guard_name')
-                ->sortable(),
-            Column::make('Permissions', 'permissions'),
-            Column::make('Created at', 'created_at_formatted', 'created_at'),
-            Column::make('Updated at', 'updated_at_formatted', 'updated_at')
+                ->sortable()
                 ->searchable(),
+            Column::make('Created at', 'created_at_formatted', 'created_at'),
+            Column::make('Updated at', 'updated_at_formatted', 'updated_at'),
         ];
     }
 
@@ -96,14 +92,14 @@ final class RolesTable extends PowerGridComponent
     {
         return [
             Filter::inputText('name', 'name'),
-            Filter::datepicker('created_at', 'created_at')
+            Filter::datetimepicker('created_at', 'created_at')
         ];
     }
 
-    public function actionsFromView(Role $row)
+    public function actionsFromView(Permission $row)
     {
         return Blade::render("
-            <a href='{{ route('roles.edit', $row->id) }}' class='rounded-lg px-2.5 py-2 ring-1 ring-blue-700 transition-transform duration-300 ease-in-out will-change-transform hover:scale-105 hover:bg-blue-300 focus:scale-105 dark:bg-blue-800 dark:text-white dark:ring-gray-700 dark:hover:bg-blue-900' wire:navigate>
+            <a href='{{ route('permissions.edit', $row->id) }}' class='rounded-lg px-2.5 py-2 ring-1 ring-blue-700 transition-transform duration-300 ease-in-out will-change-transform hover:scale-105 hover:bg-blue-300 focus:scale-105 dark:bg-blue-800 dark:text-white dark:ring-gray-700 dark:hover:bg-blue-900' wire:navigate>
                 Edit
             </a>
         ");
