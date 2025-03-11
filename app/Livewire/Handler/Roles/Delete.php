@@ -25,7 +25,7 @@ class Delete extends Component
         $query = Role::find($this->id);
 
         if (!$query) {
-            return $this->dispatch('swal', title: 'Gagal', text: 'Data tidak ditemukan', icon: 'error');
+            return abort(404);
         }
 
         $query->delete();

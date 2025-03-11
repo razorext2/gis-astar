@@ -22,7 +22,7 @@ class Update extends Component
 
         // Jika role tidak ditemukan, redirect atau tampilkan error
         if (!$this->role) {
-            abort(404, 'Role tidak ditemukan');
+            abort(404);
         }
 
         $this->form->name = $this->role->name;
