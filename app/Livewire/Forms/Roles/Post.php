@@ -3,6 +3,7 @@
 namespace App\Livewire\Forms\Roles;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 use Livewire\Livewire;
@@ -34,7 +35,7 @@ class Post extends Form
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            throw $e;
+            Log::error(now() . ': Error saat menambah data perizinan ->' . $e->getMessage());
         }
     }
 
