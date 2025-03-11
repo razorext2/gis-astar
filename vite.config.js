@@ -19,9 +19,6 @@ export default defineConfig({
                 "resources/js/landing/main.js",
                 "resources/js/landing/faceDetection.js",
 
-                // backup
-                "resources/js/backup/index.js",
-
                 // capture
                 "resources/js/capture/index.js",
                 "resources/js/capture/selfDetect.js",
