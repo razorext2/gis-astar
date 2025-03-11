@@ -15,18 +15,10 @@
 			</div>
 
 			<div>
-				<x-button.success class="getCollectorExcel max-h-10" id="new-backup" type="button">
-					<x-slot name="icon">
-						<x-icons.plus class="icon h-6 w-6 text-red-500 dark:text-white" />
-					</x-slot>
-					Buat cadangan
-				</x-button.success>
+				@livewire('handler.backups.create')
 			</div>
 		</div>
 
 		<livewire:table-refresher table-name="BackupTable" />
 	</div>
 @endsection
-@push('script')
-	@vite(['resources/js/backup/index.js']);
-@endpush
