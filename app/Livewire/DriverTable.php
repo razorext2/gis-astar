@@ -11,13 +11,17 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
+use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 
 final class DriverTable extends PowerGridComponent
 {
+    use WithExport;
+
     public string $tableName = 'DriverTable';
     public bool $deferLoading = true;
     public $pegawai;
@@ -35,6 +39,9 @@ final class DriverTable extends PowerGridComponent
                 ->showPerPage()
                 ->showRecordCount(),
             PowerGrid::responsive()
+                ->fixedColumns('kode_pegawai', 'title', 'lokasi', 'status_formatted'),
+            PowerGrid::exportable(fileName: 'driverReport-' . now()->format('YmdHis'))
+                ->type(Exportable::TYPE_XLS),
         ];
     }
 
@@ -64,13 +71,25 @@ final class DriverTable extends PowerGridComponent
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('kode_pegawai')
-            ->add('title')
-            ->add('lokasi')
-            ->add('keterangan')
-            ->add('longitude')
-            ->add('latitude')
-            ->add('status')
+            ->add('kode_pegawai', function ($query) {
+                return view('components.dashboard.name-w-code', [
+                    'code' => $query->kode_pegawai ?? 'N/A',
+                    'name' => $query->user->name ?? 'N/A',
+                ])->render();
+            })
+            ->add('title', fn($query) => $query->title ?? 'N/A')
+            ->add('lokasi', function ($query) {
+                return view(
+                    'components.dashboard.location-w-coordinate',
+                    [
+                        'location' => $query->lokasi ?? 'N/A',
+                        'long' => $query->longitude ?? 'N/A',
+                        'lat' => $query->latitude ?? 'N/A',
+                    ]
+                )->render();
+            })
+            ->add('keterangan', fn($query) => $query->keterangan ?? 'N/A')
+            ->add('status', fn($query) => $query->status ?? 'N/A')
             ->add('status_formatted', function ($query) {
                 $status = $query->status;
 
@@ -84,7 +103,6 @@ final class DriverTable extends PowerGridComponent
                 ])->render();
             })
             ->add('notes')
-            ->add('validate_by', fn($query) => e($query->user->name))
             ->add('created_at')
             ->add('created_at_formatted', fn($query)
                 => Carbon::parse($query->created_at)
@@ -119,19 +137,7 @@ final class DriverTable extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
 
-            Column::make('Longitude', 'longitude')
-                ->sortable()
-                ->searchable(),
-
-            Column::make('Latitude', 'latitude')
-                ->sortable()
-                ->searchable(),
-
             Column::make('Catatan', 'notes')
-                ->sortable()
-                ->searchable(),
-
-            Column::make('Divalidasi oleh', 'validate_by')
                 ->sortable()
                 ->searchable(),
         ];
@@ -139,31 +145,33 @@ final class DriverTable extends PowerGridComponent
 
     public function filters(): array
     {
-        return [
+        $filters = [
             Filter::inputText('title', 'title'),
             Filter::inputText('lokasi', 'lokasi'),
-            Filter::select('kode_pegawai', 'kode_pegawai')
-                ->dataSource(collect($this->pegawai))
-                ->optionLabel('name')
-                ->optionValue('kode_pegawai'),
             Filter::multiSelect('status', 'status')
                 ->dataSource([
-                    [
-                        'value' => 0,
-                        'label' => 'Diajukan'
-                    ],
-                    [
-                        'value' => 1,
-                        'label' => 'Disetujui'
-                    ],
-                    [
-                        'value' => 2,
-                        'label' => 'Ditolak'
-                    ],
+                    ['value' => 0, 'label' => 'Diajukan'],
+                    ['value' => 1, 'label' => 'Disetujui'],
+                    ['value' => 2, 'label' => 'Ditolak'],
                 ])
                 ->optionLabel('label')
                 ->optionValue('value'),
             Filter::datepicker('created_at', 'created_at')
+        ];
+
+        if (auth()->user()->can('driver-approve')) {
+            $filters[] = Filter::select('kode_pegawai', 'kode_pegawai')
+                ->dataSource(collect($this->pegawai))
+                ->optionLabel('name')
+                ->optionValue('kode_pegawai');
+        }
+
+        return $filters;
+    }
+
+    public function actionRules()
+    {
+        return [
 
         ];
     }

@@ -34,7 +34,7 @@ final class PermissionsTable extends PowerGridComponent
                 ->showPerPage(25, [0, 10, 25, 50, 500])
                 ->showRecordCount(),
             PowerGrid::responsive(),
-            PowerGrid::exportable(fileName: now() . '-permissionReport')
+            PowerGrid::exportable(fileName: 'permissionReport-' . now()->format('Ymdhis'))
                 ->type(Exportable::TYPE_XLS),
         ];
     }
