@@ -18,7 +18,7 @@ $(document).ready(function () {
                     Swal.fire({
                         title: "Gagal!",
                         html: `Anda berada ${distance.toFixed(2)} meter dari tempat yang ditentukan.`,
-                        timer: 1500,
+                        timer: 2000,
                         icon: "error",
                         showConfirmButton: false,
                     }).then(() => {
@@ -27,7 +27,7 @@ $(document).ready(function () {
 
                         setTimeout(() => {
                             window.location.href = redirectUrl;
-                        }, 1000);
+                        }, 500);
                     });
                 } else if (lastLat !== undefined && lastLng !== undefined) {
                     // Calculate distance moved since last position
@@ -37,7 +37,7 @@ $(document).ready(function () {
                         Swal.fire({
                             title: "Gagal!",
                             html: `Fake GPS terdeteksi. Silahkan matikan terlebih dahulu.`,
-                            timer: 1500,
+                            timer: 2000,
                             icon: "error",
                             showConfirmButton: false,
                         }).then(() => {
@@ -46,7 +46,7 @@ $(document).ready(function () {
 
                             setTimeout(() => {
                                 window.location.href = redirectUrl;
-                            }, 2000);
+                            }, 500);
                         });
                         return;
                     }
@@ -61,7 +61,7 @@ $(document).ready(function () {
                 Swal.fire({
                     title: "Gagal!",
                     html: `Anda harus mengaktifkan izin Lokasi.`,
-                    timer: 1500,
+                    timer: 2000,
                     icon: "error",
                     showConfirmButton: false,
                 }).then(() => {
@@ -72,7 +72,7 @@ $(document).ready(function () {
                         Swal.fire({
                             title: "Peringatan!",
                             html: 'Aktifkan izin lokasi terlebih dahulu.',
-                            timer: 1500,
+                            timer: 2000,
                             icon: "error",
                             showConfirmButton: false
                         })
@@ -80,7 +80,7 @@ $(document).ready(function () {
 
                     setTimeout(() => {
                         window.location.href = redirectUrl;
-                    }, 3000);
+                    }, 500);
                 });
             }, {
             enableHighAccuracy: true,
@@ -91,7 +91,7 @@ $(document).ready(function () {
         window.Swal.fire({
             title: "Gagal!",
             html: `Browser anda tidak memiliki support Geolocation.`,
-            timer: 1500,
+            timer: 2000,
             icon: "error",
             showConfirmButton: false,
         }).then(() => {
@@ -100,7 +100,7 @@ $(document).ready(function () {
 
             setTimeout(() => {
                 window.location.href = `${APP_URL}/dashboard`;
-            }, 1000);
+            }, 500);
         });
     }
 });

@@ -12,7 +12,7 @@ export function getLocation() {
           timer: 2000,
           icon: "error",
           showConfirmButton: false,
-        }).then(() => setTimeout(() => window.location.href = `${APP_URL}/dashboard/sales`, 2000));
+        }).then(() => setTimeout(() => window.location.href = `${APP_URL}/dashboard/driver`, 500));
       }
     );
   } else {
@@ -22,6 +22,6 @@ export function getLocation() {
       timer: 2000,
       icon: "error",
       showConfirmButton: false,
-    }).then(() => setTimeout(() => window.location.href = `${APP_URL}/dashboard/sales`, 2000));
+    }).then(() => setTimeout(() => window.location.href = `${APP_URL}/dashboard/sales`, 500));
   }
 }
