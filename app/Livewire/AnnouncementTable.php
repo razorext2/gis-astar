@@ -78,7 +78,12 @@ final class AnnouncementTable extends PowerGridComponent
     {
         return [
             Column::action('Action'),
+
             Column::make('Judul', 'title')
+                ->sortable()
+                ->searchable(),
+
+            Column::make('Status', 'status')
                 ->sortable()
                 ->searchable(),
 
@@ -86,9 +91,6 @@ final class AnnouncementTable extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
 
-            Column::make('Status', 'status')
-                ->sortable()
-                ->searchable(),
             Column::make('Updated at', 'updated_at_formatted', 'updated_at')
                 ->sortable(),
         ];
