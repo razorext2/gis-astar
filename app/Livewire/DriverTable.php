@@ -41,7 +41,8 @@ final class DriverTable extends PowerGridComponent
             PowerGrid::responsive()
                 ->fixedColumns('kode_pegawai', 'title', 'lokasi', 'status_formatted'),
             PowerGrid::exportable(fileName: 'driverReport-' . now()->format('YmdHis'))
-                ->type(Exportable::TYPE_XLS),
+                ->type(Exportable::TYPE_XLS)
+                ->stripTags(true),
         ];
     }
 
