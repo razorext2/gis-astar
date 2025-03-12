@@ -51,7 +51,7 @@ class BackupReadyEvent implements ShouldBroadcast
         $data->update(['status' => 'success']);
 
         return [
-            "id" => 123456,
+            "id" => $data->id,
             "message" => "Cadangan dengan nama $this->name, telah selesai dicadangkan. Silahkan unduh.",
         ];
     }

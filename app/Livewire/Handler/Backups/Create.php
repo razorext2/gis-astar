@@ -34,7 +34,9 @@ class Create extends Component
             'user_id' => $uid,
         ]);
 
-        NotifyBackupReadyJob::dispatch($name, Carbon::now(), $uid);
+        NotifyBackupReadyJob::dispatch($name, Carbon::now(), $uid)->delay(now()->addSeconds(5));
+
+        $this->dispatch('pg:eventRefresh-BackupTable');
 
         return $this->dispatch('swal', title: 'Sedang diproses...', text: 'Cadangan database dengan nama <b>' . $name . '</b> sedang dibuat.', icon: 'info');
     }
