@@ -1,4 +1,4 @@
-import { showAlert } from "../../utils/alert";
+import { showAlert } from "../../../utils/alert";
 
 export function deleteData() {
   $('body').on('click', '#delete-btn', async function () {

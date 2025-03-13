@@ -1,4 +1,4 @@
-import { showAlert } from "../../utils/alert";
+import { showAlert } from "../../../utils/alert";
 
 export function changeState() {
   $('body').on('click', '#state-btn', async function () {

@@ -1,4 +1,4 @@
-import { showAlert } from "../../utils/alert";
+import { showAlert } from "../../../utils/alert";
 
 export function addDataHandler() {
   $('body').on('click', '#add-button', async function () {

@@ -9,6 +9,7 @@
 				<div class="mb-2">
 					<span class="text-xl font-semibold text-gray-900 dark:bg-[#18181b] dark:text-white">
 						Manajemen Pengumuman
+						<script></script>
 					</span>
 
 					<p class="mt-0.5 text-base text-gray-600 dark:text-gray-400">
@@ -34,6 +35,3 @@
 		</div>
 	</div>
 @endsection
-@push('script')
-	@vite(['resources/js/announcement/index.js'])
-@endpush

@@ -1,4 +1,4 @@
-import { showAlert, showToast } from "./utils/alert";
+import { showAlert, showToast } from "./alert";
 
 export function fetchNotification() {
 	$('body').on('click', '#notificationButton', async function () {

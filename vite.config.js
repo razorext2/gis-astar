@@ -69,7 +69,7 @@ export default defineConfig({
                 "resources/js/dayoff/detail.js",
 
                 // announcement 
-                "resources/js/announcement/index.js",
+                "resources/js/pages/announcement/index.js",
 
                 // pegawai
                 "resources/js/pegawai/personalInfo.js",
