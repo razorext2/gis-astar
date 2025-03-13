@@ -41,12 +41,7 @@ final class AnnouncementTable extends PowerGridComponent
 
     public function header(): array
     {
-        return [
-            Button::add('bulk-delete')
-                ->slot('Bulk delete')
-                ->class($this->btnClass())
-                ->dispatch('bulkDelete.' . $this->tableName, []),
-        ];
+        return [];
     }
 
     public function datasource(): Builder
