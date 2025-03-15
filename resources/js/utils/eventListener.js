@@ -48,27 +48,62 @@ export async function initEventListener() {
           id: data.data.id,
         });
       } else if (result.isDenied) {
-        const { value: reason } = await Swal.fire({
-          title: 'Alasan penolakan',
-          input: 'textarea',
-          inputPlaceholder: 'Alasan penolakan...',
-          inputAttributes: {
-            'aria-label': 'Type your message here'
-          },
+        const revision = await Swal.fire({
+          icon: "question",
+          title: "Tolak laporan ini?",
+          html: "Kamu dapat memberikan revisi sebanyak <b>1x</b> sebelum laporan ditolak.",
+          confirmButtonText: "Revisi",
           showCancelButton: true,
-          inputValidator: (value) => {
-            if (!value) {
-              return 'Alasan penolakan tidak boleh kosong!';
-            }
-          }
+          showDenyButton: true,
+          denyButtonText: "Ya, Tolak!",
         });
 
-        if (reason) {
-          console.log(reason);
-          Livewire.dispatch('declineAction', {
-            id: data.data.id,
-            note: reason
+        if (revision.isConfirmed) {
+          const { value: reason } = await Swal.fire({
+            title: 'Alasan penolakan',
+            input: 'textarea',
+            inputPlaceholder: 'Alasan penolakan...',
+            inputAttributes: {
+              'aria-label': 'Type your message here'
+            },
+            showCancelButton: true,
+            inputValidator: (value) => {
+              if (!value) {
+                return 'Alasan penolakan tidak boleh kosong!';
+              }
+            }
           });
+
+          if (reason) {
+            Livewire.dispatch('revisionAction', {
+              id: data.data.id,
+              note: reason
+            });
+          }
+        } else if (revision.isDenied) {
+          const { value: reason } = await Swal.fire({
+            title: 'Alasan penolakan',
+            input: 'textarea',
+            inputPlaceholder: 'Alasan penolakan...',
+            inputAttributes: {
+              'aria-label': 'Type your message here'
+            },
+            showCancelButton: true,
+            inputValidator: (value) => {
+              if (!value) {
+                return 'Alasan penolakan tidak boleh kosong!';
+              }
+            }
+          });
+
+          if (reason) {
+            Livewire.dispatch('declineAction', {
+              id: data.data.id,
+              note: reason
+            });
+          }
+        } else {
+          Swal.close();
         }
       }
     });

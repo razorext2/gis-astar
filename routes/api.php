@@ -79,6 +79,7 @@ Route::middleware(['auth:sanctum', 'throttle:high'])->group(function () {
     Route::get('driver-api/{id}', [ApiDriverController::class, 'getById'])->name('driver-api.getbyid');
     Route::patch('driver-api/{id}/confirm', [ApiDriverController::class, 'confirm'])->name('driver-api.confirm');
     Route::patch('driver-api/{id}/deny', [ApiDriverController::class, 'deny'])->name('driver-api.deny');
+    Route::patch('driver-api/{id}/revision', [ApiDriverController::class, 'revision'])->name('driver-api.revision');
     Route::apiResource('driver-api', ApiDriverController::class)->only(['store', 'update']);
 
     // pengajuan off

@@ -99,6 +99,11 @@ class ApiDriverController extends Controller
         try {
             $query->update($data);
 
+            $query->update([
+                'revised_by' => auth()->user()->id,
+                'status' => 0,
+            ]);
+
             return new ApiResource(true, 'Berhasil mengubah data laporan', null);
         } catch (\Exception $e) {
             return new ApiResource(false, 'Terjadi kesalahan saat mengubah data', $e->getMessage());
@@ -143,6 +148,47 @@ class ApiDriverController extends Controller
             return new ApiResource(true, 'Data berhasil ditolak', null);
         } catch (\Exception $e) {
             return new ApiResource(false, 'Terjadi kesalahan saat menolak data', $e->getMessage());
+        }
+    }
+
+    public function revision(Request $request, $id)
+    {
+        $query = Driver::find($id); // Cari data berdasarkan ID
+
+        if (!$query) {
+            return new ApiResource(false, 'Data tidak ditemukan', null);
+        }
+
+        if ($query->total_revision >= 2) {
+            return new ApiResource(false, 'Tidak dapat memberikan revisi', 'Laporan sudah mencapai batas revisi');
+        }
+
+        $validate_by = $request->input('user_id'); // Decrypt user_id
+
+        $validator = Validator::make($request->all(), [
+            'notes' => 'required|string',
+            'user_id' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return new ApiResource(false, 'Validasi gagal', $validator->errors()->first());
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $query->update([
+                'status' => 3,
+                'notes' => $request->notes,
+                'validate_by' => $validate_by,
+                'total_revision' => $query->total_revision + 1,
+            ]);
+
+            DB::commit();
+            return new ApiResource(true, 'Permintaan revisi sudah dikirim.', null); // Kembalikan response JSON
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return new ApiResource(false, 'Terjadi kesalahan saat memproses request', $e->getMessage());
         }
     }
 }

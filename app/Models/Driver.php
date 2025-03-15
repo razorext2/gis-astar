@@ -20,7 +20,9 @@ class Driver extends Model
         'latitude',
         'status',
         'notes',
-        'validate_by'
+        'validate_by',
+        'total_revision',
+        'revised_by'
     ];
     protected $dates = ['deleted_at'];
 

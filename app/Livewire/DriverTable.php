@@ -99,6 +99,7 @@ final class DriverTable extends PowerGridComponent
                         0 => 'Diajukan',
                         1 => 'Disetujui',
                         2 => 'Ditolak',
+                        3 => 'Revisi',
                     ][$status],
                     'status' => $status
                 ])->render();
@@ -184,13 +185,16 @@ final class DriverTable extends PowerGridComponent
                 'id' => 'show-btn',
                 'action' => route('driver.show', $row->id),
                 'label' => 'Show'
-            ],
-            [
+            ]
+        ];
+
+        if ($row->status == 3 || auth()->user()->can('driver-approve')) {
+            $actions[] = [
                 'id' => 'edit-btn',
                 'action' => route('driver.edit', $row->id),
                 'label' => 'Edit'
-            ]
-        ];
+            ];
+        }
 
         return view('components.dashboard.action-buttons', [
             'id' => $row->id,
@@ -287,6 +291,31 @@ final class DriverTable extends PowerGridComponent
             ]);
 
             $this->swal('Ditolak!', 'Laporan yang dipilih berhasil ditolak', 'success');
+        } catch (\Exception $e) {
+            $this->swal("Terjadi kesalahan saat konfirmasi data", $e->getMessage(), 'error');
+            return;
+        }
+    }
+
+    #[\Livewire\Attributes\On('revisionAction')]
+    public function revisionAction($id, $note): void
+    {
+        $user_id = auth()->user()->id;
+        $query = Driver::find($id);
+
+        if (!$query) {
+            $this->swal("Gagal!", 'Data tidak ditemukan.', 'error');
+            return;
+        }
+
+        try {
+            $query->update([
+                'status' => 3,
+                'notes' => $note,
+                'validate_by' => $user_id,
+            ]);
+
+            $this->swal('Direvisi!', 'Laporan yang dipilih berhasil direvisi', 'success');
         } catch (\Exception $e) {
             $this->swal("Terjadi kesalahan saat konfirmasi data", $e->getMessage(), 'error');
             return;

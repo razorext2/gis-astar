@@ -129,6 +129,23 @@
 									class="rounded-xl bg-green-100 px-4 py-2 text-sm font-medium text-green-800 ring-1 ring-gray-300 dark:bg-green-900 dark:text-green-300 dark:ring-gray-700">
 									Disetujui. (divalidasi oleh: {{ $user->name ?? 'N/A' }})
 								</span>
+							@elseif ($status == 3)
+								<div class="flex flex-col gap-y-2">
+									<span
+										class="rounded-xl bg-yellow-100 px-4 py-2 text-sm font-medium text-yellow-800 ring-1 ring-gray-300 dark:bg-yellow-900 dark:text-yellow-300 dark:ring-gray-700">
+										Perlu diperbaiki! (divalidasi oleh: {{ $user->name ?? 'N/A' }})
+									</span>
+
+									@if ($data->total_revision <= 2)
+										<x-button.link class="w-fit rounded-xl ring-1 ring-red-700 dark:bg-red-800 dark:text-white"
+											href="{{ route('driver.edit', $data->id) }}">
+											<x-slot name="icon">
+												<x-icons.angle-right class="h-6 w-6 text-red-500 dark:text-white" />
+											</x-slot>
+											Klik untuk revisi
+										</x-button.link>
+									@endif
+								</div>
 							@else
 								<span
 									class="rounded-xl bg-red-100 px-4 py-2 text-sm font-medium text-red-800 ring-1 ring-gray-300 dark:bg-red-900 dark:text-red-300 dark:ring-gray-700">
