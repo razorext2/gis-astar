@@ -105,10 +105,8 @@ class ApiDriverController extends Controller
         }
     }
 
-    public function confirm(Request $request, $id)
+    public function confirm($id)
     {
-        $validateBy = Crypt::decryptString($request->user_id);
-
         $query = Driver::find($id);
 
         if (!$query) {
@@ -118,7 +116,7 @@ class ApiDriverController extends Controller
         try {
             $query->update([
                 'status' => 1,
-                'validate_by' => $validateBy,
+                'validate_by' => auth()->user()->id,
             ]);
 
             return new ApiResource(true, 'Data berhasil dikonfirmasi', null);
@@ -129,8 +127,6 @@ class ApiDriverController extends Controller
 
     public function deny(Request $request, $id)
     {
-        $validateBy = Crypt::decryptString($request->user_id);
-
         $query = Driver::find($id);
 
         if (!$query) {
@@ -140,7 +136,7 @@ class ApiDriverController extends Controller
         try {
             $query->update([
                 'status' => 2,
-                'validate_by' => $validateBy,
+                'validate_by' => auth()->user()->id,
                 'notes' => $request->notes
             ]);
 

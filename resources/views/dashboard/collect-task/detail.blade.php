@@ -255,5 +255,5 @@
 	<script>
 		const validate_by = "{{ Auth::user()->kode_pegawai ?? 0 }}";
 	</script>
-	@vite('resources/js/collect-task/detail.js')
+	@vite('resources/js/pages/collect-task/detail.js')
 @endpush

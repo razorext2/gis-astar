@@ -39,19 +39,9 @@ class Pegawai extends Model
         return $this->hasMany(Attendance::class, 'kode_pegawai', 'kode_pegawai');
     }
 
-    public function attendanceRelasiForSelfAbsence()
-    {
-        return $this->hasOne(Attendance::class, 'kode_pegawai', 'kode_pegawai');
-    }
-
     public function attendanceOutRelasi()
     {
         return $this->hasMany(AttendanceOut::class, 'kode_pegawai', 'kode_pegawai');
-    }
-
-    public function attendanceOutRelasiForSelfAbsence()
-    {
-        return $this->hasOne(AttendanceOut::class, 'kode_pegawai', 'kode_pegawai');
     }
 
     public function latestAttendanceOutRelasi()

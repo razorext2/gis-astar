@@ -186,6 +186,8 @@
 						<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="keterangan">Keterangan</label>
 						<div class="h-32 w-full dark:bg-white" id="editor"></div>
 						<input id="keterangan" name="keterangan" type="hidden">
+
+						<input type="hidden" id="data" value="{{ $data->keterangan }}">
 						<div class="mt-2 hidden text-sm text-red-500" id="alert-keterangan"></div>
 					</div>
 
@@ -242,8 +244,5 @@
 	</div>
 @endsection
 @push('script')
-	<script>
-		const data = @json($data->keterangan);
-	</script>
-	@vite(['resources/js/collect/edit.js'])
+	@vite(['resources/js/pages/collect/edit.js'])
 @endpush

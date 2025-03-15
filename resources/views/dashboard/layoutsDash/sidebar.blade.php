@@ -7,6 +7,7 @@
 	        'icon' => 'collect',
 	        'permission' => 'collect-list',
 	        'sublinks' => [],
+	        'navigate' => false,
 	        'indicator' => true,
 	    ],
 	    [
@@ -16,6 +17,7 @@
 	        'icon' => 'sales',
 	        'permission' => 'sales-list',
 	        'sublinks' => [],
+	        'navigate' => true,
 	        'indicator' => true,
 	    ],
 	    [
@@ -25,6 +27,7 @@
 	        'icon' => 'technician',
 	        'permission' => 'technician-list',
 	        'sublinks' => [],
+	        'navigate' => false,
 	        'indicator' => false,
 	    ],
 	    [
@@ -34,6 +37,7 @@
 	        'icon' => 'capture',
 	        'permission' => 'capture',
 	        'sublinks' => [],
+	        'navigate' => false,
 	        'indicator' => false,
 	    ],
 	    [
@@ -43,6 +47,7 @@
 	        'icon' => 'dayoff',
 	        'permission' => 'dayoff-list',
 	        'sublinks' => [],
+	        'navigate' => false,
 	        'indicator' => false,
 	    ],
 	    [
@@ -52,6 +57,7 @@
 	        'icon' => 'pegawai',
 	        'permission' => 'pegawai-list',
 	        'sublinks' => [],
+	        'navigate' => false,
 	        'indicator' => false,
 	    ],
 	    [
@@ -61,6 +67,7 @@
 	        'icon' => 'jabatan',
 	        'permission' => 'jabatan-list',
 	        'sublinks' => [],
+	        'navigate' => false,
 	        'indicator' => false,
 	    ],
 	    [
@@ -70,6 +77,7 @@
 	        'icon' => 'golongan',
 	        'permission' => 'golongan-list',
 	        'sublinks' => [],
+	        'navigate' => false,
 	        'indicator' => false,
 	    ],
 	];
@@ -154,7 +162,7 @@
 							<li>
 								<a
 									class="{{ Route::is('collect-task.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-									href="{{ route('collect-task.index') }}">
+									href="{{ route('collect-task.index') }}" wire:navigate>
 									<x-icons.cash
 										class="{{ Route::is('collect-task.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
 									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">IDC Non PPN (SR)</span>
@@ -166,7 +174,7 @@
 							<li>
 								<a
 									class="{{ Route::is('collect-task-ppn.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-									href="{{ route('collect-task-ppn.index') }}">
+									href="{{ route('collect-task-ppn.index') }}" wire:navigate>
 									<x-icons.sale-percent
 										class="{{ Route::is('collect-task-ppn.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
 									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">IDC PPN (FP)</span>
@@ -178,7 +186,7 @@
 							<li>
 								<a
 									class="{{ Route::is('collect-idy-ppn.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-									href="{{ route('collect-idy-ppn.index') }}">
+									href="{{ route('collect-idy-ppn.index') }}" wire:navigate>
 									<x-icons.cash-register
 										class="{{ Route::is('collect-idy-ppn.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
 									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">IDY PPN (FP)</span>
@@ -216,7 +224,7 @@
 				@if ($link['permission'])
 					@can($link['permission'])
 						<li>
-							<x-dashboard.sidebar-link href="{{ route($link['route']) }}" :active="$isActive">
+							<x-dashboard.sidebar-link href="{{ route($link['route']) }}" :active="$isActive" wire:navigate>
 								<x-slot name="icon">
 
 									{{-- for icons to show --}}
@@ -291,7 +299,7 @@
 							<li>
 								<a
 									class="{{ Route::is('division.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-									href="{{ route('division.index') }}">
+									href="{{ route('division.index') }}" wire:navigate>
 									<x-icons.object-column
 										class="{{ Route::is('division.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
 									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Divisi</span>
@@ -303,7 +311,7 @@
 							<li>
 								<a
 									class="{{ Route::is('placement.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-									href="{{ route('placement.index') }}">
+									href="{{ route('placement.index') }}" wire:navigate>
 									<x-icons.landmark
 										class="{{ Route::is('placement.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
 									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Penempatan</span>
@@ -338,7 +346,7 @@
 							<li>
 								<a
 									class="{{ Route::is('users.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-									href="{{ route('users.index') }}">
+									href="{{ route('users.index') }}" wire:navigate>
 									<x-icons.profile-card
 										class="{{ Route::is('users.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
 									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Users</span>

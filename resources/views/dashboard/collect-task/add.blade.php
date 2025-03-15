@@ -164,5 +164,5 @@
 	</div>
 @endsection
 @push('script')
-	@vite(['resources/js/collect-task/add.js'])
+	@vite(['resources/js/pages/collect-task/add.js'])
 @endpush

@@ -198,5 +198,5 @@
 		const id = "{{ $pegawai->kode_pegawai }}";
 		const ids = "{{ $pegawai->id }}";
 	</script>
-	@vite('resources/js/pegawai/personalInfo.js')
+	@vite('resources/js/pages/pegawai/personalInfo.js')
 @endpush

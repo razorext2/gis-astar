@@ -92,7 +92,7 @@
 	</div>
 
 	<script type="module">
-		document.addEventListener('livewire:navigated', function() {
+		document.addEventListener('DOMContentLoaded', function() {
 			// Fungsi untuk inisialisasi peta dengan koordinat yang diberikan
 			function initializeMap() {
 				// Inisialisasi peta tanpa titik awal

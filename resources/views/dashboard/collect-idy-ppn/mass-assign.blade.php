@@ -91,5 +91,5 @@
 		const srSearch = "{{ route('collect-idy-ppn.autocomplete') }}";
 		const assign_by = "{{ Auth::user()->kode_pegawai ?? '0' }}"
 	</script>
-	@vite(['resources/js/collect-idy-ppn/mass-assign.js'])
+	@vite(['resources/js/pages/collect-idy-ppn/mass-assign.js'])
 @endpush

@@ -61,9 +61,3 @@
 		</div>
 	</div>
 @endsection
-@push('script')
-	<script>
-		const dayoffIndex = "{{ route('dayoff.index') }}";
-	</script>
-	@vite(['resources/js/dayoff/index.js'])
-@endpush

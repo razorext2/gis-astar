@@ -20,59 +20,65 @@ export default defineConfig({
                 "resources/js/landing/faceDetection.js",
 
                 // capture
-                "resources/js/capture/index.js",
-                "resources/js/capture/selfDetect.js",
+                "resources/js/pages/capture/index.js",
+                "resources/js/pages/capture/selfDetect.js",
 
                 // collect
-                "resources/js/collect/index.js",
-                "resources/js/collect/edit.js",
-                "resources/js/collect/detail.js",
+                "resources/js/pages/collect/index.js",
+                "resources/js/pages/collect/edit.js",
+                "resources/js/pages/collect/detail.js",
 
                 // driver
-                "resources/js/driver/add.js",
-                "resources/js/driver/detail.js",
-                "resources/js/driver/edit.js",
+                "resources/js/pages/driver/add.js",
+                "resources/js/pages/driver/detail.js",
+                "resources/js/pages/driver/edit.js",
 
                 // collect task
-                "resources/js/collect-task/index.js",
-                "resources/js/collect-task/add.js",
-                "resources/js/collect-task/mass-assign.js",
-                "resources/js/collect-task/detail.js",
+                "resources/js/pages/collect-task/index.js",
+                "resources/js/pages/collect-task/add.js",
+                "resources/js/pages/collect-task/mass-assign.js",
+                "resources/js/pages/collect-task/detail.js",
 
                 // collect task ppn (idc ppn)
-                "resources/js/collect-task-ppn/index.js",
-                "resources/js/collect-task-ppn/add.js",
-                "resources/js/collect-task-ppn/mass-assign.js",
-                "resources/js/collect-task-ppn/detail.js",
+                "resources/js/pages/collect-task-ppn/index.js",
+                "resources/js/pages/collect-task-ppn/add.js",
+                "resources/js/pages/collect-task-ppn/mass-assign.js",
+                "resources/js/pages/collect-task-ppn/detail.js",
 
                 // collect idy ppn
-                "resources/js/collect-idy-ppn/index.js",
-                "resources/js/collect-idy-ppn/add.js",
-                "resources/js/collect-idy-ppn/mass-assign.js",
-                "resources/js/collect-idy-ppn/detail.js",
+                "resources/js/pages/collect-idy-ppn/index.js",
+                "resources/js/pages/collect-idy-ppn/add.js",
+                "resources/js/pages/collect-idy-ppn/mass-assign.js",
+                "resources/js/pages/collect-idy-ppn/detail.js",
 
                 // sales
-                "resources/js/sales/index.js",
-                "resources/js/sales/add.js",
-                "resources/js/sales/edit.js",
-                "resources/js/sales/detail.js",
+                "resources/js/pages/sales/index.js",
+                "resources/js/pages/sales/add.js",
+                "resources/js/pages/sales/edit.js",
+                "resources/js/pages/sales/detail.js",
 
                 // technician
-                "resources/js/technician/index.js",
-                "resources/js/technician/add.js",
-                "resources/js/technician/detail.js",
+                "resources/js/pages/technician/index.js",
+                "resources/js/pages/technician/add.js",
+                "resources/js/pages/technician/detail.js",
 
                 // dayoff 
-                "resources/js/dayoff/index.js",
-                "resources/js/dayoff/add.js",
-                "resources/js/dayoff/edit.js",
-                "resources/js/dayoff/detail.js",
+                "resources/js/pages/dayoff/index.js",
+                "resources/js/pages/dayoff/add.js",
+                "resources/js/pages/dayoff/edit.js",
+                "resources/js/pages/dayoff/detail.js",
 
                 // announcement 
                 "resources/js/pages/announcement/index.js",
 
                 // pegawai
-                "resources/js/pegawai/personalInfo.js",
+                "resources/js/pages/pegawai/personalInfo.js",
+                "resources/js/pages/pegawai/add.js",
+                "resources/js/pages/pegawai/edit.js",
+
+                // placement
+                "resources/js/pages/placement/add.js",
+                "resources/js/pages/placement/edit.js",
             ],
             refresh: true,
         }),

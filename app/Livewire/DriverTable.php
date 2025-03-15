@@ -241,12 +241,13 @@ final class DriverTable extends PowerGridComponent
             return;
         }
 
-        $this->dispatch('detailModal', data: $data);
+        $this->dispatch('detailDriverModal', data: $data);
     }
 
     #[\Livewire\Attributes\On('confirmAction')]
-    public function confirmAction($id, $user_id): void
+    public function confirmAction($id): void
     {
+        $user_id = auth()->user()->id;
         $query = Driver::find($id);
 
         if (!$query) {
@@ -268,8 +269,9 @@ final class DriverTable extends PowerGridComponent
     }
 
     #[\Livewire\Attributes\On('declineAction')]
-    public function declineAction($id, $note, $user_id): void
+    public function declineAction($id, $note): void
     {
+        $user_id = auth()->user()->id;
         $query = Driver::find($id);
 
         if (!$query) {

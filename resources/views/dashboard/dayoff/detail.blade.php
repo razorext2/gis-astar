@@ -138,8 +138,5 @@
 	</div>
 @endsection
 @push('script')
-	<script>
-		const validate_by = "{{ Auth::user()->kode_pegawai ?? '0' }}";
-	</script>
-	@vite('resources/js/dayoff/detail.js')
+	@vite('resources/js/pages/dayoff/detail.js')
 @endpush

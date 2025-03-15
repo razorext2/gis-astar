@@ -179,5 +179,5 @@
 	</div>
 @endsection
 @push('script')
-	@vite(['resources/js/collect-idy-ppn/add.js'])
+	@vite(['resources/js/pages/collect-idy-ppn/add.js'])
 @endpush

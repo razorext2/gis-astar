@@ -2,7 +2,7 @@
 @section('content')
 	<div
 		class="relative rounded-xl bg-white/70 p-0 ring-1 ring-gray-200 dark:bg-[#18181b]/70 dark:shadow-none dark:ring-gray-700 lg:max-w-screen-lg lg:p-4"
-		id="Scan" data-aos="zoom-in-up" data-aos-delay="50">
+		id="Scan" d-aos="zoom-in-up" data-aos-delay="50">
 		<div class="grid h-auto w-full grid-cols-1 lg:grid-cols-3 lg:gap-4">
 
 			<div class="video-container h-auto p-3 text-center lg:col-span-2 lg:p-0" data-aos="zoom-in" data-aos-delay="100">
@@ -17,13 +17,6 @@
 					<button
 						class="w-full rounded-lg bg-blue-400 p-2 font-bold text-white ring-1 ring-gray-200 hover:bg-blue-700 dark:bg-blue-800 dark:text-white dark:ring-gray-700 dark:hover:bg-blue-900"
 						id="startButton">Start</button>
-				</div>
-				<div class="mt-3 h-auto w-full rounded-lg dark:bg-[#18181b] lg:px-0">
-					<div class="-h-10 h-auto rounded-lg p-3 text-left ring-1 ring-gray-200 dark:ring-gray-700">
-						<p class="text-sm font-bold text-black dark:text-white">Log</p>
-						<hr class="my-2 bg-black dark:bg-[#18181b]">
-						<pre class="max-h-32 overflow-y-auto scroll-smooth dark:text-white" id="consoleOutput"></pre>
-					</div>
 				</div>
 			</div>
 
@@ -41,7 +34,7 @@
 						<div class="h-full w-full rounded-lg md:rounded-lg lg:w-full lg:object-fill">
 							<img
 								class="h-60 w-full rounded-lg object-cover ring-1 ring-gray-200 dark:ring-gray-700 md:h-auto lg:h-full lg:object-fill"
-								id="canvLogo" src="{{ asset('assets/img/noImage.webp') }}" alt="" loading="lazy">
+								id="canvLogo" src="{{ asset('assets/img/noImage.webp') }}" alt="">
 							<canvas
 								class="absolute left-0 top-0 h-60 w-full rounded-lg object-cover ring-1 ring-gray-200 dark:ring-gray-700 md:h-full lg:h-full"
 								id="canvAttend"></canvas>
@@ -87,6 +80,14 @@
 									</svg>
 									<span>Nama: {{ $data->full_name ?? 'N/A' }}</span>
 								</li>
+
+								{{-- hidden data --}}
+								<input type="hidden" id="specifiedLat" value="{{ $data->latitude ?? 'N/A' }}">
+								<input type="hidden" id="specifiedLng" value="{{ $data->longitude ?? 'N/A' }}">
+								<input type="hidden" id="radius" value="{{ $data->radius ?? 'N/A' }}">
+								<input type="hidden" id="movementThreshold" value="50">
+								<input type="hidden" id="kodePegawai" value="{{ $data->kode_pegawai }}">
+							</ul>
 							</ul>
 						</div>
 					</div>
@@ -97,17 +98,3 @@
 		</div>
 	</div>
 @endsection
-@push('script')
-	<script>
-		let lastLat, lastLng, lat, lng;
-		const redirectUrl = "{{ route('capture.index') }}";
-		const specifiedLat = parseFloat("{{ $data->latitude ?? 'N/A' }}"); // Latitude of the specified point
-		const specifiedLng = parseFloat("{{ $data->longitude ?? 'N/A' }}"); // Longitude of the specified point
-		const radius = parseFloat("{{ $data->radius ?? 'N/A' }}"); // Radius in meters
-		const movementThreshold = 50; // Minimum distance to move (in meters)
-		const kodePegawai = "{{ $data->kode_pegawai }}"
-	</script>
-
-	<script defer src="{{ asset('face-api.min.js') }}"></script>
-	@vite(['resources/js/capture/index.js', 'resources/js/capture/selfDetect.js'])
-@endpush

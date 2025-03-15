@@ -134,5 +134,5 @@
 	<script>
 		const data = @json($data->keterangan);
 	</script>
-	@vite(['resources/js/sales/edit.js'])
+	@vite(['resources/js/pages/sales/edit.js'])
 @endpush

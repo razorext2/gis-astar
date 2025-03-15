@@ -80,5 +80,5 @@
 	</div>
 @endsection
 @push('script')
-	@vite('resources/js/technician/detail.js')
+	@vite('resources/js/pages/technician/detail.js')
 @endpush

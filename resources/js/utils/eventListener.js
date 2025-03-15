@@ -1,5 +1,5 @@
 import { showAlert } from "./alert";
-import { showModal } from "./modal";
+import { showModal as showModalDriver } from "../pages/driver/func/modal";
 
 export async function initEventListener() {
   // swal deletion prompt
@@ -41,12 +41,11 @@ export async function initEventListener() {
   });
 
   // livewire modal event
-  Livewire.on('detailModal', data => {
-    showModal(data.data).then(async (result) => {
+  Livewire.on('detailDriverModal', data => {
+    showModalDriver(data.data).then(async (result) => {
       if (result.isConfirmed) {
         Livewire.dispatch('confirmAction', {
           id: data.data.id,
-          user_id: userId.content,
         });
       } else if (result.isDenied) {
         const { value: reason } = await Swal.fire({
@@ -68,7 +67,6 @@ export async function initEventListener() {
           console.log(reason);
           Livewire.dispatch('declineAction', {
             id: data.data.id,
-            user_id: userId.content,
             note: reason
           });
         }

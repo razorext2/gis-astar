@@ -120,8 +120,6 @@ class ApiSalesController extends Controller
             return abort(403);
         }
 
-        $validateBy = Crypt::decryptString($request->user_id);
-
         $query = Sales::find($id);
 
         if (!$query) {
@@ -131,7 +129,7 @@ class ApiSalesController extends Controller
         try {
             $query->update([
                 'status' => 1,
-                'validate_by' => $validateBy,
+                'validate_by' => auth()->user()->id,
             ]);
 
             return new ApiResource(true, 'Data berhasil dikonfirmasi', null);
@@ -146,8 +144,6 @@ class ApiSalesController extends Controller
             return abort(403);
         }
 
-        $validateBy = Crypt::decryptString($request->user_id);
-
         $query = Sales::find($id);
 
         if (!$query) {
@@ -157,7 +153,7 @@ class ApiSalesController extends Controller
         try {
             $query->update([
                 'status' => 2,
-                'validate_by' => $validateBy,
+                'validate_by' => auth()->user()->id,
                 'notes' => $request->notes
             ]);
 

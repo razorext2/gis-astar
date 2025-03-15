@@ -91,5 +91,5 @@
 		const srSearch = "{{ route('collect-task-ppn.autocomplete') }}";
 		const assign_by = "{{ Auth::user()->kode_pegawai ?? '0' }}"
 	</script>
-	@vite(['resources/js/collect-task-ppn/mass-assign.js'])
+	@vite(['resources/js/pages/collect-task-ppn/mass-assign.js'])
 @endpush

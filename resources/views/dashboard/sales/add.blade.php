@@ -149,8 +149,5 @@
 	</div>
 @endsection
 @push('script')
-	<script>
-		const storeUrl = "{{ route('sales-api.store') }}"
-	</script>
-	@vite(['resources/js/sales/add.js'])
+	@vite(['resources/js/pages/sales/add.js'])
 @endpush

@@ -136,5 +136,5 @@
 	</div>
 @endsection
 @push('script')
-	@vite(['resources/js/driver/add.js'])
+	@vite(['resources/js/pages/driver/add.js'])
 @endpush

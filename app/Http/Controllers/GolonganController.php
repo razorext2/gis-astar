@@ -20,71 +20,7 @@ class GolonganController extends Controller
 
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            // Start building the query
-            $query = Golongan::query()
-                ->with('jadwalRelasi')
-                ->orderBy('nama_golongan', 'asc');
-
-            return DataTables::of($query)
-                ->addColumn('action', function ($data) {
-                    $editUrl = route('golongan.edit', $data->id);
-
-                    // Inisialisasi variabel untuk tombol aksi
-                    $actionButtons = '
-                    <div class="inline-flex" role="group">';
-
-                    // Cek izin edit
-                    if (auth()->user()->can('golongan-edit')) {
-                        $actionButtons .= '
-                        <a href="' . $editUrl . '"class="mx-1 text-md font-medium rounded-lg focus:z-10">
-                            &#9999; <span class="hover:underline" style="color: #057A55"> Edit </span>
-                        </a>';
-                    }
-
-                    if (auth()->user()->can('golongan-delete')) {
-                        // Tambahkan tombol delete
-                        $actionButtons .= '
-                        <button
-                            class="mx-1 group text-md font-medium rounded-lg focus:z-10 delete-btn"
-                            data-id="' . $data->id . '" data-modal-target="deleteModal" data-modal-toggle="deleteModal">
-                            &#x26D4; <span class="hover:underline" style="color: #E02424;"> Delete </span>
-                        </button>';
-                    }
-
-                    '</div>';
-
-                    return $actionButtons;
-                })
-                ->addColumn('jadwal_relasi', function ($data) {
-                    if ($data->jadwalRelasi->isEmpty()) {
-                        return 'N/A';
-                    }
-
-                    // Construct the HTML for the schedule
-                    $schedule = '';
-                    foreach ($data->jadwalRelasi as $j) {
-                        $schedule .= '
-                        <div class="flex">
-                            <div class="flex-none w-12">
-                                ' . $j->hari . '
-                            </div>
-                            <div class="flex-1">
-                                ( ' . $j->jam_masuk . ' - ' . $j->jam_keluar . ' )
-                            </div>
-                        </div>';
-                    }
-                    return $schedule;
-                })
-                ->editColumn('created_updated_at', function ($data) {
-                    return $data->created_at . ' / ' . $data->updated_at;
-                })
-                ->addIndexColumn() // This is the DT_RowIndex
-                ->rawColumns(['jadwal_relasi', 'action'])
-                ->make(true);
-        } else {
-            return view('dashboard.golongan.index');
-        }
+        return view('dashboard.golongan.index');
     }
 
     public function create()
@@ -159,13 +95,5 @@ class GolonganController extends Controller
         }
 
         return redirect()->route('golongan.index')->with('status', 'Berhasil mengubah data golongan');
-    }
-
-    public function destroy($id)
-    {
-        $golongan = Golongan::findOrFail($id);
-        $golongan->delete();
-
-        return redirect()->route('golongan.index')->with('status', 'Berhasil menghapus data golongan');
     }
 }

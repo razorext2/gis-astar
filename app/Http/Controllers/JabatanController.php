@@ -22,62 +22,7 @@ class JabatanController extends Controller
 
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            // Start building the query
-            $query = Jabatan::query()
-                ->with(['divisionRelasi', 'placementRelasi'])
-                ->select([
-                    'id',
-                    'nama_jabatan',
-                    'divisi',
-                    'penempatan',
-                    'created_at',
-                    'updated_at'
-                ])
-                ->orderBy('nama_jabatan', 'asc');
-
-            // Fetch the filtered data with pagination for DataTables
-            return DataTables::of($query)
-                ->addColumn('action', function ($data) {
-                    $editUrl = route('jabatan.edit', $data->id);
-
-                    $actionButtons = '
-            <div class="inline-flex" role="group">';
-
-                    if (auth()->user()->can('jabatan-edit')) {
-                        $actionButtons .=
-                            '<a href="' . $editUrl . '"class="mx-1 text-md font-medium rounded-lg focus:z-10">
-                            &#9999; <span class="hover:underline" style="color: #057A55"> Edit </span>
-                        </a>';
-                    }
-
-                    if (auth()->user()->can('jabatan-delete')) {
-                        $actionButtons .= '
-                        <button
-                            class="mx-1 group text-md font-medium rounded-lg focus:z-10 delete-btn"
-                            data-id="' . $data->id . '" data-modal-target="deleteModal" data-modal-toggle="deleteModal">
-                            &#x26D4; <span class="hover:underline" style="color: #E02424;"> Delete </span>
-                        </button>';
-                    }
-
-                    '</div>';
-
-                    return $actionButtons;
-                })
-                ->addIndexColumn() // This is the DT_RowIndex
-                ->editColumn('nama_divisi', function ($row) {
-                    return $row->divisionRelasi->nama_divisi ?? 'N/A';  // Handle null cases
-                })
-                ->editColumn('nama_penempatan', function ($row) {
-                    return $row->placementRelasi->penempatan ?? 'N/A';  // Handle null cases
-                })
-                ->editColumn('created_updated_at', function ($row) {
-                    return $row->created_at . ' / ' . $row->updated_at;
-                })
-                ->make(true);
-        } else {
-            return view('dashboard.jabatan.index');
-        }
+        return view('dashboard.jabatan.index');
     }
 
     /**
@@ -88,7 +33,6 @@ class JabatanController extends Controller
         $division = Division::all();
         $placement = Placement::all();
         return view('dashboard.jabatan.add', compact('division', 'placement'));
-        //
     }
 
     /**
@@ -96,7 +40,6 @@ class JabatanController extends Controller
      */
     public function store(Request $request)
     {
-        //
         Jabatan::create([
             'nama_jabatan' => $request->input('nama_jabatan'),
             'divisi' => $request->input('divisi'),
@@ -112,7 +55,6 @@ class JabatanController extends Controller
      */
     public function edit(Jabatan $jabatan)
     {
-        //
         $division = Division::all();
         $placement = Placement::all();
         return view('dashboard.jabatan.edit', compact('jabatan', 'division', 'placement'));
@@ -123,7 +65,6 @@ class JabatanController extends Controller
      */
     public function update(Request $request, Jabatan $jabatan)
     {
-        //
         $jabatan->update([
             'nama_jabatan' => $request->input('nama_jabatan'),
             'divisi' => $request->input('divisi'),
@@ -131,16 +72,6 @@ class JabatanController extends Controller
         ]);
 
         return redirect()->route('jabatan.index')->with('status', 'Berhasil mengubah data Jabatan');
-        ;
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Jabatan $jabatan)
-    {
-        $jabatan->delete();
-        return redirect()->route('jabatan.index')->with('status', 'Berhasil menghapus data Jabatan');
         ;
     }
 }

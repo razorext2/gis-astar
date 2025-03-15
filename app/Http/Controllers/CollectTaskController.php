@@ -48,13 +48,13 @@ class CollectTaskController extends Controller
 
         if ($status == 'on-progress') {
             // filter bill_status = 1 (sedang berjalan)
-            $query->where('bill_status', '=', 1);
+            $query->where('bill_status', 1);
         } elseif ($status == 'pending') {
             // filter bill_status = 3 (tertunda)
-            $query->where('bill_status', '=', 3);
+            $query->where('bill_status', 3);
         } elseif ($status == 'completed') {
             // filter bill_status = 2 (selesai)
-            $query->where('bill_status', '=', 2);
+            $query->where('bill_status', 2);
         } else {
             $query->whereNull('assign_to');
         }

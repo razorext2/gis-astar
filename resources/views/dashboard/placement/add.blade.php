@@ -3,24 +3,22 @@
 	<div class="w-full">
 		<form class="mt-4" action="{{ route('placement.store') }}" method="POST">
 			@csrf
-			<div class="grid gap-6 lg:grid-cols-2 xl:grid-cols-5">
-				<div class="w-full space-y-6 xl:col-span-2">
+			<div class="grid gap-6 lg:grid-cols-2">
+				<div class="w-full space-y-6">
 					<div class="rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 sm:p-6">
 						<div class="max-w-xl">
-							<header class="flex flex-row">
-								<a
-									class="mb-4 mr-3 flex flex-row rounded-lg px-2.5 py-2.5 align-middle ring-1 ring-red-700 hover:bg-red-300 dark:bg-red-800 dark:text-white dark:ring-gray-700 dark:hover:bg-red-900 md:px-4"
-									href="{{ route('placement.index') }}">
-									<svg class="dark:fill-white" class="icon" xmlns="http://www.w3.org/2000/svg" width="25" height="25"
-										viewBox="0 0 1024 1024" fill="#000000" version="1.1">
-										<path
-											d="M669.6 849.6c8.8 8 22.4 7.2 30.4-1.6s7.2-22.4-1.6-30.4l-309.6-280c-8-7.2-8-17.6 0-24.8l309.6-270.4c8.8-8 9.6-21.6 2.4-30.4-8-8.8-21.6-9.6-30.4-2.4L360.8 480.8c-27.2 24-28 64-0.8 88.8l309.6 280z"
-											fill="" />
-									</svg>
-									Kembali
-								</a>
-								<h2 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
-									{{ __('Tambah Data Penempatan') }}
+							<header class="flex flex-row items-center gap-x-3">
+								<div class="max-w-xs">
+									<x-button.link class="w-fit ring-1 ring-red-700 dark:bg-red-800 dark:text-white"
+										href="{{ route('placement.index') }}">
+										<x-slot name="icon">
+											<x-icons.angle-right class="h-6 w-6 text-red-500 dark:text-white" />
+										</x-slot>
+										Kembali
+									</x-button.link>
+								</div>
+								<h2 class="text-lg font-medium text-gray-900 dark:text-white">
+									{{ __('Tambah Penempatan') }}
 								</h2>
 
 							</header>
@@ -119,7 +117,7 @@
 					</div>
 				</div>
 
-				<div class="w-full space-y-6 xl:col-span-2">
+				<div class="w-full">
 					<div class="rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 sm:p-6">
 						<div class="max-w-xl">
 							<header class="flex flex-row">
@@ -140,162 +138,11 @@
 			</div>
 		</form>
 	</div>
-
-	<script>
-		// Get the elements
-		var rangeInput = document.getElementById('radius-input');
-		var currencyInput = document.getElementById('radius');
-
-		// Function to update the currency input
-		function updateCurrencyInput() {
-			currencyInput.value = rangeInput.value;
-		}
-
-		// Add event listener to the range input
-		rangeInput.addEventListener('input', updateCurrencyInput);
-
-		document.addEventListener('livewire:navigated', function() {
-			// Fungsi untuk inisialisasi peta dengan koordinat yang diberikan
-			function initializeMap(lat, lng) {
-				var map = L.map('map').setView([lat, lng], 17); // Inisialisasi peta dengan koordinat yang didapat
-				document.getElementById('longitude').value = lng;
-				document.getElementById('latitude').value = lat;
-
-				// Tambahkan tile layer dari OpenStreetMap
-				L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-					attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-				}).addTo(map);
-
-				var customIcon = L.icon({
-					iconUrl: "{{ asset('assets/img/marker.png') }}", // Ganti dengan path ke ikon Anda
-					iconSize: [25, 41], // Ukuran ikon
-					iconAnchor: [12, 41], // Titik untuk mengaitkan ikon ke koordinat
-					shadowUrl: "{{ asset('assets/img/marker-shadow.png') }}", // Ganti dengan path ke bayangan Anda
-					shadowSize: [41, 41] // Ukuran bayangan
-				});
-
-				// Tambahkan marker yang bisa dipindahkan (draggable)
-				var marker = L.marker([lat, lng], {
-					icon: customIcon,
-					draggable: true
-				}).addTo(map);
-
-				// Dapatkan nilai radius awal dari input
-				var radiusValue = document.getElementById('radius').value;
-
-				// Tambahkan lingkaran dengan radius awal
-				var circle = L.circle(marker.getLatLng(), {
-					radius: radiusValue, // Radius dalam meter
-					color: 'blue',
-					fillOpacity: 0.2
-				}).addTo(map);
-
-				// Fungsi untuk memperbarui radius lingkaran
-				function updateCircleRadius() {
-					var newRadius = document.getElementById('radius').value;
-					circle.setRadius(newRadius); // Perbarui radius lingkaran
-				}
-
-				// Event listener untuk input manual radius
-				document.getElementById('radius').addEventListener('input', function() {
-					document.getElementById('radius-input').value = this
-						.value; // Sinkronkan dengan slider range
-					updateCircleRadius();
-				});
-
-				// Event listener untuk slider range radius
-				document.getElementById('radius-input').addEventListener('input', function() {
-					document.getElementById('radius').value = this.value; // Sinkronkan dengan input manual
-					updateCircleRadius();
-				});
-
-				// Variabel untuk menyimpan lokasi sebelumnya
-				let previousPosition = {
-					lat: lat,
-					lng: lng
-				};
-
-				// Fungsi untuk memeriksa jarak dan mengupdate lokasi
-				function checkLocation() {
-					navigator.geolocation.getCurrentPosition(function(position) {
-						var currentLat = position.coords.latitude;
-						var currentLng = position.coords.longitude;
-
-						var currentPosition = {
-							lat: currentLat,
-							lng: currentLng
-						};
-						var distance = getDistance(previousPosition, currentPosition);
-
-						// Jika jarak lebih dari 100 meter, beri tahu pengguna
-						if (distance > 50) {
-							alert("Fake GPS terdeteksi! Perubahan lokasi melebihi 100 meter.");
-						}
-
-						// Update posisi marker dan input longitude dan latitude
-						marker.setLatLng(currentPosition);
-						document.getElementById('longitude').value = currentLng;
-						document.getElementById('latitude').value = currentLat;
-
-						// Update posisi sebelumnya
-						previousPosition = currentPosition;
-
-						// Memindahkan lingkaran ke lokasi baru
-						circle.setLatLng(currentPosition);
-					});
-				}
-
-				// Fungsi untuk menghitung jarak antara dua koordinat
-				function getDistance(pos1, pos2) {
-					var R = 6371000; // radius bumi dalam meter
-					var dLat = (pos2.lat - pos1.lat) * Math.PI / 180;
-					var dLng = (pos2.lng - pos1.lng) * Math.PI / 180;
-
-					var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-						Math.cos(pos1.lat * Math.PI / 180) * Math.cos(pos2.lat * Math.PI / 180) *
-						Math.sin(dLng / 2) * Math.sin(dLng / 2);
-					var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-					var distance = R * c; // dalam meter
-
-					return distance;
-				}
-
-				// Update lokasi setiap 10 detik
-				setInterval(checkLocation, 500);
-
-				// Event listener untuk mendeteksi perubahan posisi marker
-				marker.on('dragend', function(event) {
-					var position = marker.getLatLng();
-					marker.setLatLng(position, {
-						draggable: true
-					});
-
-					// Update input longitude dan latitude (jika diperlukan)
-					document.getElementById('longitude').value = position.lng;
-					document.getElementById('latitude').value = position.lat;
-				});
-			}
-
-			// Gunakan Geolocation API untuk mendapatkan lokasi pengguna
-			if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(
-					function(position) {
-						var lat = position.coords.latitude;
-						var lng = position.coords.longitude;
-
-						// Panggil fungsi untuk inisialisasi peta dengan lokasi pengguna
-						initializeMap(lat, lng);
-					},
-					function(error) {
-						console.error("Error mendapatkan lokasi:", error);
-						// Jika gagal, gunakan lokasi default
-						initializeMap(3.594361307230664, 98.67298838708204);
-					}
-				);
-			} else {
-				// Jika browser tidak mendukung Geolocation, gunakan lokasi default
-				initializeMap(3.594361307230664, 98.67298838708204);
-			}
-		});
-	</script>
 @endsection
+@push('script')
+	<script>
+		var icon = "{{ asset('assets/img/marker.png') }}";
+		var shadow = "{{ asset('assets/img/marker-shadow.png') }}";
+	</script>
+	@vite(['resources/js/pages/placement/add.js'])
+@endpush

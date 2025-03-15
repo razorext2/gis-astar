@@ -255,5 +255,5 @@
 	<script>
 		const validate_by = "{{ Auth::user()->kode_pegawai ?? 0 }}";
 	</script>
-	@vite('resources/js/collect-idy-ppn/detail.js')
+	@vite('resources/js/pages/collect-idy-ppn/detail.js')
 @endpush

@@ -324,5 +324,5 @@
 	</div>
 @endsection
 @push('script')
-	@vite('resources/js/collect/detail.js')
+	@vite('resources/js/pages/collect/detail.js')
 @endpush

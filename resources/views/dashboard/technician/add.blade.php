@@ -201,5 +201,5 @@
 	</div>
 @endsection
 @push('script')
-	@vite(['resources/js/technician/add.js'])
+	@vite(['resources/js/pages/technician/add.js'])
 @endpush

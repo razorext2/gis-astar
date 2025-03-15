@@ -39,22 +39,17 @@
 			{{-- end filter --}}
 
 			<div class="col-span-2" x-data="{ openRow: null }">
-				<x-dashboard.table id="dataTable" :tablename="[
-				    '0' => '#',
-				    '1' => 'Aksi',
-				    '2' => 'Tipe',
-				    '3' => 'Nama Customer',
-				    '4' => 'Jadwal',
-				    '5' => 'Tagihan',
-				    '6' => 'Kontak',
-				]" />
+				<x-dashboard.table id="dataTable" data-url="{{ route('collect-task-ppn.showdata') }}?status=on-progress"
+					:tablename="[
+					    '0' => '#',
+					    '1' => 'Aksi',
+					    '2' => 'Tipe',
+					    '3' => 'Nama Customer',
+					    '4' => 'Jadwal',
+					    '5' => 'Tagihan',
+					    '6' => 'Kontak',
+					]" />
 			</div>
 		</div>
 	</div>
 @endsection
-@push('script')
-	<script>
-		const index = "{{ route('collect-task-ppn.showdata') }}?status=on-progress";
-	</script>
-	@vite(['resources/js/collect-task-ppn/index.js'])
-@endpush

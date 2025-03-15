@@ -84,6 +84,7 @@
 					</label>
 					<div class="h-32 w-full dark:bg-white" id="editor"></div>
 					<input id="keterangan" name="keterangan" type="hidden">
+					<input type="hidden" id="data" value="{{ $data->keterangan }}">
 					<div class="mt-2 text-sm text-red-500" id="alert-keterangan"></div>
 					<div class="mt-2 text-sm text-red-500" id="alert-image"></div>
 				</div>
@@ -104,9 +105,5 @@
 	</div>
 @endsection
 @push('script')
-	<script>
-		const data = @json($data->keterangan);
-		const uploadUrl = "{{ route('dayoff.uploadimage') }}";
-	</script>
-	@vite('resources/js/dayoff/edit.js')
+	@vite('resources/js/pages/dayoff/edit.js')
 @endpush

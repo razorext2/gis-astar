@@ -39,22 +39,17 @@
 			{{-- end filter --}}
 
 			<div class="col-span-2" x-data="{ openRow: null }">
-				<x-dashboard.table id="dataTable" :tablename="[
-				    '0' => '#',
-				    '1' => 'Aksi',
-				    '2' => 'Tipe',
-				    '3' => 'Nama Customer',
-				    '4' => 'Jadwal',
-				    '5' => 'Tagihan',
-				    '6' => 'Kontak',
-				]" />
+				<x-dashboard.table id="dataTable" data-url="{{ route('collect-idy-ppn.showdata') }}?status=pending"
+					:tablename="[
+					    '0' => '#',
+					    '1' => 'Aksi',
+					    '2' => 'Tipe',
+					    '3' => 'Nama Customer',
+					    '4' => 'Jadwal',
+					    '5' => 'Tagihan',
+					    '6' => 'Kontak',
+					]" />
 			</div>
 		</div>
 	</div>
 @endsection
-@push('script')
-	<script>
-		const index = "{{ route('collect-idy-ppn.showdata') }}?status=pending";
-	</script>
-	@vite(['resources/js/collect-idy-ppn/index.js'])
-@endpush

@@ -11,6 +11,3 @@
 		]" />
 	</div>
 @endsection
-@push('script')
-	@vite(['resources/js/collect/index.js'])
-@endpush

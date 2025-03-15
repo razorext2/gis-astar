@@ -39,7 +39,7 @@
 			{{-- end filter --}}
 
 			<div class="col-span-2" x-data="{ openRow: null }">
-				<x-dashboard.table id="dataTable" :tablename="[
+				<x-dashboard.table id="dataTable" data-url="{{ route('collect-task-ppn.showdata') }}" :tablename="[
 				    '0' => '#',
 				    '1' => 'Aksi',
 				    '2' => 'Tipe',
@@ -52,10 +52,3 @@
 		</div>
 	</div>
 @endsection
-@push('script')
-	<script>
-		const index = "{{ route('collect-task-ppn.showdata') }}";
-		const assign_by = "{{ Auth::user()->kode_pegawai ?? '0' }}"
-	</script>
-	@vite(['resources/js/collect-task-ppn/index.js'])
-@endpush

@@ -22,7 +22,6 @@ class CollectController extends Controller
 
     public function index(Request $request)
     {
-
         return view('dashboard.collect.subcontent.main');
     }
 

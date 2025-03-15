@@ -34,45 +34,8 @@ class PegawaiController extends Controller
         $this->middleware('permission:pegawai-list|pegawai-create|pegawai-edit|pegawai-delete|pegawai-timeline', ['only' => ['index', 'create', 'edit', 'destroy', 'timeline']]);
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        if ($request->ajax()) {
-            $query = Pegawai::query()
-                ->with(['golonganRelasi', 'jabatanRelasi'])
-                ->select('id', 'kode_pegawai', 'nik_pegawai', 'full_name', 'no_telp', 'jabatan', 'golongan')
-                ->orderBy('full_name', 'asc');
-
-            return DataTables::of($query)
-                ->addColumn('action', function ($data) {
-                    $dataUrl = route('pegawai.detail', $data->id);
-                    $actionButtons = '
-                <div class="inline-flex text-center" role="group">
-                    <a href="' . $dataUrl .
-                        '"
-                        class="mx-1 text-md font-medium rounded-lg focus:z-10 text-blue-500">
-                         &#128203; <span class="hover:underline"> Detail </span>
-                    </a>';
-                    return $actionButtons;
-                })
-                ->addColumn('full_name_nik', function ($data) {
-                    return '
-                        <p class="text-base font-medium">' . $data->full_name . '</p>
-                        <p class="text-md"> NIK: ' . $data->nik_pegawai . '</p>';
-                })
-                ->addColumn('nama_golongan', function ($data) {
-                    return $data->golonganRelasi->nama_golongan ?? 'N/A';
-                })
-                ->addColumn('nama_jabatan', function ($data) {
-                    return $data->jabatanRelasi->nama_jabatan ?? 'N/A';
-                })
-                ->editColumn('no_telp', function ($data) {
-                    return $data->no_telp ?? 'N/A';
-                })
-                ->addIndexColumn()
-                ->rawColumns(['action', 'full_name_nik'])
-                ->make(true);
-        }
-
         return view('dashboard.pegawai.index');
     }
 

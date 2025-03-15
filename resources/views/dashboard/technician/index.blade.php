@@ -130,6 +130,3 @@
 		</div>
 	</div>
 @endsection
-@push('script')
-	@vite('resources/js/technician/index.js')
-@endpush

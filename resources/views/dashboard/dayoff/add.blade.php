@@ -117,5 +117,5 @@
 		const searchUrl = "{{ route('pegawai.autocomplete') }}";
 		const uploadUrl = "{{ route('dayoff.uploadimage') }}";
 	</script>
-	@vite(['resources/js/dayoff/add.js'])
+	@vite(['resources/js/pages/dayoff/add.js'])
 @endpush
