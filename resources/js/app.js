@@ -3,6 +3,7 @@ import "./bootstrap";
 import "flowbite";
 import Swal from "sweetalert2";
 import flatpickr from "flatpickr";
+import { initFlowbite } from 'flowbite';
 import { fetchNotification } from './utils/notificationListener';
 import { initEventListener } from './utils/eventListener.js';
 import { initWebSocketListener } from './utils/webSocketListener';
@@ -12,7 +13,16 @@ window.flatpickr = flatpickr;
 window.$ = window.jQuery = $;
 window.Swal = Swal;
 
+Livewire.hook('commit', ({ component, commit, respond, succeed, fail }) => {
+  succeed(({ snapshot, effect }) => {
+    queueMicrotask(() => {
+      initFlowbite();
+    })
+  })
+})
+
 document.addEventListener('livewire:navigated', function () {
+  initFlowbite();
   fetchNotification();
   initEventListener();
   initWebSocketListener();
