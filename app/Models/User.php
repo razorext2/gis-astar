@@ -24,7 +24,11 @@ class User extends Authenticatable
         'kode_pegawai',
         'name',
         'email',
-        'password'
+        'password',
+        'last_login',
+        'is_active',
+        'deactivation_at',
+        'deactivation_reason'
     ];
 
     /**

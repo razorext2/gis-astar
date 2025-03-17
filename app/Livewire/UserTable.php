@@ -66,8 +66,13 @@ final class UserTable extends PowerGridComponent
                 return collect($query->roles->pluck('name'))->implode(', ');
             })
             ->add('email')
-            ->add('created_at')
-            ->add('created_at_formatted', fn($query) => Carbon::parse($query->created_at)->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss'));
+            ->add('created_at_formatted', fn($query) => Carbon::parse($query->created_at)->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss'))
+            ->add('is_active')
+            ->add('is_active_formatted', function ($query) {
+                $html = "<span class='text-white text-xs px-2.5 items-center py-0.5 rounded-xl " . ($query->is_active ? 'bg-green-500' : 'bg-red-500') . "'> " . ($query->is_active ? 'Active' : 'Inactive') . " </span>";
+
+                return $html;
+            });
     }
 
     public function columns(): array
@@ -86,11 +91,13 @@ final class UserTable extends PowerGridComponent
                 ->hidden()
                 ->searchable(),
 
-            Column::make('Roles', 'roles_formatted'),
+            Column::make('Status', 'is_active_formatted'),
 
-            Column::make('Created at', 'created_at')
+            Column::make('Status', 'is_active')
                 ->hidden()
                 ->searchable(),
+
+            Column::make('Roles', 'roles_formatted'),
 
             Column::make('Created at', 'created_at_formatted', 'created_at'),
         ];
@@ -105,6 +112,8 @@ final class UserTable extends PowerGridComponent
                 ->placeholder('User ID'),
             Filter::inputText('name', 'name')
                 ->placeholder('Nama'),
+            Filter::boolean('is_active')
+                ->label('Aktif', 'Tidak aktif')
 
         ];
     }

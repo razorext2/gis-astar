@@ -79,6 +79,9 @@ export default defineConfig({
                 // placement
                 "resources/js/pages/placement/add.js",
                 "resources/js/pages/placement/edit.js",
+
+                // user
+                "resources/js/pages/user/edit.js"
             ],
             refresh: true,
         }),

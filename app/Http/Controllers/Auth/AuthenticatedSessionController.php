@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -22,11 +23,29 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request)
     {
         $request->authenticate();
 
+        // cek status is_active
+        if (!$request->user()->is_active) {
+            Auth::guard('web')->logout();
+
+            $request->session()->invalidate();
+
+            $request->session()->regenerateToken(); 
+
+            throw ValidationException::withMessages([
+                'email' => 'Status akun anda sudah tidak aktif.',
+            ]);
+        }
+
         $request->session()->regenerate();
+
+        // update last login
+        $request->user()->update([
+            'last_login' => now(),
+        ]);
 
         return redirect()->intended(route('dashboard'));
     }

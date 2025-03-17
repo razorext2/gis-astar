@@ -1,11 +1,11 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
 	<div class="w-full space-y-6 xl:w-6/12 2xl:w-1/3">
-		<div class="dark:bg-[#18181b] dark:ring-gray-700 rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 sm:p-6">
+		<div class="rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 sm:p-6">
 			<div class="max-w-xl">
 				<header class="flex flex-row">
 					<a
-						class="dark:bg-red-800 dark:hover:bg-red-900 dark:text-white dark:ring-gray-700 mb-4 mr-3 flex flex-row rounded-lg px-2.5 py-2.5 align-middle ring-1 ring-red-700 hover:bg-red-300 md:px-4"
+						class="mb-4 mr-3 flex flex-row rounded-lg px-2.5 py-2.5 align-middle ring-1 ring-red-700 hover:bg-red-300 dark:bg-red-800 dark:text-white dark:ring-gray-700 dark:hover:bg-red-900 md:px-4"
 						href="{{ route('users.index') }}">
 						<svg class="dark:fill-white" class="icon" xmlns="http://www.w3.org/2000/svg" width="25" height="25"
 							viewBox="0 0 1024 1024" fill="#000000" version="1.1">
@@ -15,12 +15,12 @@
 						</svg>
 						Kembali
 					</a>
-					<h2 class="dark:text-white mt-2 text-lg font-medium text-gray-900">
+					<h2 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
 						{{ __('Tambah Data User') }}
 					</h2>
 
 				</header>
-				<p class="dark:text-gray-300 mt-1 text-sm text-gray-600">
+				<p class="mt-1 text-sm text-gray-600 dark:text-gray-300">
 					{{ __('Silahkan sesuaikan data dibawah ini dengan data yang benar.') }}
 				</p>
 
@@ -29,7 +29,7 @@
 					@method('put')
 					<div class="mb-4 grid gap-6 sm:mb-5 sm:gap-6">
 						<div class="w-full">
-							<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="name">Nama
+							<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="name">Nama
 								User</label>
 							<input
 								class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
@@ -37,22 +37,40 @@
 						</div>
 
 						<div class="w-full">
-							<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="email">Email
+							<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="email">Email
 								User</label>
 							<input
 								class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
 								id="email" name="email" type="email" value="{{ $user->email }}" placeholder="Email">
-
 						</div>
+
 						<div class="w-full">
-							<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="password">Password</label>
+							<label for="is_active" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Status</label>
+							<select name="is_active" id="is_active"
+								class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500">
+
+								<option value="1" {{ $user->is_active ? 'selected' : '' }}>Aktif</option>
+								<option value="0" {{ !$user->is_active ? 'selected' : '' }}>Tidak Aktif</option>
+							</select>
+						</div>
+
+						<div class="hidden w-full" id="deactivation_reason_container">
+							<label for="deactivation_reason" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Alasan
+								Akun di Nonaktifkan</label>
+							<textarea name="deactivation_reason" id="deactivation_reason" rows="8"
+							 class="w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+							 placeholder="Tulis alasan...">{{ $user->deactivation_reason }}</textarea>
+						</div>
+
+						<div class="w-full">
+							<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="password">Password</label>
 							<input
 								class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
 								id="password" name="password" type="password" placeholder="Password">
 
 						</div>
 						<div class="w-full">
-							<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="confirm-password">Confirm
+							<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="confirm-password">Confirm
 								Password</label>
 							<input
 								class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
@@ -60,7 +78,7 @@
 						</div>
 
 						<div class="w-full">
-							<label class="dark:text-white mb-2 block text-sm font-medium text-gray-900" for="roles">Roles</label>
+							<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="roles">Roles</label>
 							<select
 								class="focus:ring-primary-500 focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
 								id="roles" name="roles[]" multiple="multiple">
@@ -74,7 +92,7 @@
 					</div>
 					<div class="flex items-center">
 						<button
-							class="dark:bg-blue-800 dark:text-white dark:hover:bg-blue-900 dark:ring-gray-700 inline-flex items-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-gray-900 ring-1 ring-blue-700 hover:bg-blue-800 hover:text-white focus:text-white focus:ring-4 focus:ring-blue-300"
+							class="inline-flex items-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-gray-900 ring-1 ring-blue-700 hover:bg-blue-800 hover:text-white focus:text-white focus:ring-4 focus:ring-blue-300 dark:bg-blue-800 dark:text-white dark:ring-gray-700 dark:hover:bg-blue-900"
 							type="submit">
 							Submit
 							<svg class="ms-2 h-3.5 w-3.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -89,3 +107,6 @@
 		</div>
 	</div>
 @endsection
+@push('script')
+	@vite('resources/js/pages/user/edit.js')
+@endpush
