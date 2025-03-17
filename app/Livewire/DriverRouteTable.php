@@ -14,11 +14,10 @@ use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 final class DriverRouteTable extends PowerGridComponent
 {
     public string $tableName = 'DriverRouteTable';
+    public bool $deferLoading = true;
 
     public function setUp(): array
     {
-        $this->showCheckBox();
-
         return [
             PowerGrid::header()
                 ->showSearchInput()
@@ -26,6 +25,7 @@ final class DriverRouteTable extends PowerGridComponent
             PowerGrid::footer()
                 ->showPerPage()
                 ->showRecordCount(),
+            PowerGrid::responsive()
         ];
     }
 

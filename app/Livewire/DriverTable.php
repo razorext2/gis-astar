@@ -24,6 +24,7 @@ final class DriverTable extends PowerGridComponent
 
     public string $tableName = 'DriverTable';
     public bool $deferLoading = true;
+    public bool $showFilters = true;
     public $pegawai;
 
     public function setUp(): array

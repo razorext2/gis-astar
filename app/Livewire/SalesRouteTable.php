@@ -14,11 +14,10 @@ use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 final class SalesRouteTable extends PowerGridComponent
 {
     public string $tableName = 'SalesRouteTable';
+    public bool $deferLoading = true;
 
     public function setUp(): array
     {
-        $this->showCheckBox();
-
         return [
             PowerGrid::header()
                 ->showSearchInput()
@@ -26,6 +25,7 @@ final class SalesRouteTable extends PowerGridComponent
             PowerGrid::footer()
                 ->showPerPage()
                 ->showRecordCount(),
+            PowerGrid::responsive()
         ];
     }
 
