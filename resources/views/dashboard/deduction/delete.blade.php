@@ -14,9 +14,6 @@
 			confirmButtonText: 'YA, HAPUS!'
 		}).then((result) => {
 			if (result.isConfirmed) {
-
-				console.log('test');
-
 				//fetch to delete data
 				$.ajax({
 					url: `${APP_URL}/dashboard/pegawai/deductions/${deduction_id}`,

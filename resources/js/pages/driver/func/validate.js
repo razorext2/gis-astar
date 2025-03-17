@@ -21,8 +21,6 @@ export async function confirmAction() {
     let id = $(this).data("id");
     let userID = $('meta[name="user-id"]').attr('content');
 
-    console.log(userID);
-
     try {
       // Dialog Konfirmasi
       const result = await Swal.fire({

@@ -85,9 +85,6 @@ export function fetchNotification() {
 }
 
 export function handleNotification(data) {
-	// print data untuk testing
-	console.log('Pesan broadcast: ', data);
-
 	let message = data.message.split('.').slice(0, 2).join('. ') + (data.message.split('.').length > 2 ? '...' : '');
 	showToast('info', message);
 

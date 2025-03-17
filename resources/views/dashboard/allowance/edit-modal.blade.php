@@ -174,9 +174,6 @@
 		$('#update-allowance').click(function(e) {
 			e.preventDefault();
 
-			// console.log(document.getElementById('#calculated_allowance_edit').value);
-			console.log($('#allowance_fee_edit').val());
-
 			// Define variables
 			let allowance_id = $('#allowance_id').val();
 			let kode_pegawai = $('#kode_pegawai_edit').val();

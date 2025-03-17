@@ -40,8 +40,6 @@ async function fetchData() {
     $('#update_teknisi').append(data.UpdateTeknisi);
     $('#teknisi_telp').append(data.TeleponTeknisi);
 
-    console.log(data);
-
   } catch (error) {
     alert.showAlert('error', 'Terjadi kesalahan', error.message);
   }

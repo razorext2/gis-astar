@@ -18,7 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
         stream = userStream;
         video.srcObject = stream;
         video.play();
-        console.log("Camera started");
       })
       .catch(err => console.error('Error accessing camera: ', err));
   }
@@ -34,20 +33,15 @@ document.addEventListener("DOMContentLoaded", function () {
   function displayTimer(seconds, callback) {
     let remainingTime = seconds;
     overlay.textContent = remainingTime; // Menampilkan waktu awal
-    console.log(`Foto diambil dalam: ${remainingTime} detik`);
-
-    // Menampilkan timer di consoleOutput
 
     const timerInterval = setInterval(() => {
       remainingTime--;
       overlay.textContent = remainingTime;
-      console.log(`${remainingTime} `);
 
       // Menampilkan waktu tersisa di consoleOutput
       if (remainingTime <= 0) {
         clearInterval(timerInterval);
         overlay.textContent = ''; // Hapus teks overlay
-        console.log('Captured.');
         if (callback) callback();
       }
     }, 1000);

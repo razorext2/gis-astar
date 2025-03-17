@@ -24,14 +24,11 @@ export function searchDataHandler() {
 
       let check = database.data.success;
 
-      console.log('check database: ' + check);
-
       if (check) {
         let status = database.data.data.bill_status;
 
         if (status != 2) {
           const data = database.data.data;
-          console.log('data diambil dari database');
 
           $('#sr_date').val(data.sr_date);
           $('#sales_invoice').val(data.sales_invoice);
@@ -53,11 +50,8 @@ export function searchDataHandler() {
       } else {
         let check = BSI.data.status;
 
-        console.log('check bsi: ' + check);
-
         if (check == 'success') {
           const data = BSI.data.data[0];
-          console.log('data diambil dari BSI');
 
           $('#sr_date').val(data.TanggalPenjualan.date);
           $('#sales_invoice').val(data.NomorPenjualan);

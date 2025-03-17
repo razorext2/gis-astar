@@ -44,25 +44,19 @@ document.addEventListener('livewire:navigated', function () {
   } else if (window.location.pathname.startsWith('/dashboard/collect-idy-ppn')) {
     import('./pages/collect-idy-ppn/index.js').then((module) => {
       module.initCollectIdyPpn();
-      console.log('collect task idy loaded')
     });
   } else if (window.location.pathname.startsWith('/dashboard/collect-task-ppn')) {
     import('./pages/collect-task-ppn/index.js').then((module) => {
       module.initCollectTaskPpn();
-      console.log('collect task ppn loaded')
     });
   }
   else if (window.location.pathname.startsWith('/dashboard/collect-task')) {
     import('./pages/collect-task/index.js').then((module) => {
       module.initCollectTask();
-      console.log('collect task loaded')
     });
   } else if (window.location.pathname.startsWith('/dashboard/collect')) {
     import('./pages/collect/index.js').then((module) => {
       module.initCollect();
-      console.log('collect loaded')
     });
   }
-
-  console.log(window.location.pathname);
 });
