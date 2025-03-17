@@ -197,6 +197,65 @@
 				</li>
 			@endif
 
+			@if (auth()->user()->hasAnyPermission(['driver-approve', 'collect-approve', 'sales-approve']))
+				<li x-data="{ routes: {{ Route::is('routes.*') ? 'true' : 'false' }} }">
+					<button
+						class="{{ Route::is('routes.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-[#18181b] hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
+						type="button" aria-controls="routes-dropdown" @click="routes = !routes" :aria-expanded="routes">
+
+						<x-icons.map-pin-alt
+							class="{{ Route::is('routes.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+
+						<span class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">Rute</span>
+
+						<x-icons.carred-down class="ml-1 mt-1 inline h-4 w-4 transform transition-transform group-hover:text-red-600"
+							x-bind:class="{ 'rotate-180 duration-200': routes }" />
+					</button>
+
+					<ul class="space-y-4 py-4" id="routes-dropdown" x-show="routes"
+						x-transition:enter="transition ease-in duration-200" x-transition:enter-start="transform opacity-0 -translate-y-5"
+						x-transition:leave="transition ease-out duration-200" x-transition:leave-end="transform opacity-0 -translate-y-5">
+
+						@can('driver-approve')
+							<li>
+								<a
+									class="{{ Route::is('routes.driver') || Route::is('routes.driver.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									href="{{ route('routes.driver') }}" wire:navigate>
+									<x-icons.angle-right
+										class="{{ Route::is('routes.driver') || Route::is('routes.driver.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Driver</span>
+								</a>
+							</li>
+						@endcan
+
+						@can('collect-approve')
+							<li>
+								<a
+									class="{{ Route::is('routes.collector') || Route::is('routes.collector.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									href="{{ route('routes.collector') }}" wire:navigate>
+									<x-icons.angle-right
+										class="{{ Route::is('routes.collector') || Route::is('routes.collector.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Kolektor</span>
+								</a>
+							</li>
+						@endcan
+
+						@can('sales-approve')
+							<li>
+								<a
+									class="{{ Route::is('routes.sales') || Route::is('routes.sales.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									href="{{ route('routes.sales') }}" wire:navigate>
+									<x-icons.angle-right
+										class="{{ Route::is('routes.sales') || Route::is('routes.sales.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Sales</span>
+								</a>
+							</li>
+						@endcan
+
+					</ul>
+				</li>
+			@endif
+
 			<!-- laporan driver -->
 			@can('driver-list')
 				<li>
@@ -293,8 +352,10 @@
 					</button>
 
 					<ul class="space-y-4 py-4" id="lokasi-dropdown" x-show="lokasi"
-						x-transition:enter="transition ease-in duration-200" x-transition:enter-start="transform opacity-0 -translate-y-5"
-						x-transition:leave="transition ease-out duration-200" x-transition:leave-end="transform opacity-0 -translate-y-5">
+						x-transition:enter="transition ease-in duration-200"
+						x-transition:enter-start="transform opacity-0 -translate-y-5"
+						x-transition:leave="transition ease-out duration-200"
+						x-transition:leave-end="transform opacity-0 -translate-y-5">
 						@can('divisi-list')
 							<li>
 								<a

@@ -25,6 +25,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\ProxyController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\RouteController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\TechnicianController;
 use App\Http\Controllers\UserController;
@@ -218,6 +219,16 @@ Route::middleware(['auth', 'throttle:medium'])->group(function () {
         // backup
         Route::resource('backup', BackupController::class)->only('index');
         Route::get('backup/download/{id}', [BackupController::class, 'download'])->name('backup.download');
+
+        // routes
+        Route::get('routes/driver', [RouteController::class, 'driver'])->name('routes.driver');
+        Route::get('routes/driver/{pegawai}', [RouteController::class, 'detailDriver'])->name('routes.driver.detail');
+
+        Route::get('routes/collector', [RouteController::class, 'collector'])->name('routes.collector');
+        Route::get('routes/collector/{pegawai}', [RouteController::class, 'detailCollector'])->name('routes.collector.detail');
+
+        Route::get('routes/sales', [RouteController::class, 'sales'])->name('routes.sales');
+        Route::get('routes/sales/{pegawai}', [RouteController::class, 'detailSales'])->name('routes.sales.detail');
     });
 });
 
