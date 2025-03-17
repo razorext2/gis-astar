@@ -88,8 +88,6 @@ export function handleNotification(data) {
 	let message = data.message.split('.').slice(0, 2).join('. ') + (data.message.split('.').length > 2 ? '...' : '');
 	showToast('info', message);
 
-	console.log(message);
-
 	// sembunyikan notificationEmpty
 	$('#notificationEmpty').addClass('hidden');
 	$('#notificationDot').removeClass('hidden');
