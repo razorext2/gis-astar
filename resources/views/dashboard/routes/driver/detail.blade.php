@@ -52,7 +52,7 @@
 										</svg>
 									</span>
 									<h3 class="mb-1 flex items-center text-sm text-gray-900 dark:text-white">
-										<a class="group" href="{{ route('sales.show', $data->id) }}" target="_blank">
+										<a class="group" href="{{ route('driver.show', $data->id) }}" target="_blank">
 											{{ $data->title }}
 											<span class="text-blue-500 group-hover:underline">
 												[ 👁 ]

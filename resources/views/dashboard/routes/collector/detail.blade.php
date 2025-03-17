@@ -1,6 +1,6 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-	<div class="rounded-lg" id="sales" role="tabpanel" aria-labelledby="sales-tab">
+	<div class="rounded-lg" id="collect" role="tabpanel" aria-labelledby="collect-tab">
 		<div class="w-full">
 			<div class="grid gap-6 md:grid-cols-2">
 
@@ -38,7 +38,7 @@
 						</div>
 					</div>
 
-					<ol class="relative ml-3 border-s border-gray-200 dark:border-gray-700" id="salesContent">
+					<ol class="relative ml-3 border-s border-gray-200 dark:border-gray-700" id="collectContent">
 
 						@if ($report->isNotEmpty())
 							@foreach ($report as $data)
@@ -52,7 +52,7 @@
 										</svg>
 									</span>
 									<h3 class="mb-1 flex items-center text-sm text-gray-900 dark:text-white">
-										<a class="group" href="{{ route('sales.show', $data->id) }}" target="_blank">
+										<a class="group" href="{{ route('collect.show', $data->id) }}" target="_blank">
 											{{ $data->title }}
 											<span class="text-blue-500 group-hover:underline">
 												[ 👁 ]
