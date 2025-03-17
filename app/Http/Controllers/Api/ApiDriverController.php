@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApiResource;
+use App\Jobs\NotifyNewDriverReportJob;
 use App\Models\Driver;
 use App\Models\PhotoCollect;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -66,6 +66,9 @@ class ApiDriverController extends Controller
                     ]);
                 }
             }
+
+            // send notification
+            NotifyNewDriverReportJob::dispatch($query->id, $query->created_at)->delay(now()->addSeconds(5));
 
             DB::commit();
             return new ApiResource(true, 'Berhasil menambah data laporan', null);
