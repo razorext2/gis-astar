@@ -65,7 +65,7 @@ export function showModal(data) {
               class="col-span-2 flex flex-col items-start rounded-xl border border-gray-200 bg-gray-50 p-3">
               <p class="mb-2 text-sm text-gray-700">Dokumentasi</p>
               <div class="relative mx-auto flex-none items-center gap-4 rounded-xl p-2">
-                <img class="h-52 w-52 rounded-xl object-cover transition duration-300 ease-in-out hover:scale-[2]" id="documentations" src="${APP_URL}${data.photo_collect[0].photourl}" alt="">
+                <img class="h-52 w-52 rounded-xl object-cover transition duration-300 ease-in-out hover:scale-[2]" id="documentations" onerror="this.onerror=null; this.src='${APP_URL}/assets/img/noImage.webp';" src="${APP_URL}${data.photo_collect[0].photourl}" alt="">
               </div>
             </div>
 

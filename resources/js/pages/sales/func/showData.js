@@ -140,6 +140,17 @@ export function confirmData() {
       noTelp = row.customer_telp.replace(/^08/, "628");
     }
 
+    let url = APP_URL + row.photo_collect_relasi[0].photourl;
+
+    try {
+      const check = await fetch(url, { method: "HEAD" }); // Gunakan HEAD agar lebih ringan
+      if (!check.ok) { // Cek status, bukan hanya status 200
+        url = APP_URL + "/assets/img/noImage.webp";
+      }
+    } catch (error) {
+      url = APP_URL + "/assets/img/noImage.webp"; // Jika terjadi error (misal, jaringan terputus)
+    }
+
     const result = await Swal.fire({
       html: `
         <div class=" min-w-96 text-left">
@@ -219,7 +230,7 @@ export function confirmData() {
               class="col-span-2 flex flex-col items-start rounded-xl border border-gray-200 bg-gray-50 p-3">
               <p class="mb-2 text-sm text-gray-700">Dokumentasi</p>
               <div class="relative mx-auto flex-none items-center gap-4 rounded-xl p-2">
-                <img class="h-52 w-52 rounded-xl object-cover transition duration-300 ease-in-out hover:scale-[2]" id="documentations" src="${APP_URL}${row.photo_collect_relasi[0].photourl}" alt="" onclick="javascript:void(0)" loading="lazy">
+                <img class="h-52 w-52 rounded-xl object-cover transition duration-300 ease-in-out hover:scale-[2]" id="documentations" src="${url}" alt="" onclick="javascript:void(0)" loading="lazy">
               </div>
             </div>
 

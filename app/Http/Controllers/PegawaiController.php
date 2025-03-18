@@ -152,6 +152,13 @@ class PegawaiController extends Controller
     public function showImages(Pegawai $pegawai)
     {
         $path = public_path('storage/' . $pegawai->storage);
+
+        if (!is_dir($path)) {
+            $images[] = asset('img/noImage.webp');
+            $images[] = asset('img/noImage.webp');
+            return $images;
+        }
+
         $files = File::files($path);
 
         $images = [];

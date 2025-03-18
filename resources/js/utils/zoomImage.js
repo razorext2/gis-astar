@@ -5,7 +5,7 @@ export function zoomImage() {
     Swal.fire({
       showCancelButton: false,
       showConfirmButton: false,
-      html: `<img src="${url}" class="w-full mx-auto rounded-xl" loading="lazy" />`,
+      html: `<img src="${url}" onerror="this.onerror=null; this.src='${APP_URL}/assets/img/noImage.webp';" class="w-full mx-auto rounded-xl" loading="lazy" />`,
     })
   })
 }
