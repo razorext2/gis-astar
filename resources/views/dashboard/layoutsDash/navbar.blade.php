@@ -45,8 +45,9 @@
 				id="user-menu-button" data-dropdown-toggle="dropdown" data-dropdown-placement="bottom-end"
 				data-dropdown-offset-distance="13" type="button" aria-expanded="false">
 				<span class="sr-only">Open user menu</span>
-				<img class="h-9 w-9 rounded-full" src="{{ asset('assets/img/profile-picture-5.jpg') }}" alt="user photo"
-					loading="lazy">
+				<img class="h-9 w-9 rounded-full object-cover"
+					src="{{ auth()->user()->profile_pic ? asset('storage/profile-pictures/' . auth()->user()->profile_pic) : asset('assets/img/profile-picture-5.jpg') }}"
+					alt="user photo" loading="lazy">
 			</button>
 
 			<div

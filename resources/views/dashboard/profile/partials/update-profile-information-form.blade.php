@@ -1,10 +1,10 @@
 <section>
 	<header>
-		<h2 class="dark:text-white text-lg font-medium text-gray-900">
-			{{ __('Profile Information') }}
+		<h2 class="text-lg font-medium text-gray-900 dark:text-white">
+			{{ __('Change your name and email') }}
 		</h2>
 
-		<p class="dark:text-gray-300 mt-1 text-sm text-gray-600">
+		<p class="mt-1 text-sm text-gray-600 dark:text-gray-300">
 			{{ __("Update your account's profile information and email address.") }}
 		</p>
 	</header>
@@ -43,7 +43,7 @@
 
 		<div class="flex items-center gap-6">
 			<button
-				class="dark:bg-blue-800 dark:hover:bg-blue-900 dark:text-white dark:ring-gray-700 inline-flex items-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-gray-900 ring-1 ring-blue-700 hover:bg-blue-800 hover:text-white focus:text-white focus:ring-4 focus:ring-blue-300"
+				class="inline-flex items-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-gray-900 ring-1 ring-blue-700 hover:bg-blue-800 hover:text-white focus:text-white focus:ring-4 focus:ring-blue-300 dark:bg-blue-800 dark:text-white dark:ring-gray-700 dark:hover:bg-blue-900"
 				type="submit">{{ __('Save') }}</button>
 		</div>
 	</form>

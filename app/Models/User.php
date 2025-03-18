@@ -28,7 +28,8 @@ class User extends Authenticatable
         'last_login',
         'is_active',
         'deactivation_at',
-        'deactivation_reason'
+        'deactivation_reason',
+        'profile_pic'
     ];
 
     /**

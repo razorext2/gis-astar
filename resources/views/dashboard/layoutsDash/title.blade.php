@@ -14,7 +14,7 @@
 	    'attendanceIn.*' => 'Absen Masuk',
 	    'attendanceOut.*' => 'Absen Keluar',
 	    'capture.*' => 'Rekam Absensi',
-	    'profile.*' => 'Profile - ' . Auth::user()->name,
+	    'profile.*' => 'Profile',
 	    'log.*' => 'Log Aktivitas',
 	    'users.*' => 'Users',
 	    'roles.*' => 'Roles',
