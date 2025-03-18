@@ -137,9 +137,7 @@ class DayoffController extends Controller
 	 */
 	public function show($id)
 	{
-		$data = Cache::remember('dayoff_data_' . $id, 300, function () use ($id) {
-			return Dayoff::with('pegawaiRelasi')->findOrFail($id);
-		});
+		$data = Dayoff::with('pegawaiRelasi', 'user')->findOrFail($id);
 
 		return view('dashboard.dayoff.detail', compact('data'));
 	}

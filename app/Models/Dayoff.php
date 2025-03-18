@@ -15,4 +15,9 @@ class Dayoff extends Model
     {
         return $this->belongsTo(Pegawai::class, 'kode_pegawai', 'kode_pegawai');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'validate_by', 'id');
+    }
 }
