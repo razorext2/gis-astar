@@ -24,7 +24,7 @@
 
 				<form class="mt-4" method="POST">
 					@csrf
-					<div class="mb-4 grid grid-cols-2 gap-6 sm:mb-5 sm:gap-6">
+					<div class="mb-4 grid grid-cols-2 gap-4 sm:mb-5">
 
 						<div class="w-full">
 							<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="name">Nama
@@ -86,6 +86,27 @@
 						</div>
 					</div>
 
+					<div class="mb-4 w-full">
+						<p class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Lampiran</p>
+						<p class="mb-2 text-xs text-red-500"> *Lampiran tidak dapat diubah setelah pengajuan diajukan. Lampiran dapat
+							berisi surat sakit, surat izin, surat absen, atau surat pulang cepat. </p>
+
+						<x-button.primary id="capture-button" type="button">
+							<x-slot name="icon">
+								<x-icons.plus class="icon h-5 w-5 text-blue-500 dark:text-white" />
+							</x-slot>
+							Ambil Foto
+						</x-button.primary>
+
+						<div class="relative overflow-auto">
+							<div class="flex overflow-x-auto" id="captured-images">
+								<!-- Thumbnail gambar yang diambil akan muncul di sini -->
+							</div>
+						</div>
+
+						<div class="mt-2 hidden text-sm text-red-500" id="alert-images"></div>
+					</div>
+
 					<div class="relative mb-4 w-full">
 						<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
 							Keterangan
@@ -110,12 +131,8 @@
 			</div>
 		</div>
 	</div>
+	@livewire('utils.camera-stream-modal')
 @endsection
 @push('script')
-	<script>
-		const storeUrl = "{{ route('dayoff-api.store') }}";
-		const searchUrl = "{{ route('pegawai.autocomplete') }}";
-		const uploadUrl = "{{ route('dayoff.uploadimage') }}";
-	</script>
 	@vite(['resources/js/pages/dayoff/add.js'])
 @endpush

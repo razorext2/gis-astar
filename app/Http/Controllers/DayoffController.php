@@ -116,22 +116,6 @@ class DayoffController extends Controller
 		return view('dashboard.dayoff.add');
 	}
 
-	public function uploadImage(Request $request)
-	{
-		$request->validate([
-			'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi file gambar
-		]);
-
-		if ($request->hasFile('image')) {
-			$image = $request->file('image');
-			$path = $image->store('uploads', 'public'); // Simpan file di folder 'public/uploads'
-
-			return response()->json(['url' => Storage::url($path)]); // Kembalikan URL gambar yang diupload
-		}
-
-		return response()->json(['error' => 'Gagal mengupload gambar'], 500);
-	}
-
 	/**
 	 * Display the specified resource.
 	 */

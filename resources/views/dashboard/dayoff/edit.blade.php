@@ -78,6 +78,24 @@
 					</div>
 				</div>
 
+				<div class="mb-4 w-full">
+					<p class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Lampiran</p>
+					<p class="mb-2 text-xs text-red-500"> *Lampiran tidak dapat diubah setelah pengajuan diajukan. Lampiran dapat
+						berisi surat sakit, surat izin, surat absen, atau surat pulang cepat. </p>
+
+					@php
+						$urls = json_decode($data->url, true);
+					@endphp
+
+					<div class="flex flex-row gap-x-4">
+						@foreach ($urls as $url => $key)
+							<img src="{{ $key }}" alt=""
+								class="w-56 rounded-lg transition-transform duration-300 hover:scale-110">
+						@endforeach
+					</div>
+
+				</div>
+
 				<div class="relative mb-4 w-full">
 					<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
 						Keterangan

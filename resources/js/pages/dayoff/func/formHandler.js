@@ -1,39 +1,53 @@
+import { capturedImages } from "../../../utils/cameraStream";
+import { showAlert } from "../../../utils/alert";
+
 export function addDataHandler() {
-  $('#store').click(function (e) {
+  $('#store').click(async function (e) {
     e.preventDefault();
 
     const $button = $(this);
     $button.prop('disabled', true); // Disable the button to prevent multiple clicks
 
     let formData = new FormData();
+
     formData.append("kode_pegawai", $("#kode_pegawai").val());
     formData.append("dayoff_for", $("#dayoff_for").val());
     formData.append("tgl_dari", $("#start-time").val());
     formData.append("tgl_hingga", $("#end-time").val());
     formData.append("keterangan", $("#keterangan").val());
-    formData.append("_token", $("meta[name='csrf-token']").attr("content"));
 
-    $.ajax({
-      url: `${APP_URL}/api/dayoff-api`,
-      type: "POST",
-      dataType: "json",
-      data: formData,
-      processData: false,
-      contentType: false,
-      success: function () {
-        Swal.fire({
-          icon: "success",
-          title: "Permohonan berhasil ditambahkan!",
-          showConfirmButton: false,
-          timer: 1000
-        });
-        setTimeout(() => window.location.href = `${APP_URL}/dashboard/dayoff`, 1000);
-      },
-      error: function (xhr) {
-        handleFormErrors(xhr.responseJSON.errors);
-        $button.prop('disabled', false); // Use the stored button reference
+    for (const [index, image] of capturedImages.entries()) {
+      const blob = await dataURItoBlob(image);
+      formData.append("images[]", blob, `image${index}.png`);
+    }
+
+    try {
+      const response = await axios.post(`${APP_URL}/api/dayoff-api`, formData);
+
+      if (response.data.success) {
+        showAlert('success', response.data.message);
+        setTimeout(() => window.location.href = `${APP_URL}/dashboard/dayoff`, 1500);
+      } else {
+        $button.prop('disabled', false);
+        handleFormErrors(response.data.data);
+        let err = null;
+        let data = response.data.data;
+
+        if (typeof data === 'object' && data !== null) {
+          let firstKey = Object.keys(data)[0];
+          if (firstKey && Array.isArray(data[firstKey])) {
+            err = data[firstKey][0]; // Ambil elemen pertama dari array dalam objek
+          }
+        } else {
+          err = data;
+        }
+
+        return showAlert('error', response.data.message, `Validasi data gagal. <br><b>${err}</b>`);
       }
-    });
+    } catch (error) {
+      $button.prop('disabled', false);
+      return showAlert('error', 'Terjadi kesalahan.', error.message);
+    }
   });
 }
 
@@ -66,33 +80,31 @@ export function editDataHandler() {
       },
       success: function () {
         // tampilkan alert
-        window.Swal.fire({
-          icon: "success",
-          title: "Permohonan berhasil diubah!",
-          showConfirmButton: false,
-          timer: 1000
-        });
-
+        showAlert('success', 'Permohonan berhasil diubah!');
         setTimeout(() => window.location.reload(), 1000);
       },
       error: function (xhr) {
         handleFormErrors(xhr.responseJSON.errors);
-        $button.prop('disabled', false); // Use the stored button reference
+        $button.prop('disabled', false);
       }
     });
   });
 }
 
 function handleFormErrors(errors) {
-  for (let field in errors) {
-    const alertElement = document.getElementById(`alert-${field}`);
-    if (errors[field]) {
-      alertElement.classList.remove('hidden');
-      alertElement.classList.add('block');
-      alertElement.innerHTML = errors[field][0];
-    } else {
-      alertElement.classList.remove('block');
-      alertElement.classList.add('hidden');
-    }
+  if (typeof errors === 'object') {
+    $.each(errors, function (field, errorMessages) {
+      var $alertElement = $(`#alert-${field}`);
+      if (errorMessages && errorMessages.length) {
+        $alertElement.removeClass('hidden').html(errorMessages[0]);
+      } else {
+        $alertElement.removeClass('block').addClass('hidden');
+      }
+    });
   }
+}
+
+async function dataURItoBlob(dataURI) {
+  const response = await axios.get(dataURI, { responseType: 'blob' });
+  return response.data;
 }
