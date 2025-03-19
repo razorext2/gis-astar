@@ -82,6 +82,7 @@ Route::middleware(['auth', 'throttle:medium'])->group(function () {
     // group ke rute dashboard.
     Route::prefix('dashboard')->as('')->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('dashboard');
+        Route::get('me', [ProfileController::class, 'show'])->name('profile.me');
         Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
