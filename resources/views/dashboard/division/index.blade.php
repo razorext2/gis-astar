@@ -3,11 +3,11 @@
 	<div class="relative grid grid-cols-1 gap-6">
 
 		<div
-			class="relative grid grid-cols-1 rounded-xl bg-white py-2 shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 lg:p-6">
+			class="relative grid grid-cols-1 rounded-xl bg-white py-2 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 lg:p-6">
 
 			<div class="flex flex-col px-3 md:mb-2 lg:p-0">
 				<div class="mb-2">
-					<span class="text-xl font-semibold text-gray-900 dark:bg-[#18181b] dark:text-white">
+					<span class="text-xl font-semibold text-gray-900 dark:bg-dark-primary dark:text-white">
 						Manajemen Divisi
 					</span>
 

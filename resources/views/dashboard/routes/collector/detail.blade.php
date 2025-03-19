@@ -14,7 +14,8 @@
 				</div>
 				{{-- endsearch --}}
 
-				<div class="w-full rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-[#18181b]">
+				<div
+					class="w-full rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-dark-primary">
 					<div class="mb-4 flex items-center gap-x-3">
 						<div class="max-w-xs">
 							<x-button.link class="w-fit ring-1 ring-red-700 dark:bg-red-800 dark:text-white"
@@ -67,10 +68,12 @@
 												class="me-2 ms-3 rounded bg-green-100 p-0.5 text-sm font-medium text-green-800 dark:bg-green-900 dark:text-green-300">Approved</span>
 										@elseif($data->status == 2)
 											<span
-												class="me-2 ms-3 rounded bg-yellow-100 p-0.5 text-sm font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">Verify needed</span>
+												class="me-2 ms-3 rounded bg-yellow-100 p-0.5 text-sm font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">Verify
+												needed</span>
 										@elseif($data->status == 4)
 											<span
-												class="me-2 ms-3 rounded bg-yellow-100 p-0.5 text-sm font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">Revision needed</span>
+												class="me-2 ms-3 rounded bg-yellow-100 p-0.5 text-sm font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">Revision
+												needed</span>
 										@else
 											<span
 												class="me-2 ms-3 rounded bg-red-100 p-0.5 text-sm font-medium text-red-800 dark:bg-red-900 dark:text-red-300">Rejected</span>
@@ -94,7 +97,7 @@
 				</div>
 
 				<div
-					class="h-max w-full rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-[#18181b]">
+					class="h-max w-full rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-dark-primary">
 					<div class="mb-4">
 						<p class="text-xl font-bold leading-none text-gray-900 dark:text-white md:text-2xl">
 							Mapping

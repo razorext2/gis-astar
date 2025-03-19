@@ -2,7 +2,7 @@
 	class="fixed bottom-28 z-50 flex h-auto w-full scale-90 transform items-center divide-x rounded-lg opacity-0 transition duration-300 md:bottom-5"
 	id="toast-bottom-right" role="alert">
 	<div
-		class="toast-bottom-right dark:bg-[#18181b] dark:text-gray-100 dark:ring-gray-600 mx-auto flex w-full max-w-xs items-center rounded-lg bg-white p-4 text-gray-500 shadow-md ring-1 ring-gray-800 md:fixed md:bottom-0 md:right-5 md:mx-0"
+		class="toast-bottom-right mx-auto flex w-full max-w-xs items-center rounded-lg bg-white p-4 text-gray-500 shadow-md ring-1 ring-gray-800 dark:bg-dark-primary dark:text-gray-100 dark:ring-gray-600 md:fixed md:bottom-0 md:right-5 md:mx-0"
 		id="toast-success" role="alert">
 		<div class="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500">
 			<svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -11,7 +11,7 @@
 			</svg>
 			<span class="sr-only">Check icon</span>
 		</div>
-		<div class="dark:text-white ms-3 text-sm font-normal text-black">{{ session('success') }}</div>
+		<div class="ms-3 text-sm font-normal text-black dark:text-white">{{ session('success') }}</div>
 		<button
 			class="-mx-1.5 -my-1.5 ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-900 focus:ring-2 focus:ring-gray-300"
 			data-dismiss-target="#toast-success" type="button" aria-label="Close">

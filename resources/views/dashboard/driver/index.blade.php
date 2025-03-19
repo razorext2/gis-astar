@@ -15,7 +15,7 @@
 		@endcan
 
 		<div
-			class="relative grid grid-cols-1 rounded-xl bg-white py-2 shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 lg:p-6">
+			class="relative grid grid-cols-1 rounded-xl bg-white py-2 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 lg:p-6">
 
 			<livewire:table-refresher table-name="DriverTable" />
 

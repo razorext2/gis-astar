@@ -6,7 +6,7 @@
 	<div class="mb-4 grid grid-cols-1 gap-4 xl:gap-6">
 
 		<div
-			class="grid max-h-36 w-full grid-cols-3 rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b] xl:p-6">
+			class="grid max-h-36 w-full grid-cols-3 rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-primary xl:p-6">
 			<div class="col-span-2">
 				<div>
 					<div class="flex flex-row">
@@ -31,7 +31,8 @@
 		</div>
 
 		@can('sales-create')
-			<div class="grid w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b] xl:p-6">
+			<div
+				class="grid w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-primary xl:p-6">
 
 				<div>
 					<h2 class="font-base text-sm text-gray-400">
@@ -50,7 +51,7 @@
 		@endcan
 
 		<div
-			class="hidden w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b] lg:block xl:p-6">
+			class="hidden w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-primary lg:block xl:p-6">
 			<div>
 				<div class="flex flex-row">
 					<h2 class="font-base text-sm text-gray-400">
@@ -162,7 +163,7 @@
 
 		{{-- All Menu --}}
 		<div
-			class="w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b] md:hidden lg:col-span-2 xl:col-span-3 xl:p-6">
+			class="w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-primary md:hidden lg:col-span-2 xl:col-span-3 xl:p-6">
 			<div>
 				<div class="flex flex-row">
 					<h2 class="font-base text-sm text-gray-400">
@@ -180,7 +181,7 @@
 		{{-- All Menu --}}
 
 		<div
-			class="w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b] lg:hidden xl:p-6">
+			class="w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-primary lg:hidden xl:p-6">
 			<div>
 				<div class="flex flex-row">
 					<h2 class="font-base text-sm text-gray-400">

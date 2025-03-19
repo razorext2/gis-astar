@@ -1,7 +1,7 @@
-<div class="dark:bg-[#18181b] mt-3 h-auto w-full rounded-lg lg:px-0">
-	<div class="min-h-10 dark:border-gray-700 h-auto rounded-lg p-3 text-left border border-gray-200">
-		<p class="dark:text-white text-sm font-bold text-black">Log</p>
-		<hr class="dark:bg-[#18181b] my-2 bg-black">
-		<pre class="dark:text-white max-h-32 overflow-y-auto scroll-smooth" id="consoleOutput"></pre>
+<div class="mt-3 h-auto w-full rounded-lg dark:bg-dark-primary lg:px-0">
+	<div class="h-auto min-h-10 rounded-lg border border-gray-200 p-3 text-left dark:border-gray-700">
+		<p class="text-sm font-bold text-black dark:text-white">Log</p>
+		<hr class="my-2 bg-black dark:bg-dark-primary">
+		<pre class="max-h-32 overflow-y-auto scroll-smooth dark:text-white" id="consoleOutput"></pre>
 	</div>
 </div>

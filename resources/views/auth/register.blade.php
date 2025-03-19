@@ -1,8 +1,9 @@
 <x-guest-layout>
 
 	<div class="mx-auto w-full md:mx-0 md:w-full lg:w-9/12">
-		<div class="dark:bg-[#18181b] dark:ring-1 dark:ring-gray-700 flex w-full flex-col rounded-xl bg-white p-10 shadow-xl">
-			<h2 class="dark:text-white mb-5 text-left text-2xl font-bold text-gray-800">
+		<div
+			class="flex w-full flex-col rounded-xl bg-white p-10 shadow-xl dark:bg-dark-primary dark:ring-1 dark:ring-gray-700">
+			<h2 class="mb-5 text-left text-2xl font-bold text-gray-800 dark:text-white">
 				Register
 			</h2>
 			<form class="w-full" method="POST" action="{{ route('register') }}">
@@ -60,7 +61,7 @@
 
 					<div class="mt-5 flex items-center justify-end">
 						@if (Route::has('login'))
-							<a class="dark:text-white w-full shrink font-medium text-gray-500" href="{{ route('login') }}">
+							<a class="w-full shrink font-medium text-gray-500 dark:text-white" href="{{ route('login') }}">
 								{{ __('Already have an account?') }}
 							</a>
 						@endif

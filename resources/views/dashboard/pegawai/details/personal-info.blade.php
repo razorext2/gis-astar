@@ -1,7 +1,7 @@
 @extends('dashboard.pegawai.detail')
 @section('menus')
 	<div
-		class="mb-8 grid gap-6 rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-[#18181b] xl:grid-cols-2">
+		class="mb-8 grid gap-6 rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-dark-primary xl:grid-cols-2">
 		<div class="w-full">
 			<div class="grid rounded-xl">
 				<div class="relative w-full">
@@ -161,7 +161,7 @@
 								</div>
 
 								<div
-									class="invisible absolute z-10 inline-block rounded-lg border border-gray-200 bg-white p-2 text-sm text-gray-500 opacity-0 transition-opacity duration-300 dark:border-gray-500 dark:bg-[#18181b] dark:text-gray-400"
+									class="invisible absolute z-10 inline-block rounded-lg border border-gray-200 bg-white p-2 text-sm text-gray-500 opacity-0 transition-opacity duration-300 dark:border-gray-500 dark:bg-dark-primary dark:text-gray-400"
 									id="popover-click-{{ $date }}" data-popover role="tooltip">
 
 									<div class="popover-content max-h-[250px] overflow-y-auto">

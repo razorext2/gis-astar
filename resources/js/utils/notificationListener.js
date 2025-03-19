@@ -99,7 +99,7 @@ export function handleAnnouncement(data) {
 	$('#notification-alert').addClass('hidden');
 
 	container.prepend(`
-		<div class="relative mb-6 flex items-center gap-x-2 rounded-xl border-x border-b border-t-4 border-x-gray-200 border-b-gray-200 border-t-red-300 bg-white p-2 text-gray-600 dark:border-x-gray-700 dark:border-b-gray-700 dark:border-t-red-800 dark:bg-[#18181b] dark:text-white md:gap-x-4 md:p-4" id="broadcast-alert" role="alert">
+		<div class="relative mb-6 flex items-center gap-x-2 rounded-xl border-x border-b border-t-4 border-x-gray-200 border-b-gray-200 border-t-red-300 bg-white p-2 text-gray-600 dark:border-x-gray-700 dark:border-b-gray-700 dark:border-t-red-800 dark:bg-dark-primary dark:text-white md:gap-x-4 md:p-4" id="broadcast-alert" role="alert">
 			<div class="absolute -top-3.5 left-4 items-center justify-center rounded-lg border-t border-red-300 bg-white px-2 py-1 text-xs font-semibold text-red-700 dark:border-red-800">
 				<span class="capitalize" id="announcement-title">${data.title}</span>
 			</div>

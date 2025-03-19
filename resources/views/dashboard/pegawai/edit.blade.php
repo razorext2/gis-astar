@@ -4,7 +4,7 @@
 		<div class="w-full space-y-6 xl:col-span-3">
 			<form id="photoForm" action="{{ route('pegawai.update', $pegawai) }}" method="POST" enctype="multipart/form-data">
 				<div
-					class="grid gap-6 rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 sm:p-6 lg:grid-cols-2">
+					class="grid gap-6 rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 sm:p-6 lg:grid-cols-2">
 					<div class="max-w-xl">
 						<header class="flex flex-row">
 							<a
@@ -187,7 +187,7 @@
 
 		<div class="w-full space-y-4">
 			<header
-				class="flex flex-row rounded-xl bg-white p-4 ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 sm:p-6">
+				class="flex flex-row rounded-xl bg-white p-4 ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 sm:p-6">
 				<h2 class="text-lg font-medium text-gray-900 dark:text-white">
 					{{ __('Foto Terdaftar') }}
 				</h2>
@@ -196,7 +196,7 @@
 
 				@foreach ($images as $image)
 					@if (!is_null($image))
-						<div class="rounded-xl bg-white p-1 ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700">
+						<div class="rounded-xl bg-white p-1 ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700">
 							<img class="h-56 w-full rounded-xl border border-gray-500 object-cover blur-sm hover:blur-none"
 								src="{{ asset('storage/' . $pegawai->storage . $image) }}" alt="" loading="lazy">
 						</div>

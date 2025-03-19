@@ -2,7 +2,7 @@
 @section('subcontent')
 	<div class="flex h-auto items-center justify-center">
 		<div
-			class="grid w-full grid-cols-2 gap-2 rounded-xl bg-white p-2 shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 md:gap-4 md:p-6">
+			class="grid w-full grid-cols-2 gap-2 rounded-xl bg-white p-2 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 md:gap-4 md:p-6">
 
 			{{-- filter --}}
 			<div class="col-span-2 mb-4">
@@ -39,15 +39,16 @@
 			{{-- end filter --}}
 
 			<div class="col-span-2" x-data="{ openRow: null }">
-				<x-dashboard.table id="dataTable" data-url="{{ route('collect-task.showdata') }}?status=on-progress" :tablename="[
-				    '0' => '#',
-				    '1' => 'Aksi',
-				    '2' => 'Tipe',
-				    '3' => 'Nama Customer',
-				    '4' => 'Jadwal',
-				    '5' => 'Tagihan',
-				    '6' => 'Kontak',
-				]" />
+				<x-dashboard.table id="dataTable" data-url="{{ route('collect-task.showdata') }}?status=on-progress"
+					:tablename="[
+					    '0' => '#',
+					    '1' => 'Aksi',
+					    '2' => 'Tipe',
+					    '3' => 'Nama Customer',
+					    '4' => 'Jadwal',
+					    '5' => 'Tagihan',
+					    '6' => 'Kontak',
+					]" />
 			</div>
 		</div>
 	</div>

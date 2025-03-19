@@ -1,5 +1,5 @@
 <div class="fixed bottom-0 left-1/2 z-[51] w-full max-w-lg -translate-x-1/2 md:hidden">
-	<div class="dark:bg-[#18181b] dark:border-gray-700 h-16 w-full rounded-t-2xl border-t border-gray-200 bg-white">
+	<div class="h-16 w-full rounded-t-2xl border-t border-gray-200 bg-white dark:border-gray-700 dark:bg-dark-primary">
 		<div class="mx-auto grid h-full max-w-lg grid-cols-5">
 
 			<x-drawer.button href="{{ route('landing.page') }}" :label="'Home'" :active="Route::is('landing.page')">
@@ -16,10 +16,10 @@
 
 			<div class="flex items-center justify-center">
 				<a
-					class="hover:size-16 group absolute bottom-7 inline-flex h-14 w-14 items-center justify-center rounded-full bg-red-600 font-medium outline outline-8 outline-red-300 hover:bottom-6 hover:bg-red-700 hover:outline-red-200"
+					class="group absolute bottom-7 inline-flex h-14 w-14 items-center justify-center rounded-full bg-red-600 font-medium outline outline-8 outline-red-300 hover:bottom-6 hover:size-16 hover:bg-red-700 hover:outline-red-200"
 					href="">
 
-					<svg class="group-hover:size-9 h-8 w-8 stroke-white group-hover:stroke-gray-100" viewBox="0 0 24 24" fill="none"
+					<svg class="h-8 w-8 stroke-white group-hover:size-9 group-hover:stroke-gray-100" viewBox="0 0 24 24" fill="none"
 						xmlns="http://www.w3.org/2000/svg">
 						<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
 						<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>

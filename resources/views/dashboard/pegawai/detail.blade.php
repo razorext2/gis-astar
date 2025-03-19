@@ -1,6 +1,6 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-	<div class="mb-8 rounded-xl border border-gray-200 bg-white p-6 py-4 dark:border-gray-700 dark:bg-[#18181b]">
+	<div class="mb-8 rounded-xl border border-gray-200 bg-white p-6 py-4 dark:border-gray-700 dark:bg-dark-primary">
 		<div class="w-full">
 			<div class="flex flex-row items-center gap-x-4">
 				<div class="max-w-xs">

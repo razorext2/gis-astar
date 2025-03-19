@@ -1,7 +1,7 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
 	<div
-		class="relative rounded-xl bg-white/70 p-0 ring-1 ring-gray-200 dark:bg-[#18181b]/70 dark:shadow-none dark:ring-gray-700 lg:max-w-screen-lg lg:p-4"
+		class="relative rounded-xl bg-white/70 p-0 ring-1 ring-gray-200 dark:bg-dark-primary/70 dark:shadow-none dark:ring-gray-700 lg:max-w-screen-lg lg:p-4"
 		id="Scan" d-aos="zoom-in-up" data-aos-delay="50">
 		<div class="grid h-auto w-full grid-cols-1 lg:grid-cols-3 lg:gap-4">
 
@@ -22,7 +22,7 @@
 
 			<!-- #region -->
 			<div class="col-span-1 px-3 pb-3 md:px-3 md:pb-3 lg:col-span-1 lg:p-0" data-aos="zoom-in" data-aos-delay="100">
-				<div class="mb-4 rounded-lg p-2 text-center ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700"
+				<div class="mb-4 rounded-lg p-2 text-center ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700"
 					data-aos="fade-left" data-aos-delay="100">
 					<p class="text-xl font-bold text-black dark:text-white">INFORMASI</p>
 				</div>

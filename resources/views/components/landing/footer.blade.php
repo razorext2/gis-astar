@@ -1,4 +1,4 @@
-<footer class="border-t border-gray-200 bg-white pb-20 dark:border-gray-700 dark:bg-[#18181b] md:p-0">
+<footer class="border-t border-gray-200 bg-white pb-20 dark:border-gray-700 dark:bg-dark-primary md:p-0">
 	<div class="mx-auto w-full max-w-screen-xl py-5">
 		<x-landing.paragraph class="text-md block text-center">
 			© <?= date('Y') ?>

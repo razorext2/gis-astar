@@ -1,4 +1,4 @@
-<nav class="border-b border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-[#18181b] md:block lg:p-8">
+<nav class="border-b border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-dark-primary md:block lg:p-8">
 	<div class="center mx-auto flex max-w-screen-xl flex-wrap items-center justify-between">
 
 		<a class="flex items-center space-x-3 md:mx-auto md:mb-4 lg:mx-0 lg:mb-0 rtl:space-x-reverse" href="#">
@@ -15,7 +15,7 @@
 		<div class="mx-auto hidden w-full items-center justify-between font-medium md:order-1 md:flex md:w-auto lg:mx-0"
 			id="mega-menu-full">
 			<ul
-				class="mt-4 flex flex-col items-center rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#18181b] md:mt-0 md:flex-row md:space-x-8 md:border-0 md:bg-white md:p-0 rtl:space-x-reverse">
+				class="mt-4 flex flex-col items-center rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-primary md:mt-0 md:flex-row md:space-x-8 md:border-0 md:bg-white md:p-0 rtl:space-x-reverse">
 				<x-landing.nav-link href="{{ route('landing.page') }}" :active="request()->is('/')">Home</x-landing.nav-link>
 				<x-landing.nav-link href="{{ route('photo.regist') }}" :active="request()->is('photo-regist')">Registrasi</x-landing.nav-link>
 				<x-landing.nav-link href="#scan" :active="request()->is('#scan')">Absen</x-landing.nav-link>
@@ -31,7 +31,7 @@
 		</div>
 	</div>
 
-	<div class="mt-1 hidden bg-white dark:bg-[#18181b] md:bg-white" id="mega-menu-full-dropdown">
+	<div class="mt-1 hidden bg-white dark:bg-dark-primary md:bg-white" id="mega-menu-full-dropdown">
 		<div
 			class="mx-auto grid max-w-screen-lg px-4 py-5 text-gray-900 transition duration-1000 ease-in-out dark:text-white sm:grid-cols-1 md:px-6">
 			<ul class="space-y-4 text-left text-gray-500">

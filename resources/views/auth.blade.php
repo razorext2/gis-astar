@@ -40,7 +40,7 @@
 				x-transition:enter-end="transform scale-100 opacity-100" x-transition:leave="transition ease-out duration-300"
 				x-transition:leave-start="transform scale-100 opacity-100" x-transition:leave-end="transform scale-90 opacity-0">
 				<div
-					class="mb-4 flex w-full max-w-xs items-center rounded-lg bg-white p-4 text-gray-500 shadow ring-1 ring-gray-200 dark:bg-[#18181b] dark:text-white dark:ring-gray-700"
+					class="mb-4 flex w-full max-w-xs items-center rounded-lg bg-white p-4 text-gray-500 shadow ring-1 ring-gray-200 dark:bg-dark-primary dark:text-white dark:ring-gray-700"
 					id="toast-success" role="alert">
 					<div
 						class="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:text-white">

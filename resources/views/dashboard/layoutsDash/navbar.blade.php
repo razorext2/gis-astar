@@ -1,5 +1,5 @@
 <nav
-	class="fixed top-0 z-50 w-full border-b border-gray-200 bg-white px-4 py-2.5 dark:border-[#232327] dark:bg-[#18181b] lg:px-6">
+	class="fixed top-0 z-50 w-full border-b border-gray-200 bg-white px-4 py-2.5 dark:border-[#232327] dark:bg-dark-primary lg:px-6">
 	<div class="flex flex-wrap items-center justify-between">
 		<div class="flex items-center justify-start">
 
@@ -24,7 +24,7 @@
 
 			<!-- Dropdown menu -->
 			<div
-				class="z-50 my-4 me-4 hidden max-w-full items-center rounded-b-lg bg-white shadow-md dark:border-x dark:border-b dark:border-gray-700 dark:bg-[#18181b] md:max-w-xl"
+				class="z-50 my-4 me-4 hidden max-w-full items-center rounded-b-lg bg-white shadow-md dark:border-x dark:border-b dark:border-gray-700 dark:bg-dark-primary md:max-w-xl"
 				id="notification-dropdown">
 				<div class="bg-gray-50 p-4 font-medium text-gray-700 dark:bg-gray-800 dark:text-white">
 					Notifikasi
@@ -51,7 +51,7 @@
 			</button>
 
 			<div
-				class="z-50 my-4 hidden w-56 list-none divide-y divide-gray-100 rounded-b-lg bg-white text-base shadow-md dark:divide-gray-600 dark:border-x dark:border-b dark:border-gray-700 dark:bg-[#18181b]"
+				class="z-50 my-4 hidden w-56 list-none divide-y divide-gray-100 rounded-b-lg bg-white text-base shadow-md dark:divide-gray-600 dark:border-x dark:border-b dark:border-gray-700 dark:bg-dark-primary"
 				id="dropdown">
 				<div class="px-4 py-3">
 					<span class="block text-sm font-semibold text-gray-900 dark:text-white">{{ auth()->user()->name }}</span>
@@ -62,7 +62,7 @@
 
 						<a
 							class="block px-4 py-2 text-sm hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-							href="#">My profile</a>
+							href="{{ route('profile.me') }}">My profile</a>
 
 					</li>
 					<li>

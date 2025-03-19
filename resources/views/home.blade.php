@@ -9,7 +9,7 @@
 		</x-landing.header-text>
 
 		<div
-			class="relative mx-2 mb-5 rounded-lg border border-gray-200 bg-white/70 shadow-lg dark:border-gray-700 dark:bg-[#18181b]/70 lg:mx-auto lg:p-4"
+			class="relative mx-2 mb-5 rounded-lg border border-gray-200 bg-white/70 shadow-lg dark:border-gray-700 dark:bg-dark-primary/70 lg:mx-auto lg:p-4"
 			id="scan" data-aos="zoom-in-up" data-aos-delay="50">
 
 			<div class="grid h-auto grid-cols-1 lg:w-[900px] lg:grid-cols-3 lg:gap-4">
@@ -26,7 +26,7 @@
 
 				<!-- #region -->
 				<div class="col-span-1 px-3 pb-3 md:px-3 md:pb-3 lg:col-span-1 lg:p-0" data-aos="zoom-in" data-aos-delay="100">
-					<div class="mb-4 rounded-lg border border-gray-200 p-2 text-center dark:border-gray-700 dark:bg-[#18181b]"
+					<div class="mb-4 rounded-lg border border-gray-200 p-2 text-center dark:border-gray-700 dark:bg-dark-primary"
 						data-aos="fade-left" data-aos-delay="100">
 						<x-landing.paragraph class="text-xl font-bold">INFORMASI</x-landing.paragraph>
 					</div>

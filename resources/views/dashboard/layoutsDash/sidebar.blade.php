@@ -101,7 +101,7 @@
 
 			<li x-data="{ absensi: {{ Route::is('attendanceIn.index') || Route::is('attendanceOut.index') ? 'true' : 'false' }} }">
 				<button
-					class="{{ Route::is('attendanceIn.index') || Route::is('attendanceOut.index') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-[#18181b] hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
+					class="{{ Route::is('attendanceIn.index') || Route::is('attendanceOut.index') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
 					type="button" aria-controls="absensi-dropdown" @click="absensi = !absensi" :aria-expanded="absensi">
 					<x-icons.grid-plus
 						class="{{ Route::is('attendanceIn.index') || Route::is('attendanceOut.index') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
@@ -120,7 +120,7 @@
 						<a
 							class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
 							href="{{ route('attendanceIn.index') }}"
-							wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-[#18181b]"
+							wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-dark-primary"
 							wire:navigate>
 							<x-icons.arrow-left-bracket class="h-6 w-6 group-hover:text-red-600" />
 							<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Masuk</span>
@@ -131,7 +131,7 @@
 						<a
 							class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
 							href="{{ route('attendanceOut.index') }}"
-							wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-[#18181b]"
+							wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-dark-primary"
 							wire:navigate>
 							<x-icons.arrow-right-bracket class="h-6 w-6 group-hover:text-red-600" />
 							<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Keluar</span>
@@ -143,7 +143,7 @@
 			@if (auth()->user()->hasAnyPermission(['collect-task-list', 'collect-task-list-ppn', 'collect-idy-ppn-list']))
 				<li x-data="{ lokasi: {{ Route::is('collect-task.*') || Route::is('collect-task-ppn.*') || Route::is('collect-idy-ppn.*') ? 'true' : 'false' }} }">
 					<button
-						class="{{ Route::is('collect-task.*') || Route::is('collect-task-ppn.*') || Route::is('collect-idy-ppn.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-[#18181b] hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
+						class="{{ Route::is('collect-task.*') || Route::is('collect-task-ppn.*') || Route::is('collect-idy-ppn.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
 						type="button" aria-controls="lokasi-dropdown" @click="lokasi = !lokasi" :aria-expanded="lokasi">
 
 						<x-icons.wallet
@@ -161,7 +161,7 @@
 						@can('collect-task-list')
 							<li>
 								<a
-									class="{{ Route::is('collect-task.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									class="{{ Route::is('collect-task.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
 									href="{{ route('collect-task.index') }}" wire:navigate>
 									<x-icons.cash
 										class="{{ Route::is('collect-task.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
@@ -173,7 +173,7 @@
 						@can('collect-task-ppn-list')
 							<li>
 								<a
-									class="{{ Route::is('collect-task-ppn.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									class="{{ Route::is('collect-task-ppn.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
 									href="{{ route('collect-task-ppn.index') }}" wire:navigate>
 									<x-icons.sale-percent
 										class="{{ Route::is('collect-task-ppn.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
@@ -185,7 +185,7 @@
 						@can('collect-idy-ppn-list')
 							<li>
 								<a
-									class="{{ Route::is('collect-idy-ppn.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									class="{{ Route::is('collect-idy-ppn.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
 									href="{{ route('collect-idy-ppn.index') }}" wire:navigate>
 									<x-icons.cash-register
 										class="{{ Route::is('collect-idy-ppn.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
@@ -200,7 +200,7 @@
 			@if (auth()->user()->hasAnyPermission(['driver-approve', 'collect-approve', 'sales-approve']))
 				<li x-data="{ routes: {{ Route::is('routes.*') ? 'true' : 'false' }} }">
 					<button
-						class="{{ Route::is('routes.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-[#18181b] hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
+						class="{{ Route::is('routes.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
 						type="button" aria-controls="routes-dropdown" @click="routes = !routes" :aria-expanded="routes">
 
 						<x-icons.map-pin-alt
@@ -219,7 +219,7 @@
 						@can('driver-approve')
 							<li>
 								<a
-									class="{{ Route::is('routes.driver') || Route::is('routes.driver.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									class="{{ Route::is('routes.driver') || Route::is('routes.driver.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
 									href="{{ route('routes.driver') }}" wire:navigate>
 									<x-icons.angle-right
 										class="{{ Route::is('routes.driver') || Route::is('routes.driver.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
@@ -231,7 +231,7 @@
 						@can('collect-approve')
 							<li>
 								<a
-									class="{{ Route::is('routes.collector') || Route::is('routes.collector.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									class="{{ Route::is('routes.collector') || Route::is('routes.collector.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
 									href="{{ route('routes.collector') }}" wire:navigate>
 									<x-icons.angle-right
 										class="{{ Route::is('routes.collector') || Route::is('routes.collector.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
@@ -243,7 +243,7 @@
 						@can('sales-approve')
 							<li>
 								<a
-									class="{{ Route::is('routes.sales') || Route::is('routes.sales.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									class="{{ Route::is('routes.sales') || Route::is('routes.sales.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
 									href="{{ route('routes.sales') }}" wire:navigate>
 									<x-icons.angle-right
 										class="{{ Route::is('routes.sales') || Route::is('routes.sales.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
@@ -261,7 +261,7 @@
 				<li>
 					<a href="{{ route('driver.index') }}"
 						class="group flex flex-row items-center rounded-xl p-2 text-gray-900 hover:text-red-600 dark:text-gray-300"
-						wire:navigate wire:current.href="!text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]">
+						wire:navigate wire:current.href="!text-red-600 font-bold bg-gray-100 dark:bg-dark-primary">
 
 						<x-icons.truck wire:current="!text-red-600" class="h-6 w-6 group-hover:text-red-600" />
 						<span class="ms-3 inline-flex text-sm group-hover:text-red-600">
@@ -339,7 +339,7 @@
 			@if (auth()->user()->hasAnyPermission(['divisi-list', 'placement-list']))
 				<li x-data="{ lokasi: {{ Route::is('division.*') || Route::is('placement.*') ? 'true' : 'false' }} }">
 					<button
-						class="{{ Route::is('division.*') || Route::is('placement.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-[#18181b] hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
+						class="{{ Route::is('division.*') || Route::is('placement.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
 						type="button" aria-controls="lokasi-dropdown" @click="lokasi = !lokasi" :aria-expanded="lokasi">
 
 						<x-icons.map-pin
@@ -359,7 +359,7 @@
 						@can('divisi-list')
 							<li>
 								<a
-									class="{{ Route::is('division.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									class="{{ Route::is('division.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
 									href="{{ route('division.index') }}" wire:navigate>
 									<x-icons.object-column
 										class="{{ Route::is('division.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
@@ -371,7 +371,7 @@
 						@can('placement-list')
 							<li>
 								<a
-									class="{{ Route::is('placement.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									class="{{ Route::is('placement.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
 									href="{{ route('placement.index') }}" wire:navigate>
 									<x-icons.landmark
 										class="{{ Route::is('placement.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
@@ -386,7 +386,7 @@
 			@if (auth()->user()->hasAnyPermission(['users-list', 'roles-list', 'permissions-list']))
 				<li x-data="{ usermanage: {{ Route::is('users.*') || Route::is('permissions.*') || Route::is('roles.*') ? 'true' : 'false' }} }">
 					<button
-						class="{{ Route::is('users.*') || Route::is('permissions.*') || Route::is('roles.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-[#18181b] hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
+						class="{{ Route::is('users.*') || Route::is('permissions.*') || Route::is('roles.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
 						type="button" aria-controls="user-dropdown" @click="usermanage = !usermanage" :aria-expanded="usermanage">
 						<x-icons.user-setting
 							class="{{ Route::is('users.*') || Route::is('permissions.*') || Route::is('roles.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
@@ -406,7 +406,7 @@
 						@can('users-list')
 							<li>
 								<a
-									class="{{ Route::is('users.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									class="{{ Route::is('users.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
 									href="{{ route('users.index') }}" wire:navigate>
 									<x-icons.profile-card
 										class="{{ Route::is('users.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
@@ -418,7 +418,7 @@
 						@can('roles-list')
 							<li>
 								<a
-									class="{{ Route::is('roles.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									class="{{ Route::is('roles.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
 									href="{{ route('roles.index') }}" wire:navigate>
 									<x-icons.badge-check
 										class="{{ Route::is('roles.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
@@ -430,7 +430,7 @@
 						@can('permissions-list')
 							<li>
 								<a
-									class="{{ Route::is('permissions.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									class="{{ Route::is('permissions.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
 									href="{{ route('permissions.index') }}" wire:navigate>
 									<x-icons.adjustment
 										class="{{ Route::is('permissions.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
@@ -446,7 +446,7 @@
 			@if (auth()->user()->hasAnyPermission(['announcement-list', 'log-list', 'backup-list']))
 				<li x-data="{ system: {{ Route::is('announcement.*') || Route::is('log.*') || Route::is('backup.*') ? 'true' : 'false' }} }">
 					<button
-						class="{{ Route::is('announcement.*') || Route::is('log.*') || Route::is('backup.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-[#18181b]' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-[#18181b] hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
+						class="{{ Route::is('announcement.*') || Route::is('log.*') || Route::is('backup.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
 						type="button" aria-controls="system-dropdown" @click="system = !system" :aria-expanded="system">
 						<x-icons.computer
 							class="{{ Route::is('announcement.*') || Route::is('log.*') || Route::is('backup.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
@@ -468,7 +468,7 @@
 								<a
 									class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
 									href="{{ route('announcement.index') }}" wire:navigate
-									wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-[#18181b]">
+									wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-dark-primary">
 									<x-icons.bullhorn class="h-6 w-6 group-hover:text-red-600" />
 									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Pemberitahuan</span>
 								</a>
@@ -480,7 +480,7 @@
 								<a
 									class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
 									href="{{ route('log.index') }}" wire:navigate
-									wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-[#18181b]">
+									wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-dark-primary">
 									<x-icons.window class="h-6 w-6 group-hover:text-red-600" />
 									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Log Aktivitas</span>
 								</a>
@@ -492,7 +492,7 @@
 								<a
 									class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
 									href="{{ route('backup.index') }}"
-									wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-[#18181b]"
+									wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-dark-primary"
 									wire:navigate>
 									<x-icons.filezip class="h-6 w-6 group-hover:text-red-600" />
 									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Manage Backups</span>

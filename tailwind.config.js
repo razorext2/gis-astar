@@ -28,6 +28,7 @@ export default {
             },
             colors: {
                 "pg-primary": colors.zinc,
+                "dark-primary": '#18181b',
             },
         },
     },

@@ -5,7 +5,7 @@
 			@csrf
 			<div class="w-full md:max-w-lg">
 				<div class="w-full space-y-6 xl:col-span-2">
-					<div class="rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 sm:p-6">
+					<div class="rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 sm:p-6">
 						<div class="max-w-xl">
 							<header class="flex flex-row gap-x-3">
 								<div class="max-w-xs">

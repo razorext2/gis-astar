@@ -2,7 +2,7 @@
 @section('content')
 	<div class="grid gap-4 lg:grid-cols-2">
 		<div
-			class="col-span-2 grid w-full grid-cols-2 gap-4 rounded-lg bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 sm:p-8">
+			class="col-span-2 grid w-full grid-cols-2 gap-4 rounded-lg bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 sm:p-8">
 
 			<div class="col-span-2 lg:col-span-1" x-data="{ open: false }">
 				<header class="mb-4">
@@ -47,21 +47,21 @@
 		</div>
 
 		<div
-			class="col-span-2 rounded-lg bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 sm:p-8 lg:col-span-1">
+			class="col-span-2 rounded-lg bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 sm:p-8 lg:col-span-1">
 			<div class="w-full">
 				@include('dashboard.profile.partials.update-profile-information-form')
 			</div>
 		</div>
 
 		<div
-			class="col-span-2 rounded-lg bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 sm:p-8 lg:col-span-1">
+			class="col-span-2 rounded-lg bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 sm:p-8 lg:col-span-1">
 			<div class="w-full">
 				@include('dashboard.profile.partials.update-password-form')
 			</div>
 		</div>
 
 		<div
-			class="col-span-2 rounded-lg bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-[#18181b] dark:ring-gray-700 sm:p-8">
+			class="col-span-2 rounded-lg bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 sm:p-8">
 			<div class="w-full">
 				@include('dashboard.profile.partials.delete-user-form')
 			</div>

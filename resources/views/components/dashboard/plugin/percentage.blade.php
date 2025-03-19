@@ -1,5 +1,5 @@
 <div
-	class="w-full rounded-lg border border-gray-200 bg-white p-4 text-right transition-transform duration-500 hover:z-10 hover:scale-105 dark:border-gray-700 dark:bg-[#18181b] lg:hover:scale-110">
+	class="w-full rounded-lg border border-gray-200 bg-white p-4 text-right transition-transform duration-500 hover:z-10 hover:scale-105 dark:border-gray-700 dark:bg-dark-primary lg:hover:scale-110">
 	<h2 class="text-md font-medium text-gray-900 dark:text-white md:text-lg">
 		{{ $label }}
 	</h2>

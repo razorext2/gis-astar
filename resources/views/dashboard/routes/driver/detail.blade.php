@@ -14,7 +14,8 @@
 				</div>
 				{{-- endsearch --}}
 
-				<div class="w-full rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-[#18181b]">
+				<div
+					class="w-full rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-dark-primary">
 					<div class="mb-4 flex items-center gap-x-3">
 						<div class="max-w-xs">
 							<x-button.link class="w-fit ring-1 ring-red-700 dark:bg-red-800 dark:text-white"
@@ -91,7 +92,7 @@
 				</div>
 
 				<div
-					class="h-max w-full rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-[#18181b]">
+					class="h-max w-full rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-dark-primary">
 					<div class="mb-4">
 						<p class="text-xl font-bold leading-none text-gray-900 dark:text-white md:text-2xl">
 							Mapping
