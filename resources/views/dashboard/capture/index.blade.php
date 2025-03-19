@@ -18,6 +18,10 @@
 						class="w-full rounded-lg bg-blue-400 p-2 font-bold text-white ring-1 ring-gray-200 hover:bg-blue-700 dark:bg-blue-800 dark:text-white dark:ring-gray-700 dark:hover:bg-blue-900"
 						id="startButton">Start</button>
 				</div>
+				<div id="error"
+					class="mt-3 hidden rounded-lg bg-red-500 py-2 font-semibold text-white ring-1 ring-gray-200 dark:bg-red-700 dark:ring-gray-700">
+
+				</div>
 			</div>
 
 			<!-- #region -->
@@ -87,7 +91,6 @@
 								<input type="hidden" id="radius" value="{{ $data->radius ?? 'N/A' }}">
 								<input type="hidden" id="movementThreshold" value="50">
 								<input type="hidden" id="kodePegawai" value="{{ $data->kode_pegawai }}">
-							</ul>
 							</ul>
 						</div>
 					</div>

@@ -31,12 +31,14 @@ export async function initCapture() {
                 // Check if within the specified radius
                 if (distance > radius) {
                     showErrorAndRedirect(`Anda berada ${distance.toFixed(2)} meter dari tempat yang ditentukan.`);
+                    showError('Anda harus berada didalam radius area yang ditentukan. Jika sudah, silahkan refresh kembali.');
                 } else if (lastLat !== undefined && lastLng !== undefined) {
                     // Calculate distance moved since last position
                     const movedDistance = calculateDistance(lastLat, lastLng, lat, lng);
 
                     if (movedDistance > movementThreshold) {
                         showErrorAndRedirect("Fake GPS terdeteksi. Silahkan matikan terlebih dahulu.");
+                        showError('Matikan aplikas Fake GPS anda. Jika sudah, silahkan refresh kembali.');
                         return;
                     }
                 }
@@ -47,9 +49,11 @@ export async function initCapture() {
             },
             function () {
                 showErrorAndRedirect("Anda harus mengaktifkan izin Lokasi.");
+                showError('Pastikan anda telah mengaktifkan izin Lokasi. Jika sudah, silahkan refresh kembali.');
+                return;
             }, {
             enableHighAccuracy: true,
-            timeout: 1000,
+            timeout: 3000,
             maximumAge: 0,
         }
         );
@@ -71,13 +75,25 @@ export async function initCapture() {
     }
 
     function showErrorAndRedirect(message) {
+        const startBtn = document.getElementById('startButton');
 
-        showAlert("error", "Gagal!", message).then(() => {
-            pegawaiKosong.style.display = "block";
-            pegawaiInfo.style.display = "none";
-            setTimeout(() => {
-                window.location.href = `${APP_URL}/dashboard/capture`;
-            }, 500);
-        });
+        showAlert("error", "Gagal!", message)
+        pegawaiKosong.style.display = "block";
+        pegawaiInfo.style.display = "none";
+
+        startBtn.disabled = true;
+        startBtn.classList.add('bg-gray-500');
+        startBtn.classList.remove('bg-blue-400', 'dark:bg-blue-800', 'dark:hover:bg-blue-900', 'hover:bg-blue-700');
+        // setTimeout(() => {
+        //     window.location.href = `${APP_URL}/dashboard/capture`;
+        // }, 2000);
+
+    }
+
+    function showError(message) {
+        const container = document.getElementById('error');
+        container.textContent = message;
+
+        container.classList.remove('hidden');
     }
 }
