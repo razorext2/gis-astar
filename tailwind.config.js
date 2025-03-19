@@ -1,11 +1,10 @@
 import defaultTheme from "tailwindcss/defaultTheme";
 import forms from "@tailwindcss/forms";
-
-const colors = require('tailwindcss/colors')
+const colors = require("tailwindcss/colors");
 
 /** @type {import('tailwindcss').Config} */
 export default {
-    darkMode: 'class',
+    darkMode: "class",
     content: [
         "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
         "./storage/framework/views/*.php",
@@ -14,9 +13,9 @@ export default {
         "./resources/**/*.js",
         "./resources/**/*.vue",
         "./node_modules/flowbite/**/*.js",
-        './app/Livewire/**/*Table.php',
-        './vendor/power-components/livewire-powergrid/resources/views/**/*.php',
-        './vendor/power-components/livewire-powergrid/src/Themes/Tailwind.php'
+        "./app/Livewire/**/*Table.php",
+        "./vendor/power-components/livewire-powergrid/resources/views/**/*.php",
+        "./vendor/power-components/livewire-powergrid/src/Themes/Tailwind.php",
     ],
     presets: [
         require("./vendor/power-components/livewire-powergrid/tailwind.config.js"),
@@ -24,45 +23,13 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ["Figtree", ...defaultTheme.fontFamily.sans],
+                sans: ["Poppins", ...defaultTheme.fontFamily.sans],
+                gaming: ["Bungee", "cursive"],
+            },
+            colors: {
+                "pg-primary": colors.zinc,
             },
         },
-        fontFamily: {
-            'body': [
-                'Inter',
-                'ui-sans-serif',
-                'system-ui',
-                '-apple-system',
-                'system-ui',
-                'Segoe UI',
-                'Roboto',
-                'Helvetica Neue',
-                'Arial',
-                'Noto Sans',
-                'sans-serif',
-                'Apple Color Emoji',
-                'Segoe UI Emoji',
-                'Segoe UI Symbol',
-                'Noto Color Emoji'
-            ],
-            'sans': [
-                'Inter',
-                'ui-sans-serif',
-                'system-ui',
-                '-apple-system',
-                'system-ui',
-                'Segoe UI',
-                'Roboto',
-                'Helvetica Neue',
-                'Arial',
-                'Noto Sans',
-                'sans-serif',
-                'Apple Color Emoji',
-                'Segoe UI Emoji',
-                'Segoe UI Symbol',
-                'Noto Color Emoji'
-            ]
-        }
     },
     plugins: [
         forms,
@@ -71,11 +38,4 @@ export default {
             charts: true,
         }),
     ],
-    theme: {
-        extend: {
-            colors: {
-                "pg-primary": colors.zinc,
-            },
-        },
-    },
 };

@@ -1,6 +1,9 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
 	<div class="flex flex-col">
+		<div class="mb-4">
+			@livewire('utils.greetings')
+		</div>
 		<div class="mb-4 flex flex-col lg:grid lg:grid-cols-3 lg:gap-x-4">
 
 			<form id="attend-in" action="{{ route('attendanceIn.index') }}"></form>
