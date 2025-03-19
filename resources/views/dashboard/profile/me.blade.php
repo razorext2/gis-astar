@@ -1,6 +1,6 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-	<div class="grid grid-cols-2 gap-4 rounded-xl">
+	<div class="flex flex-col gap-4 rounded-xl">
 		<div
 			class="col-span-2 rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 lg:p-6">
 			<div class="flex flex-col gap-4">
@@ -91,47 +91,49 @@
 			</div>
 		</div>
 
-		<div
-			class="col-span-2 content-center rounded-xl bg-white px-6 py-10 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 lg:col-span-1">
-			<div class="flex flex-col items-center gap-y-3">
-				<x-icons.file-pen class="h-20 w-20 text-gray-100 dark:text-gray-700/30" />
-				<h3 class="text-lg font-semibold text-gray-700 dark:text-white">Mulai buat laporanmu.</h3>
-				<p class="text-center text-gray-700 dark:text-gray-300">
-					Laporanmu akan membantu kamu untuk mengelola data dengan lebih mudah.
-				</p>
-				<div class="flex flex-wrap justify-center gap-2">
-					@can('collect-create')
-						<x-button.link href="{{ route('collect.index') }}" class="w-44 justify-center">
-							<x-slot name="icon">Laporan Koletor</x-slot>
-							<x-icons.arrow-right class="h-4 w-4 -rotate-45 text-green-500 dark:text-white" />
-						</x-button.link>
-					@endcan
-					@can('driver-create')
-						<x-button.link href="{{ route('driver.create') }}" class="w-44 justify-center">
-							<x-slot name="icon">Laporan Driver</x-slot>
-							<x-icons.arrow-right class="h-4 w-4 -rotate-45 text-green-500 dark:text-white" />
-						</x-button.link>
-					@endcan
-					@can('sales-create')
-						<x-button.link href="{{ route('sales.create') }}" class="w-44 justify-center">
-							<x-slot name="icon">Laporan Sales</x-slot>
-							<x-icons.arrow-right class="h-4 w-4 -rotate-45 text-green-500 dark:text-white" />
-						</x-button.link>
-					@endcan
-					@can('technician-create')
-						<x-button.link href="{{ route('technician.index') }}" class="w-44 justify-center">
-							<x-slot name="icon">Laporan Teknisi</x-slot>
-							<x-icons.arrow-right class="h-4 w-4 -rotate-45 text-green-500 dark:text-white" />
-						</x-button.link>
-					@endcan
+		<div class="flex flex-col gap-4 lg:flex-row">
+			<div
+				class="col-span-2 max-h-fit content-center rounded-xl bg-white px-6 py-10 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 lg:col-span-1">
+				<div class="flex flex-col items-center gap-y-3">
+					<x-icons.file-pen class="h-20 w-20 text-gray-100 dark:text-gray-700/30" />
+					<h3 class="text-lg font-semibold text-gray-700 dark:text-white">Mulai buat laporanmu.</h3>
+					<p class="text-center text-gray-700 dark:text-gray-300">
+						Laporanmu akan membantu kamu untuk mengelola data dengan lebih mudah.
+					</p>
+					<div class="flex flex-wrap justify-center gap-2">
+						@can('collect-create')
+							<x-button.link href="{{ route('collect.index') }}" class="w-44 justify-center">
+								<x-slot name="icon">Laporan Koletor</x-slot>
+								<x-icons.arrow-right class="h-4 w-4 -rotate-45 text-green-500 dark:text-white" />
+							</x-button.link>
+						@endcan
+						@can('driver-create')
+							<x-button.link href="{{ route('driver.create') }}" class="w-44 justify-center">
+								<x-slot name="icon">Laporan Driver</x-slot>
+								<x-icons.arrow-right class="h-4 w-4 -rotate-45 text-green-500 dark:text-white" />
+							</x-button.link>
+						@endcan
+						@can('sales-create')
+							<x-button.link href="{{ route('sales.create') }}" class="w-44 justify-center">
+								<x-slot name="icon">Laporan Sales</x-slot>
+								<x-icons.arrow-right class="h-4 w-4 -rotate-45 text-green-500 dark:text-white" />
+							</x-button.link>
+						@endcan
+						@can('technician-create')
+							<x-button.link href="{{ route('technician.index') }}" class="w-44 justify-center">
+								<x-slot name="icon">Laporan Teknisi</x-slot>
+								<x-icons.arrow-right class="h-4 w-4 -rotate-45 text-green-500 dark:text-white" />
+							</x-button.link>
+						@endcan
+					</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="rounded-xl bg-white py-2 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 lg:p-6">
-			{{-- @if (auth()->user()->kode_pegawai)
-				@livewire('utils.attendance-calendar')
-			@endif --}}
+			@if (auth()->user()->kode_pegawai)
+				<div class="rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700">
+					@livewire('utils.attendance-calendar')
+				</div>
+			@endif
 		</div>
 
 	</div>

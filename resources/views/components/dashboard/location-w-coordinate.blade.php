@@ -1,3 +1,5 @@
+@props(['location' => null, 'lat' => null, 'long' => null])
+
 <div class="flex flex-col">
 	<span class="font-medium">{{ $location }}</span>
 	<span class="text-xs text-gray-400">
