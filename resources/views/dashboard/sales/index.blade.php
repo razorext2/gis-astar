@@ -23,7 +23,7 @@
 					<x-filter.filter-bar>
 						@can('sales-approve')
 							<div class="col-span-2 mx-auto flex w-full items-center lg:col-span-1">
-								<x-filter.filter-input-text id="kode_pegawai" name="kode_pegawai" :text="'kode jari'">
+								<x-filter.filter-input-text id="kode_pegawai" name="kode_pegawai" :text="'nama sales'">
 									<x-icons.fingerprint class="h-4 w-4 text-gray-500 dark:text-gray-400" />
 								</x-filter.filter-input-text>
 							</div>
@@ -47,6 +47,10 @@
 
 						<div class="col-span-2 mx-auto w-full items-center lg:col-span-1">
 							<x-filter.date-range />
+						</div>
+
+						<div class="col-span-2 mx-auto w-full items-center lg:col-span-1">
+							<x-filter.filter-input-select id="roles" name="roles" :options="['Sales' => 'Sales Medan', 'Sales-JKT' => 'Sales Jakarta']" default-option="Filter by roles" />
 						</div>
 
 					</x-filter.filter-bar>

@@ -136,7 +136,9 @@ class SalesController extends Controller
                     })
                     ->filter(function ($query) use ($request) {
                         if ($request->filled("kode_pegawai")) {
-                            $query->where('kode_pegawai', "LIKE", "%{$request->kode_pegawai}%");
+                            $query->whereHas('pegawaiRelasi', function ($query) use ($request) {
+                                $query->where('full_name', "LIKE", "%{$request->kode_pegawai}%");
+                            });
                         }
 
                         if ($request->filled("title")) {
@@ -154,6 +156,13 @@ class SalesController extends Controller
                         if ($request->filled("startDate") && $request->filled("endDate")) {
                             $query->whereBetween('created_at', [$request->startDate, $request->endDate]);
                         }
+
+                        if ($request->filled('roles')) {
+                            $query->whereHas('userRelasi.roles', function ($query) use ($request) {
+                                $query->whereIn('name', (array) $request->roles);
+                            });
+                        }
+
                     })
                     ->rawColumns(['actions', 'title', 'customer_name', 'kode_pegawai', 'lokasi', 'created_at'])
                     ->toJson();

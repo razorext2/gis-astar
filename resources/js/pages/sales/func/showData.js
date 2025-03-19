@@ -15,6 +15,7 @@ export async function showData() {
         d.status = $('#status').val();
         d.startDate = $('#datepicker-range-start').val();
         d.endDate = $('#datepicker-range-end').val();
+        d.roles = $('#roles').val();
       }
     },
     columns: [{
@@ -86,7 +87,8 @@ export async function showData() {
       $('#customer_name').val(),
       $('#status').val(),
       $('#datepicker-range-start').val(),
-      $('#datepicker-range-end').val()
+      $('#datepicker-range-end').val(),
+      $('#roles').val()
     ];
 
     // Apply filters
@@ -107,7 +109,8 @@ export async function showData() {
       $('#customer_name').val(),
       $('#status').val(),
       $('#datepicker-range-start').val(),
-      $('#datepicker-range-end').val()
+      $('#datepicker-range-end').val(),
+      $('#roles').val()
     ];
 
     // Clear filters
@@ -118,6 +121,7 @@ export async function showData() {
       $('#status').val('');
       $('#datepicker-range-start').val('');
       $('#datepicker-range-end').val('');
+      $('#roles').val('');
       table.draw();
     }
   });
