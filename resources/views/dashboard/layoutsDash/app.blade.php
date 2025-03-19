@@ -47,26 +47,27 @@
 
 		@include('dashboard.layoutsDash.sidebar')
 
-		<div class="mb-20 max-w-screen-xl p-2 sm:ml-72 sm:mt-0 sm:p-4 xl:ml-[420px]">
+		<div class="mb-20 mt-24 max-w-screen-xl px-4 sm:ml-72 md:mb-0 xl:ml-96">
 
-			<div class="mt-10 rounded-lg p-2 sm:p-4 md:mt-6">
+			{{-- breadcrumb --}}
+			@livewire('utils.breadcrumb')
 
-				{{-- title --}}
-				<div class="grid grid-cols-1">
-					@include('dashboard.layoutsDash.title')
-				</div>
-
-				{{-- carousel for cards --}}
-				@persist('card-carousel')
-					@livewire('components.card')
-				@endpersist
-
-				{{-- announcement --}}
-				@livewire('utils.announcement-container')
-
-				{{-- main content --}}
-				@yield('content')
+			{{-- title --}}
+			<div class="grid grid-cols-1">
+				@include('dashboard.layoutsDash.title')
 			</div>
+
+			{{-- carousel for cards --}}
+			@persist('card-carousel')
+				@livewire('components.card')
+			@endpersist
+
+			{{-- announcement --}}
+			@livewire('utils.announcement-container')
+
+			{{-- main content --}}
+			@yield('content')
+
 		</div>
 
 		{{-- bikin navigasi ala android --}}

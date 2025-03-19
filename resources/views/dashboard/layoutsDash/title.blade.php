@@ -34,7 +34,7 @@
 	    }) ?? 'Default Title';
 @endphp
 
-<div class="py-6 text-gray-800 dark:text-white">
+<div class="py-4 text-gray-800 dark:text-white">
 	<h2 class="text-2xl font-bold tracking-tight text-gray-950 dark:text-white sm:text-3xl">
 		{{ $pageTitle }}
 	</h2>

@@ -1,6 +1,6 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-	<div class="mb-6">
+	<div class="mb-4">
 		@livewire('utils.greetings')
 	</div>
 	<div class="mb-4 grid grid-cols-1 gap-4 xl:gap-6">
