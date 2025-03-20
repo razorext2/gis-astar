@@ -30,7 +30,7 @@
 						class="block rounded-md px-4 py-2.5 transition-colors duration-300 ease-in-out hover:bg-gray-100 hover:text-white dark:text-white dark:hover:bg-gray-600"
 						id="detail-btn" wire:click="$dispatch('detail', {id: {{ $id }}})"
 						data-userid="{{ Crypt::encryptString(auth()->user()->id) }}">
-						Detail
+						Confirm
 					</button>
 				</li>
 			@endif
