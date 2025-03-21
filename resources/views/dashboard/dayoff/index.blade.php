@@ -1,7 +1,7 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
 	<form id="add-dayoff" action="{{ route('dayoff.create') }}"></form>
-	<div class="relative grid grid-cols-1 gap-6">
+	<div class="relative grid grid-cols-1 gap-4">
 
 		@can('dayoff-create')
 			<div class="max-w-xs">

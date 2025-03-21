@@ -1,7 +1,7 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
 	<form id="add-form" action="{{ route('sales.create') }}"></form>
-	<div class="relative grid grid-cols-1 gap-6">
+	<div class="relative grid grid-cols-1 gap-4">
 
 		@can('sales-create')
 			<div class="max-w-xs">

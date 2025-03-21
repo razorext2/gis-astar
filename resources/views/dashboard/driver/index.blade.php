@@ -1,6 +1,6 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-	<div class="relative grid grid-cols-1 gap-6">
+	<div class="relative grid grid-cols-1 gap-4">
 
 		@can('driver-create')
 			<div class="max-w-xs">
