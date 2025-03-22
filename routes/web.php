@@ -28,6 +28,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\TechnicianController;
+use App\Http\Controllers\TechnicianPointsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Report\CollectorReportController;
 use Illuminate\Support\Facades\Auth;
@@ -231,6 +232,9 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('routes/sales', [RouteController::class, 'sales'])->name('routes.sales');
         Route::get('routes/sales/{pegawai}', [RouteController::class, 'detailSales'])->name('routes.sales.detail');
+
+        // points
+        Route::get('points', [TechnicianPointsController::class, 'index'])->name('points.index');
     });
 });
 

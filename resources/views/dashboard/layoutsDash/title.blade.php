@@ -25,6 +25,7 @@
 	    'announcement.*' => 'Pusat Pengumuman',
 	    'backup.*' => 'Manajemen Cadangan',
 	    'golongan.*' => 'Manajemen Golongan',
+	    'points.*' => 'Poin Teknisi',
 	];
 
 	// Temukan judul berdasarkan rute dengan wildcard
