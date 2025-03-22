@@ -16,6 +16,7 @@ class ReportCounter extends Component
             'sales' => \App\Models\Sales::needApprove(),
             'collect' => \App\Models\Collector::needApprove(),
             'driver' => \App\Models\Driver::query()->where('status', 0),
+            'technician' => \App\Models\Technician::query()->where('status', 0),
         ];
 
         $query = $models[$this->id] ?? null;

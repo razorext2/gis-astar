@@ -45,7 +45,7 @@ Route::middleware('throttle:high')->get('photo-regist', function () {
 })->name('photo.regist');
 
 // route bisa diakses jika login
-Route::middleware(['auth', 'throttle:medium'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     // notifikasi
     Route::get('notifications/{id}/mark-as-read', function ($id) {
         $notification = Auth::user()->unreadNotifications->find($id);
@@ -77,6 +77,7 @@ Route::middleware(['auth', 'throttle:medium'])->group(function () {
 
         // fetchVT
         Route::get('get/vt', [ProxyController::class, 'getVT'])->name('fetch.vt');
+        Route::get('get/vt-db', [TechnicianController::class, 'getVTFromDB'])->name('fetch.vt-db');
     });
 
     // group ke rute dashboard.

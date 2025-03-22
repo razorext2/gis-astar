@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ApiResource;
+use App\Models\Technician;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -188,7 +189,7 @@ class ProxyController extends Controller
                 $id = rawurlencode($result['data'][0]['IDPermintaanKunjungan']);
                 $date = $result['data'][0]['TanggalKunjungan'];
 
-                $url = 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchKunjunganRelasi&IDPermintaanKunjungan=' . $id  . '&TanggalKunjungan=' . $date;
+                $url = 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchKunjunganRelasi&IDPermintaanKunjungan=' . $id . '&TanggalKunjungan=' . $date;
 
                 $response = Http::get($url);
 
@@ -197,7 +198,7 @@ class ProxyController extends Controller
                 if ($partner['status'] == 'success') {
                     $result['data'][0]['partner'] = $partner['data'];
 
-                    return new ApiResource(true, 'Berhasil mengambil data', $result);
+                    return new ApiResource(true, 'Berhasil mengambil data dari API', $result);
                 }
 
                 return new ApiResource(false, 'Terjadi kegagalan saat mengambil data', $partner['message']);

@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\ApiDayoffController;
 use App\Http\Controllers\Api\ApiDriverController;
 use App\Http\Controllers\Api\ApiPegawaiController;
 use App\Http\Controllers\Api\ApiSalesController;
+use App\Http\Controllers\TechnicianController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
@@ -90,4 +91,9 @@ Route::middleware(['auth:sanctum', 'throttle:high'])->group(function () {
     // announcement
     Route::patch('announcement-api/{id}/state', [ApiAnnouncementController::class, 'changeState'])->name('announcement-api.change-state');
     Route::apiResource('announcement-api', ApiAnnouncementController::class)->only(['store', 'show', 'update', 'destroy']);
+
+    // technician
+    Route::patch('technician/{id}/confirm', [TechnicianController::class, 'confirm'])->name('technician.confirm');
+    Route::patch('technician/{id}/deny', [TechnicianController::class, 'deny'])->name('technician.deny');
+    Route::patch('technician/{id}/revision', [TechnicianController::class, 'revision'])->name('technician.revision');
 });

@@ -47,7 +47,7 @@
 
 		@include('dashboard.layoutsDash.sidebar')
 
-		<div class="mb-20 mt-24 max-w-screen-xl px-4 sm:ml-72 md:mb-4 xl:ml-96">
+		<div class="mb-20 mt-32 max-w-screen-xl px-4 sm:ml-72 sm:mt-24 md:mb-4 xl:ml-96">
 
 			{{-- breadcrumb --}}
 			@livewire('utils.breadcrumb')

@@ -236,7 +236,6 @@ class ApiCollectTaskController extends Controller
         }
 
         $data = $request->all();
-
         $query = CollectTask::find($id);
 
         if (!$query) {

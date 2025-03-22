@@ -1,6 +1,6 @@
 <nav
 	class="fixed top-0 z-50 w-full border-b border-gray-200 bg-white px-4 py-2.5 dark:border-[#232327] dark:bg-dark-primary lg:px-6">
-	<div class="flex flex-wrap items-center justify-between">
+	<div class="flex flex-wrap items-center justify-between gap-2 sm:gap-0">
 		<div class="flex items-center justify-start">
 
 			<a class="flex items-center" href="#">
@@ -9,6 +9,10 @@
 			</a>
 
 		</div>
+
+		@if (auth()->user()->hasRole('Teknisi'))
+			@livewire('widget.technician.points-accumulation')
+		@endif
 
 		<div class="flex items-center lg:order-2">
 
@@ -31,7 +35,6 @@
 				</div>
 
 				{{-- notifikasi --}}
-
 				<div class="max-h-72 overflow-y-auto md:max-h-96" id="notificationContainer"></div>
 				<div class="w-full rounded-b-lg bg-gray-50 p-4 font-medium text-gray-700 dark:bg-gray-800 dark:text-white">
 					<a class="p-4" href="{{ route('notifications.index') }}">
@@ -59,11 +62,9 @@
 				</div>
 				<ul class="py-1 text-gray-500 dark:text-gray-400" aria-labelledby="dropdown">
 					<li>
-
 						<a
 							class="block px-4 py-2 text-sm hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
 							href="{{ route('profile.me') }}">My profile</a>
-
 					</li>
 					<li>
 						<form id="editProfile" action="{{ route('profile.edit') }}" onclick="event.preventDefault();"></form>
@@ -83,7 +84,6 @@
 
 				<ul class="py-1 text-gray-500 dark:text-gray-400" aria-labelledby="dropdown">
 					<li>
-
 						<form id="logout" method="post" action="{{ route('logout') }}" onclick="event.preventDefault();">@csrf</form>
 						<button
 							class="block w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"

@@ -1,5 +1,3 @@
-import { icon } from "leaflet";
-
 export function confirmAction() {
   $('#confirm-btn').click(async function () {
     let id = $(this).data("id");

@@ -27,12 +27,13 @@ async function fetchDataAsync() {
   alert.loadingAlert("Sedang mencari data...");
 
   try {
-    const response = await axios.get(`${APP_URL}/proxy/get/vt`, {
+    const resDB = await axios.get(`${APP_URL}/proxy/get/vt-db`, {
       params: {
         no_vt: $('#no_vt').val(),
       },
     });
-    const result = response.data;
+    const resultDB = resDB.data;
+
     const arrTimb = {
       data: [
         'Single Deck',
@@ -45,67 +46,159 @@ async function fetchDataAsync() {
       ]
     }
 
-    if (!result.success) {
-      clearForm();
-      return alert.showAlert('error', result.message, result.data);
-    }
+    if (resultDB.success) {
+      if (!resultDB.data) {
+        return alert.showAlert('error', resultDB.message, 'Anda tidak dapat mengubah data yang telah dikonfirmasi.');
+      }
 
-    Swal.close();
-    alert.showAlert('success', result.message);
+      const data = resultDB.data;
 
-    const data = result.data.data[0];
+      Swal.close();
+      alert.showAlert('success', resultDB.message);
 
-    $('#kode_pegawai').val(data.NomorIdentitasTeknisi);
-    $('#employee_name').val(data.NamaTeknisi);
-    $('#customer_contact').val(data.CustomerContact);
-    $('#customer_address').val(data.AlamatLengkapKunjungan);
-    $('#job_detail').val(data.RincianPekerjaan);
-    $('#size').val(data.Ukuran);
-    $('#capacity').val(data.Kapasitas);
-    $('#indicator_type').val(data.TipeIndikator);
-    $('#indicator_sn').val(data.TipeIndikatorSN);
-    $('#loadcell_type').val(data.TipeLoadcell);
-    $('#loadcell_qty').val(data.TipeJunctionBoxSN);
-    $('#loadcell_sn').val(data.TipeLoadcellSN);
-    $('#junction_type').val(data.TipeJunctionBox);
-    $('#junction_sn').val(data.TipeJunctionBoxSN);
-    $('#job_update').val(data.UpdatePekerjaan);
-    $('#weight_type option[value="' + data.JenisTimbangan + '"]').prop('selected', true).trigger('change');
+      $('#kode_pegawai').val(data.kode_pegawai);
+      $('#employee_name').val(data.technician_name);
+      $('#id_permintaan').val(data.id_permintaan);
+      $('#visit_date').val(data.visit_date);
+      $('#customer_contact').val(data.customer_contact);
+      $('#customer_address').val(data.customer_address);
+      $('#job_detail').val(data.job_detail);
+      $('#size').val(data.size);
+      $('#capacity').val(data.capacity);
+      $('#indicator_type').val(data.indicator_type);
+      $('#indicator_sn').val(data.indicator_sn);
+      $('#loadcell_type').val(data.loadcell_type);
+      $('#loadcell_qty').val(data.loadcell_qty);
+      $('#loadcell_sn').val(data.loadcell_sn);
+      $('#junction_type').val(data.junction_type);
+      $('#job_update').val(data.job_update);
+      $('#point').val(data.point);
+      $('#weight_type option[value="' + data.weight_type + '"]').prop('selected', true).trigger('change');
 
-    // jika jenis timbangan tidak ada di array data
-    if (!arrTimb.data.includes(data.JenisTimbangan)) {
-      $('#other_weight_type').removeClass('hidden'); // tampilkan other_weight_type
-      $('#other_weight_type').val(data.JenisTimbangan); // isi other_weight_type
-      $('#weight_type option[value="Other"]').prop('selected', true).trigger('change'); // pilih weight_type
-    }
+      // jika jenis timbangan tidak ada di array data
+      if (!arrTimb.data.includes(data.weight_type)) {
+        $('#other_weight_type').removeClass('hidden'); // tampilkan other_weight_type
+        $('#other_weight_type').val(data.weight_type); // isi other_weight_type
+        $('#weight_type option[value="Other"]').prop('selected', true).trigger('change'); // pilih weight_type
+      }
 
-    // jika Timbangan Jembatan,
-    if (data.JenisTimbangan == 'Timbangan Jembatan') {
-      $('#other_loadcell_type').removeClass('hidden'); // tampilkan other_loadcell_type 
-      $('#other_loadcell_type').val(data.TipeLoadcell); // isi other_loadcell_type
-      $('#loadcell_type option[value="' + data.TipeLoadcell + '"]').prop('selected', true).trigger('change'); // pilih loadcell_type
-    }
+      // jika Timbangan Jembatan,
+      if (data.weight_type == 'Timbangan Jembatan') {
+        $('#other_loadcell_type').removeClass('hidden'); // tampilkan other_loadcell_type 
+        $('#other_loadcell_type').val(data.loadcell_type); // isi other_loadcell_type
+        $('#loadcell_type option[value="' + data.loadcell_type + '"]').prop('selected', true).trigger('change'); // pilih loadcell_type
+      }
 
-    // tampilkan container #partner_parent
-    $('#partner_parent').removeClass('hidden');
+      // tampilkan container #partner_parent
+      $('#partner_parent').removeClass('hidden');
 
-    // foreach data partner
-    result.data.data[0].partner.forEach(items => {
-      // append element ke container
-      $('#partner_child').append(`
+      // foreach data partner
+      data.partner.forEach(items => {
+        // append element ke container
+        $('#partner_child').append(`
         <div class="mb-4 flex items-center">
-					<input class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600" id="checkbox-${items.NomorKunjungan}" name="partner[]" type="checkbox" value="${items.NomorKunjungan}">
+					<input class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600" id="checkbox-${items.NomorKunjungan}" name="partner[]" type="checkbox" data-kode_pegawai="${items.NomorIdentitasTeknisi}" value="${items.NomorKunjungan}">
 					<div class="flex flex-col ms-2.5" for="checkbox-${items.NomorKunjungan}">
             <span class="text-xs font-medium text-gray-900 dark:text-gray-300">${items.NomorKunjungan}</span>
-            <span class="text-sm font-medium text-gray-900 dark:text-gray-300">${items.NamaTeknisi}</span>
+            <span class="text-sm font-medium text-gray-900 dark:text-gray-300">
+        (${items.NomorIdentitasTeknisi}) - ${items.NamaTeknisi}
+            </span>
           </div>
 				</div>
         `);
 
-      if (items.NomorKunjungan == data.NomorKunjungan) {
-        $('#checkbox-' + items.NomorKunjungan).prop('checked', true);
+        if (items.NomorKunjungan == data.no_vt) {
+          $('#checkbox-' + items.NomorKunjungan).prop('checked', true);
+          $('#checkbox-' + items.NomorKunjungan).prop('disabled', true);
+        }
+      });
+    } else {
+      const response = await axios.get(`${APP_URL}/proxy/get/vt`, {
+        params: {
+          no_vt: $('#no_vt').val(),
+        },
+      });
+      const result = response.data;
+
+      const arrTimb = {
+        data: [
+          'Single Deck',
+          'Floor Scale',
+          'Hopper',
+          'Tangki',
+          'Conveyer',
+          'Check Weigher',
+          'Timbangan Jembatan',
+        ]
       }
-    });
+
+      if (!result.success) {
+        clearForm();
+        return alert.showAlert('error', result.message, result.data);
+      }
+
+      Swal.close();
+      alert.showAlert('success', result.message);
+
+      const data = result.data.data[0];
+
+      $('#kode_pegawai').val(data.NomorIdentitasTeknisi);
+      $('#employee_name').val(data.NamaTeknisi);
+      $('#id_permintaan').val(data.IDPermintaanKunjungan);
+      $('#visit_date').val(data.TanggalKunjungan);
+      $('#customer_contact').val(data.CustomerContact);
+      $('#customer_address').val(data.AlamatLengkapKunjungan);
+      $('#job_detail').val(data.RincianPekerjaan);
+      $('#size').val(data.Ukuran);
+      $('#capacity').val(data.Kapasitas);
+      $('#indicator_type').val(data.TipeIndikator);
+      $('#indicator_sn').val(data.TipeIndikatorSN);
+      $('#loadcell_type').val(data.TipeLoadcell);
+      $('#loadcell_qty').val(data.TipeJunctionBoxSN);
+      $('#loadcell_sn').val(data.TipeLoadcellSN);
+      $('#junction_type').val(data.TipeJunctionBox);
+      $('#junction_sn').val(data.TipeJunctionBoxSN);
+      $('#job_update').val(data.UpdatePekerjaan);
+      $('#point').val(data.Point);
+      $('#weight_type option[value="' + data.JenisTimbangan + '"]').prop('selected', true).trigger('change');
+
+      // jika jenis timbangan tidak ada di array data
+      if (!arrTimb.data.includes(data.JenisTimbangan)) {
+        $('#other_weight_type').removeClass('hidden'); // tampilkan other_weight_type
+        $('#other_weight_type').val(data.JenisTimbangan); // isi other_weight_type
+        $('#weight_type option[value="Other"]').prop('selected', true).trigger('change'); // pilih weight_type
+      }
+
+      // jika Timbangan Jembatan,
+      if (data.JenisTimbangan == 'Timbangan Jembatan') {
+        $('#other_loadcell_type').removeClass('hidden'); // tampilkan other_loadcell_type 
+        $('#other_loadcell_type').val(data.TipeLoadcell); // isi other_loadcell_type
+        $('#loadcell_type option[value="' + data.TipeLoadcell + '"]').prop('selected', true).trigger('change'); // pilih loadcell_type
+      }
+
+      // tampilkan container #partner_parent
+      $('#partner_parent').removeClass('hidden');
+
+      // foreach data partner
+      result.data.data[0].partner.forEach(items => {
+        // append element ke container
+        $('#partner_child').append(`
+        <div class="mb-4 flex items-center">
+					<input class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600" id="checkbox-${items.NomorKunjungan}" name="partner[]" type="checkbox" data-kode_pegawai="${items.NomorIdentitasTeknisi}" value="${items.NomorKunjungan}">
+					<div class="flex flex-col ms-2.5" for="checkbox-${items.NomorKunjungan}">
+            <span class="text-xs font-medium text-gray-900 dark:text-gray-300">${items.NomorKunjungan}</span>
+            <span class="text-sm font-medium text-gray-900 dark:text-gray-300">
+        (${items.NomorIdentitasTeknisi}) - ${items.NamaTeknisi}
+            </span>
+          </div>
+				</div>
+        `);
+
+        if (items.NomorKunjungan == data.NomorKunjungan) {
+          $('#checkbox-' + items.NomorKunjungan).prop('checked', true);
+        }
+      });
+    }
   } catch (error) {
     clearForm();
     alert.showAlert('error', 'Failed to fetch data', error.message);

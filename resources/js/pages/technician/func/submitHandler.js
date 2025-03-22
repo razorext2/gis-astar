@@ -8,20 +8,32 @@ export function submitHandler() {
     // Create a plain object to hold the data
     const data = {
       no_vt: no_vt,
-      job_detail: $('#job_update').val(),
+      id_permintaan: $('#id_permintaan').val(),
+      kode_pegawai: $('#kode_pegawai').val(),
+      customer_contact: $('#customer_contact').val(),
+      customer_address: $('#customer_address').val(),
+      job_detail: $('#job_detail').val(),
       size: $('#size').val(),
       capacity: $('#capacity').val(),
       indicator_type: $('#indicator_type').val(),
       indicator_sn: $('#indicator_sn').val(),
       loadcell_sn: $('#loadcell_sn').val(),
+      loadcell_qty: $('#loadcell_qty').val(),
       junction_type: $('#junction_type').val(),
-      junction_sn: $('#loadcell_qty').val(),
+      job_update: $('#job_update').val(),
+      visit_date: $('#visit_date').val(),
+      point: $('#point').val(),
       partner: []
     };
 
     // Collect checked partner values
     $.each($("input[name='partner[]']:checked"), function () {
-      data.partner.push($(this).val());
+      data.partner.push({
+        kode_pegawai: $(this).data('kode_pegawai'),
+        no_vt: $(this).val()
+      });
+
+      // data.partner.push($(this).val());
     });
 
     // Handle weight type
@@ -46,8 +58,7 @@ export function submitHandler() {
       Swal.close();
 
       if (response.data.success) {
-
-        alert.showAlert('success', response.data.data.message);
+        alert.showAlert('success', response.data.message);
         $('#no_vt').val('');
         clearForm();
       } else {

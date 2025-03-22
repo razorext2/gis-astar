@@ -23,11 +23,29 @@
 				<p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
 					{{ __('Silahkan sesuaikan data dibawah ini dengan data yang benar.') }}
 				</p>
+				@if (Request::query('id'))
+					<p class="text-sm text-red-600 dark:text-red-300">
+						{{ __('*Perubahan/revisi laporan hanya diperbolehkan maksimal (n)x.') }}
+					</p>
+				@endif
 			</div>
 
 			<div class="w-full">
 
 				<div class="grid gap-4 md:grid-cols-2" id="laporan-content">
+
+					<div class="col-span-2 w-full">
+						<x-input.w-button id="no_vt" name="no_vt" value="{{ Request::query('id') }}" placeholder="VT-XXXXXX">
+							<x-slot name="buttonLabel">
+								Fetch
+							</x-slot>
+							<x-slot name="textLabel">
+								Nomor Kunjungan
+							</x-slot>
+						</x-input.w-button>
+
+						<div class="mt-2 hidden text-sm text-red-500" id="alert-no_vt"></div>
+					</div>
 
 					<div class="col-span-2 w-full lg:col-span-1">
 						<x-input.basic id="kode_pegawai" name="kode_pegawai" readonly>
@@ -41,17 +59,16 @@
 						</x-input.basic>
 					</div>
 
-					<div class="col-span-2 w-full">
-						<x-input.w-button id="no_vt" name="no_vt" value="{{ Request::query('id') }}" placeholder="VT-XXXXXX">
-							<x-slot name="buttonLabel">
-								Fetch
-							</x-slot>
-							<x-slot name="textLabel">
-								Nomor Kunjungan
-							</x-slot>
-						</x-input.w-button>
+					<div class="col-span-2 w-full lg:col-span-1">
+						<x-input.basic id="id_permintaan" name="id_permintaan" readonly>
+							ID Permintaan Kunjungan
+						</x-input.basic>
+					</div>
 
-						<div class="mt-2 hidden text-sm text-red-500" id="alert-no_vt"></div>
+					<div class="col-span-2 w-full lg:col-span-1">
+						<x-input.basic id="visit_date" name="visit_date" readonly>
+							Tanggal Kunjungan
+						</x-input.basic>
 					</div>
 
 					<div class="col-span-2 hidden w-full" id="partner_parent">
@@ -184,6 +201,15 @@
 						<textarea
 						 class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
 						 id="job_update" rows="25" placeholder="Update pekerjaan..."></textarea>
+					</div>
+
+					<div class="col-span-2 w-full">
+						<x-input.basic id="point" name="point" readonly>
+							Jumlah poin yang akan kamu dapat:
+						</x-input.basic>
+						<p class="mt-2 text-xs text-green-600 dark:text-green-300">
+							{{ __('*Poin akan diakumulasikan jika laporan telah dikonfirmasi') }}
+						</p>
 					</div>
 
 					<div class="relative col-span-2 w-full">

@@ -27,8 +27,8 @@
 	        'icon' => 'technician',
 	        'permission' => 'technician-list',
 	        'sublinks' => [],
-	        'navigate' => false,
-	        'indicator' => false,
+	        'navigate' => true,
+	        'indicator' => true,
 	    ],
 	    [
 	        'route' => 'capture.index',

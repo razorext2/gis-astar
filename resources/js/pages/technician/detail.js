@@ -1,48 +1,142 @@
 import * as alert from '../../utils/alert';
 
-document.addEventListener('DOMContentLoaded', function () {
-  fetchData();
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.getElementById('store')) {
+    validate();
+  }
 })
 
-async function fetchData() {
-  const no_vt = $('#no_vt').val();
+function validate() {
+  document.getElementById('store').addEventListener('click', async () => {
+    const id = document.getElementById('store').dataset.id;
 
-  try {
-    const response = await axios.get(`${APP_URL}/dashboard/technician/${no_vt}`);
-    const result = response.data;
+    const result = await Swal.fire({
+      title: "Konfirmasi?",
+      text: "Apakah kamu yakin ingin mengkonfirmasi pekerjaan ini?",
+      icon: "question",
+      showCancelButton: true,
+      showDenyButton: true,
+      denyButtonText: "Tolak",
+      cancelButtonText: "Batal",
+      confirmButtonText: "Konfirmasi",
+    });
 
-    if (!result.success) {
-      return alert.showAlert('error', result.message);
+    if (result.isConfirmed) {
+      const confirm = await Swal.fire({
+        title: "Konfirmasi",
+        text: "Setelah laporan dikonfirmasi, data akan diupdate ke database sehingga perubahaan tidak mungkin dilakukan",
+        icon: "info",
+        showConfirmButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Ya, konfirmasi.",
+        cancelButtonText: "Batalkan, masih ingin memeriksa",
+      });
+
+      if (!confirm.isConfirmed) {
+        console.log('dicancel')
+        return;
+      }
+
+      axios.patch(`${APP_URL}/api/technician/${id}/confirm`)
+        .then((response) => {
+
+          if (!response.data.success) {
+            return alert.showAlert('error', response.data.message, response.data.data);
+          }
+
+          alert.showAlert('success', response.data.message, response.data.data);
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        })
+        .catch((error) => {
+          alert.showAlert('error', 'Ada kegagalan pada server', error.data)
+          console.log(error);
+        });
+
+    } else if (result.isDenied) {
+      console.log('ditolak')
+
+      const revision = await Swal.fire({
+        icon: 'question',
+        title: 'Penolakan atau Revisi?',
+        html: 'Dibandingkan langsung <b>menolak laporan</b>, anda mungkin dapat mempertimbangkan untuk memberikan <b>revisi</b> terlebih dahulu.',
+        showConfirmButton: true,
+        confirmButtonText: 'Ya, minta revisi',
+        showCancelButton: true,
+        cancelButtonText: 'Saya ingin memeriksa kembali.',
+        showDenyButton: true,
+        denyButtonText: "Tidak, tolak laporan ."
+      })
+
+      if (revision.isConfirmed) {
+        const { value: notes } = await Swal.fire({
+          title: 'Alasan revisi',
+          input: 'textarea',
+          inputPlaceholder: 'Masukkan alasan revisi',
+          showCancelButton: true,
+          inputValidator: (value) => {
+            if (!value) {
+              return 'Alasan revisi tidak boleh kosong!';
+            }
+          }
+        })
+
+        if (notes) {
+          axios.patch(`${APP_URL}/api/technician/${id}/revision`, {
+            'note': notes
+          }).then((response) => {
+            if (!response.data.success) {
+              return alert.showAlert('error', response.data.message, response.data.data);
+            }
+
+            alert.showAlert('success', response.data.message, response.data.data);
+
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
+          }).catch((error) => {
+            alert.showAlert('error', 'Ada kegagalan pada server', error.data)
+            console.log(error);
+          })
+        }
+      } else if (revision.isDenied) {
+        const { value: notes } = await Swal.fire({
+          title: 'Alasan penolakan',
+          input: 'textarea',
+          inputPlaceholder: 'Masukkan alasan penolakan',
+          showCancelButton: true,
+          inputValidator: (value) => {
+            if (!value) {
+              return 'Alasan penolakan tidak boleh kosong!';
+            }
+          }
+        })
+
+        if (notes) {
+          axios.patch(`${APP_URL}/api/technician/${id}/deny`, {
+            'note': notes
+          }).then((response) => {
+            if (!response.data.success) {
+              return alert.showAlert('error', response.data.message, response.data.data);
+            }
+
+            alert.showAlert('success', response.data.message, response.data.data);
+
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
+          }).catch((error) => {
+            alert.showAlert('error', 'Ada kegagalan pada server', error.data)
+            console.log(error);
+          })
+        }
+      } else {
+        Swal.close();
+      }
+    } else {
+      Swal.close();
     }
-
-    $('.skeleton-loader').addClass('hidden');
-
-    const data = result.data;
-
-    $('#no_vt_label').append(data.NomorKunjungan);
-    $('#kode_pegawai').append(data.NomorIdentitasTeknisi);
-    $('#nama_pegawai').append(data.NamaTeknisi);
-    $('#customer_contact').append(data.CustomerContact);
-    $('#customer_address').append(data.AlamatLengkapKunjungan);
-    $('#job_detail').removeClass('hidden');
-    $('#job_detail').append(data.RincianPekerjaan);
-    $('#weight_type').append(data.JenisTimbangan);
-    $('#weight_size').append(data.Ukuran);
-    $('#weight_capacity').append(data.Kapasitas);
-    $('#indicator_type').append(data.TipeIndikator);
-    $('#indicator_sn').append(data.TipeIndikatorSN);
-    $('#loadcell_type').append(data.TipeLoadcell);
-    $('#loadcell_sn').append(data.TipeLoadcellSN);
-    $('#loadcell_qty').append(data.TipeJunctionBoxSN);
-    $('#junction_type').append(data.TipeJunctionBox);
-    $('#job_update').removeClass('hidden');
-    $('#job_update').append(data.UpdatePekerjaan);
-    $('#update_teknisi').append(data.UpdateTeknisi);
-    $('#teknisi_telp').append(data.TeleponTeknisi);
-
-  } catch (error) {
-    alert.showAlert('error', 'Terjadi kesalahan', error.message);
-  }
-
-
+  })
 }

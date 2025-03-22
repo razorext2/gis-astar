@@ -1,18 +1,6 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-	<form id="add-form" action="{{ route('technician.create') }}"></form>
-	<div class="relative grid grid-cols-1 gap-6">
-
-		@can('technician-create')
-			<div class="max-w-xs">
-				<x-button.success id="add-button" form="add-form" type="submit">
-					<x-slot name="icon">
-						<x-icons.angle-right class="h-6 w-6 text-green-500 dark:text-white" />
-					</x-slot>
-					Tambah Data
-				</x-button.success>
-			</div>
-		@endcan
+	<div class="relative grid grid-cols-1 gap-4">
 
 		<div class="rounded-xl border border-gray-200 bg-white p-2 dark:border-gray-700 dark:bg-dark-primary md:p-6">
 
@@ -22,12 +10,22 @@
 					<li>
 						<a
 							class="{{ Route::is('technician.index') && !Request::query('status') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg py-2 hover:text-red-600 dark:hover:text-red-600"
-							href="{{ route('technician.index') }}">Belum Update</a>
+							wire:navigate href="{{ route('technician.index') }}">Semua Laporan</a>
+					</li>
+					<li>
+						<a
+							class="{{ Route::is('technician.index') && Request::query('status') == 2 ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg py-2 hover:text-red-600 dark:hover:text-red-600"
+							wire:navigate href="{{ route('technician.index', ['status' => 2]) }}">Perlu Revisi</a>
 					</li>
 					<li>
 						<a
 							class="{{ Route::is('technician.index') && Request::query('status') == 1 ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg py-2 hover:text-red-600 dark:hover:text-red-600"
-							href="{{ route('technician.index', ['status' => 1]) }}">Sudah Update</a>
+							wire:navigate href="{{ route('technician.index', ['status' => 1]) }}">Disetujui</a>
+					</li>
+					<li>
+						<a
+							class="{{ Route::is('technician.index') && Request::query('status') == 3 ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg py-2 hover:text-red-600 dark:hover:text-red-600"
+							wire:navigate href="{{ route('technician.index', ['status' => 3]) }}">Ditolak</a>
 					</li>
 				</ul>
 			</div>
@@ -51,82 +49,46 @@
 						<li>
 							<a
 								class="{{ Route::is('technician.index') && !Request::query('status') ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} will-change-transformduration-300 inline-block w-full rounded-lg border-none p-3 text-sm transition-all ease-in-out hover:scale-105 hover:dark:bg-gray-500"
-								href="{{ route('technician.index') }}">Belum Update</a>
-							</a>
+								href="{{ route('technician.index') }}">Semua Laporan</a>
+						</li>
+						<li>
+							<a
+								class="{{ Route::is('technician.index') && Request::query('status') == 2 ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block w-full rounded-lg border-none p-3 text-sm transition-all duration-300 ease-in-out will-change-transform hover:scale-105 hover:dark:bg-gray-500"
+								href="{{ route('technician.index', ['status' => 2]) }}">Perlu Revisi</a>
 						</li>
 						<li>
 							<a
 								class="{{ Route::is('technician.index') && Request::query('status') == 1 ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block w-full rounded-lg border-none p-3 text-sm transition-all duration-300 ease-in-out will-change-transform hover:scale-105 hover:dark:bg-gray-500"
-								href="{{ route('technician.index', ['status' => 1]) }}">Sudah Update</a>
+								href="{{ route('technician.index', ['status' => 1]) }}">Disetujui</a>
+						</li>
+						<li>
+							<a
+								class="{{ Route::is('technician.index') && Request::query('status') == 3 ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block w-full rounded-lg border-none p-3 text-sm transition-all duration-300 ease-in-out will-change-transform hover:scale-105 hover:dark:bg-gray-500"
+								href="{{ route('technician.index', ['status' => 3]) }}">Ditolak</a>
 						</li>
 					</ul>
-
 				</div>
+
 			</div>
 		</div>
 
-		<div class="flex h-auto items-center justify-center">
-			<div
-				class="grid w-full grid-cols-2 gap-2 rounded-xl bg-white p-2 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 md:gap-4 md:p-6">
-
-				{{-- filter --}}
-				<div class="col-span-2 mb-4">
-					<x-filter.filter-bar>
-
-						<div class="col-span-2 w-full">
-
-							<div class="grid grid-cols-3 gap-2 md:gap-4">
-								<div class="col-span-3 w-full lg:col-span-1">
-									<x-input.basic id="kode_pegawai" name="kode_pegawai" placeholder="Cari kode jari..." required
-										:labels="false" />
-								</div>
-								<div class="col-span-3 w-full lg:col-span-1">
-									<x-input.basic id="customer_name" name="customer_name" placeholder="Cari nama customer..." required
-										:labels="false" />
-								</div>
-
-								<div class="col-span-3 w-full lg:col-span-1">
-									<x-input.basic id="no_vt" name="no_vt" placeholder="Cari nomor kunjungan..." required :labels="false" />
-								</div>
-							</div>
-
-						</div>
-
-						<div class="col-span-2 w-full lg:col-span-1">
-							<x-input.select id="total_data" name="total_data" :labels="false" :options="[
-							    '10' => '10',
-							    '50' => '50',
-							    '100' => '100',
-							    '500' => '500',
-							    '1000' => '1000',
-							    '2500' => '2500',
-							    '5000' => '5000',
-							    '10000' => '10000',
-							]" default-option="Total data">
-							</x-input.select>
-						</div>
-
-						<div class="col-span-2 mx-auto w-full items-center lg:col-span-1">
-							<x-filter.date-range />
-						</div>
-
-					</x-filter.filter-bar>
-				</div>
-				{{-- end filter --}}
-
-				{{-- subcontent --}}
-				<div class="col-span-2" x-data="{ openRow: null }">
-					<x-dashboard.table id="dataTable" :tablename="[
-					    '0' => '#',
-					    '1' => 'Aksi',
-					    '2' => 'Kunjungan',
-					    '3' => 'Customer',
-					    '4' => 'Tools',
-					    '5' => 'Created / Updated',
-					]" />
-				</div>
-
+		@can('technician-create')
+			<div class="max-w-xs">
+				<x-button.link class="w-fit ring-1 ring-green-700 dark:bg-green-800 dark:text-white"
+					href="{{ route('technician.create') }}">
+					<x-slot name="icon">
+						<x-icons.angle-right class="h-6 w-6 text-green-500 dark:text-white" />
+					</x-slot>
+					Tambah Data
+				</x-button.link>
 			</div>
+		@endcan
+
+		<div
+			class="relative grid grid-cols-1 rounded-xl bg-white py-2 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 lg:p-6">
+
+			<livewire:table-refresher table-name="TechnicianTable" />
+
 		</div>
 	</div>
 @endsection
