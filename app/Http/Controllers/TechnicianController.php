@@ -68,23 +68,22 @@ class TechnicianController extends Controller
         $data = $validator->validated();
 
         try {
-            // foreach ($data['partner'] as $partner) {
-            //     $response = Http::asForm()->post("https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=updateKunjungan", [
-            //         "NomorKunjungan" => $partner,
-            //         "UpdatePekerjaan" => $data['job_detail'],
-            //         "JenisTimbangan" => $data['weight_type'],
-            //         "Ukuran" => $data['size'],
-            //         "Kapasitas" => $data['capacity'],
-            //         "TipeIndikator" => $data['indicator_type'],
-            //         "TipeIndikatorSN" => $data['indicator_sn'],
-            //         "TipeLoadcell" => $data['loadcell_type'],
-            //         "TipeLoadcellSN" => $data['loadcell_sn'],
-            //         "TipeJunctionBox" => $data['junction_type'],
-            //         "TipeJunctionBoxSN" => $data['junction_sn'],
-            //     ]);
-            // }
-
             foreach ($data['partner'] as $partner) {
+                // kirim permintaan update ke server
+                //     $response = Http::asForm()->post("https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=updateKunjungan", [
+                //         "NomorKunjungan" => $partner,
+                //         "UpdatePekerjaan" => $data['job_detail'],
+                //         "JenisTimbangan" => $data['weight_type'],
+                //         "Ukuran" => $data['size'],
+                //         "Kapasitas" => $data['capacity'],
+                //         "TipeIndikator" => $data['indicator_type'],
+                //         "TipeIndikatorSN" => $data['indicator_sn'],
+                //         "TipeLoadcell" => $data['loadcell_type'],
+                //         "TipeLoadcellSN" => $data['loadcell_sn'],
+                //         "TipeJunctionBox" => $data['junction_type'],
+                //         "TipeJunctionBoxSN" => $data['junction_sn'],
+                //     ]);
+
                 // Cek apakah sudah ada data di database
                 $technician = Technician::where('no_vt', $partner['no_vt'])
                     ->where('id_permintaan', $data['id_permintaan'])
