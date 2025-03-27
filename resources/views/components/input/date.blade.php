@@ -1,4 +1,4 @@
-@props(['labels' => true, 'id', 'name', 'placeholder', 'value' => null])
+@props(['labels' => true, 'id', 'name', 'placeholder' => null, 'value' => null])
 
 @if ($labels)
 	<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"

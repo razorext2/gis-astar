@@ -20,6 +20,7 @@
 								<span
 									class="w-fit rounded-md bg-green-700 px-2 text-xs text-green-300">{{ auth()->user()->roles->first()->name }}</span>
 								<h4 class="text-lg font-semibold text-gray-800 dark:text-white">{{ auth()->user()->name }}</h4>
+								<p class="text-xs text-gray-500 dark:text-gray-400">{{ auth()->user()->bio ?? 'Not set' }}</p>
 							</div>
 						</div>
 
@@ -40,14 +41,27 @@
 									</dd>
 								</dl>
 								<dl>
+									<dt class="font-medium text-gray-800 dark:text-white">Gender</dt>
+									<dd class="text-gray-500 dark:text-gray-400">
+										{{ $data->gender ?? 'Not set' }}
+									</dd>
+								</dl>
+								<dl>
 									<dt class="font-medium text-gray-800 dark:text-white">Tanggal Lahir</dt>
 									<dd class="text-gray-500 dark:text-gray-400">
 										{{ optional($data)->tgl_lahir ? \Carbon\Carbon::parse($data->tgl_lahir)->translatedFormat('d F Y') : 'Not set' }}
 									</dd>
 								</dl>
+
 							</div>
 
 							<div class="space-y-2">
+								<dl>
+									<dt class="font-medium text-gray-800 dark:text-white">No. Telp/WA</dt>
+									<dd class="text-gray-500 dark:text-gray-400">
+										{{ $data->no_telp ?? 'Not set' }}
+									</dd>
+								</dl>
 								<dl>
 									<dt class="font-medium text-gray-800 dark:text-white">Alamat</dt>
 									<dd class="text-gray-500 dark:text-gray-400">

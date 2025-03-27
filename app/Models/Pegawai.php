@@ -22,6 +22,8 @@ class Pegawai extends Model
         'jabatan',
         'golongan',
         'tgl_lahir',
+        'gender',
+        'bio'
     ];
 
     public function collectorReportRelasi()

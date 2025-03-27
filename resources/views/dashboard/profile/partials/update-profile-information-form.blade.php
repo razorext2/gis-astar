@@ -13,22 +13,15 @@
 		@csrf
 	</form>
 
-	<form class="mt-6 space-y-6" method="post" action="{{ route('profile.update') }}">
+	<form class="mt-6 space-y-4" method="post" action="{{ route('profile.update') }}">
 		@csrf
 		@method('patch')
-
-		<div>
-			<x-input-label class="dark:text-white" for="name" :value="__('Name')" />
-			<x-text-input class="mt-1 block w-full" id="name" name="name" type="text" :value="old('name', $user->name)" required
-				autofocus autocomplete="name" />
-			<x-input-error class="mt-2" :messages="$errors->get('name')" />
-		</div>
 
 		<div class="flex items-center space-x-2">
 			<div class="flex-grow">
 				<x-input-label class="dark:text-white" for="email" :value="__('Email')" />
 				<x-text-input class="mt-1 block w-full disabled:bg-gray-300" id="email" name="email_" type="text"
-					:value="old('email', $user->email)" disabled autofocus autocomplete="email" />
+					:value="old('email', $user->email)" disabled autocomplete="email" />
 				<x-text-input name="email" type="hidden" :value="old('email', $user->email)" />
 				<x-input-error class="mt-2" :messages="$errors->get('email')" />
 			</div>
@@ -40,6 +33,70 @@
 					form="send-verification">Not Verified</button>
 			@endif
 		</div>
+
+		<div class="w-full">
+			<x-input.basic id="name" name="name" value="{{ old('name', $user->name) }}" required autocomplete="name">
+				Nama Lengkap
+			</x-input.basic>
+			<x-input-error class="mt-2" :messages="$errors->get('name')" />
+		</div>
+
+		@if (auth()->user()->kode_pegawai)
+			<div class="w-full">
+				<x-input.basic id="nick_name" name="nick_name" value="{{ old('nick_name', $data->nick_name ?? null) }}" required
+					autocomplete="nick_name">
+					Nama Panggilan
+				</x-input.basic>
+				<x-input-error class="mt-2" :messages="$errors->get('nick_name')" />
+			</div>
+
+			<div class="w-full">
+				<x-input.basic id="nik_pegawai" name="nik_pegawai" value="{{ old('nik_pegawai', $data->nik_pegawai ?? null) }}"
+					required autocomplete="nik_pegawai">
+					NIK
+				</x-input.basic>
+				<x-input-error class="mt-2" :messages="$errors->get('nik_pegawai')" />
+			</div>
+
+			<div class="w-full">
+				<x-input.basic id="no_telp" name="no_telp" value="{{ old('no_telp', $data->no_telp ?? null) }}" required
+					autocomplete="no_telp">
+					Nomor Telepon/Whatsapp
+				</x-input.basic>
+				<x-input-error class="mt-2" :messages="$errors->get('no_telp')" />
+			</div>
+
+			<div class="w-full">
+				<x-input.date id="tgl_lahir" name="tgl_lahir" :value="old('tgl_lahir', $data->tgl_lahir ?? null)" required autocomplete="tgl_lahir">
+					Tanggal Lahir
+				</x-input.date>
+				<x-input-error class="mt-2" :messages="$errors->get('tgl_lahir')" />
+			</div>
+
+			<div class="w-full">
+				<x-input.select id="gender" name="gender" :options="[
+				    'Laki-laki' => 'Laki-laki',
+				    'Perempuan' => 'Perempuan',
+				]" :value="old('gender', $data->gender ?? null)" required autocomplete="gender"
+					defaultOption="Pilih gender">
+					<x-slot name="textLabel">
+						Jenis Kelamin
+					</x-slot>
+				</x-input.select>
+				<x-input-error class="mt-2" :messages="$errors->get('gender')" />
+			</div>
+
+			<div class="w-full">
+				<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="Alamat">
+					Alamat
+				</label>
+				<x-input.textarea id="alamat" :labels="true" name="alamat"
+					value="{{ old('alamat', $data->alamat ?? null) }}" required autocomplete="alamat">
+					{{ old('alamat', $data->alamat ?? null) }}
+				</x-input.textarea>
+				<x-input-error class="mt-2" :messages="$errors->get('alamat')" />
+			</div>
+		@endif
 
 		<div class="flex items-center gap-6">
 			<button

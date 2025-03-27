@@ -32,8 +32,13 @@
 
 			<div class="col-span-2 flex flex-col gap-y-2 lg:col-span-1 lg:ml-4 lg:mt-16">
 				<h2 class="text-2xl font-bold text-gray-900 dark:text-white">{{ auth()->user()->name }}</h2>
+
+				@if (auth()->user()->kode_pegawai)
+					@livewire('handler.point.bio-edit')
+				@endif
+
 				<div class="flex w-full items-center gap-x-2">
-					<span class="w-fit rounded-xl bg-green-500 px-2 py-0.5 text-sm text-gray-600 dark:text-gray-300">
+					<span class="w-fit rounded-xl bg-green-600 px-2 py-0.5 text-sm text-green-200">
 						{{ auth()->user()->roles->pluck('name')->implode(', ') }}
 					</span>
 					<span class="text-md text-gray-600 dark:text-gray-300">

@@ -31,7 +31,9 @@ use App\Http\Controllers\TechnicianController;
 use App\Http\Controllers\TechnicianPointsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Report\CollectorReportController;
+use App\Models\Technician;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
