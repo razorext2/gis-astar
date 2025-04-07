@@ -12,7 +12,7 @@ export function editDataHandler() {
     let formData = new FormData();
     let id = $('#id').val();
 
-    if ($('#payment_amount').val() > $('#remain').val()) {
+    if (parseFloat($('#payment_amount').val()) > parseFloat($('#remain').val())) {
       return showAlert('error', 'Gagal melakukan update', '<b>Total bayar</b> tidak boleh melebihi <b>sisa tagihan</b>.');
     }
 
