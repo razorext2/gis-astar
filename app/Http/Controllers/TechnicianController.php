@@ -69,24 +69,13 @@ class TechnicianController extends Controller
 
         try {
             foreach ($data['partner'] as $partner) {
-                // kirim permintaan update ke server
-                //     $response = Http::asForm()->post("https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=updateKunjungan", [
-                //         "NomorKunjungan" => $partner,
-                //         "UpdatePekerjaan" => $data['job_detail'],
-                //         "JenisTimbangan" => $data['weight_type'],
-                //         "Ukuran" => $data['size'],
-                //         "Kapasitas" => $data['capacity'],
-                //         "TipeIndikator" => $data['indicator_type'],
-                //         "TipeIndikatorSN" => $data['indicator_sn'],
-                //         "TipeLoadcell" => $data['loadcell_type'],
-                //         "TipeLoadcellSN" => $data['loadcell_sn'],
-                //         "TipeJunctionBox" => $data['junction_type'],
-                //         "TipeJunctionBoxSN" => $data['junction_sn'],
-                //     ]);
-
                 // Cek apakah sudah ada data di database
                 $technician = Technician::where('no_vt', $partner['no_vt'])
                     ->where('id_permintaan', $data['id_permintaan'])
+                    ->first();
+
+                // cek apakah sudah ada data poinnya?
+                $point = TechnicianPoints::where('from_vt', $partner['no_vt'])
                     ->first();
 
                 // Jika data sudah ada, update
@@ -130,13 +119,24 @@ class TechnicianController extends Controller
                             'visit_date' => $data['visit_date']
                         ]);
 
-                        // $kode_pegawai = Technician::where('no_vt', $partner['no_vt'])->pluck('kode_pegawai')->first();
-
-                        TechnicianPoints::create([
-                            'from_vt' => $partner['no_vt'],
-                            'point' => $data['point'],
-                            'kode_pegawai' => $partner['kode_pegawai'],
-                        ]);
+                        // kalo blm ada, tambah
+                        if (!$point) {
+                            TechnicianPoints::create([
+                                'from_vt' => $partner['no_vt'],
+                                'point' => $data['point'],
+                                'kode_pegawai' => $partner['kode_pegawai'],
+                            ]);
+                        } else { // kalo sudah ada, update
+                            $point->update([
+                                'point' => $data['point'],
+                                'kode_pegawai' => $partner['kode_pegawai'],
+                                'is_redeemable' => 0,
+                                'is_redeeemed' => 0,
+                                'redeemed_status' => 0,
+                                'redeemed_date' => null,
+                                'deleted_at' => null,
+                            ]);
+                        }
 
                         DB::commit();
                     } catch (\Exception $e) {
@@ -193,9 +193,23 @@ class TechnicianController extends Controller
                 'is_redeemable' => 1,
             ]);
 
+            Http::asForm()->post("https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=updateKunjungan", [
+                "NomorKunjungan" => $query->no_vt,
+                "UpdatePekerjaan" => $query->job_update,
+                "JenisTimbangan" => $query->weight_type,
+                "Ukuran" => $query->size,
+                "Kapasitas" => $query->capacity,
+                "TipeIndikator" => $query->indicator_type,
+                "TipeIndikatorSN" => $query->indicator_sn,
+                "TipeLoadcell" => $query->loadcell_type,
+                "TipeLoadcellSN" => $query->loadcell_sn,
+                "TipeJunctionBox" => $query->junction_type,
+                "TipeJunctionBoxSN" => $query->loadcell_qty,
+            ]);
+
             DB::commit();
 
-            return new ApiResource(true, 'Berhasil', 'Laporan kunjungan telah dikonfirmasi');
+            return new ApiResource(true, 'Berhasil', 'Laporan kunjungan telah dikonfirmasi, laporan telah diteruskan ke server.');
         } catch (\Exception $e) {
             return new ApiResource(false, 'Gagal', $e->getMessage());
         }

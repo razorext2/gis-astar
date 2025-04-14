@@ -13,6 +13,7 @@ class PointsAccumulation extends Component
     {
         $this->points = TechnicianPoints::query()
             ->where('kode_pegawai', auth()->user()->kode_pegawai)
+            ->where('is_redeemed', false)
             ->sum('point');
 
         return $this->points;

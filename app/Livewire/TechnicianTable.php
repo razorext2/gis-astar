@@ -99,7 +99,7 @@ final class TechnicianTable extends PowerGridComponent
             ->add('customer_info', fn($query) => view('components.dashboard.name-w-code', [
                 'code' => $query->customer_address,
                 'name' => $query->customer_contact,
-                'item3' => '+ ' . $query->point->point . ' Poin'
+                'item3' => '+ ' . $query->point?->point . ' Poin'
             ]))
             ->add('tanggal_kunjungan_formatted', fn($query) => view('components.dashboard.title-w-status', [
                 'title' => Carbon::parse($query->visit_date)->locale('id')->isoFormat('DD MMM YYYY'),
