@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Handler\Point;
+namespace App\Livewire\Handler\Profile;
 
 use App\Models\Pegawai;
 use Livewire\Attributes\Validate;
@@ -28,6 +28,6 @@ class BioEdit extends Component
 
     public function render()
     {
-        return view('livewire.handler.point.bio-edit');
+        return view('livewire.handler.profile.bio-edit');
     }
 }
