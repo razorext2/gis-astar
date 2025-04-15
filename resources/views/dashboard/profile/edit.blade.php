@@ -34,7 +34,7 @@
 				<h2 class="text-2xl font-bold text-gray-900 dark:text-white">{{ auth()->user()->name }}</h2>
 
 				@if (auth()->user()->kode_pegawai)
-					@livewire('handler.point.bio-edit')
+					@livewire('handler.profile.bio-edit')
 				@endif
 
 				<div class="flex w-full items-center gap-x-2">
