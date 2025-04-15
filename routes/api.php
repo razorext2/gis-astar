@@ -96,4 +96,7 @@ Route::middleware(['auth:sanctum', 'throttle:high'])->group(function () {
     Route::patch('technician/{id}/confirm', [TechnicianController::class, 'confirm'])->name('technician.confirm');
     Route::patch('technician/{id}/deny', [TechnicianController::class, 'deny'])->name('technician.deny');
     Route::patch('technician/{id}/revision', [TechnicianController::class, 'revision'])->name('technician.revision');
+
+    // map distribution
+    Route::get('map-distribution', [\App\Http\Controllers\AttendanceController::class, 'getDistribution'])->name('map-distribution');
 });

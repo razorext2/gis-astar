@@ -238,6 +238,9 @@ Route::middleware(['auth'])->group(function () {
         // points
         Route::get('points', [TechnicianPointsController::class, 'index'])->name('points.index');
         Route::get('points/redeem', [TechnicianPointsController::class, 'redeem'])->name('technicianpoints.redeem');
+
+        // map distribution
+        Route::get('map/distribution', [AttendanceController::class, 'distribution'])->name('map.distribution');
     });
 });
 

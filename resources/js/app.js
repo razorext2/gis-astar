@@ -68,5 +68,9 @@ document.addEventListener('livewire:navigated', function () {
     import('./pages/collect/index.js').then((module) => {
       module.initCollect();
     });
+  } else if (window.location.pathname.startsWith('/dashboard/map/distribution')) {
+    import('./global/leaflet.js').then((module) => {
+      module.initDistribution();
+    });
   }
 });

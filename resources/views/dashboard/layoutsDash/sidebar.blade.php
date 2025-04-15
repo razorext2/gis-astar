@@ -518,6 +518,19 @@
 				</li>
 			@endcan
 
+			@hasanyrole('Admin|Management|Marketing|Marketing-JKT|Service')
+				<li>
+					<a href="{{ route('map.distribution') }}"
+						class="group flex flex-row items-center rounded-xl p-2 text-gray-900 hover:text-red-600 dark:text-gray-300"
+						wire:navigate wire:current.href="!text-red-600 font-bold bg-gray-100 dark:bg-dark-primary">
+
+						<x-icons.book-open wire:current="!text-red-600" class="h-6 w-6 group-hover:text-red-600" />
+						<span class="ms-3 inline-flex text-sm group-hover:text-red-600">
+							Peta penyebaran teknisi
+						</span>
+					</a>
+				</li>
+			@endhasanyrole
 		</ul>
 	</div>
 

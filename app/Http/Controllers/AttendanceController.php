@@ -50,4 +50,18 @@ class AttendanceController extends Controller
             return response()->json(['success' => false, 'message' => 'Failed to record attendance.', 'error' => $e->getMessage()]);
         }
     }
+
+    public function distribution()
+    {
+        return view('dashboard.map.distribution');
+    }
+
+    public function getDistribution()
+    {
+        return Attendance::select('kode_pegawai', 'longitude', 'latitude')
+            ->with('pegawaiRelasi:kode_pegawai,full_name')
+            ->whereDate('created_at', today())
+            ->get()
+            ->toJson();
+    }
 }
