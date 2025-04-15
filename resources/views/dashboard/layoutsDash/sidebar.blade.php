@@ -504,7 +504,7 @@
 				</li>
 			@endif
 
-			@hasrole('Teknisi')
+			@can('technician-list')
 				<li>
 					<a href="{{ route('points.index') }}"
 						class="group flex flex-row items-center rounded-xl p-2 text-gray-900 hover:text-red-600 dark:text-gray-300"
@@ -516,7 +516,7 @@
 						</span>
 					</a>
 				</li>
-			@endhasrole
+			@endcan
 
 		</ul>
 	</div>

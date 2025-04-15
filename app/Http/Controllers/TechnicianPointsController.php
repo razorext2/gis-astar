@@ -10,4 +10,9 @@ class TechnicianPointsController extends Controller
     {
         return view('dashboard.technicianpoints.index');
     }
+
+    public function redeem()
+    {
+        return view('dashboard.technicianpoints.redeem');
+    }
 }

@@ -13,7 +13,7 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
 <div>
     @if ($paginator->hasPages())
         <nav role="navigation" aria-label="Pagination Navigation" class="flex items-center justify-between">
-            <div class="flex justify-between flex-1 sm:hidden">
+            <div class="flex justify-between flex-1 lg:hidden">
                 <span>
                     @if ($paginator->onFirstPage())
                         <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-default leading-5 rounded-md dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:focus:border-blue-700 dark:active:bg-gray-700 dark:active:text-gray-300">
@@ -39,14 +39,13 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
                 </span>
             </div>
 
-            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+            <div class="hidden lg:flex-1 lg:flex lg:items-center lg:justify-between">
                 <div>
                     <p class="text-sm text-gray-700 leading-5 dark:text-gray-400">
-                        <span>{!! __('Showing') !!}</span>
                         <span class="font-medium">{{ $paginator->firstItem() }}</span>
-                        <span>{!! __('to') !!}</span>
+                        <span>{!! __('-') !!}</span>
                         <span class="font-medium">{{ $paginator->lastItem() }}</span>
-                        <span>{!! __('of') !!}</span>
+                        <span>{!! __('|') !!}</span>
                         <span class="font-medium">{{ $paginator->total() }}</span>
                         <span>{!! __('results') !!}</span>
                     </p>

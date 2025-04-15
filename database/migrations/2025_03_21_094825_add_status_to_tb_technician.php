@@ -11,13 +11,13 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('tb_technician', function (Blueprint $table) {
-            $table->smallInteger('status')
+            $table->integer('status')
                 ->default(0)
                 ->after('visit_date')
                 ->comment('0 = diajukan, 1 = disetujui, 2 = butuh revisi, 3 = ditolak');
             $table->string('validate_by', 30)->nullable()->after('status');
             $table->dateTime('validate_at')->nullable()->after('validate_by');
-            $table->smallInteger('total_revision')->default(0)->after('validate_at');
+            $table->integer('total_revision')->default(0)->after('validate_at');
             $table->string('notes', 128)->nullable()->after('total_revision');
             $table->string('revised_by', 30)->nullable()->after('notes');
             $table->dateTime('revised_at')->nullable()->after('revised_by');
@@ -26,7 +26,7 @@ return new class extends Migration {
 
     /**
      * Reverse the migrations.
-    */
+     */
     public function down(): void
     {
         Schema::table('tb_technician', function (Blueprint $table) {

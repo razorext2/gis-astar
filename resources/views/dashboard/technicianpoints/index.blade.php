@@ -1,7 +1,19 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
 	<div
-		class="w-full max-w-xl rounded-xl bg-white p-4 pl-8 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 md:p-6 md:pl-10">
-		@livewire('handler.point.index')
+		class="w-full rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 md:p-6">
+
+		<header class="mb-4 flex items-center justify-between">
+			<p class="text-lg font-semibold text-gray-900 dark:text-white">History pendapatan poin</p>
+			<x-button.link class="text-sm text-green-500 ring-1 ring-green-500 hover:bg-green-300 dark:bg-green-800 md:text-base"
+				href="{{ route('technicianpoints.redeem', ['step' => 1]) }}" wire:navigate>
+				<x-slot name="icon">
+					<x-icons.plus class="icon h-6 w-6 text-green-500 dark:text-white" />
+				</x-slot>
+				Redeem
+			</x-button.link>
+		</header>
+
+		@livewire('handler.point.technician.index')
 	</div>
 @endsection
