@@ -17,8 +17,7 @@ export function initSelfDetect() {
     pegawaiInfo = document.getElementById("pegawaiInfo"),
     lokasi = "-",
     labels = [],
-    kodePegawai = document.getElementById('kodePegawai').value,
-    detectedFaces = new Set;
+    kodePegawai = document.getElementById('kodePegawai').value;
 
   function initializeFaceAPI() {
     // Load necessary models from the specified URI
@@ -195,14 +194,16 @@ export function initSelfDetect() {
   }
 
   function showAttendanceAlert() {
-    showAlert('success', 'Berhasil', 'Berhasil melakukan absensi').then(() => {
-      // Menampilkan elemen yang relevan setelah alert
-      pegawaiKosong.style.display = "block";  // Menampilkan informasi pegawai kosong
-      pegawaiInfo.style.display = "none";     // Menyembunyikan info pegawai yang sedang diproses
-      canvInfo.style.display = "none";        // Menyembunyikan informasi canvas
+    showAlert('success', 'Berhasil', 'Berhasil melakukan absensi');
 
-      window.location.reload();
-    });
+    // Menampilkan elemen yang relevan setelah alert
+    pegawaiKosong.style.display = "block";  // Menampilkan informasi pegawai kosong
+    pegawaiInfo.style.display = "none";     // Menyembunyikan info pegawai yang sedang diproses
+    canvInfo.style.display = "none";        // Menyembunyikan informasi canvas
+
+    setTimeout(() => {
+      window.location.href = `${APP_URL}/dashboard`;
+    }, 2500);
   }
 
   async function getEmployeeImagePaths(label) {
@@ -499,8 +500,9 @@ export function initSelfDetect() {
         body: JSON.stringify({
           kode_jari: kodePegawai,
         })
-      }),
-        mainServerData = await mainServerResponse.json();
+      });
+
+      const mainServerData = await mainServerResponse.json();
       console.log("Server: " + mainServerData.message);
     } catch (error) {
       console.error("Error checking or saving attendance:", error);
