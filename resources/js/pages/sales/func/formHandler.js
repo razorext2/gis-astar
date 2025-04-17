@@ -2,7 +2,7 @@ import { capturedImages } from '../../../utils/cameraStream';
 import { showAlert } from "../../../utils/alert";
 
 export function addDataHandler() {
-  $('#store').click(async function (e) {
+  $('#store').on('click', async function (e) {
     e.preventDefault();
 
     const $button = $(this);

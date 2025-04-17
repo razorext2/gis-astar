@@ -109,6 +109,7 @@
 						    'Conveyer' => 'Conveyer',
 						    'Check Weigher' => 'Check Weigher',
 						    'Timbangan Jembatan' => 'Timbangan Jembatan',
+						    'Kombinasi' => 'Kombinasi',
 						    'Other' => 'Other',
 						]" default-option="Pilih jenis timbangan">
 							<x-slot name="textLabel">Jenis Timbangan</x-slot>
@@ -120,9 +121,19 @@
 					</div>
 
 					<div class="col-span-2 w-full lg:col-span-1">
-						<x-input.basic id="size" name="size" placeholder="12 X 12" required>
-							Ukuran
-						</x-input.basic>
+						<div class="flex items-center justify-between gap-2">
+							<div>
+								<x-input.basic id="length" name="length" placeholder="xx Meter" required>
+									Panjang
+								</x-input.basic>
+							</div>
+							<p class="mt-2 font-semibold text-gray-800 dark:text-white">x</p>
+							<div>
+								<x-input.basic id="width" name="width" placeholder="xx Meter" required>
+									Lebar
+								</x-input.basic>
+							</div>
+						</div>
 						<div class="mt-2 hidden text-sm text-red-500" id="alert-size"></div>
 					</div>
 
@@ -166,6 +177,7 @@
 								    'HM9A (Zemic)' => 'HM9A (Zemic)',
 								    'HM9B (Zemic)' => 'HM9B (Zemic)',
 								    'QS (Keli)' => 'QS (Keli)',
+								    'PST' => 'PST',
 								]"
 									default-option="Pilih type loadcell">
 								</x-input.select>
@@ -193,6 +205,26 @@
 							Type Junction Box
 						</x-input.basic>
 						<div class="mt-2 hidden text-sm text-red-500" id="alert-junction_type"></div>
+					</div>
+
+					<div class="col-span-2 w-full">
+						<p class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Dokumentasi</p>
+						<p class="mb-2 text-xs text-red-500"> *Dokumentasi tidak dapat diubah setelah laporan diinput. </p>
+
+						<x-button.primary id="capture-button" type="button">
+							<x-slot name="icon">
+								<x-icons.plus class="icon h-5 w-5 text-blue-500 dark:text-white" />
+							</x-slot>
+							Ambil Foto
+						</x-button.primary>
+
+						<div class="relative overflow-auto">
+							<div class="mt-2 flex overflow-x-auto" id="captured-images">
+								<!-- Thumbnail gambar yang diambil akan muncul di sini -->
+							</div>
+						</div>
+
+						<div class="mt-2 hidden text-sm text-red-500" id="alert-images"></div>
 					</div>
 
 					<div class="col-span-2 w-full">
@@ -225,6 +257,7 @@
 			</div>
 		</div>
 	</div>
+	@livewire('utils.camera-stream-modal')
 @endsection
 @push('script')
 	@vite(['resources/js/pages/technician/add.js'])

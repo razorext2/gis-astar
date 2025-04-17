@@ -59,7 +59,6 @@ class ProxyController extends Controller
             ], 500);
         }
     }
-
     public function fetchIDCPpn(Request $request)
     {
         $no_sr = $request->query('no_sr');
@@ -107,7 +106,6 @@ class ProxyController extends Controller
             ], 500);
         }
     }
-
     public function fetchIDYPpn(Request $request)
     {
         $no_sr = $request->query('no_sr');
@@ -155,7 +153,6 @@ class ProxyController extends Controller
             ], 500);
         }
     }
-
     public function getVT(Request $request)
     {
         $validator = Validator::make($request->all(), [

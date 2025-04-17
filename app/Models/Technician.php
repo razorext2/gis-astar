@@ -62,4 +62,9 @@ class Technician extends Model
     {
         return $this->belongsTo(TechnicianPoints::class, 'no_vt', 'from_vt');
     }
+
+    public function photo_collects(): HasMany
+    {
+        return $this->hasMany(PhotoCollect::class, 'no_vt', 'no_vt');
+    }
 }

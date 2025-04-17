@@ -99,40 +99,28 @@
 						<p class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Dokumentasi</p>
 						<p class="mb-2 text-xs text-red-500"> *Dokumentasi tidak dapat diubah setelah laporan diinput. </p>
 
-						@if (count($data->photoCollectRelasi) == 0)
-							<x-button.primary id="capture-button" type="button">
-								<x-slot name="icon">
-									<x-icons.plus class="icon h-5 w-5 text-blue-500 dark:text-white" />
-								</x-slot>
-								Ambil Foto
-							</x-button.primary>
+						<x-button.primary id="capture-button" type="button">
+							<x-slot name="icon">
+								<x-icons.plus class="icon h-5 w-5 text-blue-500 dark:text-white" />
+							</x-slot>
+							Ambil Foto
+						</x-button.primary>
 
-							<div class="relative overflow-auto">
-								<div class="flex overflow-x-auto" id="captured-images">
-									<!-- Thumbnail gambar yang diambil akan muncul di sini -->
-								</div>
+						<div class="relative overflow-auto">
+							<div class="mt-2 flex overflow-x-auto" id="captured-images">
+								<!-- Thumbnail gambar yang diambil akan muncul di sini -->
+								@if ($data->photoCollectRelasi)
+									@foreach ($data->photoCollectRelasi as $photo)
+										<div class="relative me-2 flex-none items-center gap-4">
+											<img class="h-36 w-36 rounded-xl border object-cover" id="documentations"
+												onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}';"
+												data-url="{{ asset($photo->photourl) }}" src="{{ asset($photo->photourl) }}" alt=""
+												onclick="javascript:void(0)" loading="lazy">
+										</div>
+									@endforeach
+								@endif
 							</div>
-						@else
-							<div class="relative overflow-auto">
-								<div class="flex overflow-x-auto" id="captured-images">
-
-									<!-- Thumbnail gambar yang diambil akan muncul di sini -->
-									@if ($data->photoCollectRelasi)
-										@foreach ($data->photoCollectRelasi as $photo)
-											<div class="relative me-2 flex-none items-center gap-4 rounded-xl p-2">
-												<img
-													class="h-36 w-36 rounded-xl object-cover blur-sm transition duration-300 ease-in-out hover:scale-105 hover:blur-0"
-													id="documentations" onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}';"
-													data-url="{{ asset($photo->photourl) }}" src="{{ asset($photo->photourl) }}" alt=""
-													onclick="javascript:void(0)" loading="lazy">
-											</div>
-										@endforeach
-									@endif
-
-								</div>
-							</div>
-
-						@endif
+						</div>
 
 						<div class="mt-2 hidden text-sm text-red-500" id="alert-images"></div>
 					</div>

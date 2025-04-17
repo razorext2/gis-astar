@@ -3,20 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ApiResource;
+use App\Models\PhotoCollect;
 use App\Models\Technician;
 use App\Models\TechnicianPoints;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Yajra\DataTables\DataTables;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Typography\FontFactory;
 
 class TechnicianController extends Controller
 {
@@ -59,6 +56,8 @@ class TechnicianController extends Controller
             'point' => 'required',
             'partner' => 'required|array',
             // 'partner.*' => 'array',
+            'images' => 'required|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -69,6 +68,9 @@ class TechnicianController extends Controller
 
         try {
             foreach ($data['partner'] as $partner) {
+                // decode json partner
+                $partner = json_decode($partner, true);
+
                 // Cek apakah sudah ada data di database
                 $technician = Technician::where('no_vt', $partner['no_vt'])
                     ->where('id_permintaan', $data['id_permintaan'])
@@ -144,6 +146,78 @@ class TechnicianController extends Controller
                         return new ApiResource(false, 'Gagal memperbarui kunjungan', $e->getMessage());
                     }
                 }
+
+                // upload image
+                $folderPath = "technician";
+
+                if (!Storage::disk('public')->exists($folderPath)) {
+                    Storage::disk('public')->makeDirectory($folderPath);
+                }
+
+                if ($request->hasFile('images')) {
+                    $manager = ImageManager::gd();
+
+                    foreach ($request->file('images') as $image) {
+                        $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
+
+                        $img = $manager->read($image);
+
+                        // Baca logo dan resize dulu watermark-nya
+                        $logo = $manager->read(public_path('assets/img/logo.png'))
+                            ->resize(100, 22);
+
+                        // Tempelkan logo ke pojok kanan bawah
+                        $img->place($logo, 'top-left', 10, $img->height() - 75, 90); // 90 itu opacity
+
+                        // Tambahkan watermark
+                        $img->text($technician->customer_contact, 10, $img->height() - 40, function (FontFactory $font) {
+                            $font->filename(public_path('assets/fonts/OpenSans-Regular.ttf'));
+                            $font->size(10);
+                            $font->color('#ffffff');
+                            $font->align('left');
+                            $font->valign('bottom');
+                        });
+
+                        $img->text($technician->customer_address, 10, $img->height() - 30, function (FontFactory $font) {
+                            $font->filename(public_path('assets/fonts/OpenSans-Regular.ttf'));
+                            $font->size(8);
+                            $font->color('#ffffff');
+                            $font->align('left');
+                            $font->valign('bottom');
+                        });
+
+                        $img->text($technician->kode_pegawai . ' - ' . ($technician->pegawai?->full_name ?? 'Teknisi belum terdaftar disistem'), 10, $img->height() - 20, function (FontFactory $font) {
+                            $font->filename(public_path('assets/fonts/OpenSans-Regular.ttf'));
+                            $font->size(8);
+                            $font->color('#ffffff');
+                            $font->align('left');
+                            $font->valign('bottom');
+                        });
+
+                        $img->text($technician->updated_at, 10, $img->height() - 10, function (FontFactory $font) {
+                            $font->filename(public_path('assets/fonts/OpenSans-Regular.ttf'));
+                            $font->size(8);
+                            $font->color('#ffffff');
+                            $font->align('left');
+                            $font->valign('bottom');
+                        });
+
+                        // Simpan gambar ke storage
+                        $path = $folderPath . '/' . $imageName;
+                        Storage::disk('public')->put($path, (string) $img->encode());
+
+                        $imageUrl = '/storage/' . $path;
+
+                        $upload = PhotoCollect::create([
+                            'no_vt' => $partner['no_vt'],
+                            'photourl' => $imageUrl,
+                        ]);
+
+                        if (!$upload) {
+                            return new ApiResource(false, 'Gagal menyimpan gambar');
+                        }
+                    }
+                }
             }
 
             return new ApiResource(true, 'Laporan berhasil diperbarui');
@@ -154,7 +228,7 @@ class TechnicianController extends Controller
 
     public function show($id)
     {
-        $query = Technician::with('pegawai')
+        $query = Technician::with('pegawai', 'photo_collects:id,no_vt,photourl')
             ->where('no_vt', $id)
             ->first();
 
@@ -285,7 +359,7 @@ class TechnicianController extends Controller
 
         $no_vt = $request->query('no_vt');
 
-        $technician = Technician::with('pegawai', 'technician_points')
+        $technician = Technician::with('pegawai:kode_pegawai,full_name', 'technician_points:id,from_vt,point', 'photo_collects:id,no_vt,photourl')
             ->where('no_vt', $no_vt)
             ->first();
 
@@ -298,7 +372,14 @@ class TechnicianController extends Controller
         }
 
         $technician->technician_name = $technician->pegawai->full_name ?? 'Teknisi tidak terdaftar disistem.';
-        $technician->point = $technician->technician_points->point;
+        $technician->point = $technician->technician_points()->first()?->point;
+        $technician->photo_collects = $technician->photo_collects->map(function ($photo_collect) {
+            return [
+                'id' => $photo_collect->id,
+                'no_vt' => $photo_collect->no_vt,
+                'photourl' => $photo_collect->photourl
+            ];
+        });
 
         $id = rawurlencode($technician->id_permintaan);
         $date = $technician->visit_date;

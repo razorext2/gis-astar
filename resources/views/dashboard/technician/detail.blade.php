@@ -84,6 +84,27 @@
 						{{ $data->junction_type }}
 					</x-detail.label>
 
+					<div
+						class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
+						<p class="mb-2 text-sm text-gray-600 dark:text-gray-300">Dokumentasi</p>
+						<div class="relative overflow-auto">
+							<div class="flex overflow-x-auto" id="captured-images">
+								<!-- Thumbnail gambar yang diambil akan muncul di sini -->
+								@if ($data->photo_collects)
+									@foreach ($data->photo_collects as $photo)
+										<div class="relative me-2 flex-none items-center gap-4 rounded-xl p-2">
+											<img
+												class="h-36 w-36 rounded-xl object-cover blur-sm transition duration-300 ease-in-out hover:scale-105 hover:blur-0"
+												id="documentations" onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}';"
+												data-url="{{ asset($photo->photourl) }}" src="{{ asset($photo->photourl) }}" alt=""
+												onclick="javascript:void(0)" loading="lazy">
+										</div>
+									@endforeach
+								@endif
+							</div>
+						</div>
+					</div>
+
 					<div class="col-span-2 h-full rounded-lg bg-gray-50 p-3 dark:bg-gray-700">
 						<p class="text-sm text-gray-600 dark:text-gray-300">Update pekerjaan</p>
 						<x-input.textarea id="job_update" name="job_update" placeholder="Update pekerjaan" :labels="'Update pekerjaan'" rows="15"
@@ -156,7 +177,7 @@
 				</div>
 
 				@can('technician-approve')
-					@if ($data->status == 0 || $data->status == 2)
+					@if ($data->status == 0)
 						<x-button.success class="w-fit self-end" id="store" data-id="{{ $data->no_vt }}" type="button">
 							<x-slot name="icon">
 								<x-icons.angle-right class="h-5 w-5 text-blue-500 dark:text-white" />

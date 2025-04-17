@@ -69,7 +69,7 @@
 						</x-button.primary>
 
 						<div class="relative overflow-auto">
-							<div class="flex overflow-x-auto" id="captured-images">
+							<div class="mt-2 flex overflow-x-auto" id="captured-images">
 								<!-- Thumbnail gambar yang diambil akan muncul di sini -->
 							</div>
 						</div>

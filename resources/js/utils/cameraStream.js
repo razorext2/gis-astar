@@ -46,7 +46,6 @@ export function backCameraStream() {
 
     // Sisipkan ke dalam container
     capturedImagesContainer.insertAdjacentHTML("beforeend", imageHTML);
-    capturedImagesContainer.classList.add('mt-2');
 
     // Tambahkan event listener ke tombol hapus
     const removeButton = capturedImagesContainer.lastElementChild.querySelector("button");

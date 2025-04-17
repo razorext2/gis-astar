@@ -19,6 +19,7 @@ export function fetchDataHandler() {
 async function fetchDataAsync() {
   $('#partner_parent').addClass('hidden');
   $('#partner_child').empty();
+  document.getElementById('captured-images').innerHTML = '';
 
   if ($('#no_vt').val() == '') {
     return alert.showAlert('error', 'Nomor Kunjungan tidak boleh kosong!');
@@ -63,7 +64,12 @@ async function fetchDataAsync() {
       $('#customer_contact').val(data.customer_contact);
       $('#customer_address').val(data.customer_address);
       $('#job_detail').val(data.job_detail);
-      $('#size').val(data.size);
+
+      // $('#size').val(data.size);
+      const [length, width] = data.size.split(/[*x]/i).map(val => val.trim());
+      $('#length').val(length || '');
+      $('#width').val(width || '');
+
       $('#capacity').val(data.capacity);
       $('#indicator_type').val(data.indicator_type);
       $('#indicator_sn').val(data.indicator_sn);
@@ -112,6 +118,17 @@ async function fetchDataAsync() {
           $('#checkbox-' + items.NomorKunjungan).prop('disabled', true);
         }
       });
+
+      // tampilkan dokumentasi
+      const container = document.getElementById('captured-images');
+      container.innerHTML = '';
+
+      data.photo_collects.forEach(items => {
+        container.innerHTML += `
+         <div class="relative me-2 flex-none items-center gap-4">
+           <img src="${items.photourl}" class="w-36 h-36 object-cover rounded-xl border">
+         </div>`;
+      });
     } else {
       const response = await axios.get(`${APP_URL}/proxy/get/vt`, {
         params: {
@@ -149,7 +166,12 @@ async function fetchDataAsync() {
       $('#customer_contact').val(data.CustomerContact);
       $('#customer_address').val(data.AlamatLengkapKunjungan);
       $('#job_detail').val(data.RincianPekerjaan);
-      $('#size').val(data.Ukuran);
+
+      // $('#size').val(data.Ukuran);
+      const [length, width] = data.Ukuran.split(/[*x]/i).map(val => val.trim());
+      $('#length').val(length || '');
+      $('#width').val(width || '');
+
       $('#capacity').val(data.Kapasitas);
       $('#indicator_type').val(data.TipeIndikator);
       $('#indicator_sn').val(data.TipeIndikatorSN);
