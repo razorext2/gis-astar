@@ -1,6 +1,14 @@
 export function getLocation() {
   if (navigator.geolocation) {
-    navigator.geolocation.watchPosition(
+    // Opsi agar lebih cepat
+    const geoOptions = {
+      enableHighAccuracy: true, // false = lebih cepat, true = lebih akurat tapi lebih lambat
+      timeout: 5000,             // 5 detik timeout
+      maximumAge: 60000          // gunakan cache lokasi hingga 60 detik jika ada
+    };
+
+    // Coba dapatkan posisi satu kali, lebih cepat
+    navigator.geolocation.getCurrentPosition(
       function (position) {
         $('#longitude').val(position.coords.longitude);
         $('#latitude').val(position.coords.latitude);
@@ -13,8 +21,12 @@ export function getLocation() {
           icon: "error",
           showConfirmButton: false,
         }).then(() => setTimeout(() => window.location.href = `${APP_URL}/dashboard/sales`, 500));
-      }
+      },
+      geoOptions
     );
+
+    // Jika ingin terus update lokasi, bisa aktifkan watchPosition juga (opsional)
+    // navigator.geolocation.watchPosition(successCallback, errorCallback, geoOptions);
   } else {
     window.Swal.fire({
       title: "Gagal!",
