@@ -73,7 +73,14 @@ final class AttendanceOutTable extends PowerGridComponent
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('kode_pegawai', fn($query) => $query->pegawaiRelasi->full_name)
+            ->add('kode_pegawai', function ($query) {
+                $pegawai = $query->pegawaiRelasi;
+                if ($pegawai) {
+                    $url = route('pegawai.timeline', $pegawai->kode_pegawai);
+                    return '<a target="_blank" class="underline hover:text-blue-600 transition-colors duration-500" href="' . $url . '">' . e($pegawai->full_name) . '</a>';
+                }
+                return '-';
+            })
             ->add('jenis')
             ->add('status')
             ->add('longitude', fn($query) => $query->longitude ?? '-')
