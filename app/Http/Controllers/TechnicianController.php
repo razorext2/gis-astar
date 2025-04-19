@@ -56,8 +56,9 @@ class TechnicianController extends Controller
             'point' => 'required',
             'partner' => 'required|array',
             // 'partner.*' => 'array',
-            'images' => 'required|array',
+            'images' => 'array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status' => 'integer',
         ]);
 
         if ($validator->fails()) {
@@ -95,13 +96,14 @@ class TechnicianController extends Controller
                         'job_update' => $data['job_update'],
                         'visit_date' => $data['visit_date'],
                         'revised_by' => auth()->user()->id,
-                        'revised_at' => now()
+                        'revised_at' => now(),
+                        'status' => $data['status'],
                     ]);
                 } else {
                     try {
                         DB::beginTransaction();
 
-                        Technician::create([
+                        $technician = Technician::create([
                             'no_vt' => $partner['no_vt'],
                             'id_permintaan' => $data['id_permintaan'],
                             'kode_pegawai' => $partner['kode_pegawai'],
@@ -267,19 +269,20 @@ class TechnicianController extends Controller
                 'is_redeemable' => 1,
             ]);
 
-            Http::asForm()->post("https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=updateKunjungan", [
-                "NomorKunjungan" => $query->no_vt,
-                "UpdatePekerjaan" => $query->job_update,
-                "JenisTimbangan" => $query->weight_type,
-                "Ukuran" => $query->size,
-                "Kapasitas" => $query->capacity,
-                "TipeIndikator" => $query->indicator_type,
-                "TipeIndikatorSN" => $query->indicator_sn,
-                "TipeLoadcell" => $query->loadcell_type,
-                "TipeLoadcellSN" => $query->loadcell_sn,
-                "TipeJunctionBox" => $query->junction_type,
-                "TipeJunctionBoxSN" => $query->loadcell_qty,
-            ]);
+            // kirim update ke API
+            // Http::asForm()->post("https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=updateKunjungan", [
+            //     "NomorKunjungan" => $query->no_vt,
+            //     "UpdatePekerjaan" => $query->job_update,
+            //     "JenisTimbangan" => $query->weight_type,
+            //     "Ukuran" => $query->size,
+            //     "Kapasitas" => $query->capacity,
+            //     "TipeIndikator" => $query->indicator_type,
+            //     "TipeIndikatorSN" => $query->indicator_sn,
+            //     "TipeLoadcell" => $query->loadcell_type,
+            //     "TipeLoadcellSN" => $query->loadcell_sn,
+            //     "TipeJunctionBox" => $query->junction_type,
+            //     "TipeJunctionBoxSN" => $query->loadcell_qty,
+            // ]);
 
             DB::commit();
 

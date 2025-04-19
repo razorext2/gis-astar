@@ -80,6 +80,7 @@ async function fetchDataAsync() {
       $('#job_update').val(data.job_update);
       $('#point').val(data.point);
       $('#weight_type option[value="' + data.weight_type + '"]').prop('selected', true).trigger('change');
+      $('#status option[value="' + data.status + '"]').prop('selected', true).trigger('change');
 
       // jika jenis timbangan tidak ada di array data
       if (!arrTimb.data.includes(data.weight_type)) {
@@ -168,9 +169,11 @@ async function fetchDataAsync() {
       $('#job_detail').val(data.RincianPekerjaan);
 
       // $('#size').val(data.Ukuran);
-      const [length, width] = data.Ukuran.split(/[*x]/i).map(val => val.trim());
-      $('#length').val(length || '');
-      $('#width').val(width || '');
+      if (data.Ukuran) {
+        const [length, width] = data.Ukuran.split(/[*x]/i).map(val => val.trim());
+        $('#length').val(length || '');
+        $('#width').val(width || '');
+      }
 
       $('#capacity').val(data.Kapasitas);
       $('#indicator_type').val(data.TipeIndikator);

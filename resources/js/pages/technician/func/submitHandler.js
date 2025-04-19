@@ -29,6 +29,7 @@ export function submitHandler() {
     formData.append("junction_type", $("#junction_type").val());
     formData.append("job_update", $("#job_update").val());
     formData.append("visit_date", $("#visit_date").val());
+    formData.append("status", $('#status').val());
     formData.append("point", $("#point").val());
     formData.append("partner", []);
 

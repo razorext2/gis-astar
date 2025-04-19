@@ -12,9 +12,9 @@ return new class extends Migration {
     {
         Schema::table('tb_technician', function (Blueprint $table) {
             $table->integer('status')
-                ->default(0)
+                ->default(4)
                 ->after('visit_date')
-                ->comment('0 = diajukan, 1 = disetujui, 2 = butuh revisi, 3 = ditolak');
+                ->comment('0 = diajukan, 1 = disetujui, 2 = butuh revisi, 3 = ditolak, 4 = draft');
             $table->string('validate_by', 30)->nullable()->after('status');
             $table->dateTime('validate_at')->nullable()->after('validate_by');
             $table->integer('total_revision')->default(0)->after('validate_at');

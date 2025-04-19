@@ -50,7 +50,7 @@ final class TechnicianTable extends PowerGridComponent
     {
         $query = Technician::query()
             ->with('pegawai', 'point')
-            ->orderBy('created_at', 'desc');
+            ->orderBy('updated_at', 'desc');
 
         if ($this->status) {
             $query->where('status', $this->status);
@@ -88,10 +88,27 @@ final class TechnicianTable extends PowerGridComponent
             ->add('created_at')
             ->add('updated_at')
             // custom
-            ->add('no_vt_formatted', fn($query) => view('components.dashboard.name-w-code', [
-                'code' => $query->id_permintaan,
-                'name' => $query->no_vt
-            ]))
+            ->add('no_vt_formatted', function ($query) {
+                if ($query->status == 0) {
+                    $status = 'Diajukan';
+                } elseif ($query->status == 1) {
+                    $status = 'Diterima';
+                } elseif ($query->status == 2) {
+                    $status = 'Butuh revisi';
+                } elseif ($query->status == 3) {
+                    $status = 'Ditolak';
+                } elseif ($query->status == 4) {
+                    $status = 'Draft';
+                } else {
+                    $status = 'Status tidak diketahui';
+                }
+
+                return view('components.dashboard.name-w-code', [
+                    'code' => $query->id_permintaan,
+                    'name' => $query->no_vt,
+                    'item3' => $status
+                ]);
+            })
             ->add('pegawai_info', fn($query) => view('components.dashboard.name-w-code', [
                 'code' => $query->kode_pegawai,
                 'name' => $query->pegawai->full_name ?? 'Teknisi belum terdaftar di sistem',
@@ -177,7 +194,7 @@ final class TechnicianTable extends PowerGridComponent
                 ->route('technician.show', ['technician' => $row->no_vt]),
         ];
 
-        if ($row->status == 2) {
+        if ($row->status == 2 || $row->status == 4) {
             $button[] = Button::make('edit')
                 ->slot('Update')
                 ->id($row->id)

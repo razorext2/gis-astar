@@ -133,8 +133,12 @@
 									<span class="rounded-lg bg-green-500 px-2 py-0.5"> Diterima </span>
 								@elseif ($data->status == 2)
 									<span class="rounded-lg bg-yellow-500 px-2 py-0.5"> Butuh revisi </span>
-								@else
+								@elseif ($data->status == 3)
 									<span class="rounded-lg bg-red-500 px-2 py-0.5"> Ditolak </span>
+								@elseif ($data->status == 4)
+									<span class="rounded-lg bg-gray-500 px-2 py-0.5"> Draft </span>
+								@else
+									<span class="rounded-lg bg-red-500 px-2 py-0.5"> Status tidak diketahui </span>
 								@endif
 							</div>
 

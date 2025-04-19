@@ -244,6 +244,16 @@
 						</p>
 					</div>
 
+					<div class="col-span-2 w-full" id="status_container">
+						<x-input.select id="status" name="status" :options="[
+						    '4' => 'Draft',
+						    '0' => 'Ajukan',
+						]" default-option="Pilih status laporan">
+							<x-slot name="textLabel">Status Laporan</x-slot>
+						</x-input.select>
+						<div class="mt-2 hidden text-sm text-red-500" id="alert-status"></div>
+					</div>
+
 					<div class="relative col-span-2 w-full">
 						<x-button.primary class="float-right" id="store" type="button">
 							<x-slot name="icon">
