@@ -50,6 +50,10 @@
 			</div>
 		@endcan
 
+		@hasrole('Teknisi')
+			<livewire:plugin.tech-report-percentage />
+		@endhasrole
+
 		<div
 			class="hidden w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-primary lg:block xl:p-6">
 			<div>
