@@ -1,6 +1,9 @@
 import * as alert from '../../utils/alert';
+import { zoomImage } from "../../utils/zoomImage";
 
 document.addEventListener('DOMContentLoaded', () => {
+  zoomImage();
+
   if (document.getElementById('store')) {
     validate();
   }

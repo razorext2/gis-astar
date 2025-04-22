@@ -6,7 +6,9 @@ use App\Models\PointTransactions;
 use App\Models\TechnicianPoints;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Url;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -16,8 +18,9 @@ class Redeem extends Component
     public $start_period;
     public $end_period;
     public $result;
+    public $transactionID;
     public $no_vt = [];
-    public $filteredKunjungan = [];
+    public $showModal = false;
 
     // public $apiResponse;
 
@@ -31,13 +34,6 @@ class Redeem extends Component
         $this->result = collect();
     }
 
-    public function prevStep()
-    {
-        if ($this->step > 1) {
-            $this->step--;
-        }
-    }
-
     public function process()
     {
         $transaction = PointTransactions::where('from_date', '>=', $this->start_period)
@@ -45,11 +41,22 @@ class Redeem extends Component
             ->exists();
 
         if ($transaction) {
-            dd('data ditemukan. gaboleh transaksi lagi');
+            $query = PointTransactions::with('pegawai', 'redeemedby')
+                ->where('from_date', $this->start_period)
+                ->where('to_date', $this->end_period)
+                ->get();
+
+            if (!$query) {
+                dd('gagal');
+            }
+
+            $this->result = $query;
+            $this->step = 3;
+            return;
         }
 
-        $this->result = TechnicianPoints::with('pegawai')
-            ->whereBetween('updated_at', [$this->start_period, $this->end_period])
+        $this->result = TechnicianPoints::whereBetween('updated_at', [$this->start_period, $this->end_period])
+            ->where('is_redeemable', 1)
             ->orderBy('kode_pegawai')
             ->get()
             ->groupBy('kode_pegawai')
@@ -58,94 +65,107 @@ class Redeem extends Component
         $this->step = 2;
     }
 
-    public function searchKunjungan($kode_pegawai)
+    public function openModal()
     {
-        $input = $this->no_vt[$kode_pegawai];
-
-        $filtered = $this->result->get($kode_pegawai, collect())
-            ->filter(fn($item) => stripos($item->from_vt, $input) !== false)
-            ->values();
-
-        $this->filteredKunjungan[$kode_pegawai] = $filtered;
+        $this->showModal = true;
     }
 
-    // this function will used for the next version of this app
-    // public function generateMonth()
-    // {
-    //     $start = Carbon::parse($this->start_period);
-    //     $end = Carbon::parse($this->end_period);
+    public function closeModal()
+    {
+        $this->showModal = false;
+    }
 
-    //     $months = [];
+    public function validateData()
+    {
+        $transactionID = \Illuminate\Support\Str::uuid();
 
-    //     while ($start->lt($end)) {
-    //         // Untuk setiap periode, ambil bulan setelah $start jika day >= 26
-    //         $customMonth = $start->copy()->day >= 26
-    //             ? $start->copy()->addMonth()->format('Y-m')
-    //             : $start->copy()->format('Y-m');
+        $points = TechnicianPoints::whereBetween('created_at', [$this->start_period, $this->end_period])
+            ->where('is_redeemable', 1);
 
-    //         $months[] = $customMonth;
+        try {
+            DB::beginTransaction();
+            foreach ($this->result as $kodePegawai => $group) {
+                PointTransactions::create([
+                    'transaction_id' => $transactionID,
+                    'quartal' => 1,
+                    'year' => Carbon::parse($this->start_period)->year,
+                    'point_type' => 'technician',
+                    'kode_pegawai' => $kodePegawai,
+                    'redeemed_by' => auth()->user()->id,
+                    'from_date' => $this->start_period,
+                    'to_date' => $this->end_period,
+                    'valid_points' => $group->sum('point'),
+                    'invalid_points' => 0,
+                    'total_points' => $group->sum('point'),
+                    'status' => 1 // confirmation
+                ]);
+            }
 
-    //         // Naikkan tanggal ke tanggal 26 bulan berikutnya
-    //         $start->addMonth()->day(26);
-    //     }
+            $points->update([
+                'redeemed_status' => 1,
+                'redeemed_date' => now()
+            ]);
 
-    //     // Pastikan hasilnya unik (jaga-jaga)
-    //     return array_unique($months);
-    // }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error(now() . ': Error saat validasi data - ' . $e->getMessage());
+            return $this->dispatch('swal', title: 'Error', text: 'Terjadi kesalahan: ' . $e->getMessage(), icon: 'error');
+        }
 
-    // this function will used for the next version of this app
-    // public function validateData()
-    // {
-    //     $response = Http::get('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchCountPoint');
+        $this->step = 3;
+        $this->summary($transactionID);
+    }
 
-    //     $data = $response->json();
+    public function summary($transactionID)
+    {
+        $query = PointTransactions::with('pegawai', 'redeemedby')
+            ->where('transaction_id', $transactionID)->get();
 
-    //     if (!isset($data['status']) || $data['status'] !== 'success') {
-    //         dd('Gagal mengambil data dari API');
-    //     }
+        if (!$query) {
+            dd('gagal');
+        }
 
-    //     $this->apiResponse = $data['data'];
+        $this->result = $query;
+    }
 
-    //     $validPegawai = array_flip(array_keys($this->result->toArray())); // ['344' => true, ...]
-    //     $validMonths = array_flip($this->generateMonth()); // ['2025-02' => true, '2025-03' => true, ...]
+    public function processRedeem($transactionID)
+    {
+        $this->transactionID = $transactionID;
 
-    //     $this->apiResponse = array_filter($this->apiResponse, function ($item) use ($validMonths, $validPegawai) {
-    //         return isset($validPegawai[$item['NomorIdentitasTeknisi']]) &&
-    //             isset($validMonths[$item['Bulan']]);
-    //     });
+        $points = TechnicianPoints::whereBetween('created_at', [$this->start_period, $this->end_period])
+            ->where('is_redeemable', 1);
 
-    //     return $this->apiResponse;
-    // }
+        $trans = PointTransactions::where('transaction_id', $this->transactionID);
 
-    // this function will used for the next version of this app
-    // public function accumulate()
-    // {
-    //     $groupedApi = collect($this->validateData())
-    //         ->groupBy(fn($item) => (string) $item['NomorIdentitasTeknisi']);
+        try {
+            DB::beginTransaction();
 
-    //     $merged = collect();
+            $points->update([
+                'redeemed_status' => 2, // diajukan ke hrd
+            ]);
 
-    //     // Loop data dari database yang sudah groupBy(kode_pegawai)
-    //     foreach ($this->result as $kodePegawai => $dbItems) {
-    //         $apiItems = $groupedApi->get($kodePegawai, collect());
 
-    //         $merged->push([
-    //             'kode_pegawai' => $kodePegawai,
-    //             'pegawai' => $dbItems->first()?->pegawai->full_name ?? 'Teknisi belum terdaftar disistem',
-    //             'db_data' => $dbItems,
-    //             'api_data' => $apiItems,
-    //         ]);
-    //     }
+            $trans->update([
+                'status' => 2,
+            ]);
 
-    //     return $merged;
-    // }
+            DB::commit();
 
+            // Refresh status display by reloading transaction data
+            $this->summary($this->transactionID);
+            return $this->dispatch('swal', title: 'Berhasil', text: 'Status pengajuan telah berubah menjadi menunggu persetujuan HRD', icon: 'success');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error(now() . ': Error saat mengajukan pengajuan poin - transID: ' . $this->transactionID . ' - ' . $e->getMessage());
+            return $this->dispatch('swal', title: 'Error', text: 'Terjadi kesalahan: ' . $e->getMessage(), icon: 'error');
+        }
+    }
 
     public function render()
     {
         return view('livewire.handler.point.technician.redeem', [
             'results' => $this->result,
-            'step' => $this->step,
         ]);
     }
 }

@@ -16,7 +16,7 @@ class TechnicianPoints extends Model
         'kode_pegawai',
         'is_redeemable',
         'is_redeemed',
-        'redeemed_status',
+        'redeemed_status', // 0 = validation, 1 = confirmation, 2 = approval hrd, 3 = approval management, 4 = ditolak
         'redeemed_date',
     ];
 

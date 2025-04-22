@@ -120,7 +120,8 @@ class TechnicianController extends Controller
                             'loadcell_qty' => $data['loadcell_qty'],
                             'junction_type' => $data['junction_type'],
                             'job_update' => $data['job_update'],
-                            'visit_date' => $data['visit_date']
+                            'visit_date' => $data['visit_date'],
+                            'status' => $data['status'],
                         ]);
 
                         // kalo blm ada, tambah

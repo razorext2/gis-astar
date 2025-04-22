@@ -22,7 +22,7 @@ class PointTransactions extends Model
         'valid_points',
         'invalid_points',
         'total_points',
-        'status'
+        'status' // 0 = validation, 1 = confirmation, 2 = approval hrd, 3 = approval management, 4 = ditolak
     ];
 
     public function pegawai()
@@ -30,7 +30,7 @@ class PointTransactions extends Model
         return $this->belongsTo(Pegawai::class, 'kode_pegawai', 'kode_pegawai');
     }
 
-    public function redeemed_by()
+    public function redeemedby()
     {
         return $this->belongsTo(User::class, 'redeemed_by', 'id');
     }

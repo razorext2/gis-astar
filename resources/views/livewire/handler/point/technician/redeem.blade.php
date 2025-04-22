@@ -3,10 +3,10 @@
 	<livewire:utils.stepper :step="$step" key="technician-point-redeem-stepper.{{ $step }}" />
 
 	<div class="mt-4 flex justify-between">
-		@if ($step != 3)
+		@if ($step != 1)
 			<x-button.link
 				class="w-fit ring-1 ring-red-700 hover:bg-red-300 dark:bg-red-800 dark:text-white dark:ring-gray-700 dark:hover:bg-red-900"
-				wire:navigate href="{{ url()->previous() }}">
+				wire:navigate href="{{ route('technicianpoints.redeem', ['step' => 1]) }}">
 				<x-slot name="icon">
 					<x-icons.angle-left class="icon h-6 w-6" />
 				</x-slot>
@@ -15,7 +15,7 @@
 		@endif
 
 		@if ($step == 2)
-			<x-button.success class="w-fit" wire:click="validateData">
+			<x-button.success class="w-fit" wire:click="openModal">
 				<x-slot name="icon">
 					<x-icons.angle-right class="icon h-6 w-6" />
 				</x-slot>
@@ -65,71 +65,107 @@
 	@endif
 
 	@if ($step == 2)
-
 		@if ($results->isNotEmpty())
-			<div class="mt-4 flex flex-col gap-2 text-gray-800 dark:text-white lg:gap-4">
-				@foreach ($results as $kodePegawai => $data)
+			<livewire:handler.point.technician.step-two :results="$result" />
+			@if ($showModal)
+				<div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+					<div
+						class="w-full max-w-lg rounded-lg bg-white p-6 text-gray-800 shadow-lg dark:bg-dark-secondary dark:text-white">
+						<h2 class="mb-4 text-lg font-bold">Yakinkh maniezz?</h2>
+						<p class="h-72 overflow-y-auto border-y border-gray-900 py-1 text-sm dark:border-gray-600">Lorem ipsum dolor sit
+							amet
+							consectetur adipisicing
+							elit.
+							Alias ratione quos commodi.
+							Quasi, ipsum cum! Culpa ad
+							incidunt repellendus? Dolore rem libero vitae qui illum sint dolorum vero excepturi blanditiis. Lorem ipsum dolor
+							sit amet consectetur adipisicing elit. Alias ratione quos commodi. Quasi, ipsum cum! Culpa ad incidunt
+							repellendus? Dolore rem libero vitae qui illum sint dolorum vero excepturi blanditiis.
+							Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptates, nemo facilis? Quod soluta praesentium
+							cumque architecto? Sint ex a adipisci fugiat provident facilis error voluptatum et, culpa, soluta earum? Autem?
+						</p>
+						<div class="mt-4 flex justify-end gap-2">
+							<x-button.success wire:click="validateData">Confirm</x-button.success>
+							<x-button.danger wire:click="closeModal">Tutup</x-button.danger>
+						</div>
+					</div>
+				</div>
+			@endif
+		@else
+			<div class="text-center">
+				<p class="mt-4 text-gray-800 dark:text-white">Tidak ada data ditemukan.</p>
+				<a href="{{ route('technicianpoints.redeem', ['step' => 1]) }}" class="text-blue-500 dark:text-blue-400">Kembali</a>
+			</div>
+		@endif
+	@endif
+
+	@if ($step == 3)
+		<h3 class="mt-2 text-xl font-semibold text-gray-800 dark:text-white lg:text-2xl"> Summary </h3>
+		@if ($results->isNotEmpty())
+			<div class="mt-2 flex flex-col rounded-lg bg-gray-100 p-2 text-gray-800 dark:bg-gray-700 dark:text-white lg:p-4">
+				<div class="flex items-center justify-between">
+					<span class="font-semibold">No. Transaksi</span>
+					<span class="text-right">{{ $results->first()->transaction_id ?? 'Transaksi tidak ditemukan' }}</span>
+				</div>
+				<div class="flex items-center justify-between">
+					<span class="font-semibold">Kuartal</span>
+					<span class="text-right">{{ $results->first()->year }} - {{ $results->first()->quartal }}</span>
+				</div>
+				<div class="flex items-center justify-between">
+					<span class="font-semibold">Periode</span>
+					<span class="text-right">
+						{{ \Carbon\Carbon::parse($results->first()->from_date)->locale('id')->isoFormat('D MMM Y') }}
+						<i class="text-xs not-italic">s/d</i>
+						{{ \Carbon\Carbon::parse($results->first()->to_date)->locale('id')->isoFormat('D MMM Y') }}
+					</span>
+				</div>
+				<p class="font-semibold"> Daftar Pegawai </p>
+				<div class="pl-4">
+					@foreach ($results as $item)
+						<div class="flex justify-between">
+							<span>{{ $item->pegawai->full_name ?? 'Pegawai belum terdaftar disistem' }}</span>
+							<span class="text-right">{{ $item->total_points ?? 0 }}</span>
+						</div>
+					@endforeach
+				</div>
+				<div class="flex items-center justify-between">
+					<span class="font-semibold"> Total Poin Redeem </span>
+					<span class="text-right">{{ $results->sum('total_points') }}</span>
+				</div>
+				<div class="flex items-center justify-between">
+					<span class="font-semibold"> Diredeem Oleh </span>
+					<span class="text-right">{{ $results->first()->redeemedby->name ?? 'xxx' }}</span>
+				</div>
+				<div class="flex items-center justify-between">
 					@php
-						$total = 0;
+						$statusMap = [
+						    0 => ['label' => 'Belum divalidasi', 'color' => 'bg-gray-500'],
+						    1 => ['label' => 'Butuh konfirmasi', 'color' => 'bg-yellow-500'],
+						    2 => ['label' => 'Diteruskan ke HRD', 'color' => 'bg-blue-500'],
+						    3 => ['label' => 'Diteruskan ke Manajemen', 'color' => 'bg-indigo-500'],
+						    4 => ['label' => 'Ditolak', 'color' => 'bg-red-500'],
+						];
+
+						$statusData = $statusMap[$results->first()->status] ?? [
+						    'label' => 'Status tidak diketahui',
+						    'color' => 'bg-gray-400',
+						];
 					@endphp
 
-					<p class="font-semibold">
-						{{ $kodePegawai }} -{{ $data->first()->pegawai?->full_name ?? 'Teknisi belum terdaftar disistem.' }}
-					</p>
-
-					<div class="rounded-xl p-4 dark:bg-gray-700">
-						<div class="relative max-h-44 overflow-auto">
-							@if ($data->count() > 5)
-								<div class="sticky top-0 w-full">
-									<x-input.basic name="no_vt_{{ $kodePegawai }}" wire:input="searchKunjungan('{{ $kodePegawai }}')"
-										wire:model.live="no_vt.{{ $kodePegawai }}" class="w-full" id="no_vt"
-										placeholder="Cari nomor kunjungan..." />
-								</div>
-							@endif
-
-							@php
-								$listData = $filteredKunjungan[$kodePegawai] ?? $data;
-							@endphp
-
-							@foreach ($listData as $item)
-								@php
-									$total += $item->point;
-								@endphp
-
-								<div class="mt-2 flex w-full justify-between gap-2 text-center text-sm lg:text-base">
-									<p>{{ $item->from_vt }}</p>
-									<p class="font-semibold text-green-500">+{{ $item->point }} Poin</p>
-									<p>{{ $item->updated_at }}</p>
-								</div>
-							@endforeach
-						</div>
-
-						<hr class="mt-2">
-						<table class="mt-2 w-full text-right">
-							<tr>
-								<td>Total Poin Valid dari DB</td>
-								<td class="text-right font-semibold">
-									<span class="text-green-500">{{ $total }} Poin </span>
-								</td>
-							</tr>
-							<tr>
-								<td>Bonus</td>
-								<td class="text-right font-semibold">
-									<span class="text-green-500">
-										+{{ ((($total >= 75 ? ($bonus = 25) : $total >= 100) ? ($bonus = 50) : $total >= 125) ? ($bonus = 75) : $total >= 150) ? ($bonus = 100) : ($bonus = 0) }}
-										Poin </span>
-								</td>
-							</tr>
-							<tr>
-								<td>Akumulasi</td>
-								<td class="text-right font-semibold">
-									<span class="text-green-500">{{ $total + $bonus }} Poin </span>
-								</td>
-							</tr>
-						</table>
-					</div>
-				@endforeach
+					<span class="font-semibold">Status</span>
+					<span class="{{ $statusData['color'] }} rounded-md px-2 py-0.5 text-right">{{ $statusData['label'] }}</span>
+				</div>
 			</div>
+			@if ($results->first()->status == 1)
+				<div class="mt-4 flex items-center justify-end">
+					<x-button.primary class="w-fit" wire:click="processRedeem('{{ $results->first()->transaction_id }}')">
+						<x-slot name="icon">
+							<x-icons.angle-right class="icon h-6 w-6" />
+						</x-slot>
+						Proses Redeem
+					</x-button.primary>
+				</div>
+			@endif
 		@else
 			<div class="text-center">
 				<p class="mt-4 text-gray-800 dark:text-white">Tidak ada data ditemukan.</p>

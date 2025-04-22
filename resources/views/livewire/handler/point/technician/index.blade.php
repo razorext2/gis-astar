@@ -122,9 +122,25 @@
 							+ {{ $point->point }}
 						</span>
 					</h3>
-					<span class="{{ $point->is_redeemed ? 'text-green-500' : 'text-red-500' }} -mt-2 text-sm">
-						{{ $point->is_redeemed ? 'Sudah di redeem' : 'Belum di redeem' }}
+					@php
+						$statusMap = [
+						    0 => ['label' => 'Belum divalidasi', 'color' => 'text-gray-500'],
+						    1 => ['label' => 'Butuh konfirmasi', 'color' => 'text-yellow-500'],
+						    2 => ['label' => 'Diteruskan ke HRD', 'color' => 'text-blue-500'],
+						    3 => ['label' => 'Diteruskan ke Manajemen', 'color' => 'text-indigo-500'],
+						    4 => ['label' => 'Ditolak', 'color' => 'text-red-500'],
+						];
+
+						$statusData = $statusMap[$point->redeemed_status] ?? [
+						    'label' => 'Status tidak diketahui',
+						    'color' => 'text-gray-400',
+						];
+					@endphp
+
+					<span class="{{ $statusData['color'] }} text-sm">
+						{{ $point->is_redeemed ? 'Sudah di redeem' : 'Belum di redeem' }} ({{ $statusData['label'] }})
 					</span>
+
 					<time class="block text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
 						Pukul
 						{{ $point->updated_at->format('H:i:s, d M Y') }}
