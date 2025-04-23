@@ -6,6 +6,7 @@ use App\Models\PointTransactions;
 use App\Models\TechnicianPoints;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -91,7 +92,7 @@ class Redeem extends Component
                     'year' => Carbon::parse($this->start_period)->year,
                     'point_type' => 'technician',
                     'kode_pegawai' => $kodePegawai,
-                    'redeemed_by' => auth()->user()->id,
+                    'redeemed_by' => Auth::id(),
                     'from_date' => $this->start_period,
                     'to_date' => $this->end_period,
                     'valid_points' => $group->sum('point'),

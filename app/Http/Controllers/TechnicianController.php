@@ -8,6 +8,7 @@ use App\Models\Technician;
 use App\Models\TechnicianPoints;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -95,7 +96,7 @@ class TechnicianController extends Controller
                         'junction_type' => $data['junction_type'],
                         'job_update' => $data['job_update'],
                         'visit_date' => $data['visit_date'],
-                        'revised_by' => auth()->user()->id,
+                        'revised_by' => Auth::id(),
                         'revised_at' => now(),
                         'status' => $data['status'],
                     ]);
@@ -262,7 +263,7 @@ class TechnicianController extends Controller
 
             $query->update([
                 'status' => 1,
-                'validate_by' => auth()->user()->id,
+                'validate_by' => Auth::id(),
                 'validate_at' => now(),
             ]);
 
@@ -311,7 +312,7 @@ class TechnicianController extends Controller
         try {
             $query->update([
                 'status' => 3,
-                'validate_by' => auth()->user()->id,
+                'validate_by' => Auth::id(),
                 'validate_at' => now(),
                 'notes' => $request->note
             ]);
@@ -340,7 +341,7 @@ class TechnicianController extends Controller
         try {
             $query->update([
                 'status' => 2,
-                'validate_by' => auth()->user()->id,
+                'validate_by' => Auth::id(),
                 'validate_at' => now(),
                 'notes' => $request->note,
                 'total_revision' => $query->total_revision + 1

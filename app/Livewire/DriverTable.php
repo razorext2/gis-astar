@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use PowerComponents\LivewirePowerGrid\Button;
@@ -252,7 +253,7 @@ final class DriverTable extends PowerGridComponent
     #[\Livewire\Attributes\On('confirmAction')]
     public function confirmAction($id): void
     {
-        $user_id = auth()->user()->id;
+        $user_id = Auth::id();
         $query = Driver::find($id);
 
         if (!$query) {
@@ -276,7 +277,7 @@ final class DriverTable extends PowerGridComponent
     #[\Livewire\Attributes\On('declineAction')]
     public function declineAction($id, $note): void
     {
-        $user_id = auth()->user()->id;
+        $user_id = Auth::id();
         $query = Driver::find($id);
 
         if (!$query) {
@@ -301,7 +302,7 @@ final class DriverTable extends PowerGridComponent
     #[\Livewire\Attributes\On('revisionAction')]
     public function revisionAction($id, $note): void
     {
-        $user_id = auth()->user()->id;
+        $user_id = Auth::id();
         $query = Driver::find($id);
 
         if (!$query) {

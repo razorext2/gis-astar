@@ -8,6 +8,7 @@ use App\Jobs\NotifySalesNewReportJob;
 use App\Models\PhotoCollect;
 use App\Models\Sales;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -129,7 +130,7 @@ class ApiSalesController extends Controller
         try {
             $query->update([
                 'status' => 1,
-                'validate_by' => auth()->user()->id,
+                'validate_by' => Auth::id(),
             ]);
 
             return new ApiResource(true, 'Data berhasil dikonfirmasi', null);
@@ -153,7 +154,7 @@ class ApiSalesController extends Controller
         try {
             $query->update([
                 'status' => 2,
-                'validate_by' => auth()->user()->id,
+                'validate_by' => Auth::id(),
                 'notes' => $request->notes
             ]);
 

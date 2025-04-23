@@ -8,6 +8,7 @@ use App\Jobs\NotifyNewDriverReportJob;
 use App\Models\Driver;
 use App\Models\PhotoCollect;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -103,7 +104,7 @@ class ApiDriverController extends Controller
             $query->update($data);
 
             $query->update([
-                'revised_by' => auth()->user()->id,
+                'revised_by' => Auth::id(),
                 'status' => 0,
             ]);
 
@@ -124,7 +125,7 @@ class ApiDriverController extends Controller
         try {
             $query->update([
                 'status' => 1,
-                'validate_by' => auth()->user()->id,
+                'validate_by' => Auth::id(),
             ]);
 
             return new ApiResource(true, 'Data berhasil dikonfirmasi', null);
@@ -144,7 +145,7 @@ class ApiDriverController extends Controller
         try {
             $query->update([
                 'status' => 2,
-                'validate_by' => auth()->user()->id,
+                'validate_by' => Auth::id(),
                 'notes' => $request->notes
             ]);
 
