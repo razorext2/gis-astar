@@ -1,39 +1,69 @@
-export function getLocation() {
-  if (navigator.geolocation) {
-    // Opsi agar lebih cepat
-    const geoOptions = {
-      enableHighAccuracy: true, // false = lebih cepat, true = lebih akurat tapi lebih lambat
-      timeout: 5000,             // 5 detik timeout
-      maximumAge: 60000          // gunakan cache lokasi hingga 60 detik jika ada
-    };
+export async function getLocation(mode = 'collect') {
+  if (!navigator.geolocation) {
+    throw new Error("Browser tidak mendukung Geolocation.");
+  }
 
-    // Coba dapatkan posisi satu kali, lebih cepat
-    navigator.geolocation.getCurrentPosition(
-      function (position) {
-        $('#longitude').val(position.coords.longitude);
-        $('#latitude').val(position.coords.latitude);
-      },
-      function () {
-        window.Swal.fire({
-          title: "Gagal!",
-          html: "Anda harus mengaktifkan izin lokasi.",
-          timer: 2000,
-          icon: "error",
-          showConfirmButton: false,
-        }).then(() => setTimeout(() => window.location.href = `${APP_URL}/dashboard/sales`, 500));
-      },
-      geoOptions
-    );
+  const geoOptions = {
+    enableHighAccuracy: true,
+    timeout: 10000,
+    maximumAge: 0,
+  };
 
-    // Jika ingin terus update lokasi, bisa aktifkan watchPosition juga (opsional)
-    // navigator.geolocation.watchPosition(successCallback, errorCallback, geoOptions);
-  } else {
-    window.Swal.fire({
-      title: "Gagal!",
-      html: "Browser anda tidak memiliki support Geolocation.",
-      timer: 2000,
-      icon: "error",
-      showConfirmButton: false,
-    }).then(() => setTimeout(() => window.location.href = `${APP_URL}/dashboard/sales`, 500));
+  const saveToLocalStorage = (coords) => {
+    localStorage.setItem('longitude', coords.longitude);
+    localStorage.setItem('latitude', coords.latitude);
+  };
+
+  const fallbackToLocalStorage = () => {
+    const longitude = localStorage.getItem('longitude');
+    const latitude = localStorage.getItem('latitude');
+    if (longitude && latitude) {
+      return {
+        longitude,
+        latitude,
+        from: 'localStorage'
+      };
+    }
+    throw new Error("Gagal mendapatkan lokasi dari localStorage.");
+  };
+
+  const getCurrentPositionPromise = () => {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject, geoOptions);
+    });
+  };
+
+  let attempts = 0;
+  const maxAttempts = 3;
+
+  while (attempts < maxAttempts) {
+    try {
+      const position = await getCurrentPositionPromise();
+      const coords = {
+        longitude: position.coords.longitude,
+        latitude: position.coords.latitude,
+        from: 'gps'
+      };
+      saveToLocalStorage(coords);
+      return coords;
+    } catch (error) {
+      attempts++;
+      // Handle specific geolocation errors
+      if (error.code === error.PERMISSION_DENIED) {
+        throw new Error("Akses lokasi ditolak. Harap aktifkan GPS dan izinkan akses lokasi, kemudian reload halaman ini.");
+      } else if (error.code === error.POSITION_UNAVAILABLE) {
+        throw new Error("Lokasi tidak dapat diakses, periksa sinyal atau pengaturan GPS.");
+      } else if (error.code === error.TIMEOUT) {
+        throw new Error("Pengambilan lokasi memakan waktu terlalu lama. Coba lagi.");
+      }
+
+      // Jika sudah mencoba maksimal, fallback ke localStorage
+      if (attempts >= maxAttempts) {
+        return fallbackToLocalStorage();
+      }
+
+      // Delay retry jika tidak berhasil
+      await new Promise(res => setTimeout(res, 3000)); // Delay retry
+    }
   }
 }

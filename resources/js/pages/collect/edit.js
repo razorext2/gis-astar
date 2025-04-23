@@ -4,10 +4,11 @@ import { backCameraStream } from '../../utils/cameraStream';
 import { zoomImage } from "../../utils/zoomImage";
 import { getLocation } from '../../utils/geoLocation';
 
-const data = document.getElementById('data').value;
+const data = document.getElementById('data') ? document.getElementById('data').value : ''; // Validasi elemen 'data'
 
-document.addEventListener("DOMContentLoaded", () => {
-  $('#have_paid').change(function () {
+document.addEventListener("DOMContentLoaded", async () => {
+  // Menangani perubahan status pembayaran
+  document.getElementById('have_paid').addEventListener('change', function () {
     const have_paid = $(this).val();
     const have_paid_container = $('#have_paid_container');
     const payment_amount_container = $('#payment_amount_container');
@@ -32,6 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Menangani jenis pembayaran
   $('#payment_type').on('change', function () {
     const payment_type = $(this).val();
     const no_giro_container = $('#no_giro_container');
@@ -44,9 +46,42 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Inisialisasi editor Quill
   quillEditor(data, true);
+  // Inisialisasi kamera belakang
   backCameraStream();
+  // Inisialisasi handler data
   editDataHandler();
+  // Inisialisasi zoom gambar
   zoomImage();
-  getLocation();
+
+  try {
+    // Tampilkan Swal loading saat proses pengambilan lokasi
+    window.Swal.fire({
+      title: "Mengambil lokasi...",
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      didOpen: () => window.Swal.showLoading()
+    });
+
+    // Ambil lokasi secara asinkron
+    const coords = await getLocation('collect');
+
+    // Isi form dengan lokasi yang diperoleh
+    $('#longitude').val(coords.longitude);
+    $('#latitude').val(coords.latitude);
+    console.log("Lokasi didapat dari:", coords.from);
+
+    // Tutup Swal loading setelah selesai
+    window.Swal.close();
+  } catch (err) {
+    // Jika terjadi error, tutup Swal dan tampilkan pesan error
+    window.Swal.close();
+    window.Swal.fire({
+      title: "Gagal",
+      html: err.message,
+      icon: "error",
+      showConfirmButton: true
+    });
+  }
 });
