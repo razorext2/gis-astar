@@ -276,12 +276,6 @@ class PegawaiController extends Controller
         return view('dashboard.pegawai.details.personal-info', compact('pegawai', 'dd', 'images', 'attendanceData'));
     }
 
-    public function attendanceList($id)
-    {
-        $pegawai = Pegawai::findOrFail($id);
-        return view('dashboard.pegawai.details.attendance-list', compact('pegawai'));
-    }
-
     public function payrollInfo($id)
     {
         $pegawai = Pegawai::with('salaryRelasi')->findOrFail($id);

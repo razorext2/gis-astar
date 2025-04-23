@@ -21,11 +21,6 @@
 						</li>
 						<li role="presentation">
 							<a
-								class="{{ Route::is('pegawai.attendancelist') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg p-4 hover:text-gray-600 dark:hover:text-gray-300"
-								href="{{ route('pegawai.attendancelist', $pegawai->id) }}">Attendance</a>
-						</li>
-						<li role="presentation">
-							<a
 								class="{{ Route::is('pegawai.payrollinfo') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg p-4 hover:text-gray-600 dark:hover:text-gray-300"
 								href="{{ route('pegawai.payrollinfo', $pegawai->id) }}">Payroll</a>
 						</li>
