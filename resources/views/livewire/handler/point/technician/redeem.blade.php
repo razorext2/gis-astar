@@ -2,11 +2,11 @@
 
 	<livewire:utils.stepper :step="$step" key="technician-point-redeem-stepper.{{ $step }}" />
 
-	<div class="mt-4 flex justify-between">
+	<div class="flex justify-between py-2">
 		@if ($step != 1)
 			<x-button.link
 				class="w-fit ring-1 ring-red-700 hover:bg-red-300 dark:bg-red-800 dark:text-white dark:ring-gray-700 dark:hover:bg-red-900"
-				wire:navigate href="{{ route('technicianpoints.redeem', ['step' => 1]) }}">
+				wire:navigate href="{{ route('points.redeem', ['step' => 1]) }}">
 				<x-slot name="icon">
 					<x-icons.angle-left class="icon h-6 w-6" />
 				</x-slot>
@@ -24,7 +24,7 @@
 		@endif
 	</div>
 
-	<div class="mt-4 w-full">
+	<div class="w-full">
 		<h3 class="text-lg font-semibold text-gray-900 dark:text-white">
 			@if ($step == 1)
 				Pilih periode poin yang akan diredeem.
@@ -69,10 +69,11 @@
 			<livewire:handler.point.technician.step-two :results="$result" />
 			@if ($showModal)
 				<div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
-					<div
-						class="w-full max-w-lg rounded-lg bg-white p-6 text-gray-800 shadow-lg dark:bg-dark-secondary dark:text-white">
-						<h2 class="mb-4 text-lg font-bold">Yakinkh maniezz?</h2>
-						<p class="h-72 overflow-y-auto border-y border-gray-900 py-1 text-sm dark:border-gray-600">Lorem ipsum dolor sit
+					<!-- Modal box -->
+					<div class="flex max-w-lg flex-col gap-2 rounded-lg bg-white p-6 dark:bg-gray-800">
+						<h2 class="text-lg font-semibold text-gray-900 dark:text-white">Konfirmasi Pengajuan</h2>
+						<p class="h-72 overflow-y-auto border-y border-gray-900 py-1 text-gray-800 dark:border-gray-600 dark:text-white">
+							Lorem ipsum dolor sit
 							amet
 							consectetur adipisicing
 							elit.
@@ -84,9 +85,9 @@
 							Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptates, nemo facilis? Quod soluta praesentium
 							cumque architecto? Sint ex a adipisci fugiat provident facilis error voluptatum et, culpa, soluta earum? Autem?
 						</p>
-						<div class="mt-4 flex justify-end gap-2">
-							<x-button.success wire:click="validateData">Confirm</x-button.success>
-							<x-button.danger wire:click="closeModal">Tutup</x-button.danger>
+						<div class="mt-4 flex justify-end space-x-2">
+							<x-button.success wire:click="validateData">Konfirmasi</x-button.success>
+							<x-button.danger wire:click="closeModal">Batal</x-button.danger>
 						</div>
 					</div>
 				</div>
@@ -94,7 +95,7 @@
 		@else
 			<div class="text-center">
 				<p class="mt-4 text-gray-800 dark:text-white">Tidak ada data ditemukan.</p>
-				<a href="{{ route('technicianpoints.redeem', ['step' => 1]) }}" class="text-blue-500 dark:text-blue-400">Kembali</a>
+				<a href="{{ route('points.redeem', ['step' => 1]) }}" class="text-blue-500 dark:text-blue-400">Kembali</a>
 			</div>
 		@endif
 	@endif
@@ -142,7 +143,7 @@
 						    0 => ['label' => 'Belum divalidasi', 'color' => 'bg-gray-500'],
 						    1 => ['label' => 'Butuh konfirmasi', 'color' => 'bg-yellow-500'],
 						    2 => ['label' => 'Diteruskan ke HRD', 'color' => 'bg-blue-500'],
-						    3 => ['label' => 'Diteruskan ke Manajemen', 'color' => 'bg-indigo-500'],
+						    3 => ['label' => 'Dikonfirmasi', 'color' => 'bg-green-500'],
 						    4 => ['label' => 'Ditolak', 'color' => 'bg-red-500'],
 						];
 
@@ -169,8 +170,7 @@
 		@else
 			<div class="text-center">
 				<p class="mt-4 text-gray-800 dark:text-white">Tidak ada data ditemukan.</p>
-				<a href="{{ route('technicianpoints.redeem', ['step' => 1]) }}"
-					class="text-blue-500 dark:text-blue-400">Kembali</a>
+				<a href="{{ route('points.redeem', ['step' => 1]) }}" class="text-blue-500 dark:text-blue-400">Kembali</a>
 			</div>
 		@endif
 	@endif

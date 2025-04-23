@@ -15,4 +15,14 @@ class TechnicianPointsController extends Controller
     {
         return view('dashboard.technicianpoints.redeem');
     }
+
+    public function transactions()
+    {
+        return view('dashboard.technicianpoints.transactions');
+    }
+
+    public function detail($transactionID)
+    {
+        return view('dashboard.technicianpoints.detail-transaction', compact('transactionID'));
+    }
 }

@@ -22,7 +22,7 @@ class PointTransactions extends Model
         'valid_points',
         'invalid_points',
         'total_points',
-        'status' // 0 = validation, 1 = confirmation, 2 = approval hrd, 3 = approval management, 4 = ditolak
+        'status' // 0 = validation, 1 = confirmation, 2 = approval hrd, 3 = acc, 4 = ditolak
     ];
 
     public function pegawai()

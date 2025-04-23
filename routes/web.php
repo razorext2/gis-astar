@@ -31,9 +31,7 @@ use App\Http\Controllers\TechnicianController;
 use App\Http\Controllers\TechnicianPointsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Report\CollectorReportController;
-use App\Models\Technician;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -237,7 +235,9 @@ Route::middleware(['auth'])->group(function () {
 
         // points
         Route::get('points', [TechnicianPointsController::class, 'index'])->name('points.index');
-        Route::get('points/redeem', [TechnicianPointsController::class, 'redeem'])->name('technicianpoints.redeem');
+        Route::get('points/withdraw', [TechnicianPointsController::class, 'redeem'])->name('points.redeem');
+        Route::get('points/transactions', [TechnicianPointsController::class, 'transactions'])->name('technicianpoints.transactions');
+        Route::get('points/transactions/{transaction_id}', [TechnicianPointsController::class, 'detail'])->name('technicianpoints.transactionDetail');
 
         // map distribution
         Route::get('map/distribution', [AttendanceController::class, 'distribution'])->name('map.distribution');

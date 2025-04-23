@@ -127,7 +127,7 @@
 						    0 => ['label' => 'Belum divalidasi', 'color' => 'text-gray-500'],
 						    1 => ['label' => 'Butuh konfirmasi', 'color' => 'text-yellow-500'],
 						    2 => ['label' => 'Diteruskan ke HRD', 'color' => 'text-blue-500'],
-						    3 => ['label' => 'Diteruskan ke Manajemen', 'color' => 'text-indigo-500'],
+						    3 => ['label' => 'Dikonfirmasi', 'color' => 'text-green-500'],
 						    4 => ['label' => 'Ditolak', 'color' => 'text-red-500'],
 						];
 
