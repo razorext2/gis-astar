@@ -2,24 +2,27 @@
 
 namespace App\Notifications;
 
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ExportCompleted extends Notification
+class ExportSalesCompleted extends Notification
 {
     use Queueable;
 
     protected $fileName;
-    protected $date;
+    protected $fromDate;
+    protected $toDate;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(string $fileName, $date)
+    public function __construct(string $fileName, $fromDate, $toDate)
     {
         $this->fileName = $fileName;
-        $this->date = $date;
+        $this->fromDate = $fromDate;
+        $this->toDate = $toDate;
     }
 
     /**
@@ -33,18 +36,14 @@ class ExportCompleted extends Notification
     }
 
     /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
+     * Get the mail representation of the notification.
      */
     public function toDatabase(object $notifiable): array
     {
-        $date = Carbon::parse($this->date)->locale("id")->isoFormat("DD MMMM YYYY");
-
         return [
-            'message' => "Proses ekspor telah selesai. Laporan untuk tanggal $date telah berhasil diekspor. Silahkan download berkas dengan klik tombol berikut.",
+            'message' => "Proses ekspor telah selesai. Laporan sales dari tanggal $this->fromDate sampai $this->toDate telah berhasil diekspor. Silahkan download berkas dengan klik tombol berikut.",
             'button' => [
-                'url' => route('export.collector.download', $this->fileName),
+                'url' => route('export.sales.download', $this->fileName),
                 'label' => 'Download Laporan',
             ],
             'created_at' => now()->toDateTimeString(),

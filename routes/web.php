@@ -64,6 +64,11 @@ Route::middleware(['auth'])->group(function () {
             return Storage::download("export/$filename");
         })->name('export.collector.download');
         // end laporan kolektor
+
+        // laporan sales
+        Route::get('sales/{filename}', function (string $filename) {
+            return Storage::download("export/$filename");
+        })->name('export.sales.download');
     });
 
     Route::prefix('proxy')->as('')->group(function () {

@@ -3,16 +3,24 @@
 	<form id="add-form" action="{{ route('sales.create') }}"></form>
 	<div class="relative grid grid-cols-1 gap-4">
 
-		@can('sales-create')
-			<div class="max-w-xs">
-				<x-button.success id="add-button" form="add-form" type="submit">
-					<x-slot name="icon">
-						<x-icons.angle-right class="h-6 w-6 text-green-500 dark:text-white" />
-					</x-slot>
-					Tambah Data
-				</x-button.success>
-			</div>
-		@endcan
+		<div class="flex items-center justify-between gap-2 md:justify-start md:gap-4">
+			@can('sales-create')
+				<div class="max-w-xs">
+					<x-button.success id="add-button" form="add-form" type="submit">
+						<x-slot name="icon">
+							<x-icons.angle-right class="h-6 w-6 text-green-500 dark:text-white" />
+						</x-slot>
+						Tambah Data
+					</x-button.success>
+				</div>
+			@endcan
+
+			@can('sales-export')
+				<div class="max-w-xs">
+					<livewire:handler.sales.export />
+				</div>
+			@endcan
+		</div>
 
 		<div class="flex h-auto items-center justify-center">
 			<div

@@ -100,6 +100,11 @@ class Sales extends Model
         return $this->belongsTo(User::class, 'kode_pegawai', 'kode_pegawai');
     }
 
+    public function validateBy()
+    {
+        return $this->belongsTo(User::class, 'validate_by', 'id');
+    }
+
     public function scopeNeedApprove($query)
     {
         return $query->where('status', 0);
