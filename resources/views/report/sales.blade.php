@@ -2,7 +2,7 @@
 	<thead>
 		<tr>
 			<th style="font-weight: bold;" colspan="3">{{ $role }}</th>
-			<th style="font-weight: bold;" colspan="10">{{ $fromDate . ' - ' . $toDate }}</th>
+			<th style="font-weight: bold;" colspan="10">{{ $fromDate . ' s/d ' . $toDate }}</th>
 		</tr>
 		<tr style="height: 70px;">
 			<th style="width: 25px; border: 1px solid black; text-align: center; font-weight: bold;">#</th>
@@ -23,7 +23,7 @@
 	<tbody>
 		@foreach ($data as $i => $item)
 			<tr style="font-weight: bold;">
-				<td style="border: 1px solid black; text-align: center;"></td>
+				<td style="border: 1px solid black; text-align: center;">{{ $i + 1 }}</td>
 				<td style="border: 1px solid black; text-align: center;">{{ $item->pegawaiRelasi->full_name ?? '-' }}</td>
 				<td style="border: 1px solid black; text-align: left;">{{ $item->title ?? '-' }}</td>
 				<td style="border: 1px solid black; text-align: center;">{{ $item->customer_name ?? '-' }}</td>

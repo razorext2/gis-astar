@@ -7,56 +7,59 @@
 	</x-button.success>
 
 	<!-- Modal overlay -->
+
 	<div wire:show="showModal" wire:transition
 		class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
-		<!-- Modal box -->
-		<div class="flex max-w-md flex-col gap-2 rounded-xl bg-white p-6 shadow-2xl dark:bg-gray-800 md:w-1/2 xl:w-1/3">
-			<h2 class="mb-4 text-center text-2xl font-semibold text-gray-900 dark:text-white lg:text-3xl">Export Data</h2>
+		@if ($showModal)
+			<!-- Modal box -->
+			<div class="flex max-w-md flex-col gap-2 rounded-xl bg-white p-6 shadow-2xl dark:bg-gray-800 md:w-1/2 xl:w-1/3">
+				<h2 class="mb-4 text-center text-2xl font-semibold text-gray-900 dark:text-white lg:text-3xl">Export Data</h2>
 
-			<form wire:submit="export">
-				<div class="flex w-full flex-col gap-2 md:gap-4">
-					<div class="flex justify-between gap-2">
-						<x-button.primary wire:click="showDaily">Harian</x-button.primary>
-						<x-button.primary wire:click="showWeekly">Mingguan</x-button.primary>
-						<x-button.primary wire:click="showMonthly">Bulanan</x-button.primary>
-						<x-button.primary wire:click="showYearly">Tahunan</x-button.primary>
+				<form wire:submit="export">
+					<div class="flex w-full flex-col gap-2 md:gap-4">
+						<div class="flex justify-between gap-2">
+							<x-button.primary wire:click="showDaily">Harian</x-button.primary>
+							<x-button.primary wire:click="showWeekly">Mingguan</x-button.primary>
+							<x-button.primary wire:click="showMonthly">Bulanan</x-button.primary>
+							<x-button.primary wire:click="showYearly">Tahunan</x-button.primary>
+						</div>
+						<div class="grid w-full grid-cols-2 gap-2 md:gap-4">
+							<div>
+								<x-input.basic type="date" id="from_date" wire:model="fromDate" name="from_date">
+									Dari tanggal
+								</x-input.basic>
+							</div>
+							<div>
+								<x-input.basic type="date" id="to_date" wire:model="toDate" name="to_date">
+									Hingga tanggal
+								</x-input.basic>
+							</div>
+						</div>
+
+						@hasanyrole(['Admin', 'Management'])
+							<div>
+								<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="roles">Pilih data yg mau
+									diekspor</label>
+								<x-filter.filter-input-select id="roles" wire:model="role" name="roles" :options="[
+								    'All' => 'Semua',
+								    'Sales' => 'Sales Medan',
+								    'Sales-JKT' => 'Sales Jakarta',
+								]"
+									default-option="Filter by roles" />
+							</div>
+						@endhasanyrole
 					</div>
-					<div class="grid w-full grid-cols-2 gap-2 md:gap-4">
-						<div>
-							<x-input.basic type="date" id="from_date" wire:model="fromDate" name="from_date">
-								Dari tanggal
-							</x-input.basic>
-						</div>
-						<div>
-							<x-input.basic type="date" id="to_date" wire:model="toDate" name="to_date">
-								Hingga tanggal
-							</x-input.basic>
-						</div>
+
+					<div class="mt-4 flex justify-end space-x-2">
+						<x-button.success type="submit">
+							<span wire:loading.remove> Proses </span>
+							<span wire:loading> Proses... </span>
+						</x-button.success>
+						<x-button.primary wire:click="$set('showModal', false)">Batal</x-button.primary>
 					</div>
+				</form>
 
-					@hasanyrole(['Admin', 'Management'])
-						<div>
-							<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="roles">Pilih data yg mau
-								diekspor</label>
-							<x-filter.filter-input-select id="roles" wire:model="role" name="roles" :options="[
-							    'All' => 'Semua',
-							    'Sales' => 'Sales Medan',
-							    'Sales-JKT' => 'Sales Jakarta',
-							]"
-								default-option="Filter by roles" />
-						</div>
-					@endhasanyrole
-				</div>
-
-				<div class="mt-4 flex justify-end space-x-2">
-					<x-button.success type="submit">
-						<span wire:loading.remove> Proses </span>
-						<span wire:loading> Proses... </span>
-					</x-button.success>
-					<x-button.primary wire:click="$set('showModal', false)">Batal</x-button.primary>
-				</div>
-			</form>
-
-		</div>
+			</div>
+		@endif
 	</div>
 </div>
