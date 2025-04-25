@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\Sales;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -28,13 +29,13 @@ class SalesExport implements FromView, ShouldAutoSize, WithEvents
     }
     public function view(): View
     {
-        $sales = Sales::query()
+        $sales = Sales::with(['userRelasi', 'pegawaiRelasi', 'validateBy'])
             ->where('created_at', '>=', $this->fromDate)
             ->where('created_at', '<=', $this->toDate);
 
-        if ($this->role && $this->role != 'All') {
-            $sales = $sales->whereHas('userRelasi.roles', function ($sales) {
-                $sales->whereIn('name', (array) $this->role);
+        if ($this->role && $this->role !== 'All') {
+            $sales = $sales->whereHas('userRelasi.roles', function ($role) {
+                $role->whereIn('name', (array) $this->role);
             });
         }
 
