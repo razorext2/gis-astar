@@ -24,7 +24,7 @@ class Export extends Component
     public function showDaily()
     {
         $this->fromDate = Carbon::today()->startOfDay()->toDateString();
-        $this->toDate = Carbon::today()->endOfDay()->toDateString();
+        $this->toDate = Carbon::tomorrow()->endOfDay()->toDateString();
     }
 
     public function showWeekly()
@@ -47,11 +47,21 @@ class Export extends Component
 
     public function export()
     {
-        $data = Sales::whereBetween('created_at', [$this->fromDate, $this->toDate]);
+        $data = Sales::where('created_at', '>=', $this->fromDate)
+            ->where('created_at', '<=', $this->toDate);
 
-        if ($this->role != 'All') {
-            $data = $data->whereHas('userRelasi.roles', function ($data) {
-                $data->whereIn('name', (array) $this->role);
+        // Apply role filter for non-Admin users when a specific role is selected
+        if ($this->role !== 'All') {
+            if (Auth::user()->hasRole('Management')) {
+                $filterRole = 'Sales';
+            } elseif (Auth::user()->hasRole('Management-JKT')) {
+                $filterRole = 'Sales-JKT';
+            } else {
+                $filterRole = $this->role;
+            }
+
+            $data = $data->whereHas('userRelasi.roles', function ($q) use ($filterRole) {
+                $q->where('name', $filterRole);
             });
         }
 
