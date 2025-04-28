@@ -56,7 +56,7 @@ class Redeem extends Component
             return;
         }
 
-        $this->result = TechnicianPoints::whereBetween('updated_at', [$this->start_period, $this->end_period])
+        $this->result = TechnicianPoints::whereBetween('created_at', [$this->start_period, $this->end_period])
             ->where('is_redeemable', 1)
             ->orderBy('kode_pegawai')
             ->get()

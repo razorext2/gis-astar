@@ -67,14 +67,7 @@
 		@endif
 
 		@if ($results->first()->status == 3)
-			<div class="mt-4 flex items-center justify-end">
-				<x-button.primary class="w-fit" wire:click="export">
-					<x-slot name="icon">
-						<x-icons.bookmark class="icon h-6 w-6" />
-					</x-slot>
-					Export
-				</x-button.primary>
-			</div>
+			<livewire:handler.point.technician.export-point-transactions :transactionID="$results->first()->transaction_id" />
 		@endif
 
 		@if ($showModal)

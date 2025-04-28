@@ -44,6 +44,7 @@ class DetailTransaction extends Component
 
             $point->update([
                 'is_redeemed' => 1,
+                'transaction_id' => $this->transactionID,
                 'redeemed_status' => 3
             ]);
 
@@ -96,11 +97,6 @@ class DetailTransaction extends Component
     public function closeModal()
     {
         $this->showModal = false;
-    }
-
-    public function export()
-    {
-        dd('exported');
     }
 
     public function render()

@@ -18,6 +18,7 @@ class TechnicianPoints extends Model
         'is_redeemed',
         'redeemed_status', // 0 = validation, 1 = confirmation, 2 = approval hrd, 3 = acc, 4 = ditolak
         'redeemed_date',
+        'transaction_id',
     ];
 
     public function pegawai(): BelongsTo
@@ -28,5 +29,10 @@ class TechnicianPoints extends Model
     public function kunjungan(): BelongsTo
     {
         return $this->belongsTo(Technician::class, 'from_vt', 'no_vt');
+    }
+
+    public function transaction(): BelongsTo
+    {
+        return $this->belongsTo(PointTransactions::class, 'transaction_id', 'transaction_id');
     }
 }

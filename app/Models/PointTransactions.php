@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PointTransactions extends Model
@@ -33,5 +34,10 @@ class PointTransactions extends Model
     public function redeemedby()
     {
         return $this->belongsTo(User::class, 'redeemed_by', 'id');
+    }
+
+    public function point(): HasMany
+    {
+        return $this->hasMany(TechnicianPoints::class, 'kode_pegawai', 'kode_pegawai');
     }
 }
