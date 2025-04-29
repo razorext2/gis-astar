@@ -40,19 +40,44 @@
 	@if ($step == 1)
 		<form wire:submit.prevent="process" class="mt-4 grid gap-4 lg:grid-cols-2">
 			@csrf
+			<div class="col-span-2 flex flex-col">
+				<x-input.select wire:model="quarter" id="quarter" name="quarter" :options="[
+				    '1' => 'Kuarter 1',
+				    '2' => 'Kuarter 2',
+				    '3' => 'Kuarter 3',
+				    '4' => 'Kuarter 4',
+				]"
+					defaultOption="Pilih quarter" />
+				@error('quarter')
+					<span class="mt-2 text-sm text-red-600">
+						{{ $message }}
+					</span>
+				@enderror
+			</div>
+
 			<div class="col-span-2 flex flex-col lg:col-span-1">
 				<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="start_period">Periode
 					awal:</label>
 				<input
 					class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-					type="date" name="start_period" wire:model="start_period" required>
+					type="date" name="start_period" wire:model="start_period">
+				@error('start_period')
+					<span class="mt-2 text-sm text-red-600">
+						{{ $message }}
+					</span>
+				@enderror
 			</div>
 
 			<div class="col-span-2 flex flex-col lg:col-span-1">
 				<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="end_period">Periode akhir:</label>
 				<input
 					class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-					type="date" name="end_period" wire:model="end_period" required>
+					type="date" name="end_period" wire:model="end_period">
+				@error('end_period')
+					<span class="mt-2 text-sm text-red-600">
+						{{ $message }}
+					</span>
+				@enderror
 			</div>
 
 			<div class="col-span-2">
@@ -124,14 +149,14 @@
 				<div class="pl-4">
 					@foreach ($results as $item)
 						<div class="flex justify-between">
-							<span>{{ $item->pegawai->full_name ?? 'Pegawai belum terdaftar disistem' }}</span>
-							<span class="text-right">{{ $item->total_points ?? 0 }}</span>
+							<span> ({{ $item->kode_pegawai }}) {{ $item->pegawai->full_name ?? 'Pegawai belum terdaftar disistem' }}</span>
+							<span class="text-right">{{ $item->total_points ?? 0 }} Poin</span>
 						</div>
 					@endforeach
 				</div>
 				<div class="flex items-center justify-between">
 					<span class="font-semibold"> Total Poin Redeem </span>
-					<span class="text-right">{{ $results->sum('total_points') }}</span>
+					<span class="text-right">{{ $results->sum('total_points') }} Poin</span>
 				</div>
 				<div class="flex items-center justify-between">
 					<span class="font-semibold"> Diredeem Oleh </span>

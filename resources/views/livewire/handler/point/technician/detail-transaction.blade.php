@@ -20,14 +20,14 @@
 		<div class="pl-4">
 			@foreach ($results as $item)
 				<div class="flex justify-between">
-					<span>{{ $item->pegawai->full_name ?? 'Pegawai belum terdaftar disistem' }}</span>
-					<span class="text-right">{{ $item->total_points ?? 0 }}</span>
+					<span>({{ $item->kode_pegawai }}) {{ $item->pegawai->full_name ?? 'Pegawai belum terdaftar disistem' }}</span>
+					<span class="text-right">{{ $item->total_points ?? 0 }} Poin</span>
 				</div>
 			@endforeach
 		</div>
 		<div class="flex items-center justify-between">
 			<span class="font-semibold"> Total Poin Redeem </span>
-			<span class="text-right">{{ $results->sum('total_points') }}</span>
+			<span class="text-right">{{ $results->sum('total_points') }} Poin</span>
 		</div>
 		<div class="flex items-center justify-between">
 			<span class="font-semibold"> Diredeem Oleh </span>

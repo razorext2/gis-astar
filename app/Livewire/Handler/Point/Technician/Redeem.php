@@ -5,10 +5,8 @@ namespace App\Livewire\Handler\Point\Technician;
 use App\Models\PointTransactions;
 use App\Models\TechnicianPoints;
 use Carbon\Carbon;
-use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Url;
 use Livewire\Attributes\Validate;
@@ -16,14 +14,16 @@ use Livewire\Component;
 
 class Redeem extends Component
 {
+    #[Validate('required')]
     public $start_period;
+    #[Validate('required')]
     public $end_period;
+    #[Validate('required')]
+    public $quarter;
     public $result;
     public $transactionID;
     public $no_vt = [];
     public $showModal = false;
-
-    // public $apiResponse;
 
     #[Url]
     public $step = 1;
@@ -37,19 +37,15 @@ class Redeem extends Component
 
     public function process()
     {
+        $this->validate();
+
         $transaction = PointTransactions::where('from_date', '>=', $this->start_period)
-            ->where('to_date', '<=', $this->end_period)
-            ->exists();
+            ->where('to_date', '<=', $this->end_period);
 
-        if ($transaction) {
-            $query = PointTransactions::with('pegawai', 'redeemedby')
-                ->where('from_date', $this->start_period)
-                ->where('to_date', $this->end_period)
-                ->get();
-
-            if (!$query) {
-                dd('gagal');
-            }
+        if ($transaction->exists()) {
+            $query = $transaction->where('quartal', $this->quarter)
+                ->where('year', Carbon::parse($this->end_period)->year)
+                ->with('pegawai', 'redeemedby')->get();
 
             $this->result = $query;
             $this->step = 3;
@@ -58,6 +54,8 @@ class Redeem extends Component
 
         $this->result = TechnicianPoints::whereBetween('created_at', [$this->start_period, $this->end_period])
             ->where('is_redeemable', 1)
+            ->where('is_redeemed', 0)
+            ->where('redeemed_status', 0)
             ->orderBy('kode_pegawai')
             ->get()
             ->groupBy('kode_pegawai')
@@ -88,8 +86,8 @@ class Redeem extends Component
             foreach ($this->result as $kodePegawai => $group) {
                 PointTransactions::create([
                     'transaction_id' => $transactionID,
-                    'quartal' => 1,
-                    'year' => Carbon::parse($this->start_period)->year,
+                    'quartal' => $this->quarter,
+                    'year' => Carbon::parse($this->end_period)->year,
                     'point_type' => 'technician',
                     'kode_pegawai' => $kodePegawai,
                     'redeemed_by' => Auth::id(),
@@ -124,7 +122,7 @@ class Redeem extends Component
             ->where('transaction_id', $transactionID)->get();
 
         if (!$query) {
-            dd('gagal');
+            
         }
 
         $this->result = $query;
