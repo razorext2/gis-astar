@@ -57,11 +57,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     // Tampilkan Swal loading saat proses pengambilan lokasi
-    window.Swal.fire({
+    Swal.fire({
       title: "Mengambil lokasi...",
       allowOutsideClick: false,
       allowEscapeKey: false,
-      didOpen: () => window.Swal.showLoading()
+      didOpen: () => Swal.showLoading()
     });
 
     // Ambil lokasi secara asinkron
@@ -73,11 +73,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log("Lokasi didapat dari:", coords.from);
 
     // Tutup Swal loading setelah selesai
-    window.Swal.close();
+    Swal.close();
   } catch (err) {
     // Jika terjadi error, tutup Swal dan tampilkan pesan error
-    window.Swal.close();
-    window.Swal.fire({
+    Swal.close();
+    Swal.fire({
       title: "Gagal",
       html: err.message,
       icon: "error",

@@ -7,6 +7,12 @@ export function editDataHandler() {
 
     const $button = $(this);
     $button.prop('disabled', true);
+    Swal.fire({
+      title: "Menyimpan data...",
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      didOpen: () => Swal.showLoading()
+    });
 
     // Ambil data form
     let formData = new FormData();
@@ -37,9 +43,11 @@ export function editDataHandler() {
       const response = await axios.post(`${APP_URL}/api/collect-api/${id}`, formData);
 
       if (response.data.success) {
+        Swal.close();
         showAlert('success', response.data.message);
         setTimeout(() => window.location.href = `${APP_URL}/dashboard/collect`, 1500);
       } else {
+        Swal.close();
         const firstError = response.data.data[Object.keys(response.data.data)[0]][0];
 
         handleFormErrors(response.data.data);
@@ -48,6 +56,7 @@ export function editDataHandler() {
         return showAlert('error', response.data.message, `Validasi data gagal. <br><b>${firstError}</b>`);
       }
     } catch (error) {
+      Swal.close();
       $button.prop('disabled', false);
       return showAlert('error', 'Terjadi kesalahan.', error.message);
     }
