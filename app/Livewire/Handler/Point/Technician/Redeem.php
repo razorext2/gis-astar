@@ -122,7 +122,7 @@ class Redeem extends Component
             ->where('transaction_id', $transactionID)->get();
 
         if (!$query) {
-            
+            return $this->dispatch('swal', title: 'Error', text: 'Data tidak ditemukan', icon: 'error');
         }
 
         $this->result = $query;
