@@ -19,16 +19,18 @@ class ExportSalesToExcelJob implements ShouldQueue
     public $fromDate;
     public $toDate;
     public $role;
+    public $sales;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($user, $fromDate, $toDate, $role)
+    public function __construct($user, $fromDate, $toDate, $role, $sales)
     {
         $this->user = $user;
         $this->fromDate = $fromDate;
         $this->toDate = $toDate;
         $this->role = $role;
+        $this->sales = $sales;
     }
 
     /**
@@ -41,7 +43,7 @@ class ExportSalesToExcelJob implements ShouldQueue
             $fileName = rand(1, 999999) . '-' . $this->fromDate . '-' . $this->toDate . '.xlsx';
 
             // lakukan export di background
-            (new SalesExport($this->fromDate, $this->toDate, $this->role))->store("export/$fileName");
+            (new SalesExport($this->fromDate, $this->toDate, $this->role, $this->sales))->store("export/$fileName");
 
             // cari user yg melakukan request
             $user = User::find($this->user);

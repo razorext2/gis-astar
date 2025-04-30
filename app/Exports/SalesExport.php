@@ -20,12 +20,14 @@ class SalesExport implements FromView, ShouldAutoSize, WithEvents
     protected $fromDate;
     protected $toDate;
     protected $role;
+    protected $sales;
 
-    public function __construct($fromDate, $toDate, $role)
+    public function __construct($fromDate, $toDate, $role, $sales)
     {
         $this->fromDate = $fromDate;
         $this->toDate = $toDate;
         $this->role = $role;
+        $this->sales = $sales;
     }
     public function view(): View
     {
@@ -39,7 +41,12 @@ class SalesExport implements FromView, ShouldAutoSize, WithEvents
             });
         }
 
-        $sales = $sales->get();
+        if($this->sales) {
+            $sales = $sales->where('kode_pegawai', $this->sales);
+        }
+
+        $sales = $sales->orderBy('created_at', 'asc')
+            ->get();
 
         return view('report.sales', [
             'fromDate' => $this->fromDate,

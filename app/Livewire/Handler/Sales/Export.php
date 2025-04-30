@@ -4,6 +4,7 @@ namespace App\Livewire\Handler\Sales;
 
 use App\Jobs\ExportSalesToExcelJob;
 use App\Models\Sales;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -14,6 +15,12 @@ class Export extends Component
     public $fromDate;
     public $toDate;
     public $role;
+    public $sales;
+
+    public function authUser()
+    {
+        return Auth::user();
+    }
 
     public function mount()
     {
@@ -52,9 +59,9 @@ class Export extends Component
 
         // Apply role filter for non-Admin users when a specific role is selected
         if ($this->role !== 'All') {
-            if (Auth::user()->hasRole('Management')) {
+            if ($this->authUser()->hasRole('Management')) {
                 $this->role = 'Sales';
-            } elseif (Auth::user()->hasRole('Management-JKT')) {
+            } elseif ($this->authUser()->hasRole('Management-JKT')) {
                 $this->role = 'Sales-JKT';
             }
 
@@ -63,16 +70,22 @@ class Export extends Component
             });
         }
 
+        // jika pilih nama, maka munculkan laporan sesuai nama yg dipilih
+        if ($this->sales) {
+            $data = $data->where('kode_pegawai', $this->sales);
+        }
+
         if (!$data->exists()) {
             return $this->dispatch('swal', title: 'Gagal', text: 'Data tidak ditemukan', icon: 'error');
         }
 
-        $user = Auth::id();
+        $user = $this->authUser()->id;
         $fromDate = $this->fromDate;
         $toDate = $this->toDate;
         $role = $this->role;
+        $sales = $this->sales;
 
-        ExportSalesToExcelJob::dispatch($user, $fromDate, $toDate, $role)->delay(now()->addSeconds(5));
+        ExportSalesToExcelJob::dispatch($user, $fromDate, $toDate, $role, $sales)->delay(now()->addSeconds(5));
 
         $this->showModal = false;
         return $this->dispatch('swal', title: 'Berhasil', text: 'Data berhasil di export', icon: 'success');
@@ -80,6 +93,21 @@ class Export extends Component
 
     public function render()
     {
-        return view('livewire.handler.sales.export');
+        $sales = User::select(['id', 'kode_pegawai', 'name'])
+            ->whereHas('roles', function ($query) {
+                if ($this->authUser()->hasRole('Management')) {
+                    $query->where('name', 'Sales');
+                } elseif ($this->authUser()->hasRole('Management-JKT')) {
+                    $query->where('name', 'Sales-JKT');
+                } else {
+                    $query->whereIn('name', ['Sales', 'Sales-JKT']);
+                }
+            })
+            ->orderBy('kode_pegawai', 'asc')
+            ->get();
+
+        return view('livewire.handler.sales.export', [
+            'salesData' => $sales
+        ]);
     }
 }

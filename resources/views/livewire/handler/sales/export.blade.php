@@ -48,6 +48,20 @@
 									default-option="Filter by roles" />
 							</div>
 						@endhasanyrole
+
+						<div>
+							<label for="sales" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Pilih nama
+								sales</label>
+							<select
+								class="block w-full rounded-lg border border-gray-200 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+								wire:model="sales">
+								<option value="">Semua</option>
+								@foreach ($salesData as $row)
+									<option value="{{ $row->kode_pegawai }}">({{ $row->kode_pegawai }}) {{ $row->name }}</option>
+								@endforeach
+							</select>
+
+						</div>
 					</div>
 
 					<div class="mt-4 flex justify-end space-x-2">
