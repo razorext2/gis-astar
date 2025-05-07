@@ -44,9 +44,6 @@ document.addEventListener('livewire:navigated', function () {
     import('./pages/capture/index.js').then((module) => {
       module.initCapture();
     });
-    import('./pages/capture/selfDetect.js').then((module) => {
-      module.initSelfDetect();
-    });
   } else if (window.location.pathname === '/dashboard/dayoff') {
     import('./pages/dayoff/index.js').then((module) => {
       module.initDayoff();

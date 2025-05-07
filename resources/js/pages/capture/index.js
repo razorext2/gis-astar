@@ -4,6 +4,7 @@ let geoWatcher = null; // Simpan ID watcher
 
 export async function initCapture() {
     let lastLat, lastLng, lat, lng;
+    let selfDetectLoaded = false;
 
     // Hapus watcher lama jika ada
     if (geoWatcher !== null) {
@@ -43,6 +44,17 @@ export async function initCapture() {
                     }
                 }
 
+                // Log current position after it's available
+                console.log(lat, lng);
+
+                // Call selfDetect here
+                if (!selfDetectLoaded) {
+                    selfDetectLoaded = true;
+                    import('./selfDetect.js').then((module) => {
+                        module.initSelfDetect(lat, lng);
+                    });
+                }
+
                 // Save current position for the next check
                 lastLat = lat;
                 lastLng = lng;
@@ -55,10 +67,9 @@ export async function initCapture() {
             enableHighAccuracy: true,
             timeout: 3000,
             maximumAge: 0,
-        }
-        );
+        });
     } else {
-        showErrorAndRedirect("Browser anda tidak memiliki support Geolocation.");
+        return showErrorAndRedirect("Browser anda tidak memiliki support Geolocation.");
     }
 
     // Function to calculate distance between two coordinates using Haversine formula
@@ -84,10 +95,6 @@ export async function initCapture() {
         startBtn.disabled = true;
         startBtn.classList.add('bg-gray-500');
         startBtn.classList.remove('bg-blue-400', 'dark:bg-blue-800', 'dark:hover:bg-blue-900', 'hover:bg-blue-700');
-        // setTimeout(() => {
-        //     window.location.href = `${APP_URL}/dashboard/capture`;
-        // }, 2000);
-
     }
 
     function showError(message) {

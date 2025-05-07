@@ -48,7 +48,6 @@
 					<div
 						class="relative flex h-auto w-full flex-col rounded-lg p-4 leading-normal ring-1 ring-gray-200 dark:ring-gray-700 lg:justify-between"
 						data-aos="fade-left" data-aos-delay="100">
-						<div id="pegawaiInfo"></div>
 						<div id="pegawaiKosong">
 							<ul class="space-y-4 text-left text-gray-500 dark:text-white">
 								<li class="flex items-center space-x-3 rtl:space-x-reverse">

@@ -2,8 +2,7 @@ import * as faceapi from "face-api.js";
 import { showAlert, loadingAlert } from "../../utils/alert";
 import Swal from "sweetalert2";
 
-export function initSelfDetect() {
-  let lat, lng;
+export function initSelfDetect(lat, lng) {
   let videoStream = null,
     webcamStarted = !1,
     detectionInterval = null;
@@ -13,9 +12,7 @@ export function initSelfDetect() {
     startButton = document.getElementById("startButton"),
     csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
     canvInfo = document.getElementById("canvAttend"),
-    pegawaiKosong = document.getElementById("pegawaiKosong"),
     pegawaiInfo = document.getElementById("pegawaiInfo"),
-    lokasi = "-",
     labels = [],
     kodePegawai = document.getElementById('kodePegawai').value;
 
@@ -31,7 +28,7 @@ export function initSelfDetect() {
         showAlert('success', 'Berhasil', 'Model berhasil diload');
       })
       .catch((error) => {
-        console.error("Error loading FaceAPI models:", error);
+        return showAlert('error', 'Gagal', `Gagal memuat model: ${error}`);
       });
   }
 
@@ -45,13 +42,13 @@ export function initSelfDetect() {
     // Draw the current frame of the video onto the canvas
     canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
 
+    startButton.innerText = 'Foto dicapture, mengolah...';
+
     // Return a promise to handle the blob creation asynchronously
     return new Promise((resolve) => {
       canvas.toBlob((blob) => {
         resolve(blob || null); // Resolve with the blob or null if no blob is created
       }, "image/png");
-
-      console.log("Image captured...");
     });
   }
 
@@ -75,156 +72,48 @@ export function initSelfDetect() {
 
         // Gambar gambar ke canvas
         canvasContext.drawImage(image, 0, 0);
-        console.log("Image displayed successfully on the canvas.");
       };
 
       // Tindakan ketika gambar gagal dimuat
       image.onerror = () => {
-        console.error("Failed to load image:", imageSource);
+        return showAlert('error', 'Terjadi kesalahan.', `Gagal memuat gambar: ${imageSource}`)
       };
     } else {
-      console.error("Failed to get canvas context.");
+      return showAlert('error', 'Terjadi kesalahan.', 'Gagal memuat canvas');
     }
-  }
-
-  function displayPegawaiData(employeeData) {
-    // Sembunyikan elemen "pegawaiKosong" karena data tersedia
-    pegawaiKosong.style.display = "none";
-
-    // Referensi elemen informasi pegawai
-    const pegawaiInfoElement = pegawaiInfo;
-
-    // Validasi keberadaan elemen informasi pegawai
-    if (!pegawaiInfoElement) {
-      console.error("Element with ID 'pegawaiInfo' not found");
-      return;
-    }
-
-    // Tampilkan elemen informasi pegawai
-    pegawaiInfoElement.style.display = "block";
-
-    // Isi informasi pegawai
-    pegawaiInfoElement.innerHTML = `
-    <ul class="space-y-4 text-left text-gray-500">
-        <li class="flex items-center space-x-3 rtl:space-x-reverse">
-            <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5" />
-            </svg>
-            <span>Lokasi: ${lokasi}</span>
-        </li>
-        <li class="flex items-center space-x-3 rtl:space-x-reverse">
-            <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5" />
-            </svg>
-            <span>Kode Pegawai: ${employeeData.kode_pegawai}</span>
-        </li>
-        <li class="flex items-center space-x-3 rtl:space-x-reverse">
-            <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5" />
-            </svg>
-            <span>NIK: ${employeeData.nik_pegawai}</span>
-        </li>
-        <li class="flex items-center space-x-3 rtl:space-x-reverse">
-            <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5" />
-            </svg>
-            <span>Nama: ${employeeData.full_name}</span>
-        </li>
-        <li class="flex items-center space-x-3 rtl:space-x-reverse">
-            <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5" />
-            </svg>
-            <span id="waktu-masuk">Waktu Masuk: </span>
-        </li>
-        <li class="flex items-center space-x-3 rtl:space-x-reverse">
-            <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5" />
-            </svg>
-            <span id="waktu-keluar">Waktu Keluar: </span>
-        </li>
-    </ul>`;
-  }
-
-  function updateJamKeluar() {
-    // Mendapatkan waktu saat ini dengan format lokal Indonesia
-    const currentTime = new Date().toLocaleString("id-ID", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-      hour12: false,
-      timeZone: "Asia/Jakarta"
-    });
-
-    // Mendapatkan elemen DOM dengan ID "waktu-keluar"
-    const waktuKeluarElement = document.getElementById("waktu-keluar");
-
-    if (waktuKeluarElement) {
-      // Memperbarui konten elemen dengan waktu keluar
-      waktuKeluarElement.textContent = `Waktu Keluar: ${currentTime}`;
-    } else {
-      // Log kesalahan jika elemen tidak ditemukan
-      console.error("Element with ID 'waktu-keluar' not found.");
-    }
-  }
-
-  function formatDatabaseDate(dateString) {
-    // Membuat objek Date dari string tanggal yang diterima
-    const date = new Date(dateString);
-
-    // Memeriksa apakah tanggal valid
-    if (isNaN(date)) {
-      console.error("Invalid date string provided:", dateString);
-      return null; // Mengembalikan null jika format tanggal tidak valid
-    }
-
-    // Mengembalikan tanggal dalam format lokal Indonesia
-    return date.toLocaleString("id-ID", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-      hour12: false,
-      timeZone: "Asia/Jakarta"
-    });
   }
 
   function showAttendanceAlert() {
     showAlert('success', 'Berhasil', 'Berhasil melakukan absensi');
 
     // Menampilkan elemen yang relevan setelah alert
-    pegawaiKosong.style.display = "block";  // Menampilkan informasi pegawai kosong
-    pegawaiInfo.style.display = "none";     // Menyembunyikan info pegawai yang sedang diproses
-    canvInfo.style.display = "none";        // Menyembunyikan informasi canvas
+    startButton.innerText = "Stop";
+    startButton.disabled = false;
 
     setTimeout(() => {
-      window.location.href = `${APP_URL}/dashboard`;
+      window.location.href = `${APP_URL}/dashboard/capture`;
     }, 2500);
   }
 
   async function getEmployeeImagePaths(label) {
     try {
       // Fetch data from the server with the encoded label
-      const response = await fetch(`${APP_URL}/api/pegawai-images/${encodeURIComponent(label)}`);
+      const response = await axios.get(`${APP_URL}/api/pegawai-images/${encodeURIComponent(label)}`);
 
       // Check if the response was successful
-      if (!response.ok) throw new Error("Network response was not ok");
+      if (response.status !== 200) throw new Error("Network response was not ok");
 
       // Parse and return the JSON data
-      return await response.json();
+      return response.data;
     } catch (error) {
       // Log error messages and return an empty array
-      console.log("The folder for this employee is empty.");
-      console.log("Please register their face first.");
-      return [];
+      return showAlert('error', 'Terjadi kesalahan.', 'Daftarkan wajah terlebih dahulu.');
     }
   }
 
   async function getLabeledFaceDescriptions() {
+    startButton.innerText = "Mengambil label...";
+
     const labeledFaceDescriptors = [];
 
     // Iterate through all the labels (e.g., employee labels or face IDs)
@@ -241,12 +130,14 @@ export function initSelfDetect() {
 
           // If face is detected, push the descriptor into the list
           loadingAlert('Fetching images...');
+
           if (detectedFace) {
+            startButton.innerText = "Mendeteksi wajah..."
             faceDescriptors.push(detectedFace.descriptor);
           }
         } catch (error) {
           // Log error if image processing fails
-          console.error(`Error processing image ${imagePath}:`, error);
+          return showAlert('error', 'Terjadi kesalahan.', `Gagal memuat gambar: ${imagePath}`);
         }
       }
 
@@ -262,29 +153,29 @@ export function initSelfDetect() {
   async function getEmployeeDataByLabel(label) {
     try {
       // Make an API call to fetch employee data by label
-      const response = await fetch(`${APP_URL}/api/getPegawaiData/${encodeURIComponent(label)}`);
+      const response = await axios.get(`${APP_URL}/api/getPegawaiData/${encodeURIComponent(label)}`);
 
       // Check if the response is okay
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error("Network response was not ok");
       }
 
       // Return the response data as JSON
-      return await response.json();
+      return response.data;
     } catch (error) {
       // Log the error and return null if the request fails
-      console.error("Error fetching employee data:", error);
-      return null;
+      return showAlert('error', 'Terjadi kesalahan.', `Gagal memuat data pegawai: ${error}`);
     }
   }
 
   async function startFaceDetection() {
+    startButton.innerText = "Memulai...";
+
     if (!detectionInterval) {
       try {
         const labeledFaceDescriptors = await getLabeledFaceDescriptions();
         if (labeledFaceDescriptors.length === 0) {
-          console.error("No labeled face descriptors found.");
-          return;
+          return showAlert('error', 'Terjadi kesalahan.', 'Tidak ada wajah yang terdaftar.');
         }
 
         const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors);
@@ -293,8 +184,7 @@ export function initSelfDetect() {
 
         const canvasContext = overlay.getContext("2d", { willReadFrequently: true });
         if (!canvasContext) {
-          console.error("Failed to get canvas context.");
-          return;
+          return showAlert('error', 'Terjadi kesalahan.', 'Gagal memuat canvas.');
         }
 
         const detectedFaceLabels = new Set();
@@ -330,7 +220,6 @@ export function initSelfDetect() {
                 const employee = await getEmployeeDataByLabel(matchedLabel);
                 if (employee) {
                   employeeData = employee;  // Simpan data pegawai jika ditemukan
-                  displayPegawaiData(employeeData);  // Menampilkan data pegawai
                   employeeCode = employeeData.kode_pegawai;
                   employeeNik = employeeData.nik_pegawai;
                 }
@@ -353,185 +242,113 @@ export function initSelfDetect() {
                 await saveAttendance(employeeCode, employeeNik, employeeData);
                 canvInfo.style.display = "block";
               } else {
-                console.error("Failed to capture image");
+                return showAlert('error', 'Terjadi kesalahan.', 'Gagal mengambil gambar.');
               }
             }
 
           } catch (error) {
-            console.error("Error during face detection or matching:", error);
+            return showAlert('error', 'Terjadi kesalahan.', `Gagal mengambil gambar: ${error}`);
           }
         }, 2000);
 
         Swal.close();
       } catch (error) {
-        console.error("Error initializing face recognition:", error);
+        return showAlert('error', 'Terjadi kesalahan.', `Gagal mengisialisasi face recognition: ${error}`);
       }
     }
   }
 
   async function saveImageToServer(image, label) {
     const formData = new FormData();
+
     // Menambahkan file gambar dan label ke FormData
     formData.append("image", image, "capturedImg.png");
     formData.append("label", label);
 
     try {
+      startButton.innerText = 'Menyimpan gambar...';
+
       // Mengirim request POST untuk menyimpan gambar ke server
-      const response = await fetch(`${APP_URL}/api/saveImage`, {
-        method: "POST",
-        headers: {
-          "X-CSRF-TOKEN": csrfToken // Token CSRF untuk keamanan
-        },
-        body: formData
-      });
+      const response = await axios.post(`${APP_URL}/api/saveImage`, formData);
 
       // Jika server merespons dengan status OK
-      if (response.ok) {
-        const data = await response.json();
+      if (response.status === 200) {
+        const data = response.data;
 
         // Jika URL gambar dikembalikan, tampilkan gambar di canvas
         if (data.imageUrl) {
           displayImageOnCanvas(data.imageUrl);
-          console.log("Image saved and displayed on canvas");
         }
       } else {
-        console.error("Failed to save image");
+        return showAlert('error', 'Terjadi kesalahan.', 'Gagal menyimpan gambar.');
       }
     } catch (error) {
-      console.error("Error saving image:", error);
+      return showAlert('error', 'Terjadi kesalahan.', `Terjadi kesalahan saat menyimpan gambar: ${error}`);
     }
   }
 
-  async function saveAttendance(kodePegawai, nikPegawai, lokasi) {
+  async function saveAttendance(kodePegawai, nikPegawai) {
     try {
-      // Mengecek apakah pegawai sudah melakukan absensi masuk (clock-in)
-      const response = await fetch(`${APP_URL}/api/check-attendance`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-TOKEN": csrfToken
-        },
-        body: JSON.stringify({
-          kode_pegawai: kodePegawai,
-          nik_pegawai: nikPegawai,
-          longitude: lng,
-          latitude: lat
-        })
+      startButton.innerText = "Menyimpan data...";
+
+      // Cek status absensi
+      const { data: checkData } = await axios.post(`${APP_URL}/api/check-attendance`, {
+        kode_pegawai: kodePegawai,
+        nik_pegawai: nikPegawai,
+        longitude: lng,
+        latitude: lat
       });
-      const data = await response.json();
 
-      // Jika pegawai sudah clock-in, proses clock-out
-      if (data.hasClockedIn) {
-        const jamMasuk = formatDatabaseDate(data.jam_masuk);
-        document.getElementById("waktu-masuk").textContent = `Waktu Masuk: ${jamMasuk}`;
-        updateJamKeluar();
+      const endpoint = checkData.hasClockedIn
+        ? `${APP_URL}/store-attendance-out`
+        : `${APP_URL}/store-attendance`;
 
-        // Mengirim data absensi keluar (clock-out)
-        const clockOutResponse = await fetch(`${APP_URL}/store-attendance-out`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": csrfToken
-          },
-          body: JSON.stringify({
-            kode_pegawai: kodePegawai,
-            nik_pegawai: nikPegawai,
-            longitude: lng,
-            latitude: lat
-          })
-        });
-        const clockOutData = await clockOutResponse.json();
+      const payload = {
+        kode_pegawai: kodePegawai,
+        nik_pegawai: nikPegawai,
+        longitude: lng,
+        latitude: lat,
+      };
 
-        // Jika absensi keluar berhasil
-        if (clockOutData.success) {
-          showAttendanceAlert();
-        } else {
-          console.error("Failed to record clock-out:", clockOutData.message);
-        }
-      } else {
-        // Jika pegawai belum clock-in, catat jam masuk
-        const currentTime = new Date();
-        const formattedTime = currentTime.toLocaleString("id-ID", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-          second: "numeric",
-          hour12: false,
-          timeZone: "Asia/Jakarta"
-        });
-
-        document.getElementById("waktu-masuk").textContent = `Waktu Masuk: ${formattedTime}`;
-        document.getElementById("waktu-keluar").textContent = "Jam Keluar: Belum ada data";
-
-        // Mengirim data absensi masuk (clock-in)
-        const clockInResponse = await fetch(`${APP_URL}/store-attendance`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": csrfToken
-          },
-          body: JSON.stringify({
-            kode_pegawai: kodePegawai,
-            nik_pegawai: nikPegawai,
-            jam_masuk: currentTime.toISOString(),
-            longitude: lng,
-            latitude: lat
-          })
-        });
-        const clockInData = await clockInResponse.json();
-
-        // Jika absensi masuk berhasil
-        if (clockInData.success) {
-          console.log(clockInData.message);
-          showAttendanceAlert();
-        } else {
-          console.error("Failed to record clock-in:", clockInData.message);
-        }
+      if (!checkData.hasClockedIn) {
+        payload.jam_masuk = new Date().toISOString();
       }
 
-      const mainServerResponse = await fetch(`${APP_URL}/api/proxy/server/attendance`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-TOKEN": csrfToken
-        },
-        body: JSON.stringify({
-          kode_jari: kodePegawai,
-        })
+      const { data: attendanceData } = await axios.post(endpoint, payload);
+
+      if (attendanceData.success) {
+        showAttendanceAlert();
+      } else {
+        return showAlert('error', 'Terjadi kesalahan.', attendanceData.message || 'Gagal menyimpan data absensi.');
+      }
+
+      // Sinkronisasi ke server pusat
+      await axios.post(`${APP_URL}/api/proxy/server/attendance`, {
+        kode_jari: kodePegawai,
       });
 
-      const mainServerData = await mainServerResponse.json();
-      console.log("Server: " + mainServerData.message);
     } catch (error) {
-      console.error("Error checking or saving attendance:", error);
+      return showAlert('error', 'Terjadi kesalahan.', `Gagal memproses absensi: ${error.message || error}`);
     }
   }
 
-  fetch(`${APP_URL}/api/getPegawai/${kodePegawai}`)
-    .then(response => response.json())
-    .then(data => {
+
+  axios.get(`${APP_URL}/api/getPegawai/${kodePegawai}`)
+    .then(response => {
       loadingAlert("Initializing application");
-      labels.push(...data);
+      labels.push(...response.data);
       initializeFaceAPI();
     })
-    .catch(error => console.error("Error fetching data", error));
-
-  canvInfo.style.display = "none";
+    .catch(error => {
+      return showAlert('error', 'Terjadi kesalahan.', `Terjadi kesalahan saat memuat data: ${error}`);
+    });
 
   // Event listener untuk start button
   startButton.addEventListener("click", async () => {
     overlay.style.display = "block";
     canvInfo.style.display = "none";
-
-    startButton.innerHTML = "Loading...";
+    startButton.innerText = "Loading...";
     startButton.setAttribute("disabled", "disabled");
-
-    if (webcamStarted) {
-      console.log("Webcam is already active");
-      return;
-    }
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -541,10 +358,9 @@ export function initSelfDetect() {
       video.srcObject = stream;
       videoStream = stream;
       webcamStarted = true;
-      console.log("Webcam started successfully");
       startFaceDetection();
     } catch (error) {
-      console.error("Error accessing webcam:", error);
+      return showAlert('error', 'Terjadi kesalahan.', `Terjadi kesalahan saat mengakses kamera: ${error}`);
     }
   });
 
