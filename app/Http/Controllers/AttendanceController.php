@@ -64,4 +64,9 @@ class AttendanceController extends Controller
             ->get()
             ->toJson();
     }
+
+    public function todayAttendance()
+    {
+        return view('dashboard.map.today');
+    }
 }

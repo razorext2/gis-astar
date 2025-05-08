@@ -99,12 +99,12 @@
 				</x-dashboard.sidebar-link>
 			</li>
 
-			<li x-data="{ absensi: {{ Route::is('attendanceIn.index') || Route::is('attendanceOut.index') ? 'true' : 'false' }} }">
+			<li x-data="{ absensi: {{ Route::is('attendanceIn.index') || Route::is('attendanceOut.index') || Route::is('today.attendance') ? 'true' : 'false' }} }">
 				<button
-					class="{{ Route::is('attendanceIn.index') || Route::is('attendanceOut.index') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
+					class="{{ Route::is('attendanceIn.index') || Route::is('attendanceOut.index') || Route::is('today.attendance') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
 					type="button" aria-controls="absensi-dropdown" @click="absensi = !absensi" :aria-expanded="absensi">
 					<x-icons.grid-plus
-						class="{{ Route::is('attendanceIn.index') || Route::is('attendanceOut.index') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+						class="{{ Route::is('attendanceIn.index') || Route::is('attendanceOut.index') || Route::is('today.attendance') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
 					<span class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">Absensi</span>
 
 					<x-icons.carred-down class="ml-1 mt-1 inline h-4 w-4 transform transition-transform group-hover:text-red-600"
@@ -115,6 +115,17 @@
 				<ul class="space-y-4 py-4" id="absensi-dropdown" x-show="absensi"
 					x-transition:enter="transition ease-in duration-200" x-transition:enter-start="transform opacity-0 -translate-y-5"
 					x-transition:leave="transition ease-out duration-200" x-transition:leave-end="transform opacity-0 -translate-y-5">
+
+					<li>
+						<a
+							class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
+							href="{{ route('today.attendance') }}"
+							wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-dark-primary"
+							wire:navigate>
+							<x-icons.map-pin-alt class="h-6 w-6 group-hover:text-red-600" />
+							<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Today's Attendance</span>
+						</a>
+					</li>
 
 					<li>
 						<a
@@ -444,12 +455,12 @@
 			@endif
 
 			@if (auth()->user()->hasAnyPermission(['announcement-list', 'log-list', 'backup-list']))
-				<li x-data="{ system: {{ Route::is('announcement.*') || Route::is('log.*') || Route::is('backup.*') ? 'true' : 'false' }} }">
+				<li x-data="{ system: {{ Route::is('announcement.*') || Route::is('log.*') || Route::is('backup.*') || Route::is('kuesioner.*') ? 'true' : 'false' }} }">
 					<button
-						class="{{ Route::is('announcement.*') || Route::is('log.*') || Route::is('backup.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
+						class="{{ Route::is('announcement.*') || Route::is('log.*') || Route::is('backup.*') || Route::is('kuesioner.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
 						type="button" aria-controls="system-dropdown" @click="system = !system" :aria-expanded="system">
 						<x-icons.computer
-							class="{{ Route::is('announcement.*') || Route::is('log.*') || Route::is('backup.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+							class="{{ Route::is('announcement.*') || Route::is('log.*') || Route::is('backup.*') || Route::is('kuesioner.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
 
 						<span class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">System Settings</span>
 
@@ -462,6 +473,16 @@
 						x-transition:enter-start="transform opacity-0 -translate-y-5"
 						x-transition:leave="transition ease-out duration-200"
 						x-transition:leave-end="transform opacity-0 -translate-y-5">
+
+						<li>
+							<a
+								class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
+								href="{{ route('kuesioner.index') }}" wire:navigate
+								wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-dark-primary">
+								<x-icons.question-circle class="h-6 w-6 group-hover:text-red-600" />
+								<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Kuesioner</span>
+							</a>
+						</li>
 
 						@can('announcement-list')
 							<li>

@@ -24,6 +24,7 @@ use App\Http\Controllers\PlacementController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\ProxyController;
+use App\Http\Controllers\QuestionnaireController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\SalesController;
@@ -209,6 +210,10 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('driver', DriverController::class)
             ->only('index', 'show', 'create', 'edit');
 
+        // route kuesioner
+        Route::resource('kuesioner', QuestionnaireController::class)
+            ->only('index', 'show', 'create', 'edit');
+
         // route pegawai
         Route::get('pegawai/autocomplete/', [PegawaiController::class, 'autocomplete'])->name('pegawai.autocomplete');
         Route::get('pegawai/{pegawai}/detail', [PegawaiController::class, 'detail'])->name('pegawai.detail');
@@ -245,6 +250,9 @@ Route::middleware(['auth'])->group(function () {
 
         // map distribution
         Route::get('map/distribution', [AttendanceController::class, 'distribution'])->name('map.distribution');
+
+        // todays attendance
+        Route::get('attendance/today', [AttendanceController::class, 'todayAttendance'])->name('today.attendance');
     });
 });
 

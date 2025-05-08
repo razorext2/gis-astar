@@ -42,9 +42,4 @@ class Post extends Form
             Log::error(now() . ': Error saat menambah data perizinan ->' . $e->getMessage());
         }
     }
-
-    public function update()
-    {
-        // 
-    }
 }
