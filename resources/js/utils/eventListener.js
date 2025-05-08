@@ -40,6 +40,13 @@ export async function initEventListener() {
     showAlert(data.icon, data.title, data.text)
   });
 
+  // livewire redirect delayea
+  Livewire.on('redirectRoute', route => {
+    setTimeout(() => {
+      window.location.href = route;
+    }, 1000);
+  })
+
   // livewire modal event
   Livewire.on('detailDriverModal', data => {
     showModalDriver(data.data).then(async (result) => {

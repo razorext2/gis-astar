@@ -94,7 +94,8 @@
 
 						<span class="text-navy-700 text-xs font-medium text-gray-400 dark:text-white">
 							<a class="inline-flex underline"
-								href="https://www.google.com/maps/{{ '@' . $data->latitude }},{{ $data->longitude }},20m/" target="_blank">
+								href="https://www.google.com/maps/search/?api=1&query={{ $data->latitude }},{{ $data->longitude }}"
+								target="_blank">
 								{{ $data->latitude }}, {{ $data->longitude }}
 								<x-icons.arrow-up class="h-4 w-4 rotate-45" />
 							</a>
@@ -108,7 +109,7 @@
 						<div class="relative overflow-auto">
 							<div class="flex overflow-x-auto" id="captured-images">
 								<!-- Thumbnail gambar yang diambil akan muncul di sini -->
-								@if ($data->photoCollectRelasi)
+								@if ($data->photoCollectRelasi->count() > 0)
 									@foreach ($data->photoCollectRelasi as $photo)
 										<div class="relative me-2 flex-none items-center gap-4 rounded-xl p-2">
 											<img
@@ -118,6 +119,8 @@
 												onclick="javascript:void(0)" loading="lazy">
 										</div>
 									@endforeach
+								@else
+									<p class="font-semibold text-gray-800 dark:text-white"> Tidak ada dokumentasi</p>
 								@endif
 							</div>
 						</div>
@@ -168,20 +171,29 @@
 						</p>
 					</div>
 
+					@if ($data->id_session)
+						<div
+							class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
+							<p class="text-sm text-gray-600 dark:text-gray-300">Kuesioner</p>
+
+							@if ($data->questionnaire->isNotEmpty())
+								@foreach ($data->questionnaire as $question)
+									<p class="text-navy-700 text-base font-medium dark:text-white">
+										<span class="font-semibold">{{ $question->question->question }}</span>
+										<i>{{ $question->option->option }}</i>
+									</p>
+								@endforeach
+							@else
+								<p class="text-navy-700 text-base font-medium dark:text-white">Tidak ada kuesioner yang dijawab</p>
+							@endif
+
+						</div>
+					@endif
+
 					@can('sales-approve')
 						@if ($data->status == 0)
 							<div class="col-span-2 mt-2 flex flex-col justify-end" id="action">
-								<div class="text-right">
-
-									<x-button.success class="confirm-btn float-right" id="confirm-btn" data-id="{{ $data->id }}"
-										data-validateby="{{ Crypt::encryptString(auth()->user()->id) }}" type="button">
-										<x-slot name="icon">
-											<x-icons.angle-right class="h-5 w-5" />
-										</x-slot>
-										Konfirmasi
-									</x-button.success>
-
-								</div>
+								<livewire:handler.sales.validate :id="$data->id" />
 							</div>
 						@endif
 					@endcan
@@ -190,7 +202,8 @@
 			</div>
 		</div>
 	</div>
+
+	@push('script')
+		@vite('resources/js/pages/sales/detail.js')
+	@endpush
 @endsection
-@push('script')
-	@vite('resources/js/pages/sales/detail.js')
-@endpush

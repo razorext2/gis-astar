@@ -24,6 +24,7 @@ class Sales extends Model
         "status",
         "notes",
         "validate_by",
+        "id_session",
     ];
 
     /**
@@ -108,5 +109,10 @@ class Sales extends Model
     public function scopeNeedApprove($query)
     {
         return $query->where('status', 0);
+    }
+
+    public function questionnaire()
+    {
+        return $this->hasMany(QuestionAnswer::class, 'id_session', 'id_session');
     }
 }
