@@ -144,15 +144,21 @@ export function confirmData() {
       noTelp = row.customer_telp.replace(/^08/, "628");
     }
 
-    let url = APP_URL + row.photo_collect_relasi[0].photourl;
+    let url;
 
-    try {
-      const check = await fetch(url, { method: "HEAD" }); // Gunakan HEAD agar lebih ringan
-      if (!check.ok) { // Cek status, bukan hanya status 200
-        url = APP_URL + "/assets/img/noImage.webp";
+    if (row.photo_collect_relasi.length > 0) {
+      url = APP_URL + row.photo_collect_relasi[0].photourl;
+
+      try {
+        const check = await fetch(url, { method: "HEAD" }); // Gunakan HEAD agar lebih ringan
+        if (!check.ok) { // Cek status, bukan hanya status 200
+          url = APP_URL + "/assets/img/noImage.webp";
+        }
+      } catch (error) {
+        url = APP_URL + "/assets/img/noImage.webp"; // Jika terjadi error (misal, jaringan terputus)
       }
-    } catch (error) {
-      url = APP_URL + "/assets/img/noImage.webp"; // Jika terjadi error (misal, jaringan terputus)
+    } else {
+      url = APP_URL + "/assets/img/noImage.webp";
     }
 
     const result = await Swal.fire({
@@ -224,7 +230,7 @@ export function confirmData() {
               <span class="text-gray-800 text-base font-medium ">${row.lokasi}</span>
               <span class="text-xs font-medium text-gray-400 text-left">
                 <a class="inline-flex underline"
-                  href="https://www.google.com/maps/@${row.latitude},${row.longitude},20m/" target="_blank">
+                  href="https://www.google.com/maps/search/?api=1&query=${row.latitude},${row.longitude}" target="_blank">
                   ${row.latitude}, ${row.longitude}
                 </a>
               </span>
@@ -265,16 +271,35 @@ export function confirmData() {
     });
 
     if (result.isConfirmed) {
-      axios.patch(`${APP_URL}/api/sales-api/${id}/confirm`, {
-        id: id,
+      const tanya = await Swal.fire({
+        title: "Survey bro",
+        html: "Jawab dulu ngab",
+        showCancelButton: true,
+        cancelButtonText: "Batal",
+        confirmButtonText: "Kirim Survey",
       })
-        .then(function () {
-          Swal.fire("Laporan berhasil diapprove!", "", "success");
-          return $('#dataTable').DataTable().ajax.reload(null, false);
-        })
-        .catch(function (error) {
-          return Swal.fire("ada kegagalan pada server.", `${error}`, "error");
+
+      if (tanya.isConfirmed) {
+        Swal.fire({
+          title: "Menyimpan...",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          allowEnterKey: false,
+          didOpen: () => Swal.showLoading()
         });
+      }
+
+      // axios.patch(`${APP_URL}/api/sales-api/${id}/confirm`, {
+      //   id: id,
+      // })
+      //   .then(function () {
+      //     Swal.fire("Laporan berhasil diapprove!", "", "success");
+      //     return $('#dataTable').DataTable().ajax.reload(null, false);
+      //   })
+      //   .catch(function (error) {
+      //     return Swal.fire("ada kegagalan pada server.", `${error}`, "error");
+      //   });
+
     } else if (result.isDenied) {
       const { value: text } = await Swal.fire({
         input: 'textarea',

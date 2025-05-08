@@ -74,7 +74,8 @@
 
 						<span class="text-navy-700 text-xs font-medium text-gray-400 dark:text-white">
 							<a class="inline-flex underline"
-								href="https://www.google.com/maps/{{ '@' . $data->latitude }},{{ $data->longitude }},20m/" target="_blank">
+								href="https://www.google.com/maps/search/?api=1&query={{ $data->latitude }},{{ $data->longitude }}"
+								target="_blank">
 								{{ $data->latitude }}, {{ $data->longitude }}
 								<x-icons.arrow-up class="h-4 w-4 rotate-45" />
 							</a>
