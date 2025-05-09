@@ -76,7 +76,7 @@ final class AttendanceOutTable extends PowerGridComponent
             ->add('kode_pegawai', function ($query) {
                 $pegawai = $query->pegawaiRelasi;
                 if ($pegawai) {
-                    $url = route('pegawai.timeline', $pegawai->kode_pegawai);
+                    $url = route('pegawai.timeline', $pegawai->kode_pegawai) . '?date=' . Carbon::parse($query->jam_keluar)->format('Y-m-d');
                     return '<a target="_blank" class="underline hover:text-blue-600 transition-colors duration-500" href="' . $url . '">' . e($pegawai->full_name) . '</a>';
                 }
                 return '-';
