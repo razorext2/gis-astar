@@ -1,9 +1,9 @@
 <form wire:submit="save">
-	<div class="mt-4 flex flex-col" x-data="{ uploading: false, progress: 0 }" x-on:livewire-upload-start="uploading = true"
+	<div class="mt-4 flex flex-col gap-2" x-data="{ uploading: false, progress: 0 }" x-on:livewire-upload-start="uploading = true"
 		x-on:livewire-upload-finish="uploading = false" x-on:livewire-upload-cancel="uploading = false"
 		x-on:livewire-upload-error="uploading = false" x-on:livewire-upload-progress="progress = $event.detail.progress">
 
-		<div class="flex items-center gap-x-2 py-1">
+		<div class="flex items-center gap-x-2">
 			<label class="block text-sm font-medium text-gray-900 dark:text-white" for="user_avatar">Change </label>
 
 			<div x-show="uploading" class="w-full rounded-full bg-gray-200 dark:bg-gray-700">
@@ -11,6 +11,12 @@
 					x-bind:style="{ width: progress + '%' }"> </div>
 			</div>
 		</div>
+
+		@if ($photo)
+			<div>
+				<img class="h-20 w-20 rounded-lg object-cover" src="{{ $photo->temporaryUrl() }}">
+			</div>
+		@endif
 
 		<div class="flex items-center gap-x-2">
 			<input
