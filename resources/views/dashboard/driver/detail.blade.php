@@ -62,7 +62,7 @@
 						class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
 						<p class="text-sm text-gray-600 dark:text-gray-300">Judul laporan</p>
 						<p class="text-navy-700 text-base font-medium dark:text-white">
-							{{ $data->title }}
+							{{ $data->title ?? 'N/A' }}
 						</p>
 					</div>
 
@@ -70,7 +70,7 @@
 						class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
 						<p class="text-sm text-gray-600 dark:text-gray-300">Lokasi checkpoint</p>
 
-						<span class="text-navy-700 text-base font-medium dark:text-white">{{ $data->lokasi }}</span>
+						<span class="text-navy-700 text-base font-medium dark:text-white">{{ $data->lokasi ?? 'N/A' }}</span>
 
 						<span class="text-navy-700 text-xs font-medium text-gray-400 dark:text-white">
 							<a class="inline-flex underline"
@@ -151,7 +151,7 @@
 							@else
 								<span
 									class="rounded-xl bg-red-100 px-4 py-2 text-sm font-medium text-red-800 ring-1 ring-gray-300 dark:bg-red-900 dark:text-red-300 dark:ring-gray-700">
-									Laporan di Tolak! (divalidasi oleh: {{ $user->name ?? 'N/A' }})
+									Laporan di Tolak! (divalidasi oleh: {{ $data->validateBy->name ?? 'N/A' }})
 								</span>
 							@endif
 

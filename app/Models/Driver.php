@@ -64,4 +64,9 @@ class Driver extends Model
     {
         return $this->belongsTo(Pegawai::class, 'kode_pegawai', 'kode_pegawai');
     }
+
+    public function validateBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'validate_by', 'id');
+    }
 }

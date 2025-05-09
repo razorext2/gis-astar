@@ -14,10 +14,13 @@ class DriverController extends Controller
 
     public function show($id)
     {
-        $data = Driver::find($id);
-        $user = \App\Models\User::select('id', 'name')->where('id', $data->validate_by)->first();
+        $data = Driver::with(['validateBy', 'pegawai'])->find($id);
 
-        return view('dashboard.driver.detail', (['data' => $data, 'user' => $user]));
+        if (!$data) {
+            return abort(404);
+        }
+
+        return view('dashboard.driver.detail', (['data' => $data]));
     }
 
     public function create(): View
