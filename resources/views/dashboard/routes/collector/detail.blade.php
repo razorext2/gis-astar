@@ -8,7 +8,6 @@
 				<div class="w-full md:col-span-2">
 					<form id="dateForm" action="{{ route('routes.collector.detail', ['pegawai' => $pegawai->kode_pegawai]) }}"
 						method="GET">
-						@csrf
 						<x-dashboard.date-picker id="datepicker-actions" name="date" form="dateForm" :text="'Filter tanggal'" />
 					</form>
 				</div>
