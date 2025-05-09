@@ -145,18 +145,18 @@
 
 							@if ($status == 0)
 								<span
-									class="rounded-xl bg-yellow-100 px-4 py-2 text-sm font-medium text-yellow-800 ring-1 ring-gray-300 dark:bg-yellow-900 dark:text-yellow-300 dark:ring-gray-700">
+									class="rounded-xl text-sm font-semibold text-yellow-800 ring-1 ring-gray-300 dark:text-yellow-400 dark:ring-gray-700">
 									Sedang diajukan.
 								</span>
 							@elseif ($status == 1)
 								<span
-									class="rounded-xl bg-green-100 px-4 py-2 text-sm font-medium text-green-800 ring-1 ring-gray-300 dark:bg-green-900 dark:text-green-300 dark:ring-gray-700">
-									Disetujui. (divalidasi oleh: {{ $user->name ?? 'N/A' }})
+									class="rounded-xl text-sm font-semibold text-green-800 ring-1 ring-gray-300 dark:text-green-400 dark:ring-gray-700">
+									Disetujui. (divalidasi oleh: {{ $data->validateBy->name ?? 'N/A' }})
 								</span>
 							@else
 								<span
-									class="rounded-xl bg-red-100 px-4 py-2 text-sm font-medium text-red-800 ring-1 ring-gray-300 dark:bg-red-900 dark:text-red-300 dark:ring-gray-700">
-									Laporan di Tolak! (divalidasi oleh: {{ $user->name ?? 'N/A' }})
+									class="rounded-xl text-sm font-semibold text-red-800 ring-1 ring-gray-300 dark:text-red-400 dark:ring-gray-700">
+									Laporan di Tolak! (divalidasi oleh: {{ $data->validateBy->name ?? 'N/A' }})
 								</span>
 							@endif
 
@@ -171,29 +171,37 @@
 						</p>
 					</div>
 
-					@if ($data->id_session)
+					@if ($data->order_notes && Auth::user()->can('sales-approve'))
+						<div
+							class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700 lg:col-span-1">
+							<p class="text-sm text-gray-600 dark:text-gray-300">Customer Melakukan Order?</p>
+							<p class="text-navy-700 text-base font-medium dark:text-white">
+								{{ $data->customer_make_order == 1 ? 'Ya' : 'Tidak' }}
+							</p>
+						</div>
+						<div
+							class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700 lg:col-span-1">
+							<p class="text-sm text-gray-600 dark:text-gray-300">Note</p>
+							<p class="text-xs text-gray-400 dark:text-gray-400">Produk yg di order customer/alasan customer tdk order.</p>
+							<p class="text-navy-700 text-base font-medium dark:text-white">
+								{{ $data->order_notes ?? 'Tidak ada catatan' }}
+							</p>
+						</div>
 						<div
 							class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
-							<p class="text-sm text-gray-600 dark:text-gray-300">Kuesioner</p>
+							<p class="text-sm text-gray-600 dark:text-gray-300">Bukti followup</p>
 
-							@if ($data->questionnaire->isNotEmpty())
-								@foreach ($data->questionnaire as $question)
-									<p class="text-navy-700 text-base font-medium dark:text-white">
-										<span class="font-semibold">{{ $question->question->question }}</span>
-										<i>{{ $question->option->option }}</i>
-									</p>
-								@endforeach
-							@else
-								<p class="text-navy-700 text-base font-medium dark:text-white">Tidak ada kuesioner yang dijawab</p>
-							@endif
-
+							<img class="h-36 w-36 rounded-xl object-cover transition duration-300 ease-in-out hover:scale-105"
+								onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}';"
+								src="{{ asset('storage/sales/proof/' . $data->proof_picture) }}" alt="" onclick="javascript:void(0)"
+								loading="lazy" id="documentations" data-url="{{ asset('storage/sales/proof/' . $data->proof_picture) }}">
 						</div>
 					@endif
 
 					@can('sales-approve')
 						@if ($data->status == 0)
 							<div class="col-span-2 mt-2 flex flex-col justify-end" id="action">
-								<livewire:handler.sales.validate :id="$data->id" />
+								<livewire:handler.sales.validate-sales :label="'Konfirmasi'" :id="$data->id" />
 							</div>
 						@endif
 					@endcan

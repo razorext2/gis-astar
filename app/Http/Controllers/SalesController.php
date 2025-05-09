@@ -50,9 +50,8 @@ class SalesController extends Controller
                     });
                 }
 
-                $query->orderBy('status');
-
-                $query->latest();
+                $query->orderBy('status')
+                    ->latest();
 
                 return DataTables::of($query)
                     ->addIndexColumn()
@@ -66,12 +65,10 @@ class SalesController extends Controller
                         ];
 
                         if (auth()->user()->can('sales-approve')) {
+                            $confirm = false;
+
                             if ($data->status == 0) {
-                                $actions[] = [
-                                    'id' => 'confirm-btn',
-                                    'action' => 'javascript:void(0)',
-                                    'label' => 'Confirm'
-                                ];
+                                $confirm = true;
                             }
 
                             if (auth()->user()->can('sales-delete')) {
@@ -91,6 +88,7 @@ class SalesController extends Controller
                             return view('components.dashboard.action-buttons', [
                                 'id' => $data->id,
                                 'datas' => $actions,
+                                'confirm' => $confirm,
                             ])->render();
                         } else {
                             return view('components.dashboard.single-button', [
@@ -191,15 +189,13 @@ class SalesController extends Controller
      */
     public function show($id)
     {
-        $data = Sales::with(['pegawaiRelasi:kode_pegawai,full_name', 'photoCollectRelasi'])->findOrFail($id);
+        $data = Sales::with(['pegawaiRelasi:kode_pegawai,full_name', 'photoCollectRelasi', 'validateBy'])->findOrFail($id);
 
         if ($data->kode_pegawai != auth()->user()->kode_pegawai && !auth()->user()->can('sales-approve')) {
             return abort(403);
         }
 
-        $user = User::select('id', 'name')->where('id', $data->validate_by)->first();
-
-        return view('dashboard.sales.detail', compact('data', 'user'));
+        return view('dashboard.sales.detail', compact('data'));
     }
 
     /**

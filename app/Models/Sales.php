@@ -25,6 +25,9 @@ class Sales extends Model
         "notes",
         "validate_by",
         "id_session",
+        "customer_make_order",
+        "order_notes",
+        "proof_picture",
     ];
 
     /**

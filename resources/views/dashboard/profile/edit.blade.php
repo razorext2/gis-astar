@@ -16,7 +16,7 @@
 				</header>
 
 				<div class="relative w-full">
-					<img class="h-72 w-full rounded-md object-cover object-top ring-1 ring-gray-200 dark:ring-gray-700"
+					<img class="h-72 w-full rounded-md object-cover object-center ring-1 ring-gray-200 dark:ring-gray-700"
 						src="{{ auth()->user()->profile_pic ? asset('storage/profile-pictures/' . auth()->user()->profile_pic) : asset('assets/img/profile-picture-5.jpg') }}"
 						alt="">
 

@@ -60,7 +60,7 @@
 					<div class="col-span-2 w-full">
 						<x-input.basic id="customer_telp" name="customer_telp" value="{{ $data->customer_telp }}"
 							placeholder="Nomor Telepon Customer" required>
-							No. Telp / Contact Person
+							No. Whatsapp
 						</x-input.basic>
 						<div class="mt-2 hidden text-sm text-red-500" id="alert-customer_telp"></div>
 					</div>

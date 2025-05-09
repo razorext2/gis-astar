@@ -173,20 +173,13 @@ final class DriverTable extends PowerGridComponent
         return $filters;
     }
 
-    public function actionRules()
-    {
-        return [
-
-        ];
-    }
-
     public function actionsFromView(Driver $row): View
     {
         $actions = [
             [
                 'id' => 'show-btn',
                 'action' => route('driver.show', $row->id),
-                'label' => 'Show'
+                'label' => 'Detail'
             ]
         ];
 
