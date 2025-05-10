@@ -58,7 +58,6 @@ export default defineConfig({
                 "resources/js/pages/sales/detail.js",
 
                 // technician
-                "resources/js/pages/technician/index.js",
                 "resources/js/pages/technician/add.js",
                 "resources/js/pages/technician/detail.js",
 
