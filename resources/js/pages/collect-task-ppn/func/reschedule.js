@@ -1,11 +1,5 @@
-import { showAlert } from "../../../utils/alert";
+import { showAlert, loadingAlert } from "../../../utils/alert";
 
-/**
- * @function reschedule
- * @description Fungsi untuk reschedule tagihan dengan kode xxxx
- * @param {void} 
- * @return {void}
- */
 export function reschedule() {
   $('body').on('click', '#reschedule-btn', async function () {
     let id = $(this).data("id");
@@ -39,6 +33,7 @@ export function reschedule() {
       });
 
       if (date) {
+        loadingAlert("Reschedule...");
         try {
           const response = await axios.patch(`${APP_URL}/api/collect-task-ppn-api/${id}/reschedule`, {
             date: date,
@@ -46,15 +41,18 @@ export function reschedule() {
           });
 
           if (response.data.success) {
+            Swal.close();
             showAlert('success', response.data.message);
             $('#dataTable').DataTable().ajax.reload(null, false);
           } else {
+            Swal.close();
             console.error(response.data.message);
             showAlert('error', response.data.message, response.data.data);
           }
         } catch (error) {
+          Swal.close();
           console.log(error);
-          showAlert('error', 'Ada kegagalan pada server.', error.message)
+          return showAlert('error', 'Ada kegagalan pada server.', error.message)
         }
       }
     }

@@ -2,6 +2,7 @@ import { quillEditor } from "../../utils/quillEditor";
 import { backCameraStream } from "../../utils/cameraStream";
 import { addDataHandler } from "./func/formHandler";
 import { getLocation } from '../../utils/geoLocation';
+import { loadingAlert, showAlert } from "../../utils/alert";
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Inisialisasi editor Quill
@@ -13,12 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     // Tampilkan Swal loading saat proses pengambilan lokasi
-    window.Swal.fire({
-      title: "Mengambil lokasi...",
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      didOpen: () => window.Swal.showLoading()
-    });
+    loadingAlert("Mengambil lokasi...");
 
     // Ambil lokasi secara asinkron
     const coords = await getLocation('driver');
@@ -29,15 +25,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log("Lokasi didapat dari:", coords.from);
 
     // Tutup Swal loading setelah selesai
-    window.Swal.close();
+    Swal.close();
   } catch (err) {
     // Jika terjadi error, tutup Swal dan tampilkan pesan error
-    window.Swal.close();
-    window.Swal.fire({
-      title: "Gagal",
-      html: err.message,
-      icon: "error",
-      showConfirmButton: true
-    });
+    Swal.close();
+    showAlert('error', 'Terjadi kesalahan.', err.message);
   }
 });

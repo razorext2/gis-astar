@@ -1,17 +1,21 @@
-import { showAlert } from "../../../utils/alert";
+import Swal from "sweetalert2";
+import { showAlert, loadingAlert } from "../../../utils/alert";
 
 async function sendRequest(url, data) {
   try {
     const response = await axios.patch(url, data);
     if (response.data.success) {
+      Swal.close();
       showAlert("success", response.data.message, response.data.data);
       setTimeout(() => {
         window.location.href = `${APP_URL}/dashboard/driver`;
       }, 1500);
     } else {
+      Swal.close();
       showAlert("error", response.data.message, response.data.data);
     }
   } catch (error) {
+    Swal.close();
     showAlert("error", "Terjadi kesalahan", error.message);
   }
 }
@@ -44,6 +48,7 @@ export async function confirmAction() {
         });
 
         if (validation.isConfirmed) {
+          loadingAlert("Mengapprove laporan...");
           await sendRequest(`${APP_URL}/api/driver-api/${id}/confirm`, { user_id: userID });
         }
       } else if (result.isDenied) {
@@ -73,6 +78,7 @@ export async function confirmAction() {
           });
 
           if (text) {
+            loadingAlert('Meminta revisi...');
             await sendRequest(`${APP_URL}/api/driver-api/${id}/revision`, {
               user_id: userID,
               notes: text,
@@ -94,6 +100,7 @@ export async function confirmAction() {
           });
 
           if (text) {
+            loadingAlert('Menolak laporan...');
             await sendRequest(`${APP_URL}/api/driver-api/${id}/deny`, {
               user_id: userID,
               notes: text,
@@ -104,7 +111,9 @@ export async function confirmAction() {
         }
       }
     } catch (error) {
+      Swal.close();
       console.error("Terjadi kesalahan:", error);
+      return showAlert('error', 'Terjadi kesalahan', error.message);
     }
   });
 }

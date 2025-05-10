@@ -18,7 +18,6 @@ export function clearForm() {
   $('#job_update').val('');
   $('#point').val('');
   $('#weight_type option[value=""]').prop('selected', true).trigger('change');
-
   $('#partner_parent').addClass('hidden');
   $('#partner_child').empty();
 }

@@ -1,9 +1,11 @@
-import { showAlert } from "../../../utils/alert";
+import { showAlert, loadingAlert } from "../../../utils/alert";
 
 async function sendRequest(url, data) {
   try {
+    loadingAlert("Memproses...");
     const response = await axios.patch(url, data);
     if (response.data.success) {
+      Swal.close();
       showAlert("success", response.data.message, response.data.data);
       setTimeout(() => {
         window.location.href = `${APP_URL}/dashboard/collect/submitted`;

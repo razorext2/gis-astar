@@ -1,4 +1,4 @@
-import { showAlert } from "../../../utils/alert";
+import { showAlert, loadingAlert } from "../../../utils/alert";
 
 export function deleteData() {
   $("body").on("click", "#delete-btn", async function () {
@@ -15,17 +15,21 @@ export function deleteData() {
 
     if (result.isConfirmed) {
       try {
+        loadingAlert("Menghapus data...");
         const response = await axios.delete(`${APP_URL}/api/collect-task-ppn-api/${id}`);
 
         if (response.data.success) {
+          Swal.close();
           showAlert('success', response.data.message);
           $('#dataTable').DataTable().ajax.reload(null, false);
         } else {
+          Swal.close();
           showAlert('error', response.data.message);
         }
       } catch (error) {
+        Swal.close();
         console.error('Error:', error);
-        showAlert('error', 'Terjadi kesalahan.', error.message);
+        return showAlert('error', 'Terjadi kesalahan.', error.message);
       }
     }
   });

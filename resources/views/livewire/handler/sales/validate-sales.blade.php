@@ -1,5 +1,5 @@
 <div>
-	<x-button.success class="confirm-btn float-right" id="confirm-btn" wire:click="$set('showModal', true)">
+	<x-button.success class="float-right" wire:click="$set('showModal', true)">
 		<x-slot name="icon">
 			<x-icons.angle-right class="h-5 w-5" />
 		</x-slot>

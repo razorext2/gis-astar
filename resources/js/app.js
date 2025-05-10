@@ -36,10 +36,6 @@ document.addEventListener('livewire:navigated', function () {
     import('./pages/sales/index.js').then((module) => {
       module.initSales();
     })
-  } else if (window.location.pathname === '/dashboard/technician') {
-    import('./pages/technician/index.js').then((module) => {
-      module.initTechnician();
-    })
   } else if (window.location.pathname === '/dashboard/capture') {
     import('./pages/capture/index.js').then((module) => {
       module.initCapture();

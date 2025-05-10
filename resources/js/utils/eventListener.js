@@ -42,9 +42,17 @@ export async function initEventListener() {
 
   // livewire redirect delayea
   Livewire.on('redirectRoute', route => {
-    setTimeout(() => {
-      window.location.href = route;
-    }, 1000);
+    if (document.getElementById('dataTable')) {
+      $('#dataTable').DataTable().ajax.reload();
+
+      console.log('ada');
+    } else {
+
+      console.log('ga ada');
+      setTimeout(() => {
+        window.location.href = route;
+      }, 1000);
+    }
   })
 
   // livewire modal event

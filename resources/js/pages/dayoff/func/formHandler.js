@@ -1,5 +1,5 @@
 import { capturedImages } from "../../../utils/cameraStream";
-import { showAlert } from "../../../utils/alert";
+import { showAlert, loadingAlert } from "../../../utils/alert";
 
 export function addDataHandler() {
   $('#store').click(async function (e) {
@@ -7,6 +7,8 @@ export function addDataHandler() {
 
     const $button = $(this);
     $button.prop('disabled', true); // Disable the button to prevent multiple clicks
+
+    loadingAlert("Menyimpan data...");
 
     let formData = new FormData();
 
@@ -25,9 +27,11 @@ export function addDataHandler() {
       const response = await axios.post(`${APP_URL}/api/dayoff-api`, formData);
 
       if (response.data.success) {
+        Swal.close();
         showAlert('success', response.data.message);
         setTimeout(() => window.location.href = `${APP_URL}/dashboard/dayoff`, 1500);
       } else {
+        Swal.close();
         $button.prop('disabled', false);
         handleFormErrors(response.data.data);
         let err = null;
@@ -46,6 +50,7 @@ export function addDataHandler() {
       }
     } catch (error) {
       $button.prop('disabled', false);
+      Swal.close();
       return showAlert('error', 'Terjadi kesalahan.', error.message);
     }
   });

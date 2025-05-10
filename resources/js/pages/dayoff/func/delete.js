@@ -1,3 +1,5 @@
+import { showAlert, loadingAlert } from '../../../utils/alert';
+
 export function deleteData() {
   $("body").on("click", "#delete-btn", function () {
     let id = $(this).data("id");
@@ -12,25 +14,23 @@ export function deleteData() {
       confirmButtonText: "Ya, Hapus!"
     }).then((result) => {
       if (result.isConfirmed) {
+        loadingAlert("Menghapus data...");
         // fetch data to ajax
-        $.ajax({
-          url: `${APP_URL}/api/dayoff-api/${id}`,
-          type: "DELETE",
-          cache: false,
+        axios.delete(`${APP_URL}/api/dayoff-api/${id}`, {
           data: {
             "_token": token
-          },
-          success: function (response) {
-            Swal.fire({
-              icon: "success",
-              title: response.message,
-              showConfirmButton: false,
-              timer: 1000
-            });
-
-            $('#table-dayoff').DataTable().ajax.reload(null, false);
           }
         })
+          .then(response => {
+            Swal.close();
+            showAlert('success', response.data.message);
+            $('#table-dayoff').DataTable().ajax.reload(null, false);
+          })
+          .catch(error => {
+            Swal.close();
+            console.error('Error:', error);
+            return showAlert('error', 'Terjadi kesalahan.', error.message);
+          })
       }
     })
   })

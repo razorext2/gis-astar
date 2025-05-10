@@ -1,4 +1,4 @@
-import { showAlert } from '../../../utils/alert';
+import { showAlert, loadingAlert } from '../../../utils/alert';
 import { handleFormErrors } from '../../../utils/handleFormErrors';
 
 // Fungsi untuk melakukan assign tugas ke satu pegawai
@@ -26,6 +26,7 @@ export async function singleAssign() {
     });
 
     if (input) {
+      loadingAlert("Assign penagihan...");
       try {
         // Mengirim permintaan assign ke server
         const response = await axios.patch(`${APP_URL}/api/collect-task-ppn-api/${id}/assign`, {
@@ -34,16 +35,19 @@ export async function singleAssign() {
         })
         if (response.data.success) {
           // Jika berhasil, tampilkan pesan sukses dan perbarui tabel
+          Swal.close();
           showAlert('success', response.data.message);
           $('#dataTable').DataTable().ajax.reload(null, false);
         } else {
           // Jika gagal, tampilkan pesan error
+          Swal.close();
           showAlert('error', response.data.message);
         }
       } catch (error) {
         // Tangani error dari server
+        Swal.close();
         console.error('Error:', error);
-        showAlert('error', 'Terjadi kesalahan.', error.message);
+        return showAlert('error', 'Terjadi kesalahan.', error.message);
       }
     }
   })

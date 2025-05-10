@@ -1,4 +1,4 @@
-import { showAlert } from '../../../utils/alert';
+import { showAlert, loadingAlert } from '../../../utils/alert';
 import { handleFormErrors } from '../../../utils/handleFormErrors';
 
 // Fungsi untuk melakukan assign tugas ke satu pegawai
@@ -26,6 +26,7 @@ export async function singleAssign() {
     });
 
     if (input) {
+      loadingAlert("Assign penagihan...");
       try {
         // Mengirim permintaan assign ke server
         const response = await axios.patch(`${APP_URL}/api/collect-idy-ppn-api/${id}/assign`, {
@@ -34,16 +35,19 @@ export async function singleAssign() {
         })
         if (response.data.success) {
           // Jika berhasil, tampilkan pesan sukses dan perbarui tabel
+          Swal.close();
           showAlert('success', response.data.message);
           $('#dataTable').DataTable().ajax.reload(null, false);
         } else {
           // Jika gagal, tampilkan pesan error
+          Swal.close();
           showAlert('error', response.data.message);
         }
       } catch (error) {
         // Tangani error dari server
+        Swal.close();
         console.error('Error:', error);
-        showAlert('error', 'Terjadi kesalahan.', error.message);
+        return showAlert('error', 'Terjadi kesalahan.', error.message);
       }
     }
   })
@@ -53,6 +57,8 @@ export async function singleAssign() {
 export function massAssign() {
   $('#store').click(async function (e) {
     e.preventDefault();
+
+    loadingAlert("Assign penagihan...");
 
     // Inisialisasi variabel
     const $button = $(this);
@@ -75,18 +81,21 @@ export function massAssign() {
       // Proses respons dari server
       if (response.data.success) {
         // Jika berhasil, tampilkan pesan sukses dan redirect
+        Swal.close();
         showAlert('success', response.data.message);
         setTimeout(() => {
           window.location.href = `${APP_URL}/dashboard/collect-idy-ppn`;
         }, 1500);
       } else {
         // Jika gagal, tampilkan pesan error dan tangani kesalahan form
+        Swal.close();
         $button.prop('disabled', false);
         showAlert('error', response.data.message);
         handleFormErrors(response.data.data);
       }
     } catch (error) {
       // Tangani error dari server
+      Swal.close();
       $button.prop('disabled', false);
       console.error('Error:', error);
       showAlert('error', 'Terjadi kesalahan.', error.message);

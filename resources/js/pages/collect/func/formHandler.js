@@ -1,5 +1,5 @@
 import { capturedImages } from '../../../utils/cameraStream'; // import capturedImages array
-import { showAlert } from '../../../utils/alert';
+import { showAlert, loadingAlert } from '../../../utils/alert';
 
 export function editDataHandler() {
   $('#store').click(async function (e) {
@@ -7,12 +7,8 @@ export function editDataHandler() {
 
     const $button = $(this);
     $button.prop('disabled', true);
-    Swal.fire({
-      title: "Menyimpan data...",
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      didOpen: () => Swal.showLoading()
-    });
+
+    loadingAlert("Menyimpan data...");
 
     // Ambil data form
     let formData = new FormData();
@@ -58,6 +54,7 @@ export function editDataHandler() {
     } catch (error) {
       Swal.close();
       $button.prop('disabled', false);
+      handleFormErrors(error.response.data.errors);
       return showAlert('error', 'Terjadi kesalahan.', error.message);
     }
   });

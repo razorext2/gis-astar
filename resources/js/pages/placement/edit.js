@@ -1,4 +1,3 @@
-
 // Get the elements
 var rangeInput = document.getElementById('radius-input');
 var currencyInput = document.getElementById('radius');

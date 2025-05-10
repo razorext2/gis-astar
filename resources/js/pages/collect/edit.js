@@ -3,6 +3,7 @@ import { quillEditor } from "../../utils/quillEditor";
 import { backCameraStream } from '../../utils/cameraStream';
 import { zoomImage } from "../../utils/zoomImage";
 import { getLocation } from '../../utils/geoLocation';
+import { loadingAlert, showAlert } from '../../utils/alert';
 
 const data = document.getElementById('data') ? document.getElementById('data').value : ''; // Validasi elemen 'data'
 
@@ -57,12 +58,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     // Tampilkan Swal loading saat proses pengambilan lokasi
-    Swal.fire({
-      title: "Mengambil lokasi...",
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      didOpen: () => Swal.showLoading()
-    });
+    loadingAlert("Mengambil lokasi...");
 
     // Ambil lokasi secara asinkron
     const coords = await getLocation('collect');
@@ -77,11 +73,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (err) {
     // Jika terjadi error, tutup Swal dan tampilkan pesan error
     Swal.close();
-    Swal.fire({
-      title: "Gagal",
-      html: err.message,
-      icon: "error",
-      showConfirmButton: true
-    });
+    showAlert('error', 'Gagal mengambil lokasi', err.message);
   }
 });

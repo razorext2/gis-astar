@@ -81,6 +81,7 @@ class ValidateSales extends Component
             ]);
 
             DB::commit();
+            $this->resetModal();
             $this->dispatch('swal', title: 'Berhasil', text: 'Data telah dikonfirmasi', icon: 'success');
             return $this->dispatch('redirectRoute', route('sales.index'));
         } catch (\Exception $e) {

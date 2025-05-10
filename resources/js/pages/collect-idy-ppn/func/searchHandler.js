@@ -1,20 +1,16 @@
-import { showAlert } from '../../../utils/alert';
+import { showAlert, loadingAlert } from '../../../utils/alert';
 
 export function searchDataHandler() {
   $('#no_sr_submit').on('click', async function () {
     let no_sr = $('#no_sr').val();
 
+    loadingAlert("Memproses data...");
+
     if (no_sr == '') {
+      Swal.close();
       showAlert('error', 'Terjadi kesalahan!', 'No. SR tidak boleh kosong!');
       return;
     }
-
-    Swal.fire({
-      title: "Memproses data...",
-      showConfirmButton: false,
-      allowOutsideClick: false,
-      willOpen: () => Swal.showLoading()
-    });
 
     try {
       const [database, BSI] = await Promise.all([
@@ -45,6 +41,7 @@ export function searchDataHandler() {
 
           Swal.close();
         } else {
+          Swal.close();
           showAlert('error', 'Terjadi kesalahan saat mengambil data!', `Tagihan dengan kode: ${no_sr} ditemukan, namun statusnya sudah ditutup.`);
         }
       } else {
@@ -68,13 +65,15 @@ export function searchDataHandler() {
 
           Swal.close();
         } else {
+          Swal.close();
           clear();
           showAlert('error', 'Terjadi kesalahan saat mengambil data!', `Tagihan dengan kode: ${no_sr} tidak ditemukan.`);
         }
       }
     } catch (error) {
       console.error("Error fetching data:", error);
-      showAlert('error', 'Terjadi kesalahan saat mengambil data!', error.message)
+      Swal.close();
+      return showAlert('error', 'Terjadi kesalahan saat mengambil data!', error.message)
     }
   });
 
@@ -82,5 +81,6 @@ export function searchDataHandler() {
 
   $('#no_sr_reset').on('click', function () {
     clear();
+    Swal.close();
   });
 }

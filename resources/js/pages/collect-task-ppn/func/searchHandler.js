@@ -1,4 +1,4 @@
-import { showAlert } from '../../../utils/alert';
+import { showAlert, loadingAlert } from '../../../utils/alert';
 
 export function searchDataHandler() {
   $('#no_sr_submit').on('click', async function () {
@@ -9,12 +9,7 @@ export function searchDataHandler() {
       return;
     }
 
-    Swal.fire({
-      title: "Memproses data...",
-      showConfirmButton: false,
-      allowOutsideClick: false,
-      willOpen: () => Swal.showLoading()
-    });
+    loadingAlert("Memproses data...");
 
     try {
       const [database, BSI] = await Promise.all([
@@ -45,6 +40,7 @@ export function searchDataHandler() {
 
           Swal.close();
         } else {
+          Swal.close();
           showAlert('error', 'Terjadi kesalahan saat mengambil data!', `Tagihan dengan kode: ${no_sr} ditemukan, namun statusnya sudah ditutup.`);
         }
       } else {
@@ -68,13 +64,14 @@ export function searchDataHandler() {
 
           Swal.close();
         } else {
-          clear();
+          Swal.close(); clear();
           showAlert('error', 'Terjadi kesalahan saat mengambil data!', `Tagihan dengan kode: ${no_sr} tidak ditemukan.`);
         }
       }
     } catch (error) {
+      Swal.close();
       console.error("Error fetching data:", error);
-      showAlert('error', 'Terjadi kesalahan saat mengambil data!', error.message)
+      return showAlert('error', 'Terjadi kesalahan saat mengambil data!', error.message)
     }
   });
 

@@ -1,5 +1,6 @@
 import { capturedImages } from '../../../utils/cameraStream';
-import { showAlert } from "../../../utils/alert";
+import { showAlert, loadingAlert } from "../../../utils/alert";
+import Swal from 'sweetalert2';
 
 export function addDataHandler() {
   $('#store').on('click', async function (e) {
@@ -7,6 +8,8 @@ export function addDataHandler() {
 
     const $button = $(this);
     $button.prop('disabled', true);
+
+    loadingAlert("Menyimpan...");
 
     let formData = new FormData();
 
@@ -28,9 +31,11 @@ export function addDataHandler() {
       const response = await axios.post(`${APP_URL}/api/sales-api`, formData);
 
       if (response.data.success) {
+        Swal.close();
         showAlert('success', response.data.message);
         setTimeout(() => window.location.href = `${APP_URL}/dashboard/sales`, 1500);
       } else {
+        Swal.close();
         $button.prop('disabled', false);
         handleFormErrors(response.data.data);
         let err = null;
@@ -44,11 +49,10 @@ export function addDataHandler() {
         } else {
           err = data;
         }
-
         return showAlert('error', response.data.message, `Validasi data gagal. <br><b>${err}</b>`);
-
       }
     } catch (error) {
+      Swal.close();
       $button.prop('disabled', false);
       console.error('Error:', error);
       return showAlert('error', 'Terjadi kesalahan.', error.message);
@@ -63,6 +67,8 @@ export function editDataHandler() {
 
     const $button = $(this);
     $button.prop('disabled', true);
+
+    loadingAlert("Menyimpan...");
 
     // define variable
     let id = $('#id').val();
@@ -82,17 +88,14 @@ export function editDataHandler() {
       keterangan: keterangan,
     })
       .then(response => {
-        Swal.fire({
-          icon: "success",
-          title: "Laporan berhasil diubah!",
-          showConfirmButton: false,
-          timer: 1000
-        });
-        setTimeout(() => window.location.href = `${APP_URL}/dashboard/sales`, 1000);
+        Swal.close();
+        showAlert('success', response.data.message);
+        setTimeout(() => window.location.href = `${APP_URL}/dashboard/sales`, 1500);
       })
       .catch(error => {
-        handleFormErrors(error.response.data.errors);
+        Swal.close();
         $button.prop('disabled', false);
+        handleFormErrors(error.response.data.errors);
       });
   })
 }

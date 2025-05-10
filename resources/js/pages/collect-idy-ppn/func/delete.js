@@ -14,18 +14,22 @@ export function deleteData() {
     });
 
     if (result.isConfirmed) {
+      loadingAlert("Menghapus data...");
       try {
         const response = await axios.delete(`${APP_URL}/api/collect-idy-ppn-api/${id}`);
 
         if (response.data.success) {
+          Swal.close();
           showAlert('success', response.data.message);
           $('#dataTable').DataTable().ajax.reload(null, false);
         } else {
+          Swal.close();
           showAlert('error', response.data.message);
         }
       } catch (error) {
+        Swal.close();
         console.error('Error:', error);
-        showAlert('error', 'Terjadi kesalahan.', error.message);
+        return showAlert('error', 'Terjadi kesalahan.', error.message);
       }
     }
   });

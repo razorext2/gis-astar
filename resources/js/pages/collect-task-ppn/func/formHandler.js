@@ -1,4 +1,4 @@
-import { showAlert } from '../../../utils/alert';
+import { showAlert, loadingAlert } from '../../../utils/alert';
 import { handleFormErrors } from '../../../utils/handleFormErrors';
 
 export function addDataHandler() {
@@ -7,6 +7,8 @@ export function addDataHandler() {
 
     const $button = $(this);
     $button.prop('disabled', true);
+
+    loadingAlert("Menyimpan...");
 
     let formData = new FormData();
     formData.append("no_sr", $("#no_sr").val());
@@ -27,6 +29,7 @@ export function addDataHandler() {
     formData.append("assign_date", $("#assign_date").val());
 
     if ($('#remaining_bill').val() != $('#remaining_bill_bsi').val()) {
+      Swal.close();
       $button.prop('disabled', false);
       showAlert('error', 'Sisa tagihan tidak sama.', 'Hubungi IT untuk pengecekan data lebih lanjut.');
       return;
@@ -35,14 +38,17 @@ export function addDataHandler() {
     try {
       const response = await axios.post(`${APP_URL}/api/collect-task-ppn-api`, formData);
       if (response.data.success) {
+        Swal.close();
         showAlert('success', response.data.message);
         setTimeout(() => window.location.reload(), 1500);
       } else {
+        Swal.close();
         $button.prop('disabled', false);
         handleFormErrors(response.data.data);
         showAlert('error', response.data.message)
       }
     } catch (error) {
+      Swal.close();
       console.error('Error:', error);
       $button.prop('disabled', false);
       showAlert('error', 'Terjadi kesalahan.', error.message);

@@ -1,5 +1,5 @@
 import { capturedImages } from '../../../utils/cameraStream';
-import { showAlert } from '../../../utils/alert';
+import { showAlert, loadingAlert } from '../../../utils/alert';
 
 export function addDataHandler() {
   $('#store').click(async function (e) {
@@ -7,6 +7,8 @@ export function addDataHandler() {
 
     const $button = $(this);
     $button.prop('disabled', true);
+
+    loadingAlert("Menyimpan data...");
 
     let formData = new FormData();
 
@@ -26,9 +28,11 @@ export function addDataHandler() {
       const response = await axios.post(`${APP_URL}/api/driver-api`, formData);
 
       if (response.data.success) {
+        Swal.close();
         showAlert('success', response.data.message);
         setTimeout(() => Livewire.navigate(`${APP_URL}/dashboard/driver`), 1000);
       } else {
+        Swal.close();
         $button.prop('disabled', false);
         handleFormErrors(response.data.data);
         let err = null;
@@ -42,11 +46,10 @@ export function addDataHandler() {
         } else {
           err = data;
         }
-
         return showAlert('error', response.data.message, `Validasi data gagal. <br><b>${err}</b>`);
-
       }
     } catch (error) {
+      Swal.close();
       $button.prop('disabled', false);
       console.error('Error:', error);
       return showAlert('error', 'Terjadi kesalahan.', error.message);
@@ -60,6 +63,8 @@ export function editDataHandler() {
 
     const $button = $(this);
     $button.prop('disabled', true);
+
+    loadingAlert("Menyimpan data...");
 
     // define variable
     let id = $('#id').val();
@@ -75,17 +80,14 @@ export function editDataHandler() {
       keterangan: keterangan,
     })
       .then(response => {
-        Swal.fire({
-          icon: "success",
-          title: "Laporan berhasil diubah!",
-          showConfirmButton: false,
-          timer: 1000
-        });
+        Swal.close();
+        showAlert('success', 'Laporan berhasil diubah!');
         setTimeout(() => Livewire.navigate(`${APP_URL}/dashboard/driver`), 1000);
       })
       .catch(error => {
-        handleFormErrors(error.response.data.errors);
+        Swal.close();
         $button.prop('disabled', false);
+        handleFormErrors(error.response.data.errors);
       });
   })
 }

@@ -1,4 +1,4 @@
-import { showAlert } from '../../../utils/alert';
+import { showAlert, loadingAlert } from '../../../utils/alert';
 
 export async function validate() {
   $('body').on('click', '#confirm-btn', async function () {
@@ -15,18 +15,22 @@ export async function validate() {
     });
 
     if (result.isConfirmed) {
+      loadingAlert("Menutup tagihan...");
       try {
         const response = await axios.patch(`${APP_URL}/api/collect-task-api/${id}/validate`, { validate_by: validate_by });
 
         if (response.data.success) {
+          Swal.close();
           showAlert('success', response.data.message);
           setTimeout(() => window.location.reload(), 1000);
         } else {
+          Swal.close();
           showAlert('error', response.data.message, response.data.data);
         }
       } catch (error) {
+        Swal.close();
         console.error('Error:', error);
-        showAlert('error', 'Terjadi kesalahan.', error.message);
+        return showAlert('error', 'Terjadi kesalahan.', error.message);
       }
     }
   });
