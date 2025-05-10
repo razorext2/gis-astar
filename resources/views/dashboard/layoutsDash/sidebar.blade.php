@@ -116,16 +116,18 @@
 					x-transition:enter="transition ease-in duration-200" x-transition:enter-start="transform opacity-0 -translate-y-5"
 					x-transition:leave="transition ease-out duration-200" x-transition:leave-end="transform opacity-0 -translate-y-5">
 
-					<li>
-						<a
-							class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
-							href="{{ route('today.attendance') }}"
-							wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-dark-primary"
-							wire:navigate>
-							<x-icons.map-pin-alt class="h-6 w-6 group-hover:text-red-600" />
-							<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Today's Attendance</span>
-						</a>
-					</li>
+					@hasanyrole('Admin|Management|HRD')
+						<li>
+							<a
+								class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
+								href="{{ route('today.attendance') }}"
+								wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-dark-primary"
+								wire:navigate>
+								<x-icons.map-pin-alt class="h-6 w-6 group-hover:text-red-600" />
+								<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Today's Attendance</span>
+							</a>
+						</li>
+					@endhasanyrole
 
 					<li>
 						<a
@@ -558,17 +560,19 @@
 							</a>
 						</li>
 
-						<li>
-							<a
-								class="{{ Route::is('technicianpoints.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-								href="{{ route('technicianpoints.transactions') }}" wire:navigate>
+						@can('technician-approve')
+							<li>
+								<a
+									class="{{ Route::is('technicianpoints.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									href="{{ route('technicianpoints.transactions') }}" wire:navigate>
 
-								<x-icons.arrow-left wire:current="!text-red-600" class="h-6 w-6 group-hover:text-red-600" />
-								<span class="ms-3 inline-flex text-sm group-hover:text-red-600">
-									Poin Keluar
-								</span>
-							</a>
-						</li>
+									<x-icons.arrow-left wire:current="!text-red-600" class="h-6 w-6 group-hover:text-red-600" />
+									<span class="ms-3 inline-flex text-sm group-hover:text-red-600">
+										Poin Keluar
+									</span>
+								</a>
+							</li>
+						@endcan
 
 					</ul>
 				</li>

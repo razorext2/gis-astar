@@ -20,19 +20,21 @@
 			x-transition:leave-end="opacity-0 -translate-y-5">
 
 			<div class="mt-4 grid grid-cols-2 gap-2 lg:grid-cols-3">
-				<div>
-					<x-input.basic id="kodepegawai" maxlength="10" name="kodepegawai" wire:model.live.throttle.150ms="kodepegawai"
-						placeholder="Cari kode pegawai...">
-						Kode pegawai:
-					</x-input.basic>
-				</div>
+				@can('technician-approve')
+					<div>
+						<x-input.basic id="kodepegawai" maxlength="10" name="kodepegawai" wire:model.live.throttle.150ms="kodepegawai"
+							placeholder="Cari kode pegawai...">
+							Kode pegawai:
+						</x-input.basic>
+					</div>
 
-				<div>
-					<x-input.basic id="name" maxlength="30" name="name" wire:model.live.throttle.150ms="name"
-						placeholder="Cari nama pegawai...">
-						Nama pegawai:
-					</x-input.basic>
-				</div>
+					<div>
+						<x-input.basic id="name" maxlength="30" name="name" wire:model.live.throttle.150ms="name"
+							placeholder="Cari nama pegawai...">
+							Nama pegawai:
+						</x-input.basic>
+					</div>
+				@endcan
 
 				<div>
 					<x-input.basic id="no_vt" maxlength="10" name="no_vt" wire:model.live.throttle.150ms="no_vt"
