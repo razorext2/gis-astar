@@ -1,6 +1,5 @@
 import * as faceapi from "face-api.js";
 import { showAlert, loadingAlert } from "../../utils/alert";
-import Swal from "sweetalert2";
 
 export function initSelfDetect(lat, lng) {
   let videoStream = null,
@@ -91,8 +90,8 @@ export function initSelfDetect(lat, lng) {
     startButton.disabled = false;
 
     setTimeout(() => {
-      window.location.href = `${APP_URL}/dashboard/capture`;
-    }, 2500);
+      window.location.href = `${APP_URL}/dashboard`;
+    }, 1500);
   }
 
   async function getEmployeeImagePaths(label) {
@@ -317,15 +316,22 @@ export function initSelfDetect(lat, lng) {
       const { data: attendanceData } = await axios.post(endpoint, payload);
 
       if (attendanceData.success) {
-        showAttendanceAlert();
+        // show loading
+        loadingAlert('Mengirim ke server...')
+
+        // Sinkronisasi ke server pusat
+        await axios.post(`${APP_URL}/api/proxy/server/attendance`, {
+          kode_jari: kodePegawai,
+        }).then(() => {
+          Swal.close();
+          showAttendanceAlert();
+        }).catch((error) => {
+          Swal.close();
+          showAlert('error', 'Terjadi kesalahan.', `Gagal menyimpan data absensi: ${error}`);
+        });
       } else {
         return showAlert('error', 'Terjadi kesalahan.', attendanceData.message || 'Gagal menyimpan data absensi.');
       }
-
-      // Sinkronisasi ke server pusat
-      await axios.post(`${APP_URL}/api/proxy/server/attendance`, {
-        kode_jari: kodePegawai,
-      });
 
     } catch (error) {
       return showAlert('error', 'Terjadi kesalahan.', `Gagal memproses absensi: ${error.message || error}`);

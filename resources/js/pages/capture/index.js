@@ -33,6 +33,7 @@ export async function initCapture() {
                 if (distance > radius) {
                     showErrorAndRedirect(`Anda berada ${distance.toFixed(2)} meter dari tempat yang ditentukan.`);
                     showError('Anda harus berada didalam radius area yang ditentukan. Jika sudah, silahkan refresh kembali.');
+                    return
                 } else if (lastLat !== undefined && lastLng !== undefined) {
                     // Calculate distance moved since last position
                     const movedDistance = calculateDistance(lastLat, lastLng, lat, lng);
@@ -90,7 +91,6 @@ export async function initCapture() {
 
         showAlert("error", "Gagal!", message)
         pegawaiKosong.style.display = "block";
-        pegawaiInfo.style.display = "none";
 
         startBtn.disabled = true;
         startBtn.classList.add('bg-gray-500');
@@ -100,7 +100,6 @@ export async function initCapture() {
     function showError(message) {
         const container = document.getElementById('error');
         container.textContent = message;
-
         container.classList.remove('hidden');
     }
 }
