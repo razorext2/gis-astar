@@ -59,10 +59,6 @@ export function showDatatables() {
         }
     });
 
-    setInterval(function () {
-        table.ajax.reload();
-    }, 60000);
-
     $('#cari').click(function () {
         // Ambil nilai dari semua input filter
         const filters = ['#title', '#no_sr', '#kode_pegawai', '#bill_type', '#datepicker-range-start',
