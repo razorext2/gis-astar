@@ -11,62 +11,49 @@
 		@if ($showModal)
 			<!-- Modal box -->
 			<div
-				class="mx-2 flex w-full flex-col gap-1 rounded-xl bg-white p-2 shadow-2xl dark:bg-gray-800 sm:mx-0 md:w-2/3 md:gap-2 md:p-4 lg:w-1/2 lg:p-6 xl:w-2/5">
+				class="mx-2 flex w-full flex-col gap-1 rounded-xl bg-white p-2 shadow-2xl dark:bg-dark-primary sm:mx-0 md:w-2/3 md:gap-2 md:p-4 lg:w-1/2 lg:p-6 xl:w-2/5">
 				@if ($step == 1)
 					<h2 class="mb-2 text-center text-2xl font-semibold text-gray-900 dark:text-white lg:text-3xl">Konfirmasi?</h2>
 
 					@if ($showDetail)
 						<div class="grid max-h-[450px] w-full gap-1 overflow-auto text-left md:grid-cols-2">
-							<div class="col-span-2 flex flex-col items-start rounded-xl border border-gray-200 bg-gray-50 p-3 lg:col-span-1">
-								<p class="text-sm text-gray-700">Kode Pegawai</p>
-								<p class="text-base font-medium text-gray-800">
-									{{ $data->kode_pegawai ?? 'N/A' }}
-								</p>
-							</div>
+							<x-detail.label label="Kode Pegawai" id="kode_pegawai">
+								{{ $data->kode_pegawai ?? 'N/A' }}
+							</x-detail.label>
 
-							<div class="col-span-2 flex flex-col items-start rounded-xl border border-gray-200 bg-gray-50 p-3 lg:col-span-1">
-								<p class="text-sm text-gray-700">Nama Pegawai</p>
-								<p class="text-base font-medium text-gray-800">
-									{{ $data->pegawaiRelasi?->full_name ?? 'N/A' }}
-								</p>
-							</div>
+							<x-detail.label label="Nama Pegawai" id="nama_pegawai">
+								{{ $data->pegawaiRelasi?->full_name ?? 'N/A' }}
+							</x-detail.label>
 
-							<div class="col-span-2 flex flex-col items-start rounded-xl border border-gray-200 bg-gray-50 p-3 lg:col-span-1">
-								<p class="text-sm text-gray-700">Waktu Dibuat</p>
-								<p class="text-base font-medium text-gray-800">
-									{{ $data->created_at ?? 'N/A' }}
-								</p>
-							</div>
+							<x-detail.label label="Waktu Dibuat" id="created_at">
+								{{ $data->created_at ?? 'N/A' }}
+							</x-detail.label>
 
-							<div class="col-span-2 flex flex-col items-start rounded-xl border border-gray-200 bg-gray-50 p-3 lg:col-span-1">
-								<p class="text-sm text-gray-700">Waktu Diupdate</p>
-								<p class="text-base font-medium text-gray-800">
-									{{ $data->updated_at ?? 'N/A' }}
-								</p>
-							</div>
+							<x-detail.label label="Waktu Diupdate" id="updated_at">
+								{{ $data->updated_at ?? 'N/A' }}
+							</x-detail.label>
 
-							<div class="col-span-2 flex flex-col items-start rounded-xl border border-gray-200 bg-gray-50 p-3">
-								<p class="text-sm text-gray-700">Judul laporan</p>
-								<p class="text-base font-medium text-gray-800">
-									{{ $data->title ?? 'N/A' }}
-								</p>
-							</div>
+							<x-detail.label class="!col-span-2" label="Judul laporan" id="title">
+								{{ $data->title ?? 'N/A' }}
+							</x-detail.label>
 
-							<div class="col-span-2 flex flex-col items-start rounded-xl border border-gray-200 bg-gray-50 p-3">
-								<p class="text-sm text-gray-700">Customer</p>
-								<p class="text-base font-medium text-gray-800">
-									{{ $data->customer_name ?? 'N/A' }}
+							<div
+								class="col-span-2 flex flex-col items-start rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
+								<p class="text-sm text-gray-600 dark:text-gray-300">Customer</p>
+								<p class="text-navy-700 text-base font-medium dark:text-white">
+									{{ $data->customer_name ?? 'N/A' }} ({{ $data->customer_telp ?? 'N/A' }})
 								</p>
-								<a class="inline-flex text-base font-medium text-gray-800 underline"
+								<a class="inline-flex text-base font-medium text-gray-800 underline dark:text-white"
 									href="https://api.whatsapp.com/send?phone={{ $data->customer_telp ?? 'N/A' }}&text=Halo, %2A{{ ucwords(strtolower($data->title ?? 'N/A')) }}%2A. %0A%0ASaya marketing dari %2APT. Indodacin Presisi Utama%2A. Saya ingin menghubungi Anda terkait pesanan atau layanan yang mungkin Anda butuhkan.%0A%0AJika ada pertanyaan atau ingin berdiskusi lebih lanjut, silakan balas pesan ini.%0A%0ATerima kasih!%F0%9F%98%8A"
 									target="_blank">
 									Chat customer
 								</a>
 							</div>
 
-							<div class="col-span-2 flex flex-col items-start rounded-xl border border-gray-200 bg-gray-50 p-3">
-								<p class="text-sm text-gray-700">Lokasi checkpoint</p>
-								<span class="text-base font-medium text-gray-800">{{ $data->lokasi ?? 'N/A' }}</span>
+							<div
+								class="col-span-2 flex flex-col items-start rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
+								<p class="text-sm text-gray-600 dark:text-gray-300">Lokasi checkpoint</p>
+								<span class="text-navy-700 text-base font-medium dark:text-white">{{ $data->lokasi ?? 'N/A' }}</span>
 								<span class="text-left text-xs font-medium text-gray-400">
 									<a class="inline-flex underline"
 										href="https://www.google.com/maps/search/?api=1&query={{ $data->latitude ?? 'N/A' }},{{ $data->longitude ?? 'N/A' }}"
@@ -76,8 +63,9 @@
 								</span>
 							</div>
 
-							<div class="col-span-2 flex flex-col items-start rounded-xl border border-gray-200 bg-gray-50 p-3">
-								<p class="mb-2 text-sm text-gray-700">Dokumentasi</p>
+							<div
+								class="col-span-2 flex flex-col items-start rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
+								<p class="mb-2 text-sm text-gray-600 dark:text-gray-300">Dokumentasi</p>
 								<div class="relative mx-auto flex-none items-center gap-4 rounded-xl p-2">
 									@if ($data->photoCollectRelasi && $data->photoCollectRelasi->count() > 0)
 										@foreach ($data->photoCollectRelasi as $photo)
@@ -94,15 +82,13 @@
 								</div>
 							</div>
 
-							<div class="col-span-2 flex flex-col items-start rounded-xl border border-gray-200 bg-gray-50 p-3 lg:col-span-1">
-								<p class="text-sm text-gray-700">Keterangan</p>
-								<p class="! text-base font-medium text-gray-800">
-									{{ $data->keterangan ?? 'N/A' }}
-								</p>
-							</div>
+							<x-detail.label label="Keterangan" id="keterangan">
+								{{ $data->keterangan ?? 'N/A' }}
+							</x-detail.label>
 
-							<div class="col-span-2 flex flex-col items-start rounded-xl border border-gray-200 bg-gray-50 p-3 lg:col-span-1">
-								<p class="text-sm text-gray-700">Status</p>
+							<div
+								class="col-span-2 flex flex-col items-start rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700 lg:col-span-1">
+								<p class="text-sm text-gray-600 dark:text-gray-300">Status</p>
 								<p class="pt-1.5 text-base font-medium text-gray-800" id="status">
 									<span class="rounded-xl bg-yellow-100 px-4 py-2 text-sm font-medium text-yellow-800 ring-1 ring-gray-300">
 										Sedang diajukan.
