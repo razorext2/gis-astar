@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Sales;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -32,8 +33,8 @@ class SalesExport implements FromView, ShouldAutoSize, WithEvents
     public function view(): View
     {
         $sales = Sales::with(['userRelasi', 'pegawaiRelasi', 'validateBy'])
-            ->where('created_at', '>=', $this->fromDate)
-            ->where('created_at', '<=', $this->toDate);
+            ->where('created_at', '>=', Carbon::parse($this->fromDate)->startOfDay())
+            ->where('created_at', '<=', Carbon::parse($this->toDate)->endOfDay());
 
         if ($this->role && $this->role !== 'All') {
             $sales = $sales->whereHas('userRelasi.roles', function ($role) {
@@ -41,7 +42,7 @@ class SalesExport implements FromView, ShouldAutoSize, WithEvents
             });
         }
 
-        if($this->sales) {
+        if ($this->sales) {
             $sales = $sales->where('kode_pegawai', $this->sales);
         }
 

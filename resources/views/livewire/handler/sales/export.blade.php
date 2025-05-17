@@ -36,18 +36,24 @@
 							</div>
 						</div>
 
-						@hasanyrole(['Admin', 'Management'])
-							<div>
-								<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="roles">Pilih data yg mau
-									diekspor</label>
-								<x-filter.filter-input-select id="roles" wire:model="role" name="roles" :options="[
-								    'All' => 'Semua',
-								    'Sales' => 'Sales Medan',
-								    'Sales-JKT' => 'Sales Jakarta',
-								]"
-									default-option="Filter by roles" />
-							</div>
-						@endhasanyrole
+						<div>
+							<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="roles">Pilih data yg mau
+								diekspor</label>
+							@php
+								$roles = [];
+								if (auth()->user()->can('sales-export-all')) {
+								    $roles['All'] = 'Semua';
+								}
+								if (auth()->user()->can('sales-export-medan')) {
+								    $roles['Sales'] = 'Sales Medan';
+								}
+								if (auth()->user()->can('sales-export-jkt')) {
+								    $roles['Sales-JKT'] = 'Sales Jakarta';
+								}
+							@endphp
+							<x-filter.filter-input-select id="roles" wire:model="role" name="roles" :options="$roles"
+								default-option="Filter by roles" />
+						</div>
 
 						<div>
 							<label for="sales" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Pilih nama

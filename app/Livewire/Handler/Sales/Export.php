@@ -59,12 +59,6 @@ class Export extends Component
 
         // Apply role filter for non-Admin users when a specific role is selected
         if ($this->role !== 'All') {
-            if ($this->authUser()->hasRole('Management')) {
-                $this->role = 'Sales';
-            } elseif ($this->authUser()->hasRole('Management-JKT')) {
-                $this->role = 'Sales-JKT';
-            }
-
             $data = $data->whereHas('userRelasi.roles', function ($q) {
                 $q->where('name', $this->role);
             });
@@ -95,9 +89,9 @@ class Export extends Component
     {
         $sales = User::select(['id', 'kode_pegawai', 'name'])
             ->whereHas('roles', function ($query) {
-                if ($this->authUser()->hasRole('Management')) {
+                if ($this->authUser()->hasAnyRole(['Management', 'Marketing'])) {
                     $query->where('name', 'Sales');
-                } elseif ($this->authUser()->hasRole('Management-JKT')) {
+                } elseif ($this->authUser()->hasAnyRole(['Management-JKT', 'Marketing-JKT'])) {
                     $query->where('name', 'Sales-JKT');
                 } else {
                     $query->whereIn('name', ['Sales', 'Sales-JKT']);
