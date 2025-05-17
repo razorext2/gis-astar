@@ -8,9 +8,9 @@ class PermissionController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:permissions-list', ['index']);
-        $this->middleware('permission:permissions-create', ['create']);
-        $this->middleware('permission:permissions-edit', ['edit']);
+        $this->middleware('permission:permissions-list', ['only' => 'index']);
+        $this->middleware('permission:permissions-create', ['only' => 'create']);
+        $this->middleware('permission:permissions-edit', ['only' => 'edit']);
     }
 
     public function index()

@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Number;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\App;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\Attendance;

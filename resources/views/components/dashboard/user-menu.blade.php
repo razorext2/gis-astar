@@ -56,6 +56,24 @@
 		</x-menu.mobile-link>
 	@endcan
 
+	@can('sales-approve')
+		<x-menu.mobile-link href="{{ route('routes.sales') }}" :label="'Rute Sales'">
+			<x-icons.angle-right class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
+		</x-menu.mobile-link>
+	@endcan
+
+	@can('driver-approve')
+		<x-menu.mobile-link href="{{ route('routes.driver') }}" :label="'Rute Driver'">
+			<x-icons.angle-right class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
+		</x-menu.mobile-link>
+	@endcan
+
+	@can('collect-approve')
+		<x-menu.mobile-link href="{{ route('routes.collector') }}" :label="'Rute Kolektor'">
+			<x-icons.angle-right class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
+		</x-menu.mobile-link>
+	@endcan
+
 	@can('dayoff-list')
 		<x-menu.mobile-link href="{{ route('dayoff.index') }}" :label="'Cuti'">
 			<x-icons.lock-time class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
@@ -83,6 +101,12 @@
 	@can('division-list')
 		<x-menu.mobile-link href="{{ route('division.index') }}" :label="'Divisi'">
 			<x-icons.object-column class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
+		</x-menu.mobile-link>
+	@endcan
+
+	@can('technician-approve')
+		<x-menu.mobile-link href="{{ route('map.distribution') }}" :label="'Peta Penyebaran'">
+			<x-icons.book-open class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
 		</x-menu.mobile-link>
 	@endcan
 
@@ -125,6 +149,18 @@
 	@can('backup-list')
 		<x-menu.mobile-link href="{{ route('backup.index') }}" :label="'Manage Backup'">
 			<x-icons.filezip class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
+		</x-menu.mobile-link>
+	@endcan
+
+	@can('technician-list')
+		<x-menu.mobile-link href="{{ route('points.index') }}" :label="'Poin Masuk'">
+			<x-icons.arrow-right class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
+		</x-menu.mobile-link>
+	@endcan
+
+	@can('point-redeem')
+		<x-menu.mobile-link href="{{ route('technicianpoints.transactions') }}" :label="'Poin Keluar'">
+			<x-icons.arrow-left class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
 		</x-menu.mobile-link>
 	@endcan
 

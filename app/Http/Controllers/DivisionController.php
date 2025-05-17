@@ -11,10 +11,10 @@ class DivisionController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:divisi-list', ['index']);
-        $this->middleware('permission:divisi-create', ['create']);
-        $this->middleware('permission:divisi-edit', ['edit']);
-        $this->middleware('permission:divisi-delete', ['destroy']);
+        $this->middleware('permission:divisi-list', ['only' => 'index']);
+        $this->middleware('permission:divisi-create', ['only' => 'create']);
+        $this->middleware('permission:divisi-edit', ['only' => 'edit']);
+        $this->middleware('permission:divisi-delete', ['only' => 'destroy']);
     }
 
     public function index(Request $request)

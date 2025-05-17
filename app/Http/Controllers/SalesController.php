@@ -14,7 +14,7 @@ class SalesController extends Controller
 {
     function __construct()
     {
-        $this->middleware("permission:sales-list", ['index', 'show']);
+        $this->middleware("permission:sales-list", ['only' => 'index', 'show']);
         $this->middleware("permission:sales-create", ['only' => 'create']);
         $this->middleware("permission:sales-edit", ['only' => 'edit']);
     }

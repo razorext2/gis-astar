@@ -17,10 +17,10 @@ class DayoffController extends Controller
 	 */
 	function __construct()
 	{
-		$this->middleware('permission:dayoff-list', ['index']);
-		$this->middleware('permission:dayoff-create', ['create']);
-		$this->middleware('permission:dayoff-edit', ['edit']);
-		$this->middleware('permission:dayoff-delete', ['destroy']);
+		$this->middleware('permission:dayoff-list', ['only' => 'index']);
+		$this->middleware('permission:dayoff-create', ['only' => 'create']);
+		$this->middleware('permission:dayoff-edit', ['only' => 'edit']);
+		$this->middleware('permission:dayoff-delete', ['only' => 'destroy']);
 	}
 
 	public function index(Request $request)

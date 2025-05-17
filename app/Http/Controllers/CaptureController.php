@@ -12,7 +12,7 @@ class CaptureController extends Controller
      */
     function __construct()
     {
-        $this->middleware('permission:capture', ['index']);
+        $this->middleware('permission:capture', ['only' => 'index']);
     }
 
     public function index()

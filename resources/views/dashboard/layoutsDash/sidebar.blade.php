@@ -476,7 +476,7 @@
 						x-transition:leave="transition ease-out duration-200"
 						x-transition:leave-end="transform opacity-0 -translate-y-5">
 
-						<li>
+						{{-- <li>
 							<a
 								class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
 								href="{{ route('kuesioner.index') }}" wire:navigate
@@ -484,7 +484,7 @@
 								<x-icons.question-circle class="h-6 w-6 group-hover:text-red-600" />
 								<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Kuesioner</span>
 							</a>
-						</li>
+						</li> --}}
 
 						@can('announcement-list')
 							<li>
@@ -548,19 +548,21 @@
 						x-transition:leave="transition ease-out duration-200"
 						x-transition:leave-end="transform opacity-0 -translate-y-5">
 
-						<li>
-							<a
-								class="{{ Route::is('points.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-								href="{{ route('points.index') }}" wire:navigate>
+						@can('technician-list')
+							<li>
+								<a
+									class="{{ Route::is('points.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									href="{{ route('points.index') }}" wire:navigate>
 
-								<x-icons.arrow-right wire:current="!text-red-600" class="h-6 w-6 group-hover:text-red-600" />
-								<span class="ms-3 inline-flex text-sm group-hover:text-red-600">
-									Poin Masuk
-								</span>
-							</a>
-						</li>
+									<x-icons.arrow-right wire:current="!text-red-600" class="h-6 w-6 group-hover:text-red-600" />
+									<span class="ms-3 inline-flex text-sm group-hover:text-red-600">
+										Poin Masuk
+									</span>
+								</a>
+							</li>
+						@endcan
 
-						@can('technician-approve')
+						@can('point-redeem')
 							<li>
 								<a
 									class="{{ Route::is('technicianpoints.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
@@ -578,7 +580,7 @@
 				</li>
 			@endcan
 
-			@hasanyrole('Admin|Management|Marketing|Marketing-JKT|Service')
+			@can('technician-approve')
 				<li>
 					<a href="{{ route('map.distribution') }}"
 						class="group flex flex-row items-center rounded-xl p-2 text-gray-900 hover:text-red-600 dark:text-gray-300"
@@ -590,7 +592,7 @@
 						</span>
 					</a>
 				</li>
-			@endhasanyrole
+			@endcan
 		</ul>
 	</div>
 

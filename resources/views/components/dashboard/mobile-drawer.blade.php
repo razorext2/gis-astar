@@ -99,11 +99,46 @@
 			        'icon' => 'technician',
 			    ],
 			    [
+			        'permission' => 'driver-approve',
+			        'link' => 'routes.driver',
+			        'check' => 'routes.driver',
+			        'label' => 'Rute Driver',
+			        'icon' => 'angle-right',
+			    ],
+			    [
+			        'permission' => 'collect-approve',
+			        'link' => 'routes.collector',
+			        'check' => 'routes.collector',
+			        'label' => 'Rute Kolektor',
+			        'icon' => 'angle-right',
+			    ],
+			    [
+			        'permission' => 'sales-approve',
+			        'link' => 'routes.sales',
+			        'check' => 'routes.sales',
+			        'label' => 'Rute Sales',
+			        'icon' => 'angle-right',
+			    ],
+			    [
 			        'permission' => 'capture',
 			        'link' => 'capture.index',
 			        'check' => 'capture.*',
 			        'label' => 'Record',
 			        'icon' => 'capture',
+			    ],
+			    [
+			        'permission' => 'technician-list',
+			        'link' => 'points.index',
+			        'check' => 'points.*',
+			        'label' => 'Poin Masuk',
+			        'icon' => 'arrow-right',
+			    ],
+			    [
+			        'permission' => 'point-redeem',
+			        'link' => 'technicianpoints.transactions',
+			        'check' => 'technicianpoints.*',
+			        'label' => 'Poin Keluar',
+			        'icon' => 'arrow-left',
 			    ],
 			    [
 			        'permission' => 'pegawai-list',
@@ -175,13 +210,19 @@
 			        'label' => 'Pusat Notifikasi',
 			        'icon' => 'announcement',
 			    ],
-
 			    [
 			        'permission' => 'backup-list',
 			        'link' => 'backup.index',
 			        'check' => 'backup.*',
 			        'label' => 'Manage Backup',
 			        'icon' => 'backup',
+			    ],
+			    [
+			        'permission' => 'technician-approve',
+			        'link' => 'map.distribution',
+			        'check' => 'map.*',
+			        'label' => 'Peta Penyebaran',
+			        'icon' => 'book-open',
 			    ],
 			];
 		@endphp
@@ -283,6 +324,22 @@
 
 							@case('backup')
 								<x-icons.filezip class="{{ $iconClass }} {{ $iconSize }}" />
+							@break
+
+							@case('angle-right')
+								<x-icons.angle-right class="{{ $iconClass }} {{ $iconSize }}" />
+							@break
+
+							@case('arrow-right')
+								<x-icons.arrow-right class="{{ $iconClass }} {{ $iconSize }}" />
+							@break
+
+							@case('arrow-left')
+								<x-icons.arrow-left class="{{ $iconClass }} {{ $iconSize }}" />
+							@break
+
+							@case('book-open')
+								<x-icons.book-open class="{{ $iconClass }} {{ $iconSize }}" />
 							@break
 						@endswitch
 
