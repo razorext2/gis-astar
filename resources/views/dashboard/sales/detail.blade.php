@@ -1,8 +1,7 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
 	<div class="w-full space-y-6">
-		<div
-			class="grid gap-6 rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 sm:p-6">
+		<div class="grid gap-6 rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary sm:p-6">
 			<div class="w-full">
 				<header class="flex flex-row">
 
@@ -144,18 +143,15 @@
 							@endphp
 
 							@if ($status == 0)
-								<span
-									class="rounded-xl text-sm font-semibold text-yellow-800 ring-1 ring-gray-300 dark:text-yellow-400 dark:ring-gray-700">
+								<span class="text-sm font-semibold text-yellow-400">
 									Sedang diajukan.
 								</span>
 							@elseif ($status == 1)
-								<span
-									class="rounded-xl text-sm font-semibold text-green-800 ring-1 ring-gray-300 dark:text-green-400 dark:ring-gray-700">
+								<span class="text-sm font-semibold text-green-400">
 									Disetujui. (divalidasi oleh: {{ $data->validateBy->name ?? 'N/A' }})
 								</span>
 							@else
-								<span
-									class="rounded-xl text-sm font-semibold text-red-800 ring-1 ring-gray-300 dark:text-red-400 dark:ring-gray-700">
+								<span class="text-sm font-semibold text-red-400">
 									Laporan di Tolak! (divalidasi oleh: {{ $data->validateBy->name ?? 'N/A' }})
 								</span>
 							@endif

@@ -83,7 +83,7 @@
 							</div>
 
 							<x-detail.label label="Keterangan" id="keterangan">
-								{{ $data->keterangan ?? 'N/A' }}
+								{{ strip_tags($data->keterangan ?? 'N/A') }}
 							</x-detail.label>
 
 							<div
