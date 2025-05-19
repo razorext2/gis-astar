@@ -47,14 +47,14 @@ export function submitHandler() {
     });
 
     // Handle weight type
-    if ($('#weight_type').val() == 'Other') {
+    if ($('#weight_type').val() === 'Other') {
       formData.append("weight_type", $('#other_weight_type').val());
     } else {
       formData.append("weight_type", $('#weight_type').val());
     }
 
     // Handle loadcell type
-    if ($('#loadcell_type').val() == 'Timbangan Jembatan') {
+    if ($('#weight_type').val() === 'Timbangan Jembatan') {
       formData.append("loadcell_type", $('#other_loadcell_type').val());
     } else {
       formData.append("loadcell_type", $('#loadcell_type').val());

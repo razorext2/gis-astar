@@ -48,7 +48,7 @@ class TechnicianController extends Controller
             'capacity' => 'required|string|max:100',
             'indicator_type' => 'required|string|max:100',
             'indicator_sn' => 'required|string|max:100',
-            'loadcell_type' => 'required|string|max:100',
+            'loadcell_type' => 'string|max:100',
             'loadcell_sn' => 'required|string|max:100',
             'loadcell_qty' => 'required|string|max:50',
             'junction_type' => 'required|string|max:100',
