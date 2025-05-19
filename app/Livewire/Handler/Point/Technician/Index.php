@@ -59,8 +59,9 @@ class Index extends Component
                 $to = $this->to_date ?? now()->endOfDay();
                 $query->whereBetween('updated_at', [$from, $to]);
             })
+            ->where('is_redeemable', 1)
             ->orderByDesc('updated_at')
-            ->paginate(10);
+            ->paginate(perPage: 10);
     }
 
     public function render()
