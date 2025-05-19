@@ -1,10 +1,10 @@
-<div class="relative w-full" id="notifications-bell">
-	<x-icons.bell class="h-6 w-6 text-gray-800 dark:text-white" />
+<div class="relative w-full text-gray-500 dark:text-white" id="notifications-bell">
+	<x-icons.bell class="h-7 w-7" />
 
 	@if ($notification->count() > 0)
-		<div class="absolute -left-0.5 bottom-0 block h-2 w-2" id="notificationDot" aria-live="polite">
+		<div class="absolute -top-0.5 right-4 block" id="notificationDot" aria-live="polite">
 			<span class="absolute mx-auto inline-flex h-full w-full animate-ping rounded-full bg-yellow-400 opacity-75"></span>
-			<span class="absolute h-2 w-2 rounded-full bg-red-500"></span>
+			<span class="absolute h-4 w-4 rounded-full bg-red-500 text-xs text-white">{{ $notification->count() }}</span>
 		</div>
 	@endif
 
