@@ -25,16 +25,22 @@
 	</div>
 
 	<div class="w-full">
-		<h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-			@if ($step == 1)
+
+		@if ($step == 1)
+			<h3 class="text-lg font-semibold text-gray-900 dark:text-white">
 				Pilih periode poin yang akan diredeem.
-			@elseif($step == 2)
+			</h3>
+			<p class="text-xs text-gray-500 dark:text-gray-400 md:text-sm">
+				Silahkan pilih quarter, tanggal mulai dan tanggal akhir dari poin yang akan diredeem.
+			</p>
+		@elseif($step == 2)
+			<h3 class="text-lg font-semibold text-gray-900 dark:text-white">
 				Validasi poin tiap teknisi.
-			@endif
-		</h3>
-		<p class="text-xs text-gray-500 dark:text-gray-400 md:text-sm">
-			Lorem, ipsum dolor sit amet consectetur adipisicing elit. Veritatis aperiam dolores minus non sapiente?
-		</p>
+			</h3>
+			<p class="text-xs text-gray-500 dark:text-gray-400 md:text-sm">
+				Cek terlebih dahulu setiap data poin yang didapatkan oleh teknisi sebelum melanjutkan.
+			</p>
+		@endif
 	</div>
 
 	@if ($step == 1)
@@ -97,18 +103,9 @@
 					<!-- Modal box -->
 					<div class="flex max-w-lg flex-col gap-2 rounded-lg bg-white p-6 dark:bg-gray-800">
 						<h2 class="text-lg font-semibold text-gray-900 dark:text-white">Konfirmasi Pengajuan</h2>
-						<p class="h-72 overflow-y-auto border-y border-gray-900 py-1 text-gray-800 dark:border-gray-600 dark:text-white">
-							Lorem ipsum dolor sit
-							amet
-							consectetur adipisicing
-							elit.
-							Alias ratione quos commodi.
-							Quasi, ipsum cum! Culpa ad
-							incidunt repellendus? Dolore rem libero vitae qui illum sint dolorum vero excepturi blanditiis. Lorem ipsum dolor
-							sit amet consectetur adipisicing elit. Alias ratione quos commodi. Quasi, ipsum cum! Culpa ad incidunt
-							repellendus? Dolore rem libero vitae qui illum sint dolorum vero excepturi blanditiis.
-							Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptates, nemo facilis? Quod soluta praesentium
-							cumque architecto? Sint ex a adipisci fugiat provident facilis error voluptatum et, culpa, soluta earum? Autem?
+						<p class="overflow-y-auto border-y border-gray-900 py-1 text-gray-800 dark:border-gray-600 dark:text-white">
+							Apakah anda yakin ingin melakukan redeem poin untuk semua teknisi dengan poin valid dari tanggal
+							<b>{{ $start_period }}</b> sampai tanggal <b>{{ $end_period }}</b>?
 						</p>
 						<div class="mt-4 flex justify-end space-x-2">
 							<x-button.success wire:click="validateData">Konfirmasi</x-button.success>
