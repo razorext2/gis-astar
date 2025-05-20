@@ -127,7 +127,7 @@ async function fetchDataAsync() {
       data.photo_collects.forEach(items => {
         container.innerHTML += `
          <div class="relative me-2 flex-none items-center gap-4">
-           <img src="${items.photourl}" class="w-36 h-36 object-cover rounded-xl border">
+           <img src="${APP_URL + items.photourl}" class="w-36 h-36 object-cover rounded-xl border">
          </div>`;
       });
     } else {
