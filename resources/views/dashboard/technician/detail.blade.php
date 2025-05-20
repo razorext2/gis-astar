@@ -124,7 +124,7 @@
 					<div
 						class="col-span-2 flex flex-row gap-4 rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700 lg:flex-col">
 
-						<div class="grid w-full grid-cols-4 content-center items-center">
+						<div class="grid w-full content-center items-center lg:grid-cols-4">
 							<div class="text-navy-700 text-base font-medium dark:text-white">
 								<p class="mb-0.5 text-sm text-gray-600 dark:text-gray-300">Status</p>
 								@if ($data->status == 0)
@@ -159,7 +159,7 @@
 
 						</div>
 
-						<div class="grid w-full grid-cols-4 content-center items-center">
+						<div class="grid w-full content-center items-center lg:grid-cols-4">
 							<div class="text-navy-700 text-base font-medium dark:text-white">
 								<p class="mb-0.5 text-sm text-gray-600 dark:text-gray-300">Jumlah revisi</p>
 								Direvisi {{ $data->total_revision }} kali
