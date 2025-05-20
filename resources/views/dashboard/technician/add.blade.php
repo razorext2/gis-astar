@@ -123,14 +123,14 @@
 					<div class="col-span-2 w-full lg:col-span-1">
 						<div class="flex items-center justify-between gap-2">
 							<div>
-								<x-input.basic id="length" name="length" placeholder="xx Meter" required>
-									Panjang
+								<x-input.basic id="width" name="width" placeholder="xx Meter" required>
+									Lebar
 								</x-input.basic>
 							</div>
 							<p class="mt-2 font-semibold text-gray-800 dark:text-white">x</p>
 							<div>
-								<x-input.basic id="width" name="width" placeholder="xx Meter" required>
-									Lebar
+								<x-input.basic id="length" name="length" placeholder="xx Meter" required>
+									Panjang
 								</x-input.basic>
 							</div>
 						</div>
