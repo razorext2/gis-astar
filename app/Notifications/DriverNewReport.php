@@ -41,7 +41,7 @@ class DriverNewReport extends Notification
         return [
             'message' => "Driver telah membuat laporan baru pada tanggal $date, silahkan diperiksa dan lakukan konfirmasi.",
             "button" => [
-                "url" => route('sales.show', $this->driver_id),
+                "url" => route('driver.show', $this->driver_id),
                 "label" => "Periksa Laporan",
             ],
             "created_at" => Carbon::now()->locale("id")->isoFormat("DD MMM YYYY HH:mm:ss"),

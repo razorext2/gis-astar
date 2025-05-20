@@ -70,7 +70,7 @@
 					</div>
 				@endforelse
 			</div>
-			{{ $notifications->links() }}
+			{{ $notifications->withPath('/attendance/')->links() }}
 		</div>
 	</div>
 @endsection
