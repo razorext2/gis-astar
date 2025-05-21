@@ -1,36 +1,41 @@
 <div class="grid w-full gap-2 lg:grid-cols-2">
-	@foreach ($data as $index => $row)
-		@php
-			$storage_path = "labels/{$row->pegawaiRelasi->kode_pegawai}/capturedImg/{$row->photoURL}.png";
-			$img_check = Storage::disk('public')->exists($storage_path);
-			$image_path = asset(sha1('libs') . '/' . $row->photoURL . '.png');
-			$no_image_path = asset('assets/img/noImage.webp');
-		@endphp
 
-		<div wire:click="openModal({{ $row->id }})"
-			class="relative flex cursor-pointer flex-col items-center rounded-lg border-gray-200 shadow-sm transition-transform duration-300 hover:scale-95 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-700 dark:hover:bg-gray-700 md:flex-row">
+	@if ($data->count() > 0)
+		@foreach ($data as $index => $row)
+			@php
+				$storage_path = "labels/{$row->pegawaiRelasi->kode_pegawai}/capturedImg/{$row->photoURL}.png";
+				$img_check = Storage::disk('public')->exists($storage_path);
+				$image_path = asset(sha1('libs') . '/' . $row->photoURL . '.png');
+				$no_image_path = asset('assets/img/noImage.webp');
+			@endphp
 
-			@php $lateDuration = $this->getLateDuration($row->jam_masuk); @endphp
-			@if ($lateDuration)
-				<span class="absolute right-2 top-2 rounded-lg bg-red-800 px-2 py-1 text-xs text-white">
-					+ {{ $lateDuration }}
-				</span>
-			@endif
+			<div wire:click="openModal({{ $row->id }})"
+				class="relative flex cursor-pointer flex-col items-center rounded-lg border-gray-200 shadow-sm transition-transform duration-300 hover:scale-95 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-700 dark:hover:bg-gray-700 md:flex-row">
 
-			<img class="h-44 w-full rounded-t-lg object-cover md:h-44 md:w-48 md:rounded-none md:rounded-s-lg"
-				src="{{ $img_check ? $image_path : $no_image_path }}" alt="">
+				@php $lateDuration = $this->getLateDuration($row->jam_masuk); @endphp
+				@if ($lateDuration)
+					<span class="absolute right-2 top-2 rounded-lg bg-red-800 px-2 py-1 text-xs text-white">
+						+ {{ $lateDuration }}
+					</span>
+				@endif
 
-			<div class="flex flex-col justify-between gap-y-1 p-4 leading-normal">
-				<h5 class="text-lg font-bold tracking-tight text-gray-900 dark:text-white md:text-xl">
-					{{ $row->pegawaiRelasi->full_name }}
-				</h5>
-				<p class="text-sm text-gray-700 dark:text-gray-400">
-					Melakukan <span class="text-green-400">checkin</span> pada pukul
-					<span class="text-green-400">{{ \Carbon\Carbon::parse($row->jam_masuk)->format('H:i:s') }}</span>
-				</p>
+				<img class="h-44 w-full rounded-t-lg object-cover md:h-44 md:w-48 md:rounded-none md:rounded-s-lg"
+					src="{{ $img_check ? $image_path : $no_image_path }}" alt="">
+
+				<div class="flex flex-col justify-between gap-y-1 p-4 leading-normal">
+					<h5 class="text-lg font-bold tracking-tight text-gray-900 dark:text-white md:text-xl">
+						{{ $row->pegawaiRelasi->full_name }}
+					</h5>
+					<p class="text-sm text-gray-700 dark:text-gray-400">
+						Melakukan <span class="text-green-400">checkin</span> pada pukul
+						<span class="text-green-400">{{ \Carbon\Carbon::parse($row->jam_masuk)->format('H:i:s') }}</span>
+					</p>
+				</div>
 			</div>
-		</div>
-	@endforeach
+		@endforeach
+	@else
+		<p class="col-span-2 w-full text-center text-gray-800 dark:text-white"> Belum ada data. </p>
+	@endif
 
 	<div wire:show="showModal" wire:transition.duration.300ms
 		class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
