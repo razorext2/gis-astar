@@ -15,7 +15,7 @@ export async function initCapture() {
     const specifiedLat = parseFloat(document.getElementById('specifiedLat').value);
     const specifiedLng = parseFloat(document.getElementById('specifiedLng').value);
     const radius = parseFloat(document.getElementById('radius').value);
-    const movementThreshold = parseFloat(document.getElementById('movementThreshold').value);
+    // const movementThreshold = parseFloat(document.getElementById('movementThreshold').value);
 
     if (navigator.geolocation) {
         geoWatcher = navigator.geolocation.watchPosition(
@@ -34,16 +34,18 @@ export async function initCapture() {
                     showErrorAndRedirect(`Anda berada ${distance.toFixed(2)} meter dari tempat yang ditentukan.`);
                     showError('Anda harus berada didalam radius area yang ditentukan. Jika sudah, silahkan refresh kembali.');
                     return
-                } else if (lastLat !== undefined && lastLng !== undefined) {
-                    // Calculate distance moved since last position
-                    const movedDistance = calculateDistance(lastLat, lastLng, lat, lng);
-
-                    if (movedDistance > movementThreshold) {
-                        showErrorAndRedirect("Fake GPS terdeteksi. Silahkan matikan terlebih dahulu.");
-                        showError('Matikan aplikas Fake GPS anda. Jika sudah, silahkan refresh kembali.');
-                        return;
-                    }
                 }
+
+                // else if (lastLat !== undefined && lastLng !== undefined) {
+                //     // Calculate distance moved since last position
+                //     const movedDistance = calculateDistance(lastLat, lastLng, lat, lng);
+
+                //     if (movedDistance > movementThreshold) {
+                //         showErrorAndRedirect("Fake GPS terdeteksi. Silahkan matikan terlebih dahulu.");
+                //         showError('Matikan aplikas Fake GPS anda. Jika sudah, silahkan refresh kembali.');
+                //         return;
+                //     }
+                // }
 
                 // Log current position after it's available
                 console.log(lat, lng);
