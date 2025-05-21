@@ -4,7 +4,7 @@ export function showAlert(type, title, text = null) {
     title: title,
     html: text,
     showConfirmButton: false,
-    timer: 1500
+    timer: 2500
   });
 }
 

@@ -221,6 +221,8 @@ class TechnicianController extends Controller
                             return new ApiResource(false, 'Gagal menyimpan gambar');
                         }
                     }
+                } else {
+                    return new ApiResource(false, 'Dokumentasi tidak boleh kosong', 'Anda harus menyertakan dokumentasi setiap update laporan.');
                 }
             }
 
@@ -372,8 +374,8 @@ class TechnicianController extends Controller
             return new ApiResource(false, 'Data tidak ditemukan', 'Laporan kunjungan tidak ditemukan');
         }
 
-        if ($technician->status == 3 || $technician->status == 1) {
-            return new ApiResource(true, 'Laporan telah dikonfirmasi');
+        if ($technician->status == 1) {
+            return new ApiResource(true, 'Laporan telah diperiksa');
         }
 
         $technician->technician_name = $technician->pegawai->full_name ?? 'Teknisi tidak terdaftar disistem.';

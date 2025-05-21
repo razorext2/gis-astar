@@ -57,6 +57,16 @@ async function fetchDataAsync() {
       Swal.close();
       alert.showAlert('success', resultDB.message);
 
+      if (data.status == 0) {
+        const storeBtn = document.getElementById('store');
+        storeBtn.disabled = true;
+        storeBtn.classList.add('bg-gray-200', 'dark:bg-gray-600', 'ring-gray-400', 'dark:ring-gray-500', 'cursor-not-allowed');
+
+        document.getElementById('warning_status').classList.remove('hidden');
+      } else if (data.status == 3) {
+        alert.showAlert('warning', 'Laporan telah di tolak', 'Anda masih dapat mengajukan kembali laporan yang sudah ditolak.');
+      }
+
       $('#kode_pegawai').val(data.kode_pegawai);
       $('#employee_name').val(data.technician_name);
       $('#id_permintaan').val(data.id_permintaan);
@@ -127,7 +137,7 @@ async function fetchDataAsync() {
       data.photo_collects.forEach(items => {
         container.innerHTML += `
          <div class="relative me-2 flex-none items-center gap-4">
-           <img src="${APP_URL + items.photourl}" class="w-36 h-36 object-cover rounded-xl border">
+           <img id="documentations" data-url="${APP_URL + items.photourl}" src="${APP_URL + items.photourl}" class="w-36 h-36 object-cover rounded-xl border">
          </div>`;
       });
     } else {

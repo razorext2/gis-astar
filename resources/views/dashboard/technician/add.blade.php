@@ -255,6 +255,13 @@
 					</div>
 
 					<div class="relative col-span-2 w-full">
+						<p id="warning_status" class="-mt-1 mb-2 hidden w-full text-right text-sm text-red-600"> * Anda tidak
+							diperbolehkan
+							mengubah
+							laporan yang sedang dalam
+							status
+							<b>Diajukan</b>
+						</p>
 						<x-button.primary class="float-right" id="store" type="button">
 							<x-slot name="icon">
 								<x-icons.angle-right class="icon h-5 w-5" />
