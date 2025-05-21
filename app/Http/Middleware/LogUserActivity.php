@@ -19,7 +19,10 @@ class LogUserActivity
         Log::info('User accessed:', [
             'path' => $request->path(),
             'method' => $request->method(),
-            'ip' => $request->ip(),
+            'laravel_ip' => $request->ip(),
+            'X-Forwarded-For' => $request->header('X-Forwarded-For'),
+            'X-Real-IP' => $request->header('X-Real-IP'),
+            'Remote-Addr' => $_SERVER['REMOTE_ADDR'] ?? 'Unknown',
             'user_agent' => $request->userAgent(),
         ]);
 
