@@ -1,4 +1,4 @@
-import { showAlert } from '../../utils/alert';
+import { showAlert, loadingAlert } from '../../utils/alert';
 
 let geoWatcher = null; // Simpan ID watcher
 
@@ -18,6 +18,9 @@ export async function initCapture() {
     // const movementThreshold = parseFloat(document.getElementById('movementThreshold').value);
 
     if (navigator.geolocation) {
+        // tampilkan loading message
+        loadingAlert('Mengambil lokasi...');
+
         geoWatcher = navigator.geolocation.watchPosition(
             function (position) {
                 lat = position.coords.latitude;
@@ -31,6 +34,7 @@ export async function initCapture() {
 
                 // Check if within the specified radius
                 if (distance > radius) {
+                    Swal.close();
                     showErrorAndRedirect(`Anda berada ${distance.toFixed(2)} meter dari tempat yang ditentukan.`);
                     showError('Anda harus berada didalam radius area yang ditentukan. Jika sudah, silahkan refresh kembali.');
                     return
@@ -47,31 +51,52 @@ export async function initCapture() {
                 //     }
                 // }
 
-                // Log current position after it's available
-                console.log(lat, lng);
+                if (lat !== null || lng !== null) {
+                    Swal.close();
 
-                // Call selfDetect here
-                if (!selfDetectLoaded) {
-                    selfDetectLoaded = true;
-                    import('./selfDetect.js').then((module) => {
-                        module.initSelfDetect(lat, lng);
-                    });
-                }
+                    console.log('your location:', lat, lng);
+
+                    // Call selfDetect here
+                    if (!selfDetectLoaded) {
+                        selfDetectLoaded = true;
+                        import('./selfDetect.js').then((module) => {
+                            module.initSelfDetect(lat, lng);
+                        });
+                    }
+                };
 
                 // Save current position for the next check
                 lastLat = lat;
                 lastLng = lng;
             },
-            function () {
-                showErrorAndRedirect("Anda harus mengaktifkan izin Lokasi.");
-                showError('Pastikan anda telah mengaktifkan izin Lokasi. Jika sudah, silahkan refresh kembali.');
-                return;
+            function (error) {
+                Swal.close();
+
+                let errorMessage = 'Terjadi kesalahan saat mengambil lokasi.';
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        errorMessage = 'Izin lokasi ditolak. Silakan aktifkan izin lokasi di pengaturan browser atau perangkat Anda.';
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        errorMessage = 'Informasi lokasi tidak tersedia. Pastikan perangkat Anda tidak dalam mode pesawat dan memiliki koneksi GPS.';
+                        break;
+                    case error.TIMEOUT:
+                        errorMessage = 'Pengambilan lokasi terlalu lama. Pastikan sinyal GPS Anda kuat dan coba lagi.';
+                        break;
+                    default:
+                        errorMessage = 'Terjadi kesalahan yang tidak diketahui saat mengambil lokasi.';
+                        break;
+                }
+
+                showErrorAndRedirect(errorMessage);
+                showError(errorMessage);
             }, {
             enableHighAccuracy: true,
-            timeout: 3000,
+            timeout: 10000,
             maximumAge: 0,
         });
     } else {
+        Swal.close();
         return showErrorAndRedirect("Browser anda tidak memiliki support Geolocation.");
     }
 
