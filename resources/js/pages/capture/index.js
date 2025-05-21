@@ -92,7 +92,7 @@ export async function initCapture() {
                 showError(errorMessage);
             }, {
             enableHighAccuracy: true,
-            timeout: 10000,
+            timeout: 60000,
             maximumAge: 0,
         });
     } else {
