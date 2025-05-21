@@ -30,7 +30,7 @@ class ValidateSales extends Component
     public $customer_make_order;
     #[Validate('required|string')]
     public $order_notes;
-    #[Validate('required|image|max:1024')]
+    #[Validate('required|image|max:2048')]
     public $proof_pic;
 
     public function mount($id)
@@ -55,6 +55,8 @@ class ValidateSales extends Component
 
     public function confirmQuestionnaire()
     {
+        $this->validate();
+
         $this->checkPermission();
 
         $query = Sales::find($this->id);
