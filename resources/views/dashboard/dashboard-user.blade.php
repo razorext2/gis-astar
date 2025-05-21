@@ -81,7 +81,7 @@
 									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-600 dark:bg-gray-700 sm:flex">
 									<time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">
 										@php
-											$input = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $attendance['jam_masuk']);
+											$input = \Carbon\Carbon::parse($attendance['jam_masuk']);
 											$current = \Carbon\Carbon::now();
 											$diff = $input->diffInSeconds($current);
 
@@ -126,7 +126,7 @@
 									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-600 dark:bg-gray-700 sm:flex">
 									<time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">
 										@php
-											$input = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $attendance['latest_jam_keluar']);
+											$input = \Carbon\Carbon::parse($attendance['latest_jam_keluar']);
 											$current = \Carbon\Carbon::now();
 											$diff = $input->diffInSeconds($current);
 
