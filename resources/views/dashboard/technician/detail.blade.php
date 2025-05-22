@@ -100,6 +100,8 @@
 												onclick="javascript:void(0)" loading="lazy">
 										</div>
 									@endforeach
+								@else
+									<p class="text-gray-600 dark:text-white"> Tidak ada dokumentasi.</p>
 								@endif
 							</div>
 						</div>
