@@ -1,4 +1,4 @@
-<div class="grid w-full gap-2 lg:grid-cols-2">
+<div class="grid w-full gap-2 lg:grid-cols-2" wire:poll.60s>
 
 	@if ($data->count() > 0)
 		@foreach ($data as $index => $row)

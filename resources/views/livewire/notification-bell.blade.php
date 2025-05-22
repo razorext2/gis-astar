@@ -1,4 +1,4 @@
-<div class="relative w-full text-gray-500 dark:text-white" id="notifications-bell">
+<div class="relative w-full text-gray-500 dark:text-white" id="notifications-bell" wire:poll.60s>
 	<x-icons.bell class="h-7 w-7" />
 
 	@if ($notification->count() > 0)
