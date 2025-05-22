@@ -274,19 +274,19 @@ class TechnicianController extends Controller
             ]);
 
             // kirim update ke API
-            // Http::asForm()->post("https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=updateKunjungan", [
-            //     "NomorKunjungan" => $query->no_vt,
-            //     "UpdatePekerjaan" => $query->job_update,
-            //     "JenisTimbangan" => $query->weight_type,
-            //     "Ukuran" => $query->size,
-            //     "Kapasitas" => $query->capacity,
-            //     "TipeIndikator" => $query->indicator_type,
-            //     "TipeIndikatorSN" => $query->indicator_sn,
-            //     "TipeLoadcell" => $query->loadcell_type,
-            //     "TipeLoadcellSN" => $query->loadcell_sn,
-            //     "TipeJunctionBox" => $query->junction_type,
-            //     "TipeJunctionBoxSN" => $query->loadcell_qty,
-            // ]);
+            Http::asForm()->post("https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=updateKunjungan", [
+                "NomorKunjungan" => $query->no_vt,
+                "UpdatePekerjaan" => $query->job_update,
+                "JenisTimbangan" => $query->weight_type,
+                "Ukuran" => $query->size,
+                "Kapasitas" => $query->capacity,
+                "TipeIndikator" => $query->indicator_type,
+                "TipeIndikatorSN" => $query->indicator_sn,
+                "TipeLoadcell" => $query->loadcell_type,
+                "TipeLoadcellSN" => $query->loadcell_sn,
+                "TipeJunctionBox" => $query->junction_type,
+                "TipeJunctionBoxSN" => $query->loadcell_qty,
+            ]);
 
             DB::commit();
 
@@ -295,6 +295,7 @@ class TechnicianController extends Controller
             return new ApiResource(false, 'Gagal', $e->getMessage());
         }
     }
+
     public function deny(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
