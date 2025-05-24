@@ -57,7 +57,7 @@ final class DriverTable extends PowerGridComponent
             $data->where('kode_pegawai', auth()->user()->kode_pegawai);
         }
 
-        $data->orderBy('status', 'asc');
+        // $data->orderBy('status', 'asc');
 
         return $data;
     }
