@@ -35,8 +35,8 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->append(LogUserActivity::class);
-        // $middleware->append(TrackUserActivity::class);
-        // $middleware->append(LogUserActions::class);
+        $middleware->append(TrackUserActivity::class);
+        $middleware->append(LogUserActions::class);
         $middleware->append(EnsureDatabaseConnection::class);
     })
 

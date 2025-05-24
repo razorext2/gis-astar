@@ -25,6 +25,7 @@ final class LogTable extends PowerGridComponent
         $this->showCheckBox();
         $this->users = \App\Models\User::select('id', 'name')
             ->whereHas('logs')
+            ->orderBy('name', 'asc')
             ->get();
 
         return [
@@ -89,9 +90,12 @@ final class LogTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::action('Action'),
             Column::make('#', 'id')
                 ->index(),
+            Column::action('Action'),
+            Column::make('Created At', 'created_at')
+                ->sortable()
+                ->searchable(),
             Column::make('Kode Pegawai', 'employee_code'),
             Column::make('Nama User', 'user_name'),
             Column::make('User Action', 'user_action')
@@ -101,9 +105,6 @@ final class LogTable extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
             Column::make('User Agent', 'user_agent')
-                ->sortable()
-                ->searchable(),
-            Column::make('Created At', 'created_at')
                 ->sortable()
                 ->searchable(),
         ];
