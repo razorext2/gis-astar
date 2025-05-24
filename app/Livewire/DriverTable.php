@@ -59,7 +59,7 @@ final class DriverTable extends PowerGridComponent
 
         // $data->orderBy('status', 'asc');
 
-        return $data;
+        return $data->latest();
     }
 
     public function relationSearch(): array
