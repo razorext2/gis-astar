@@ -25,7 +25,7 @@ document.addEventListener('livewire:navigated', function () {
   initFlowbite();
   fetchNotification();
   initEventListener();
-  initWebSocketListener();
+  // initWebSocketListener();
 
   // handle announcement
   if (window.location.pathname === '/dashboard/announcement') {
