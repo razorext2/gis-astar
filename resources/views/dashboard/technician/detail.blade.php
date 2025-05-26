@@ -17,6 +17,15 @@
 					<h2 class="font-base mt-2 text-lg text-gray-900 dark:text-gray-300">
 						Detail: <span class="font-bold text-white" id="no_vt_label"> Laporan </span>
 					</h2>
+
+					<div class="flex w-full items-center justify-end">
+						<x-button.primary class="my-auto me-4 max-h-10" id="fetch-button" form="actionForm" type="submit">
+							<x-slot name="icon">
+								<x-icons.clipboard class="icon h-6 w-6 text-blue-500 dark:text-white" />
+							</x-slot>
+							Fetch perbaikan data
+						</x-button.primary>
+					</div>
 				</header>
 			</div>
 
