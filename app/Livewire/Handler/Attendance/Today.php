@@ -7,17 +7,21 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Today extends Component
 {
-    public $data = [];
-    public $address;
-    public bool $showModal = false;
+    use WithPagination;
+
+    // public $data = [];
     public $attendance;
+    public string $date;
+    public string $address;
+    public bool $showModal = false;
 
     public function mount()
     {
-        $this->data = Attendance::whereDate('created_at', now())->get();
+        $this->date = Carbon::now()->toDateString();
     }
 
     public function fetchAddress($lat, $long)
@@ -71,9 +75,15 @@ class Today extends Component
         return gmdate('H \j\a\m i \m\e\n\i\t s \d\e\t\i\k', $diffInSeconds);
     }
 
+    public function changeDate()
+    {
+        $this->date = Carbon::parse($this->date)->toDateString();
+    }
 
     public function render()
     {
-        return view('livewire.handler.attendance.today');
+        $data = Attendance::whereDate('created_at', $this->date)->paginate(6);
+
+        return view('livewire.handler.attendance.today', compact('data'));
     }
 }

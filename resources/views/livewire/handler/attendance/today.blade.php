@@ -1,7 +1,29 @@
-<div class="grid w-full gap-2 lg:grid-cols-2" wire:poll.60s>
+<div class="grid w-full grid-cols-1 gap-y-4">
 
-	@if ($data->count() > 0)
-		@foreach ($data as $index => $row)
+	<div class="col-span-2 w-full">
+		<form wire:submit.prevent="changeDate" class="flex w-full flex-row items-center justify-end gap-2">
+
+			<div class="relative flex flex-row items-center gap-2">
+				<label for="date" class="block text-sm font-medium text-gray-900 dark:text-white">Tanggal :</label>
+				<input type="date" wire:model="date"
+					class="block w-56 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500">
+			</div>
+
+			<x-button.primary type="submit" wire:loading.attr="disabled">
+				<x-slot name="icon">
+					<x-icons.angle-right wire:loading.remove class="h-5 w-5 text-blue-500 dark:text-white" />
+					<x-icons.loading wire:loading />
+				</x-slot>
+
+				<span wire:loading.remove>Cari</span>
+
+			</x-button.primary>
+
+		</form>
+	</div>
+
+	<div class="grid w-full gap-2 lg:grid-cols-2" wire:poll.60s>
+		@forelse ($data as $index => $row)
 			@php
 				$storage_path = "labels/{$row->pegawaiRelasi->kode_pegawai}/capturedImg/{$row->photoURL}.png";
 				$img_check = Storage::disk('public')->exists($storage_path);
@@ -32,49 +54,51 @@
 					</p>
 				</div>
 			</div>
-		@endforeach
-	@else
-		<p class="col-span-2 w-full text-center text-gray-800 dark:text-white"> Belum ada data. </p>
-	@endif
+		@empty
+			<p class="col-span-2 w-full text-center text-gray-800 dark:text-white"> Belum ada data. </p>
+		@endforelse
 
-	<div wire:show="showModal" wire:transition.duration.300ms
-		class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
-		@if ($showModal)
-			<!-- Modal box -->
-			<div class="mx-2 flex flex-col gap-2 rounded-xl bg-white p-4 shadow-2xl dark:bg-gray-800 sm:mx-0 md:w-1/3 lg:p-6">
-				<h2 class="text-center text-2xl font-semibold text-gray-900 dark:text-white lg:text-3xl">Detail
-				</h2>
-				<div class="flex w-full flex-col gap-2 text-gray-800 dark:text-white">
+		{{ $data->links() }}
 
-					<div class="h-72 lg:h-96">
-						<img onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}'"
-							class="h-full w-full rounded-md object-cover"
-							src="{{ asset(sha1('libs') . '/' . $attendance->photoURL . '.png') }}" alt="">
+		<div wire:show="showModal" wire:transition.duration.300ms
+			class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+			@if ($showModal)
+				<!-- Modal box -->
+				<div class="mx-2 flex flex-col gap-2 rounded-xl bg-white p-4 shadow-2xl dark:bg-gray-800 sm:mx-0 md:w-1/3 lg:p-6">
+					<h2 class="text-center text-2xl font-semibold text-gray-900 dark:text-white lg:text-3xl">Detail
+					</h2>
+					<div class="flex w-full flex-col gap-2 text-gray-800 dark:text-white">
+
+						<div class="h-72 lg:h-96">
+							<img onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}'"
+								class="h-full w-full rounded-md object-cover"
+								src="{{ asset(sha1('libs') . '/' . $attendance->photoURL . '.png') }}" alt="">
+						</div>
+
+						<p class="text-lg font-semibold lg:text-2xl">{{ $attendance->pegawaiRelasi->full_name }}</p>
+						<p class="text-sm text-gray-700 dark:text-gray-400">Melakukan <span class="text-green-400">checkin</span> pada
+							pukul
+							<span class="text-green-400">{{ \Carbon\Carbon::parse($attendance->jam_masuk)->format('H:i:s') }}</span> di
+							<span class="text-green-400">{{ $address }}</span>
+						</p>
+
+						<a class="flex flex-row"
+							href="https://www.google.com/maps/search/?api=1&query={{ $attendance->latitude }},{{ $attendance->longitude }}"
+							target="_blank">Lihat lokasi <x-icons.arrow-right class="ml-1 h-5 w-5 -rotate-45" /></a>
+
+						<div class="flex justify-between">
+							<p class="text-xs">Coord: {{ $attendance->latitude }}, {{ $attendance->longitude }} </p>
+							<p class="text-xs">Created at: {{ $attendance->created_at }}</p>
+						</div>
 					</div>
 
-					<p class="text-lg font-semibold lg:text-2xl">{{ $attendance->pegawaiRelasi->full_name }}</p>
-					<p class="text-sm text-gray-700 dark:text-gray-400">Melakukan <span class="text-green-400">checkin</span> pada
-						pukul
-						<span class="text-green-400">{{ \Carbon\Carbon::parse($attendance->jam_masuk)->format('H:i:s') }}</span> di
-						<span class="text-green-400">{{ $address }}</span>
-					</p>
-
-					<a class="flex flex-row"
-						href="https://www.google.com/maps/search/?api=1&query={{ $attendance->latitude }},{{ $attendance->longitude }}"
-						target="_blank">Lihat lokasi <x-icons.arrow-right class="ml-1 h-5 w-5 -rotate-45" /></a>
-
-					<div class="flex justify-between">
-						<p class="text-xs">Coord: {{ $attendance->latitude }}, {{ $attendance->longitude }} </p>
-						<p class="text-xs">Created at: {{ $attendance->created_at }}</p>
+					<div class="mt-4">
+						<x-button.primary class="w-full justify-center" wire:click="set('showModal', false)">
+							Ok
+						</x-button.primary>
 					</div>
 				</div>
-
-				<div class="mt-4">
-					<x-button.primary class="w-full justify-center" wire:click="set('showModal', false)">
-						Ok
-					</x-button.primary>
-				</div>
-			</div>
-		@endif
+			@endif
+		</div>
 	</div>
 </div>
