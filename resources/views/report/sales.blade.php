@@ -14,6 +14,8 @@
 			<th style="width: 180px; border: 1px solid black; text-align: center; font-weight: bold;">Lokasi</th>
 			<th style="width: 120px; border: 1px solid black; text-align: center; font-weight: bold;">Ket.</th>
 			<th style="width: 100px; border: 1px solid black; text-align: center; font-weight: bold;">Diupdate Tgl</th>
+			<th style="width: 100px; border: 1px solid black; text-align: center; font-weight: bold;">Customer Beli?</th>
+			<th style="width: 150px; border: 1px solid black; text-align: center; font-weight: bold;">Note dr Marketing</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -28,6 +30,8 @@
 				<td style="border: 1px solid black;">{{ $item->lokasi ?? '-' }}</td>
 				<td style="border: 1px solid black;">{{ strip_tags($item->keterangan) ?? '-' }}</td>
 				<td style="border: 1px solid black; text-align: center;">{{ $item->updated_at ?? '-' }}</td>
+				<td style="border: 1px solid black; text-align: center;">{{ $item->customer_make_order ?? '-' }}</td>
+				<td style="border: 1px solid black;">{{ $item->order_notes ?? '-' }}</td>
 			</tr>
 		@endforeach
 	</tbody>
