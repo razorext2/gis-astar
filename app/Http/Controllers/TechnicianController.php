@@ -410,4 +410,11 @@ class TechnicianController extends Controller
 
         return new ApiResource(true, 'Berhasil mengambil data dari database', $technician);
     }
+
+    public function fetchUpdate($id)
+    {
+        return view('dashboard.technician.fetch-update', [
+            'id' => $id
+        ]);
+    }
 }

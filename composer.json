@@ -12,6 +12,7 @@
         "asantibanez/livewire-charts": "^4.1",
         "barryvdh/laravel-debugbar": "^3.14",
         "intervention/image": "^3.11",
+        "jfcherng/php-diff": "^6.16",
         "laravel/breeze": "^2.1",
         "laravel/framework": "^11.44",
         "laravel/octane": "^2.6",

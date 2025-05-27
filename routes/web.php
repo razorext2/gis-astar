@@ -116,6 +116,7 @@ Route::middleware(['auth'])->group(function () {
 
         // route technician
         Route::resource('technician', TechnicianController::class);
+        Route::get('technician/fetch/update/{id}', [TechnicianController::class, 'fetchUpdate'])->name('technician.fetch.update');
 
         // route collect 
         // tampilkan semua data where status = 0 (belum dilengkapi)
