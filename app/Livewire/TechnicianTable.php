@@ -50,10 +50,15 @@ final class TechnicianTable extends PowerGridComponent
     {
         $query = Technician::query()
             ->with('pegawai', 'point')
-            ->orderBy('updated_at', 'desc');
+            ->orderBy('visit_date', 'desc');
 
-        if ($this->status) {
-            $query->where('status', $this->status);
+        if ($this->status != '') {
+            match ($this->status) {
+                'unapproved' => $query->where('status', 0),
+                'needrevision' => $query->where('status', 2),
+                'approved' => $query->where('status', 1),
+                'rejected' => $query->where('status', 3),
+            };
         }
 
         if (auth()->user()->can('technician-approve')) {

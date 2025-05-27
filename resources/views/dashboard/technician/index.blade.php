@@ -14,18 +14,23 @@
 					</li>
 					<li>
 						<a
-							class="{{ Route::is('technician.index') && Request::query('status') == 2 ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg py-2 hover:text-red-600 dark:hover:text-red-600"
-							wire:navigate href="{{ route('technician.index', ['status' => 2]) }}">Perlu Revisi</a>
+							class="{{ Route::is('technician.index') && Request::query('status') && Request::query('status') == 'unapproved' ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg py-2 hover:text-red-600 dark:hover:text-red-600"
+							wire:navigate href="{{ route('technician.index', ['status' => 'unapproved']) }}">Belum Disetujui</a>
 					</li>
 					<li>
 						<a
-							class="{{ Route::is('technician.index') && Request::query('status') == 1 ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg py-2 hover:text-red-600 dark:hover:text-red-600"
-							wire:navigate href="{{ route('technician.index', ['status' => 1]) }}">Disetujui</a>
+							class="{{ Route::is('technician.index') && Request::query('status') && Request::query('status') == 'needrevision' ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg py-2 hover:text-red-600 dark:hover:text-red-600"
+							wire:navigate href="{{ route('technician.index', ['status' => 'needrevision']) }}">Perlu Revisi</a>
 					</li>
 					<li>
 						<a
-							class="{{ Route::is('technician.index') && Request::query('status') == 3 ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg py-2 hover:text-red-600 dark:hover:text-red-600"
-							wire:navigate href="{{ route('technician.index', ['status' => 3]) }}">Ditolak</a>
+							class="{{ Route::is('technician.index') && Request::query('status') && Request::query('status') == 'approved' ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg py-2 hover:text-red-600 dark:hover:text-red-600"
+							wire:navigate href="{{ route('technician.index', ['status' => 'approved']) }}">Disetujui</a>
+					</li>
+					<li>
+						<a
+							class="{{ Route::is('technician.index') && Request::query('status') && Request::query('status') == 'rejected' ? 'text-red-600 border-b border-gray-400' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg py-2 hover:text-red-600 dark:hover:text-red-600"
+							wire:navigate href="{{ route('technician.index', ['status' => 'rejected']) }}">Ditolak</a>
 					</li>
 				</ul>
 			</div>
