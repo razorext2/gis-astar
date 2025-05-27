@@ -30,7 +30,8 @@
 				<td style="border: 1px solid black;">{{ $item->lokasi ?? '-' }}</td>
 				<td style="border: 1px solid black;">{{ strip_tags($item->keterangan) ?? '-' }}</td>
 				<td style="border: 1px solid black; text-align: center;">{{ $item->updated_at ?? '-' }}</td>
-				<td style="border: 1px solid black; text-align: center;">{{ $item->customer_make_order ?? '-' }}</td>
+				<td style="border: 1px solid black; text-align: center;">
+					{{ $item->customer_make_order == 0 ? 'Tidak' : 'Ya' ?? '-' }}</td>
 				<td style="border: 1px solid black;">{{ $item->order_notes ?? '-' }}</td>
 			</tr>
 		@endforeach
