@@ -7,11 +7,13 @@
 
 			<div class="video-container h-auto p-3 text-center lg:col-span-2 lg:p-0" data-aos="zoom-in" data-aos-delay="100">
 				<div class="relative h-[30rem] w-full">
-					<video class="flex h-full w-full rounded-lg object-cover p-0 ring-1 ring-gray-200 dark:ring-gray-700" id="video"
+					<div class="relative h-full w-full overflow-hidden rounded-lg ring-1 ring-gray-200 dark:ring-gray-700"
 						data-aos="zoom-in" data-aos-delay="100"
-						style="background: url('{{ asset('assets/img/noCamera.webp') }}') center center / cover no-repeat;" autoplay>
-					</video>
-					<canvas class="absolute left-0 top-0 flex h-full w-full rounded-xl object-cover p-0" id="overlay"></canvas>
+						style="background: url('{{ asset('assets/img/noCamera.webp') }}') center center / cover no-repeat;">
+						<video id="video" class="absolute left-0 top-0 h-full w-full scale-x-[-1] object-cover" autoplay></video>
+					</div>
+
+					<canvas class="absolute left-0 top-0 flex h-full w-full rounded-xl object-cover p-0" id="canvas"></canvas>
 				</div>
 				<div class="mt-3 inline-flex w-full lg:px-0">
 					<button

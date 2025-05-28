@@ -7,11 +7,9 @@ export function initSelfDetect(lat, lng) {
     detectionInterval = null;
 
   const video = document.getElementById("video"),
-    overlay = document.getElementById("overlay"),
+    canvas = document.getElementById("canvas"),
     startButton = document.getElementById("startButton"),
-    csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
     canvInfo = document.getElementById("canvAttend"),
-    pegawaiInfo = document.getElementById("pegawaiInfo"),
     labels = [],
     kodePegawai = document.getElementById('kodePegawai').value;
 
@@ -179,9 +177,9 @@ export function initSelfDetect(lat, lng) {
 
         const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors);
         const videoDimensions = { width: video.width, height: video.height };
-        faceapi.matchDimensions(overlay, videoDimensions);
+        faceapi.matchDimensions(canvas, videoDimensions);
 
-        const canvasContext = overlay.getContext("2d", { willReadFrequently: true });
+        const canvasContext = canvas.getContext("2d", { willReadFrequently: true });
         if (!canvasContext) {
           return showAlert('error', 'Terjadi kesalahan.', 'Gagal memuat canvas.');
         }
@@ -196,8 +194,8 @@ export function initSelfDetect(lat, lng) {
               .withFaceDescriptors();
             const resizedFaces = faceapi.resizeResults(detectedFaces, videoDimensions);
             const tempCanvas = document.createElement("canvas");
-            tempCanvas.width = overlay.width;
-            tempCanvas.height = overlay.height;
+            tempCanvas.width = canvas.width;
+            tempCanvas.height = canvas.height;
 
             let isFaceMatched = false;
             let matchedLabel = null;
@@ -229,7 +227,7 @@ export function initSelfDetect(lat, lng) {
               // Fungsi untuk memastikan gambar sudah ditampilkan sebelum melanjutkan
               await new Promise((resolve) => {
                 // Menunggu hingga gambar ter-render pada canvas
-                canvasContext.clearRect(0, 0, overlay.width, overlay.height);
+                canvasContext.clearRect(0, 0, canvas.width, canvas.height);
                 canvasContext.drawImage(tempCanvas, 0, 0);
                 requestAnimationFrame(() => resolve()); // Gunakan requestAnimationFrame untuk menunggu rendering selesai
               });
@@ -338,7 +336,6 @@ export function initSelfDetect(lat, lng) {
     }
   }
 
-
   axios.get(`${APP_URL}/api/getPegawai/${kodePegawai}`)
     .then(response => {
       loadingAlert("Initializing application");
@@ -351,7 +348,7 @@ export function initSelfDetect(lat, lng) {
 
   // Event listener untuk start button
   startButton.addEventListener("click", async () => {
-    overlay.style.display = "block";
+    canvas.style.display = "block";
     canvInfo.style.display = "none";
     startButton.innerText = "Loading...";
     startButton.setAttribute("disabled", "disabled");
@@ -370,11 +367,11 @@ export function initSelfDetect(lat, lng) {
     }
   });
 
-  // Mengatur dimensi video dan overlay
+  // Mengatur dimensi video dan canvas
   video.addEventListener("loadedmetadata", () => {
     video.width = video.videoWidth;
     video.height = video.videoHeight;
-    overlay.width = video.width;
-    overlay.height = video.height;
+    canvas.width = video.width;
+    canvas.height = video.height;
   });
 }
