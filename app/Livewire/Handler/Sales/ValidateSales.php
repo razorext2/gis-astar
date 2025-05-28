@@ -22,6 +22,8 @@ class ValidateSales extends Component
     public $step = 1;
     public $data;
 
+    public $customer_telp;
+
     #[Validate('required|string|max:100')]
     public $customer_name;
     #[Validate('required|string|max:255')]
@@ -41,6 +43,10 @@ class ValidateSales extends Component
 
         $this->customer_name = $this->data->customer_name;
         $this->customer_address = $this->data->lokasi;
+
+        $this->customer_telp = str_starts_with($this->data->customer_telp, '08')
+            ? '628' . substr($this->data->customer_telp, 2)
+            : $this->data->customer_telp;
     }
 
     public function toQuestionnaire()
