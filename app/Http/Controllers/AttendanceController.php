@@ -60,7 +60,7 @@ class AttendanceController extends Controller
     {
         return Attendance::select('kode_pegawai', 'longitude', 'latitude')
             ->with('pegawaiRelasi:kode_pegawai,full_name')
-            ->whereDate('created_at', today())
+            ->whereBetween('created_at', [today()->subMonth(), today()])
             ->get()
             ->toJson();
     }
