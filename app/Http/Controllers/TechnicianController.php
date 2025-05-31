@@ -24,7 +24,7 @@ class TechnicianController extends Controller
         $this->middleware("permission:technician-create", ["only" => "create"]);
     }
 
-    public function index(Request $request)
+    public function index()
     {
         return view("dashboard.technician.index");
     }
@@ -66,9 +66,15 @@ class TechnicianController extends Controller
             return new ApiResource(false, 'Validasi gagal', $validator->errors()->first());
         }
 
+        if (!$request->hasFile('images')) {
+            return new ApiResource(false, 'Dokumentasi tidak boleh kosong', 'Anda harus menyertakan dokumentasi setiap update laporan.');
+        }
+
         $data = $validator->validated();
 
         try {
+            DB::beginTransaction();
+
             foreach ($data['partner'] as $partner) {
                 // decode json partner
                 $partner = json_decode($partner, true);
@@ -101,53 +107,44 @@ class TechnicianController extends Controller
                         'status' => $data['status'],
                     ]);
                 } else {
-                    try {
-                        DB::beginTransaction();
+                    $technician = Technician::create([
+                        'no_vt' => $partner['no_vt'],
+                        'id_permintaan' => $data['id_permintaan'],
+                        'kode_pegawai' => $partner['kode_pegawai'],
+                        'customer_contact' => $data['customer_contact'],
+                        'customer_address' => $data['customer_address'],
+                        'job_detail' => $data['job_detail'],
+                        'weight_type' => $data['weight_type'],
+                        'size' => $data['size'],
+                        'capacity' => $data['capacity'],
+                        'indicator_type' => $data['indicator_type'],
+                        'indicator_sn' => $data['indicator_sn'],
+                        'loadcell_type' => $data['loadcell_type'],
+                        'loadcell_sn' => $data['loadcell_sn'],
+                        'loadcell_qty' => $data['loadcell_qty'],
+                        'junction_type' => $data['junction_type'],
+                        'job_update' => $data['job_update'],
+                        'visit_date' => $data['visit_date'],
+                        'status' => $data['status'],
+                    ]);
 
-                        $technician = Technician::create([
-                            'no_vt' => $partner['no_vt'],
-                            'id_permintaan' => $data['id_permintaan'],
+                    // kalo blm ada, tambah
+                    if (!$point) {
+                        TechnicianPoints::create([
+                            'from_vt' => $partner['no_vt'],
+                            'point' => $data['point'],
                             'kode_pegawai' => $partner['kode_pegawai'],
-                            'customer_contact' => $data['customer_contact'],
-                            'customer_address' => $data['customer_address'],
-                            'job_detail' => $data['job_detail'],
-                            'weight_type' => $data['weight_type'],
-                            'size' => $data['size'],
-                            'capacity' => $data['capacity'],
-                            'indicator_type' => $data['indicator_type'],
-                            'indicator_sn' => $data['indicator_sn'],
-                            'loadcell_type' => $data['loadcell_type'],
-                            'loadcell_sn' => $data['loadcell_sn'],
-                            'loadcell_qty' => $data['loadcell_qty'],
-                            'junction_type' => $data['junction_type'],
-                            'job_update' => $data['job_update'],
-                            'visit_date' => $data['visit_date'],
-                            'status' => $data['status'],
                         ]);
-
-                        // kalo blm ada, tambah
-                        if (!$point) {
-                            TechnicianPoints::create([
-                                'from_vt' => $partner['no_vt'],
-                                'point' => $data['point'],
-                                'kode_pegawai' => $partner['kode_pegawai'],
-                            ]);
-                        } else { // kalo sudah ada, update
-                            $point->update([
-                                'point' => $data['point'],
-                                'kode_pegawai' => $partner['kode_pegawai'],
-                                'is_redeemable' => 0,
-                                'is_redeeemed' => 0,
-                                'redeemed_status' => 0,
-                                'redeemed_date' => null,
-                                'deleted_at' => null,
-                            ]);
-                        }
-
-                        DB::commit();
-                    } catch (\Exception $e) {
-                        DB::rollBack();
-                        return new ApiResource(false, 'Gagal memperbarui kunjungan', $e->getMessage());
+                    } else { // kalo sudah ada, update
+                        $point->update([
+                            'point' => $data['point'],
+                            'kode_pegawai' => $partner['kode_pegawai'],
+                            'is_redeemable' => 0,
+                            'is_redeeemed' => 0,
+                            'redeemed_status' => 0,
+                            'redeemed_date' => null,
+                            'deleted_at' => null,
+                        ]);
                     }
                 }
 
@@ -158,76 +155,74 @@ class TechnicianController extends Controller
                     Storage::disk('public')->makeDirectory($folderPath);
                 }
 
-                if ($request->hasFile('images')) {
-                    $manager = ImageManager::gd();
+                $manager = ImageManager::gd();
 
-                    foreach ($request->file('images') as $image) {
-                        $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
+                foreach ($request->file('images') as $image) {
+                    $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
 
-                        $img = $manager->read($image);
+                    $img = $manager->read($image);
 
-                        // Baca logo dan resize dulu watermark-nya
-                        $logo = $manager->read(public_path('assets/img/logo.png'))
-                            ->resize(100, 22);
+                    // Baca logo dan resize dulu watermark-nya
+                    $logo = $manager->read(public_path('assets/img/logo.png'))
+                        ->resize(100, 22);
 
-                        // Tempelkan logo ke pojok kanan bawah
-                        $img->place($logo, 'top-left', 10, $img->height() - 75, 90); // 90 itu opacity
+                    // Tempelkan logo ke pojok kanan bawah
+                    $img->place($logo, 'top-left', 10, $img->height() - 75, 90); // 90 itu opacity
 
-                        // Tambahkan watermark
-                        $img->text($technician->customer_contact, 10, $img->height() - 40, function (FontFactory $font) {
-                            $font->filename(public_path('assets/fonts/OpenSans-Regular.ttf'));
-                            $font->size(10);
-                            $font->color('#ffffff');
-                            $font->align('left');
-                            $font->valign('bottom');
-                        });
+                    // Tambahkan watermark
+                    $img->text($technician->customer_contact, 10, $img->height() - 40, function (FontFactory $font) {
+                        $font->filename(public_path('assets/fonts/OpenSans-Regular.ttf'));
+                        $font->size(10);
+                        $font->color('#ffffff');
+                        $font->align('left');
+                        $font->valign('bottom');
+                    });
 
-                        $img->text($technician->customer_address, 10, $img->height() - 30, function (FontFactory $font) {
-                            $font->filename(public_path('assets/fonts/OpenSans-Regular.ttf'));
-                            $font->size(8);
-                            $font->color('#ffffff');
-                            $font->align('left');
-                            $font->valign('bottom');
-                        });
+                    $img->text($technician->customer_address, 10, $img->height() - 30, function (FontFactory $font) {
+                        $font->filename(public_path('assets/fonts/OpenSans-Regular.ttf'));
+                        $font->size(8);
+                        $font->color('#ffffff');
+                        $font->align('left');
+                        $font->valign('bottom');
+                    });
 
-                        $img->text($technician->kode_pegawai . ' - ' . ($technician->pegawai?->full_name ?? 'Teknisi belum terdaftar disistem'), 10, $img->height() - 20, function (FontFactory $font) {
-                            $font->filename(public_path('assets/fonts/OpenSans-Regular.ttf'));
-                            $font->size(8);
-                            $font->color('#ffffff');
-                            $font->align('left');
-                            $font->valign('bottom');
-                        });
+                    $img->text($technician->kode_pegawai . ' - ' . ($technician->pegawai?->full_name ?? 'Teknisi belum terdaftar disistem'), 10, $img->height() - 20, function (FontFactory $font) {
+                        $font->filename(public_path('assets/fonts/OpenSans-Regular.ttf'));
+                        $font->size(8);
+                        $font->color('#ffffff');
+                        $font->align('left');
+                        $font->valign('bottom');
+                    });
 
-                        $img->text($technician->updated_at, 10, $img->height() - 10, function (FontFactory $font) {
-                            $font->filename(public_path('assets/fonts/OpenSans-Regular.ttf'));
-                            $font->size(8);
-                            $font->color('#ffffff');
-                            $font->align('left');
-                            $font->valign('bottom');
-                        });
+                    $img->text($technician->updated_at, 10, $img->height() - 10, function (FontFactory $font) {
+                        $font->filename(public_path('assets/fonts/OpenSans-Regular.ttf'));
+                        $font->size(8);
+                        $font->color('#ffffff');
+                        $font->align('left');
+                        $font->valign('bottom');
+                    });
 
-                        // Simpan gambar ke storage
-                        $path = $folderPath . '/' . $imageName;
-                        Storage::disk('public')->put($path, (string) $img->encode());
+                    // Simpan gambar ke storage
+                    $path = $folderPath . '/' . $imageName;
+                    Storage::disk('public')->put($path, (string) $img->encode());
 
-                        $imageUrl = '/storage/' . $path;
+                    $imageUrl = '/storage/' . $path;
 
-                        $upload = PhotoCollect::create([
-                            'no_vt' => $partner['no_vt'],
-                            'photourl' => $imageUrl,
-                        ]);
+                    $upload = PhotoCollect::create([
+                        'no_vt' => $partner['no_vt'],
+                        'photourl' => $imageUrl,
+                    ]);
 
-                        if (!$upload) {
-                            return new ApiResource(false, 'Gagal menyimpan gambar');
-                        }
+                    if (!$upload) {
+                        return new ApiResource(false, 'Gagal menyimpan gambar');
                     }
-                } else {
-                    return new ApiResource(false, 'Dokumentasi tidak boleh kosong', 'Anda harus menyertakan dokumentasi setiap update laporan.');
                 }
             }
 
+            DB::commit();
             return new ApiResource(true, 'Laporan berhasil diperbarui');
         } catch (\Exception $e) {
+            DB::rollBack();
             return new ApiResource(false, 'Gagal memperbarui kunjungan', $e->getMessage());
         }
     }
