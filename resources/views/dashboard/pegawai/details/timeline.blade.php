@@ -46,29 +46,17 @@
 									@if ($data->type == 'Check-in')
 										<span
 											class="absolute -start-11 flex h-6 w-6 items-center justify-center rounded-full bg-green-800 dark:bg-green-900">
-											<svg class="h-2.5 w-2.5 text-green-100 dark:text-green-300" aria-hidden="true"
-												xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-												<path
-													d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-											</svg>
+											<x-icons.date class="h-2.5 w-2.5 text-green-100 dark:text-green-300" />
 										</span>
 									@elseif ($data->type == 'Checkpoint')
 										<span
 											class="absolute -start-11 flex h-6 w-6 items-center justify-center rounded-full bg-yellow-800 dark:bg-yellow-900">
-											<svg class="h-2.5 w-2.5 text-yellow-100 dark:text-yellow-300" aria-hidden="true"
-												xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-												<path
-													d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-											</svg>
+											<x-icons.date class="h-2.5 w-2.5 text-yellow-100 dark:text-yellow-300" />
 										</span>
 									@else
 										<span
 											class="absolute -start-11 flex h-6 w-6 items-center justify-center rounded-full bg-red-800 dark:bg-red-900">
-											<svg class="h-2.5 w-2.5 text-red-100 dark:text-red-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-												fill="currentColor" viewBox="0 0 20 20">
-												<path
-													d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-											</svg>
+											<x-icons.date class="h-2.5 w-2.5 text-red-100 dark:text-red-300" />
 										</span>
 									@endif
 
@@ -78,11 +66,31 @@
 									<span class="text-md mb-2 block font-normal leading-none text-gray-400 dark:text-gray-300">
 										{{ $isOnsite ? 'Tidak ada data koordinat' : $data->longitude . ', ' . $data->latitude }}
 									</span>
+
 									<time class="mb-2 block text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
-										{{ Carbon\Carbon::parse($data->time)->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss') }}
+										{{ Carbon\Carbon::parse($data->created_at)->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss') }}
 									</time>
+
+									@if (!$loop->first)
+										@php
+											$prevRecord = $attendances[$loop->index - 1];
+											$currentTime = Carbon\Carbon::parse($data->created_at);
+											$prevTime = Carbon\Carbon::parse($prevRecord->created_at);
+											$diffInMinutes = round($prevTime->diffInMinutes($currentTime, true));
+										@endphp
+
+										<p class="mb-2 block text-sm font-normal leading-none text-gray-400 dark:text-gray-300">
+											+{{ countDistance($prevRecord->latitude, $prevRecord->longitude, $data->latitude, $data->longitude) }} dari
+											titik sebelumnya
+										</p>
+
+										<p class="mb-2 block text-sm font-normal leading-none text-gray-400 dark:text-gray-300">
+											Ditempuh dalam waktu ~{{ $diffInMinutes }} menit
+										</p>
+									@endif
+
 									<img class="absolute !-top-2.5 right-0 h-16 w-16 rounded-lg object-cover" src="{{ $path }}"
-										alt="" loading="lazy">
+										alt="" loading="lazy" onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}';">
 								</li>
 							@endforeach
 						@else
@@ -127,7 +135,7 @@
 						{
 							coords: L.latLng({{ $data->latitude ? $data->latitude : '3.591516090416829' }},
 								{{ $data->longitude ? $data->longitude : '98.66902828216554' }}),
-							name: '{{ $data->type ?? 'Unknown Location' }}' // Ganti 'location_name' dengan nama lokasi atau deskripsi lain
+							name: '{{ $data->type ?? 'Unknown Location' }}: {{ $data->created_at }}' // Ganti 'location_name' dengan nama lokasi atau deskripsi lain
 						},
 					@endforeach
 				];

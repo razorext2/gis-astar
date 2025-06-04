@@ -43,7 +43,8 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/Helpers/getCurrentDate.php"
+            "app/Helpers/getCurrentDate.php",
+            "app/Helpers/countDistance.php"
         ]
     },
     "autoload-dev": {

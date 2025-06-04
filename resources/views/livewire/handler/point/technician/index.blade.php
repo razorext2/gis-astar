@@ -144,9 +144,10 @@
 					</span>
 
 					<time class="block text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
-						Pukul
+						Diperoleh {{ $point->created_at->format('H:i:s, d M Y') }}, Update
 						{{ $point->updated_at->format('H:i:s, d M Y') }}
 					</time>
+
 					<p class="text-base font-normal text-gray-500 dark:text-gray-400">
 						{{ auth()->user()->can('technician-approve') ? $point->pegawai->full_name ?? 'Teknisi' : 'Anda' }}
 						({{ $point->kode_pegawai }})

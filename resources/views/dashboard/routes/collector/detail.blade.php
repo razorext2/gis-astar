@@ -80,7 +80,23 @@
 
 									</h3>
 									<span class="text-md mb-2 block font-normal leading-none text-gray-400 dark:text-gray-300">
-										<!-- Add any additional data from $data here -->
+										@if ($data->latitude && !$loop->first)
+											@php
+												$prevRecord = $report[$loop->index - 1];
+												$currentTime = Carbon\Carbon::parse($data->created_at);
+												$prevTime = Carbon\Carbon::parse($prevRecord->created_at);
+												$diffInMinutes = round($prevTime->diffInMinutes($currentTime, true));
+											@endphp
+
+											<p class="mb-2 block text-sm font-normal leading-none text-gray-400 dark:text-gray-300">
+												+{{ countDistance($prevRecord->latitude, $prevRecord->longitude, $data->latitude, $data->longitude) }} dari
+												titik sebelumnya
+											</p>
+
+											<p class="mb-2 block text-sm font-normal leading-none text-gray-400 dark:text-gray-300">
+												Ditempuh dalam waktu ~{{ $diffInMinutes }} menit
+											</p>
+										@endif
 									</span>
 									<time class="mb-2 block text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
 										{{ $data->created_at->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss') }}

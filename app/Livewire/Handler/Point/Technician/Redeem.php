@@ -14,11 +14,11 @@ use Livewire\Component;
 
 class Redeem extends Component
 {
-    #[Validate('required')]
+    #[Validate('required|date')]
     public $start_period;
-    #[Validate('required')]
+    #[Validate('required|date')]
     public $end_period;
-    #[Validate('required')]
+    #[Validate('required|in:1,2,3,4')]
     public $quarter;
     public $result;
     public $transactionID;
@@ -40,7 +40,8 @@ class Redeem extends Component
         $this->validate();
 
         $transaction = PointTransactions::where('from_date', '>=', $this->start_period)
-            ->where('to_date', '<=', $this->end_period);
+            ->where('to_date', '<=', $this->end_period)
+            ->where('quartal', $this->quarter);
 
         if ($transaction->exists()) {
             $query = $transaction->where('quartal', $this->quarter)
@@ -143,7 +144,6 @@ class Redeem extends Component
             $points->update([
                 'redeemed_status' => 2, // diajukan ke hrd
             ]);
-
 
             $trans->update([
                 'status' => 2,
