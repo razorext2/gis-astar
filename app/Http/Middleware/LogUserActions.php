@@ -39,6 +39,8 @@ class LogUserActions
                 'ip_address' => $request->ip(),
                 'user_agent' => $request->header('User-Agent'),
                 'user_location' => 'Unknown', // Implementasi untuk user location opsional
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         }
 
