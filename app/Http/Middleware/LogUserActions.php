@@ -36,7 +36,14 @@ class LogUserActions
             DB::table('tb_log')->insert([
                 'user_id' => $user->id,
                 'user_action' => "{$entityName} > {$actionName}",
-                'ip_address' => $request->ip(),
+                'ip_address' => "
+                    [
+                        LaravelIP: {$request->ip()},
+                        X-Forwarded-For: {$request->header('X-Forwarded-For')},
+                        X-Real-IP: {$request->header('X-Real-IP')},
+                        Remote-Addr: {$_SERVER['REMOTE_ADDR']}
+                    ]
+                ",
                 'user_agent' => $request->header('User-Agent'),
                 'user_location' => 'Unknown', // Implementasi untuk user location opsional
                 'created_at' => now(),
