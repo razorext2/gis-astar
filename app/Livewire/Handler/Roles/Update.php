@@ -11,10 +11,11 @@ use Spatie\Permission\Models\Role;
 class Update extends Component
 {
     public Post $form;
-    public array $permissions = [];
+    public $permissions;
     public ?Role $role = null; // Ubah menjadi nullable untuk keamanan
     public array $rolePermissions = [];
     public bool $selectAll = false;
+    public string $searchPermission = '';
 
     public function mount($id)
     {
@@ -29,16 +30,13 @@ class Update extends Component
 
         $this->rolePermissions = $this->role->permissions()->pluck('id')->all();
         $this->form->selectedPermissions = $this->rolePermissions;
-
-        // Ambil permission sebagai array asosiatif (id => name)
-        $this->permissions = Permission::pluck('name', 'id')->toArray();
     }
 
     public function toggleSelectAll()
     {
         if ($this->selectAll) {
             // Jika Select All dicentang, pilih semua permissions
-            $this->form->selectedPermissions = array_keys($this->permissions);
+            $this->form->selectedPermissions = $this->permissions->pluck('id')->all();
         } else {
             // Jika Select All di-uncheck, kembalikan ke data awal
             $this->form->selectedPermissions = $this->rolePermissions;
@@ -72,6 +70,12 @@ class Update extends Component
 
     public function render()
     {
-        return view('livewire.handler.roles.update');
+        $permissions = Permission::select('id', 'name')
+            ->where('name', 'like', '%' . $this->searchPermission . '%')
+            ->get();
+
+        $this->permissions = $permissions;
+
+        return view('livewire.handler.roles.update', compact('permissions'));
     }
 }
