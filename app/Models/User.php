@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -63,5 +64,17 @@ class User extends Authenticatable
     public function pegawai(): BelongsTo
     {
         return $this->belongsTo(Pegawai::class, 'kode_pegawai', 'kode_pegawai');
+    }
+
+    // relasi team member
+    public function teamMember(): HasOne
+    {
+        return $this->hasOne(TeamMember::class, 'kode_pegawai', 'kode_pegawai');
+    }
+
+    // relasi poin teknisi
+    public function technicianPoint(): HasMany
+    {
+        return $this->hasMany(TechnicianPoints::class, 'kode_pegawai', 'kode_pegawai');
     }
 }

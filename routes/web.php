@@ -28,6 +28,7 @@ use App\Http\Controllers\QuestionnaireController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TechnicianController;
 use App\Http\Controllers\TechnicianPointsController;
 use App\Http\Controllers\UserController;
@@ -254,6 +255,9 @@ Route::middleware(['auth'])->group(function () {
 
         // todays attendance
         Route::get('attendance/today', [AttendanceController::class, 'todayAttendance'])->name('today.attendance');
+
+        // teams
+        Route::resource('teams', TeamController::class)->only('index', 'create', 'edit');
     });
 });
 
