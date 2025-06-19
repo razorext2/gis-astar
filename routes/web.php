@@ -39,8 +39,8 @@ use Illuminate\Support\Facades\Storage;
 
 // turn off for a while, redirect to dashboard
 Route::middleware('throttle:high')->get('/', function () {
-    return view('home', ['title' => 'Take attendance']);
-    // return redirect('login');
+    // return view('home', ['title' => 'Take attendance']);
+    return redirect('login');
 })->name('landing.page');
 
 Route::middleware('throttle:high')->get('photo-regist', function () {
