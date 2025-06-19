@@ -14,7 +14,9 @@
 			@livewire('widget.technician.points-accumulation')
 		@endif
 
-		<div class="flex items-center lg:order-2">
+		<div class="flex items-center gap-2 lg:order-2">
+
+			@livewire('utils.ping-checker')
 
 			<!-- Notifications -->
 			<button

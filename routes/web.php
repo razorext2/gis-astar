@@ -39,8 +39,8 @@ use Illuminate\Support\Facades\Storage;
 
 // turn off for a while, redirect to dashboard
 Route::middleware('throttle:high')->get('/', function () {
-    // return view('home', ['title' => 'Take attendance']);
-    return redirect('login');
+    return view('home', ['title' => 'Take attendance']);
+    // return redirect('login');
 })->name('landing.page');
 
 Route::middleware('throttle:high')->get('photo-regist', function () {
@@ -111,6 +111,7 @@ Route::middleware(['auth'])->group(function () {
 
         // record attendance
         Route::get('capture', [CaptureController::class, 'index'])->name('capture.index');
+        Route::get('capture/route', [CaptureController::class, 'route'])->name('capture.route');
 
         // route salesman
         Route::resource('sales', SalesController::class)->except(['store', 'update', 'destroy']);
@@ -294,3 +295,15 @@ Route::get('/' . $libs . '/{filename}', function ($filename) {
         abort(404);
     }
 })->where('filename', '.*');
+
+// buat ping
+Route::get('ping', function () {
+    $targetUrl = 'https://indodacin.nusa.net.id/webmail/src/login.php';
+
+    try {
+        \Illuminate\Support\Facades\Http::timeout(5)->get($targetUrl);
+        return response()->json(['success' => true]);
+    } catch (\Exception $e) {
+        return response()->json(['success' => false], 500);
+    }
+})->name('ping.checker');
