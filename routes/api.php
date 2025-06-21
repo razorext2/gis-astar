@@ -18,8 +18,7 @@ use Illuminate\Support\Facades\Http;
 // public API
 Route::post('photo-regist-process', [ApiAttendanceController::class, 'photoRegistProcess'])->name('photo.registProcess');
 Route::post('check-attendance', [ApiAttendanceController::class, 'checkAttendance']);
-Route::get('getPegawai', [ApiPegawaiController::class, 'getPegawai']); // harusnya ini gausah
-Route::get('pegawai-images/{id}', [ApiPegawaiController::class, 'getPegawaiImages']); // sama ini, soalnya ini api public
+Route::get('pegawai-images/{id}', [ApiPegawaiController::class, 'getPegawaiImages']);
 Route::get('getPegawaiData/{id}', [ApiPegawaiController::class, 'getPegawaiDataByLabel']);
 
 // public API post attendance ke server utama
@@ -32,6 +31,9 @@ Route::post('proxy/server/attendance', function (Request $request) {
 });
 
 Route::middleware(['auth:sanctum', 'throttle:high'])->group(function () {
+    // attendance api
+    Route::post('facerecognition/verify', [ApiAttendanceController::class, 'verify'])->name('facerecognition.verify');
+
     // private API using token, harus auth.
     Route::get('get-attendance-data', [ApiAttendanceController::class, 'getAttendanceData'])->name('pegawai.getattendance');
 

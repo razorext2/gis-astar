@@ -27,12 +27,6 @@ class ApiPegawaiController extends Controller
         ]);
     }
 
-    public function getPegawai()
-    {
-        $data = Pegawai::whereNotNull('storage')->pluck('kode_pegawai');
-        return response()->json($data);
-    }
-
     public function getPegawaiImages($storage)
     {
         $sanitizedStorage = basename($storage);
@@ -52,16 +46,12 @@ class ApiPegawaiController extends Controller
 
         if (!empty($images)) {
             $relativeImagePaths = array_map(function ($path) {
-                return App::environment('production')
-                    // ganti nanti disini juga
-                    // ? str_replace(public_path(), '/attendance', $path)
-                    ? str_replace(public_path(), '/attendance', $path)
-                    : str_replace(public_path(), '', $path);
+                return str_replace(public_path(), '', $path);
             }, $images);
 
-            // dd($relativeImagePaths);
-
             return response()->json($relativeImagePaths);
+        } else {
+            return response()->json(['error' => 'No images found'], 404);
         }
     }
 
