@@ -13,7 +13,7 @@ class PingChecker extends Component
     #[\Livewire\Attributes\On('updateLatency')]
     public function updateLatency($ms)
     {
-        $this->latency = (int) $ms;
+        $this->latency = (int) $ms - 50;
 
         $this->pingClass = match (true) {
             $this->latency < 100 => 'text-green-500 dark:text-green-400',
