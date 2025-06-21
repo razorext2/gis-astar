@@ -14,7 +14,7 @@
 				polling();
 
 				// Jalankan polling berulang setiap 5 detik
-				setInterval(polling, 5000);
+				setInterval(polling, 10000);
 			}
 		}
 	}
