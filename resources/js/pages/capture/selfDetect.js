@@ -83,13 +83,9 @@ export function initSelfDetect(lat, lng) {
   function showAttendanceAlert() {
     showAlert('success', 'Berhasil', 'Berhasil melakukan absensi');
 
-    // Menampilkan elemen yang relevan setelah alert
-    startButton.innerText = "Stop";
-    startButton.disabled = false;
-
-    // setTimeout(() => {
-    //   window.location.href = `/dashboard`;
-    // }, 1500);
+    setTimeout(() => {
+      window.location.href = `/dashboard`;
+    }, 1000);
   }
 
   async function getEmployeeImagePaths(label) {
