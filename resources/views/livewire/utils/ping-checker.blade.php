@@ -1,4 +1,4 @@
-<div x-data="pingChecker()" x-init="startPolling()" class="p-4">
+<div x-data="pingChecker()" x-init="startPolling()">
 	<div class="mt-2 space-y-1">
 		<p class="{{ $pingClass }} text-sm">
 			{{ $latency == 0 ? 'Loading...' : $latency . ' ms' }}
