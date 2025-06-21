@@ -14,7 +14,7 @@
 						<div class="flex flex-row items-center gap-x-4">
 							<img class="h-20 w-20 rounded-lg object-cover"
 								src="{{ auth()->user()->profile_pic ? asset('storage/profile-pictures/' . auth()->user()->profile_pic) : asset('assets/img/profile-picture-5.jpg') }}"
-								alt="user photo" loading="lazy">
+								alt="user photo" loading="lazy" onerror="this.src = '{{ asset('assets/img/noImage.webp') }}'">
 
 							<div class="flex flex-col gap-y-1">
 								<span

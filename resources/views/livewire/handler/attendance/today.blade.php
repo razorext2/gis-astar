@@ -42,7 +42,8 @@
 				@endif
 
 				<img class="h-44 w-full rounded-t-lg object-cover md:h-44 md:w-48 md:rounded-none md:rounded-s-lg"
-					src="{{ $img_check ? $image_path : $no_image_path }}" alt="">
+					src="{{ $img_check ? $image_path : $no_image_path }}" alt=""
+					onerror="this.src = '{{ asset('assets/img/noImage.webp') }}'">
 
 				<div class="flex flex-col justify-between gap-y-1 p-4 leading-normal">
 					<h5 class="text-lg font-bold tracking-tight text-gray-900 dark:text-white md:text-xl">

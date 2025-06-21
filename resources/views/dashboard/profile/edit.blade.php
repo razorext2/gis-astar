@@ -18,7 +18,7 @@
 				<div class="relative w-full">
 					<img class="h-72 w-full rounded-md object-cover object-center ring-1 ring-gray-200 dark:ring-gray-700"
 						src="{{ auth()->user()->profile_pic ? asset('storage/profile-pictures/' . auth()->user()->profile_pic) : asset('assets/img/profile-picture-5.jpg') }}"
-						alt="">
+						alt="" onerror="this.src = '{{ asset('assets/img/noImage.webp') }}'">
 
 					<button
 						class="absolute bottom-0 left-0 w-full rounded-b-md bg-red-800 py-2 text-white transition-colors duration-500 hover:bg-red-700"
