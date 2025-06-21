@@ -16,9 +16,9 @@ export function initSelfDetect(lat, lng) {
   function initializeFaceAPI() {
     // Load necessary models from the specified URI
     Promise.all([
-      faceapi.nets.ssdMobilenetv1.loadFromUri(`${APP_URL}/models`),       // Load SSD MobileNet model
-      faceapi.nets.faceRecognitionNet.loadFromUri(`${APP_URL}/models`),   // Load Face Recognition model
-      faceapi.nets.faceLandmark68Net.loadFromUri(`${APP_URL}/models`)     // Load Face Landmark model
+      faceapi.nets.ssdMobilenetv1.loadFromUri(`/models`),       // Load SSD MobileNet model
+      faceapi.nets.faceRecognitionNet.loadFromUri(`/models`),   // Load Face Recognition model
+      faceapi.nets.faceLandmark68Net.loadFromUri(`/models`)     // Load Face Landmark model
     ])
       .then(() => {
         Swal.close();
@@ -87,15 +87,15 @@ export function initSelfDetect(lat, lng) {
     startButton.innerText = "Stop";
     startButton.disabled = false;
 
-    setTimeout(() => {
-      window.location.href = `${APP_URL}/dashboard`;
-    }, 1500);
+    // setTimeout(() => {
+    //   window.location.href = `/dashboard`;
+    // }, 1500);
   }
 
   async function getEmployeeImagePaths(label) {
     try {
       // Fetch data from the server with the encoded label
-      const response = await axios.get(`${APP_URL}/api/pegawai-images/${encodeURIComponent(label)}`);
+      const response = await axios.get(`/api/pegawai-images/${encodeURIComponent(label)}`);
 
       // Check if the response was successful
       if (response.status !== 200) throw new Error("Network response was not ok");
@@ -116,26 +116,23 @@ export function initSelfDetect(lat, lng) {
     // Iterate through all the labels (e.g., employee labels or face IDs)
     for (const label of labels) {
       const faceDescriptors = [];
-      const imagePaths = await getEmployeeImagePaths(label);  // Get image paths for each label
+      const imagePath = await getEmployeeImagePaths(label);  // Get image paths for each label
 
-      // Process each image path for face recognition
-      for (const imagePath of imagePaths) {
-        try {
-          // Fetch the image and detect face landmarks and descriptors
-          const image = await faceapi.fetchImage(imagePath);
-          const detectedFace = await faceapi.detectSingleFace(image).withFaceLandmarks().withFaceDescriptor();
+      try {
+        // Fetch the image and detect face landmarks and descriptors
+        const image = await faceapi.fetchImage(imagePath);
+        const detectedFace = await faceapi.detectSingleFace(image).withFaceLandmarks().withFaceDescriptor();
 
-          // If face is detected, push the descriptor into the list
-          loadingAlert('Fetching images...');
+        // If face is detected, push the descriptor into the list
+        loadingAlert('Fetching images...');
 
-          if (detectedFace) {
-            startButton.innerText = "Mendeteksi wajah..."
-            faceDescriptors.push(detectedFace.descriptor);
-          }
-        } catch (error) {
-          // Log error if image processing fails
-          return showAlert('error', 'Terjadi kesalahan.', `Gagal memuat gambar: ${imagePath}`);
+        if (detectedFace) {
+          startButton.innerText = "Mendeteksi wajah..."
+          faceDescriptors.push(detectedFace.descriptor);
         }
+      } catch (error) {
+        // Log error if image processing fails
+        return showAlert('error', 'Terjadi kesalahan.', `Gagal memuat gambar: ${imagePath}`);
       }
 
       // If face descriptors were detected, create a LabeledFaceDescriptors object
@@ -150,7 +147,7 @@ export function initSelfDetect(lat, lng) {
   async function getEmployeeDataByLabel(label) {
     try {
       // Make an API call to fetch employee data by label
-      const response = await axios.get(`${APP_URL}/api/getPegawaiData/${encodeURIComponent(label)}`);
+      const response = await axios.get(`/api/getPegawaiData/${encodeURIComponent(label)}`);
 
       // Check if the response is okay
       if (response.status !== 200) {
@@ -206,7 +203,7 @@ export function initSelfDetect(lat, lng) {
               const bestMatch = faceMatcher.findBestMatch(face.descriptor);
               const matchDistance = bestMatch.distance;
 
-              if (bestMatch.label !== "unknown" && matchDistance < 0.4 && !detectedFaceLabels.has(bestMatch.label)) {
+              if (bestMatch.label !== "unknown" && matchDistance < 0.6 && !detectedFaceLabels.has(bestMatch.label)) {
                 const boundingBox = face.detection.box;
                 new faceapi.draw.DrawBox(boundingBox, { label: bestMatch.toString() }).draw(tempCanvas);
                 isFaceMatched = true;
@@ -266,7 +263,7 @@ export function initSelfDetect(lat, lng) {
       startButton.innerText = 'Menyimpan gambar...';
 
       // Mengirim request POST untuk menyimpan gambar ke server
-      const response = await axios.post(`${APP_URL}/api/saveImage`, formData);
+      const response = await axios.post(`/api/saveImage`, formData);
 
       // Jika server merespons dengan status OK
       if (response.status === 200) {
@@ -289,7 +286,7 @@ export function initSelfDetect(lat, lng) {
       startButton.innerText = "Menyimpan data...";
 
       // Cek status absensi
-      const { data: checkData } = await axios.post(`${APP_URL}/api/check-attendance`, {
+      const { data: checkData } = await axios.post(`/api/check-attendance`, {
         kode_pegawai: kodePegawai,
         nik_pegawai: nikPegawai,
         longitude: lng,
@@ -297,8 +294,8 @@ export function initSelfDetect(lat, lng) {
       });
 
       const endpoint = checkData.hasClockedIn
-        ? `${APP_URL}/store-attendance-out`
-        : `${APP_URL}/store-attendance`;
+        ? `/store-attendance-out`
+        : `/store-attendance`;
 
       const payload = {
         kode_pegawai: kodePegawai,
@@ -318,7 +315,7 @@ export function initSelfDetect(lat, lng) {
         loadingAlert('Mengirim ke server...')
 
         // Sinkronisasi ke server pusat
-        await axios.post(`${APP_URL}/api/proxy/server/attendance`, {
+        await axios.post(`/api/proxy/server/attendance`, {
           kode_jari: kodePegawai,
         }).then(() => {
           Swal.close();
@@ -336,7 +333,7 @@ export function initSelfDetect(lat, lng) {
     }
   }
 
-  axios.get(`${APP_URL}/api/getPegawai/${kodePegawai}`)
+  axios.get(`/api/getPegawai/${kodePegawai}`)
     .then(response => {
       loadingAlert("Initializing application");
       labels.push(...response.data);

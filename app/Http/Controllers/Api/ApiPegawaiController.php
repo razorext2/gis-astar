@@ -27,31 +27,28 @@ class ApiPegawaiController extends Controller
         ]);
     }
 
-    public function getPegawaiImages($storage)
+    public function getPegawai()
     {
-        $sanitizedStorage = basename($storage);
-        $directoryPath = public_path('storage/labels/' . $sanitizedStorage);
+        $data = Pegawai::whereNotNull('storage')->pluck('kode_pegawai');
+        return response()->json($data);
+    }
+
+    public function getPegawaiImages($kode_pegawai)
+    {
+        $directoryPath = public_path('storage/labels/' . $kode_pegawai);
+        $filePath = $directoryPath . '/photo1.png';
 
         if (!is_dir($directoryPath)) {
             return response()->json(['error' => 'Directory not found'], 404);
         }
 
-        $images = [];
-        $dirIterator = new DirectoryIterator($directoryPath);
-        foreach ($dirIterator as $fileinfo) {
-            if ($fileinfo->isFile() && in_array($fileinfo->getExtension(), ['png', 'jpg', 'jpeg', 'webp'])) {
-                $images[] = $fileinfo->getPathname();
-            }
-        }
+        if (file_exists($filePath)) {
+            // buat path relative
+            $relativePath = str_replace(public_path(), '', $filePath);
 
-        if (!empty($images)) {
-            $relativeImagePaths = array_map(function ($path) {
-                return str_replace(public_path(), '', $path);
-            }, $images);
-
-            return response()->json($relativeImagePaths);
+            return response()->json($relativePath);
         } else {
-            return response()->json(['error' => 'No images found'], 404);
+            return response()->json(['error' => 'photo1.png not found'], 404);
         }
     }
 
