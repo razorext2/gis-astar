@@ -52,7 +52,7 @@
 				<span class="sr-only">Open user menu</span>
 				<img class="h-9 w-9 rounded-full object-cover"
 					src="{{ auth()->user()->profile_pic ? asset('storage/profile-pictures/' . auth()->user()->profile_pic) : asset('assets/img/profile-picture-5.jpg') }}"
-					alt="user photo" loading="lazy">
+					alt="user photo" loading="lazy" onerror="this.src = '{{ asset('assets/img/noImage.webp') }}'">
 			</button>
 
 			<div
