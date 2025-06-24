@@ -53,6 +53,11 @@ class Edit extends Component
 
             // kalo misal team_leader diubah
             if ($this->team_leader != $this->team->team_leader) {
+                // remove role leader lama
+                User::where('kode_pegawai', $this->team->team_leader)
+                    ->firstOrFail()
+                    ->removeRole('Kepala-Teknisi');
+
                 // update role leader lama jadi anggota
                 TeamMember::where('team_code', $this->team_code)
                     ->where('role', 'Leader')
@@ -66,6 +71,11 @@ class Edit extends Component
                     ->update([
                         'role' => 'Leader'
                     ]);
+
+                // assign role leader baru
+                User::where('kode_pegawai', $this->team_leader)
+                    ->firstOrFail()
+                    ->assignRole('Kepala-Teknisi');
 
                 // update leader di team nya juga
                 Team::where('team_code', $this->team_code)->update([
@@ -90,6 +100,11 @@ class Edit extends Component
 
             // hapus member pada team
             TeamMember::where('team_code', $this->team->team_code)->delete();
+
+            // remove role leader
+            User::where('kode_pegawai', $this->team->team_leader)
+                ->firstOrFail()
+                ->removeRole('Kepala-Teknisi');
 
             // hapus team
             $this->team->delete();

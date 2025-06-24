@@ -59,6 +59,7 @@ class Create extends Component
 
             // assign role
             User::where('kode_pegawai', $this->team_leader)
+                ->firstOrFail()
                 ->assignRole('Kepala-Teknisi');
 
             $this->reset();
