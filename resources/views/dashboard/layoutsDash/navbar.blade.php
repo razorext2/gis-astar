@@ -10,11 +10,13 @@
 
 		</div>
 
-		@if (auth()->user()->hasRole('Teknisi'))
-			@livewire('widget.technician.points-accumulation')
-		@endif
+		<div>
+			@if (auth()->user()->hasRole('Teknisi'))
+				@livewire('widget.technician.points-accumulation')
+			@endif
+		</div>
 
-		<div class="flex items-center gap-2 lg:order-2">
+		<div class="flex items-center justify-between gap-2">
 
 			@livewire('utils.ping-checker')
 
