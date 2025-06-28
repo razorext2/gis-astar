@@ -35,9 +35,5 @@ export default {
     },
     plugins: [
         forms,
-        require("flowbite/plugin")({
-            datatables: true,
-            charts: true,
-        }),
     ],
 };
