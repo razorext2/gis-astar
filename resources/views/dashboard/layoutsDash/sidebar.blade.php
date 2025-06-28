@@ -32,8 +32,18 @@
 	    ],
 	    [
 	        'route' => 'capture.index',
-	        'check' => 'capture.*',
+	        'check' => 'capture.index',
 	        'label' => 'Record Attendance',
+	        'icon' => 'capture',
+	        'permission' => 'capture',
+	        'sublinks' => [],
+	        'navigate' => false,
+	        'indicator' => false,
+	    ],
+	    [
+	        'route' => 'capture.route',
+	        'check' => 'capture.route',
+	        'label' => 'Absen Rute',
 	        'icon' => 'capture',
 	        'permission' => 'capture',
 	        'sublinks' => [],
@@ -290,13 +300,18 @@
 
 			@foreach ($sidebarLinks as $link)
 				@php
+					$navigate = false;
 					$isActive = Route::is($link['check']);
+
+					if ($link['icon'] != 'capture') {
+					    $navigate = true;
+					}
 				@endphp
 
 				@if ($link['permission'])
 					@can($link['permission'])
 						<li>
-							<x-dashboard.sidebar-link href="{{ route($link['route']) }}" :active="$isActive" wire:navigate>
+							<x-dashboard.sidebar-link href="{{ route($link['route']) }}" :active="$isActive" :navigate="$navigate">
 								<x-slot name="icon">
 
 									{{-- for icons to show --}}
@@ -306,6 +321,10 @@
 										@break
 
 										@case('capture')
+											<x-icons.camera class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+										@break
+
+										@case('another-capture')
 											<x-icons.camera class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
 										@break
 

@@ -34,4 +34,9 @@ class CaptureController extends Controller
             return view('dashboard.capture.index', compact('data'));
         }
     }
+
+    public function route()
+    {
+        return view('dashboard.capture.route');
+    }
 }

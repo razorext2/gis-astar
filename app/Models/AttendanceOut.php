@@ -25,7 +25,10 @@ class AttendanceOut extends Model
         'longitude',
         'latitude',
         'photoURL',
-        'created_at',
+        'verified',
+        'distance',
+        'verified_by',
+        'keterangan'
     ];
 
     protected $casts = [

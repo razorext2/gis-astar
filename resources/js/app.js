@@ -25,7 +25,7 @@ document.addEventListener('livewire:navigated', function () {
   initFlowbite();
   fetchNotification();
   initEventListener();
-  // initWebSocketListener();
+  initWebSocketListener();
 
   // handle announcement
   if (window.location.pathname === '/dashboard/announcement') {
@@ -39,6 +39,10 @@ document.addEventListener('livewire:navigated', function () {
   } else if (window.location.pathname === '/dashboard/capture') {
     import('./pages/capture/index.js').then((module) => {
       module.initCapture();
+    });
+  } else if (window.location.pathname === '/dashboard/capture/route') {
+    import('./pages/capture/route.js').then((module) => {
+      module.initRecognition();
     });
   } else if (window.location.pathname === '/dashboard/dayoff') {
     import('./pages/dayoff/index.js').then((module) => {
