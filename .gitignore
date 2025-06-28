@@ -19,6 +19,10 @@ yarn-error.log
 /.idea
 /.vscode
 
+/venv
+/python/venv
+/python/temp_files
+
 **/caddy
 frankenphp
 frankenphp-worker.php
