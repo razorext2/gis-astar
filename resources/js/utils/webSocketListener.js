@@ -23,6 +23,9 @@ export async function initWebSocketListener() {
       .listen('.driverNewReport', (data) => {
         handleNotification(data);
       })
+      .listen('.basicEvent', (data) => {
+        handleNotification(data);
+      })
       .listen('.backupReady', (data) => {
         showToast('success', data.message);
         Livewire.dispatch('pg:eventRefresh-BackupTable');
