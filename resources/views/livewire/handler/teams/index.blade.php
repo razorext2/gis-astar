@@ -1,6 +1,7 @@
 <div class="mt-4 grid gap-2 lg:gap-4">
 	@forelse ($teams as $row)
-		<div class="rounded-lg bg-gray-50 p-2 transition-all duration-300 dark:bg-gray-700 lg:p-4">
+		<div wire:key="{{ $row->team_code }}"
+			class="rounded-lg bg-gray-50 p-2 transition-all duration-300 dark:bg-gray-700 lg:p-4">
 			<div class="flex w-full flex-row items-center justify-between gap-2">
 				<div class="grow cursor-pointer" wire:click="showDetail('{{ $row->team_code }}')">
 					<div class="mb-1 flex flex-col gap-0.5 text-gray-800 dark:text-gray-50 lg:flex-row lg:items-center lg:gap-2">
@@ -79,7 +80,7 @@
 							@if ($kode_pegawai)
 								<div class="mt-2">
 									@forelse ($technicians as $technician)
-										<div class="flex items-center py-1">
+										<div class="flex items-center py-1" wire:key="{{ $technician->kode_pegawai }}">
 											<input id="member-{{ $technician->kode_pegawai }}" wire:model="newMember" type="checkbox"
 												value="{{ $technician->kode_pegawai }}"
 												class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600">
