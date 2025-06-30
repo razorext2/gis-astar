@@ -1,5 +1,5 @@
 # import lib yg dibutuhkan
-from fastapi import FastAPI, File, UploadFile, Form
+from fastapi import FastAPI, File, UploadFile, Form, RedirectResponse
 from fastapi.responses import JSONResponse
 from deepface import DeepFace
 import shutil, os, glob
@@ -13,6 +13,10 @@ model = DeepFace.build_model(model_name)
 
 # tentukan folder referensi
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "public", "storage", "labels"))
+
+@app.get("/")
+async def root():
+    return RedirectResponse(url="https://attendance.indodacin.com")
 
 # inisialisasi fungsi
 @app.post("/recognize")
