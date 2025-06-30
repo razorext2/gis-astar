@@ -1,6 +1,6 @@
 # import lib yg dibutuhkan
-from fastapi import FastAPI, File, UploadFile, Form, RedirectResponse
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI, File, UploadFile, Form
+from fastapi.responses import JSONResponse, RedirectResponse
 from deepface import DeepFace
 import shutil, os, glob
 
