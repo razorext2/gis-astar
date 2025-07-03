@@ -370,9 +370,9 @@ class TechnicianController extends Controller
             return new ApiResource(false, 'Data tidak ditemukan', 'Laporan kunjungan tidak ditemukan');
         }
 
-        if ($technician->kode_pegawai != Auth::user()->kode_pegawai) {
-            return new ApiResource(false, 'Anda tidak memiliki akses', 'Anda tidak memiliki akses untuk melihat data ini');
-        }
+        // if ($technician->kode_pegawai != Auth::user()->kode_pegawai && Auth::user()->can('technician-approve')) {
+        //     return new ApiResource(false, 'Anda tidak memiliki akses', 'Anda tidak memiliki akses untuk melihat data ini');
+        // }
 
         if ($technician->status == 1) {
             return new ApiResource(true, 'Laporan telah diperiksa');
