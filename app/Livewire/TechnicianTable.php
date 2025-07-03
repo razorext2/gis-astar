@@ -203,7 +203,7 @@ final class TechnicianTable extends PowerGridComponent
                 ->route('technician.show', ['technician' => $row->no_vt]),
         ];
 
-        if ($row->status == 2 || $row->status == 4 || auth()->user()->can('technician-update')) {
+        if ($row->status == 2 || $row->status == 4 || auth()->user()->can('technician-approve')) {
             $button[] = Button::make('edit')
                 ->slot('Update')
                 ->id($row->id)
