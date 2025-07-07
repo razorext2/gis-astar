@@ -19,9 +19,14 @@ yarn-error.log
 /.idea
 /.vscode
 
+/.venv
 /venv
 /python/venv
+/python/.venv
+/python/tes.ipynb
 /python/temp_files
+/python/__pycache__/*
+/dbexport/*.sql
 
 **/caddy
 frankenphp
