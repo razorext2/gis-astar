@@ -13,8 +13,8 @@
 				// Jalankan pertama kali saat halaman load
 				polling();
 
-				// Jalankan polling berulang setiap 5 detik
-				setInterval(polling, 10000);
+				// Jalankan polling berulang setiap 30 detik
+				setInterval(polling, 30000);
 			}
 		}
 	}
