@@ -23,7 +23,7 @@ export async function initWebSocketListener() {
       .listen('.driverNewReport', (data) => {
         handleNotification(data);
       })
-      .listen('.basicEvent', (data) => {
+      .listen('.recognitionEvent', (data) => {
         handleNotification(data);
       })
       .listen('.backupReady', (data) => {

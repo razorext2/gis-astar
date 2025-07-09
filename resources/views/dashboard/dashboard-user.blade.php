@@ -79,21 +79,6 @@
 								</span>
 								<div
 									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-600 dark:bg-gray-700 sm:flex">
-									<time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">
-										@php
-											$input = \Carbon\Carbon::parse($attendance['jam_masuk']);
-											$current = \Carbon\Carbon::now();
-											$diff = $input->diffInSeconds($current);
-
-											if ($diff < 60) {
-											    echo round($diff) . ' seconds ago';
-											} elseif ($diff < 3600) {
-											    echo round($input->diffInMinutes($current)) . ' minutes ago';
-											} else {
-											    echo round($input->diffInHours($current)) . ' hours ago';
-											}
-										@endphp
-									</time>
 									<div class="text-sm font-normal text-gray-500 dark:text-gray-300">
 										Kamu melakukan
 										<a class="font-semibold text-green-600 hover:underline dark:text-green-500" href="#">
@@ -108,7 +93,37 @@
 											class="rounded bg-gray-100 px-0.5 py-1 text-xs font-normal text-gray-800 dark:bg-gray-600 dark:text-gray-300">
 											{{ \Carbon\Carbon::parse($attendance['jam_masuk'])->format('H:i:s') }}
 										</span>
+									</div>
 
+									<div class="flex flex-col items-end">
+										@php
+											$status = $attendance['status_in'];
+											$map = [
+											    0 => [
+											        'color' => 'yellow',
+											        'text' => 'Diajukan',
+											    ],
+											    1 => [
+											        'color' => 'green',
+											        'text' => 'Diterima',
+											    ],
+											    2 => [
+											        'color' => 'red',
+											        'text' => 'Ditolak',
+											    ],
+											];
+											$color = $map[$status]['color'] ?? 'blue';
+											$text = $map[$status]['text'] ?? 'Dibatalkan';
+										@endphp
+
+										<span
+											class="bg-{{ $color }}-300 text-{{ $color }}-800 dark:bg-{{ $color }}-900 dark:text-{{ $color }}-300 rounded-lg px-2 py-0.5 text-xs font-normal">
+											{{ $text }}
+										</span>
+
+										<time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">
+											{{ \Carbon\Carbon::parse($attendance['jam_masuk'])->locale('id')->diffForHumans() }}
+										</time>
 									</div>
 								</div>
 							</li>
@@ -124,21 +139,6 @@
 								</span>
 								<div
 									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-600 dark:bg-gray-700 sm:flex">
-									<time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">
-										@php
-											$input = \Carbon\Carbon::parse($attendance['latest_jam_keluar']);
-											$current = \Carbon\Carbon::now();
-											$diff = $input->diffInSeconds($current);
-
-											if ($diff < 60) {
-											    echo round($diff) . ' seconds ago';
-											} elseif ($diff < 3600) {
-											    echo round($input->diffInMinutes($current)) . ' minutes ago';
-											} else {
-											    echo round($input->diffInHours($current)) . ' hours ago';
-											}
-										@endphp
-									</time>
 									<div class="text-sm font-normal text-gray-500 dark:text-gray-300">
 										Kamu melakukan
 										<a class="font-semibold text-red-600 hover:underline dark:text-red-500" href="#">
@@ -153,7 +153,37 @@
 											class="rounded bg-gray-100 px-0.5 py-0.5 text-xs font-normal text-gray-800 dark:bg-gray-600 dark:text-gray-300">
 											{{ \Carbon\Carbon::parse($attendance['latest_jam_keluar'])->format('H:i:s') }}
 										</span>
+									</div>
 
+									<div class="flex flex-col items-end">
+										@php
+											$status = $attendance['status_out'];
+											$map = [
+											    0 => [
+											        'color' => 'yellow',
+											        'text' => 'Diajukan',
+											    ],
+											    1 => [
+											        'color' => 'green',
+											        'text' => 'Diterima',
+											    ],
+											    2 => [
+											        'color' => 'red',
+											        'text' => 'Ditolak',
+											    ],
+											];
+											$color = $map[$status]['color'] ?? 'blue';
+											$text = $map[$status]['text'] ?? 'Dibatalkan';
+										@endphp
+
+										<span
+											class="bg-{{ $color }}-300 text-{{ $color }}-800 dark:bg-{{ $color }}-900 dark:text-{{ $color }}-300 rounded-lg px-2 py-0.5 text-xs font-normal">
+											{{ $text }}
+										</span>
+
+										<time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">
+											{{ \Carbon\Carbon::parse($attendance['latest_jam_keluar'])->locale('id')->diffForHumans() }}
+										</time>
 									</div>
 								</div>
 							</li>
@@ -165,7 +195,7 @@
 			</div>
 		</div>
 
-		{{-- All Menu --}}
+		{{-- all menu --}}
 		<div
 			class="w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-primary md:hidden lg:col-span-2 xl:col-span-3 xl:p-6">
 			<div>
@@ -182,8 +212,9 @@
 				<x-dashboard.user-menu />
 			</div>
 		</div>
-		{{-- All Menu --}}
+		{{-- end all menu --}}
 
+		{{-- attendance sub menu --}}
 		<div
 			class="w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-primary lg:hidden xl:p-6">
 			<div>
@@ -210,9 +241,38 @@
 								</span>
 								<div
 									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-600 dark:bg-gray-700 sm:flex">
-									<time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">
-										{{ \Carbon\Carbon::parse($attendance['jam_masuk'])->locale('id')->diffForHumans() }}
-									</time>
+
+									<div class="flex flex-row items-center gap-x-1">
+										@php
+											$status = $attendance['status_in'];
+											$map = [
+											    0 => [
+											        'color' => 'yellow',
+											        'text' => 'Diajukan',
+											    ],
+											    1 => [
+											        'color' => 'green',
+											        'text' => 'Diterima',
+											    ],
+											    2 => [
+											        'color' => 'red',
+											        'text' => 'Ditolak',
+											    ],
+											];
+											$color = $map[$status]['color'] ?? 'blue';
+											$text = $map[$status]['text'] ?? 'Dibatalkan';
+										@endphp
+
+										<time class="text-xs font-normal text-gray-400">
+											{{ \Carbon\Carbon::parse($attendance['jam_masuk'])->locale('id')->diffForHumans() }}
+										</time>
+
+										<span
+											class="bg-{{ $color }}-300 text-{{ $color }}-800 dark:bg-{{ $color }}-900 dark:text-{{ $color }}-300 rounded-md px-2 py-0.5 text-xs font-normal">
+											{{ $text }}
+										</span>
+									</div>
+
 									<div class="text-sm font-normal text-gray-500 dark:text-gray-300">
 										Kamu melakukan
 										<a class="font-semibold text-green-600 hover:underline dark:text-green-500" href="#">
@@ -223,7 +283,6 @@
 											class="rounded bg-gray-100 px-0.5 py-1 text-xs font-normal text-gray-800 dark:bg-gray-600 dark:text-gray-300">
 											{{ \Carbon\Carbon::parse($attendance['jam_masuk'])->format('H:i:s') }}
 										</span>
-
 									</div>
 								</div>
 							</li>
@@ -239,9 +298,36 @@
 								</span>
 								<div
 									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-600 dark:bg-gray-700 sm:flex">
-									<time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">
-										{{ \Carbon\Carbon::parse($attendance['latest_jam_keluar'])->locale('id')->diffForHumans() }}
-									</time>
+									<div class="flex flex-row items-center gap-x-1">
+										@php
+											$status = $attendance['status_out'];
+											$map = [
+											    0 => [
+											        'color' => 'yellow',
+											        'text' => 'Diajukan',
+											    ],
+											    1 => [
+											        'color' => 'green',
+											        'text' => 'Diterima',
+											    ],
+											    2 => [
+											        'color' => 'red',
+											        'text' => 'Ditolak',
+											    ],
+											];
+											$color = $map[$status]['color'] ?? 'blue';
+											$text = $map[$status]['text'] ?? 'Dibatalkan';
+										@endphp
+
+										<time class="text-xs font-normal text-gray-400">
+											{{ \Carbon\Carbon::parse($attendance['latest_jam_keluar'])->locale('id')->diffForHumans() }}
+										</time>
+
+										<span
+											class="bg-{{ $color }}-300 text-{{ $color }}-800 dark:bg-{{ $color }}-900 dark:text-{{ $color }}-300 rounded-md px-2 py-0.5 text-xs font-normal">
+											{{ $text }}
+										</span>
+									</div>
 									<div class="text-sm font-normal text-gray-500 dark:text-gray-300">
 										Kamu melakukan
 										<a class="font-semibold text-red-600 hover:underline dark:text-red-500" href="#">
@@ -263,5 +349,6 @@
 
 			</div>
 		</div>
+		{{-- end attendance sub menu --}}
 	</div>
 @endsection

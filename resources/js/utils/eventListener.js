@@ -3,19 +3,23 @@ import { showModal as showModalDriver } from "../pages/driver/func/modal";
 
 export async function initEventListener() {
   // swal deletion prompt
-  const confirmDelete = (data) => {
+  const confirmationModal = (title, html, icon) => {
     return Swal.fire({
-      title: "Apa kamu yakin?",
-      html: `Kamu akan menghapus data dengan ID <b>${data.id}</b>`,
-      icon: "warning",
+      title: title,
+      html: html,
+      icon: icon,
       showCancelButton: true,
-      confirmButtonText: "Ya, hapus!"
+      confirmButtonText: "Ya. "
     });
   };
 
   // livewire confirm delete
   Livewire.on('confirmDelete', data => {
-    confirmDelete(data).then((result) => {
+    confirmationModal(
+      "Apa kamu yakin?",
+      `Kamu akan menghapus data dengan ID <b>${data.id}</b>`,
+      "warning"
+    ).then((result) => {
       if (result.isConfirmed) {
         Livewire.dispatch('confirmDeleteAction', {
           id: data.id
@@ -26,7 +30,11 @@ export async function initEventListener() {
 
   // livewire bulk delete event
   Livewire.on('confirmBulkDelete', data => {
-    confirmDelete(data).then((result) => {
+    confirmationModal(
+      "Apa kamu yakin?",
+      `Kamu akan menghapus data dengan ID <b>${data.id}</b>`,
+      "warning"
+    ).then((result) => {
       if (result.isConfirmed) {
         Livewire.dispatch(`confirmBulkDeleteAction.${data.tableName}`, {
           id: data.id
@@ -123,4 +131,21 @@ export async function initEventListener() {
       }
     });
   });
+
+  Livewire.on('confirmation', data => {
+    console.log(data);
+
+    confirmationModal(
+      "Apa kamu yakin?",
+      `Kamu akan memverifikasi kehadiran dengan ID <b>${data.id}</b>`,
+      "warning",
+    ).then((result) => {
+      if (result.isConfirmed) {
+        Livewire.dispatch(`${data.action}.${data.tableName}`, {
+          id: data.id,
+          tableName: data.tableName,
+        });
+      }
+    });
+  })
 }

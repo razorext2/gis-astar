@@ -83,12 +83,17 @@ class AdminController extends Controller
             ])
                 ->select('kode_pegawai', 'nick_name')
                 ->where('kode_pegawai', Auth::user()->kode_pegawai)
+                ->whereHas('attendanceRelasi', function ($query) {
+                    $query->where('status', 1);
+                })
                 ->get()
                 ->map(function ($pegawai) {
                     return [
                         'kode_pegawai' => $pegawai->kode_pegawai,
                         'nick_name' => $pegawai->nick_name,
-                        'jam_masuk' => $pegawai->attendanceRelasi->first()->jam_masuk ?? null,
+                        'status_in' => $pegawai->attendanceRelasi->status ?? null,
+                        'jam_masuk' => $pegawai->attendanceRelasi->jam_masuk ?? null,
+                        'status_out' => $pegawai->latestAttendanceOutRelasi->status ?? null,
                         'latest_jam_keluar' => $pegawai->latestAttendanceOutRelasi->jam_keluar ?? null,
                     ];
                 })

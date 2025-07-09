@@ -1,15 +1,18 @@
 # import lib yg dibutuhkan
 from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.responses import JSONResponse, RedirectResponse
-from deepface import DeepFace
 import shutil, os, glob
+import numpy as np
+import cv2
+from insightface.app import FaceAnalysis
+from numpy.linalg import norm
 
 # init app
 app = FastAPI()
 
-# tentukan model yg digunakan
-model_name = "ArcFace"
-model = DeepFace.build_model(model_name)
+# inisialisasi model InsightFace
+insight_app = FaceAnalysis(name="buffalo_l")
+insight_app.prepare(ctx_id=0)
 
 # tentukan folder referensi
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "public", "storage", "labels"))
@@ -38,68 +41,56 @@ async def recognize(kode_pegawai: str=Form(...), file: UploadFile = File(...)):
             return JSONResponse({"error": "Gagal menyimpan file sementara"}, status_code=400)
 
         # baca semua foto referensi di folder pegawai
-        matched = False
-        best_distance = 1.0
-        objs = None
-
-        # cek dulu ada wajah ga di foto yg ditake
-        faces = DeepFace.extract_faces(temp_path, enforce_detection=False)
+        temp_img = cv2.imread(temp_path)
+        faces = insight_app.get(temp_img)
 
         if not faces:
-            return JSONResponse({"error": "Tidak ada wajah terdeteksi"}, status_code=400)
+            return JSONResponse({
+                "kode_pegawai": kode_pegawai,
+                "verified": False,
+                "distance": 1.0,
+                "error": True,
+                "error_message": "Tidak ada wajah yang terdeteksi pada foto"
+            }, status_code=400)
 
-        for ref_img in glob.glob(f"{folder_path}/*.png"):
-            result = DeepFace.verify(
-                img1_path = ref_img,
-                img2_path = temp_path,
-                model_name = model_name
-            )
+        uploaded_embedding = faces[0].embedding
+        matched = False
+        best_distance = 1.0
 
-            if result["verified"]:
+        for ref_img_path in glob.glob(f"{folder_path}/*.png"):
+            ref_img = cv2.imread(ref_img_path)
+            ref_faces = insight_app.get(ref_img)
+            if not ref_faces:
+                continue
+
+            ref_embedding = ref_faces[0].embedding
+            cosine_sim = np.dot(uploaded_embedding, ref_embedding) / (norm(uploaded_embedding) * norm(ref_embedding))
+            distance = 1 - cosine_sim  # konversi ke bentuk jarak (semakin kecil, semakin mirip)
+
+            if cosine_sim > 0.5:
                 matched = True
-                best_distance = result["distance"]
+                best_distance = distance
                 break
 
-            # catat jarak terdekat (optional)
-            best_distance = min(best_distance, result["distance"])
-
-        # # analisis
-        # objs = DeepFace.analyze(
-        #     img_path=temp_path,
-        #     actions=['age', 'gender', 'race', 'emotion'],
-        #     enforce_detection=True
-        # )
-
-        # if not objs:
-        #     return JSONResponse({"error": "Tidak ada wajah terdeteksi"}, status_code=400)
-
-        # # ambil wajah terbesar jika ada banyak
-        # if isinstance(objs, list):
-        #     best_face = max(objs, key=lambda o: o["region"]["w"] * o["region"]["h"])
-        # else:
-        #     best_face = objs
+            best_distance = min(best_distance, distance)
 
         # hapus foto sementara
         os.remove(temp_path)
 
         # kembalikan hasil dengan format json
         return JSONResponse({
+             "kode_pegawai": kode_pegawai,
             "verified": matched,
-            "distance": best_distance,
+            "distance": float(best_distance),
             "error": False,
-            # "base_dir": BASE_DIR,
-            # "folder_path": folder_path,
-            # "temp_path": temp_path,
-            # "age": best_face.get("age"),
-            # "gender": best_face.get("dominant_gender"),
-            # "race": best_face.get("dominant_race"),
-            # "emotion": best_face.get("dominant_emotion")
+            "error_message": ""
         })
 
     except Exception as e:
         return JSONResponse({
+            "kode_pegawai": kode_pegawai,
             "verified": False,
             "distance": 1.0,
             "error": True,
-            "error_message": str(e)}, 
-        status_code=500)
+            "error_message": str(e)
+        }, status_code=500)

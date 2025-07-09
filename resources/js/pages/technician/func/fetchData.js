@@ -47,6 +47,8 @@ async function fetchDataAsync() {
       ]
     }
 
+    console.log(resultDB);
+
     if (resultDB.success) {
       if (!resultDB.data) {
         return alert.showAlert('error', resultDB.message, 'Anda tidak dapat mengubah data yang telah dikonfirmasi.');

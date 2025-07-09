@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Events\BasicEvent;
+use App\Events\RecognitionEvent;
 use App\Http\Resources\ApiResource;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -40,36 +40,97 @@ class ProcessFaceRecognition implements ShouldQueue
     public function handle()
     {
         $modelClass = "\\App\\Models\\{$this->model}";
-        $file = fopen(storage_path('app/' . $this->img_path . '/' . $this->filename), 'r');
+        $data = $modelClass::where('id', $this->id)->first();
 
-        $response = Http::attach('file', $file)
-            ->post('http://127.0.0.1:9223/recognize', [
-                'kode_pegawai' => $this->kode_pegawai,
-            ])->json();
+        $fullPath = storage_path('app/' . $this->img_path . '/' . $this->filename);
 
-        if ($response['error']) {
-            $modelClass::where('id', $this->id)->delete();
+        try {
+            // Pastikan file ada
+            if (!file_exists($fullPath)) {
+                throw new \Exception('File tidak ditemukan.');
+            }
+
+            $file = fopen($fullPath, 'r');
+
+            $response = Http::attach('file', $file)
+                ->post('http://192.168.11.20:8231/recognize', [
+                    'kode_pegawai' => $this->kode_pegawai,
+                ]);
+
+            fclose($file); // Selalu tutup file
+
+            $responseData = $response->json();
+
+            if (!is_array($responseData) || !isset($responseData['error'])) {
+                throw new \Exception('Respons dari API tidak valid.');
+            }
+
+            // Pindahkan file
+            $targetPath = "public/labels/{$this->kode_pegawai}/capturedImg/{$this->filename}";
+            if (!Storage::move("{$this->img_path}/{$this->filename}", $targetPath)) {
+                throw new \Exception('Gagal memindahkan file hasil capture.');
+            }
+
+            if ($responseData['error']) {
+                $data->update([
+                    'status' => 2,
+                    'verified' => true,
+                    'verified_by' => 'System',
+                ]); // lebih aman daripada delete
+
+                return broadcast(new RecognitionEvent(
+                    $this->user_id,
+                    'error',
+                    'Absensi gagal: ' . ($responseData['error_message'] ?? 'Terjadi kesalahan')
+                ));
+            }
+
+            if ($responseData['verified'] && $responseData['distance'] < 0.65) {
+                // update data absensi otomatis
+                $data->update([
+                    'status' => 1,
+                    'verified' => true,
+                    'verified_by' => 'System',
+                    'distance' => $responseData['distance'],
+                ]);
+
+                // langsung kirim ke API
+                $api = Http::post('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendance', [
+                    'kode_jari' => $this->kode_pegawai,
+                    // 'waktu' => $data->waktu_ori,
+                    'waktu' => '2025-07-09 17:55:29.003'
+                ]);
+
+                dump($api->json());
+
+                return broadcast(new RecognitionEvent(
+                    $this->user_id,
+                    'success',
+                    'Absensi berhasil diverifikasi, lihat hasilnya di halaman absensi.'
+                ));
+            } else {
+                $data->update([
+                    'verified' => false,
+                    'distance' => $responseData['distance'],
+                    'status' => 0, // pending manual
+                ]);
+
+                return broadcast(new RecognitionEvent(
+                    $this->user_id,
+                    'error',
+                    'Absensi berhasil, namun wajah tidak dikenali. Silahkan menunggu hingga HRD memverifikasi.'
+                ));
+            }
+
+        } catch (\Exception $e) {
+            $data->delete();
             Storage::delete("{$this->img_path}/{$this->filename}");
 
-            return broadcast(new BasicEvent($this->user_id, 'error', $response['error_message']));
+            return broadcast(new RecognitionEvent(
+                $this->user_id,
+                'error',
+                'Absensi gagal: ' . $e->getMessage()
+            ));
         }
-
-        Storage::move($this->img_path . '/' . $this->filename, "public/labels/{$this->kode_pegawai}/capturedImg/{$this->filename}");
-
-        if ($response['verified'] && $response['distance'] < 0.65) {
-            $modelClass::where('id', $this->id)->update([
-                'verified' => true,
-                'verified_by' => 'System',
-                'distance' => $response['distance'],
-            ]);
-
-        } else {
-            $modelClass::where('id', $this->id)->update([
-                'verified' => false,
-                'distance' => $response['distance'],
-            ]);
-        }
-
-        return broadcast(new BasicEvent($this->user_id, 'success', 'Absensi berhasil diverifikasi, lihat hasilnya di halaman absensi.'));
     }
 }

@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 import { showAlert, loadingAlert } from "../../utils/alert";
 import { getLocation } from "../../utils/geoLocation";
 
@@ -105,24 +106,27 @@ export async function initRecognition() {
           formData.append('longitude', String(longitude));
           formData.append('latitude', String(latitude));
 
+          loadingAlert('Memproses...');
+
           axios.post('/api/facerecognition/verify', formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
-          }).then(async res => {
-            if (res.data.success) {
-              // redirect ke dashboard
-              showAlert('success', res.data.message, res.data.data);
-
-              return setTimeout(() => {
-                window.location.href = '/dashboard';
-              }, 1500);
-            } else {
-              return showAlert('error', res.data.message, res.data.data);
-            }
           })
+            .then(async res => {
+
+              if (res.data.success) {
+                showAlert('success', res.data.message, res.data.data);
+
+                return setTimeout(() => {
+                  window.location.href = '/dashboard';
+                }, 1500);
+              } else {
+                showAlert('error', res.data.message, res.data.data);
+              }
+            })
             .catch(error => {
-              $(this).prop('disabled', false);
+              Swal.close();
               return showAlert('error', error.message, error.data);
             });
         }
@@ -149,3 +153,4 @@ function base64ToFile(base64, filename) {
   while (n--) u8arr[n] = bstr.charCodeAt(n);
   return new File([u8arr], filename, { type: mime });
 }
+

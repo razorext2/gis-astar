@@ -38,7 +38,11 @@ class Pegawai extends Model
 
     public function attendanceRelasi()
     {
-        return $this->hasMany(Attendance::class, 'kode_pegawai', 'kode_pegawai');
+        $today = Carbon::today();
+
+        return $this->hasOne(Attendance::class, 'kode_pegawai', 'kode_pegawai')
+            ->whereDate('jam_masuk', $today)
+            ->latest('jam_masuk');
     }
 
     public function attendanceOutRelasi()

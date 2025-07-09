@@ -98,6 +98,7 @@ class ApiAttendanceController extends Controller
 
     public function verify(Request $request)
     {
+        // validasi input awal
         $validator = Validator::make($request->all(), [
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'keterangan' => 'required|string',
@@ -109,96 +110,80 @@ class ApiAttendanceController extends Controller
             return new ApiResource(false, 'Terjadi kegagalan.', $validator->errors()->first());
         }
 
-        // check user
-        $user = User::where('kode_pegawai', Auth::user()->kode_pegawai)
-            ->whereDoesntHave('pegawai')
-            ->first();
+        $user = Auth::user();
+        $kode_pegawai = $user->kode_pegawai;
+        $user_id = $user->id;
 
-        if ($user !== null) {
+        // cek user tanpa relasi pegawai
+        if (User::where('kode_pegawai', $kode_pegawai)->whereDoesntHave('pegawai')->exists()) {
             return new ApiResource(false, 'Terjadi kegagalan.', 'Akun pegawai untuk user ini tidak ditemukan.');
         }
 
-        // check foto selfie
-        $pegawai = Pegawai::where('kode_pegawai', Auth::user()->kode_pegawai)
-            ->first();
-
-        if ($pegawai->storage === null) {
+        // cek apakah pegawai sudah punya foto selfie
+        $pegawai = Pegawai::where('kode_pegawai', $kode_pegawai)->first();
+        if (!$pegawai || !$pegawai->storage) {
             return new ApiResource(false, 'Terjadi kegagalan.', 'Foto selfie belum diatur.');
         }
 
-        // inisialisasi kode pegawai
-        $kode_pegawai = Auth::user()->kode_pegawai;
-        $user_id = Auth::user()->id;
-
-        // validasi kode pegawai
-        if ($kode_pegawai === null) {
-            return new ApiResource(false, 'Terjadi kegagalan.', 'Kode pegawai kosong');
+        if (!$request->has('image') || empty($request->image)) {
+            return new ApiResource(false, 'Terjadi kegagalan.', 'Image data is required.');
         }
 
         try {
-            // validasi request
-            if (!$request->has('image') || empty($request->image)) {
-                return new ApiResource(false, 'Terjadi kegagalan.', 'Image data is required.');
-            }
-
+            // simpan foto sementara
             $img_path = "public/labels/{$kode_pegawai}/_temp/";
             $filename = $kode_pegawai . "_" . getCurrentDate();
 
-            // simpan gambar sementara
             if (!$request->image->storeAs($img_path, $filename . ".png")) {
-                return new ApiResource(false, 'Terjadi kegagalan.', 'Failed to save temporary image.');
+                return new ApiResource(false, 'Terjadi kegagalan.', 'Gagal menyimpan gambar.');
             }
 
-            // tambah data
-            $data = Attendance::where('kode_pegawai', $kode_pegawai)
+            // cek apakah absen masuk sudah dilakukan
+            $existing = Attendance::where('kode_pegawai', $kode_pegawai)
+                ->where('status', 1)
                 ->whereDate('created_at', now()->toDateString())
                 ->first();
 
-            if ($data) {
-                $out = AttendanceOut::create([
-                    'kode_pegawai' => $kode_pegawai,
-                    'upl' => 0,
-                    'upl68' => 0,
-                    'uplm68' => 0,
-                    'upljam' => 0,
-                    'jenis' => 'Wajah',
-                    'waktuori' => now(),
-                    'status' => 1,
-                    'jam_keluar' => now(),
-                    'longitude' => $request->longitude,
-                    'latitude' => $request->latitude,
-                    'photoURL' => $filename,
-                    'keterangan' => $request->keterangan,
-                ]);
+            $isKeluar = $existing ? true : false;
+            $modelClass = $isKeluar ? AttendanceOut::class : Attendance::class;
+            $absenType = $isKeluar ? 'AttendanceOut' : 'Attendance';
+            $jamField = $isKeluar ? 'jam_keluar' : 'jam_masuk';
 
-                // jalankan job
-                ProcessFaceRecognition::dispatch('AttendanceOut', $out->id, $img_path, $user_id, $kode_pegawai, $filename . ".png");
-            } else {
-                $in = Attendance::create([
-                    'kode_pegawai' => $kode_pegawai,
-                    'upl' => 0,
-                    'upl68' => 0,
-                    'uplm68' => 0,
-                    'upljam' => 0,
-                    'jenis' => 'Wajah',
-                    'waktuori' => now(),
-                    'status' => 1,
-                    'jam_masuk' => now(),
-                    'longitude' => $request->longitude,
-                    'latitude' => $request->latitude,
-                    'photoURL' => $filename,
-                    'keterangan' => $request->keterangan,
-                ]);
+            // data absensi
+            $absenData = [
+                'kode_pegawai' => $kode_pegawai,
+                'upl' => 0,
+                'upl68' => 0,
+                'uplm68' => 0,
+                'upljam' => 0,
+                'jenis' => 'Wajah',
+                'waktuori' => now(),
+                'status' => 0, // status = pending/diajukan
+                $jamField => now(),
+                'longitude' => $request->longitude,
+                'latitude' => $request->latitude,
+                'photoURL' => $filename,
+                'keterangan' => $request->keterangan,
+            ];
 
-                // jalankan job
-                ProcessFaceRecognition::dispatch('Attendance', $in->id, $img_path, $user_id, $kode_pegawai, $filename . ".png");
-            }
+            // simpan data absen (masuk/keluar)
+            $absen = $modelClass::create($absenData);
 
-            return new ApiResource(true, 'Absensi berhasil dilakukan.', 'Hasil verifikasi akan muncul dalam beberapa saat.');
+            // kirim ke job pengenalan wajah
+            ProcessFaceRecognition::dispatch(
+                $absenType,
+                $absen->id,
+                $img_path,
+                $user_id,
+                $kode_pegawai,
+                $filename . '.png'
+            );
+
+            return new ApiResource(true, 'Verifikasi absensi sedang diproses...', 'Silahkan menunggu beberapa saat.');
         } catch (\Exception $e) {
             Log::error('Error in verify attendance: ' . $e->getMessage(), [
                 'exception' => $e,
-                'user_id' => Auth::id()
+                'user_id' => $user_id
             ]);
 
             return new ApiResource(false, 'Terjadi kegagalan.', $e->getMessage());

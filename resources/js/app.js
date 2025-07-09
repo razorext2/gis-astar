@@ -8,6 +8,7 @@ import { fetchNotification } from './utils/notificationListener';
 import { initEventListener } from './utils/eventListener.js';
 import { initWebSocketListener } from './utils/webSocketListener';
 import './../../vendor/power-components/livewire-powergrid/dist/powergrid';
+import { zoomImage } from './utils/zoomImage';
 
 window.flatpickr = flatpickr;
 window.$ = window.jQuery = $;
@@ -36,6 +37,8 @@ document.addEventListener('livewire:navigated', function () {
     import('./pages/sales/index.js').then((module) => {
       module.initSales();
     })
+  } else if (window.location.pathname === '/dashboard/attendanceIn' || window.location.pathname === '/dashboard/attendanceOut') {
+    zoomImage();
   } else if (window.location.pathname === '/dashboard/capture') {
     import('./pages/capture/index.js').then((module) => {
       module.initCapture();
