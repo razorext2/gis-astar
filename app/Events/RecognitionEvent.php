@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class BasicEvent implements ShouldBroadcast
+class RecognitionEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     protected int $user_id;
@@ -41,7 +41,7 @@ class BasicEvent implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        return 'basicEvent';
+        return 'recognitionEvent';
     }
 
     public function broadcastWith()
