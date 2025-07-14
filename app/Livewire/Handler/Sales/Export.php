@@ -93,8 +93,10 @@ class Export extends Component
                     $query->where('name', 'Sales');
                 } elseif ($this->authUser()->hasAnyRole(['Management-JKT', 'Marketing-JKT'])) {
                     $query->where('name', 'Sales-JKT');
+                } elseif ($this->authUser()->hasAnyRole(['Management-PKU', 'Marketing-PKU'])) {
+                    $query->where('name', 'Sales-PKU');
                 } else {
-                    $query->whereIn('name', ['Sales', 'Sales-JKT']);
+                    $query->whereIn('name', ['Sales', 'Sales-JKT', 'Sales-PKU']);
                 }
             })
             ->orderBy('kode_pegawai', 'asc')

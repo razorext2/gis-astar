@@ -50,6 +50,9 @@
 								if (auth()->user()->can('sales-export-jkt')) {
 								    $roles['Sales-JKT'] = 'Sales Jakarta';
 								}
+								if (auth()->user()->can('sales-export-pku')) {
+								    $roles['Sales-PKU'] = 'Sales Pekanbaru';
+								}
 							@endphp
 							<x-filter.filter-input-select id="roles" wire:model="role" name="roles" :options="$roles"
 								default-option="Filter by roles" />

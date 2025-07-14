@@ -31,7 +31,7 @@ final class SalesRouteTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return User::query()->role(['sales', 'sales-jkt']);
+        return User::query()->role(['sales', 'sales-jkt', 'sales-pku']);
     }
 
     public function relationSearch(): array

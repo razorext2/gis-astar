@@ -38,7 +38,7 @@
 							</li>
 						@endif
 
-						@if ($pegawai->userRelasi->hasRole(['Sales', 'Sales-JKT']))
+						@if ($pegawai->userRelasi->hasRole(['Sales', 'Sales-JKT', 'Sales-PKU']))
 							<li role="presentation">
 								<a
 									class="{{ Route::is('pegawai.sales') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg p-4 hover:text-gray-600 dark:hover:text-gray-300"

@@ -58,7 +58,7 @@
 						</div>
 
 						<div class="col-span-2 mx-auto w-full items-center lg:col-span-1">
-							<x-filter.filter-input-select id="roles" name="roles" :options="['Sales' => 'Sales Medan', 'Sales-JKT' => 'Sales Jakarta']" default-option="Filter by roles" />
+							<x-filter.filter-input-select id="roles" name="roles" :options="['Sales' => 'Sales Medan', 'Sales-JKT' => 'Sales Jakarta', 'Sales-PKU' => 'Sales Pekanbaru']" default-option="Filter by roles" />
 						</div>
 
 					</x-filter.filter-bar>

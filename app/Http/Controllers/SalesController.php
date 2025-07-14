@@ -48,6 +48,14 @@ class SalesController extends Controller
                             $r->where('name', 'Sales-JKT'); // Hanya role 'Sales-JKT'
                         });
                     });
+                } elseif ($user->hasAnyRole(['Marketing-PKU', 'Management-PKU'])) {
+                    $query->whereHas('userRelasi', function ($q) {
+                        $q->whereHas('roles', function ($r) {
+                            $r->where('name', 'Sales-PKU'); // Hanya role 'Sales-PKU'
+                        });
+                    });
+                } else {
+                    abort(403);
                 }
 
                 $query->orderBy('status')
