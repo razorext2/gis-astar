@@ -20,11 +20,12 @@ class ProcessFaceRecognition implements ShouldQueue
     protected string $filename;
     protected int $id;
     protected string $model;
+    protected string $no_vt;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($model, $id, $img_path, $user_id, $kode_pegawai, $filename)
+    public function __construct($model, $id, $img_path, $user_id, $kode_pegawai, $filename, $no_vt)
     {
         $this->model = $model;
         $this->id = $id;
@@ -32,6 +33,7 @@ class ProcessFaceRecognition implements ShouldQueue
         $this->user_id = $user_id;
         $this->kode_pegawai = $kode_pegawai;
         $this->filename = $filename;
+        $this->no_vt = $no_vt;
     }
 
     /**
@@ -99,8 +101,8 @@ class ProcessFaceRecognition implements ShouldQueue
                 // langsung kirim ke API
                 $api = Http::post('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendance', [
                     'kode_jari' => $this->kode_pegawai,
-                    // 'waktu' => $data->waktu_ori,
-                    'waktu' => '2025-07-09 17:55:29.003'
+                    'waktu' => $data->waktu_ori,
+                    'kodebarcode' => $this->no_vt,
                 ]);
 
                 dump($api->json());

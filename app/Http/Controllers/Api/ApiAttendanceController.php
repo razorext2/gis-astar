@@ -113,6 +113,7 @@ class ApiAttendanceController extends Controller
         $user = Auth::user();
         $kode_pegawai = $user->kode_pegawai;
         $user_id = $user->id;
+        $no_vt = null;
 
         // cek user tanpa relasi pegawai
         if (User::where('kode_pegawai', $kode_pegawai)->whereDoesntHave('pegawai')->exists()) {
@@ -166,6 +167,14 @@ class ApiAttendanceController extends Controller
                 'keterangan' => $request->keterangan,
             ];
 
+            // cari no_vt
+            $vtBesar = preg_match('/VT-(\d{1,8})/', $request->keterangan, $matches);
+            $vtKecil = preg_match('/vt-(\d{1,8})/', $request->keterangan, $matches);
+
+            if ($vtBesar || $vtKecil) {
+                $no_vt = "VT-" . $matches[1];
+            }
+
             // simpan data absen (masuk/keluar)
             $absen = $modelClass::create($absenData);
 
@@ -176,7 +185,8 @@ class ApiAttendanceController extends Controller
                 $img_path,
                 $user_id,
                 $kode_pegawai,
-                $filename . '.png'
+                $filename . '.png',
+                $no_vt
             );
 
             return new ApiResource(true, 'Verifikasi absensi sedang diproses...', 'Silahkan menunggu beberapa saat.');
