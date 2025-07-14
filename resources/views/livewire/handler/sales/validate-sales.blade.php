@@ -44,7 +44,7 @@
 									{{ $data->customer_name ?? 'N/A' }} (+{{ $customer_telp ?? 'N/A' }})
 								</p>
 								<a class="inline-flex text-base font-medium text-gray-800 underline dark:text-white"
-									href="https://api.whatsapp.com/send?phone={{ $customer_telp ?? 'N/A' }}&text=Halo, %2A{{ ucwords(strtolower($data->title ?? 'N/A')) }}%2A. %0A%0ASaya marketing dari %2APT. Indodacin Presisi Utama%2A. Saya ingin menghubungi Anda terkait pesanan atau layanan yang mungkin Anda butuhkan.%0A%0AJika ada pertanyaan atau ingin berdiskusi lebih lanjut, silakan balas pesan ini.%0A%0ATerima kasih!%F0%9F%98%8A"
+									href="https://api.whatsapp.com/send?phone={{ $customer_telp ?? 'N/A' }}&text=Halo, %2A{{ ucwords(strtolower($data->title ?? 'N/A')) }}%2A. %0A%0ASaya marketing dari %2APT. Indodacin Presisi Utama%2A, perusahaan yang bergerak dibidang %2ATimbangan%2A. Saya ingin menghubungi Anda terkait pesanan atau layanan yang mungkin Anda butuhkan.%0A%0AJika ada pertanyaan atau ingin berdiskusi lebih lanjut, silakan balas pesan ini.%0A%0ATerima kasih!%F0%9F%98%8A"
 									target="_blank">
 									Chat customer
 								</a>
