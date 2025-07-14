@@ -57,6 +57,8 @@ class ProcessFaceRecognition implements ShouldQueue
                     'kode_pegawai' => $this->kode_pegawai,
                 ]);
 
+            dump($response->json());
+
             fclose($file); // Selalu tutup file
 
             $responseData = $response->json();

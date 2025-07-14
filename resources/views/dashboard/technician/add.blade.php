@@ -16,7 +16,7 @@
 					</x-button.danger>
 
 					<h2 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
-						{{ __('Update Laporan Teknisi') }}
+						Update Laporan Teknisi {{ Request::query('id') ?? '' }}
 					</h2>
 
 				</header>
@@ -34,7 +34,7 @@
 
 				<div class="grid gap-4 md:grid-cols-2" id="laporan-content">
 
-					<div class="col-span-2 w-full">
+					<div class="{{ Request::query('id') ? 'hidden' : 'col-span-2 w-full' }}">
 						<x-input.w-button id="no_vt" name="no_vt" value="{{ Request::query('id') }}" placeholder="VT-XXXXXX">
 							<x-slot name="buttonLabel">
 								Fetch
@@ -207,24 +207,33 @@
 						<div class="mt-2 hidden text-sm text-red-500" id="alert-junction_type"></div>
 					</div>
 
+					{{-- @livewire('handler.pdf.upload-pdf') --}}
 					<div class="col-span-2 w-full">
-						<p class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Dokumentasi</p>
-						<p class="mb-2 text-xs text-red-500"> *Dokumentasi tidak dapat diubah setelah laporan diinput. </p>
+						<p class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Upload Dokumen BAST</p>
+						<p class="mb-2 text-xs text-red-500">
+							*Harap mengirimkan file PDF yang sudah di scan terlebih dahulu.
+						</p>
 
-						<x-button.primary id="capture-button" type="button">
-							<x-slot name="icon">
-								<x-icons.plus class="icon h-5 w-5 text-blue-500 dark:text-white" />
-							</x-slot>
-							Ambil Foto
-						</x-button.primary>
+						<div class="flex w-full flex-col gap-y-2">
+							<label for="bast_document"
+								class="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-800">
+								<div class="flex flex-col items-center justify-center pb-6 pt-5">
+									<x-icons.cloud-upload class="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" />
+									<p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Klik untuk
+											upload</span>
+									</p>
+									<p class="text-xs text-gray-500 dark:text-gray-400">Hanya file PDF yang diperbolehkan. Max: 10MB</p>
+									<p id="documentName" class="mt-1 text-base font-semibold text-gray-500 dark:text-gray-400"></p>
+								</div>
+								<input id="bast_document" name="bast_document" accept=".pdf" type="file" class="hidden" />
+							</label>
 
-						<div class="relative overflow-auto">
-							<div class="mt-2 flex overflow-x-auto" id="captured-images">
-								<!-- Thumbnail gambar yang diambil akan muncul di sini -->
+							<div class="flex hidden flex-row items-center gap-2" id="saved_documentation">
+								<x-button.primary class="float-right" id="show_document" type="button"> Lihat dokumen saat ini
+								</x-button.primary>
 							</div>
+							<div id="captured-images" class="flex hidden flex-row"></div>
 						</div>
-
-						<div class="mt-2 hidden text-sm text-red-500" id="alert-images"></div>
 					</div>
 
 					<div class="col-span-2 w-full">
@@ -269,12 +278,10 @@
 							Update laporan
 						</x-button.primary>
 					</div>
-
 				</div>
 			</div>
 		</div>
 	</div>
-	@livewire('utils.camera-stream-modal')
 @endsection
 @push('script')
 	@vite(['resources/js/pages/technician/add.js'])

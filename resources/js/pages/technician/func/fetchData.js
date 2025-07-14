@@ -12,6 +12,8 @@ export function fetchDataHandler() {
   }
 
   $('#no_vt_submit').on('click', async function () {
+    $('#captured-images').addClass('hidden');
+    $('#saved_documentation').addClass('hidden');
     fetchDataAsync();
   });
 }
@@ -19,7 +21,6 @@ export function fetchDataHandler() {
 async function fetchDataAsync() {
   $('#partner_parent').addClass('hidden');
   $('#partner_child').empty();
-  document.getElementById('captured-images').innerHTML = '';
 
   if ($('#no_vt').val() == '') {
     return alert.showAlert('error', 'Nomor Kunjungan tidak boleh kosong!');
@@ -34,7 +35,6 @@ async function fetchDataAsync() {
       },
     });
     const resultDB = resDB.data;
-
     const arrTimb = {
       data: [
         'Single Deck',
@@ -47,23 +47,19 @@ async function fetchDataAsync() {
       ]
     }
 
-    console.log(resultDB);
-
-    if (resultDB.success) {
+    if (resultDB.success) { // kalo ada data nya di database
+      // kalo data udah di konfirmasi
       if (!resultDB.data) {
         return alert.showAlert('error', resultDB.message, 'Anda tidak dapat mengubah data yang telah dikonfirmasi.');
       }
 
       const data = resultDB.data;
-
-      Swal.close();
       alert.showAlert('success', resultDB.message);
 
       if (data.status == 0) {
         const storeBtn = document.getElementById('store');
         storeBtn.disabled = true;
         storeBtn.classList.add('bg-gray-200', 'dark:bg-gray-600', 'ring-gray-400', 'dark:ring-gray-500', 'cursor-not-allowed');
-
         document.getElementById('warning_status').classList.remove('hidden');
       } else if (data.status == 3) {
         alert.showAlert('warning', 'Laporan telah di tolak', 'Anda masih dapat mengajukan kembali laporan yang sudah ditolak.');
@@ -76,12 +72,9 @@ async function fetchDataAsync() {
       $('#customer_contact').val(data.customer_contact);
       $('#customer_address').val(data.customer_address);
       $('#job_detail').val(data.job_detail);
-
-      // $('#size').val(data.size);
       const [length, width] = data.size.split(/[*x]/i).map(val => val.trim());
       $('#length').val(length || '');
       $('#width').val(width || '');
-
       $('#capacity').val(data.capacity);
       $('#indicator_type').val(data.indicator_type);
       $('#indicator_sn').val(data.indicator_sn);
@@ -132,24 +125,54 @@ async function fetchDataAsync() {
         }
       });
 
-      // tampilkan dokumentasi
-      const container = document.getElementById('captured-images');
-      container.innerHTML = '';
+      const containerImg = document.getElementById('captured-images');
+      const containerDoc = document.getElementById('saved_documentation');
 
-      data.photo_collects.forEach(items => {
-        container.innerHTML += `
-         <div class="relative me-2 flex-none items-center gap-4">
-           <img id="documentations" data-url="${APP_URL + items.photourl}" src="${APP_URL + items.photourl}" class="w-36 h-36 object-cover rounded-xl border">
-         </div>`;
+      containerImg.innerHTML = '';
+      containerDoc.innerHTML = '';
+
+      data.photo_collects.forEach((item, index) => {
+        const fileUrl = item.photourl;
+        const ext = fileUrl.split('.').pop().toLowerCase(); // normalisasi ekstensi
+
+        if (['jpg', 'jpeg', 'png'].includes(ext)) {
+          $('#captured-images').removeClass('hidden');
+
+          containerImg.innerHTML += `
+      <div class="relative me-2 flex-none items-center gap-4">
+        <img
+          id="documentations"
+          data-url="${APP_URL + fileUrl}"
+          src="${APP_URL + fileUrl}"
+          class="w-36 transition-transform duration-500 hover:scale-105 h-36 object-cover rounded-xl">
+      </div>`;
+        }
+
+        else if (ext === 'pdf') {
+          $('#saved_documentation').removeClass('hidden');
+
+          // Buat tombol baru jika perlu
+          const docId = `show_document_${index}`;
+          const button = document.createElement('button');
+          button.textContent = `Lihat Dokumen`;
+          button.id = docId;
+          button.className = "dark:bg-blue-800 dark:hover:bg-blue-900 dark:text-white dark:border-gray-700 rounded-lg bg-blue-400 p-2 font-bold text-white border border-gray-200 hover:bg-blue-700";
+
+          button.addEventListener('click', () => {
+            window.open(`/storage/technician/${fileUrl}`, '_blank');
+          });
+
+          containerDoc.appendChild(button);
+        }
       });
-    } else {
+    } else { // kalo ga ada datanya di database
+      // cek datanya di API
       const response = await axios.get(`${APP_URL}/proxy/get/vt`, {
         params: {
           no_vt: $('#no_vt').val(),
         },
       });
       const result = response.data;
-
       const arrTimb = {
         data: [
           'Single Deck',

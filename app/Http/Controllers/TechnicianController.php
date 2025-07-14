@@ -57,17 +57,11 @@ class TechnicianController extends Controller
             'point' => 'required',
             'partner' => 'required|array',
             // 'partner.*' => 'array',
-            'images' => 'array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'integer',
         ]);
 
         if ($validator->fails()) {
             return new ApiResource(false, 'Validasi gagal', $validator->errors()->first());
-        }
-
-        if (!$request->hasFile('images')) {
-            return new ApiResource(false, 'Dokumentasi tidak boleh kosong', 'Anda harus menyertakan dokumentasi setiap update laporan.');
         }
 
         $data = $validator->validated();
@@ -107,6 +101,15 @@ class TechnicianController extends Controller
                         'status' => $data['status'],
                     ]);
                 } else {
+                    // validasi ada dokumen gak?
+                    $validate = Validator::make($request->allFiles(), [
+                        'bast_document' => 'required|file|mimes:pdf|max:10240',
+                    ]);
+
+                    if ($validate->fails()) {
+                        return new ApiResource(false, 'Validasi gagal', $validate->errors()->first());
+                    }
+
                     $technician = Technician::create([
                         'no_vt' => $partner['no_vt'],
                         'id_permintaan' => $data['id_permintaan'],
@@ -148,73 +151,29 @@ class TechnicianController extends Controller
                     }
                 }
 
-                // upload image
-                $folderPath = "technician";
+                if ($request->file('bast_document')) {
+                    // simpan dokumen
+                    $document = $request->file('bast_document');
+                    $documentName = 'dokumen_bast_' . $request->no_vt . '.' . $document->getClientOriginalExtension();
+                    $document->storeAs('public/technician/pdf', $documentName);
 
-                if (!Storage::disk('public')->exists($folderPath)) {
-                    Storage::disk('public')->makeDirectory($folderPath);
-                }
+                    $check = PhotoCollect::where('no_vt', $request->no_vt)
+                        ->where('photourl', 'pdf/' . $documentName)
+                        ->first();
 
-                $manager = ImageManager::gd();
-
-                foreach ($request->file('images') as $image) {
-                    $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
-
-                    $img = $manager->read($image);
-
-                    // Baca logo dan resize dulu watermark-nya
-                    $logo = $manager->read(public_path('assets/img/logo.png'))
-                        ->resize(100, 22);
-
-                    // Tempelkan logo ke pojok kanan bawah
-                    $img->place($logo, 'top-left', 10, $img->height() - 75, 90); // 90 itu opacity
-
-                    // Tambahkan watermark
-                    $img->text($technician->customer_contact, 10, $img->height() - 40, function (FontFactory $font) {
-                        $font->filename(public_path('assets/fonts/OpenSans-Regular.ttf'));
-                        $font->size(10);
-                        $font->color('#ffffff');
-                        $font->align('left');
-                        $font->valign('bottom');
-                    });
-
-                    $img->text($technician->customer_address, 10, $img->height() - 30, function (FontFactory $font) {
-                        $font->filename(public_path('assets/fonts/OpenSans-Regular.ttf'));
-                        $font->size(8);
-                        $font->color('#ffffff');
-                        $font->align('left');
-                        $font->valign('bottom');
-                    });
-
-                    $img->text($technician->kode_pegawai . ' - ' . ($technician->pegawai?->full_name ?? 'Teknisi belum terdaftar disistem'), 10, $img->height() - 20, function (FontFactory $font) {
-                        $font->filename(public_path('assets/fonts/OpenSans-Regular.ttf'));
-                        $font->size(8);
-                        $font->color('#ffffff');
-                        $font->align('left');
-                        $font->valign('bottom');
-                    });
-
-                    $img->text($technician->updated_at, 10, $img->height() - 10, function (FontFactory $font) {
-                        $font->filename(public_path('assets/fonts/OpenSans-Regular.ttf'));
-                        $font->size(8);
-                        $font->color('#ffffff');
-                        $font->align('left');
-                        $font->valign('bottom');
-                    });
-
-                    // Simpan gambar ke storage
-                    $path = $folderPath . '/' . $imageName;
-                    Storage::disk('public')->put($path, (string) $img->encode());
-
-                    $imageUrl = '/storage/' . $path;
-
-                    $upload = PhotoCollect::create([
-                        'no_vt' => $partner['no_vt'],
-                        'photourl' => $imageUrl,
-                    ]);
+                    if ($check) {
+                        $upload = $check->update([
+                            'updated_at' => now(),
+                        ]);
+                    } else {
+                        $upload = PhotoCollect::create([
+                            'no_vt' => $request->no_vt,
+                            'photourl' => 'pdf/' . $documentName,
+                        ]);
+                    }
 
                     if (!$upload) {
-                        return new ApiResource(false, 'Gagal menyimpan gambar');
+                        return new ApiResource(false, 'Gagal mengupload dokumen.');
                     }
                 }
             }

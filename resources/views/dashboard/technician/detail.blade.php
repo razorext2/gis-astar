@@ -99,23 +99,35 @@
 					<div
 						class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
 						<p class="mb-2 text-sm text-gray-600 dark:text-gray-300">Dokumentasi</p>
-						<div class="relative overflow-auto">
-							<div class="flex overflow-x-auto" id="captured-images">
-								<!-- Thumbnail gambar yang diambil akan muncul di sini -->
-								@if ($data->photo_collects)
+
+						<div class="flex" id="captured-images">
+							<!-- Thumbnail gambar yang diambil akan muncul di sini -->
+							@if ($data->photo_collects)
+								<div class="flex flex-col gap-2">
 									@foreach ($data->photo_collects as $photo)
-										<div class="relative me-2 flex-none items-center gap-4 rounded-xl p-2">
-											<img
-												class="h-36 w-36 rounded-xl object-cover blur-sm transition duration-300 ease-in-out hover:scale-105 hover:blur-0"
-												id="documentations" onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}';"
-												data-url="{{ asset($photo->photourl) }}" src="{{ asset($photo->photourl) }}" alt=""
-												onclick="javascript:void(0)" loading="lazy">
-										</div>
+										@php
+											$ext = pathinfo($photo->photourl, PATHINFO_EXTENSION);
+										@endphp
+
+										@if ($ext == 'pdf')
+											<div class="flex-none items-center gap-x-2">
+												<x-button.primary onclick="window.open(`/storage/technician/{{ $photo->photourl }}`, '_blank')"
+													id="show_document" type="button"> Lihat dokumen saat ini
+												</x-button.primary>
+											</div>
+										@elseif(in_array($ext, ['png', 'jpg', 'jpeg']))
+											<div class="relative me-2 flex-none items-center gap-4 rounded-xl">
+												<img class="h-36 w-36 rounded-xl object-cover transition duration-300 ease-in-out hover:scale-105"
+													id="documentations" onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}';"
+													data-url="{{ asset($photo->photourl) }}" src="{{ asset($photo->photourl) }}" alt=""
+													onclick="javascript:void(0)" loading="lazy">
+											</div>
+										@endif
 									@endforeach
-								@else
-									<p class="text-gray-600 dark:text-white"> Tidak ada dokumentasi.</p>
-								@endif
-							</div>
+								</div>
+							@else
+								<p class="text-gray-600 dark:text-white"> Tidak ada dokumentasi.</p>
+							@endif
 						</div>
 					</div>
 
