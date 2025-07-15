@@ -54,8 +54,6 @@ class SalesController extends Controller
                             $r->where('name', 'Sales-PKU'); // Hanya role 'Sales-PKU'
                         });
                     });
-                } else {
-                    abort(403);
                 }
 
                 $query->orderBy('status')

@@ -30,8 +30,6 @@ class ReportCounter extends Component
                 $query->whereHas('userRelasi.roles', fn($r) => $r->where('name', 'Sales-JKT'));
             } elseif ($this->id === 'sales' && $user->hasAnyRole(['Marketing-PKU', 'Management-PKU'])) {
                 $query->whereHas('userRelasi.roles', fn($r) => $r->where('name', 'Sales-PKU'));
-            } else {
-                abort(403);
             }
         }
 
