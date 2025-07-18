@@ -30,7 +30,7 @@
 						<button
 							class="block rounded-md px-4 py-2.5 transition-colors duration-300 ease-in-out hover:bg-gray-100 hover:text-white dark:text-white dark:hover:bg-gray-600"
 							id="detail-btn" wire:click="$dispatch('detail', {id: {{ $id }}})"
-							data-userid="{{ Crypt::encryptString(auth()->user()->id) }}">
+							data-userid="{{ Crypt::encryptString(auth()->user()->id) }}" wire:key="detail-btn-{{ $id }}">
 							Confirm
 						</button>
 					</li>
@@ -40,7 +40,8 @@
 					<li>
 						<button
 							class="block rounded-md px-4 py-2.5 text-red-500 transition-colors duration-300 ease-in-out hover:bg-red-500 hover:text-white"
-							id="delete-btn" wire:click="$dispatch('delete', {id: {{ $id }}})">
+							id="delete-btn" wire:click="$dispatch('delete', {id: {{ $id }}})"
+							wire:key="delete-btn-{{ $id }}">
 							Hapus
 						</button>
 					</li>
