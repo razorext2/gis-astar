@@ -131,6 +131,11 @@
 									class="rounded-xl bg-green-100 px-4 py-2 text-sm font-medium text-green-800 ring-1 ring-gray-300 dark:bg-green-900 dark:text-green-300 dark:ring-gray-700">
 									Disetujui. (divalidasi oleh: {{ $data->validateBy->name ?? 'N/A' }})
 								</span>
+							@elseif($status == 2)
+								<span
+									class="rounded-xl bg-red-100 px-4 py-2 text-sm font-medium text-red-800 ring-1 ring-gray-300 dark:bg-red-900 dark:text-red-300 dark:ring-gray-700">
+									Laporan di Tolak! (divalidasi oleh: {{ $data->validateBy->name ?? 'N/A' }})
+								</span>
 							@elseif ($status == 3)
 								<div class="flex flex-col gap-y-2">
 									<span
@@ -148,10 +153,15 @@
 										</x-button.link>
 									@endif
 								</div>
-							@else
+							@elseif($status == 4)
 								<span
-									class="rounded-xl bg-red-100 px-4 py-2 text-sm font-medium text-red-800 ring-1 ring-gray-300 dark:bg-red-900 dark:text-red-300 dark:ring-gray-700">
-									Laporan di Tolak! (divalidasi oleh: {{ $data->validateBy->name ?? 'N/A' }})
+									class="rounded-xl bg-red-100 px-4 py-2 text-sm font-medium text-yellow-800 ring-1 ring-gray-300 dark:bg-yellow-900 dark:text-yellow-300 dark:ring-gray-700">
+									Laporan belum di assign
+								</span>
+							@elseif($status == 5)
+								<span
+									class="rounded-xl bg-red-100 px-4 py-2 text-sm font-medium text-yellow-800 ring-1 ring-gray-300 dark:bg-yellow-900 dark:text-yellow-300 dark:ring-gray-700">
+									Menunggu laporan diupdate...
 								</span>
 							@endif
 

@@ -34,4 +34,29 @@ class DriverController extends Controller
 
         return view('dashboard.driver.edit', (['data' => $data]));
     }
+
+    public function assignAddView()
+    {
+        if (!auth()->user()->can('driver-approve')) {
+            abort(403);
+        }
+
+        return view('dashboard.driver.assign-add');
+    }
+
+    public function assignToView($id)
+    {
+        if (!auth()->user()->can('driver-approve')) {
+            abort(403);
+        }
+
+        return view('dashboard.driver.assign-to', ['id' => $id]);
+    }
+
+    public function assignUpdate($id)
+    {
+        $data = Driver::find($id);
+
+        return view('dashboard.driver.assign-update', ['data' => $data]);
+    }
 }

@@ -26,6 +26,8 @@ class ApiDriverController extends Controller
             'longitude' => 'required|string|max:128|min:3',
             'images' => 'required|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status_pengantaran' => 'required|integer',
+            'tipe_kunjungan' => 'required|string|max:10',
         ]);
 
         if ($validator->fails()) {
@@ -44,6 +46,72 @@ class ApiDriverController extends Controller
                 'longitude' => $data['longitude'],
                 'latitude' => $data['latitude'],
                 'keterangan' => $data['keterangan'],
+                'status_pengantaran' => $data['status_pengantaran'],
+                'tipe_kunjungan' => $data['tipe_kunjungan'],
+            ]);
+
+            $folderPath = "driver";
+
+            if (!Storage::disk('public')->exists($folderPath)) {
+                Storage::disk('public')->makeDirectory($folderPath);
+            }
+
+            // save images
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
+
+                    Storage::disk('public')->putFileAs($folderPath, $image, $imageName);
+
+                    $imageUrl = '/storage/' . $folderPath . '/' . $imageName;
+
+                    PhotoCollect::create([
+                        'id_driver' => $query->id,
+                        'photourl' => $imageUrl,
+                    ]);
+                }
+            }
+
+            // send notification
+            NotifyNewDriverReportJob::dispatch($query->id, $query->created_at)->delay(now()->addSeconds(5));
+
+            DB::commit();
+            return new ApiResource(true, 'Berhasil menambah data laporan', null);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return new ApiResource(false, 'Terjadi kesalahan saat menambah data', $e->getMessage());
+        }
+    }
+
+    public function assignUpdate(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required',
+            'keterangan' => 'required|string|min:3',
+            'latitude' => 'required|string|max:128|min:3',
+            'longitude' => 'required|string|max:128|min:3',
+            'status_pengantaran' => 'required|integer',
+            'images' => 'required|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return new ApiResource(false, 'Validasi gagal', $validator->errors());
+        }
+
+        $data = $validator->validated();
+
+        try {
+            DB::beginTransaction();
+
+            $query = Driver::find($request->id);
+
+            $query->update([
+                'keterangan' => $data['keterangan'],
+                'longitude' => $data['longitude'],
+                'latitude' => $data['latitude'],
+                'status' => 0, // butuh validasi
+                'status_pengantaran' => $data['status_pengantaran'],
             ]);
 
             $folderPath = "driver";
@@ -86,6 +154,8 @@ class ApiDriverController extends Controller
             'title' => 'string|max:128|min:3',
             'lokasi' => 'string|min:3',
             'keterangan' => 'string|min:3',
+            'status_pengantaran' => 'required|integer',
+            'tipe_kunjungan' => 'required|string|max:10',
         ]);
 
         if ($validator->fails()) {

@@ -32,16 +32,33 @@
 				<div class="grid gap-4 md:grid-cols-2" id="laporan-content">
 					<input id="id" type="hidden" value="{{ $data->id }}" required>
 
-					<div class="col-span-2 w-full lg:col-span-1">
-						<x-input.basic id="kode_pegawai" name="kode_pegawai" value="{{ $data->kode_pegawai }}" readonly>
+					<div class="{{ $data->kode_pegawai ?? 'hidden' }} col-span-2 w-full lg:col-span-1">
+						<x-input.basic id="kode_pegawai" name="kode_pegawai" value="{{ $data->kode_pegawai ?? '' }}" readonly>
 							Kode Pegawai
 						</x-input.basic>
 					</div>
 
-					<div class="col-span-2 w-full lg:col-span-1">
-						<x-input.basic id="employee_name" name="employee_name" value="{{ $data->pegawai->name }}" readonly>
+					<div class="{{ $data->user ? '' : 'hidden' }} col-span-2 w-full lg:col-span-1">
+						<x-input.basic id="employee_name" name="employee_name" value="{{ $data->user->name ?? '-' }}" readonly>
 							Nama Pegawai
 						</x-input.basic>
+					</div>
+
+					<div class="col-span-2 w-full">
+						<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="tipe_kunjungan">
+							Tujuan Perjalanan
+						</label>
+
+						<select
+							class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+							id="tipe_kunjungan" name="tipe_kunjungan">
+							<option>Pilih Tujuan</option>
+							<option value="ATRBRG" {{ $data->tipe_kunjungan == 'ATRBRG' ? 'selected' : '' }}>Antar Barang (SR)</option>
+							<option value="JPTBRG" {{ $data->tipe_kunjungan == 'JPTBRG' ? 'selected' : '' }}>Jemput Barang</option>
+							<option value="ATRTEK" {{ $data->tipe_kunjungan == 'ATRTEK' ? 'selected' : '' }}>Antar Teknisi</option>
+							<option value="JPTTEK" {{ $data->tipe_kunjungan == 'JPTTEK' ? 'selected' : '' }}>Jemput Teknisi</option>
+							<option value="DLL" {{ $data->tipe_kunjungan == 'DLL' ? 'selected' : '' }}>Lain - Lain</option>
+						</select>
 					</div>
 
 					<div class="col-span-2 w-full">
@@ -56,6 +73,20 @@
 							Lokasi
 						</x-input.basic>
 						<div class="mt-2 hidden text-sm text-red-500" id="alert-lokasi"></div>
+					</div>
+
+					<div class="col-span-2 w-full">
+						<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="status_pengantaran">
+							Status Pengantaran
+						</label>
+
+						<select
+							class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+							id="status_pengantaran" name="status_pengantaran">
+							<option>Pilih Status Pengantaran</option>
+							<option value="1" {{ $data->status_pengantaran == 1 ? 'selected' : '' }}>Belum Diterima</option>
+							<option value="2" {{ $data->status_pengantaran == 2 ? 'selected' : '' }}>Sudah Diterima</option>
+						</select>
 					</div>
 
 					<div class="col-span-2 w-full">

@@ -12,6 +12,8 @@ class Driver extends Model
     use SoftDeletes;
     protected $table = 'tb_drivers';
     protected $fillable = [
+        'no_sr',
+        'tipe_kunjungan',
         'kode_pegawai',
         'title',
         'lokasi',
@@ -19,10 +21,13 @@ class Driver extends Model
         'longitude',
         'latitude',
         'status',
+        'status_pengantaran',
         'notes',
         'validate_by',
         'total_revision',
-        'revised_by'
+        'revised_by',
+        'assign_date',
+        'assign_by'
     ];
     protected $dates = ['deleted_at'];
 

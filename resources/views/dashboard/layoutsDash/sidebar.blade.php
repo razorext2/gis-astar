@@ -279,24 +279,59 @@
 				</li>
 			@endif
 
-			<!-- laporan driver -->
-			@can('driver-list')
-				<li>
-					<a href="{{ route('driver.index') }}"
-						class="group flex flex-row items-center rounded-xl p-2 text-gray-900 hover:text-red-600 dark:text-gray-300"
-						wire:navigate wire:current.href="!text-red-600 font-bold bg-gray-100 dark:bg-dark-primary">
+			@if (auth()->user()->hasAnyPermission(['driver-list']))
+				<li x-data="{ routes: {{ Route::is('driver.*') ? 'true' : 'false' }} }">
+					<button
+						class="{{ Route::is('driver.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
+						type="button" aria-controls="routes-dropdown" @click="routes = !routes" :aria-expanded="routes">
 
-						<x-icons.truck wire:current="!text-red-600" class="h-6 w-6 group-hover:text-red-600" />
-						<span class="ms-3 inline-flex text-sm group-hover:text-red-600">
-							Laporan Driver
+						<x-icons.truck class="{{ Route::is('driver.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
 
-							@if (auth()->user()->hasPermissionTo('driver-approve'))
-								@livewire('utils.report-counter', ['id' => 'driver'])
-							@endif
-						</span>
-					</a>
+						<span class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">Laporan Driver</span>
+
+						<x-icons.carred-down class="ml-1 mt-1 inline h-4 w-4 transform transition-transform group-hover:text-red-600"
+							x-bind:class="{ 'rotate-180 duration-200': routes }" />
+					</button>
+
+					<ul class="space-y-4 py-4" id="routes-dropdown" x-show="routes"
+						x-transition:enter="transition ease-in duration-200"
+						x-transition:enter-start="transform opacity-0 -translate-y-5"
+						x-transition:leave="transition ease-out duration-200"
+						x-transition:leave-end="transform opacity-0 -translate-y-5">
+
+						@can('driver-approve')
+							<li>
+								<a
+									class="{{ Route::is('driver.assign.add') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									href="{{ route('driver.assign.add') }}" wire:navigate>
+									<x-icons.angle-right
+										class="{{ Route::is('driver.assign.add') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+									<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Assign Laporan (SR)</span>
+								</a>
+							</li>
+						@endcan
+
+						@can('driver-list')
+							<li>
+								<a
+									class="{{ Route::is('driver.index') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									href="{{ route('driver.index') }}" wire:navigate>
+									<x-icons.angle-right
+										class="{{ Route::is('driver.index') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+									<span class="ms-3 inline-flex text-sm group-hover:text-red-600">
+										Laporan Driver
+
+										@if (auth()->user()->hasPermissionTo('driver-approve'))
+											@livewire('utils.report-counter', ['id' => 'driver'])
+										@endif
+									</span>
+								</a>
+							</li>
+						@endcan
+
+					</ul>
 				</li>
-			@endcan
+			@endif
 
 			@foreach ($sidebarLinks as $link)
 				@php

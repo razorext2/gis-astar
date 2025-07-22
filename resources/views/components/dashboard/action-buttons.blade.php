@@ -13,7 +13,7 @@
 			x-transition:leave-start="transform opacity-100 translate-x-0"
 			x-transition:leave-end="transform opacity-0 -translate-x-2">
 			<ul
-				class="absolute -top-10 left-2 flex w-auto flex-col rounded-lg bg-white text-sm text-gray-700 shadow-md ring-1 ring-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:ring-0 md:flex-row">
+				class="absolute -top-10 left-2 z-50 flex w-auto flex-col rounded-lg bg-white text-sm text-gray-700 shadow-md ring-1 ring-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:ring-0 md:flex-row">
 				@foreach ($datas as $item)
 					<li>
 						<a

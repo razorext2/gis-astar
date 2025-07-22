@@ -1,4 +1,4 @@
-import { showAlert } from "./alert";
+import { showAlert, loadingAlert } from "./alert";
 import { showModal as showModalDriver } from "../pages/driver/func/modal";
 
 export async function initEventListener() {
@@ -52,11 +52,7 @@ export async function initEventListener() {
   Livewire.on('redirectRoute', route => {
     if (document.getElementById('dataTable')) {
       $('#dataTable').DataTable().ajax.reload();
-
-      console.log('ada');
     } else {
-
-      console.log('ga ada');
       setTimeout(() => {
         window.location.href = route;
       }, 1000);
@@ -147,5 +143,13 @@ export async function initEventListener() {
         });
       }
     });
+  })
+
+  Livewire.on('loadingProgress', data => {
+    loadingAlert(data.message);
+  })
+
+  Livewire.on('loadingClose', () => {
+    window.Swal.close();
   })
 }

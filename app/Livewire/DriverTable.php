@@ -4,13 +4,12 @@ namespace App\Livewire;
 
 use App\Models\Driver;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
 use Illuminate\View\View;
-use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
@@ -24,6 +23,7 @@ final class DriverTable extends PowerGridComponent
     use WithExport;
 
     public string $tableName = 'DriverTable';
+    public string $status;
     public bool $deferLoading = true;
     public bool $showFilters = false;
     public $pegawai;
@@ -31,6 +31,7 @@ final class DriverTable extends PowerGridComponent
     public function setUp(): array
     {
         $this->pegawai = User::role('Driver')->get();
+        $this->status = Request::query('status') ?? '';
 
         return [
             PowerGrid::header()
@@ -57,7 +58,16 @@ final class DriverTable extends PowerGridComponent
             $data->where('kode_pegawai', auth()->user()->kode_pegawai);
         }
 
-        // $data->orderBy('status', 'asc');
+        if ($this->status != '') {
+            match ($this->status) {
+                'unapproved' => $data->where('status', 0),
+                'approved' => $data->where('status', 1),
+                'rejected' => $data->where('status', 2),
+                'needrevision' => $data->where('status', 3),
+                'notassigned' => $data->where('status', 4)
+                    ->where('kode_pegawai', null)
+            };
+        }
 
         return $data->latest();
     }
@@ -77,24 +87,23 @@ final class DriverTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             ->add('kode_pegawai', function ($query) {
-                return view('components.dashboard.name-w-code', [
-                    'code' => $query->kode_pegawai ?? 'N/A',
-                    'name' => $query->user->name ?? 'N/A',
+                return view('components.dashboard.name-code-button', [
+                    'user' => $query->user,
+                    'data' => $query,
                 ])->render();
             })
-            ->add('title', fn($query) => $query->title ?? 'N/A')
+            ->add('title', fn($query) => '<span class="text-wrap w-72">' . $query->title ?? '-' . '</span>')
             ->add('lokasi', function ($query) {
                 return view(
                     'components.dashboard.location-w-coordinate',
                     [
-                        'location' => $query->lokasi ?? 'N/A',
-                        'long' => $query->longitude ?? 'N/A',
-                        'lat' => $query->latitude ?? 'N/A',
+                        'location' => $query->lokasi ?? '-',
+                        'long' => $query->longitude ?? '',
+                        'lat' => $query->latitude ?? '',
                     ]
                 )->render();
             })
-            ->add('keterangan', fn($query) => $query->keterangan ?? 'N/A')
-            ->add('status', fn($query) => $query->status ?? 'N/A')
+            ->add('status', fn($query) => $query->status ?? '-')
             ->add('status_formatted', function ($query) {
                 $status = $query->status;
 
@@ -104,11 +113,13 @@ final class DriverTable extends PowerGridComponent
                         1 => 'Disetujui',
                         2 => 'Ditolak',
                         3 => 'Revisi',
+                        4 => 'Belum diassign',
+                        5 => 'Belum diupdate',
                     ][$status],
-                    'status' => $status
+                    'status' => $status,
+                    'id' => $query->id,
                 ])->render();
             })
-            ->add('notes')
             ->add('created_at')
             ->add('created_at_formatted', fn($query)
                 => Carbon::parse($query->created_at)
@@ -138,14 +149,6 @@ final class DriverTable extends PowerGridComponent
 
             Column::make('Created at', 'created_at_formatted', 'created_at')
                 ->sortable(),
-
-            Column::make('Keterangan', 'keterangan')
-                ->sortable()
-                ->searchable(),
-
-            Column::make('Catatan', 'notes')
-                ->sortable()
-                ->searchable(),
         ];
     }
 
@@ -159,6 +162,9 @@ final class DriverTable extends PowerGridComponent
                     ['value' => 0, 'label' => 'Diajukan'],
                     ['value' => 1, 'label' => 'Disetujui'],
                     ['value' => 2, 'label' => 'Ditolak'],
+                    ['value' => 3, 'label' => 'Revisi'],
+                    ['value' => 4, 'label' => 'Belum diassign'],
+                    ['value' => 5, 'label' => 'Belum diupdate'],
                 ])
                 ->optionLabel('label')
                 ->optionValue('value'),
@@ -182,7 +188,7 @@ final class DriverTable extends PowerGridComponent
                 'id' => 'show-btn',
                 'action' => route('driver.show', $row->id),
                 'label' => 'Detail'
-            ]
+            ],
         ];
 
         if ($row->status == 3 || auth()->user()->can('driver-approve')) {
@@ -317,6 +323,12 @@ final class DriverTable extends PowerGridComponent
             $this->swal("Terjadi kesalahan saat konfirmasi data", $e->getMessage(), 'error');
             return;
         }
+    }
+
+    #[\Livewire\Attributes\On('assign')]
+    public function assign($id)
+    {
+        return redirect()->route('driver.assign.to', $id);
     }
 
     public function swal($title, $text, $icon)

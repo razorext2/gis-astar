@@ -18,6 +18,8 @@ export function addDataHandler() {
     formData.append("lokasi", $("#lokasi").val());
     formData.append("latitude", $("#latitude").val());
     formData.append("longitude", $("#longitude").val());
+    formData.append("status_pengantaran", $("#status_pengantaran").val());
+    formData.append("tipe_kunjungan", $("#tipe_kunjungan").val());
 
     for (const [index, image] of capturedImages.entries()) {
       const blob = await dataURItoBlob(image);
@@ -26,6 +28,62 @@ export function addDataHandler() {
 
     try {
       const response = await axios.post(`${APP_URL}/api/driver-api`, formData);
+
+      if (response.data.success) {
+        Swal.close();
+        showAlert('success', response.data.message);
+        setTimeout(() => Livewire.navigate(`${APP_URL}/dashboard/driver`), 1000);
+      } else {
+        Swal.close();
+        $button.prop('disabled', false);
+        handleFormErrors(response.data.data);
+        let err = null;
+        let data = response.data.data;
+
+        if (typeof data === 'object' && data !== null) {
+          let firstKey = Object.keys(data)[0];
+          if (firstKey && Array.isArray(data[firstKey])) {
+            err = data[firstKey][0]; // Ambil elemen pertama dari array dalam objek
+          }
+        } else {
+          err = data;
+        }
+        return showAlert('error', response.data.message, `Validasi data gagal. <br><b>${err}</b>`);
+      }
+    } catch (error) {
+      Swal.close();
+      $button.prop('disabled', false);
+      console.error('Error:', error);
+      return showAlert('error', 'Terjadi kesalahan.', error.message);
+    }
+  });
+}
+
+export function updateDataHandler() {
+  $('#store').click(async function (e) {
+    e.preventDefault();
+
+    const $button = $(this);
+    $button.prop('disabled', true);
+
+    loadingAlert("Menyimpan data...");
+
+    let formData = new FormData();
+
+    formData.append("id", $("#id").val());
+    formData.append("keterangan", $("#keterangan").val());
+    formData.append("lokasi", $("#lokasi").val());
+    formData.append("latitude", $("#latitude").val());
+    formData.append("longitude", $("#longitude").val());
+    formData.append('status_pengantaran', $("#status_pengantaran").val());
+
+    for (const [index, image] of capturedImages.entries()) {
+      const blob = await dataURItoBlob(image);
+      formData.append("images[]", blob, `image${index}.png`);
+    }
+
+    try {
+      const response = await axios.post(`${APP_URL}/api/driver-api/update-assign`, formData);
 
       if (response.data.success) {
         Swal.close();
@@ -71,6 +129,8 @@ export function editDataHandler() {
     let title = $("#title").val();
     let lokasi = $('#lokasi').val();
     let keterangan = $("#keterangan").val();
+    let status_pengantaran = $("#status_pengantaran").val();
+    let tipe_kunjungan = $("#tipe_kunjungan").val();
 
     // axios request
     axios.patch(`${APP_URL}/api/driver-api/${id}`, {
@@ -78,6 +138,8 @@ export function editDataHandler() {
       title: title,
       lokasi: lokasi,
       keterangan: keterangan,
+      status_pengantaran: status_pengantaran,
+      tipe_kunjungan: tipe_kunjungan,
     })
       .then(response => {
         Swal.close();

@@ -32,6 +32,7 @@ export default defineConfig({
                 "resources/js/pages/driver/add.js",
                 "resources/js/pages/driver/detail.js",
                 "resources/js/pages/driver/edit.js",
+                "resources/js/pages/driver/update.js",
 
                 // collect task
                 "resources/js/pages/collect-task/index.js",

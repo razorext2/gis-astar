@@ -212,6 +212,10 @@ Route::middleware(['auth'])->group(function () {
         // route driver
         Route::resource('driver', DriverController::class)
             ->only('index', 'show', 'create', 'edit');
+        Route::get('driver/assign', [DriverController::class, 'assign'])->name('driver.assign');
+        Route::get('driver/assign/add', [DriverController::class, 'assignAddView'])->name('driver.assign.add');
+        Route::get('driver/assign/to/{id}', [DriverController::class, 'assignToView'])->name('driver.assign.to');
+        Route::get('driver/assign/update/{id}', [DriverController::class, 'assignUpdate'])->name('driver.assign.update');
 
         // route kuesioner
         Route::resource('kuesioner', QuestionnaireController::class)

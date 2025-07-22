@@ -44,6 +44,17 @@
 					</div>
 
 					<div class="col-span-2 w-full">
+						<x-input.select id="tipe_kunjungan" name="tipe_kunjungan" :defaultOption="'Pilih Tujuan Perjalanan'" :options="[
+						    'JPTBRG' => 'Jemput Barang',
+						    'ATRTEK' => 'Antar Teknisi',
+						    'JPTTEK' => 'Jemput Teknisi',
+						    'DLL' => 'Lain - Lain',
+						]">
+							<x-slot name="textLabel">Tujuan Perjalanan</x-slot>
+						</x-input.select>
+					</div>
+
+					<div class="col-span-2 w-full">
 						<x-input.basic id="title" name="title" placeholder="Kunjungan ke toko xxx" required>
 							Judul Laporan
 						</x-input.basic>
@@ -55,6 +66,14 @@
 							Lokasi
 						</x-input.basic>
 						<div class="mt-2 hidden text-sm text-red-500" id="alert-lokasi"></div>
+					</div>
+
+					<div class="col-span-2 w-full">
+						<x-input.select id="status_pengantaran" name="status_pengantaran" :defaultOption="'Pilih Status Pengantaran'" :options="[
+						    1 => 'Belum Diterima',
+						    2 => 'Sudah Diterima',
+						]"
+							:labels="true" :textLabel="'Status Pengantaran'" />
 					</div>
 
 					<div class="col-span-2 w-full">

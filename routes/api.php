@@ -79,6 +79,7 @@ Route::middleware(['auth:sanctum', 'throttle:high'])->group(function () {
     Route::apiResource('sales-api', ApiSalesController::class)->only(['store', 'update', 'destroy']);
 
     // laporan driver
+    Route::post('driver-api/update-assign', [ApiDriverController::class, 'assignUpdate'])->name('driver-api.update-assign');
     Route::get('driver-api/{id}', [ApiDriverController::class, 'getById'])->name('driver-api.getbyid');
     Route::patch('driver-api/{id}/confirm', [ApiDriverController::class, 'confirm'])->name('driver-api.confirm');
     Route::patch('driver-api/{id}/deny', [ApiDriverController::class, 'deny'])->name('driver-api.deny');
