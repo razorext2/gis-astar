@@ -314,10 +314,10 @@
 						@can('driver-list')
 							<li>
 								<a
-									class="{{ Route::is('driver.index') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+									class="{{ Route::is('driver.index') || Route::is('driver.create') || Route::is('driver.show') || Route::is('driver.edit') || Route::is('driver.assign.to') || Route::is('driver.assign.update') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
 									href="{{ route('driver.index') }}" wire:navigate>
 									<x-icons.angle-right
-										class="{{ Route::is('driver.index') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+										class="{{ Route::is('driver.index') || Route::is('driver.create') || Route::is('driver.show') || Route::is('driver.edit') || Route::is('driver.assign.to') || Route::is('driver.assign.update') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
 									<span class="ms-3 inline-flex text-sm group-hover:text-red-600">
 										Laporan Driver
 
