@@ -50,11 +50,6 @@ class AssignAdd extends Component
         // validasi input
         $this->validate();
 
-        // simpan data
-        $type = $this->pt_type;
-        $name = $this->pt_name;
-        $address = $this->pt_address;
-
         // tampilkan pesan loading
         $this->dispatch('loadingProgress', message: 'Mengirim data...');
 

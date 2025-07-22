@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->string('title', 255)->comment('Nama PT.')->change(); // ubah comment title jadi nama PT
             $table->string('lokasi', 255)->comment('Alamat PT.')->change(); // ubah lokasi jadi alamat PT
             $table->tinyInteger('status')
-                ->comment('0 : Diajukan, 1 : Disetujui, 2 : Ditolak, 3 : Revisi, 4 : Belum di Assign')
+                ->comment('0 : Diajukan, 1 : Disetujui, 2 : Ditolak, 3 : Revisi, 4 : Belum di Assign, 5 : Menunggu di Update')
                 ->change();
             $table->string('no_sr', 20)
                 ->nullable()

@@ -84,6 +84,40 @@
 					</div>
 
 					<div
+						class="flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
+						<p class="text-sm text-gray-600 dark:text-gray-300">Tujuan Perjalanan</p>
+						<p class="text-navy-700 text-base font-medium dark:text-white">
+							@php
+								$tp = match ((string) $data->tipe_kunjungan) {
+								    'ATRBRG' => 'Antar Barang (SR)',
+								    'JPTBRG' => 'Jemput Barang',
+								    'ATRTEK' => 'Antar Teknisi',
+								    'JPTTEK' => 'Jemput Teknisi',
+								    default => 'N/A',
+								};
+							@endphp
+
+							{{ $tp }}
+						</p>
+					</div>
+
+					<div
+						class="flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
+						<p class="text-sm text-gray-600 dark:text-gray-300">Status Pengantaran</p>
+						<p class="text-navy-700 text-base font-medium dark:text-white">
+							@php
+								$sp = match ((int) $data->status_pengantaran) {
+								    1 => 'Belum Diterima',
+								    2 => 'Sudah Diterima',
+								    default => 'N/A',
+								};
+							@endphp
+
+							{{ $sp }}
+						</p>
+					</div>
+
+					<div
 						class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
 						<p class="mb-2 text-sm text-gray-600 dark:text-gray-300">Dokumentasi</p>
 						<div class="relative overflow-auto">

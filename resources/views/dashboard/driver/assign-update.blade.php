@@ -66,11 +66,12 @@
 				</div>
 
 				<div class="col-span-2 w-full">
-					<x-input.select id="status_pengantaran" name="status_pengantaran" :defaultOption="'Pilih Status Pengantaran'" :options="[
+					<x-input.select id="status_pengantaran" required name="status_pengantaran" :defaultOption="'Pilih Status Pengantaran'" :options="[
 					    1 => 'Belum Diterima',
 					    2 => 'Sudah Diterima',
 					]"
 						:labels="true" :textLabel="'Status Pengantaran'" />
+					<div class="mt-2 hidden text-sm text-red-500" id="alert-status_pengantaran"></div>
 				</div>
 
 				<div class="col-span-2 w-full">
