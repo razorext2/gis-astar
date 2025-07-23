@@ -8,9 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Log;
-use Illuminate\View\View;
 use Livewire\Attributes\On;
-use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
@@ -18,7 +16,6 @@ use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\Traits\WithExport;
-use PowerComponents\LivewirePowerGrid\Facades\Rule;
 
 final class AttendanceInTable extends PowerGridComponent
 {
@@ -101,9 +98,6 @@ final class AttendanceInTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            // Column::make('ID', 'id'),
-
-
             Column::make('#', 'photo_url')
                 ->bodyAttribute('flex flex-col items-center px-0'),
 

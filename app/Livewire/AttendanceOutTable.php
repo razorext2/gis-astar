@@ -2,12 +2,13 @@
 
 namespace App\Livewire;
 
-use \App\Models\AttendanceOut;
+use App\Models\AttendanceOut;
 use App\Models\Pegawai;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
-use PowerComponents\LivewirePowerGrid\Button;
+use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
@@ -26,7 +27,11 @@ final class AttendanceOutTable extends PowerGridComponent
 
     public function setUp(): array
     {
-        $this->showCheckBox();
+        $auth = Auth::user();
+
+        if ($auth->can('attendance-approve')) {
+            $this->checkbox = true;
+        }
 
         $this->pegawai = Pegawai::orderBy('full_name')
             ->whereHas('attendanceOutRelasi')
@@ -40,9 +45,9 @@ final class AttendanceOutTable extends PowerGridComponent
                 ->showPerPage()
                 ->showRecordCount(),
             PowerGrid::responsive(),
-            PowerGrid::exportable(fileName: 'absensi-masuk')
+            PowerGrid::exportable(fileName: 'absensi-keluar')
                 ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV)
-                ->onQueue('absensiMasuk')
+                ->onQueue('absensiKeluar')
                 ->onConnection('redis')
         ];
     }
@@ -73,65 +78,127 @@ final class AttendanceOutTable extends PowerGridComponent
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('kode_pegawai', function ($query) {
-                $pegawai = $query->pegawaiRelasi;
-                if ($pegawai) {
-                    $url = route('pegawai.timeline', $pegawai->kode_pegawai) . '?date=' . Carbon::parse($query->jam_keluar)->format('Y-m-d');
-                    return '<a target="_blank" class="underline hover:text-blue-600 transition-colors duration-500" href="' . $url . '">' . e($pegawai->full_name) . '</a>';
-                }
-                return '-';
-            })
-            ->add('jenis')
-            ->add('status')
-            ->add('longitude', fn($query) => $query->longitude ?? '-')
-            ->add('latitude', fn($query) => $query->latitude ?? '-')
-            ->add('jam_keluar', fn($query) => Carbon::parse($query->jam_keluar)->locale('id')->isoFormat('YYYY-MM-DD HH:mm:ss'))
-            ->add('photoURL', fn($query) => Blade::render('components.table-component.image-column', ['data' => $query]))
+            ->add('kode_pegawai')
+            ->add('kode_pegawai_formatted', fn($query) => Blade::render('components.table-component.codename', ['data' => $query]))
+            ->add('location', fn($query) => '<a class="underline hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-500" href="https://www.google.com/maps/search/?api=1&query=' . $query->latitude . ',' . $query->longitude . '" target="_blank">' . $query->latitude . ', ' . $query->longitude . '</a>')
+            ->add('jam_keluar')
+            ->add('jam_keluar_formatted', fn($query) => Blade::render('components.table-component.attendance-verify', [
+                'status' => $query->status,
+                'verified' => $query->verified ? 'verified' : 'unverified',
+                'similarity' => (1 - round($query->distance ?? 1, 2)) * 100 . '%',
+                'verified_by' => $query->verifiedBy ? $query->verifiedBy->name : $query->verified_by
+            ]))
+            ->add('photo_url', fn($query) => Blade::render('components.table-component.image-column', ['data' => $query]))
             ->add('created_at')
-            ->add('updated_at');
+            ->add('updated_at')
+            ->add('verified');
     }
 
     public function columns(): array
     {
         return [
-            Column::make('ID', 'id'),
+            Column::make('#', 'photo_url')
+                ->bodyAttribute('flex flex-col items-center px-0'),
 
-            Column::make('#', 'photoURL')
+            Column::make('Pegawai', 'kode_pegawai_formatted'),
+
+            Column::make('Status Verifikasi', 'jam_keluar_formatted'),
+
+            Column::make('Jam Keluar', 'jam_keluar')
                 ->sortable()
                 ->searchable(),
 
-            Column::make('Kode pegawai', 'kode_pegawai')
-                ->sortable()
-                ->searchable(),
+            Column::make('Lokasi', 'location'),
 
-            Column::make('Jenis', 'jenis')
-                ->sortable()
-                ->searchable(),
-
-            Column::make('Jam keluar', 'jam_keluar'),
-
-            Column::make('Longitude', 'longitude')
-                ->sortable()
-                ->searchable(),
-
-            Column::make('Latitude', 'latitude')
-                ->sortable()
-                ->searchable(),
+            Column::action('Aksi')
+                ->hidden(isHidden: Auth::user()->can('attendance-approve') == false)
+                ->fixedOnResponsive(),
 
             Column::make('Created at', 'created_at')
-                ->sortable()
-                ->searchable(),
+                ->hidden(isHidden: true, isForceHidden: true),
+
+            Column::make('Verified', 'verified')
+                ->hidden(isHidden: true, isForceHidden: true),
         ];
     }
 
     public function filters(): array
     {
         return [
-            Filter::datetimepicker('created_at'),
+            Filter::datetimepicker('created_at')
+                ->params([
+                    'timezone' => 'Asia/Jakarta',
+                    'no_weekends' => true,
+                ]),
             Filter::select('kode_pegawai', 'kode_pegawai')
                 ->dataSource($this->pegawai)
                 ->optionLabel('full_name')
                 ->optionValue('kode_pegawai'),
+            Filter::select('verified', 'verified')
+                ->dataSource([
+                    0 => [
+                        'name' => 'Unverified',
+                        'value' => 0,
+                    ],
+                    1 => [
+                        'name' => 'Verified',
+                        'value' => 1,
+                    ],
+                ])
+                ->optionLabel('name')
+                ->optionValue('value'),
         ];
+    }
+
+    public function actionsFromView($data)
+    {
+        if (Auth::user()->can('attendance-approve') && $data->verified == false) {
+            return view('components.table-component.confirm-button', [
+                'data' => $data,
+            ]);
+        }
+    }
+
+    #[On('verifikasi')]
+    public function verifikasi($id)
+    {
+        $this->dispatch(
+            'confirmation',
+            id: $id,
+            tableName: $this->tableName,
+            action: 'attendanceVerificationAction'
+        );
+    }
+
+    #[On('attendanceVerificationAction.{tableName}')]
+    public function verificationProcess($id, $tableName)
+    {
+        if ($tableName == $this->tableName) {
+            try {
+                $query = AttendanceOut::where('id', $id)->update([
+                    'verified' => 1,
+                    'verified_by' => Auth::id(),
+                    'status' => 1
+                ]);
+
+                if ($query) {
+                    $this->swal('Berhasil', 'Absensi berhasil di verifikasi', 'success');
+                }
+            } catch (\Exception $e) {
+                Log::error($e);
+
+                return $this->swal('Gagal', 'Absensi gagal di verifikasi', 'error');
+            }
+        }
+    }
+
+    public function swal($title, $text, $icon)
+    {
+        return $this->dispatch(
+            'swal',
+            title: $title,
+            text: $text,
+            icon: $icon
+        );
     }
 }

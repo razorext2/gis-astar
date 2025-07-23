@@ -43,6 +43,9 @@ class AttendanceController extends Controller
                 'latitude' => $latitude,
                 'photoURL' => $photoURL,
                 'created_at' => now(),
+                'verified' => 1,
+                'verified_by' => 'System',
+                'distance' => 0,
             ]);
 
             return response()->json(['success' => true, 'message' => 'Attendance recorded successfully.']);

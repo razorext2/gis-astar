@@ -20,7 +20,7 @@ class ProcessFaceRecognition implements ShouldQueue
     protected string $filename;
     protected int $id;
     protected string $model;
-    protected string $no_vt;
+    protected $no_vt;
 
     /**
      * Create a new job instance.
@@ -57,6 +57,7 @@ class ProcessFaceRecognition implements ShouldQueue
             $response = Http::attach('file', $file)
                 ->post('http://192.168.11.20:8231/recognize', [
                     'kode_pegawai' => $this->kode_pegawai,
+                    'no_vt' => $this->no_vt,
                 ]);
 
             dump($response->json());
