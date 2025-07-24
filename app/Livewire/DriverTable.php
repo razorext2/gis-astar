@@ -114,6 +114,11 @@ final class DriverTable extends PowerGridComponent
             ->add('created_at_formatted', fn($query)
                 => Carbon::parse($query->created_at)
                     ->locale('id')
+                    ->isoFormat('D MMMM YYYY HH:mm:ss'))
+            ->add('assign_date')
+            ->add('assign_date_formatted', fn($query)
+                => Carbon::parse($query->assign_date)
+                    ->locale('id')
                     ->isoFormat('D MMMM YYYY HH:mm:ss'));
     }
 
@@ -134,7 +139,10 @@ final class DriverTable extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
 
-            Column::make('Created at', 'created_at_formatted', 'created_at')
+            Column::make('Di Assign Tgl', 'assign_date_formatted', 'assign_date')
+                ->sortable(),
+
+            Column::make('Di Buat Tgl', 'created_at_formatted', 'created_at')
                 ->sortable(),
         ];
     }

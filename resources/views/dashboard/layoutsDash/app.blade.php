@@ -60,7 +60,7 @@
 
 		{{-- bikin navigasi ala android --}}
 		@persist('mobile-drawer')
-			<x-dashboard.mobile-drawer></x-dashboard.mobile-drawer>
+			<x-mobile-drawer></x-mobile-drawer>
 		@endpersist
 
 		{{-- preload --}}
