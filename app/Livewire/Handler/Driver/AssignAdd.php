@@ -65,6 +65,8 @@ class AssignAdd extends Component
             ]);
 
             if ($driver) {
+                $this->reset();
+
                 return $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Data berhasil disimpan.');
             }
         } catch (\Exception $e) {
