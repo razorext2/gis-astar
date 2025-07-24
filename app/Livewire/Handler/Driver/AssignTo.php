@@ -4,11 +4,17 @@ namespace App\Livewire\Handler\Driver;
 
 use App\Models\Driver;
 use App\Models\User;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class AssignTo extends Component
 {
     public Driver $driver;
+
+    #[Validate('required|integer', message: [
+        'kode_pegawai.required' => 'Driver wajib dipilih!',
+        'kode_pegawai.integer' => 'Kode Jari harus berupa angka!',
+    ])]
     public int $kode_pegawai;
 
     public function mount(int $id): void
@@ -18,6 +24,8 @@ class AssignTo extends Component
 
     public function assign()
     {
+        $this->validate();
+
         try {
             $this->driver->update([
                 'status' => 5,

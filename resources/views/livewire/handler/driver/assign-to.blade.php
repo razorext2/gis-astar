@@ -30,6 +30,10 @@
 					<option value="{{ $row->kode_pegawai }}">{{ $row->name }}</option>
 				@endforeach
 			</select>
+
+			@error('kode_pegawai')
+				<p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+			@enderror
 		</div>
 
 		<div class="relative col-span-2 w-full">

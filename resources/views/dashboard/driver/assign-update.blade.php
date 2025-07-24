@@ -91,7 +91,7 @@
 						</div>
 					</div>
 
-					<div class="mt-2 hidden text-sm text-red-500" id="alert-images"></div>
+					<div class="hidden text-sm text-red-500" id="alert-images"></div>
 				</div>
 
 				<div class="col-span-2 w-full">
@@ -100,6 +100,7 @@
 					<input id="keterangan" name="keterangan" type="hidden">
 					<div class="mt-2 hidden text-sm text-red-500" id="alert-keterangan"></div>
 				</div>
+
 				<input class="w-full rounded-lg border border-gray-300 bg-gray-400 p-2.5 text-sm text-gray-900" id="longitude"
 					name="longitude" type="hidden" readonly>
 
