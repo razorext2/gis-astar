@@ -129,8 +129,15 @@
 			    [
 			        'permission' => 'capture',
 			        'link' => 'capture.index',
-			        'check' => 'capture.*',
-			        'label' => 'Record',
+			        'check' => 'capture.index',
+			        'label' => 'Absensi',
+			        'icon' => 'capture',
+			    ],
+			    [
+			        'permission' => 'capture-route',
+			        'link' => 'capture.route',
+			        'check' => 'capture.route',
+			        'label' => 'Absensi Rute',
 			        'icon' => 'capture',
 			    ],
 			    [

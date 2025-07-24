@@ -1,7 +1,13 @@
 <div class="grid cursor-pointer grid-cols-3 items-center justify-between gap-2 text-gray-500">
 
 	@can('capture')
-		<x-menu.mobile-link href="{{ route('capture.index') }}" :label="'Record'">
+		<x-menu.mobile-link href="{{ route('capture.index') }}" :label="'Absensi'">
+			<x-icons.camera class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
+		</x-menu.mobile-link>
+	@endcan
+
+	@can('capture-route')
+		<x-menu.mobile-link href="{{ route('capture.route') }}" :label="'Absensi Rute'">
 			<x-icons.camera class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
 		</x-menu.mobile-link>
 	@endcan
