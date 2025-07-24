@@ -73,8 +73,15 @@
 			    [
 			        'permission' => 'driver-list',
 			        'link' => 'driver.index',
-			        'check' => 'driver.*',
+			        'check' => 'driver.index',
 			        'label' => 'Laporan Driver',
+			        'icon' => 'driver',
+			    ],
+			    [
+			        'permission' => 'driver-approve',
+			        'link' => 'driver.assign.add',
+			        'check' => 'driver.assign.add',
+			        'label' => 'Assign Laporan Driver',
 			        'icon' => 'driver',
 			    ],
 			    [

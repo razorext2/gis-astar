@@ -44,6 +44,12 @@
 		</x-menu.mobile-link>
 	@endcan
 
+	@can('driver-approve')
+		<x-menu.mobile-link href="{{ route('driver.assign.add') }}" :label="'Assign Laporan Driver'">
+			<x-icons.truck class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
+		</x-menu.mobile-link>
+	@endcan
+
 	@can('driver-list')
 		<x-menu.mobile-link href="{{ route('driver.index') }}" :label="'Laporan Driver'">
 			<x-icons.truck class="h-7 w-7 stroke-blue-500 dark:stroke-white" />

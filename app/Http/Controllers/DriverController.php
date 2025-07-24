@@ -53,9 +53,13 @@ class DriverController extends Controller
         return view('dashboard.driver.assign-to', ['id' => $id]);
     }
 
-    public function assignUpdate($id)
+    public function assignUpdateView($id)
     {
         $data = Driver::find($id);
+
+        if ($data->assign_date > now()) {
+            abort(404);
+        }
 
         return view('dashboard.driver.assign-update', ['data' => $data]);
     }

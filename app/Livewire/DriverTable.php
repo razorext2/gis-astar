@@ -41,8 +41,6 @@ final class DriverTable extends PowerGridComponent
             PowerGrid::footer()
                 ->showPerPage()
                 ->showRecordCount(),
-            PowerGrid::responsive()
-                ->fixedColumns('kode_pegawai', 'title', 'lokasi', 'status_formatted'),
             PowerGrid::exportable(fileName: 'driverReport-' . now()->format('YmdHis'))
                 ->type(Exportable::TYPE_XLS)
                 ->stripTags(true),
@@ -64,12 +62,13 @@ final class DriverTable extends PowerGridComponent
                 'approved' => $data->where('status', 1),
                 'rejected' => $data->where('status', 2),
                 'needrevision' => $data->where('status', 3),
-                'notassigned' => $data->where('status', 4)
-                    ->where('kode_pegawai', null)
+                'notassigned' => $data->where('status', 4),
+                'notupdated' => $data->where('status', 5)
             };
         }
 
-        return $data->latest();
+        return $data->orderBy('created_at', 'desc')
+            ->orderBy('status', 'desc');
     }
 
     public function relationSearch(): array
@@ -92,17 +91,8 @@ final class DriverTable extends PowerGridComponent
                     'data' => $query,
                 ])->render();
             })
-            ->add('title', fn($query) => '<span class="text-wrap w-72">' . $query->title ?? '-' . '</span>')
-            ->add('lokasi', function ($query) {
-                return view(
-                    'components.dashboard.location-w-coordinate',
-                    [
-                        'location' => $query->lokasi ?? '-',
-                        'long' => $query->longitude ?? '',
-                        'lat' => $query->latitude ?? '',
-                    ]
-                )->render();
-            })
+            ->add('title')
+            ->add('lokasi', fn($query) => view('components.table-component.title-location-coordinate', ['data' => $query])->render())
             ->add('status', fn($query) => $query->status ?? '-')
             ->add('status_formatted', function ($query) {
                 $status = $query->status;
@@ -135,13 +125,10 @@ final class DriverTable extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
 
-            Column::make('Judul Laporan', 'title')
-                ->sortable()
-                ->searchable(),
-
             Column::make('Lokasi', 'lokasi')
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->bodyAttribute('min-w-80'),
 
             Column::make('Status', 'status_formatted', 'status')
                 ->sortable()
