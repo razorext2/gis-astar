@@ -2,7 +2,8 @@
 @section('content')
 	<div class="relative grid grid-cols-1 gap-6">
 
-		<div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-primary">
+		<div
+			class="rounded-xl border border-gray-200 bg-white p-4 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none">
 			<ul class="flex flex-wrap text-center text-sm font-medium">
 				<li>
 					<a

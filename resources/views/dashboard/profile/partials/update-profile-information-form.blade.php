@@ -27,9 +27,10 @@
 			</div>
 			@if (!is_null($user->email_verified_at))
 				<span
-					class="mt-6 rounded-lg bg-green-200 p-2 text-center text-green-800 shadow-sm ring-1 ring-green-800">Verified</span>
+					class="mt-6 rounded-lg bg-green-200 p-2 text-center text-green-800 shadow-md ring-1 ring-green-800 dark:shadow-none">Verified</span>
 			@else
-				<button class="mt-6 rounded-lg bg-red-200 p-2 text-center text-red-800 shadow-sm ring-1 ring-red-800"
+				<button
+					class="mt-6 rounded-lg bg-red-200 p-2 text-center text-red-800 shadow-md ring-1 ring-red-800 dark:shadow-none"
 					form="send-verification">Not Verified</button>
 			@endif
 		</div>
@@ -100,7 +101,7 @@
 
 		<div class="flex items-center gap-6">
 			<button
-				class="inline-flex items-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-gray-900 ring-1 ring-blue-700 hover:bg-blue-800 hover:text-white focus:text-white focus:ring-4 focus:ring-blue-300 dark:bg-blue-800 dark:text-white dark:ring-gray-700 dark:hover:bg-blue-900"
+				class="inline-flex items-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-gray-900 ring-1 ring-blue-700 transition-all duration-300 hover:bg-blue-800 hover:text-white focus:text-white focus:ring-4 focus:ring-blue-300 dark:bg-blue-800 dark:text-white dark:ring-gray-700 dark:hover:bg-blue-900"
 				type="submit">{{ __('Save') }}</button>
 		</div>
 	</form>

@@ -1,7 +1,7 @@
 <div class="mt-4 grid gap-2 lg:gap-4">
 	@forelse ($teams as $row)
 		<div wire:key="{{ $row->team_code }}"
-			class="rounded-lg bg-gray-50 p-2 transition-all duration-300 dark:bg-gray-700 lg:p-4">
+			class="rounded-lg bg-gray-50 p-2 ring-1 ring-gray-200 transition-all duration-300 dark:bg-gray-700 dark:ring-0 lg:p-4">
 			<div class="flex w-full flex-row items-center justify-between gap-2">
 				<div class="grow cursor-pointer" wire:click="showDetail('{{ $row->team_code }}')">
 					<div class="mb-1 flex flex-col gap-0.5 text-gray-800 dark:text-gray-50 lg:flex-row lg:items-center lg:gap-2">

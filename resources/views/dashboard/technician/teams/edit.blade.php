@@ -1,7 +1,7 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
 	<div
-		class="w-full rounded-xl border border-gray-200 bg-white p-2 dark:border-gray-700 dark:bg-dark-primary md:p-6 lg:w-2/3 xl:w-1/2">
+		class="w-full rounded-xl border border-gray-200 bg-white p-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none md:p-6 lg:w-2/3 xl:w-1/2">
 		<div class="flex flex-row justify-between">
 			<div>
 				<h2 class="w-full text-lg font-semibold text-gray-900 dark:text-white">Ubah tim</h2>

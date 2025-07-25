@@ -94,7 +94,8 @@
 @endphp
 
 <!-- Sidebar Navigation -->
-<aside class="left-0 top-0 hidden h-screen flex-col bg-gray-50 pb-16 pt-16 dark:bg-[#09090b] md:fixed md:flex"
+<aside
+	class="left-0 top-0 hidden h-screen flex-col bg-white pb-16 pt-16 shadow-sm dark:bg-[#09090b] dark:shadow-none md:fixed md:flex"
 	id="logo-sidebar" aria-label="Sidebar">
 
 	<div class="overflow-y-scroll p-5" wire:scroll>

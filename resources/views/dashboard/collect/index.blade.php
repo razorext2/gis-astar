@@ -2,7 +2,8 @@
 @section('content')
 	<div class="relative grid grid-cols-1 gap-4">
 
-		<div class="rounded-xl border border-gray-200 bg-white p-2 dark:border-gray-700 dark:bg-dark-primary md:p-6">
+		<div
+			class="rounded-xl border border-gray-200 bg-white p-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none md:p-6">
 
 			{{-- desktop view --}}
 			<div class="hidden items-center lg:flex">
@@ -101,7 +102,7 @@
 
 		<div class="flex h-auto items-center justify-center">
 			<div
-				class="grid w-full grid-cols-2 gap-2 rounded-xl bg-white p-2 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 md:gap-4 md:p-6">
+				class="grid w-full grid-cols-2 gap-2 rounded-xl bg-white p-2 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 md:gap-4 md:p-6">
 
 				{{-- filter --}}
 				<div class="col-span-2 mb-4">

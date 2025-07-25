@@ -6,7 +6,8 @@
 			@method('put')
 			<div class="grid gap-6 lg:grid-cols-2">
 				<div class="w-full space-y-6">
-					<div class="rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 sm:p-6">
+					<div
+						class="rounded-xl bg-white p-4 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 sm:p-6">
 						<div class="max-w-xl">
 							<header class="flex flex-row items-center gap-x-3">
 								<div class="max-w-xs">
@@ -126,7 +127,8 @@
 				</div>
 
 				<div class="w-full">
-					<div class="rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 sm:p-6">
+					<div
+						class="rounded-xl bg-white p-4 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 sm:p-6">
 						<div class="max-w-xl">
 							<header class="flex flex-row">
 								<h2 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">

@@ -9,7 +9,7 @@
 </button>
 
 <div
-	class="invisible absolute z-50 inline-block w-72 rounded-lg border border-gray-200 bg-white text-sm text-gray-500 opacity-0 shadow-sm transition-opacity duration-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400"
+	class="invisible absolute z-50 inline-block w-72 rounded-lg border border-gray-200 bg-white text-sm text-gray-500 opacity-0 shadow-md transition-opacity duration-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:shadow-none"
 	id="{{ $id }}" data-popover role="tooltip">
 	<div class="space-y-2 p-3">
 		<h3 class="font-semibold text-gray-900 dark:text-white">Perhatian!</h3>

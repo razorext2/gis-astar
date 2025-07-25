@@ -55,7 +55,7 @@
 		@if (collect($clockIn)->isNotEmpty())
 			@foreach ($clockIn as $row)
 				<li
-					class="flex w-full flex-col items-center gap-0 rounded-lg border border-gray-200 bg-white shadow-sm hover:bg-gray-100 dark:border-gray-700 dark:bg-dark-secondary dark:hover:bg-gray-700 sm:gap-2 md:flex-row">
+					class="flex w-full flex-col items-center gap-0 rounded-lg border border-gray-200 bg-white shadow-md hover:bg-gray-100 dark:border-gray-700 dark:bg-dark-secondary dark:shadow-none dark:hover:bg-gray-700 sm:gap-2 md:flex-row">
 					<img class="h-24 w-full rounded-t-lg object-cover md:w-20 md:rounded-none md:rounded-s-lg"
 						onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}'"
 						src="{{ asset('storage/labels/' . auth()->user()->kode_pegawai . '/capturedImg/' . $row->photoURL . '.png') }}"
@@ -73,7 +73,7 @@
 			@endforeach
 			@foreach ($clockOut as $row)
 				<li
-					class="flex w-full flex-col items-center gap-0 rounded-lg border border-gray-200 bg-white shadow-sm hover:bg-gray-100 dark:border-gray-700 dark:bg-dark-secondary dark:hover:bg-gray-700 sm:gap-2 md:flex-row">
+					class="flex w-full flex-col items-center gap-0 rounded-lg border border-gray-200 bg-white shadow-md hover:bg-gray-100 dark:border-gray-700 dark:bg-dark-secondary dark:shadow-none dark:hover:bg-gray-700 sm:gap-2 md:flex-row">
 					<img class="h-24 w-full rounded-t-lg object-cover md:w-20 md:rounded-none md:rounded-s-lg"
 						onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}'"
 						src="{{ asset('storage/labels/' . auth()->user()->kode_pegawai . '/capturedImg/' . $row->photoURL . '.png') }}"
@@ -91,7 +91,7 @@
 			@endforeach
 		@else
 			<li
-				class="flex w-full flex-col items-center gap-0 rounded-lg border border-gray-200 bg-white shadow-sm hover:bg-gray-100 dark:border-gray-700 dark:bg-dark-secondary dark:hover:bg-gray-700 sm:gap-2 md:flex-row">
+				class="flex w-full flex-col items-center gap-0 rounded-lg border border-gray-200 bg-white shadow-md hover:bg-gray-100 dark:border-gray-700 dark:bg-dark-secondary dark:shadow-none dark:hover:bg-gray-700 sm:gap-2 md:flex-row">
 				<div class="flex flex-col p-2 text-left leading-normal">
 					<h5 class="font-semi-bold text-wrap text-sm tracking-tight text-gray-900 dark:text-white">
 						Tidak ada data absensi

@@ -13,7 +13,7 @@
 				{{-- endsearch --}}
 
 				<div
-					class="w-full rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-dark-primary">
+					class="w-full rounded-xl border border-gray-200 bg-white p-6 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none">
 					<div class="mb-4">
 						<p class="text-xl font-bold leading-none text-gray-900 dark:text-white md:text-2xl">{{ $pegawai->full_name }}</p>
 						<p class="text-lg font-semibold leading-none text-gray-900 dark:text-white md:text-xl">
@@ -102,7 +102,7 @@
 				</div>
 
 				<div
-					class="h-max w-full rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-dark-primary">
+					class="h-max w-full rounded-xl border border-gray-200 bg-white p-6 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none">
 					<div class="mb-4">
 						<p class="text-xl font-bold leading-none text-gray-900 dark:text-white md:text-2xl">
 							Mapping

@@ -22,7 +22,7 @@
 		</form>
 	</div>
 
-	<div class="grid w-full gap-2 lg:grid-cols-2" wire:poll.60s>
+	<div class="grid w-full gap-2 lg:grid-cols-2 lg:gap-4" wire:poll.60s>
 		@forelse ($data as $index => $row)
 			@php
 				$storage_path = "labels/{$row->pegawaiRelasi->kode_pegawai}/capturedImg/{$row->photoURL}.png";
@@ -32,7 +32,7 @@
 			@endphp
 
 			<div wire:click="openModal({{ $row->id }})"
-				class="relative flex cursor-pointer flex-col items-center rounded-lg border-gray-200 shadow-sm transition-transform duration-300 hover:scale-95 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-700 dark:hover:bg-gray-700 md:flex-row">
+				class="relative flex cursor-pointer flex-col items-center rounded-lg border-gray-200 ring-1 ring-gray-200 transition-transform duration-300 hover:scale-95 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-700 dark:ring-0 dark:hover:bg-gray-700 md:flex-row">
 
 				@php $lateDuration = $this->getLateDuration($row->jam_masuk); @endphp
 				@if ($lateDuration)

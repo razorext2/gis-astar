@@ -13,7 +13,6 @@ class Today extends Component
 {
     use WithPagination;
 
-    // public $data = [];
     public $attendance;
     public string $date;
     public string $address;

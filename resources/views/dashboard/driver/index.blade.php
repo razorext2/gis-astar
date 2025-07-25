@@ -2,9 +2,9 @@
 @section('content')
 	<div class="relative grid grid-cols-1 gap-4">
 
-		<div class="rounded-xl border border-gray-200 bg-white p-2 dark:border-gray-700 dark:bg-dark-primary md:p-6">
+		<div
+			class="rounded-xl border border-gray-200 bg-white p-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none md:p-6">
 			{{-- desktop view --}}
-
 			<div class="hidden items-center lg:flex">
 				<ul class="flex flex-wrap gap-6 text-sm font-medium">
 					<li>
@@ -120,7 +120,7 @@
 		@endcan
 
 		<div
-			class="relative grid grid-cols-1 rounded-xl bg-white py-2 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 lg:p-6">
+			class="relative grid grid-cols-1 rounded-xl bg-white py-2 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 lg:p-6">
 
 			<livewire:table-refresher table-name="DriverTable" />
 

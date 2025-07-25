@@ -1,4 +1,5 @@
-<nav class="border-b border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-dark-primary md:block lg:p-8">
+<nav
+	class="border-b border-gray-200 bg-white p-4 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none md:block lg:p-8">
 	<div class="center mx-auto flex max-w-screen-xl flex-wrap items-center justify-between">
 
 		<a class="flex items-center space-x-3 md:mx-auto md:mb-4 lg:mx-0 lg:mb-0 rtl:space-x-reverse" href="#">

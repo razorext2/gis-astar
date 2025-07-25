@@ -1,7 +1,7 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
 	<div
-		class="relative grid grid-cols-1 rounded-xl bg-white py-2 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 lg:p-6">
+		class="relative grid grid-cols-1 rounded-xl bg-white py-2 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 lg:p-6">
 
 		<div class="flex flex-col px-3 md:mb-2 lg:p-0">
 			<div class="mb-2">

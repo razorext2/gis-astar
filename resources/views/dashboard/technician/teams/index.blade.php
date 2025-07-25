@@ -1,6 +1,7 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-	<div class="rounded-xl border border-gray-200 bg-white p-2 dark:border-gray-700 dark:bg-dark-primary md:p-6">
+	<div
+		class="rounded-xl border border-gray-200 bg-white p-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none md:p-6">
 		<div class="flex flex-row justify-between">
 			<div>
 				<h2 class="w-full text-lg font-semibold text-gray-900 dark:text-white">Tim teknisi</h2>

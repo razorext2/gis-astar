@@ -5,7 +5,7 @@
 		@include('dashboard.layoutsDash.head')
 	</head>
 
-	<body class="bg-gray-50 dark:bg-[#09090b]">
+	<body class="bg-gray-100 dark:bg-[#09090b]">
 		@if (session('status'))
 			<div
 				class="fixed left-1/2 top-20 z-50 flex w-full -translate-x-1/2 transform items-center divide-x px-4 transition duration-300 md:left-auto md:right-4 md:top-20 md:w-fit md:translate-x-0 md:px-0"

@@ -1,7 +1,7 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
 	<div
-		class="relative rounded-xl bg-white/70 p-0 ring-1 ring-gray-200 dark:bg-dark-primary/70 dark:shadow-none dark:ring-gray-700 lg:max-w-screen-lg lg:p-4"
+		class="relative rounded-xl bg-white p-0 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary/70 dark:shadow-none dark:ring-gray-700 lg:max-w-screen-lg lg:p-4"
 		id="Scan" d-aos="zoom-in-up" data-aos-delay="50">
 		<div class="grid h-auto w-full grid-cols-1 lg:grid-cols-3 lg:gap-4">
 
@@ -17,7 +17,7 @@
 				</div>
 				<div class="mt-3 inline-flex w-full lg:px-0">
 					<button
-						class="w-full rounded-lg bg-blue-400 p-2 font-bold text-white ring-1 ring-gray-200 hover:bg-blue-700 dark:bg-blue-800 dark:text-white dark:ring-gray-700 dark:hover:bg-blue-900"
+						class="w-full rounded-lg bg-blue-400 p-2 font-bold text-white ring-1 ring-gray-200 transition-all duration-300 hover:bg-blue-700 dark:bg-blue-800 dark:text-white dark:ring-gray-700 dark:hover:bg-blue-900"
 						id="startButton">Start</button>
 				</div>
 				<div id="error"

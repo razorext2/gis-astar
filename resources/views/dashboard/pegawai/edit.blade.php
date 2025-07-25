@@ -4,7 +4,7 @@
 		<div class="w-full space-y-6 xl:col-span-3">
 			<form id="photoForm" action="{{ route('pegawai.update', $pegawai) }}" method="POST" enctype="multipart/form-data">
 				<div
-					class="grid gap-6 rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 sm:p-6 lg:grid-cols-2">
+					class="grid gap-6 rounded-xl bg-white p-4 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 sm:p-6 lg:grid-cols-2">
 					<div class="max-w-xl">
 						<header class="flex flex-row">
 							<a

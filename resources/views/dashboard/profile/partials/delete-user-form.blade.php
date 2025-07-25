@@ -10,7 +10,7 @@
 	</header>
 
 	<button
-		class="inline-flex items-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-gray-900 ring-1 ring-red-700 hover:bg-red-800 hover:text-white focus:text-white focus:ring-4 focus:ring-red-300 dark:bg-red-800 dark:text-white dark:ring-gray-700 dark:hover:bg-red-900"
+		class="inline-flex items-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-gray-900 ring-1 ring-red-700 transition-all duration-300 hover:bg-red-800 hover:text-white focus:text-white focus:ring-4 focus:ring-red-300 dark:bg-red-800 dark:text-white dark:ring-gray-700 dark:hover:bg-red-900"
 		x-data=""
 		x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')">{{ __('Delete Account') }}</button>
 
@@ -44,7 +44,7 @@
 				</button>
 
 				<button
-					class="ms-3 inline-flex items-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-gray-900 ring-1 ring-red-700 hover:bg-red-800 hover:text-white focus:text-white focus:ring-4 focus:ring-red-300 dark:bg-red-800 dark:text-white dark:ring-gray-700 dark:hover:bg-red-900"
+					class="ms-3 inline-flex items-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-gray-900 ring-1 ring-red-700 transition-all duration-300 hover:bg-red-800 hover:text-white focus:text-white focus:ring-4 focus:ring-red-300 dark:bg-red-800 dark:text-white dark:ring-gray-700 dark:hover:bg-red-900"
 					type="submit">
 					{{ __('Delete Account') }}
 				</button>

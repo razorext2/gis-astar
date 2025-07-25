@@ -78,7 +78,7 @@
 										loading="lazy" />
 								</span>
 								<div
-									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-600 dark:bg-gray-700 sm:flex">
+									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-md dark:border-gray-600 dark:bg-gray-700 dark:shadow-none sm:flex">
 									<div class="text-sm font-normal text-gray-500 dark:text-gray-300">
 										Kamu melakukan
 										<a class="font-semibold text-green-600 hover:underline dark:text-green-500" href="#">
@@ -138,7 +138,7 @@
 										loading="lazy" />
 								</span>
 								<div
-									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-600 dark:bg-gray-700 sm:flex">
+									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-md dark:border-gray-600 dark:bg-gray-700 dark:shadow-none sm:flex">
 									<div class="text-sm font-normal text-gray-500 dark:text-gray-300">
 										Kamu melakukan
 										<a class="font-semibold text-red-600 hover:underline dark:text-red-500" href="#">
@@ -240,7 +240,7 @@
 										loading="lazy" />
 								</span>
 								<div
-									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-600 dark:bg-gray-700 sm:flex">
+									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-md dark:border-gray-600 dark:bg-gray-700 dark:shadow-none sm:flex">
 
 									<div class="flex flex-row items-center gap-x-1">
 										@php
@@ -297,7 +297,7 @@
 										loading="lazy" />
 								</span>
 								<div
-									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-600 dark:bg-gray-700 sm:flex">
+									class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-md dark:border-gray-600 dark:bg-gray-700 dark:shadow-none sm:flex">
 									<div class="flex flex-row items-center gap-x-1">
 										@php
 											$status = $attendance['status_out'];

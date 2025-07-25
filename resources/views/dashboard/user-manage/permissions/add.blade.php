@@ -1,7 +1,8 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
 	<div class="w-fit space-y-6">
-		<div class="rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700 sm:p-6">
+		<div
+			class="rounded-xl bg-white p-4 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 sm:p-6">
 			<div class="max-w-2xl">
 				<header class="flex flex-row gap-x-2">
 					<x-button.link class="w-fit ring-1 ring-red-700 dark:bg-red-800 dark:text-white"

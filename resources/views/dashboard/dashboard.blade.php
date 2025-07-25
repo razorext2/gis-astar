@@ -4,6 +4,7 @@
 		<div class="mb-4">
 			@livewire('utils.greetings')
 		</div>
+
 		<div class="mb-4 flex flex-col lg:grid lg:grid-cols-3 lg:gap-x-4">
 
 			<form id="attend-in" action="{{ route('attendanceIn.index') }}"></form>
@@ -11,7 +12,7 @@
 
 			<!-- Chart -->
 			<div
-				class="col-span-2 mb-4 flex h-full flex-col rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-primary md:p-6 lg:mb-0">
+				class="col-span-2 mb-4 flex h-full flex-col rounded-xl border border-gray-200 bg-white p-4 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none md:p-6 lg:mb-0">
 				<div class="mb-5 flex justify-between">
 					<div>
 						<p class="mb-2 text-3xl font-bold leading-none text-gray-900 dark:text-white">
@@ -53,7 +54,8 @@
 			<!-- Notification -->
 			<div class="grid grid-cols-1 gap-y-4">
 
-				<div class="flex flex-col rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-primary">
+				<div
+					class="flex flex-col rounded-xl border border-gray-200 bg-white p-4 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none">
 
 					<p class="font-base text-sm text-gray-500 dark:text-gray-400">
 						Absen Masuk
@@ -90,7 +92,8 @@
 					</ul>
 				</div>
 
-				<div class="flex flex-col rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-primary">
+				<div
+					class="flex flex-col rounded-xl border border-gray-200 bg-white p-4 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none">
 
 					<p class="font-base text-sm text-gray-400">
 						Absen Keluar
