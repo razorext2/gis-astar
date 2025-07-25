@@ -1,4 +1,4 @@
-<div class="mt-4 flex flex-col items-center gap-4">
+<div class="mt-4 flex flex-col gap-2">
 	@if ($diffResult)
 		<style>
 			{!! \Jfcherng\Diff\DiffHelper::getStyleSheet() !!}
@@ -6,7 +6,7 @@
 
 		{!! $diffResult !!}
 
-		<form wire:submit.prevent="update">
+		<form wire:submit.prevent="update" class="mt-2 flex justify-center">
 			<x-button.primary type="submit" wire:loading.attr="disabled" wire:target="update">
 				<x-slot name="icon">
 					<x-icons.angle-right wire:loading.remove class="h-5 w-5 text-blue-500 dark:text-white" />

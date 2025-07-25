@@ -21,11 +21,8 @@ class Fetch extends Component
     {
         $api = Http::get("https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchKunjungan&NomorKunjungan=$this->id")->json();
 
-        $this->apiData = $api['data'][0]['RincianPekerjaan'];
-
-        $this->dbData = Technician::where('no_vt', $this->id)
-            ->first()
-            ->job_detail;
+        $this->apiData = $api['data'][0];
+        $this->dbData = Technician::where('no_vt', $this->id)->first();
 
         $this->renderDiff($this->apiData, $this->dbData);
     }
@@ -51,12 +48,34 @@ class Fetch extends Component
             'wrapperClasses' => ['diff-wrapper'],
         ];
 
-        $jsonResult = DiffHelper::calculate($api, $db, 'Json');
-        $htmlRenderer = RendererFactory::make($rendererName, $rendererOptions);
-        $result = $htmlRenderer->renderArray(json_decode($jsonResult, true));
+        $data_api = [
+            'customer_name' => $api['CustomerContact'],
+            'customer_address' => $api['AlamatLengkapKunjungan'],
+            'job_detail' => $api['RincianPekerjaan'],
+        ];
 
-        $this->diffResult = $result;
+        $data_db = [
+            'customer_name' => $db->customer_contact,
+            'customer_address' => $db->customer_address,
+            'job_detail' => $db->job_detail,
+        ];
+
+        $htmlRenderer = RendererFactory::make($rendererName, $rendererOptions);
+        $combinedDiffResult = '';
+
+        foreach ($data_api as $key => $apiValue) {
+            $dbValue = $data_db[$key] ?? '';
+
+            $jsonResult = DiffHelper::calculate($apiValue, $dbValue, 'Json');
+            $result = $htmlRenderer->renderArray(json_decode($jsonResult, true));
+
+            if ($result)
+                $combinedDiffResult .= "<span class='font-semibold text-gray-800 dark:text-white text-left'>" . ucfirst(str_replace('_', ' ', $key)) . "</span>" . $result;
+        }
+
+        $this->diffResult = $combinedDiffResult;
     }
+
 
     public function update()
     {
@@ -70,12 +89,14 @@ class Fetch extends Component
             DB::beginTransaction();
 
             $query->update([
-                'job_detail' => $this->apiData,
+                'job_detail' => $this->apiData['RincianPekerjaan'],
+                'customer_contact' => $this->apiData['CustomerContact'],
+                'customer_address' => $this->apiData['AlamatLengkapKunjungan'],
             ]);
 
             DB::commit();
-            $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Data berhasil diperbarui');
-            return $this->dispatch('redirectRoute', 'technician.index');
+
+            return redirect()->route('technician.show', $this->id)->with('status', 'Data berhasil diperbarui');
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: $e->getMessage());
