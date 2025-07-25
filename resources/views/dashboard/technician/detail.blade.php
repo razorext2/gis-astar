@@ -103,7 +103,7 @@
 						<div class="flex" id="captured-images">
 							<!-- Thumbnail gambar yang diambil akan muncul di sini -->
 							@if ($data->photo_collects)
-								<div class="flex flex-col gap-2">
+								<div class="flex flex-row gap-2">
 									@foreach ($data->photo_collects as $photo)
 										@php
 											$ext = pathinfo($photo->photourl, PATHINFO_EXTENSION);
@@ -115,9 +115,12 @@
 													id="show_document" type="button"> Lihat dokumen saat ini
 												</x-button.primary>
 											</div>
-										@elseif(in_array($ext, ['png', 'jpg', 'jpeg']))
+										@endif
+
+										@if (in_array($ext, ['png', 'jpg', 'jpeg']))
 											<div class="relative me-2 flex-none items-center gap-4 rounded-xl">
-												<img class="h-36 w-36 rounded-xl object-cover transition duration-300 ease-in-out hover:scale-105"
+												<img
+													class="h-36 w-36 rounded-xl object-cover ring-1 ring-gray-200 transition duration-300 ease-in-out hover:scale-105"
 													id="documentations" onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}';"
 													data-url="{{ asset($photo->photourl) }}" src="{{ asset($photo->photourl) }}" alt=""
 													onclick="javascript:void(0)" loading="lazy">
