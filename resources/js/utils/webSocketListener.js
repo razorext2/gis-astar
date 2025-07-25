@@ -1,4 +1,4 @@
-import { showToast } from "./alert";
+import { showToast, showAlert } from "./alert";
 import { handleNotification, handleAnnouncement } from "./notificationListener";
 
 export async function initWebSocketListener() {
@@ -24,7 +24,9 @@ export async function initWebSocketListener() {
         handleNotification(data);
       })
       .listen('.recognitionEvent', (data) => {
-        handleNotification(data);
+        let message = data.message.split('.').slice(0, 2).join('. ') + (data.message.split('.').length > 2 ? '...' : '');
+
+        showAlert(data.type, 'Berhasil', message)
       })
       .listen('.backupReady', (data) => {
         showToast('success', data.message);

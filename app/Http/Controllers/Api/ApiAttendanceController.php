@@ -173,6 +173,8 @@ class ApiAttendanceController extends Controller
 
             if ($vtBesar || $vtKecil) {
                 $no_vt = "VT-" . $matches[1];
+            } else {
+                $no_vt = '';
             }
 
             // simpan data absen (masuk/keluar)
