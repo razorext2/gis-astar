@@ -35,24 +35,24 @@ class SalesController extends Controller
                     $query->where('kode_pegawai', $user->kode_pegawai);
                 }
 
-                // Filter berdasarkan role menggunakan Spatie
+                // Filter relasi user yang memiliki role 'Sales'
                 if ($user->hasRole('Marketing')) {
-                    $query->whereHas('userRelasi', function ($q) {
-                        $q->whereHas('roles', function ($r) {
-                            $r->where('name', 'Sales'); // Hanya role 'Sales'
-                        });
+                    $query->orWhereHas('userRelasi.roles', function ($r) {
+                        $r->where('name', 'Sales');
                     });
-                } elseif ($user->hasAnyRole(['Marketing-JKT', 'Management-JKT'])) {
-                    $query->whereHas('userRelasi', function ($q) {
-                        $q->whereHas('roles', function ($r) {
-                            $r->where('name', 'Sales-JKT'); // Hanya role 'Sales-JKT'
-                        });
+                }
+
+                // Filter relasi user yang memiliki role 'Sales-JKT'
+                if ($user->hasAnyRole(['Marketing-JKT', 'Management-JKT'])) {
+                    $query->orWhereHas('userRelasi.roles', function ($r) {
+                        $r->where('name', 'Sales-JKT');
                     });
-                } elseif ($user->hasAnyRole(['Marketing-PKU', 'Management-PKU'])) {
-                    $query->whereHas('userRelasi', function ($q) {
-                        $q->whereHas('roles', function ($r) {
-                            $r->where('name', 'Sales-PKU'); // Hanya role 'Sales-PKU'
-                        });
+                }
+
+                // Filter relasi user yang memiliki role 'Sales-PKU'
+                if ($user->hasAnyRole(['Marketing-PKU', 'Management-PKU'])) {
+                    $query->orWhereHas('userRelasi.roles', function ($r) {
+                        $r->where('name', 'Sales-PKU');
                     });
                 }
 
