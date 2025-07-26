@@ -53,7 +53,11 @@ final class DriverTable extends PowerGridComponent
             ->with(['user', 'photoCollect']);
 
         if (!auth()->user()->can('driver-approve')) {
-            $data->where('kode_pegawai', auth()->user()->kode_pegawai);
+            $data->where('kode_pegawai', auth()->user()->kode_pegawai)
+                ->where(function ($query) {
+                    $query->whereDate('assign_date', '<=', now())
+                        ->orWhereNull('assign_date');
+                });
         }
 
         if ($this->status != '') {
