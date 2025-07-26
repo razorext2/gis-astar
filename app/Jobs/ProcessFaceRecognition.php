@@ -55,7 +55,7 @@ class ProcessFaceRecognition implements ShouldQueue
             $file = fopen($fullPath, 'r');
 
             $response = Http::attach('file', $file)
-                ->post('http://192.168.11.20:8231/recognize', [
+                ->post('https://verify.indodacin.com/recognize', [
                     'kode_pegawai' => $this->kode_pegawai,
                     'no_vt' => $this->no_vt,
                 ]);
