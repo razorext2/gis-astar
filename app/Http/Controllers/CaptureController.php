@@ -13,6 +13,7 @@ class CaptureController extends Controller
     function __construct()
     {
         $this->middleware('permission:capture', ['only' => 'index']);
+        $this->middleware('permission:capture-route', ['only' => 'route']);
     }
 
     public function index()

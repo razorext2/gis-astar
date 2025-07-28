@@ -45,7 +45,7 @@
 	        'check' => 'capture.route',
 	        'label' => 'Absen Rute',
 	        'icon' => 'capture',
-	        'permission' => 'capture',
+	        'permission' => 'capture-route',
 	        'sublinks' => [],
 	        'navigate' => false,
 	        'indicator' => false,

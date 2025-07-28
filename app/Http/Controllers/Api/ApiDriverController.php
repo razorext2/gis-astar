@@ -15,6 +15,13 @@ use Illuminate\Support\Facades\Validator;
 
 class ApiDriverController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:driver-approve', ['only' => ['confirm', 'deny', 'revision']]);
+        $this->middleware('permission:driver-edit', ['only' => ['update', 'assignUpdate']]);
+        $this->middleware('permission:driver-create', ['only' => 'store']);
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [

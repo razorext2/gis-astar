@@ -7,6 +7,14 @@ use Illuminate\Contracts\View\View;
 
 class DriverController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:driver-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:driver-create', ['only' => 'create']);
+        $this->middleware('permission:driver-edit', ['only' => 'edit']);
+        $this->middleware('permission:driver-approve', ['only' => ['assignAddView', 'assignToView', 'assignUpdateView']]);
+    }
+
     public function index()
     {
         return view('dashboard.driver.index');
@@ -37,19 +45,11 @@ class DriverController extends Controller
 
     public function assignAddView()
     {
-        if (!auth()->user()->can('driver-approve')) {
-            abort(403);
-        }
-
         return view('dashboard.driver.assign-add');
     }
 
     public function assignToView($id)
     {
-        if (!auth()->user()->can('driver-approve')) {
-            abort(403);
-        }
-
         return view('dashboard.driver.assign-to', ['id' => $id]);
     }
 
