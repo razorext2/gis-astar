@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Spatie\Permission\Models\Role;
 
 class Today extends Component
 {
@@ -15,12 +16,14 @@ class Today extends Component
 
     public $attendance;
     public string $date;
+    public string $role;
     public string $address;
     public bool $showModal = false;
 
     public function mount()
     {
         $this->date = Carbon::now()->toDateString();
+        $this->role = '';
     }
 
     public function fetchAddress($lat, $long)
@@ -74,14 +77,15 @@ class Today extends Component
         return gmdate('H \j\a\m i \m\e\n\i\t s \d\e\t\i\k', $diffInSeconds);
     }
 
-    public function changeDate()
-    {
-        $this->date = Carbon::parse($this->date)->toDateString();
-    }
-
     public function render()
     {
-        $data = Attendance::whereDate('created_at', $this->date)->paginate(6);
+        $data = Attendance::whereDate('created_at', $this->date)
+            ->when($this->role, function ($query) {
+                return $query->whereHas('user.roles', function ($role) {
+                    $role->where('name', $this->role);
+                });
+            })
+            ->paginate(6);
 
         return view('livewire.handler.attendance.today', compact('data'));
     }

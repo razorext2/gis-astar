@@ -1,28 +1,22 @@
 <div class="grid w-full grid-cols-1 gap-y-4">
 
-	<div class="col-span-2 w-full">
-		<form wire:submit.prevent="changeDate" class="flex w-full flex-row items-center justify-end gap-2">
+	<div class="flex w-full flex-col items-center gap-2 md:flex-row lg:gap-4">
+		<x-input.select wire:model.live="role" :labels="false" id="role" name="role" :defaultOption="'Pilih Role'"
+			placeholder="Role" :options="[
+			    'Driver' => 'Driver',
+			    'Employee' => 'Karyawan',
+			    'Mekanik' => 'Mekanik',
+			    'Sales' => 'Sales',
+			    'Sales-JKT' => 'Sales Jakarta',
+			    'Sales-PKU' => 'Sales Pekanbaru',
+			    'Teknisi' => 'Teknisi',
+			]" />
 
-			<div class="relative flex flex-row items-center gap-2">
-				<label for="date" class="block text-sm font-medium text-gray-900 dark:text-white">Tanggal :</label>
-				<input type="date" wire:model="date"
-					class="block w-56 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500">
-			</div>
-
-			<x-button.primary type="submit" wire:loading.attr="disabled">
-				<x-slot name="icon">
-					<x-icons.angle-right wire:loading.remove class="h-5 w-5 text-blue-500 dark:text-white" />
-					<x-icons.loading wire:loading />
-				</x-slot>
-
-				<span wire:loading.remove>Cari</span>
-
-			</x-button.primary>
-
-		</form>
+		<input type="date" wire:model.live="date"
+			class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500">
 	</div>
 
-	<div class="grid w-full gap-2 lg:grid-cols-2 lg:gap-4" wire:poll.60s>
+	<div class="grid w-full gap-2 lg:grid-cols-2 lg:gap-4" wire:poll.300s>
 		@forelse ($data as $index => $row)
 			@php
 				$storage_path = "labels/{$row->pegawaiRelasi->kode_pegawai}/capturedImg/{$row->photoURL}.png";
