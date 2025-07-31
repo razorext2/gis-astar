@@ -86,7 +86,8 @@ class ProcessFaceRecognition implements ShouldQueue
                 return broadcast(new RecognitionEvent(
                     $this->user_id,
                     'error',
-                    'Absensi gagal: ' . ($responseData['error_message'] ?? 'Terjadi kesalahan')
+                    'Gagal',
+                    $responseData['error_message'] ?? 'Terjadi kesalahan'
                 ));
             }
 
@@ -111,6 +112,7 @@ class ProcessFaceRecognition implements ShouldQueue
                 return broadcast(new RecognitionEvent(
                     $this->user_id,
                     'success',
+                    'Berhasil',
                     'Absensi berhasil diverifikasi, lihat hasilnya di halaman absensi.'
                 ));
             } else {
@@ -123,6 +125,7 @@ class ProcessFaceRecognition implements ShouldQueue
                 return broadcast(new RecognitionEvent(
                     $this->user_id,
                     'error',
+                    'Menunggu persetujuan',
                     'Absensi berhasil, namun wajah tidak dikenali. Silahkan menunggu hingga HRD memverifikasi.'
                 ));
             }
@@ -134,7 +137,8 @@ class ProcessFaceRecognition implements ShouldQueue
             return broadcast(new RecognitionEvent(
                 $this->user_id,
                 'error',
-                'Absensi gagal: ' . $e->getMessage()
+                'Gagal',
+                $e->getMessage()
             ));
         }
     }

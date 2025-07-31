@@ -26,7 +26,7 @@ export async function initWebSocketListener() {
       .listen('.recognitionEvent', (data) => {
         let message = data.message.split('.').slice(0, 2).join('. ') + (data.message.split('.').length > 2 ? '...' : '');
 
-        showAlert(data.type, 'Berhasil', message)
+        showAlert(data.type, data.title, message)
       })
       .listen('.backupReady', (data) => {
         showToast('success', data.message);

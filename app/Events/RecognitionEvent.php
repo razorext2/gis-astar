@@ -15,15 +15,17 @@ class RecognitionEvent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
     protected int $user_id;
     protected string $type;
+    protected string $title;
     protected string $message;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($user_id, $type, $message)
+    public function __construct($user_id, $type, $title, $message)
     {
         $this->user_id = $user_id;
         $this->type = $type;
+        $this->title = $title;
         $this->message = $message;
     }
 
@@ -48,6 +50,7 @@ class RecognitionEvent implements ShouldBroadcast
     {
         return [
             'type' => $this->type,
+            'title' => $this->title,
             'message' => $this->message,
         ];
     }
