@@ -69,10 +69,6 @@ class AssignAdd extends Component
         // validasi input
         $this->validate();
 
-        $assign_date = $this->assign_date;
-
-        dd($assign_date);
-
         // tampilkan pesan loading
         $this->dispatch('loadingProgress', message: 'Mengirim data...');
 
