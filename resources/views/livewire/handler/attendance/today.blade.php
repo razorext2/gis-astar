@@ -47,6 +47,11 @@
 						Melakukan <span class="text-green-400">checkin</span> pada pukul
 						<span class="text-green-400">{{ \Carbon\Carbon::parse($row->jam_masuk)->format('H:i:s') }}</span>
 					</p>
+					@if ($row->keterangan)
+						<p class="text-sm text-gray-700 dark:text-gray-400">
+							{{ $row->keterangan }}
+						</p>
+					@endif
 				</div>
 			</div>
 		@empty
