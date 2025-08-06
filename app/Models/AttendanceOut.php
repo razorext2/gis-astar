@@ -24,6 +24,7 @@ class AttendanceOut extends Model
         'jam_keluar',
         'longitude',
         'latitude',
+        'position_status',
         'photoURL',
         'verified',
         'distance',

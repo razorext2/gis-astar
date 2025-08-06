@@ -102,6 +102,7 @@ class ApiAttendanceController extends Controller
         $validator = Validator::make($request->all(), [
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'keterangan' => 'required|string',
+            'status' => 'required|integer',
             'longitude' => 'required|string',
             'latitude' => 'required|string',
         ]);
@@ -165,6 +166,7 @@ class ApiAttendanceController extends Controller
                 'latitude' => $request->latitude,
                 'photoURL' => $filename,
                 'keterangan' => $request->keterangan,
+                'position_status' => $request->status,
             ];
 
             // cari no_vt

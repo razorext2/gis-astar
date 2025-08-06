@@ -24,6 +24,7 @@ class Attendance extends Model
         'jam_masuk',
         'longitude',
         'latitude',
+        'position_status',
         'photoURL',
         'verified',
         'distance',

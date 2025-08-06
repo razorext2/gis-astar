@@ -80,7 +80,7 @@ final class AttendanceOutTable extends PowerGridComponent
             ->add('id')
             ->add('kode_pegawai')
             ->add('kode_pegawai_formatted', fn($query) => Blade::render('components.table-component.codename', ['data' => $query]))
-            ->add('location', fn($query) => '<a class="underline hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-500" href="https://www.google.com/maps/search/?api=1&query=' . $query->latitude . ',' . $query->longitude . '" target="_blank">' . $query->latitude . ', ' . $query->longitude . '</a>')
+            ->add('location', fn($query) => Blade::render('components.table-component.location-and-status', ['data' => $query]))
             ->add('jam_keluar')
             ->add('jam_keluar_formatted', fn($query) => Blade::render('components.table-component.attendance-verify', [
                 'status' => $query->status,
@@ -97,8 +97,7 @@ final class AttendanceOutTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('#', 'photo_url')
-                ->bodyAttribute('flex flex-col items-center px-0'),
+            Column::make('#', 'photo_url'),
 
             Column::make('Pegawai', 'kode_pegawai_formatted'),
 

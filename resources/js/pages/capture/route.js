@@ -70,11 +70,26 @@ export async function initRecognition() {
       const imageData = canvas.toDataURL('image/png');
 
       if (imageData) {
-        const { value: keterangan } = await Swal.fire({
-          input: "textarea",
+        const { value: captureRoute } = await Swal.fire({
           title: "Keterangan absensi",
-          inputPlaceholder: "Tulis keterangan absensi.",
-          inputAttributes: { "aria-label": "Tulis keterangan absensi..." },
+          html: `
+            <form id="captureRouteForm" class="grid gap-4 !text-left">
+              <div class="col-span-2">
+                <label for="keterangan" class="block mb-2 text-sm font-medium text-gray-900">Keterangan</label>
+                <textarea name="keterangan" id="keterangan" class="swal2-textarea !w-full !m-0 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5" rows="4" placeholder="Tulis deskripsi..."></textarea>                    
+              </div>
+
+              <div class="col-span-2">
+                <label for="status" class="block mb-2 text-sm font-medium text-gray-900">Status</label>
+                <select name="status" id="status" class="swal2-input !w-full !m-0 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
+                  <option value="">Pilih Status</option>
+                  <option value="1">On Route</option>
+                  <option value="2">Standby</option>
+                  <option value="3">On Site</option>
+                </select>
+              </div>
+            </form>
+          `,
           allowOutsideClick: false,
           confirmButtonText: "Simpan",
           footer: `
@@ -86,25 +101,36 @@ export async function initRecognition() {
                     - otw ke pt a, vt - belum ada
                   </div>
                 `,
-          preConfirm: (value) => {
-            if (!value) {
-              Swal.showValidationMessage("Keterangan harus diisi!");
+          didOpen: () => {
+            $('#keterangan').focus();
+          },
+          preConfirm: () => {
+            const $form = $('#captureRouteForm');
+            const keterangan = $form.find('#keterangan').val();
+            const status = $form.find('#status').val();
+
+            if (!keterangan.trim()) {
+              Swal.showValidationMessage('Keterangan harus diisi!');
               return false;
             }
+
+            if (!status.trim()) {
+              Swal.showValidationMessage('Status harus diisi!');
+              return false;
+            }
+
+            return { keterangan, status };
           },
         });
 
-        if (keterangan) {
-          console.log('coords: ', longitude, latitude);
-
-          // Kirim ke endpoint Laravel
+        if (captureRoute) {
           const imageFile = base64ToFile(imageData, 'face.png');
-
           const formData = new FormData();
           formData.append('image', imageFile);
-          formData.append('keterangan', keterangan);
           formData.append('longitude', String(longitude));
           formData.append('latitude', String(latitude));
+          formData.append('keterangan', captureRoute.keterangan);
+          formData.append('status', captureRoute.status);
 
           loadingAlert('Memproses...');
 
@@ -112,23 +138,19 @@ export async function initRecognition() {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
-          })
-            .then(async res => {
-
-              if (res.data.success) {
-                showAlert('success', res.data.message, res.data.data);
-
-                return setTimeout(() => {
-                  window.location.href = '/dashboard';
-                }, 1500);
-              } else {
-                showAlert('error', res.data.message, res.data.data);
-              }
-            })
-            .catch(error => {
-              Swal.close();
-              return showAlert('error', error.message, error.data);
-            });
+          }).then(async res => {
+            if (res.data.success) {
+              showAlert('success', res.data.message, res.data.data);
+              return setTimeout(() => {
+                window.location.href = '/dashboard';
+              }, 1500);
+            } else {
+              showAlert('error', res.data.message, res.data.data);
+            }
+          }).catch(error => {
+            Swal.close();
+            return showAlert('error', error.message, error.data);
+          });
         }
       }
     }

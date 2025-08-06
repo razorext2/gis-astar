@@ -29,14 +29,6 @@
 				<div wire:click="openModal({{ $row->id }})"
 					class="relative flex cursor-pointer flex-col items-center rounded-lg border-gray-200 ring-1 ring-gray-200 transition-transform duration-300 hover:scale-95 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-700 dark:ring-0 dark:hover:bg-gray-700 lg:flex-row">
 
-					@php $lateDuration = $this->getLateDuration($row->jam_masuk); @endphp
-
-					@if ($lateDuration)
-						<span class="absolute right-2 top-2 rounded-lg bg-red-800 px-2 py-1 text-xs text-white">
-							+ {{ $lateDuration }}
-						</span>
-					@endif
-
 					<img
 						class="h-44 w-full rounded-t-lg object-cover lg:h-full lg:w-48 lg:rounded-none lg:rounded-s-lg xl:h-44 xl:w-44"
 						src="{{ $img_check ? $image_path : $no_image_path }}" alt=""
@@ -47,8 +39,8 @@
 							{{ $row->pegawaiRelasi->full_name }}
 						</h5>
 						<p class="text-sm text-gray-700 dark:text-gray-400">
-							Melakukan <span class="text-green-400">checkin</span> pada pukul
-							<span class="text-green-400">{{ \Carbon\Carbon::parse($row->jam_masuk)->format('H:i:s') }}</span>
+							Melakukan <span class="text-red-400">checkout</span> pada pukul
+							<span class="text-red-400">{{ \Carbon\Carbon::parse($row->jam_keluar)->format('H:i:s') }}</span>
 						</p>
 						@if ($row->keterangan)
 							<div class="flex w-full flex-row items-center gap-x-1">
@@ -56,7 +48,7 @@
 								@if ($row->position_status == 1)
 									<x-icons.exclamation-circle class="h-4 w-4 text-yellow-500" />
 								@elseif($row->position_status == 2)
-									<x-icons.check-circle class="h-4 w-4 text-green-500" />
+									<x-icons.check-circle class="h-4 w-4 text-red-500" />
 								@elseif($row->position_status == 3)
 									<x-icons.minus-circle class="h-4 w-4 text-red-500" />
 								@else
@@ -81,9 +73,9 @@
 
 	</div>
 
-	<div wire:show="showModal" wire:transition.duration.300ms
+	<div wire:show="showModalOut" wire:transition.duration.300ms
 		class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
-		@if ($showModal)
+		@if ($showModalOut)
 			<!-- Modal box -->
 			<div class="mx-2 flex flex-col gap-2 rounded-xl bg-white p-4 shadow-2xl dark:bg-gray-800 sm:mx-0 md:w-1/3 lg:p-6">
 				<h2 class="text-center text-2xl font-semibold text-gray-900 dark:text-white lg:text-3xl">Detail
@@ -97,9 +89,9 @@
 					</div>
 
 					<p class="text-lg font-semibold lg:text-2xl">{{ $attendance->pegawaiRelasi->full_name }}</p>
-					<p class="text-sm text-gray-700 dark:text-gray-400">Melakukan <span class="text-green-400">checkin</span> pada
+					<p class="text-sm text-gray-700 dark:text-gray-400">Melakukan <span class="text-red-400">checkout</span> pada
 						pukul
-						<span class="text-green-400">{{ \Carbon\Carbon::parse($attendance->jam_masuk)->format('H:i:s') }}</span> di
+						<span class="text-green-400">{{ \Carbon\Carbon::parse($attendance->jam_keluar)->format('H:i:s') }}</span> di
 						<span class="text-green-400">{{ $address }}</span>
 					</p>
 
@@ -114,7 +106,7 @@
 				</div>
 
 				<div class="mt-4">
-					<x-button.primary class="w-full justify-center" wire:click="set('showModal', false)">
+					<x-button.primary class="w-full justify-center" wire:click="set('showModalOut', false)">
 						Ok
 					</x-button.primary>
 				</div>
