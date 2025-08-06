@@ -100,8 +100,8 @@ class ApiAttendanceController extends Controller
     {
         // validasi input awal
         $validator = Validator::make($request->all(), [
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'keterangan' => 'required|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:4096',
+            'keterangan' => 'required|string|min:10',
             'status' => 'required|integer',
             'longitude' => 'required|string',
             'latitude' => 'required|string',

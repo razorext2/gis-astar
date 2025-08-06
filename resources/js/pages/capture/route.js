@@ -109,6 +109,7 @@ export async function initRecognition() {
             const keterangan = $form.find('#keterangan').val();
             const status = $form.find('#status').val();
 
+
             if (!keterangan.trim()) {
               Swal.showValidationMessage('Keterangan harus diisi!');
               return false;
@@ -116,6 +117,11 @@ export async function initRecognition() {
 
             if (!status.trim()) {
               Swal.showValidationMessage('Status harus diisi!');
+              return false;
+            }
+
+            if (keterangan.length < 10) {
+              Swal.showValidationMessage('Keterangan minimal 10 karakter!');
               return false;
             }
 
