@@ -149,7 +149,7 @@ export async function initRecognition() {
               showAlert('success', res.data.message, res.data.data);
               return setTimeout(() => {
                 window.location.href = '/dashboard';
-              }, 1500);
+              }, 500);
             } else {
               showAlert('error', res.data.message, res.data.data);
             }
