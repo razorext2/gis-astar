@@ -127,7 +127,7 @@
 					x-transition:enter="transition ease-in duration-200" x-transition:enter-start="transform opacity-0 -translate-y-5"
 					x-transition:leave="transition ease-out duration-200" x-transition:leave-end="transform opacity-0 -translate-y-5">
 
-					@hasanyrole('Admin|Management|HRD')
+					@hasanyrole('Admin|Management|HRD|Service')
 						<li>
 							<a
 								class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
