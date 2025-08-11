@@ -50,14 +50,14 @@ final class TeamMemberTable extends PowerGridComponent
                 $progress = [];
                 $progress[$query->kode_pegawai] = $this->getApi($query->kode_pegawai);
 
+                $html = '';
+
                 foreach ($progress[$query->kode_pegawai] as $month => $items) {
-                    if (count($items) > 0 && $items[0]['TotalKunjungan'] > 0) {
-                        $percentage = ($items[0]['SudahTerisi'] / $items[0]['TotalKunjungan']) * 100;
-                        $label = $items[0]['SudahTerisi'] . '/' . $items[0]['TotalKunjungan'];
-                    } else {
-                        $percentage = 0;
-                        $label = '0/0';
-                    }
+                    $total = $items[0]['TotalKunjungan'] ?? 0;
+                    $filled = $items[0]['SudahTerisi'] ?? 0;
+
+                    $percentage = $total > 0 ? ($filled / $total) * 100 : 0;
+                    $label = "{$filled}/{$total}";
 
                     if ($percentage <= 50) {
                         $colorClass = "bg-red-600 text-gray-600 dark:text-red-100";
@@ -67,16 +67,20 @@ final class TeamMemberTable extends PowerGridComponent
                         $colorClass = 'bg-green-600 text-green-100';
                     }
 
-                    return '<p class="mb-1 text-sm text-gray-800 dark:text-white">
-								' . \Carbon\Carbon::parse($month)->locale('id')->format('F Y') . '
-							</p>
-							<div class="w-full rounded-full bg-gray-200 dark:bg-gray-600">
-								<div class="' . $colorClass . ' rounded-full p-0.5 text-center text-xs font-medium leading-none"
-									style="width: ' . $percentage . '%">
-									' . $label . '
-								</div>
-							</div>';
+                    $html .= '
+                        <p class="mb-1 text-sm text-gray-800 dark:text-white">'
+                        . \Carbon\Carbon::parse($month)->locale('id')->isoFormat('MMMM Y') .
+                        '</p>
+                        <div class="w-full rounded-full bg-gray-200 dark:bg-gray-600">
+                            <div class="' . $colorClass . ' rounded-full p-0.5 text-center text-xs font-medium leading-none"
+                                style="width: ' . $percentage . '%">
+                                ' . $label . '
+                            </div>
+                        </div>
+                    ';
                 }
+
+                return $html;
             });
     }
 
@@ -89,10 +93,10 @@ final class TeamMemberTable extends PowerGridComponent
 
             Column::make('Role', 'role'),
 
-            Column::make('Total Poin', 'total_poin')
+            Column::make('Total Poin (DB)', 'total_poin')
                 ->contentClasses('text-center'),
 
-            Column::make('Progress Laporan', 'progress'),
+            Column::make('Progress Laporan (API)', 'progress'),
         ];
     }
 
@@ -110,21 +114,23 @@ final class TeamMemberTable extends PowerGridComponent
 
     public function getApi($kode_pegawai)
     {
-        $api = Http::get('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchCountPoint&NomorIdentitasTeknisi=' . $kode_pegawai)->json();
+        $api = Http::get(
+            'https://indodacin.nusa.net.id/web/finger/secureapi.php',
+            [
+                'tipe' => 'fetchCountPoint',
+                'NomorIdentitasTeknisi' => $kode_pegawai
+            ]
+        )->json();
 
-        // Ambil semua bulan (format 'YYYY-MM') dari getMonth()
-        $months = [];
-        for ($i = 0; $i < 1; $i++) {
-            $months[] = now()->subMonths($i)->format('Y-m');
-        }
+        // Ambil 5 bulan terakhir (Y-m)
+        $months = collect(range(0, 2))
+            ->map(fn($i) => now()->subMonths($i)->format('Y-m'));
 
+        $data = collect($api['data'] ?? []);
 
-        $result = [];
-        foreach ($months as $bulan) {
-            $result[$bulan] = array_values(array_filter($api['data'] ?? [], function ($item) use ($bulan) {
-                return isset($item['Bulan']) && $item['Bulan'] === $bulan;
-            }));
-        }
+        $result = $months->mapWithKeys(fn($bulan) => [
+            $bulan => $data->filter(fn($item) => ($item['Bulan'] ?? null) === $bulan)->values()
+        ])->toArray();
 
         return $result;
     }
