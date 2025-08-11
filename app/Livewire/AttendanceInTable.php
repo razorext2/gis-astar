@@ -83,10 +83,14 @@ final class AttendanceInTable extends PowerGridComponent
             ->add('kode_pegawai_formatted', fn($query) => Blade::render('components.table-component.codename', ['data' => $query]))
             ->add('location', fn($query) => Blade::render('components.table-component.location-and-status', ['data' => $query]))
             ->add('jam_masuk')
-            ->add('jam_masuk_formatted', fn($query) => Blade::render('components.table-component.two-row-vertical', [
-                'a' => $query->waktuori . ' (' . $query->timezone . ')',
-                'b' => $query->jam_keluar . ' (' . now()->timezone . ')',
-            ]))
+            ->add('jam_masuk_formatted', function ($query) {
+                $timezone = $query->timezone ?? 'No timezone';
+
+                return Blade::render('components.table-component.two-row-vertical', [
+                    'a' => $query->waktuori . ', ' . $timezone,
+                    'b' => $query->jam_masuk . ', ' . now()->timezone,
+                ]);
+            })
             ->add('status')
             ->add('status_formatted', fn($query) => Blade::render('components.table-component.attendance-verify', [
                 'status' => $query->status,
