@@ -64,6 +64,18 @@ class TodayOut extends Component
         $this->attendance = $data;
     }
 
+    public function getLateDuration($jamMasuk)
+    {
+        $masuk = Carbon::parse($jamMasuk);
+        $target = $masuk->copy()->setTime(17, 0, 0);
+        $diffInSeconds = $masuk->diffInSeconds($target, false);
+
+        if ($diffInSeconds <= 0)
+            return null;
+
+        return gmdate('H \j\a\m i \m\e\n\i\t s \d\e\t\i\k', $diffInSeconds);
+    }
+
     public function render()
     {
         $data = AttendanceOut::whereDate('created_at', $this->date)

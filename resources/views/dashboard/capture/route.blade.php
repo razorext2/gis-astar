@@ -5,9 +5,17 @@
 
 		<div class="w-full">
 			<h2 class="w-full text-lg font-semibold text-gray-900 dark:text-white">Absensi baru khusus rute</h2>
-			<p class="text-md text-gray-600 dark:text-gray-300"> Rasa stroberi </p>
+			<p class="text-md text-gray-600 dark:text-gray-300">
+				Timezone: <span class="font-semibold text-gray-600 dark:text-white" id="timezone_js"></span>
+			</p>
 		</div>
 
 		@livewire('handler.attendance.route')
 	</div>
+
+	<script>
+		const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+		document.getElementById('timezone_js').textContent = timezone;
+	</script>
 @endsection

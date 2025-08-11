@@ -82,7 +82,12 @@ final class AttendanceOutTable extends PowerGridComponent
             ->add('kode_pegawai_formatted', fn($query) => Blade::render('components.table-component.codename', ['data' => $query]))
             ->add('location', fn($query) => Blade::render('components.table-component.location-and-status', ['data' => $query]))
             ->add('jam_keluar')
-            ->add('jam_keluar_formatted', fn($query) => Blade::render('components.table-component.attendance-verify', [
+            ->add('jam_keluar_formatted', fn($query) => Blade::render('components.table-component.two-row-vertical', [
+                'a' => $query->waktuori . ' (' . $query->timezone . ')',
+                'b' => $query->jam_keluar . ' (' . now()->timezone . ')',
+            ]))
+            ->add('status')
+            ->add('status_formatted', fn($query) => Blade::render('components.table-component.attendance-verify', [
                 'status' => $query->status,
                 'verified' => $query->verified ? 'verified' : 'unverified',
                 'similarity' => (1 - round($query->distance ?? 1, 2)) * 100 . '%',
@@ -101,9 +106,9 @@ final class AttendanceOutTable extends PowerGridComponent
 
             Column::make('Pegawai', 'kode_pegawai_formatted'),
 
-            Column::make('Status Verifikasi', 'jam_keluar_formatted'),
+            Column::make('Status Verifikasi', 'status_formatted'),
 
-            Column::make('Jam Keluar', 'jam_keluar')
+            Column::make('Jam Keluar', 'jam_keluar_formatted')
                 ->sortable()
                 ->searchable(),
 

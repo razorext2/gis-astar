@@ -29,7 +29,7 @@
 				<div wire:click="openModal({{ $row->id }})"
 					class="relative flex cursor-pointer flex-col items-center rounded-lg border-gray-200 ring-1 ring-gray-200 transition-transform duration-300 hover:scale-95 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-700 dark:ring-0 dark:hover:bg-gray-700 lg:flex-row">
 
-					@php $lateDuration = $this->getLateDuration($row->jam_masuk); @endphp
+					@php $lateDuration = $this->getLateDuration($row->waktuori); @endphp
 
 					@if ($lateDuration)
 						<span class="absolute right-2 top-2 rounded-lg bg-red-800 px-2 py-1 text-xs text-white">
@@ -48,7 +48,9 @@
 						</h5>
 						<p class="text-sm text-gray-700 dark:text-gray-400">
 							Melakukan <span class="text-green-400">checkin</span> pada pukul
-							<span class="text-green-400">{{ \Carbon\Carbon::parse($row->jam_masuk)->format('H:i:s') }}</span>
+							<span class="text-green-400">{{ \Carbon\Carbon::parse($row->waktuori)->format('H:i:s') }}
+								({{ $row->timezone ?? '-' }})
+							</span>
 						</p>
 						@if ($row->keterangan)
 							<div class="flex w-full flex-row items-center gap-x-1">
@@ -99,7 +101,8 @@
 					<p class="text-lg font-semibold lg:text-2xl">{{ $attendance->pegawaiRelasi->full_name }}</p>
 					<p class="text-sm text-gray-700 dark:text-gray-400">Melakukan <span class="text-green-400">checkin</span> pada
 						pukul
-						<span class="text-green-400">{{ \Carbon\Carbon::parse($attendance->jam_masuk)->format('H:i:s') }}</span> di
+						<span class="text-green-400">{{ \Carbon\Carbon::parse($attendance->waktuori)->format('H:i:s') }}
+							({{ $attendance->timezone ?? '-' }})</span> di
 						<span class="text-green-400">{{ $address }}</span>
 					</p>
 
