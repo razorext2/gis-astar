@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
@@ -61,9 +62,12 @@ class AttendanceController extends Controller
 
     public function getDistribution()
     {
+        $startHour = Carbon::now()->startOfDay();
+        $endHour = Carbon::now()->endOfDay();
+
         return Attendance::select('kode_pegawai', 'longitude', 'latitude')
             ->with('pegawaiRelasi:kode_pegawai,full_name')
-            ->whereBetween('created_at', [today()->subMonth(), today()])
+            ->whereBetween('created_at', [$startHour, $endHour])
             ->get()
             ->toJson();
     }
