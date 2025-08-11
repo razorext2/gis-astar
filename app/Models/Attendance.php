@@ -20,6 +20,7 @@ class Attendance extends Model
         'upljam',
         'jenis',
         'waktuori',
+        'timezone',
         'status',
         'jam_masuk',
         'longitude',

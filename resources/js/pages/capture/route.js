@@ -130,20 +130,21 @@ export async function initRecognition() {
         });
 
         if (captureRoute) {
+          const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
           const imageFile = base64ToFile(imageData, 'face.png');
           const formData = new FormData();
+
           formData.append('image', imageFile);
           formData.append('longitude', String(longitude));
           formData.append('latitude', String(latitude));
           formData.append('keterangan', captureRoute.keterangan);
           formData.append('status', captureRoute.status);
+          formData.append('timezone', timezone);
 
           loadingAlert('Memproses...');
 
           axios.post('/api/facerecognition/verify', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
+            headers: { 'Content-Type': 'multipart/form-data' }
           }).then(async res => {
             if (res.data.success) {
               showAlert('success', res.data.message, res.data.data);

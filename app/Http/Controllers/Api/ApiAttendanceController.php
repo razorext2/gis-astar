@@ -105,6 +105,7 @@ class ApiAttendanceController extends Controller
             'status' => 'required|integer',
             'longitude' => 'required|string',
             'latitude' => 'required|string',
+            'timezone' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -150,6 +151,8 @@ class ApiAttendanceController extends Controller
             $modelClass = $isKeluar ? AttendanceOut::class : Attendance::class;
             $absenType = $isKeluar ? 'AttendanceOut' : 'Attendance';
             $jamField = $isKeluar ? 'jam_keluar' : 'jam_masuk';
+            $waktuWib = Carbon::now($request->timezone)
+                ->setTimezone('Asia/Jakarta');
 
             // data absensi
             $absenData = [
@@ -159,7 +162,8 @@ class ApiAttendanceController extends Controller
                 'uplm68' => 0,
                 'upljam' => 0,
                 'jenis' => 'Wajah',
-                'waktuori' => now(),
+                'waktuori' => $waktuWib,
+                'timezone' => $request->timezone,
                 'status' => 0, // status = pending/diajukan
                 $jamField => now(),
                 'longitude' => $request->longitude,

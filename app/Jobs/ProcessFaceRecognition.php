@@ -103,7 +103,7 @@ class ProcessFaceRecognition implements ShouldQueue
                 // langsung kirim ke API
                 $api = Http::post('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendance', [
                     'kode_jari' => $this->kode_pegawai,
-                    'waktu' => $data->waktu_ori,
+                    'waktu' => $data->waktuori,
                     'kodebarcode' => $this->no_vt,
                 ]);
 

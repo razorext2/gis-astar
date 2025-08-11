@@ -20,6 +20,7 @@ class AttendanceOut extends Model
         'upljam',
         'jenis',
         'waktuori',
+        'timezone',
         'status',
         'jam_keluar',
         'longitude',
