@@ -98,7 +98,10 @@
 							src="{{ asset(sha1('libs') . '/' . $attendance->photoURL . '.png') }}" alt="">
 					</div>
 
-					<p class="text-lg font-semibold lg:text-2xl">{{ $attendance->pegawaiRelasi->full_name }}</p>
+					<a href="{{ route('pegawai.detail', $attendance->pegawaiRelasi->id) }}" target="_blank"
+						class="w-fit text-lg font-semibold hover:underline lg:text-2xl">
+						{{ $attendance->pegawaiRelasi->full_name }}
+					</a>
 					<p class="text-sm text-gray-700 dark:text-gray-400">Melakukan <span class="text-green-400">checkin</span> pada
 						pukul
 						<span class="text-green-400">{{ \Carbon\Carbon::parse($attendance->waktuori)->format('H:i:s') }}
