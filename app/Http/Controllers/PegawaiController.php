@@ -275,6 +275,13 @@ class PegawaiController extends Controller
         return view('dashboard.pegawai.details.personal-info', compact('pegawai', 'dd', 'images', 'attendanceData'));
     }
 
+    public function attendance($id)
+    {
+        $pegawai = Pegawai::findOrFail($id);
+
+        return view('dashboard.pegawai.details.attendance', compact('pegawai'));
+    }
+
     public function payrollInfo($id)
     {
         $pegawai = Pegawai::with('salaryRelasi')->findOrFail($id);
@@ -346,7 +353,6 @@ class PegawaiController extends Controller
             $date = Carbon::parse($request->query('date'))->isoFormat('YYYY-MM-DD');
         } else {
             $date = Carbon::today(); // Ambil tanggal dari query string
-
         }
 
         // Query untuk data Check-out
@@ -367,7 +373,11 @@ class PegawaiController extends Controller
             ->get();
 
         if ($attendances->isNotEmpty()) {
-            $attendances->last()->type = 'Check-out'; // Tandai data terakhir sebagai "Check-out"
+            if ($attendances->count() > 1) {
+                $attendances->last()->type = 'Check-out'; // Tandai data terakhir sebagai "Check-out"
+            }
+
+            $attendances->first()->type = 'Check-in'; // Tandai data pertama sebagai "Check-in"
         }
 
         // Mendapatkan informasi pegawai

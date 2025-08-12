@@ -225,6 +225,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('pegawai/{pegawai}/detail', [PegawaiController::class, 'detail'])->name('pegawai.detail');
         Route::get('pegawai/attendance', [PegawaiController::class, 'getAttendanceDate'])->name('pegawai.get.attendance.date');
         Route::get('pegawai/{pegawai}/payroll', [PegawaiController::class, 'payrollInfo'])->name('pegawai.payrollinfo');
+        Route::get('pegawai/{pegawai}/attendance', [PegawaiController::class, 'attendance'])->name('pegawai.attendance');
         Route::get('pegawai/{pegawai}/timeline', [PegawaiController::class, 'timeline'])->name('pegawai.timeline');
         Route::get('pegawai/{pegawai}/collectors', [PegawaiController::class, 'reportCollectors'])->name('pegawai.collectors');
         Route::get('pegawai/{pegawai}/sales', [PegawaiController::class, 'reportSales'])->name('pegawai.sales');

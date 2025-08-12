@@ -14,24 +14,32 @@
 				</div>
 				<div class="mb-4 border-b border-gray-200 dark:border-gray-700">
 					<ul class="flex flex-wrap text-center text-sm font-medium" role="tablist">
-						<li role="presentation">
+						<li>
 							<a
 								class="{{ Route::is('pegawai.detail') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg p-4 hover:text-gray-600 dark:hover:text-gray-300"
 								href="{{ route('pegawai.detail', $pegawai->id) }}">Profile</a>
 						</li>
-						<li role="presentation">
+
+						<li>
+							<a
+								class="{{ Route::is('pegawai.attendance') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg p-4 hover:text-gray-600 dark:hover:text-gray-300"
+								href="{{ route('pegawai.attendance', $pegawai->id) }}">Absensi</a>
+						</li>
+
+						{{-- <li>
 							<a
 								class="{{ Route::is('pegawai.payrollinfo') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg p-4 hover:text-gray-600 dark:hover:text-gray-300"
 								href="{{ route('pegawai.payrollinfo', $pegawai->id) }}">Payroll</a>
-						</li>
-						<li role="presentation">
+						</li> --}}
+
+						<li>
 							<a
 								class="{{ Route::is('pegawai.timeline') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg p-4 hover:text-gray-600 dark:hover:text-gray-300"
 								href="{{ route('pegawai.timeline', $pegawai->kode_pegawai) }}">Timeline</a>
 						</li>
 
 						@if ($pegawai->userRelasi->hasRole('Collector'))
-							<li role="presentation">
+							<li>
 								<a
 									class="{{ Route::is('pegawai.collectors') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg p-4 hover:text-gray-600 dark:hover:text-gray-300"
 									href="{{ route('pegawai.collectors', $pegawai->kode_pegawai) }}">Laporan Kolektor</a>
@@ -39,7 +47,7 @@
 						@endif
 
 						@if ($pegawai->userRelasi->hasRole(['Sales', 'Sales-JKT', 'Sales-PKU']))
-							<li role="presentation">
+							<li>
 								<a
 									class="{{ Route::is('pegawai.sales') ? 'text-red-600 border-b-2 hover:border-gray-300' : 'text-gray-400' }} inline-block rounded-t-lg p-4 hover:text-gray-600 dark:hover:text-gray-300"
 									href="{{ route('pegawai.sales', $pegawai->kode_pegawai) }}">Laporan Sales</a>

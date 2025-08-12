@@ -22,8 +22,9 @@ final class AttendanceOutTable extends PowerGridComponent
     use WithExport;
     public string $tableName = 'AttendanceOutTable';
     public bool $deferLoading = true;
-    public bool $showFilters = true;
+    public bool $showFilters = false;
     public $pegawai;
+    public ?int $kodePegawai = null;
 
     public function setUp(): array
     {
@@ -59,6 +60,10 @@ final class AttendanceOutTable extends PowerGridComponent
 
         if (auth()->user()->kode_pegawai) {
             $data->where('kode_pegawai', auth()->user()->kode_pegawai);
+        }
+
+        if ($this->kodePegawai) {
+            $data->where('kode_pegawai', $this->kodePegawai);
         }
 
         return $data->latest();
