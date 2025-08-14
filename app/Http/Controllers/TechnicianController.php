@@ -153,11 +153,13 @@ class TechnicianController extends Controller
 
                 if ($request->file('bast_document')) {
                     // simpan dokumen
+                    $no_vt = strtoupper($request->no_vt);
+
                     $document = $request->file('bast_document');
-                    $documentName = 'dokumen_bast_' . $request->no_vt . '.' . $document->getClientOriginalExtension();
+                    $documentName = 'dokumen_bast_' . $no_vt . '.' . $document->getClientOriginalExtension();
                     $document->storeAs('public/technician/pdf', $documentName);
 
-                    $check = PhotoCollect::where('no_vt', $request->no_vt)
+                    $check = PhotoCollect::where('no_vt', $no_vt)
                         ->where('photourl', 'pdf/' . $documentName)
                         ->first();
 
@@ -167,7 +169,7 @@ class TechnicianController extends Controller
                         ]);
                     } else {
                         $upload = PhotoCollect::create([
-                            'no_vt' => $request->no_vt,
+                            'no_vt' => $no_vt,
                             'photourl' => 'pdf/' . $documentName,
                         ]);
                     }
