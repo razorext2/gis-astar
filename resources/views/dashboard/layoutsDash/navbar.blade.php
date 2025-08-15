@@ -16,7 +16,7 @@
 			@endif
 		</div>
 
-		<div class="flex items-center justify-between gap-2">
+		<div class="flex items-center justify-between gap-2 lg:gap-4">
 
 			@livewire('utils.ping-checker')
 
@@ -30,9 +30,9 @@
 				@livewire('notification-bell')
 			</button>
 
-			<!-- Dropdown menu -->
+			<!-- Notifikasi Dropdown -->
 			<div
-				class="z-50 my-4 me-4 hidden max-w-full items-center rounded-b-lg bg-white shadow-md shadow-md dark:border-x dark:border-b dark:border-gray-700 dark:bg-dark-primary dark:shadow-none md:max-w-xl"
+				class="z-50 my-4 me-4 hidden max-w-full items-center rounded-b-lg bg-white shadow-md dark:border-x dark:border-b dark:border-gray-700 dark:bg-dark-primary dark:shadow-none md:max-w-xl"
 				id="notification-dropdown">
 				<div class="bg-gray-50 p-4 font-medium text-gray-700 dark:bg-gray-800 dark:text-white">
 					Notifikasi
@@ -48,7 +48,8 @@
 
 			</div>
 
-			<button class="ms-3 flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"
+			{{-- Profile Photo --}}
+			<button class="flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"
 				id="user-menu-button" data-dropdown-toggle="dropdown" data-dropdown-placement="bottom-end"
 				data-dropdown-offset-distance="13" type="button" aria-expanded="false">
 				<span class="sr-only">Open user menu</span>
@@ -57,6 +58,7 @@
 					alt="user photo" loading="lazy" onerror="this.src = '{{ asset('assets/img/noImage.webp') }}'">
 			</button>
 
+			{{-- Dropdown Profile --}}
 			<div
 				class="z-50 my-4 hidden w-56 list-none divide-y divide-gray-100 rounded-b-lg bg-white text-base shadow-md dark:divide-gray-600 dark:border-x dark:border-b dark:border-gray-700 dark:bg-dark-primary"
 				id="dropdown">

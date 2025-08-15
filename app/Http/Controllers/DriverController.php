@@ -11,8 +11,8 @@ class DriverController extends Controller
     {
         $this->middleware('permission:driver-list', ['only' => ['index', 'show']]);
         $this->middleware('permission:driver-create', ['only' => 'create']);
-        $this->middleware('permission:driver-edit', ['only' => 'edit']);
-        $this->middleware('permission:driver-approve', ['only' => ['assignAddView', 'assignToView', 'assignUpdateView']]);
+        $this->middleware('permission:driver-edit', ['only' => ['edit', 'assignUpdateView']]);
+        $this->middleware('permission:driver-approve', ['only' => ['assignAddView', 'assignToView']]);
     }
 
     public function index()
@@ -57,9 +57,9 @@ class DriverController extends Controller
     {
         $data = Driver::find($id);
 
-        if ($data->assign_date > now()) {
-            abort(404);
-        }
+        // if ($data->assign_date > now()) {
+        //     abort(404);
+        // }
 
         return view('dashboard.driver.assign-update', ['data' => $data]);
     }
