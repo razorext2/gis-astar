@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Attendance;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Auth;
 
 class AttendanceController extends Controller
 {
@@ -30,7 +30,7 @@ class AttendanceController extends Controller
                 $latitude = NULL;
             }
 
-            Attendance::create([
+            $absensi = Attendance::create([
                 'kode_pegawai' => $kodePegawai,
                 'upl' => 0,
                 'upl68' => 0,
@@ -49,8 +49,12 @@ class AttendanceController extends Controller
                 'distance' => 0,
             ]);
 
+            if (!$absensi || !$absensi->exists) {
+                throw new Exception('Gagal menyimpan data absensi. Silahkan lakukan absensi ulang.');
+            }
+
             return response()->json(['success' => true, 'message' => 'Attendance recorded successfully.']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['success' => false, 'message' => 'Failed to record attendance.', 'error' => $e->getMessage()]);
         }
     }

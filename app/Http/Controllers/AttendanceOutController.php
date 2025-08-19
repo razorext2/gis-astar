@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\AttendanceOut;
-// use App\Models\Logabsensi;
-use Illuminate\Support\Facades\Auth;
+use Exception;
 
 class AttendanceOutController extends Controller
 {
@@ -30,7 +29,7 @@ class AttendanceOutController extends Controller
                 $latitude = NULL;
             }
 
-            AttendanceOut::create([
+            $absensi = AttendanceOut::create([
                 'kode_pegawai' => $kodePegawai,
                 'upl' => 0,
                 'upl68' => 0,
@@ -49,8 +48,12 @@ class AttendanceOutController extends Controller
                 'distance' => 0,
             ]);
 
+            if (!$absensi || !$absensi->exists) {
+                throw new Exception('Gagal menyimpan data absensi. Silahkan lakukan absensi ulang.');
+            }
+
             return response()->json(['success' => true, 'message' => 'Clock-out recorded successfully.']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['success' => false, 'message' => 'Failed to record attendance.', 'error' => $e->getMessage()]);
         }
     }

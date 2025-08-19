@@ -4,6 +4,8 @@ namespace App\Jobs;
 
 use App\Events\RecognitionEvent;
 use App\Http\Resources\ApiResource;
+use App\Models\User;
+use App\Notifications\SendNotifAttendance;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Broadcast;
@@ -41,9 +43,11 @@ class ProcessFaceRecognition implements ShouldQueue
      */
     public function handle()
     {
+        // cari model
         $modelClass = "\\App\\Models\\{$this->model}";
         $data = $modelClass::where('id', $this->id)->first();
 
+        // path ke file
         $fullPath = storage_path('app/' . $this->img_path . '/' . $this->filename);
 
         try {
@@ -54,6 +58,7 @@ class ProcessFaceRecognition implements ShouldQueue
 
             $file = fopen($fullPath, 'r');
 
+            // kirim file ke api untuk direcognize
             $response = Http::attach('file', $file)
                 ->post('https://verify.indodacin.com/recognize', [
                     'kode_pegawai' => $this->kode_pegawai,
@@ -83,6 +88,9 @@ class ProcessFaceRecognition implements ShouldQueue
                     'verified_by' => 'System',
                 ]); // lebih aman daripada delete
 
+                // kirim notifikasi
+                $this->sendNotif('Absensi gagal: ' . $responseData['error_message'], $this->id, $this->model);
+
                 return broadcast(new RecognitionEvent(
                     $this->user_id,
                     'error',
@@ -100,40 +108,51 @@ class ProcessFaceRecognition implements ShouldQueue
                     'distance' => $responseData['distance'],
                 ]);
 
-                // langsung kirim ke API
-                $api = Http::post('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendance', [
-                    'kode_jari' => $this->kode_pegawai,
-                    'waktu' => $data->waktuori,
-                    'kodebarcode' => $this->no_vt,
-                ]);
+                // // langsung kirim ke API
+                // $api = Http::post('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendance', [
+                //     'kode_jari' => $this->kode_pegawai,
+                //     'waktu' => $data->waktuori,
+                //     'kodebarcode' => $this->no_vt,
+                // ]);
 
-                dump($api->json());
+                // dump($api->json());
 
+                // kirim notifikasi
+                $this->sendNotif('Absensi berhasil diverifikasi, lihat hasilnya di halaman absensi.', $this->id, $this->model);
+
+                // broadcast pesan
                 return broadcast(new RecognitionEvent(
                     $this->user_id,
                     'success',
                     'Berhasil',
                     'Absensi berhasil diverifikasi, lihat hasilnya di halaman absensi.'
                 ));
-            } else {
-                $data->update([
-                    'verified' => false,
-                    'distance' => $responseData['distance'],
-                    'status' => 0, // pending manual
-                ]);
-
-                return broadcast(new RecognitionEvent(
-                    $this->user_id,
-                    'error',
-                    'Menunggu persetujuan',
-                    'Absensi berhasil, namun wajah tidak dikenali. Silahkan menunggu hingga HRD memverifikasi.'
-                ));
             }
 
-        } catch (\Exception $e) {
-            $data->delete();
-            Storage::delete("{$this->img_path}/{$this->filename}");
+            // update data pending
+            $data->update([
+                'verified' => false,
+                'distance' => $responseData['distance'],
+                'status' => 0, // pending manual
+            ]);
 
+            // kirim notifikasi
+            $this->sendNotif('Absensi berhasil, namun wajah tidak dikenali. Silahkan menunggu hingga HRD memverifikasi.', $this->id, $this->model);
+
+            return broadcast(new RecognitionEvent(
+                $this->user_id,
+                'error',
+                'Menunggu persetujuan',
+                'Absensi berhasil, namun wajah tidak dikenali. Silahkan menunggu hingga HRD memverifikasi.'
+            ));
+        } catch (\Exception $e) {
+            // soft deletes
+            $data->delete();
+
+            // send notifikasi
+            $this->sendNotif("Absensi gagal, terjadi kesalahan: {$e->getMessage()}, silahkan coba kembali.", $this->id, $this->model);
+
+            // broadcast
             return broadcast(new RecognitionEvent(
                 $this->user_id,
                 'error',
@@ -141,5 +160,13 @@ class ProcessFaceRecognition implements ShouldQueue
                 $e->getMessage()
             ));
         }
+    }
+
+    public function sendNotif($message, $data_id, $type)
+    {
+        // ambil data pegawai
+        $user = User::where('kode_pegawai', $this->kode_pegawai)->first();
+
+        $user->notify(new SendNotifAttendance($message, $data_id, $type));
     }
 }

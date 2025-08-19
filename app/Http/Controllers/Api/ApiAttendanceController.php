@@ -12,6 +12,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -115,7 +116,7 @@ class ApiAttendanceController extends Controller
         $user = Auth::user();
         $kode_pegawai = $user->kode_pegawai;
         $user_id = $user->id;
-        $no_vt = null;
+        $no_vt = '';
 
         // cek user tanpa relasi pegawai
         if (User::where('kode_pegawai', $kode_pegawai)->whereDoesntHave('pegawai')->exists()) {
@@ -131,6 +132,8 @@ class ApiAttendanceController extends Controller
         if (!$request->has('image') || empty($request->image)) {
             return new ApiResource(false, 'Terjadi kegagalan.', 'Image data is required.');
         }
+
+        DB::beginTransaction();
 
         try {
             // simpan foto sementara
@@ -172,18 +175,19 @@ class ApiAttendanceController extends Controller
                 'position_status' => $request->status,
             ];
 
-            // cari no_vt
-            $vtBesar = preg_match('/VT-(\d{1,8})/', $request->keterangan, $matches);
-            $vtKecil = preg_match('/vt-(\d{1,8})/', $request->keterangan, $matches);
-
-            if ($vtBesar || $vtKecil) {
-                $no_vt = "VT-" . $matches[1];
-            } else {
-                $no_vt = '';
+            if (preg_match('/VT-(\d{1,8})/i', $request->keterangan, $matches)) {
+                $no_vt = 'VT-' . $matches[1];
             }
 
             // simpan data absen (masuk/keluar)
             $absen = $modelClass::create($absenData);
+
+            if (!$absen || !$absen->exists) {
+                DB::rollBack();
+                return new ApiResource(false, 'Terjadi kegagalan.', 'Gagal menyimpan data absensi. Silahkan lakukan absensi ulang.');
+            }
+
+            DB::commit();
 
             // kirim ke job pengenalan wajah
             ProcessFaceRecognition::dispatch(
@@ -198,6 +202,7 @@ class ApiAttendanceController extends Controller
 
             return new ApiResource(true, 'Verifikasi absensi sedang diproses...', 'Silahkan menunggu beberapa saat.');
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error('Error in verify attendance: ' . $e->getMessage(), [
                 'exception' => $e,
                 'user_id' => $user_id
