@@ -43,7 +43,7 @@ class SendNotifAttendance extends Notification
     public function toDatabase(object $notifiable): array
     {
         $routes = [
-            'AttendanceIn' => 'attendanceIn',
+            'Attendance' => 'attendanceIn',
             'AttendanceOut' => 'attendanceOut',
         ];
 

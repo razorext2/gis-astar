@@ -46,6 +46,7 @@ class ProcessFaceRecognition implements ShouldQueue
         // cari model
         $modelClass = "\\App\\Models\\{$this->model}";
         $data = $modelClass::where('id', $this->id)->first();
+        $type = $this->model == 'Attendance' ? 'Masuk' : 'Keluar';
 
         // path ke file
         $fullPath = storage_path('app/' . $this->img_path . '/' . $this->filename);
@@ -89,7 +90,7 @@ class ProcessFaceRecognition implements ShouldQueue
                 ]); // lebih aman daripada delete
 
                 // kirim notifikasi
-                $this->sendNotif('Absensi gagal: ' . $responseData['error_message'], $this->id, $this->model);
+                $this->sendNotif("Absensi {$type} gagal: " . $responseData['error_message'], $this->id, $this->model);
 
                 return broadcast(new RecognitionEvent(
                     $this->user_id,
@@ -118,7 +119,7 @@ class ProcessFaceRecognition implements ShouldQueue
                 // dump($api->json());
 
                 // kirim notifikasi
-                $this->sendNotif('Absensi berhasil diverifikasi, lihat hasilnya di halaman absensi.', $this->id, $this->model);
+                $this->sendNotif("Absensi {$type} berhasil diverifikasi, lihat hasilnya di halaman absensi.", $this->id, $this->model);
 
                 // broadcast pesan
                 return broadcast(new RecognitionEvent(
@@ -137,7 +138,7 @@ class ProcessFaceRecognition implements ShouldQueue
             ]);
 
             // kirim notifikasi
-            $this->sendNotif('Absensi berhasil, namun wajah tidak dikenali. Silahkan menunggu hingga HRD memverifikasi.', $this->id, $this->model);
+            $this->sendNotif("Absensi {$type} berhasil, namun wajah tidak dikenali. Silahkan menunggu hingga HRD memverifikasi.", $this->id, $this->model);
 
             return broadcast(new RecognitionEvent(
                 $this->user_id,
@@ -150,7 +151,7 @@ class ProcessFaceRecognition implements ShouldQueue
             $data->delete();
 
             // send notifikasi
-            $this->sendNotif("Absensi gagal, terjadi kesalahan: {$e->getMessage()}, silahkan coba kembali.", $this->id, $this->model);
+            $this->sendNotif("Absensi {$type} gagal, terjadi kesalahan: {$e->getMessage()}, silahkan coba kembali.", $this->id, $this->model);
 
             // broadcast
             return broadcast(new RecognitionEvent(
