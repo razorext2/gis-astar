@@ -6,11 +6,11 @@
 		<div class="flex flex-col px-3 lg:p-0">
 			<div>
 				<span class="text-xl font-semibold text-gray-900 dark:text-white">
-					Absen Masuk
+					Absen Keluar
 				</span>
 
 				<p class="mt-0.5 text-base text-gray-600 dark:text-gray-400">
-					Berisi semua data absensi masuk yang dilakukan oleh pegawai.
+					Berisi semua data absensi keluar yang dilakukan oleh pegawai.
 				</p>
 			</div>
 		</div>
