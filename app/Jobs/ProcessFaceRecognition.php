@@ -109,14 +109,14 @@ class ProcessFaceRecognition implements ShouldQueue
                     'distance' => $responseData['distance'],
                 ]);
 
-                // // langsung kirim ke API
-                // $api = Http::post('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendance', [
-                //     'kode_jari' => $this->kode_pegawai,
-                //     'waktu' => $data->waktuori,
-                //     'kodebarcode' => $this->no_vt,
-                // ]);
+                // langsung kirim ke API
+                $api = Http::post('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendance', [
+                    'kode_jari' => $this->kode_pegawai,
+                    'waktu' => $data->waktuori,
+                    'kodebarcode' => $this->no_vt,
+                ]);
 
-                // dump($api->json());
+                dump($api->json());
 
                 // kirim notifikasi
                 $this->sendNotif("Absensi {$type} berhasil diverifikasi, lihat hasilnya di halaman absensi.", $this->id, $this->model);
