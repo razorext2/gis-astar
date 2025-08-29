@@ -1,22 +1,26 @@
 <nav
 	class="fixed top-0 z-50 w-full border-b border-gray-200 bg-white px-4 py-2.5 shadow-sm dark:border-[#232327] dark:bg-dark-primary dark:shadow-none lg:px-6">
-	<div class="flex flex-wrap items-center justify-between gap-2 sm:gap-0">
+	<div class="flex flex-wrap items-center justify-between gap-2 sm:flex-nowrap">
+
+		{{-- title dan icon --}}
 		<div class="flex items-center justify-start">
 
-			<a class="flex items-center" href="#">
+			<a class="flex items-center" href="{{ config('app.url') }}">
 				<img class="h-8" src="{{ asset('assets/img/logo.png') }}" alt="Indodacin Logo" loading="lazy" />
 				<span class="text-md self-center whitespace-nowrap font-semibold italic dark:text-white">attendance</span>
 			</a>
 
 		</div>
 
+		{{-- poin --}}
 		<div>
 			@if (auth()->user()->hasRole('Teknisi'))
 				@livewire('widget.technician.points-accumulation')
 			@endif
 		</div>
 
-		<div class="flex items-center justify-between gap-2 lg:gap-4">
+		{{-- notification, ping checker, profile --}}
+		<div class="flex w-full items-center justify-between gap-2 sm:w-auto lg:gap-4">
 
 			@livewire('utils.ping-checker')
 
