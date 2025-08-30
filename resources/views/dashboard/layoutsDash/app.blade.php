@@ -46,8 +46,8 @@
 		@endpersist
 
 		{{-- preload --}}
-		{{-- <div class="fixed inset-0 z-50 bg-white dark:bg-[#09090b] md:z-[9999]" id="preloader">
-		</div> --}}
+		<div class="fixed inset-0 z-50 bg-white dark:bg-[#09090b] md:z-[9999]" id="preloader">
+		</div>
 
 		<!-- js -->
 		@include('dashboard.layoutsDash.js')

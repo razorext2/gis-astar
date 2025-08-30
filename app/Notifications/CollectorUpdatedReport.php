@@ -7,8 +7,10 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\WebPush\WebPushChannel;
+use NotificationChannels\WebPush\WebPushMessage;
 
-class CollectorUpdatedReport extends Notification
+class CollectorUpdatedReport extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -33,7 +35,7 @@ class CollectorUpdatedReport extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['database', WebPushChannel::class];
     }
 
     /**
@@ -53,5 +55,19 @@ class CollectorUpdatedReport extends Notification
             ],
             "created_at" => Carbon::now()->locale("id")->isoFormat("DD MMM YYYY HH:mm:ss"),
         ];
+    }
+
+    public function toWebPush($notifiable, $notification)
+    {
+        return (new WebPushMessage)
+            ->title("PT. Indodacin Presisi Utama")
+            ->body("Laporan dengan kode: $this->no_sr telah diperbarui pada tanggal $this->date. Silahkan diperiksa!")
+            ->icon("https://indodacin.dev/assets/img/logo.ico")
+            ->badge("https://indodacin.dev/assets/img/logo.ico")
+            ->action("Periksa Laporan", route("collect.show", $this->collect_id))
+            ->tag("Indodacin")
+            ->data([
+                "url" => route("collect.show", $this->collect_id),
+            ]);
     }
 }

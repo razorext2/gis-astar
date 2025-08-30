@@ -4,9 +4,12 @@ namespace App\Notifications;
 
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\WebPush\WebPushChannel;
+use NotificationChannels\WebPush\WebPushMessage;
 
-class ExportCompleted extends Notification
+class ExportCompleted extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -29,7 +32,7 @@ class ExportCompleted extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['database', WebPushChannel::class];
     }
 
     /**
@@ -49,5 +52,19 @@ class ExportCompleted extends Notification
             ],
             'created_at' => now()->toDateTimeString(),
         ];
+    }
+
+    public function toWebPush($notifiable, $notification)
+    {
+        return (new WebPushMessage)
+            ->title("PT. Indodacin Presisi Utama")
+            ->body("Proses ekspor telah selesai. Laporan untuk tanggal $this->date telah berhasil diekspor. Silahkan download berkas dengan klik tombol berikut.")
+            ->icon("https://indodacin.dev/assets/img/logo.ico")
+            ->badge("https://indodacin.dev/assets/img/logo.ico")
+            ->action("Download Laporan", route("export.collector.download", $this->fileName))
+            ->tag("Indodacin")
+            ->data([
+                "url" => route("export.collector.download", $this->fileName),
+            ]);
     }
 }

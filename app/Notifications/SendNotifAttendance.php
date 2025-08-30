@@ -6,6 +6,8 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\WebPush\WebPushChannel;
+use NotificationChannels\WebPush\WebPushMessage;
 
 class SendNotifAttendance extends Notification
 {
@@ -32,7 +34,7 @@ class SendNotifAttendance extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['database', WebPushChannel::class];
     }
 
     /**
@@ -58,5 +60,26 @@ class SendNotifAttendance extends Notification
             "created_at" => now(),
 
         ];
+    }
+
+    public function toWebPush($notifiable, $notification)
+    {
+        $routes = [
+            'Attendance' => 'attendanceIn',
+            'AttendanceOut' => 'attendanceOut',
+        ];
+
+        $route = $routes[$this->type] ?? 'attendanceIn';
+
+        return (new WebPushMessage)
+            ->title('PT. Indodacin Presisi Utama')
+            ->body($this->message)
+            ->icon('https://indodacin.dev/assets/img/logo.ico')
+            ->badge('https://indodacin.dev/assets/img/logo.ico')
+            ->action('Periksa', route("{$route}.index", $this->data_id))
+            ->tag('Indodacin')
+            ->data([
+                'url' => route("{$route}.index", $this->data_id),
+            ]);
     }
 }

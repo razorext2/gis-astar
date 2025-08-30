@@ -24,6 +24,7 @@ use App\Http\Controllers\PlacementController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\ProxyController;
+use App\Http\Controllers\PushController;
 use App\Http\Controllers\QuestionnaireController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RouteController;
@@ -49,6 +50,9 @@ Route::middleware('throttle:high')->get('photo-regist', function () {
 
 // route bisa diakses jika login
 Route::middleware(['auth'])->group(function () {
+    // subrektion
+    Route::post('/push-subscribe', [PushController::class, 'subscribe']);
+
     // notifikasi
     Route::get('notifications/{id}/mark-as-read', function ($id) {
         $notification = Auth::user()->unreadNotifications->find($id);
