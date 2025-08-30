@@ -95,7 +95,7 @@
 
 <!-- Sidebar Navigation -->
 <aside
-	class="left-0 top-0 z-50 hidden h-screen flex-col bg-white pb-14 shadow-sm transition-all duration-300 ease-out dark:bg-[#09090b] dark:shadow-none md:fixed md:flex"
+	class="left-0 top-0 z-50 hidden h-screen min-w-[265px] flex-col bg-white pb-14 shadow-sm transition-all duration-300 ease-out dark:bg-blue-500 dark:shadow-none md:fixed md:flex"
 	id="logo-sidebar" aria-label="Sidebar" :class="openSidebar ? 'translate-x-0' : '-translate-x-72'">
 
 	<div id="tombolSidebar" :class="openSidebar ? 'translate-x-0' : 'absolute translate-x-24 bg-white dark:bg-[#09090b]'"
