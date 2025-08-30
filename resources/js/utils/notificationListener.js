@@ -113,7 +113,7 @@ export function handleAnnouncement(data) {
 				</div>
 
 				<button class="flex flex-row items-center gap-2 rounded-lg p-2 ring-1 ring-red-700 transition-transform duration-300 ease-in-out will-change-transform hover:scale-105 hover:bg-red-300 focus:scale-105 dark:bg-red-800 dark:text-white dark:ring-gray-700 dark:hover:bg-red-900" data-dismiss-target="#broadcast-alert" id="close" type="button" aria-label="Close">
-					<svg aria-hidden="true" class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+					<svg aria-hidden="true" class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
 						<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6" />
 					</svg>
 				</button>

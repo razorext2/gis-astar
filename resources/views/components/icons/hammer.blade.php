@@ -1,5 +1,4 @@
-<svg aria-hidden="true" {{ $attributes }} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-	viewBox="0 0 24 24">
+<svg aria-hidden="true" {{ $attributes }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
 	<path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
 		d="m20.9532 11.7634-2.0523-2.05225-2.0523 2.05225 2.0523 2.0523 2.0523-2.0523Zm-1.3681-2.73651-4.1046-4.10457L12.06 8.3428l4.1046 4.1046 3.4205-3.42051Zm-4.1047 2.73651-2.7363-2.73638-8.20919 8.20918 2.73639 2.7364 8.2091-8.2092Z" />
 	<path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
