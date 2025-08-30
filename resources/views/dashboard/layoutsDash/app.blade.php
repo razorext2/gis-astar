@@ -12,9 +12,7 @@
 			</x-notification-popup>
 		@endif
 
-		@persist('navbar')
-			@include('dashboard.layoutsDash.navbar')
-		@endpersist
+		@include('dashboard.layoutsDash.navbar')
 
 		@include('dashboard.layoutsDash.sidebar')
 
