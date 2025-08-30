@@ -95,8 +95,40 @@
 
 <!-- Sidebar Navigation -->
 <aside
-	class="left-0 top-0 hidden h-screen flex-col bg-white pb-16 pt-16 shadow-sm dark:bg-[#09090b] dark:shadow-none md:fixed md:flex"
-	id="logo-sidebar" aria-label="Sidebar">
+	class="left-0 top-0 z-50 hidden h-screen flex-col bg-white pb-14 shadow-sm transition-all duration-300 ease-out dark:bg-[#09090b] dark:shadow-none md:fixed md:flex"
+	id="logo-sidebar" aria-label="Sidebar" :class="openSidebar ? 'translate-x-0' : '-translate-x-72'">
+
+	<div id="tombolSidebar" :class="openSidebar ? 'translate-x-0' : 'absolute translate-x-24 bg-white dark:bg-[#09090b]'"
+		class="mx-auto flex w-full justify-between rounded-br-2xl p-5 shadow-md drop-shadow-lg transition-all duration-200 ease-out dark:border-b-[1px] dark:border-r-[4px] dark:border-red-800 dark:shadow-none dark:drop-shadow-none">
+		<div class="flex items-center justify-start">
+			<a class="flex items-center" href="{{ config('app.url') }}">
+				<img class="h-8" src="{{ asset('assets/img/logo.png') }}" alt="Indodacin Logo" loading="lazy" />
+			</a>
+		</div>
+
+		<button @click="openSidebar = !openSidebar" class="rounded-lg px-2 py-1">
+			<span x-show="!openSidebar">
+				<x-icons.open-sidebar-alt data-tooltip-target="open-sidebar-alt"
+					class="h-6 w-6 text-gray-800 transition-all duration-300 ease-in-out hover:scale-110 dark:text-white" />
+
+				<div id="open-sidebar-alt" role="tooltip"
+					class="shadow-xs tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 transition-opacity duration-300 dark:bg-gray-700">
+					Buka Sidebar
+					<div class="tooltip-arrow" data-popper-arrow></div>
+				</div>
+			</span>
+			<span x-show="openSidebar">
+				<x-icons.close-sidebar-alt data-tooltip-target="close-sidebar-alt"
+					class="h-6 w-6 text-gray-800 transition-all duration-300 ease-in-out hover:scale-110 dark:text-white" />
+
+				<div id="close-sidebar-alt" role="tooltip"
+					class="shadow-xs tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 transition-opacity duration-300 dark:bg-gray-700">
+					Tutup Sidebar
+					<div class="tooltip-arrow" data-popper-arrow></div>
+				</div>
+			</span>
+		</button>
+	</div>
 
 	<div class="overflow-y-scroll p-5" wire:scroll>
 		<ul class="space-y-2 font-medium">
@@ -237,8 +269,10 @@
 					</button>
 
 					<ul class="space-y-4 py-4" id="routes-dropdown" x-show="routes"
-						x-transition:enter="transition ease-in duration-200" x-transition:enter-start="transform opacity-0 -translate-y-5"
-						x-transition:leave="transition ease-out duration-200" x-transition:leave-end="transform opacity-0 -translate-y-5">
+						x-transition:enter="transition ease-in duration-200"
+						x-transition:enter-start="transform opacity-0 -translate-y-5"
+						x-transition:leave="transition ease-out duration-200"
+						x-transition:leave-end="transform opacity-0 -translate-y-5">
 
 						@can('driver-approve')
 							<li>

@@ -1,9 +1,9 @@
 <nav
-	class="fixed top-0 z-50 w-full border-b border-gray-200 bg-white px-4 py-2.5 shadow-sm dark:border-[#232327] dark:bg-dark-primary dark:shadow-none lg:px-6">
+	class="fixed top-0 z-40 w-full border-b border-gray-200 bg-white px-4 py-2.5 shadow-sm dark:border-[#232327] dark:bg-dark-primary dark:shadow-none lg:px-6">
 	<div class="flex flex-wrap items-center justify-between gap-2 sm:flex-nowrap">
-
 		{{-- title dan icon --}}
-		<div class="flex items-center justify-start">
+		<div :class="openSidebar ? 'translate-x-0' : 'translate-x-20'"
+			class="flex items-center justify-start transition-all duration-300 ease-out">
 
 			<a class="flex items-center" href="{{ config('app.url') }}">
 				<img class="h-8" src="{{ asset('assets/img/logo.png') }}" alt="Indodacin Logo" loading="lazy" />

@@ -5,7 +5,7 @@
 		@include('dashboard.layoutsDash.head')
 	</head>
 
-	<body class="bg-gray-100 dark:bg-[#09090b]">
+	<body class="relative bg-gray-100 dark:bg-[#09090b]" x-data="{ openSidebar: true }">
 		@if (session('status'))
 			<x-notification-popup>
 				{{ session('status') }}
@@ -18,7 +18,9 @@
 
 		@include('dashboard.layoutsDash.sidebar')
 
-		<div class="mb-20 mt-32 max-w-screen-xl px-4 sm:ml-72 sm:mt-24 md:mb-4 xl:ml-96">
+		<div
+			:class="openSidebar ? 'max-w-screen-xl sm:ml-72 xl:ml-96' : 'sm:ml-24 md:ml-28 lg:ml-36 xl:mx-36 mx-auto max-w-screen-2xl'"
+			class="mb-20 mt-32 px-4 transition-all duration-300 ease-in-out sm:mt-24 md:mb-4">
 
 			{{-- breadcrumb --}}
 			@livewire('utils.breadcrumb')
