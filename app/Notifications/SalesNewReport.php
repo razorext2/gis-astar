@@ -60,8 +60,8 @@ class SalesNewReport extends Notification implements ShouldQueue
         return (new WebPushMessage)
             ->title("PT. Indodacin Presisi Utama")
             ->body("Sales telah membuat laporan baru pada tanggal $this->created_at, silahkan diperiksa dan lakukan konfirmasi.")
-            ->icon("https://indodacin.dev/assets/img/logo.ico")
-            ->badge("https://indodacin.dev/assets/img/logo.ico")
+            ->icon(asset("/assets/img/logo.ico"))
+            ->badge(asset("/assets/img/logo.ico"))
             ->action("Periksa Laporan", route("sales.show", $this->report_id))
             ->tag("Indodacin")
             ->data([

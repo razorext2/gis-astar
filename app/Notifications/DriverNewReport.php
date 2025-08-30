@@ -55,8 +55,8 @@ class DriverNewReport extends Notification implements ShouldQueue
         return (new WebPushMessage)
             ->title("PT. Indodacin Presisi Utama")
             ->body("Driver telah membuat laporan baru pada tanggal $this->created_at, silahkan diperiksa dan lakukan konfirmasi.")
-            ->icon("https://indodacin.dev/assets/img/logo.ico")
-            ->badge("https://indodacin.dev/assets/img/logo.ico")
+            ->icon(asset("/assets/img/logo.ico"))
+            ->badge(asset("/assets/img/logo.ico"))
             ->action("Periksa Laporan", route("driver.show", $this->driver_id))
             ->tag("Indodacin")
             ->data([

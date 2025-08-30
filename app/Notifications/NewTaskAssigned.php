@@ -59,8 +59,8 @@ class NewTaskAssigned extends Notification implements ShouldQueue
         return (new WebPushMessage)
             ->title("PT. Indodacin Presisi Utama")
             ->body("Anda memiliki penagihan baru dengan kode tagihan: $this->no_sr yang harus anda tagih. Cek detail:")
-            ->icon("https://indodacin.dev/assets/img/logo.ico")
-            ->badge("https://indodacin.dev/assets/img/logo.ico")
+            ->icon(asset("/assets/img/logo.ico"))
+            ->badge(asset("/assets/img/logo.ico"))
             ->action("Lihat Detail", route("collect.show", $this->collect_id))
             ->tag("Indodacin")
             ->data([

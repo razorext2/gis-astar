@@ -62,8 +62,8 @@ class CollectorUpdatedReport extends Notification implements ShouldQueue
         return (new WebPushMessage)
             ->title("PT. Indodacin Presisi Utama")
             ->body("Laporan dengan kode: $this->no_sr telah diperbarui pada tanggal $this->date. Silahkan diperiksa!")
-            ->icon("https://indodacin.dev/assets/img/logo.ico")
-            ->badge("https://indodacin.dev/assets/img/logo.ico")
+            ->icon(asset("/assets/img/logo.ico"))
+            ->badge(asset("/assets/img/logo.ico"))
             ->action("Periksa Laporan", route("collect.show", $this->collect_id))
             ->tag("Indodacin")
             ->data([

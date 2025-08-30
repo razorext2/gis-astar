@@ -57,8 +57,8 @@ class ExportSalesCompleted extends Notification implements ShouldQueue
         return (new WebPushMessage)
             ->title("PT. Indodacin Presisi Utama")
             ->body("Proses ekspor telah selesai. Laporan sales dari tanggal $this->fromDate sampai $this->toDate telah berhasil diekspor. Silahkan download berkas dengan klik tombol berikut.")
-            ->icon("https://indodacin.dev/assets/img/logo.ico")
-            ->badge("https://indodacin.dev/assets/img/logo.ico")
+            ->icon(asset("/assets/img/logo.ico"))
+            ->badge(asset("/assets/img/logo.ico"))
             ->action("Download Laporan", route("export.sales.download", $this->fileName))
             ->tag("Indodacin")
             ->data([
