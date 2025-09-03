@@ -25,48 +25,102 @@ document.addEventListener('livewire:navigated', function () {
     }
   })
 
-  // Only relevant for browsers that support installation.
+  // ==== INSTALL HANDLER + FALLBACK UI KECIL ====
+
+  // Helper: toast kecil di pojok bawah
+  function showInstallHint(text, ms = 6500) {
+    // buat container sekali
+    let box = document.getElementById('install-toast');
+    if (!box) {
+      box = document.createElement('div');
+      box.id = 'install-toast';
+      box.setAttribute('role', 'status');
+      Object.assign(box.style, {
+        position: 'fixed', zIndex: 9999,
+        right: '16px', bottom: '16px',
+        maxWidth: '360px', padding: '12px 14px',
+        borderRadius: '12px',
+        background: 'rgba(10, 20, 36, .92)',
+        color: '#cfe0ff', font: '600 14px/1.4 Inter, system-ui, sans-serif',
+        boxShadow: '0 10px 30px rgba(0,0,0,.35), inset 0 0 0 1px #23334f'
+      });
+      document.body.appendChild(box);
+    }
+    box.textContent = text;
+    box.style.opacity = '1';
+    clearTimeout(box._t);
+    box._t = setTimeout(() => { box.style.opacity = '0'; }, ms);
+  }
+
+  // Deteksi ringan
+  const ua = navigator.userAgent || navigator.vendor || window.opera;
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  const isIOS = /iPad|iPhone|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const isAndroid = /Android/i.test(ua);
+  const isSafari = /^((?!chrome|android).)*safari/i.test(ua) && !/crios|fxios/i.test(ua);
+  const isMac = /Macintosh|Mac OS X/.test(ua);
+  const isFirefox = /firefox|fxios/i.test(ua);
+  const isInApp = /(FBAN|FBAV|Instagram|Line|WhatsApp|TikTok|Twitter|WeChat|Snapchat)/i.test(ua);
+
+  // Jika sudah terpasang, sembunyikan tombol install
+  if (isStandalone && installApp) {
+    document.getElementById('installAppContainer').style.display = 'none';
+  }
+
+  // Browser dengan `beforeinstallprompt` (Chromium)
   if ('BeforeInstallPromptEvent' in window) {
-    // Variable to stash the `BeforeInstallPromptEvent`.
     let installEvent = null;
 
-    // Function that will be run when the app is installed.
     const onInstall = () => {
-      // Disable the install button.
-      installApp.disabled = true;
-      // No longer needed.
+      if (installApp) installApp.disabled = true;
       installEvent = null;
+      showInstallHint('Aplikasi terpasang. Terima kasih!');
     };
 
     window.addEventListener('beforeinstallprompt', (event) => {
-      // Do not show the install prompt quite yet.
       event.preventDefault();
-      // Stash the `BeforeInstallPromptEvent` for later.
       installEvent = event;
-      // Enable the install button.
-      installApp.disabled = false;
+      if (installApp) installApp.disabled = false;
     });
 
-    installApp.addEventListener('click', async () => {
-      // If there is no stashed `BeforeInstallPromptEvent`, return.
-      if (!installEvent) {
-        return;
-      }
-      // Use the stashed `BeforeInstallPromptEvent` to prompt the user.
-      installEvent.prompt();
-      const result = await installEvent.userChoice;
-      // If the user installs the app, run `onInstall()`.
-      if (result.outcome === 'accepted') {
-        onInstall();
-      }
+    if (installApp) {
+      installApp.addEventListener('click', async () => {
+        if (!installEvent) return;
+        installEvent.prompt();
+        const result = await installEvent.userChoice;
+        if (result.outcome === 'accepted') onInstall();
+      });
+    }
+
+    window.addEventListener('appinstalled', onInstall);
+  }
+  // Fallback: tampilkan instruksi sesuai browser
+  else if (installApp) {
+    // Jangan disable tombol — kita pakai untuk memunculkan hint
+    installApp.disabled = false;
+
+    // Tentukan pesan
+    let msg = 'Gunakan menu browser → “Install app” / “Add to Home screen”.';
+    if (isInApp) {
+      msg = 'Buka halaman ini di browser sistem (Chrome/Safari), lalu pilih “Add to Home Screen/Install”.';
+    } else if (isIOS) {
+      msg = 'iOS: buka ikon Share (⬆️) → “Tambahkan ke Layar Utama” untuk memasang aplikasi.';
+    } else if (isSafari && isMac) {
+      msg = 'Safari (macOS): menu “File” → “Add to Dock” untuk memasang PWA.';
+    } else if (isFirefox && isAndroid) {
+      msg = 'Firefox Android: menu ⋮ → “Tambahkan ke Layar Utama”.';
+    } else if (isFirefox) {
+      msg = 'Firefox belum mendukung prompt install. Gunakan “Install Site”/“Create shortcut” atau coba Chrome/Edge.';
+    }
+
+    // Saat tombol di-klik, tampilkan hint
+    installApp.addEventListener('click', (e) => {
+      e.preventDefault();
+      showInstallHint(msg);
     });
 
-    // The user can decide to ignore the install button
-    // and just use the browser prompt directly. In this case
-    // likewise run `onInstall()`.
-    window.addEventListener('appinstalled', () => {
-      onInstall();
-    });
+    // Tampilkan sekali saat halaman siap
+    setTimeout(() => showInstallHint(msg, 8000), 400);
   }
 
   // toggle tema

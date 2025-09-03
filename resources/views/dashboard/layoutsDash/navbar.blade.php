@@ -99,7 +99,7 @@
 							class="block w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
 							form="logout" type="submit">Sign out</button>
 					</li>
-					<li class="flex items-center px-4 py-3">
+					<li class="flex items-center px-4 py-3" id="installAppContainer">
 						<button
 							class="rounded-lg bg-green-600 px-4 py-2 text-center text-sm text-white ring-1 ring-gray-200 transition-colors duration-500 ease-in-out hover:bg-green-700 dark:bg-green-700 dark:ring-gray-700 dark:hover:bg-green-800 dark:hover:text-white"
 							id="installApp">
