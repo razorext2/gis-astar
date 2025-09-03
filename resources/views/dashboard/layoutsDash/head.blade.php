@@ -10,10 +10,10 @@
 <!-- Favicons -->
 <link href="{{ asset('assets/img/logo.ico') }}" rel="icon" />
 <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon" />
-
 <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Poppins&display=swap" rel="stylesheet">
 
 @livewireStyles
+@laravelPWA
 
 <!-- Vite Files -->
 @vite('resources/css/app.css')

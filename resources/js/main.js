@@ -40,7 +40,7 @@ async function subscribeUser() {
   if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
 
   // register SW sekali (biarkan browser handle update)
-  const reg = await navigator.serviceWorker.register('/service-worker.js');
+  const reg = await navigator.serviceWorker.register('/serviceworker.js');
   const vapidPublicKey = import.meta.env.VITE_VAPID_PUBLIC_KEY;
 
   let sub = await reg.pushManager.getSubscription();

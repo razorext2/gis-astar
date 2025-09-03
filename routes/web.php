@@ -315,3 +315,8 @@ Route::get('ping', function () {
         return response()->json(['success' => false], 500);
     }
 })->name('ping.checker');
+
+// offline page
+Route::get('/offline', function () {
+    return view('vendor.laravelpwa.offline');
+});

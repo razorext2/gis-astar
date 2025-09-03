@@ -8,6 +8,7 @@
 <title>{{ $title }}: Attendance System</title>
 
 @livewireStyles
+@laravelPWA
 
 <!-- Favicons -->
 <link href="{{ asset('assets/img/logo.ico') }}" rel="icon" />
