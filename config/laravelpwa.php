@@ -114,6 +114,7 @@ return [
                     'label' => 'Attendance page'
                 ]
             ],
+            'display_override' => ['window-controls-overlay'],
         ]
     ]
 ];
