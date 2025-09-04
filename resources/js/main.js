@@ -111,6 +111,8 @@ document.addEventListener('livewire:navigated', function () {
       msg = 'Firefox Android: menu ⋮ → “Tambahkan ke Layar Utama”.';
     } else if (isFirefox) {
       msg = 'Firefox belum mendukung prompt install. Gunakan “Install Site”/“Create shortcut” atau coba Chrome/Edge.';
+    } else if (isSafari) {
+      msg = 'Safari belum mendukung prompt install. Gunakan “Install Site”/“Create shortcut” atau coba Chrome/Edge.';
     }
 
     // Saat tombol di-klik, tampilkan hint

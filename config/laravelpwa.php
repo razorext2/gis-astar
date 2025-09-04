@@ -4,13 +4,13 @@ return [
     'name' => 'IndodacinAttendanceSystem',
     'manifest' => [
         'name' => env('APP_NAME', 'My PWA App'),
-        'short_name' => 'Dacin',
+        'short_name' => 'Indodacin Attendance',
         'start_url' => '/login',
-        'background_color' => '#ffffff',
-        'theme_color' => '#000000',
+        'background_color' => '#EF4444',
+        'theme_color' => '#EF4444',
         'display' => 'standalone',
         'orientation' => 'any',
-        'status_bar' => '#991b1b',
+        'status_bar' => '#EF4444',
         'icons' => [
             '72x72' => [
                 'path' => '/images/icons/icon-72x72.png',
