@@ -7,10 +7,9 @@ return [
         'short_name' => 'Indodacin Attendance',
         'start_url' => '/login',
         'background_color' => '#EF2525',
-        'theme_color' => '#FFFFFF',
         'display' => 'standalone',
+        'theme_color' => '#EF2525',
         'orientation' => 'any',
-        'status_bar' => '#FFFFFF',
         'icons' => [
             '72x72' => [
                 'path' => '/images/icons/icon-72x72.png',

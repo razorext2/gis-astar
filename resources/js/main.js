@@ -133,7 +133,6 @@ document.addEventListener('livewire:navigated', function () {
           "text-red-400", !e)
   }
 
-
   async function subscribeUser() {
     if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
 

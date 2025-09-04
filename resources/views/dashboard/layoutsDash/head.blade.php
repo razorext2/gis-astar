@@ -37,14 +37,3 @@
 <link href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.dataTables.css" rel="stylesheet">
 {{-- Tom select --}}
 <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.css" rel="stylesheet">
-
-<!-- Theme -->
-<script>
-	if (localStorage.getItem("color-theme") === "dark" || (!("color-theme" in localStorage) && window.matchMedia(
-			"(prefers-color-scheme: dark)").matches)) {
-		document.documentElement.classList.add("dark");
-	} else {
-		document.documentElement.classList.remove("dark");
-	}
-	const APP_URL = "{{ env('APP_URL') }}";
-</script>

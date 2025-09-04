@@ -2,7 +2,7 @@
 	class="fixed top-0 z-40 w-full border-b border-gray-200 bg-white px-4 py-2.5 shadow-sm dark:border-[#232327] dark:bg-dark-primary dark:shadow-none lg:px-6">
 	<div class="flex flex-wrap items-center justify-between gap-2 sm:flex-nowrap">
 		{{-- title dan icon --}}
-		<div :class="openSidebar ? '-translate-x-40' : 'translate-x-20'"
+		<div :class="openSidebar ? 'translate-x-0 sm:-translate-x-40' : 'translate-x-20 sm:translate-x-20'"
 			class="flex items-center justify-start transition-all duration-500 ease-out">
 
 			<a class="flex items-center" href="{{ config('app.url') }}">

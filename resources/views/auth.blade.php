@@ -11,7 +11,6 @@
 		<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
 		@livewireStyles()
-		@laravelPWA
 
 		<!-- Fonts -->
 		<link href="{{ asset('assets/img/logo.ico') }}" rel="icon" />

@@ -7,8 +7,8 @@
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 <title>{{ $title }}: Attendance System</title>
 
-@livewireStyles
 @laravelPWA
+@livewireStyles
 
 <!-- Favicons -->
 <link href="{{ asset('assets/img/logo.ico') }}" rel="icon" />
@@ -24,15 +24,3 @@
 
 <link href="{{ asset('assets/vendor/aos/aos.css') }}" rel="stylesheet" />
 <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet" />
-
-<!-- JavaScript -->
-<script data-navigate-once>
-	if (localStorage.getItem('color-theme') === 'dark' ||
-		(!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-		document.documentElement.classList.add('dark');
-	} else {
-		document.documentElement.classList.remove('dark');
-	}
-
-	const APP_URL = "{{ env('APP_URL') }}";
-</script>
