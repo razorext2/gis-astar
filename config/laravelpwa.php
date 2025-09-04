@@ -6,11 +6,11 @@ return [
         'name' => env('APP_NAME', 'My PWA App'),
         'short_name' => 'Indodacin Attendance',
         'start_url' => '/login',
-        'background_color' => '#EF4444',
-        'theme_color' => '#EF4444',
+        'background_color' => '#EF2525',
+        'theme_color' => '#EF2525',
         'display' => 'standalone',
         'orientation' => 'any',
-        'status_bar' => '#EF4444',
+        'status_bar' => '#FFFFFF',
         'icons' => [
             '72x72' => [
                 'path' => '/images/icons/icon-72x72.png',
