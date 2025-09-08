@@ -17,7 +17,7 @@ export async function validate() {
     if (result.isConfirmed) {
       try {
         loadingAlert("Menutup tagihan...");
-        const response = await axios.patch(`${APP_URL}/api/collect-task-ppn-api/${id}/validate`, { validate_by: validate_by });
+        const response = await axios.patch(`/api/collect-task-ppn-api/${id}/validate`, { validate_by: validate_by });
 
         if (response.data.success) {
           Swal.close();

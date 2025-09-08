@@ -16,7 +16,7 @@ const labels = [],
 
 
 
-fetch(`${APP_URL}/api/getPegawai`).then((e => e.json())).then((e => {
+fetch(`/api/getPegawai`).then((e => e.json())).then((e => {
   console.log("Initializing application"),
     labels.push(...e),
     initializeFaceAPI()
@@ -25,16 +25,16 @@ fetch(`${APP_URL}/api/getPegawai`).then((e => e.json())).then((e => {
 
 function initializeFaceAPI() {
   Promise.all([
-    faceapi.nets.ssdMobilenetv1.loadFromUri(`${APP_URL}/models`),
-    faceapi.nets.faceRecognitionNet.loadFromUri(`${APP_URL}/models`),
-    faceapi.nets.faceLandmark68Net.loadFromUri(`${APP_URL}/models`)]).then((() => {
+    faceapi.nets.ssdMobilenetv1.loadFromUri(`/models`),
+    faceapi.nets.faceRecognitionNet.loadFromUri(`/models`),
+    faceapi.nets.faceLandmark68Net.loadFromUri(`/models`)]).then((() => {
       modelsLoaded = !0, console.log("Models loaded successfully")
     }))
 }
 
 async function getImagePathsForLabel(e) {
   try {
-    const t = await fetch(`${APP_URL}/api/pegawai-images/${encodeURIComponent(e)}`);
+    const t = await fetch(`/api/pegawai-images/${encodeURIComponent(e)}`);
     if (!t.ok) throw new Error("Network response was not ok");
     return await t.json()
   } catch (e) {
@@ -137,7 +137,7 @@ async function saveImageToServer(e, t) {
   const n = new FormData;
   n.append("image", e, "capturedImg.png"), n.append("label", t);
   try {
-    const e = await axios.post(`${APP_URL}/api/saveImage`, n, {
+    const e = await axios.post(`/api/saveImage`, n, {
       headers: {
         "X-CSRF-TOKEN": csrfToken
       }
@@ -170,7 +170,7 @@ function customConsoleLog(e) {
 
 async function getPegawaiDataByLabel(e) {
   try {
-    const t = await fetch(`${APP_URL}/api/getPegawaiData/${encodeURIComponent(e)}`);
+    const t = await fetch(`/api/getPegawaiData/${encodeURIComponent(e)}`);
     if (!t.ok) throw new Error("Network response was not ok");
     return await t.json()
   } catch (e) {
@@ -238,7 +238,7 @@ function attendanceAlert() {
 
 async function saveAttendance(employeeCode, employeeNIK) {
   try {
-    const attendanceCheckResponse = await fetch(`${APP_URL}/api/check-attendance`, {
+    const attendanceCheckResponse = await fetch(`/api/check-attendance`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -254,7 +254,7 @@ async function saveAttendance(employeeCode, employeeNIK) {
     if (attendanceCheckData.hasClockedIn) {
       const clockInTime = attendanceCheckData.jam_masuk;
       document.getElementById("waktu-masuk").textContent = `${clockInTime}`;
-      const clockOutResponse = await fetch(`${APP_URL}/store-attendance-out`, {
+      const clockOutResponse = await fetch(`/store-attendance-out`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -283,7 +283,7 @@ async function saveAttendance(employeeCode, employeeNIK) {
         },
         formattedDateTime = currentDateTime.toLocaleString("id-ID", dateTimeFormat);
       document.getElementById("waktu-masuk").textContent = `${formattedDateTime}`;
-      const clockInResponse = await fetch(`${APP_URL}/store-attendance`, {
+      const clockInResponse = await fetch(`/store-attendance`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -302,7 +302,7 @@ async function saveAttendance(employeeCode, employeeNIK) {
     }
 
     // insert to api
-    const mainServerResponse = await fetch(`${APP_URL}/api/proxy/server/attendance`, {
+    const mainServerResponse = await fetch(`/api/proxy/server/attendance`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

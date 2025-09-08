@@ -28,12 +28,12 @@ export function addDataHandler() {
     }
 
     try {
-      const response = await axios.post(`${APP_URL}/api/sales-api`, formData);
+      const response = await axios.post(`/api/sales-api`, formData);
 
       if (response.data.success) {
         Swal.close();
         showAlert('success', response.data.message);
-        setTimeout(() => window.location.href = `${APP_URL}/dashboard/sales`, 1500);
+        setTimeout(() => window.location.href = `/dashboard/sales`, 1500);
       } else {
         Swal.close();
         $button.prop('disabled', false);
@@ -79,7 +79,7 @@ export function editDataHandler() {
     let keterangan = $("#keterangan").val();
 
     // axios request
-    axios.patch(`${APP_URL}/api/sales-api/${id}`, {
+    axios.patch(`/api/sales-api/${id}`, {
       id: id,
       title: title,
       customer_name: customer_name,
@@ -90,7 +90,7 @@ export function editDataHandler() {
       .then(response => {
         Swal.close();
         showAlert('success', response.data.message);
-        setTimeout(() => window.location.href = `${APP_URL}/dashboard/sales`, 1500);
+        setTimeout(() => window.location.href = `/dashboard/sales`, 1500);
       })
       .catch(error => {
         Swal.close();

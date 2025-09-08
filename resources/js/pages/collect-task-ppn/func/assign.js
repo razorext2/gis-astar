@@ -29,7 +29,7 @@ export async function singleAssign() {
       loadingAlert("Assign penagihan...");
       try {
         // Mengirim permintaan assign ke server
-        const response = await axios.patch(`${APP_URL}/api/collect-task-ppn-api/${id}/assign`, {
+        const response = await axios.patch(`/api/collect-task-ppn-api/${id}/assign`, {
           assign_to: input,
           assign_by: assign_by
         })
@@ -70,7 +70,7 @@ export function massAssign() {
 
     try {
       // Kirim permintaan assign massal ke server
-      const response = await axios.patch(`${APP_URL}/api/collect-task-ppn-api/mass-assign`, {
+      const response = await axios.patch(`/api/collect-task-ppn-api/mass-assign`, {
         kode_pegawai: kode_pegawai,
         sr_data: sr_data,
         assign_by: assign_by,
@@ -81,7 +81,7 @@ export function massAssign() {
         // Jika berhasil, tampilkan pesan sukses dan redirect
         showAlert('success', response.data.message);
         setTimeout(() => {
-          window.location.href = `${APP_URL}/dashboard/collect-task-ppn`;
+          window.location.href = `/dashboard/collect-task-ppn`;
         }, 1500);
       } else {
         // Jika gagal, tampilkan pesan error dan tangani kesalahan form

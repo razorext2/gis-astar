@@ -8,7 +8,7 @@ export function searchDataHandler() {
 
       if (query.length > 2) { // Mulai pencarian saat input lebih dari 2 karakter
         $.ajax({
-          url: `${APP_URL}/dashboard/pegawai/autocomplete`,
+          url: `/dashboard/pegawai/autocomplete`,
           type: "GET",
           data: {
             query: query

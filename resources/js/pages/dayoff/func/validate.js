@@ -20,13 +20,13 @@ export async function confirmAction() {
     // If the action is confirmed
     if (result.isConfirmed) {
       loadingAlert("Mengapprove permohonan...");
-      await axios.patch(`${APP_URL}/api/dayoff-api/${id}/approve`, {
+      await axios.patch(`/api/dayoff-api/${id}/approve`, {
         'validate_by': validate_by
       }).then(() => {
         Swal.close();
         showAlert('success', 'Laporan berhasil diapprove!');
         setTimeout(() => {
-          window.location.href = `${APP_URL}/dashboard/dayoff`;
+          window.location.href = `/dashboard/dayoff`;
         }, 1000);
       }).catch(() => {
         Swal.close();
@@ -51,14 +51,14 @@ export async function confirmAction() {
       if (text) {
         loadingAlert("Menolak permohonan...");
         // For now, just display the message
-        await axios.patch(`${APP_URL}/api/dayoff-api/${id}/deny`, {
+        await axios.patch(`/api/dayoff-api/${id}/deny`, {
           'validate_by': validate_by,
           'notes': text
         }).then(() => {
           Swal.close();
           showAlert('success', 'Permohonan telah ditolak!');
           setTimeout(() => {
-            window.location.href = `${APP_URL}/dashboard/dayoff`;
+            window.location.href = `/dashboard/dayoff`;
           }, 1000);
         }).catch(() => {
           Swal.close();

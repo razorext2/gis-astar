@@ -4,7 +4,7 @@ export function getAttendanceData() {
     const popoverContent = $(`#popover-click-${date} .popover-content`);
 
     // Mengambil data menggunakan Axios
-    await axios.get(`${APP_URL}/api/get-attendance-data`, {
+    await axios.get(`/api/get-attendance-data`, {
       params: {
         date: date, // Ambil dari data-date
         id: id, // Ambil dari Blade
@@ -37,7 +37,7 @@ export function getAttendanceData() {
         const photoURL = libs; // Ambil dari Blade
         const url = item.photoURL; // URL dari item
         const path =
-          `${APP_URL}/${photoURL}/${url}.png`; // Gabungkan URL
+          `/${photoURL}/${url}.png`; // Gabungkan URL
 
         attendanceTable += `
 							<tr>
@@ -85,7 +85,7 @@ export function getAttendanceData() {
         const photoURL = libs; // Ambil dari Blade
         const url = item.photoURL; // URL dari item
         const path =
-          `${APP_URL}/${photoURL}/${url}.png`; // Gabungkan URL
+          `/${photoURL}/${url}.png`; // Gabungkan URL
 
         attendanceOutTable += `
 							<tr>

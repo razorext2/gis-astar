@@ -27,12 +27,12 @@ export function addDataHandler() {
     }
 
     try {
-      const response = await axios.post(`${APP_URL}/api/driver-api`, formData);
+      const response = await axios.post(`/api/driver-api`, formData);
 
       if (response.data.success) {
         Swal.close();
         showAlert('success', response.data.message);
-        setTimeout(() => Livewire.navigate(`${APP_URL}/dashboard/driver`), 1000);
+        setTimeout(() => Livewire.navigate(`/dashboard/driver`), 1000);
       } else {
         Swal.close();
         $button.prop('disabled', false);
@@ -83,12 +83,12 @@ export function updateDataHandler() {
     }
 
     try {
-      const response = await axios.post(`${APP_URL}/api/driver-api/update-assign`, formData);
+      const response = await axios.post(`/api/driver-api/update-assign`, formData);
 
       if (response.data.success) {
         Swal.close();
         showAlert('success', response.data.message);
-        setTimeout(() => Livewire.navigate(`${APP_URL}/dashboard/driver`), 1000);
+        setTimeout(() => Livewire.navigate(`/dashboard/driver`), 1000);
       } else {
         Swal.close();
         $button.prop('disabled', false);
@@ -133,7 +133,7 @@ export function editDataHandler() {
     let tipe_kunjungan = $("#tipe_kunjungan").val();
 
     // axios request
-    axios.patch(`${APP_URL}/api/driver-api/${id}`, {
+    axios.patch(`/api/driver-api/${id}`, {
       id: id,
       title: title,
       lokasi: lokasi,
@@ -144,7 +144,7 @@ export function editDataHandler() {
       .then(response => {
         Swal.close();
         showAlert('success', 'Laporan berhasil diubah!');
-        setTimeout(() => Livewire.navigate(`${APP_URL}/dashboard/driver`), 1000);
+        setTimeout(() => Livewire.navigate(`/dashboard/driver`), 1000);
       })
       .catch(error => {
         Swal.close();

@@ -36,7 +36,7 @@ export function addDataHandler() {
     }
 
     try {
-      const response = await axios.post(`${APP_URL}/api/collect-task-ppn-api`, formData);
+      const response = await axios.post(`/api/collect-task-ppn-api`, formData);
       if (response.data.success) {
         Swal.close();
         showAlert('success', response.data.message);

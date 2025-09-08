@@ -17,15 +17,15 @@ export function initDistribution() {
 
     // Custom icon untuk marker
     var customIcon = L.icon({
-      iconUrl: `${APP_URL}/assets/img/marker.png`, // Ganti dengan path ke ikon Anda
+      iconUrl: `/assets/img/marker.png`, // Ganti dengan path ke ikon Anda
       iconSize: [25, 41], // Ukuran ikon
       iconAnchor: [12, 41], // Titik untuk mengaitkan ikon ke koordinat
-      shadowUrl: `${APP_URL}/assets/img/marker-shadow.png`, // Ganti dengan path ke bayangan Anda
+      shadowUrl: `/assets/img/marker-shadow.png`, // Ganti dengan path ke bayangan Anda
       shadowSize: [41, 41] // Ukuran bayangan
     });
 
     // Ambil data waypoints dari API
-    fetch(`${APP_URL}/api/map-distribution`)
+    fetch(`/api/map-distribution`)
       .then(response => response.json())
       .then(data => {
         const waypoints = data.map(item => ({

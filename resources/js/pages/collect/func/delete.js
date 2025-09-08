@@ -16,7 +16,7 @@ export function deleteData() {
         loadingAlert("Menghapus data...");
         // fetch data to ajax
         try {
-          const response = await axios.delete(`${APP_URL}/api/collect-api/${id}`);
+          const response = await axios.delete(`/api/collect-api/${id}`);
 
           if (response.data.success) {
             Swal.close();

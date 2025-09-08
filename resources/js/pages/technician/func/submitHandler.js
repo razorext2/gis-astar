@@ -61,7 +61,7 @@ export function submitHandler() {
 
     try {
       // kirim data object langsung di POST request
-      const response = await axios.post(`${APP_URL}/dashboard/technician`, formData);
+      const response = await axios.post(`/dashboard/technician`, formData);
       Swal.close();
 
       if (response.data.success) {

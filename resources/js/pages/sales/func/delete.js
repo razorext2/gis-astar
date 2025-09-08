@@ -15,7 +15,7 @@ export function deleteData() {
       if (result.isConfirmed) {
         loadingAlert('Menghapus data...');
         // fetch data to ajax
-        axios.delete(`${APP_URL}/api/sales-api/${id}`)
+        axios.delete(`/api/sales-api/${id}`)
           .then(response => {
             Swal.close();
             showAlert('success', response.data.message);

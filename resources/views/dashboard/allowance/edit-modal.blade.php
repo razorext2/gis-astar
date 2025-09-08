@@ -105,7 +105,7 @@
 			//open allowanceEditModal
 			let allowance_id = $(this).data('id');
 			$.ajax({
-				url: `${APP_URL}/dashboard/pegawai/allowances/${allowance_id}`,
+				url: `/dashboard/pegawai/allowances/${allowance_id}`,
 				type: 'GET',
 				cache: false,
 				success: function(response) {
@@ -185,7 +185,7 @@
 
 			// Ajax call
 			$.ajax({
-				url: `${APP_URL}/dashboard/pegawai/allowances/${allowance_id}`,
+				url: `/dashboard/pegawai/allowances/${allowance_id}`,
 				type: "PUT",
 				cache: false,
 				data: {

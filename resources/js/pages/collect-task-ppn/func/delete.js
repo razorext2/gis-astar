@@ -16,7 +16,7 @@ export function deleteData() {
     if (result.isConfirmed) {
       try {
         loadingAlert("Menghapus data...");
-        const response = await axios.delete(`${APP_URL}/api/collect-task-ppn-api/${id}`);
+        const response = await axios.delete(`/api/collect-task-ppn-api/${id}`);
 
         if (response.data.success) {
           Swal.close();

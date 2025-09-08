@@ -6,7 +6,7 @@ export async function showData() {
     responsive: true,
     lengthMenu: [10, 25, 50, 75, 100, -1],
     ajax: {
-      url: `${APP_URL}/dashboard/sales`,
+      url: `/dashboard/sales`,
       type: "GET",
       data: function (d) {
         d.kode_pegawai = $('#kode_pegawai').val();

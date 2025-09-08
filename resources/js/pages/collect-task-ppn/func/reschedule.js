@@ -35,7 +35,7 @@ export function reschedule() {
       if (date) {
         loadingAlert("Reschedule...");
         try {
-          const response = await axios.patch(`${APP_URL}/api/collect-task-ppn-api/${id}/reschedule`, {
+          const response = await axios.patch(`/api/collect-task-ppn-api/${id}/reschedule`, {
             date: date,
             id: id,
           });

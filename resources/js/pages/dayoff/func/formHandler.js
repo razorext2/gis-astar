@@ -24,12 +24,12 @@ export function addDataHandler() {
     }
 
     try {
-      const response = await axios.post(`${APP_URL}/api/dayoff-api`, formData);
+      const response = await axios.post(`/api/dayoff-api`, formData);
 
       if (response.data.success) {
         Swal.close();
         showAlert('success', response.data.message);
-        setTimeout(() => window.location.href = `${APP_URL}/dashboard/dayoff`, 1500);
+        setTimeout(() => window.location.href = `/dashboard/dayoff`, 1500);
       } else {
         Swal.close();
         $button.prop('disabled', false);
@@ -73,7 +73,7 @@ export function editDataHandler() {
 
     // ajax request
     $.ajax({
-      url: `${APP_URL}/api/dayoff-api/${id}`,
+      url: `/api/dayoff-api/${id}`,
       type: "PATCH",
       dataType: "json",
       data: {

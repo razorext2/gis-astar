@@ -8,7 +8,7 @@ async function sendRequest(url, data) {
       Swal.close();
       showAlert("success", response.data.message, response.data.data);
       setTimeout(() => {
-        window.location.href = `${APP_URL}/dashboard/collect/submitted`;
+        window.location.href = `/dashboard/collect/submitted`;
       }, 1500);
     } else {
       showAlert("error", response.data.message, response.data.data);
@@ -46,7 +46,7 @@ export async function confirmAction() {
         });
 
         if (validation.isConfirmed) {
-          await sendRequest(`${APP_URL}/api/collect-api/${id}/confirm`, { user_id: userID });
+          await sendRequest(`/api/collect-api/${id}/confirm`, { user_id: userID });
         }
       } else if (result.isDenied) {
         const revision = await Swal.fire({
@@ -75,7 +75,7 @@ export async function confirmAction() {
           });
 
           if (text) {
-            await sendRequest(`${APP_URL}/api/collect-api/${id}/revision`, {
+            await sendRequest(`/api/collect-api/${id}/revision`, {
               user_id: userID,
               notes: text,
             });
@@ -96,7 +96,7 @@ export async function confirmAction() {
           });
 
           if (text) {
-            await sendRequest(`${APP_URL}/api/collect-api/${id}/deny`, {
+            await sendRequest(`/api/collect-api/${id}/deny`, {
               user_id: userID,
               notes: text,
             });

@@ -72,7 +72,7 @@ export function exportHandler() {
 
     if (exportData) {
       try {
-        const response = await axios.get(`${APP_URL}/export/collector/`, {
+        const response = await axios.get(`/export/collector/`, {
           params: exportData
         });
 

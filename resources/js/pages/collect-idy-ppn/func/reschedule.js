@@ -35,7 +35,7 @@ export function reschedule() {
       if (date) {
         loadingAlert("Reschedule tagihan...");
         try {
-          const response = await axios.patch(`${APP_URL}/api/collect-idy-ppn-api/${id}/reschedule`, {
+          const response = await axios.patch(`/api/collect-idy-ppn-api/${id}/reschedule`, {
             date: date,
             id: id,
           });

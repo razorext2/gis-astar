@@ -30,7 +30,7 @@ export async function singleAssign() {
 
       try {
         // Mengirim permintaan assign ke server
-        const response = await axios.patch(`${APP_URL}/api/collect-task-api/${id}/assign`, {
+        const response = await axios.patch(`/api/collect-task-api/${id}/assign`, {
           assign_to: input,
           assign_by: assign_by
         })
@@ -73,7 +73,7 @@ export function massAssign() {
 
     try {
       // Kirim permintaan assign massal ke server
-      const response = await axios.patch(`${APP_URL}/api/collect-task-api/mass-assign`, {
+      const response = await axios.patch(`/api/collect-task-api/mass-assign`, {
         kode_pegawai: kode_pegawai,
         sr_data: sr_data,
         assign_by: assign_by,
@@ -85,7 +85,7 @@ export function massAssign() {
         Swal.close();
         showAlert('success', response.data.message);
         setTimeout(() => {
-          window.location.href = `${APP_URL}/dashboard/collect-task`;
+          window.location.href = `/dashboard/collect-task`;
         }, 1500);
       } else {
         // Jika gagal, tampilkan pesan error dan tangani kesalahan form

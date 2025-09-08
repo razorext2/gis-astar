@@ -16,7 +16,7 @@ export function deleteData() {
       if (result.isConfirmed) {
         loadingAlert("Menghapus data...");
         // fetch data to ajax
-        axios.delete(`${APP_URL}/api/dayoff-api/${id}`, {
+        axios.delete(`/api/dayoff-api/${id}`, {
           data: {
             "_token": token
           }

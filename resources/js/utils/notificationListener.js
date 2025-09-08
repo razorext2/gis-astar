@@ -10,7 +10,7 @@ export function fetchNotification() {
 		`);
 
 		try {
-			const response = await axios.get(`${APP_URL}/notifications/fetch`);
+			const response = await axios.get(`/notifications/fetch`);
 
 			// Hapus indikator loading
 			$('#notificationContainer').empty();
@@ -51,7 +51,7 @@ export function fetchNotification() {
 											</button>
 
 											<form id="markAsRead-${item.id}"
-												action="${APP_URL}/notifications/${item.id}/mark-as-read/"></form>
+												action="/notifications/${item.id}/mark-as-read/"></form>
 											<button class="font-semibold text-blue-600" id="btnMarkAsRead" form="markAsRead-${item.id}"
 												type="submit">
 												Mark as Read

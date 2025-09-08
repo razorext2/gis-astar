@@ -3,7 +3,7 @@ export function getAttendancePeriod() {
 
   $('#getAttendancePeriod').click(async function () {
     try {
-      const inputOptions = attendancePeriodsCache || await axios.get(`${APP_URL}/api/getSixMonthsBefore`)
+      const inputOptions = attendancePeriodsCache || await axios.get(`/api/getSixMonthsBefore`)
         .then(response => {
           if (!response.data.success) {
             throw new Error('Data tidak valid.');
@@ -38,7 +38,7 @@ export function getAttendancePeriod() {
 
       if (period) {
         // Arahkan pengguna ke URL dengan parameter periode
-        window.location.href = `${APP_URL}/dashboard/pegawai/${ids}/detail?period=${period}`;
+        window.location.href = `/dashboard/pegawai/${ids}/detail?period=${period}`;
       }
     } catch (error) {
       console.error('Error during period selection:', error);

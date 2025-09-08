@@ -20,7 +20,7 @@ export function deleteData() {
           }, 1000);
         }
 
-        const response = await axios.delete(`${APP_URL}/api/announcement-api/${id}`);
+        const response = await axios.delete(`/api/announcement-api/${id}`);
 
         if (response.data.success) {
           showAlert('success', response.data.message);

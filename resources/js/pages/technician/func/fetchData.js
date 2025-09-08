@@ -29,7 +29,7 @@ async function fetchDataAsync() {
   alert.loadingAlert("Sedang mencari data...");
 
   try {
-    const resDB = await axios.get(`${APP_URL}/proxy/get/vt-db`, {
+    const resDB = await axios.get(`/proxy/get/vt-db`, {
       params: {
         no_vt: $('#no_vt').val(),
       },
@@ -142,8 +142,8 @@ async function fetchDataAsync() {
       <div class="relative me-2 flex-none items-center gap-4">
         <img
           id="documentations"
-          data-url="${APP_URL + fileUrl}"
-          src="${APP_URL + fileUrl}"
+          data-url="${fileUrl}"
+          src="${fileUrl}"
           class="w-36 transition-transform duration-500 hover:scale-105 h-36 object-cover rounded-xl">
       </div>`;
         }
@@ -167,7 +167,7 @@ async function fetchDataAsync() {
       });
     } else { // kalo ga ada datanya di database
       // cek datanya di API
-      const response = await axios.get(`${APP_URL}/proxy/get/vt`, {
+      const response = await axios.get(`/proxy/get/vt`, {
         params: {
           no_vt: $('#no_vt').val(),
         },

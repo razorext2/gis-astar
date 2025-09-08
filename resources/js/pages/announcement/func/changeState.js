@@ -38,7 +38,7 @@ export function changeState() {
 
       if (result.isConfirmed) {
         try {
-          const response = await axios.patch(`${APP_URL}/api/announcement-api/${id}/state`, {
+          const response = await axios.patch(`/api/announcement-api/${id}/state`, {
             state,
           }, {
             validateStatus: () => true,

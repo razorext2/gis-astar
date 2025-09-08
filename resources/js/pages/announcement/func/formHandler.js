@@ -46,7 +46,7 @@ export function addDataHandler() {
 
     if (newAnnouncement) {
       try {
-        axios.post(`${APP_URL}/api/announcement-api`, newAnnouncement)
+        axios.post(`/api/announcement-api`, newAnnouncement)
           .then(response => {
             showAlert('success', response.data.message);
             Livewire.dispatch('pg:eventRefresh-AnnouncementTable')
@@ -64,7 +64,7 @@ export function editDataHandler() {
 
     let id = $(this).data('id');
 
-    const response = await axios.get(`${APP_URL}/api/announcement-api/${id}`);
+    const response = await axios.get(`/api/announcement-api/${id}`);
 
     if (response.data.success) {
       const data = response.data.data;
@@ -109,7 +109,7 @@ export function editDataHandler() {
       if (updateAnnouncement) {
         try {
 
-          const response = await axios.patch(`${APP_URL}/api/announcement-api/${id}`, updateAnnouncement);
+          const response = await axios.patch(`/api/announcement-api/${id}`, updateAnnouncement);
 
           if (response.data.success) {
             showAlert('success', response.data.message);

@@ -8,7 +8,7 @@ async function sendRequest(url, data) {
       Swal.close();
       showAlert("success", response.data.message, response.data.data);
       setTimeout(() => {
-        window.location.href = `${APP_URL}/dashboard/driver`;
+        window.location.href = `/dashboard/driver`;
       }, 1500);
     } else {
       Swal.close();
@@ -49,7 +49,7 @@ export async function confirmAction() {
 
         if (validation.isConfirmed) {
           loadingAlert("Mengapprove laporan...");
-          await sendRequest(`${APP_URL}/api/driver-api/${id}/confirm`, { user_id: userID });
+          await sendRequest(`/api/driver-api/${id}/confirm`, { user_id: userID });
         }
       } else if (result.isDenied) {
         const revision = await Swal.fire({
@@ -79,7 +79,7 @@ export async function confirmAction() {
 
           if (text) {
             loadingAlert('Meminta revisi...');
-            await sendRequest(`${APP_URL}/api/driver-api/${id}/revision`, {
+            await sendRequest(`/api/driver-api/${id}/revision`, {
               user_id: userID,
               notes: text,
             });
@@ -101,7 +101,7 @@ export async function confirmAction() {
 
           if (text) {
             loadingAlert('Menolak laporan...');
-            await sendRequest(`${APP_URL}/api/driver-api/${id}/deny`, {
+            await sendRequest(`/api/driver-api/${id}/deny`, {
               user_id: userID,
               notes: text,
             });

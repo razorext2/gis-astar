@@ -143,7 +143,7 @@
 
 			// Ajax call
 			$.ajax({
-				url: `${APP_URL}/dashboard/pegawai/allowances`,
+				url: `/dashboard/pegawai/allowances`,
 				type: "POST",
 				cache: false,
 				data: {

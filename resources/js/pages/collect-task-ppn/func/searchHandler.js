@@ -13,8 +13,8 @@ export function searchDataHandler() {
 
     try {
       const [database, BSI] = await Promise.all([
-        axios.get(`${APP_URL}/api/collect-task-ppn-api/getSR/${no_sr}`),
-        axios.get(`${APP_URL}/proxy/idc/ppn`, { params: { no_sr } })
+        axios.get(`/api/collect-task-ppn-api/getSR/${no_sr}`),
+        axios.get(`/proxy/idc/ppn`, { params: { no_sr } })
       ]);
 
       let check = database.data.success;

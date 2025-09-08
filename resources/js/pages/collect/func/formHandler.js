@@ -36,12 +36,12 @@ export function editDataHandler() {
     }
 
     try {
-      const response = await axios.post(`${APP_URL}/api/collect-api/${id}`, formData);
+      const response = await axios.post(`/api/collect-api/${id}`, formData);
 
       if (response.data.success) {
         Swal.close();
         showAlert('success', response.data.message);
-        setTimeout(() => window.location.href = `${APP_URL}/dashboard/collect`, 1500);
+        setTimeout(() => window.location.href = `/dashboard/collect`, 1500);
       } else {
         Swal.close();
         const firstError = response.data.data[Object.keys(response.data.data)[0]][0];

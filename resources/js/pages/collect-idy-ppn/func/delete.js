@@ -16,7 +16,7 @@ export function deleteData() {
     if (result.isConfirmed) {
       loadingAlert("Menghapus data...");
       try {
-        const response = await axios.delete(`${APP_URL}/api/collect-idy-ppn-api/${id}`);
+        const response = await axios.delete(`/api/collect-idy-ppn-api/${id}`);
 
         if (response.data.success) {
           Swal.close();

@@ -40,7 +40,7 @@ function validate() {
         return;
       }
 
-      axios.patch(`${APP_URL}/api/technician/${id}/confirm`)
+      axios.patch(`/api/technician/${id}/confirm`)
         .then((response) => {
 
           if (!response.data.success) {
@@ -87,7 +87,7 @@ function validate() {
         })
 
         if (notes) {
-          axios.patch(`${APP_URL}/api/technician/${id}/revision`, {
+          axios.patch(`/api/technician/${id}/revision`, {
             'note': notes
           }).then((response) => {
             if (!response.data.success) {
@@ -118,7 +118,7 @@ function validate() {
         })
 
         if (notes) {
-          axios.patch(`${APP_URL}/api/technician/${id}/deny`, {
+          axios.patch(`/api/technician/${id}/deny`, {
             'note': notes
           }).then((response) => {
             if (!response.data.success) {

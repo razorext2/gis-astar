@@ -7,7 +7,7 @@ export function showDatatables() {
     paging: true,
     "lengthMenu": [15, 25, 50, 75, 100, -1],
     ajax: {
-      url: `${APP_URL}/dashboard/dayoff`,
+      url: `/dashboard/dayoff`,
       data: function (d) {
         d.dayoff_for = $('#dayoff-for').val();
         d.kode_pegawai = $('#kode-pegawai').val();
