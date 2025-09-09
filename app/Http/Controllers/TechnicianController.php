@@ -153,7 +153,7 @@ class TechnicianController extends Controller
 
                 if ($request->file('bast_document')) {
                     // simpan dokumen
-                    $no_vt = strtoupper($request->no_vt);
+                    $no_vt = strtoupper($partner['no_vt']);
 
                     $document = $request->file('bast_document');
                     $documentName = 'dokumen_bast_' . $no_vt . '.' . $document->getClientOriginalExtension();

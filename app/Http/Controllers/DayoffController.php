@@ -25,7 +25,6 @@ class DayoffController extends Controller
 
 	public function index(Request $request)
 	{
-
 		$query = Dayoff::with('pegawaiRelasi:kode_pegawai,full_name');
 
 		if (!Auth::user()->can('dayoff-confirm')) {
