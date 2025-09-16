@@ -435,9 +435,6 @@
 					<a class="btn ghost" href="/">Ke Beranda</a>
 				</div>
 				<div class="hint" id="statusHint"></div>
-				<div class="hint">Tip: jika kamu memakai PWA, pastikan aset halaman ini di‑cache oleh service worker. Contoh:
-					<code>caches.addAll(['/offline.html'])</code>.
-				</div>
 			</div>
 		</div>
 
