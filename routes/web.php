@@ -16,6 +16,7 @@ use App\Http\Controllers\DeductionController;
 use App\Http\Controllers\DivisionController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\GolonganController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\LoghistoryController;
 use App\Http\Controllers\NotificationController;
@@ -267,6 +268,9 @@ Route::middleware(['auth'])->group(function () {
 
         // teams
         Route::resource('teams', TeamController::class)->only('index', 'create', 'edit');
+
+        // invoice
+        Route::resource('invoice', InvoiceController::class);
     });
 });
 
