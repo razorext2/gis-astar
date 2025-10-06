@@ -2,7 +2,7 @@
 
 	<div class="flex flex-row gap-2">
 		<x-button.success id="create-participant" class="w-fit" wire:click="$set('showCreateForm', true)">
-			Tambah Partisipan [{{ $big_event_id }}]
+			Tambah Partisipan
 		</x-button.success>
 
 		<x-button.success id="refresh-table" class="w-fit" wire:click="refreshTable">
@@ -42,7 +42,7 @@
 
 			<div class="w-full">
 				<x-input.basic id="redirect-to" placeholder="cth: https://xxx.com" name="redirect_to"
-					wire:model.live.throttle.500ms="redirect_to">
+					wire:model.live.throttle.200ms="redirect_to">
 					Redirect Ke-
 				</x-input.basic>
 
