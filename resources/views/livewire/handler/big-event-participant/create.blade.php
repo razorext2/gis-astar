@@ -2,7 +2,7 @@
 
 	<div class="flex flex-row gap-2">
 		<x-button.success id="create-participant" class="w-fit" wire:click="$set('showCreateForm', true)">
-			Tambah Partisipan
+			Tambah Partisipan [{{ $big_event_id }}]
 		</x-button.success>
 
 		<x-button.success id="refresh-table" class="w-fit" wire:click="refreshTable">
@@ -14,7 +14,7 @@
 		class="{{ $showCreateForm ? 'block' : 'hidden' }} rounded-xl p-4 dark:bg-dark-secondary">
 		<form wire:submit.prevent="store" class="flex w-full flex-col gap-2">
 			<div class="w-full">
-				<x-input.basic id="search-user" name="search_user" wire:model.live.throttle.500ms="search" placeholder="Cari User"
+				<x-input.basic id="search-user" name="search_user" wire:model.live.throttle.100ms="search" placeholder="Cari User"
 					:labels="'Cari User'">
 					Cari Nama Partisipan
 				</x-input.basic>

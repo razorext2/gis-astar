@@ -107,7 +107,7 @@ final class BigEventTable extends PowerGridComponent
             Button::make('detail')
                 ->slot('Detail')
                 ->id($row->id)
-                ->class('dark:bg-green-800 text-sm dark:hover:bg-green-900 dark:text-white dark:border-gray-700 rounded-lg bg-green-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-green-700')
+                ->class('dark:bg-blue-800 text-sm dark:hover:bg-blue-900 dark:text-white dark:border-gray-700 rounded-lg bg-blue-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-green-700')
                 ->route('event.show', ['event' => $row->id]),
             Button::make('edit')
                 ->slot('Ubah')

@@ -110,28 +110,35 @@ class BigEventController extends Controller
 
     public function storeParticipantVisitor(Request $request, $event_id, $participant_id)
     {
+        $ip = $request->ip();
+        $ua = Str::limit((string) $request->userAgent(), 255, '');
+        $buck = now()->setMicroseconds(0);
+
         $data = BigEventParticipant::where('id', $participant_id)
             ->where('big_event_id', $event_id)
             ->firstOrFail();
 
-        $key = 'visit:' . $participant_id . ':' . $request->ip() . ':' . md5($request->userAgent() ?? '');
+        $key = 'visit:' . $participant_id . ':' . $ip . ':' . md5($ua ?? '');
 
         RateLimiter::attempt(
             $key,
             1, // max 1 kali
-            function () use ($participant_id, $request) {
-                $ip = $request->ip();
-                $ua = Str::limit((string) $request->userAgent(), 255, '');
-                $buck = now()->setMicroseconds(0);
+            function () use ($participant_id, $ip, $ua, $buck) {
+                $check = BigEventParticipantVisitor::where('participant_id', $participant_id)
+                    ->where('ip', $ip)
+                    ->where('ua', $ua)
+                    ->first();
 
-                BigEventParticipantVisitor::insertOrIgnore([
-                    'participant_id' => $participant_id,
-                    'ip' => $ip,
-                    'ua' => $ua,
-                    'second_bucket' => $buck,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+                if (!$check) {
+                    BigEventParticipantVisitor::insertOrIgnore([
+                        'participant_id' => $participant_id,
+                        'ip' => $ip,
+                        'ua' => $ua,
+                        'second_bucket' => $buck,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
             },
             2 // detik dedupe window
         );

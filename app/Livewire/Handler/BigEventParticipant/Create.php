@@ -15,15 +15,10 @@ class Create extends Component
 
     #[Validate('required', message: 'Partisipan harus dipilih')]
     public ?int $user_id = null;
-    public ?string $big_event_id = null;
+    public ?string $big_event_id;
     #[Validate('required', message: 'Link redirect harus diisi')]
     #[Validate('url', message: 'Link redirect harus valid')]
     public ?string $redirect_to = null;
-
-    public function mount($big_event_id)
-    {
-        $this->big_event_id = $big_event_id;
-    }
 
     public function store()
     {
@@ -36,7 +31,7 @@ class Create extends Component
         if ($user) {
             $this->dispatch('swal', icon: 'error', text: 'Partisipan sudah terdaftar', title: 'Gagal');
 
-            $this->reset();
+            $this->resetForm();
 
             return;
         }
@@ -61,10 +56,11 @@ class Create extends Component
 
             $this->dispatch('swal', icon: 'success', text: 'Data berhasil disimpan', title: 'Berhasil');
             $this->dispatch('pg:eventRefresh-BigEventParticipantTable');
-            $this->reset();
+            $this->resetForm();
+
         } catch (\Throwable $e) {
             DB::rollBack();
-            $this->reset();
+            $this->resetForm();
 
             return $this->dispatch('swal', icon: 'error', text: 'Gagal menyimpan data: ' . $e, title: 'Terjadi Kesalahan');
         }
@@ -73,6 +69,14 @@ class Create extends Component
     public function refreshTable()
     {
         $this->dispatch('pg:eventRefresh-BigEventParticipantTable');
+    }
+
+    public function resetForm()
+    {
+        $this->search = null;
+        $this->user_id = null;
+        $this->redirect_to = null;
+        $this->showCreateForm = false;
     }
 
     public function render()
