@@ -32,6 +32,7 @@
 	    'technicianpoints.*' => 'Transaksi Point',
 	    'routes.*' => 'Rute',
 	    'teams.*' => 'Manajemen Tim',
+	    'event.*' => 'Manajemen Event',
 	];
 
 	// Temukan judul berdasarkan rute dengan wildcard
