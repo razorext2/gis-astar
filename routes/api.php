@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\ApiDayoffController;
 use App\Http\Controllers\Api\ApiDriverController;
 use App\Http\Controllers\Api\ApiPegawaiController;
 use App\Http\Controllers\Api\ApiSalesController;
+use App\Http\Controllers\BigEventController;
 use App\Http\Controllers\TechnicianController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,9 @@ Route::post('photo-regist-process', [ApiAttendanceController::class, 'photoRegis
 Route::post('check-attendance', [ApiAttendanceController::class, 'checkAttendance']);
 Route::get('pegawai-images/{id}', [ApiPegawaiController::class, 'getPegawaiImages']);
 Route::get('getPegawaiData/{id}', [ApiPegawaiController::class, 'getPegawaiDataByLabel']);
+
+// ini untuk api partisipan event jika customer klik
+Route::get('event/{event}/{participant}/visitor', [BigEventController::class, 'storeParticipantVisitor'])->name('event.participant.api');
 
 // public API post attendance ke server utama
 Route::post('proxy/server/attendance', function (Request $request) {

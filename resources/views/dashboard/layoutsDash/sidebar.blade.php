@@ -95,7 +95,7 @@
 
 <!-- Sidebar Navigation -->
 <aside
-	class="left-0 top-0 z-50 hidden h-screen min-w-[265px] flex-col bg-white pb-14 shadow-sm transition-all duration-300 ease-out dark:bg-[#09090b] dark:shadow-none md:fixed md:flex"
+	class="left-0 top-0 z-40 hidden h-screen min-w-[265px] flex-col bg-white pb-14 shadow-sm transition-all duration-300 ease-out dark:bg-[#09090b] dark:shadow-none md:fixed md:flex"
 	id="logo-sidebar" aria-label="Sidebar" :class="openSidebar ? 'translate-x-0' : '-translate-x-72'">
 
 	<div id="tombolSidebar" :class="openSidebar ? 'translate-x-0' : 'absolute translate-x-24 bg-white dark:bg-[#09090b]'"
@@ -683,6 +683,20 @@
 				</li>
 			@endcan
 
+			@if (auth()->user()->hasRole(['Admin', 'HRD', 'Management', 'Management-Special']))
+				<li>
+					<a href="{{ route('event.index') }}"
+						class="group flex flex-row items-center rounded-xl p-2 text-gray-900 hover:text-red-600 dark:text-gray-300"
+						wire:navigate wire:current.href="!text-red-600 font-bold bg-gray-100 dark:bg-dark-primary">
+
+						<x-icons.gift-box wire:current="!text-red-600" class="h-6 w-6 group-hover:text-red-600" />
+						<span class="ms-3 inline-flex text-sm group-hover:text-red-600">
+							Event
+						</span>
+					</a>
+				</li>
+			@endif
+
 			@can('technician-approve')
 				<li>
 					<a href="{{ route('map.distribution') }}"
@@ -691,7 +705,7 @@
 
 						<x-icons.book-open wire:current="!text-red-600" class="h-6 w-6 group-hover:text-red-600" />
 						<span class="ms-3 inline-flex text-sm group-hover:text-red-600">
-							Peta penyebaran teknisi
+							Peta Penyebaran Teknisi
 						</span>
 					</a>
 				</li>

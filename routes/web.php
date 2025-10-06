@@ -6,6 +6,7 @@ use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceOutController;
 use App\Http\Controllers\BackupController;
+use App\Http\Controllers\BigEventController;
 use App\Http\Controllers\CaptureController;
 use App\Http\Controllers\CollectController;
 use App\Http\Controllers\CollectIdyPpnController;
@@ -267,6 +268,11 @@ Route::middleware(['auth'])->group(function () {
 
         // teams
         Route::resource('teams', TeamController::class)->only('index', 'create', 'edit');
+
+        // ini untuk event
+        Route::resource('event', BigEventController::class);
+        Route::get('event/{event}/participant/{participant}', [BigEventController::class, 'participantDetails'])->name('event.participant.show');
+        Route::delete('event/{event}/participant/{participant}', [BigEventController::class, 'participantDelete'])->name('event.participant.delete');
     });
 });
 

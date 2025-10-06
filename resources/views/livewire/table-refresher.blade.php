@@ -1,3 +1,3 @@
-<div wire:poll.300s="refreshTable">
+<div wire:poll.3600s="refreshTable">
 	@livewire($tableName)
 </div>
