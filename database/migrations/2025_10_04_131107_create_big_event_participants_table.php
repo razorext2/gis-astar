@@ -18,8 +18,8 @@ return new class extends Migration {
             $table->foreignId('user_id')
                 ->constrained('users')
                 ->cascadeOnDelete();
-            $table->string('visitor_api', 100)->nullable();
-            $table->string('redirect_to', 255)->nullable();
+            $table->string('visitor_api')->nullable();
+            $table->string('redirect_to')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
