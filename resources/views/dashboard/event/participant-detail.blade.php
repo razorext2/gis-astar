@@ -22,9 +22,20 @@
 
 			<div class="col-span-2 grid grid-cols-2">
 				<div
-					class="col-span-2 rounded-xl border-[1px] border-gray-200 bg-gray-50 p-2.5 text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:text-white lg:p-4">
+					class="col-span-2 rounded-t-xl border-[1px] border-gray-200 bg-gray-50 p-2.5 text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:text-white lg:p-4">
 					<p class="text-xs italic"> Nama Partisipan </p>
-					<p class="font-semibold"> {{ ucwords($participant->userId->name) }}</p>
+					<p class="font-semibold"> {{ ucwords($participant->userId->name) }}
+						[{{ $participant->userId->kode_pegawai ?? '-' }}]</p>
+				</div>
+				<div
+					class="col-span-2 border-[1px] border-gray-200 bg-gray-50 p-2.5 text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:text-white lg:p-4">
+					<p class="text-xs italic"> Visitor Api </p>
+					<p class="font-semibold"> {{ $participant->visitor_api }}</p>
+				</div>
+				<div
+					class="col-span-2 rounded-b-xl border-[1px] border-gray-200 bg-gray-50 p-2.5 text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:text-white lg:p-4">
+					<p class="text-xs italic"> Redirect URL </p>
+					<p class="font-semibold"> {{ $participant->redirect_to }}</p>
 				</div>
 
 			</div>
@@ -43,7 +54,7 @@
 						<p class="font-semibold text-gray-800 dark:text-gray-400"> Second Bucket </p>
 						<p class="font-semibold text-gray-800 dark:text-gray-400"> Details </p>
 					</div>
-					@forelse ($participant->bigEventVisitor as $row)
+					@forelse ($visitor as $row)
 						@php $info = json_decode($row->real_info ?? '[]', true) ?: []; @endphp
 						<div
 							class="{{ $loop->last ? 'rounded-b-xl' : '' }} grid grid-cols-4 gap-1 border-[1px] border-gray-600 p-2 lg:p-4">
@@ -63,6 +74,12 @@
 						<p class="p-4 text-center italic text-red-500"> Belum ada yang mengunjungi link
 							{{ ucwords($participant->userId->name) }} </p>
 					@endforelse
+
+					@if ($visitor instanceof \Illuminate\Pagination\AbstractPaginator && $visitor->hasPages())
+						<div class="border-t border-gray-200 bg-white p-2 dark:border-gray-700 dark:bg-dark-primary">
+							{{ $visitor->links() }}
+						</div>
+					@endif
 				</div>
 
 			</div>

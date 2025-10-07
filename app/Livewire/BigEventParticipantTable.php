@@ -5,6 +5,8 @@ namespace App\Livewire;
 use App\Models\BigEventParticipant;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
@@ -25,18 +27,29 @@ final class BigEventParticipantTable extends PowerGridComponent
     {
         return [
             PowerGrid::header(),
-            PowerGrid::responsive(),
+            // PowerGrid::responsive(),
             PowerGrid::footer()
                 ->showPerPage()
                 ->showRecordCount(),
         ];
     }
 
-    public function datasource(): Builder
+    public function datasource()
     {
-        return BigEventParticipant::query()
-            ->where('big_event_id', $this->id)
-            ->orderBy('created_at', 'asc');
+        // base: hilangkan scoped soft delete agar alias kolom konsisten
+        $base = BigEventParticipant::withoutGlobalScope(SoftDeletingScope::class)
+            ->select('tb_big_event_participant.*')
+            ->withCount('bigEventVisitor as visitors_count');
+
+        $query = BigEventParticipant::withoutGlobalScope(SoftDeletingScope::class)
+            ->fromSub($base, 'p')
+            ->select('p.*')
+            ->selectRaw('DENSE_RANK() OVER (ORDER BY p.visitors_count DESC) AS rank_pos')
+            ->whereNull('p.deleted_at');
+
+        $query->orderBy('rank_pos', 'asc');
+
+        return $query;
     }
 
     public function relationSearch(): array
@@ -53,12 +66,8 @@ final class BigEventParticipantTable extends PowerGridComponent
             ->add('user_id')
             ->add('user_id_formatted', fn($query) => $query->userId->name)
             ->add('visitor_api')
-            ->add('redirect_to')
-            ->add('counter_formatted', function ($query) {
-                $count = $query->bigEventVisitor()->count();
-
-                return $count . ' Orang';
-            })
+            ->add('counter_formatted', fn($row) => number_format($row->visitors_count) . ' Orang')
+            ->add('ranking_formatted', fn($row) => '#' . $row->rank_pos)
             ->add('created_at');
     }
 
@@ -73,18 +82,13 @@ final class BigEventParticipantTable extends PowerGridComponent
             Column::make('ID', 'id_formatted')
                 ->sortable()
                 ->searchable(),
-
+            Column::action('Action'),
             Column::make('Nama Partisipan', 'user_id_formatted'),
             Column::make('Jlh Visitor', 'counter_formatted'),
+            Column::make('Ranking', 'ranking_formatted')
+                ->bodyAttribute('text-sm'),
             Column::make('Visitor API', 'visitor_api')
-                ->sortable()
-                ->searchable(),
-
-            Column::make('Redirect', 'redirect_to')
-                ->sortable()
-                ->searchable(),
-
-            Column::action('Action')
+                ->bodyAttribute('text-sm'),
         ];
     }
 

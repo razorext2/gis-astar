@@ -38,9 +38,12 @@ class BigEventController extends Controller
 
     public function participantDetails($event, $participant)
     {
-        $participant = BigEventParticipant::findOrFail($participant);
+        $participant = BigEventParticipant::with(['bigEventVisitor', 'bigEventId', 'userId'])
+            ->findOrFail($participant);
 
-        return view('dashboard.event.participant-detail', compact('participant'));
+        $visitor = $participant->bigEventVisitor()->latest()->paginate(10);
+
+        return view('dashboard.event.participant-detail', compact('participant', 'visitor'));
     }
 
     public function store(Request $request)

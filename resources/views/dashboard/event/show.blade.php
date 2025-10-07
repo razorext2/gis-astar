@@ -59,6 +59,11 @@
 
 			</div>
 
+			<div class="col-span-2 flex w-full flex-col gap-2">
+				<h3 class="text-lg font-semibold text-gray-800 dark:text-white"> Grafik Total Visitor</h3>
+				@livewire('chart.participant-visitor-graph', ['event_id' => $event->id])
+			</div>
+
 			<div class="col-span-2 flex flex-col gap-1">
 				<div class="w-full">
 					<h2 class="text-lg font-semibold">Daftar Partisipan</h2>
