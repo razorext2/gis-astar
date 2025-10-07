@@ -37,12 +37,27 @@
 				</div>
 
 				<div class="flex flex-col rounded-xl bg-gray-50 dark:bg-dark-secondary">
+					<div class="grid grid-cols-4 gap-1 rounded-t-xl border-[1px] border-b-0 border-gray-600 p-2 lg:p-4">
+						<p class="font-semibold text-gray-800 dark:text-gray-400"> IP </p>
+						<p class="font-semibold text-gray-800 dark:text-gray-400"> User Agent </p>
+						<p class="font-semibold text-gray-800 dark:text-gray-400"> Second Bucket </p>
+						<p class="font-semibold text-gray-800 dark:text-gray-400"> Details </p>
+					</div>
 					@forelse ($participant->bigEventVisitor as $row)
+						@php $info = json_decode($row->real_info ?? '[]', true) ?: []; @endphp
 						<div
-							class="{{ $loop->first ? 'rounded-t-xl' : '' }} {{ $loop->last ? 'rounded-b-xl' : '' }} grid grid-cols-3 gap-1 border-[1px] border-gray-600 p-2 lg:p-4">
-							<p class="text-gray-800 dark:text-gray-400"> {{ $row->ip }} </p>
-							<p class="text-gray-800 dark:text-gray-400"> {{ $row->ua }} </p>
-							<p class="text-gray-800 dark:text-gray-400"> {{ $row->second_bucket }} </p>
+							class="{{ $loop->last ? 'rounded-b-xl' : '' }} grid grid-cols-4 gap-1 border-[1px] border-gray-600 p-2 lg:p-4">
+							<p class="text-gray-800 dark:text-white"> {{ $row->ip }} </p>
+							<p class="text-gray-800 dark:text-white"> {{ $row->ua }} </p>
+							<p class="text-gray-800 dark:text-white"> {{ $row->second_bucket }} </p>
+							<div class="flex flex-col gap-1 text-sm text-gray-800 dark:text-gray-400">
+								<p>host: <span class="italic dark:text-white">{{ $info['host'][0] ?? '-' }}</span></p>
+								<p>x-forwarded-for: <span class="italic dark:text-white">{{ $info['x-forwarded-for'][0] ?? '-' }}</span></p>
+								<p>user-agent: <span class="italic dark:text-white">{{ $info['user-agent'][0] ?? '-' }}</span></p>
+								<p>sec-ch-ua: <span class="italic dark:text-white">{{ $info['sec-ch-ua'][0] ?? '-' }}</span></p>
+								<p>sec-ch-ua-platform: <span class="italic dark:text-white">{{ $info['sec-ch-ua-platform'][0] ?? '-' }}</span>
+								</p>
+							</div>
 						</div>
 					@empty
 						<p class="p-4 text-center italic text-red-500"> Belum ada yang mengunjungi link
