@@ -110,11 +110,9 @@ class BigEventController extends Controller
 
     public function storeParticipantVisitor(Request $request, $event_id, $participant_id)
     {
-        $ip = $request->ip();
+        $ip = $request->header('x-forwarded-for');
         $ua = Str::limit((string) $request->userAgent(), 255, '');
         $buck = now()->setMicroseconds(0);
-
-
 
         $data = BigEventParticipant::where('id', $participant_id)
             ->where('big_event_id', $event_id)
