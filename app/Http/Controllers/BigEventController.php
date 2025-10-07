@@ -114,6 +114,8 @@ class BigEventController extends Controller
         $ua = Str::limit((string) $request->userAgent(), 255, '');
         $buck = now()->setMicroseconds(0);
 
+
+
         $data = BigEventParticipant::where('id', $participant_id)
             ->where('big_event_id', $event_id)
             ->firstOrFail();
@@ -123,22 +125,19 @@ class BigEventController extends Controller
         RateLimiter::attempt(
             $key,
             1, // max 1 kali
-            function () use ($participant_id, $ip, $ua, $buck) {
-                $check = BigEventParticipantVisitor::where('participant_id', $participant_id)
-                    ->where('ip', $ip)
-                    ->where('ua', $ua)
-                    ->first();
+            function () use ($request, $participant_id, $ip, $ua, $buck) {
+                $request_all = $request->headers->all();
+                $real_info = json_encode($request_all);
 
-                if (!$check) {
-                    BigEventParticipantVisitor::insertOrIgnore([
-                        'participant_id' => $participant_id,
-                        'ip' => $ip,
-                        'ua' => $ua,
-                        'second_bucket' => $buck,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
-                }
+                BigEventParticipantVisitor::insertOrIgnore([
+                    'participant_id' => $participant_id,
+                    'ip' => $ip,
+                    'ua' => $ua,
+                    'second_bucket' => $buck,
+                    'real_info' => $real_info,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
             },
             2 // detik dedupe window
         );

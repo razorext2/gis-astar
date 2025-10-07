@@ -16,6 +16,7 @@ class BigEventParticipantVisitor extends Model
         'ip',
         'ua',
         'second_bucket',
+        'real_info',
     ];
 
     public function participant()
