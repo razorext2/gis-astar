@@ -2,7 +2,7 @@
 @section('content')
 	<div class="mb-16 flex flex-col text-gray-800 dark:text-white">
 		<div
-			class="relative flex flex-col gap-4 rounded-xl bg-white p-2 shadow-md ring-1 ring-gray-200 transition-all duration-500 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 md:p-4 lg:p-6">
+			class="flex flex-col gap-4 rounded-xl bg-white p-2 shadow-md ring-1 ring-gray-200 transition-all duration-500 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 md:p-4 lg:p-6">
 
 			<div class="col-span-2 mb-4 flex w-full flex-row items-center gap-4">
 				<div class="max-w-xs">
@@ -20,22 +20,22 @@
 				</div>
 			</div>
 
-			<div class="col-span-2 grid grid-cols-2">
+			<div class="col-span-2 grid w-full grid-cols-2">
 				<div
 					class="col-span-2 rounded-t-xl border-[1px] border-gray-200 bg-gray-50 p-2.5 text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:text-white lg:p-4">
 					<p class="text-xs italic"> Nama Partisipan </p>
-					<p class="font-semibold"> {{ ucwords($participant->userId->name) }}
+					<p class="break-words font-semibold"> {{ ucwords($participant->userId->name) }}
 						[{{ $participant->userId->kode_pegawai ?? '-' }}]</p>
 				</div>
 				<div
-					class="col-span-2 border-[1px] border-gray-200 bg-gray-50 p-2.5 text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:text-white lg:p-4">
+					class="col-span-2 flex flex-col border-[1px] border-gray-200 bg-gray-50 p-2.5 text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:text-white lg:p-4">
 					<p class="text-xs italic"> Visitor Api </p>
-					<p class="font-semibold"> {{ $participant->visitor_api }}</p>
+					<p class="break-words font-semibold"> {{ $participant->visitor_api }}</p>
 				</div>
 				<div
 					class="col-span-2 rounded-b-xl border-[1px] border-gray-200 bg-gray-50 p-2.5 text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:text-white lg:p-4">
 					<p class="text-xs italic"> Redirect URL </p>
-					<p class="font-semibold"> {{ $participant->redirect_to }}</p>
+					<p class="break-words font-semibold"> {{ $participant->redirect_to }}</p>
 				</div>
 
 			</div>
@@ -48,25 +48,27 @@
 				</div>
 
 				<div class="flex flex-col rounded-xl bg-gray-50 dark:bg-dark-secondary">
-					<div class="grid grid-cols-4 gap-1 rounded-t-xl border-[1px] border-b-0 border-gray-600 p-2 lg:p-4">
+					{{-- <div class="grid grid-cols-4 gap-1 overflow-x-auto rounded-t-xl border-[1px] border-b-0 border-gray-600 p-2 lg:p-4">
 						<p class="font-semibold text-gray-800 dark:text-gray-400"> IP </p>
 						<p class="font-semibold text-gray-800 dark:text-gray-400"> User Agent </p>
 						<p class="font-semibold text-gray-800 dark:text-gray-400"> Second Bucket </p>
 						<p class="font-semibold text-gray-800 dark:text-gray-400"> Details </p>
-					</div>
+					</div> --}}
 					@forelse ($visitor as $row)
 						@php $info = json_decode($row->real_info ?? '[]', true) ?: []; @endphp
 						<div
-							class="{{ $loop->last ? 'rounded-b-xl' : '' }} grid grid-cols-4 gap-1 border-[1px] border-gray-600 p-2 lg:p-4">
-							<p class="text-gray-800 dark:text-white"> {{ $row->ip }} </p>
-							<p class="text-gray-800 dark:text-white"> {{ $row->ua }} </p>
-							<p class="text-gray-800 dark:text-white"> {{ $row->second_bucket }} </p>
-							<div class="flex flex-col gap-1 text-sm text-gray-800 dark:text-gray-400">
-								<p>host: <span class="italic dark:text-white">{{ $info['host'][0] ?? '-' }}</span></p>
-								<p>x-forwarded-for: <span class="italic dark:text-white">{{ $info['x-forwarded-for'][0] ?? '-' }}</span></p>
-								<p>user-agent: <span class="italic dark:text-white">{{ $info['user-agent'][0] ?? '-' }}</span></p>
-								<p>sec-ch-ua: <span class="italic dark:text-white">{{ $info['sec-ch-ua'][0] ?? '-' }}</span></p>
-								<p>sec-ch-ua-platform: <span class="italic dark:text-white">{{ $info['sec-ch-ua-platform'][0] ?? '-' }}</span>
+							class="{{ $loop->last ? 'rounded-b-xl' : '' }} {{ $loop->first ? 'rounded-t-xl' : '' }} flex flex-row gap-4 overflow-x-auto border-[1px] border-gray-200 p-4 dark:border-gray-700 lg:p-6">
+							<p class="grow text-gray-800 dark:text-white"> {{ $row->ip }} </p>
+							<p class="grow-0 text-gray-800 dark:text-white"> {{ $row->ua }} </p>
+							<p class="grow text-gray-800 dark:text-white"> {{ $row->second_bucket }} </p>
+							<div class="flex grow flex-col gap-1 text-sm text-gray-600 dark:text-gray-400">
+								<p>host: <span class="italic text-gray-800 dark:text-white">{{ $info['host'][0] ?? '-' }}</span></p>
+								<p>x-forwarded-for: <span
+										class="italic text-gray-800 dark:text-white">{{ $info['x-forwarded-for'][0] ?? '-' }}</span></p>
+								<p>user-agent: <span class="italic text-gray-800 dark:text-white">{{ $info['user-agent'][0] ?? '-' }}</span></p>
+								<p>sec-ch-ua: <span class="italic text-gray-800 dark:text-white">{{ $info['sec-ch-ua'][0] ?? '-' }}</span></p>
+								<p>sec-ch-ua-platform: <span
+										class="italic text-gray-800 dark:text-white">{{ $info['sec-ch-ua-platform'][0] ?? '-' }}</span>
 								</p>
 							</div>
 						</div>

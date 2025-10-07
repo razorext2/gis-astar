@@ -225,6 +225,13 @@
 			        'icon' => 'announcement',
 			    ],
 			    [
+			        'permission' => 'event-manage',
+			        'link' => 'event.index',
+			        'check' => 'event.*',
+			        'label' => 'Event',
+			        'icon' => 'event',
+			    ],
+			    [
 			        'permission' => 'backup-list',
 			        'link' => 'backup.index',
 			        'check' => 'backup.*',
@@ -354,6 +361,10 @@
 
 							@case('book-open')
 								<x-icons.book-open class="{{ $iconClass }} {{ $iconSize }}" />
+							@break
+
+							@case('event')
+								<x-icons.gift-box class="{{ $iconClass }} {{ $iconSize }}" />
 							@break
 						@endswitch
 

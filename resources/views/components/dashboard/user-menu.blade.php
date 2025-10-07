@@ -164,6 +164,12 @@
 		</x-menu.mobile-link>
 	@endcan
 
+	@can('event-manage')
+		<x-menu.mobile-link href="{{ route('event.index') }}" :label="'Event'">
+			<x-icons.gift-box class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
+		</x-menu.mobile-link>
+	@endcan
+
 	@can('technician-list')
 		<x-menu.mobile-link href="{{ route('points.index') }}" :label="'Poin Masuk'">
 			<x-icons.arrow-right class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
