@@ -127,18 +127,26 @@ class BigEventController extends Controller
             $key,
             1, // max 1 kali
             function () use ($request, $participant_id, $ip, $ua, $buck) {
-                $request_all = $request->headers->all();
-                $real_info = json_encode($request_all);
+                $data = BigEventParticipantVisitor::where('participant_id', $participant_id)
+                    ->where('ip', $ip)
+                    ->first();
 
-                BigEventParticipantVisitor::insertOrIgnore([
-                    'participant_id' => $participant_id,
-                    'ip' => $ip,
-                    'ua' => $ua,
-                    'second_bucket' => $buck,
-                    'real_info' => $real_info,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+                if (!$data) {
+                    $request_all = $request->headers->all();
+                    $real_info = json_encode($request_all);
+
+                    BigEventParticipantVisitor::insertOrIgnore([
+                        'participant_id' => $participant_id,
+                        'ip' => $ip,
+                        'ua' => $ua,
+                        'second_bucket' => $buck,
+                        'real_info' => $real_info,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+
+                return;
             },
             2 // detik dedupe window
         );
