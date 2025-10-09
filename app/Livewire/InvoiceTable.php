@@ -24,7 +24,9 @@ final class InvoiceTable extends PowerGridComponent
 
     public function setUp(): array
     {
-        $this->showCheckBox();
+        if (auth()->user()->can('invoice-delete')) {
+            $this->showCheckBox();
+        }
 
         return [
             PowerGrid::header()

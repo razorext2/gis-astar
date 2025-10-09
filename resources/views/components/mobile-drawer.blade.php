@@ -71,6 +71,13 @@
 			        'icon' => 'collect-idy-ppn',
 			    ],
 			    [
+			        'permission' => 'invoice-list',
+			        'link' => 'invoice.index',
+			        'check' => 'invoice.index',
+			        'label' => 'Laporan Invoice',
+			        'icon' => 'invoice',
+			    ],
+			    [
 			        'permission' => 'driver-list',
 			        'link' => 'driver.index',
 			        'check' => 'driver.index',
@@ -365,6 +372,10 @@
 
 							@case('event')
 								<x-icons.gift-box class="{{ $iconClass }} {{ $iconSize }}" />
+							@break
+
+							@case('invoice')
+								<x-icons.file-invoice class="{{ $iconClass }} {{ $iconSize }}" />
 							@break
 						@endswitch
 

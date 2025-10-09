@@ -44,6 +44,12 @@
 		</x-menu.mobile-link>
 	@endcan
 
+	@can('invoice-list')
+		<x-menu.mobile-link href="{{ route('invoice.index') }}" :label="'Laporan Invoice'">
+			<x-icons.file-invoice class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
+		</x-menu.mobile-link>
+	@endcan
+
 	@can('sales-list')
 		<x-menu.mobile-link href="{{ route('sales.index') }}" :label="'Laporan Sales'">
 			<x-icons.receipt class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
