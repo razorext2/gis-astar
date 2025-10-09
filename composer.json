@@ -28,6 +28,8 @@
         "silviolleite/laravelpwa": "^2.0",
         "spatie/laravel-backup": "^9.2",
         "spatie/laravel-permission": "^6.9",
+        "symfony/css-selector": "^7.3",
+        "symfony/dom-crawler": "^7.3",
         "yajra/laravel-datatables": "^11.0",
         "yajra/laravel-datatables-oracle": "11"
     },

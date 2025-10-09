@@ -31,6 +31,16 @@
 	        'indicator' => true,
 	    ],
 	    [
+	        'route' => 'invoice.index',
+	        'check' => 'invoice.*',
+	        'label' => 'Laporan Invoice',
+	        'icon' => 'invoice',
+	        'permission' => 'invoice-list',
+	        'sublinks' => [],
+	        'navigate' => true,
+	        'indicator' => false,
+	    ],
+	    [
 	        'route' => 'capture.index',
 	        'check' => 'capture.index',
 	        'label' => 'Record Attendance',
@@ -420,6 +430,10 @@
 
 										@case('technician')
 											<x-icons.hammer class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+										@break
+
+										@case('invoice')
+											<x-icons.file-invoice class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
 										@break
 									@endswitch
 

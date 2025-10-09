@@ -7,8 +7,11 @@ use App\Http\Resources\ApiResource;
 use App\Jobs\NotifyCollectorNewAssignedJob;
 use App\Models\CollectIdyPpn;
 use App\Models\Collector;
+use App\Models\Invoice;
+use App\Models\InvoiceDetail;
 use App\Models\Pegawai;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -59,6 +62,19 @@ class ApiCollectIdyPpnController extends Controller
                 ]);
             } else {
                 CollectIdyPpn::create($data);
+            }
+
+            // check ketersediaan data di invoice
+            $invoice = Invoice::where('no_faktur_pajak', $data['tax_invoice'])->first();
+
+            if ($invoice) {
+                InvoiceDetail::create([
+                    'no_faktur_pajak' => $data['tax_invoice'],
+                    'status_btt' => 'ada',
+                    'status' => "Menunggu Piutang untuk Assign ke Kolektor [tipe: " . $data['sr_type'] . "].",
+                    'informasi_pengiriman' => [],
+                    'added_by' => Auth::id(),
+                ]);
             }
 
             DB::commit();
@@ -161,8 +177,20 @@ class ApiCollectIdyPpnController extends Controller
                 'assign_date' => $query->assign_date,
             ]);
 
+            // update status invoice lagi
+            if ($query) {
+                InvoiceDetail::create([
+                    'no_faktur_pajak' => $query['tax_invoice'],
+                    'status_btt' => 'ada',
+                    'status' => 'Sedang dibawa Kolektor [' . $collector->full_name . '] ke alamat penagihan [' . $query->customer_address . '] dengan tipe ' . $sr_type . '.',
+                    'informasi_pengiriman' => [],
+                    'added_by' => Auth::id(),
+                ]);
+            }
+
             $data = Collector::where('kode_pegawai', $request->assign_to)->latest()->first();
 
+            // berikan notifikasi
             NotifyCollectorNewAssignedJob::dispatch($request->assign_to, $data->id, $query->no_sr)
                 ->delay(now()->addSeconds(5));
 

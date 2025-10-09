@@ -31,8 +31,9 @@
 	    'today.attendance' => 'Absensi Hari Ini',
 	    'technicianpoints.*' => 'Transaksi Point',
 	    'routes.*' => 'Rute',
-	    'teams.*' => 'Manajemen Tim',
-	    'event.*' => 'Manajemen Event',
+	    'teams.*' => 'Tim Teknisi',
+	    'event.*' => 'Data Pameran',
+	    'invoice.*' => 'Invoice',
 	];
 
 	// Temukan judul berdasarkan rute dengan wildcard

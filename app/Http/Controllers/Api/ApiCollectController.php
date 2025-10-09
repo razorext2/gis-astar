@@ -6,29 +6,27 @@ use App\Models\CollectIdyPpn;
 use App\Models\Collector;
 use App\Models\CollectTask;
 use App\Models\CollectTaskPpn;
+use App\Models\Invoice;
+use App\Models\InvoiceDetail;
 use App\Models\PhotoCollect;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApiResource;
 use App\Jobs\NotifyCollectorHasUpdatedReportJob;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
-// class ApiCollectorController extends Controller
 class ApiCollectController extends Controller
 {
-    /**
-     * Update resource from database.
-     */
     public function update(Request $request, $id)
     {
-        // data
+        // cari data
         $query = Collector::find($id);
 
-        // Validasi input
+        // validasi input
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:128|min:5',
             'keterangan' => 'required|string|min:5',
@@ -50,23 +48,26 @@ class ApiCollectController extends Controller
             default => 0,
         };
 
+        // cek jika total bayar melebihi sisa tagihan
         if ($request->payment_amount > $remaining_bill) {
             return new ApiResource(false, 'Gagal melakukan update', '<b>Total bayar</b> tidak boleh melebihi <b>sisa tagihan</b>.');
         }
 
-        // Jika validasi gagal, kembalikan response JSON
+        // jika validasi gagal, kembalikan response JSON
         if ($validator->fails()) {
             return new ApiResource(false, 'Validasi gagal', $validator->errors());
         }
 
-        if (!$query) { // Jika data tidak ditemukan
+        // Jika data tidak ditemukan
+        if (!$query) {
             return new ApiResource(false, 'Laporan tidak ditemukan', null);
         }
 
         try {
             DB::beginTransaction();
 
-            $query->update([ // Update data
+            // update data collector
+            $query->update([
                 'keterangan' => $request->keterangan,
                 'latitude' => $request->latitude,
                 'longitude' => $request->longitude,
@@ -81,6 +82,40 @@ class ApiCollectController extends Controller
                 'revised_by' => $request->user()->id,
             ]);
 
+            // check ketersediaan data di Invoice
+            $invoice = Invoice::where('no_faktur_pajak', $query->no_sr)->first();
+
+            // jika invoice ditemukan
+            if ($invoice) {
+                $paid_status = match ($request->have_paid) {
+                    '5' => 'Antar Bon Lunas',
+                    '3' => 'Tanda terima',
+                    '0' => 'Belum bayar',
+                    '1' => 'Cicil',
+                    '2' => 'Lunas',
+                    '4' => 'Belum sempat',
+                    default => 'Status tidak diketahui',
+                };
+
+                $status = 'Tagihan sudah tiba dialamat tujuan dengan status tagihan [' . $paid_status . ', ket: ' . strip_tags($request->keterangan) . ']';
+
+                // update status invoice
+                $invoice->update([
+                    'status_terbaru' => $status,
+                    'latest_update_by' => Auth::id(),
+                ]);
+
+                // tambah data detail invoice
+                InvoiceDetail::create([
+                    'no_faktur_pajak' => $query->no_sr,
+                    'status_btt' => 'ada',
+                    'status' => $status,
+                    'informasi_pengiriman' => [],
+                    'added_by' => Auth::id(),
+                ]);
+            }
+
+            // upload dokumentasi
             $folderPath = 'collectors';
 
             if (!Storage::disk('public')->exists($folderPath)) {
@@ -113,9 +148,6 @@ class ApiCollectController extends Controller
         }
     }
 
-    /**
-     * Confirm laporan.
-     */
     public function confirmCollect($id, Request $request): ApiResource
     {
         $validator = Validator::make($request->all(), [
@@ -175,9 +207,6 @@ class ApiCollectController extends Controller
         }
     }
 
-    /**
-     * Tolak laporan dengan notes.
-     */
     public function denyCollect(Request $request, $id)
     {
         $query = Collector::find($id); // Cari data berdasarkan ID
@@ -236,7 +265,6 @@ class ApiCollectController extends Controller
     public function revisionCollect(Request $request, $id)
     {
         $query = Collector::find($id); // Cari data berdasarkan ID
-
         if (!$query) {
             return new ApiResource(false, 'Laporan tidak ditemukan', null);
         }
@@ -274,9 +302,6 @@ class ApiCollectController extends Controller
         }
     }
 
-    /**
-     * Delete the resource.
-     */
     public function destroy($id, Request $request)
     {
         $query = Collector::findOrFail($id);
