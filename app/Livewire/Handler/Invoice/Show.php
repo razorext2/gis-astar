@@ -10,7 +10,6 @@ class Show extends Component
 {
     public ?string $no_faktur_pajak = null;
     public ?string $id;
-    public ?bool $show_detail = false;
 
     public function render()
     {

@@ -223,8 +223,7 @@ class Create extends Component
             ]);
         }
 
-        $this->addForm->reset();
-        $this->fetchDataForm->reset();
+        $this->redirect(route('invoice.index'), navigate: true);
     }
 
     public function render()
