@@ -126,11 +126,11 @@
 						<div class="flex flex-col gap-1 border-t-[1px] border-gray-400 pt-2">
 							<h3 class="text-base font-semibold">Informasi Pengiriman: </h3>
 
-							<p>[Resi] {{ $detail->informasi_pengiriman['resi'] }}</p>
-							<p>[Tujuan] {{ $detail->informasi_pengiriman['tujuan'] }}</p>
+							<p>[Resi] {{ $detail->informasi_pengiriman['resi'] ?? '-' }}</p>
+							<p>[Tujuan] {{ $detail->informasi_pengiriman['tujuan'] ?? '-' }}</p>
 						</div>
 
-						@livewire('handler.invoice.fetch-resi', ['resi' => $detail->informasi_pengiriman['resi']])
+						@livewire('handler.invoice.fetch-resi', ['resi' => $detail->informasi_pengiriman['resi'] ?? '0'])
 					@endif
 
 					@if (!empty($detail->documentations))
