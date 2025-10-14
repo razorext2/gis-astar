@@ -28,7 +28,7 @@ class Create extends Component
             $this->id = $id;
         }
 
-        $invoice = Invoice::where('id', $this->id)->first();
+        $invoice = Invoice::with('details')->where('id', $this->id)->first();
 
         if (!empty($invoice)) {
             $this->fetchDataForm->nofakturpajak = $invoice->no_faktur_pajak;
@@ -43,6 +43,16 @@ class Create extends Component
             $this->addForm->delivery_status = $invoice->status_pengiriman;
 
             $this->status = $invoice->status_terbaru;
+
+            $latestDetail = $invoice->details()->latest('created_at')->first();
+
+            $this->addForm->invoice_destination = '';
+            $this->addForm->resi_number = '';
+
+            if ($latestDetail && is_array($latestDetail->informasi_pengiriman)) {
+                $this->addForm->invoice_destination = $latestDetail->informasi_pengiriman['tujuan'] ?? '';
+                $this->addForm->resi_number = $latestDetail->informasi_pengiriman['resi'] ?? '';
+            }
         }
     }
 
@@ -52,12 +62,21 @@ class Create extends Component
         $data = $this->fetchDataForm->fetch();
 
         // check dari database
-        $invoice = Invoice::where('no_faktur_pajak', $data['data'][0]['NomorFakturPajak'])->first();
+        $invoice = Invoice::with('details')->where('no_faktur_pajak', $data['data'][0]['NomorFakturPajak'])->first();
 
         if ($invoice) {
             $this->status = $invoice->status_terbaru;
             $this->addForm->invoice_type = $invoice->tipe_invoice;
             $this->addForm->delivery_status = $invoice->status_pengiriman;
+            $latestDetail = $invoice->details()->latest('created_at')->first();
+
+            $this->addForm->invoice_destination = '';
+            $this->addForm->resi_number = '';
+
+            if ($latestDetail && is_array($latestDetail->informasi_pengiriman)) {
+                $this->addForm->invoice_destination = $latestDetail->informasi_pengiriman['tujuan'] ?? '';
+                $this->addForm->resi_number = $latestDetail->informasi_pengiriman['resi'] ?? '';
+            }
 
             $this->dispatch('swal', icon: 'success', text: 'Riwayat invoice sudah ada didatabase, saat ini anda sedang menambah riwayat data.', title: 'Berhasil');
         }
@@ -192,10 +211,14 @@ class Create extends Component
 
     public function addHistory($userId)
     {
-        $shippingInfo = array_filter([
-            'tujuan' => $this->addForm->invoice_destination ?: null,
-            'resi' => $this->addForm->resi_number ?: null,
-        ], static fn($value) => filled($value));
+        $shippingInfo = [];
+
+        if ($this->addForm->delivery_status == 1) {
+            $shippingInfo = array_filter([
+                'tujuan' => $this->addForm->invoice_destination ?: null,
+                'resi' => $this->addForm->resi_number ?: null,
+            ], static fn($value) => filled($value));
+        }
 
         $invoiceDetail = InvoiceDetail::create([
             'no_faktur_pajak' => $this->addForm->tax_number,

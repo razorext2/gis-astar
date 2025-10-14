@@ -106,9 +106,9 @@ final class InvoiceTable extends PowerGridComponent
             ->add('status_pengiriman_formatted', function ($query) {
                 $status = match ($query->status_pengiriman) {
                     '0' => 'Belum Dikirim',
-                    '1' => 'Sudah Dikirim',
-                    '2' => 'Sedang Dalam Pengiriman',
-                    default => 'Unknown',
+                    '1' => 'Sedang Dalam Pengiriman',
+                    '2' => 'Sudah Diterima',
+                    default => 'Tidak Diketahui',
                 };
 
                 return $status;

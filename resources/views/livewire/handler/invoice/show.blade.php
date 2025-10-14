@@ -73,7 +73,17 @@
 		<div
 			class="col-span-2 border-[1px] border-gray-200 bg-gray-50 p-2.5 text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:text-white lg:col-span-1">
 			<p class="text-xs italic">Status Pengiriman </p>
-			<p class="font-semibold"> {{ $invoice->status_pengiriman ? 'Belum Dikirim' : 'Sudah Dikirim' }}</p>
+			<p class="font-semibold">
+				@php
+					$delivery_status = match ($invoice->status_pengiriman) {
+					    '0' => 'Belum Dikirim',
+					    '1' => 'Sedang Dalam Pengiriman',
+					    '2' => 'Sudah Diterima',
+					    default => 'Tidak Diketahui',
+					};
+				@endphp
+				{{ $delivery_status }}
+			</p>
 		</div>
 
 		<div

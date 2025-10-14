@@ -132,7 +132,7 @@
 
 		<div class="w-full">
 			<x-input.select id="delivery_status" name="delivery_status" :labels="true"
-				wire:model.live="addForm.delivery_status" :textLabel="'Status Pengiriman'" :options="['0' => 'Belum dikirim', '1' => 'Sudah dikirim']" :defaultOption="'Pilih Status Pengiriman'"
+				wire:model.live="addForm.delivery_status" :textLabel="'Status Pengiriman'" :options="['0' => 'Belum dikirim', '1' => 'Sudah dikirim', '2' => 'Sudah diterima']" :defaultOption="'Pilih Status Pengiriman'"
 				:value="$addForm->delivery_status" />
 
 			@error('addForm.delivery_status')
@@ -142,8 +142,9 @@
 
 		@if ($addForm->delivery_status == 1 && $addForm->invoice_type == 'lukot')
 			<div class="w-full">
-				<x-input.select id="invoice_destination" name="invoice_destination" :labels="true"
-					wire:model.live="addForm.invoice_destination" :textLabel="'Tipe Pengiriman'" :options="['cust' => 'Customer Langsung', 'pku' => 'IDC Pekanbaru', 'jkt' => 'IDC Jakarta']" :defaultOption="'Pilih Tipe Pengiriman'" />
+				<x-input.select required id="invoice_destination" name="invoice_destination" :labels="true"
+					wire:model.live="addForm.invoice_destination" :textLabel="'Tipe Pengiriman'" :options="['cust' => 'Customer Langsung', 'pku' => 'IDC Pekanbaru', 'jkt' => 'IDC Jakarta']" :defaultOption="'Pilih Tipe Pengiriman'"
+					:value="$addForm->invoice_destination" />
 
 				@error('addForm.invoice_destination')
 					<span class="error mt-2 text-sm text-red-500">{{ $message }}</span>
@@ -151,7 +152,7 @@
 			</div>
 
 			<div class="w-full">
-				<x-input.basic id="resi_number" name="resi_number" :labels="true" wire:model.live="addForm.resi_number"
+				<x-input.basic required id="resi_number" name="resi_number" :labels="true" wire:model.live="addForm.resi_number"
 					placeholder="Nomor Resi">
 					Nomor Resi
 				</x-input.basic>
