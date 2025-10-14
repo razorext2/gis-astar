@@ -93,31 +93,34 @@
 						</div>
 
 						<div class="col-span-2 w-full">
-							<x-input.textarea id="customer_address" name="customer_address" placeholder="Jl. XXX, XXX, XXX" required>
-								Alamat Customer
-							</x-input.textarea>
+							<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="customer_address">Alamat
+								Customer</label>
+							<x-input.textarea :labels="false" id="customer_address" name="customer_address" placeholder="Jl. XXX, XXX, XXX"
+								required />
 							<div class="mt-2 hidden text-sm text-red-500" id="alert-customer_address"></div>
 						</div>
 
-						<div class="col-span-2 w-full">
-							<x-input.textarea id="shipping_address" name="shipping_address" placeholder="Jl. XXX, XXX, XXX">
-								Alamat Pengiriman
-							</x-input.textarea>
-							<div class="mt-2 hidden text-sm text-red-500" id="alert-shipping_address"></div>
-						</div>
+						<div class="hidden">
+							<div class="col-span-2 w-full">
+								<x-input.textarea id="shipping_address" name="shipping_address" placeholder="Jl. XXX, XXX, XXX">
+									Alamat Pengiriman
+								</x-input.textarea>
+								<div class="mt-2 hidden text-sm text-red-500" id="alert-shipping_address"></div>
+							</div>
 
-						<div class="w-full">
-							<x-input.basic id="customer_fax" name="customer_fax" placeholder="XXXXXXX" required>
-								Fax
-							</x-input.basic>
-							<div class="mt-2 hidden text-sm text-red-500" id="alert-customer_fax"></div>
-						</div>
+							<div class="w-full">
+								<x-input.basic id="customer_fax" name="customer_fax" placeholder="XXXXXXX" required>
+									Fax
+								</x-input.basic>
+								<div class="mt-2 hidden text-sm text-red-500" id="alert-customer_fax"></div>
+							</div>
 
-						<div class="w-full">
-							<x-input.phone-number id="customer_telp" name="customer_telp" placeholder="08123456XXXX" required>
-								Telepon
-							</x-input.phone-number>
-							<div class="mt-2 hidden text-sm text-red-500" id="alert-customer_telp"></div>
+							<div class="w-full">
+								<x-input.phone-number id="customer_telp" name="customer_telp" placeholder="08123456XXXX" required>
+									Telepon
+								</x-input.phone-number>
+								<div class="mt-2 hidden text-sm text-red-500" id="alert-customer_telp"></div>
+							</div>
 						</div>
 
 						<div class="col-span-2 w-full">

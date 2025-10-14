@@ -56,9 +56,9 @@ export function searchDataHandler() {
           $('#customer_name').val(data.NamaCustomer);
           $('#customer_recipient').val(data.CustomerContact);
           $('#customer_address').val(data.AlamatContact);
-          $('#customer_telp').val(data.TeleponContact);
-          $('#customer_fax').val(data.FaxContact);
-          $('#shipping_address').val(data.AlamatKirim);
+          $('#customer_telp').val('0');
+          $('#customer_fax').val('0');
+          $('#shipping_address').val(data.CustomerContact);
           $('#remaining_bill_bsi').val(data.SisaPiutang);
           $('#remaining_bill').val(data.SisaPiutang);
           $('#total_bill').val(data.Total);

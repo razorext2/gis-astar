@@ -20,7 +20,7 @@ class ApiCollectIdyPpnController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'no_sr' => 'required|string|min:3|max:16',
+            'no_sr' => 'required|string|min:3|max:20',
             'sales_invoice' => 'required|string|min:3',
             'tax_invoice' => 'required|string|min:3',
             'sr_type' => 'required|string',

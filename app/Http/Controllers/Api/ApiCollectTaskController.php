@@ -17,7 +17,7 @@ class ApiCollectTaskController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'no_sr' => 'required|string|min:3|max:16',
+            'no_sr' => 'required|string|min:3|max:20',
             'sr_type' => 'required|string',
             'sr_date' => 'required|date',
             'customer_name' => 'required|string|min:5',
