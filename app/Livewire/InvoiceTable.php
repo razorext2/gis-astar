@@ -47,7 +47,7 @@ final class InvoiceTable extends PowerGridComponent
     {
         return Invoice::query()
             ->with(['addedBy', 'latestUpdateBy'])
-            ->orderBy('created_at', 'desc');
+            ->orderBy('updated_at', 'desc');
     }
 
     public function relationSearch(): array
