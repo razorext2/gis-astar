@@ -21,6 +21,10 @@ final class InvoiceTable extends PowerGridComponent
     public string $tableName = 'InvoiceTable';
     public bool $deferLoading = true;
     public bool $showFilters = false;
+    public string $sortField = 'updated_at';
+    public string $sortDirection = 'desc';
+    public bool $multiSort = true;
+
     public $user;
 
     public function setUp(): array
@@ -39,7 +43,7 @@ final class InvoiceTable extends PowerGridComponent
             PowerGrid::footer()
                 ->showPerPage()
                 ->showRecordCount(),
-            PowerGrid::responsive(),
+            // PowerGrid::responsive(),
             PowerGrid::exportable(now()->format('ymdhis') . '-InvoiceTable.xlsx')
                 ->type(Exportable::TYPE_XLS)
                 ->stripTags(true)
@@ -64,8 +68,6 @@ final class InvoiceTable extends PowerGridComponent
                     ->where('informasi_pengiriman->tujuan', 'jkt');
             });
         }
-
-        $query->orderBy('updated_at', 'desc');
 
         return $query;
     }
@@ -113,8 +115,8 @@ final class InvoiceTable extends PowerGridComponent
             })
             ->add('btt_formatted', function ($query) {
                 return view('components.dashboard.name-w-code', [
-                    'code' => $query->nomor_btt,
-                    'name' => $query->tgl_btt
+                    'code' => $query->tgl_btt,
+                    'name' => $query->nomor_btt
                 ]);
             })
             ->add('no_penjualan_formatted', function ($query) {
@@ -133,9 +135,27 @@ final class InvoiceTable extends PowerGridComponent
 
                 return $status;
             })
-            ->add('added_by_formatted', fn($query) => $query->addedBy->name)
-            ->add('latest_update_by_formatted', fn($query) => $query->latestUpdateBy->name)
-            ->add('created_at_formatted', fn($query) => Carbon::parse($query->created_at)->locale('id')->isoFormat('DD MMMM YYYY'));
+            ->add('status_formatted', function ($query) {
+                $status = match ($query->status_pengiriman) {
+                    '0' => 'Belum Dikirim',
+                    '1' => 'Sedang Dalam Pengiriman',
+                    '2' => 'Sudah Diterima',
+                    default => 'Tidak Diketahui',
+                };
+
+                return view('components.dashboard.name-w-code', [
+                    'code' => $query->tipe_invoice,
+                    'name' => $status,
+                    'item3' => $query->status_terbaru
+                ]);
+            })
+            ->add('user_info_formatted', function ($query) {
+                return view('components.dashboard.name-w-code', [
+                    'code' => 'Ditambah oleh: ' . $query->addedBy->name,
+                    'name' => 'Terakhir update: ' . $query->latestUpdateBy->name,
+                    'item3' => 'Dibuat Tanggal: ' . Carbon::parse($query->created_at)->locale('id')->isoFormat('DD MMMM YYYY')
+                ]);
+            });
     }
 
     public function columns(): array
@@ -154,28 +174,12 @@ final class InvoiceTable extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
 
-            Column::make('Tipe Invoice', 'tipe_invoice')
-                ->sortable()
-                ->searchable(),
+            Column::make('Status Pengiriman', 'status_pengiriman')
+                ->hidden(true),
+            Column::make('Nama Customer', 'nama_customer')->hidden(true),
 
-            Column::make('Status Pengiriman', 'status_pengiriman_formatted', 'status_pengiriman')
-                ->sortable()
-                ->searchable(),
-
-            Column::make('Status Terbaru', 'status_terbaru')
-                ->sortable()
-                ->searchable(),
-
-            Column::make('Ditambah Oleh', 'added_by_formatted', 'added_by')
-                ->sortable()
-                ->searchable(),
-
-            Column::make('Diperbarui Oleh', 'latest_update_by_formatted', 'latest_update_by')
-                ->sortable()
-                ->searchable(),
-
-            Column::make('Dibuat Tanggal', 'created_at_formatted', 'created_at')
-                ->sortable(),
+            Column::make('Status Invoice', 'status_formatted', 'tipe_invoice'),
+            Column::make('Oleh', 'user_info_formatted', 'added_by'),
         ];
     }
 
@@ -184,22 +188,29 @@ final class InvoiceTable extends PowerGridComponent
         return [
             Filter::inputText('no_faktur_pajak', 'no_faktur_pajak')
                 ->placeholder('Cari no faktur pajak'),
+
             Filter::inputText('nomor_btt', 'nomor_btt')
                 ->placeholder('Cari nomor btt'),
-            Filter::inputText('tgl_btt', 'tgl_btt')
-                ->placeholder('Cari tgl btt'),
+
             Filter::inputText('nama_customer', 'nama_customer')
                 ->placeholder('Cari nama customer'),
-            Filter::inputText('added_by_formatted', 'added_by')
-                ->placeholder('Cari added by'),
-            Filter::select('status_pengiriman_formatted', 'status_pengiriman')
+
+            Filter::select('status_pengiriman', 'status_pengiriman')
                 ->dataSource([
                     ['name' => 'Belum Dikirim', 'value' => '0'],
-                    ['name' => 'Sudah Dikirim', 'value' => '1'],
-                    ['name' => 'Sedang Dalam Pengiriman', 'value' => '2'],
+                    ['name' => 'Sedang Dalam Pengiriman', 'value' => '1'],
+                    ['name' => 'Sudah Diterima', 'value' => '2'],
                 ])
                 ->optionLabel('name')
-                ->optionValue('value')
+                ->optionValue('value'),
+
+            Filter::select('status_formatted', 'tipe_invoice')
+                ->dataSource([
+                    ['name' => 'Dalkot', 'value' => 'dalkot'],
+                    ['name' => 'Lukot', 'value' => 'lukot'],
+                ])
+                ->optionLabel('name')
+                ->optionValue('value'),
         ];
     }
 
@@ -214,5 +225,10 @@ final class InvoiceTable extends PowerGridComponent
         ];
 
         return $button;
+    }
+
+    protected function queryString()
+    {
+        return $this->powerGridQueryString();
     }
 }

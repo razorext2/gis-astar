@@ -96,12 +96,14 @@
 			class="col-span-2 border-[1px] border-gray-200 bg-gray-50 p-2.5 text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:text-white lg:col-span-1 lg:rounded-bl-xl">
 			<p class="text-xs italic">Ditambah Oleh </p>
 			<p class="font-semibold"> {{ $invoice->addedBy->name }}</p>
+			<p class="text-sm">{{ \Carbon\Carbon::parse($invoice->created_at)->format('d M Y h:i:s') }}</p>
 		</div>
 
 		<div
 			class="col-span-2 rounded-b-xl border-[1px] border-gray-200 bg-gray-50 p-2.5 text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:text-white lg:col-span-1 lg:rounded-bl-none">
 			<p class="text-xs italic">Terakhir Diupdate Oleh </p>
 			<p class="font-semibold"> {{ $invoice->latestUpdateBy->name }}</p>
+			<p class="text-sm">{{ \Carbon\Carbon::parse($invoice->updated_at)->format('d M Y h:i:s') }}</p>
 		</div>
 
 	</div>
@@ -129,7 +131,7 @@
 						</p>
 					</div>
 
-					<p class="my-4 text-sm md:text-base lg:text-lg">"{{ $detail->status }}"</p>
+					<p class="my-4 text-sm md:text-base">"{{ $detail->status }}"</p>
 
 					{{-- informasi pengiriman --}}
 					@if (!empty($detail->informasi_pengiriman))
