@@ -170,7 +170,7 @@ class CollectController extends Controller
                         ]
                     ];
 
-                    if (Auth::user()->hasRole('Admin')) {
+                    if (Auth::user()->can('collect-approve')) {
                         if ($data->status != 1) {
                             $actions[] = [
                                 'id' => 'edit-btn',
@@ -179,11 +179,13 @@ class CollectController extends Controller
                             ];
                         }
 
-                        $actions[] = [
-                            'id' => 'delete-btn',
-                            'action' => 'javascript:void(0)',
-                            'label' => 'Hapus',
-                        ];
+                        if (Auth::user()->hasRole('Admin')) {
+                            $actions[] = [
+                                'id' => 'delete-btn',
+                                'action' => 'javascript:void(0)',
+                                'label' => 'Hapus',
+                            ];
+                        }
                     }
 
                     if (Auth::user()->can('collect-approve')) {
@@ -247,9 +249,6 @@ class CollectController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($id)
     {
         $data = Collector::with('photoCollectRelasi', 'pegawaiRelasi')->findOrFail($id);
@@ -267,14 +266,9 @@ class CollectController extends Controller
         return view('dashboard.collect.detail', compact('data', 'user'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
-        $data = Cache::remember('collector_data_' . $id, 1800, function () use ($id) {
-            return Collector::with('photoCollectRelasi', 'pegawaiRelasi', 'collectTaskRelasi', 'collectTaskPpnRelasi')->findOrFail($id);
-        });
+        $data = Collector::with('photoCollectRelasi', 'pegawaiRelasi', 'collectTaskRelasi', 'collectTaskPpnRelasi')->findOrFail($id);
 
         if (
             !auth()->user()->hasRole('Admin')
