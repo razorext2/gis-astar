@@ -15,7 +15,7 @@
 
 		</div>
 
-		@can('invoice-add')
+		@can(['invoice-list', 'invoice-add'])
 			<div class="max-w-xs">
 				<x-button.link wire:navigate class="w-fit ring-1 ring-green-700 dark:bg-green-800 dark:text-white"
 					href="{{ route('invoice.create') }}">

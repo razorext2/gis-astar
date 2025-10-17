@@ -21,9 +21,12 @@ final class InvoiceTable extends PowerGridComponent
     public string $tableName = 'InvoiceTable';
     public bool $deferLoading = true;
     public bool $showFilters = false;
+    public $user;
 
     public function setUp(): array
     {
+        $this->user = auth()->user();
+
         if (auth()->user()->can('invoice-delete')) {
             $this->showCheckBox();
         }
@@ -45,9 +48,26 @@ final class InvoiceTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return Invoice::query()
-            ->with(['addedBy', 'latestUpdateBy'])
-            ->orderBy('updated_at', 'desc');
+        $query = Invoice::query()
+            ->with(['addedBy', 'latestUpdateBy', 'details']);
+
+        if ($this->user->can('invoice-list-pku')) {
+            $query->whereHas('details', function (Builder $detailQuery) {
+                $detailQuery
+                    ->where('informasi_pengiriman->tujuan', 'pku');
+            });
+        }
+
+        if ($this->user->can('invoice-list-jkt')) {
+            $query->whereHas('details', function (Builder $detailQuery) {
+                $detailQuery
+                    ->where('informasi_pengiriman->tujuan', 'jkt');
+            });
+        }
+
+        $query->orderBy('updated_at', 'desc');
+
+        return $query;
     }
 
     public function relationSearch(): array
