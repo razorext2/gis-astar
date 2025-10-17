@@ -50,6 +50,18 @@
 		</x-menu.mobile-link>
 	@endcan
 
+	@can('invoice-list-pku')
+		<x-menu.mobile-link href="{{ route('invoice.index') }}" :label="'Laporan Invoice PKU'">
+			<x-icons.file-invoice class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
+		</x-menu.mobile-link>
+	@endcan
+
+	@can('invoice-list-jkt')
+		<x-menu.mobile-link href="{{ route('invoice.index') }}" :label="'Laporan Invoice JKT'">
+			<x-icons.file-invoice class="h-7 w-7 stroke-blue-500 dark:stroke-white" />
+		</x-menu.mobile-link>
+	@endcan
+
 	@can('sales-list')
 		<x-menu.mobile-link href="{{ route('sales.index') }}" :label="'Laporan Sales'">
 			<x-icons.receipt class="h-7 w-7 stroke-blue-500 dark:stroke-white" />

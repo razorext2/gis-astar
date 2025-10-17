@@ -78,6 +78,20 @@
 			        'icon' => 'invoice',
 			    ],
 			    [
+			        'permission' => 'invoice-list-pku',
+			        'link' => 'invoice.index',
+			        'check' => 'invoice.index',
+			        'label' => 'Laporan Invoice PKU',
+			        'icon' => 'invoice',
+			    ],
+			    [
+			        'permission' => 'invoice-list-jkt',
+			        'link' => 'invoice.index',
+			        'check' => 'invoice.index',
+			        'label' => 'Laporan Invoice JKT',
+			        'icon' => 'invoice',
+			    ],
+			    [
 			        'permission' => 'driver-list',
 			        'link' => 'driver.index',
 			        'check' => 'driver.index',
