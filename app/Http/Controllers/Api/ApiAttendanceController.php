@@ -175,8 +175,8 @@ class ApiAttendanceController extends Controller
                 'position_status' => $request->status,
             ];
 
-            if (preg_match('/VT-(\d{1,8})/i', $request->keterangan, $matches)) {
-                $no_vt = 'VT-' . $matches[1];
+            if (preg_match('/\bVT\s*-?\s*(\d+)\b/i', $request->keterangan, $m)) {
+                $no_vt = 'VT-' . $m[1];  // vt123123123 → VT-123123123
             }
 
             // simpan data absen (masuk/keluar)
@@ -210,5 +210,20 @@ class ApiAttendanceController extends Controller
 
             return new ApiResource(false, 'Terjadi kegagalan.', $e->getMessage());
         }
+    }
+
+    protected function formatNomorDokumen($input)
+    {
+        // Hapus spasi di awal/akhir
+        $input = trim($input);
+
+        // Hilangkan semua spasi di dalam input
+        $input = preg_replace('/\s+/', '', $input);
+
+        // Pastikan format menjadi VT-XXXXX
+        // Ganti 'VT' diikuti angka langsung menjadi 'VT-' + angka
+        $input = preg_replace('/^VT-?(\d+)$/i', 'VT-$1', $input);
+
+        return strtoupper($input); // pastikan huruf besar
     }
 }
