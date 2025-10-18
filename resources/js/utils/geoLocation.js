@@ -5,7 +5,7 @@ export async function getLocation(mode = 'collect') {
 
   const geoOptions = {
     enableHighAccuracy: true,
-    timeout: 10000,
+    timeout: 20000,
     maximumAge: 0,
   };
 
@@ -34,7 +34,7 @@ export async function getLocation(mode = 'collect') {
   };
 
   let attempts = 0;
-  const maxAttempts = 3;
+  const maxAttempts = 5;
 
   while (attempts < maxAttempts) {
     try {
