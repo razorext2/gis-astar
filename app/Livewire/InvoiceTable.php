@@ -125,21 +125,12 @@ final class InvoiceTable extends PowerGridComponent
                     'name' => $query->no_piutang
                 ]);
             })
-            ->add('status_pengiriman_formatted', function ($query) {
-                $status = match ($query->status_pengiriman) {
-                    '0' => 'Belum Dikirim',
-                    '1' => 'Sedang Dalam Pengiriman',
-                    '2' => 'Sudah Diterima',
-                    default => 'Tidak Diketahui',
-                };
-
-                return $status;
-            })
             ->add('status_formatted', function ($query) {
                 $status = match ($query->status_pengiriman) {
                     '0' => 'Belum Dikirim',
                     '1' => 'Sedang Dalam Pengiriman',
                     '2' => 'Sudah Diterima',
+                    '3' => 'Belum Diterima',
                     default => 'Tidak Diketahui',
                 };
 
@@ -200,6 +191,7 @@ final class InvoiceTable extends PowerGridComponent
                     ['name' => 'Belum Dikirim', 'value' => '0'],
                     ['name' => 'Sedang Dalam Pengiriman', 'value' => '1'],
                     ['name' => 'Sudah Diterima', 'value' => '2'],
+                    ['name' => 'Belum Diterima', 'value' => '3'],
                 ])
                 ->optionLabel('name')
                 ->optionValue('value'),

@@ -132,7 +132,7 @@
 						    '0' => 'Belum bayar',
 						    '1' => 'Cicil',
 						    '2' => 'Lunas',
-						    '4' => 'Belum sempat',
+						    '4' => 'Ada Kendala',
 						]"
 							default-option="Pilih status">
 							<x-slot name="textLabel">

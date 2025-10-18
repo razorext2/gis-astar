@@ -48,7 +48,6 @@ Route::middleware(['auth:sanctum', 'throttle:high'])->group(function () {
     Route::patch('collect-task-api/{id}/reschedule', [ApiCollectTaskController::class, 'reschedule'])->name('collect-task-api.reschedule');
     Route::patch('collect-task-api/{id}/validate', [ApiCollectTaskController::class, 'validateTask'])->name('collect-task-api.validate');
     Route::patch('collect-task-api/{id}/assign', [ApiCollectTaskController::class, 'assignProcess'])->name('collect-task-api.assign');
-    Route::patch('collect-task-api/mass-assign', [ApiCollectTaskController::class, 'massAssignProcess'])->name('collect-task-api.mass-assign');
     Route::get('collect-task-api/getSR/{no_sr}', [ApiCollectTaskController::class, 'getSR'])
         ->name('collect-task-api.getsr')
         ->middleware('auth:sanctum');
@@ -58,7 +57,6 @@ Route::middleware(['auth:sanctum', 'throttle:high'])->group(function () {
     Route::patch('collect-task-ppn-api/{id}/reschedule', [ApiCollectTaskPpnController::class, 'reschedule'])->name('collect-task-ppn-api.reschedule');
     Route::patch('collect-task-ppn-api/{id}/validate', [ApiCollectTaskPpnController::class, 'validateTask'])->name('collect-task-ppn-api.validate');
     Route::patch('collect-task-ppn-api/{id}/assign', [ApiCollectTaskPpnController::class, 'assignProcess'])->name('collect-task-ppn-api.assign');
-    Route::patch('collect-task-ppn-api/mass-assign', [ApiCollectTaskPpnController::class, 'massAssignProcess'])->name('collect-task-ppn-api.mass-assign');
     Route::get('collect-task-ppn-api/getSR/{no_sr}', [ApiCollectTaskPpnController::class, 'getSR'])->name('collect-task-ppn-api.getsr');
     Route::apiResource('collect-task-ppn-api', ApiCollectTaskPpnController::class)->except(['index', 'show']);
 
@@ -66,7 +64,6 @@ Route::middleware(['auth:sanctum', 'throttle:high'])->group(function () {
     Route::patch('collect-idy-ppn-api/{id}/reschedule', [ApiCollectIdyPpnController::class, 'reschedule'])->name('collect-idy-ppn-api.reschedule');
     Route::patch('collect-idy-ppn-api/{id}/validate', [ApiCollectIdyPpnController::class, 'validateTask'])->name('collect-idy-ppn-api.validate');
     Route::patch('collect-idy-ppn-api/{id}/assign', [ApiCollectIdyPpnController::class, 'assignProcess'])->name('collect-idy-ppn-api.assign');
-    Route::patch('collect-idy-ppn-api/mass-assign', [ApiCollectIdyPpnController::class, 'massAssignProcess'])->name('collect-idy-ppn-api.mass-assign');
     Route::get('collect-idy-ppn-api/getSR/{no_sr}', [ApiCollectIdyPpnController::class, 'getSR'])->name('collect-idy-ppn-api.getsr');
     Route::apiResource('collect-idy-ppn-api', ApiCollectIdyPpnController::class)->except(['index', 'show']);
 

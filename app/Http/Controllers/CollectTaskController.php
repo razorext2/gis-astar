@@ -16,7 +16,6 @@ class CollectTaskController extends Controller
     {
         $this->middleware('permission:collect-task-list', ['only' => ['index', 'onProgress', 'pending', 'completed', 'show']]);
         $this->middleware('permission:collect-task-create', ['only' => 'create']);
-        $this->middleware('permission:collect-task-assign', ['only' => 'massAssign']);
     }
 
     public function index()
@@ -47,14 +46,11 @@ class CollectTaskController extends Controller
         $status = $request->get('status');
 
         if ($status == 'on-progress') {
-            // filter bill_status = 1 (sedang berjalan)
-            $query->where('bill_status', 1);
-        } elseif ($status == 'pending') {
-            // filter bill_status = 3 (tertunda)
-            $query->where('bill_status', 3);
+            $query->where('bill_status', 1);  // filter bill_status = 1 (sedang berjalan)
         } elseif ($status == 'completed') {
-            // filter bill_status = 2 (selesai)
-            $query->where('bill_status', 2);
+            $query->where('bill_status', 2);  // filter bill_status = 2 (selesai)
+        } elseif ($status == 'pending') {
+            $query->where('bill_status', 3);  // filter bill_status = 3 (tertunda)
         } else {
             $query->whereNull('assign_to');
         }
@@ -181,11 +177,6 @@ class CollectTaskController extends Controller
         $user = User::select('kode_pegawai', 'name')->where('kode_pegawai', $data->validate_by)->first();
 
         return view('dashboard.collect-task.detail', compact('data', 'collect', 'user'));
-    }
-
-    public function massAssign()
-    {
-        return view('dashboard.collect-task.mass-assign');
     }
 
     public function autocomplete(Request $request)

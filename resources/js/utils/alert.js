@@ -4,7 +4,7 @@ export function showAlert(type, title, text = null) {
     title: title,
     html: text,
     showConfirmButton: false,
-    timer: 2500
+    timer: 3500
   });
 }
 
@@ -22,7 +22,7 @@ export function showToast(type, title) {
     toast: true,
     position: "bottom-end",
     showConfirmButton: false,
-    timer: 4000,
+    timer: 3500,
     timerProgressBar: true,
     didOpen: (toast) => {
       toast.onmouseenter = Swal.stopTimer;

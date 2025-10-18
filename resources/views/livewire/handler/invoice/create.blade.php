@@ -29,7 +29,7 @@
 	<form wire:submit="store" class="col-span-2 grid grid-cols-2 gap-4">
 		<div class="col-span-2 grid grid-cols-2 gap-4 rounded-lg bg-gray-100 p-4 dark:bg-dark-secondary">
 			<div class="w-full">
-				<x-input.basic id="btt_number" name="btt_number" wire:model="addForm.btt_number" placeholder="Nomor BTT">
+				<x-input.basic id="btt_number" readonly name="btt_number" wire:model="addForm.btt_number" placeholder="Nomor BTT">
 					Nomor BTT
 				</x-input.basic>
 
@@ -39,7 +39,7 @@
 			</div>
 
 			<div class="w-full">
-				<x-input.basic id="btt_created_at" name="btt_created_at" wire:model="addForm.btt_created_at"
+				<x-input.basic id="btt_created_at" readonly name="btt_created_at" wire:model="addForm.btt_created_at"
 					placeholder="Tanggal BTT Dibuat">
 					Tanggal BTT Dibuat
 				</x-input.basic>
@@ -50,7 +50,7 @@
 			</div>
 
 			<div class="col-span-2 w-full">
-				<x-input.basic id="company_name" name="company_name" wire:model="addForm.company_name"
+				<x-input.basic id="company_name" readonly name="company_name" wire:model="addForm.company_name"
 					placeholder="Nama Perusahaan">
 					Nama PT
 				</x-input.basic>
@@ -61,7 +61,7 @@
 			</div>
 
 			<div class="w-full">
-				<x-input.basic id="invoice_date" name="invoice_date" wire:model="addForm.invoice_date"
+				<x-input.basic id="invoice_date" readonly name="invoice_date" wire:model="addForm.invoice_date"
 					placeholder="Tanggal Invoice">
 					Tanggal Invoice
 				</x-input.basic>
@@ -72,7 +72,7 @@
 			</div>
 
 			<div class="w-full">
-				<x-input.basic id="receivable_number" name="receivable_number" wire:model="addForm.receivable_number"
+				<x-input.basic id="receivable_number" readonly name="receivable_number" wire:model="addForm.receivable_number"
 					placeholder="Nomor Piutang">
 					Nomor Piutang
 				</x-input.basic>
@@ -83,7 +83,8 @@
 			</div>
 
 			<div class="w-full">
-				<x-input.basic id="sale_number" name="sale_number" wire:model="addForm.sale_number" placeholder="Nomor Penjualan">
+				<x-input.basic id="sale_number" name="sale_number" readonly wire:model="addForm.sale_number"
+					placeholder="Nomor Penjualan">
 					Nomor Penjualan
 				</x-input.basic>
 
@@ -93,7 +94,8 @@
 			</div>
 
 			<div class="w-full">
-				<x-input.basic id="tax_number" name="tax_number" wire:model="addForm.tax_number" placeholder="Nomor Faktur Pajak">
+				<x-input.basic id="tax_number" name="tax_number" readonly wire:model="addForm.tax_number"
+					placeholder="Nomor Faktur Pajak">
 					Nomor Faktur Pajak
 				</x-input.basic>
 
@@ -132,7 +134,12 @@
 
 		<div class="w-full">
 			<x-input.select id="delivery_status" name="delivery_status" :labels="true"
-				wire:model.live="addForm.delivery_status" :textLabel="'Status Pengiriman'" :options="['0' => 'Belum dikirim', '1' => 'Sudah dikirim', '2' => 'Sudah diterima']" :defaultOption="'Pilih Status Pengiriman'"
+				wire:model.live="addForm.delivery_status" :textLabel="'Status Pengiriman'" :options="[
+				    '0' => 'Belum dikirim',
+				    '1' => 'Sedang Dalam Pengiriman',
+				    '2' => 'Sudah diterima',
+				    '3' => 'Belum Diterima',
+				]" :defaultOption="'Pilih Status Pengiriman'"
 				:value="$addForm->delivery_status" />
 
 			@error('addForm.delivery_status')

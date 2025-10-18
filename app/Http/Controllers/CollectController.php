@@ -110,7 +110,7 @@ class CollectController extends Controller
                     } elseif ($data->have_paid == 3) {
                         $status = 'Tanda terima';
                     } elseif ($data->have_paid == 4) {
-                        $status = 'Belum sempat';
+                        $status = 'Ada Kendala';
                     } elseif ($data->have_paid == 5) {
                         $status = 'Antar bon lunas';
                     }

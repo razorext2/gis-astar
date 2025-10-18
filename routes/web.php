@@ -152,7 +152,6 @@ Route::middleware(['auth'])->group(function () {
         // route collect task
         Route::get('collect-task/autocomplete', [CollectTaskController::class, 'autocomplete'])->name('collect-task.autocomplete');
         Route::get('collect-task/assign', [CollectTaskController::class, 'assign'])->name('collect-task.assign');
-        Route::get('collect-task/mass-assign', [CollectTaskController::class, 'massAssign'])->name('collect-task.mass-assign');
         Route::resource('collect-task', CollectTaskController::class)->except(['store', 'update', 'destroy']);
 
         // route collect task ppn (idc ppn)
@@ -167,7 +166,6 @@ Route::middleware(['auth'])->group(function () {
         // route collect task
         Route::get('collect-task-ppn/autocomplete', [CollectTaskPpnController::class, 'autocomplete'])->name('collect-task-ppn.autocomplete');
         Route::get('collect-task-ppn/assign', [CollectTaskPpnController::class, 'assign'])->name('collect-task-ppn.assign');
-        Route::get('collect-task-ppn/mass-assign', [CollectTaskPpnController::class, 'massAssign'])->name('collect-task-ppn.mass-assign');
         Route::resource('collect-task-ppn', CollectTaskPpnController::class)->except(['store', 'update', 'destroy']);
 
         // route collect idy ppn
@@ -182,7 +180,6 @@ Route::middleware(['auth'])->group(function () {
         // route collect idy
         Route::get('collect-idy-ppn/autocomplete', [CollectIdyPpnController::class, 'autocomplete'])->name('collect-idy-ppn.autocomplete');
         Route::get('collect-idy-ppn/assign', [CollectIdyPpnController::class, 'assign'])->name('collect-idy-ppn.assign');
-        Route::get('collect-idy-ppn/mass-assign', [CollectIdyPpnController::class, 'massAssign'])->name('collect-idy-ppn.mass-assign');
         Route::resource('collect-idy-ppn', CollectIdyPpnController::class)->except(['store', 'update', 'destroy']);
 
         // route dayoff

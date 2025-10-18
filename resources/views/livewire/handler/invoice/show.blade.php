@@ -79,6 +79,7 @@
 					    '0' => 'Belum Dikirim',
 					    '1' => 'Sedang Dalam Pengiriman',
 					    '2' => 'Sudah Diterima',
+					    '3' => 'Belum Diterima',
 					    default => 'Tidak Diketahui',
 					};
 				@endphp

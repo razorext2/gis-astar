@@ -40,17 +40,6 @@ export async function initCapture() {
                     return
                 }
 
-                // else if (lastLat !== undefined && lastLng !== undefined) {
-                //     // Calculate distance moved since last position
-                //     const movedDistance = calculateDistance(lastLat, lastLng, lat, lng);
-
-                //     if (movedDistance > movementThreshold) {
-                //         showErrorAndRedirect("Fake GPS terdeteksi. Silahkan matikan terlebih dahulu.");
-                //         showError('Matikan aplikas Fake GPS anda. Jika sudah, silahkan refresh kembali.');
-                //         return;
-                //     }
-                // }
-
                 if (lat !== null || lng !== null) {
                     Swal.close();
 

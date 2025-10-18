@@ -174,57 +174,6 @@ class ApiCollectTaskController extends Controller
         }
     }
 
-    public function massAssignProcess(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'kode_pegawai' => 'required|integer',
-            'sr_data' => 'required|array',
-            'sr_data.*' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return new ApiResource(false, 'Validasi gagal', $validator->errors());
-        }
-
-        try {
-            DB::beginTransaction();
-
-            CollectTask::whereIn('no_sr', $request->sr_data)->update([
-                'bill_status' => 3,
-                'assign_to' => $request->kode_pegawai,
-                'assign_by' => $request->assign_by,
-            ]);
-
-            $query = CollectTask::whereIn('no_sr', $request->sr_data)->get();
-
-            foreach ($query as $data) {
-                $collector = Collector::create([
-                    'bill_type' => 'idcnonppn',
-                    'no_sr' => $data->no_sr,
-                    'kode_pegawai' => $request->kode_pegawai,
-                    'title' => $data->customer_name,
-                    'location' => $data->customer_address,
-                    'assign_date' => $data->assign_date,
-                ]);
-
-                if (!$collector) {
-                    return new ApiResource(false, 'Terjadi kesalahan saat assign tagihan', null);
-                }
-
-                $data = Collector::where('kode_pegawai', $request->kode_pegawai)->latest()->first();
-
-                NotifyCollectorNewAssignedJob::dispatch($request->kode_pegawai, $data->id, $data->no_sr)
-                    ->delay(now()->addSeconds(5));
-            }
-
-            DB::commit();
-            return new ApiResource(true, 'Berhasil menambah assigment', null);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return new ApiResource(false, 'Terjadi kesalahan saat assign tagihan', $e->getMessage());
-        }
-    }
-
     public function reschedule(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [

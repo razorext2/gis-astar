@@ -22,27 +22,32 @@ export function searchDataHandler() {
       if (check) {
         let status = database.data.data.bill_status;
 
-        if (status != 2) {
-          const data = database.data.data;
-
-          $('#sr_date').val(data.sr_date);
-          $('#sales_invoice').val(data.sales_invoice);
-          $('#tax_invoice').val(data.tax_invoice);
-          $('#customer_name').val(data.customer_name);
-          $('#customer_recipient').val(data.customer_recipient);
-          $('#customer_address').val(data.customer_address);
-          $('#customer_telp').val(data.customer_telp);
-          $('#customer_fax').val(data.customer_fax);
-          $('#shipping_address').val(data.shipping_address);
-          $('#remaining_bill').val(data.remaining_bill);
-          $('#remaining_bill_bsi').val(BSI.data.data[0].SisaPiutang);
-          $('#total_bill').val(data.total_bill);
-
+        if (status == 2) {
           Swal.close();
-        } else {
-          Swal.close();
-          showAlert('error', 'Terjadi kesalahan saat mengambil data!', `Tagihan dengan kode: ${no_sr} ditemukan, namun statusnya sudah ditutup.`);
+          return showAlert('error', 'Terjadi kesalahan saat mengambil data!', `Tagihan dengan kode: ${no_sr} ditemukan, namun statusnya sudah ditutup.`);
         }
+
+        if (status == 3) {
+          Swal.close();
+          return showAlert('error', 'Terjadi kesalahan saat mengambil data!', `Tagihan dengan kode: ${no_sr} ditemukan, namun masih ada laporan kolektor terkait yang belum di periksa!.`);
+        }
+
+        const data = database.data.data;
+
+        $('#sr_date').val(data.sr_date);
+        $('#sales_invoice').val(data.sales_invoice);
+        $('#tax_invoice').val(data.tax_invoice);
+        $('#customer_name').val(data.customer_name);
+        $('#customer_recipient').val(data.customer_recipient);
+        $('#customer_address').val(data.customer_address);
+        $('#customer_telp').val(data.customer_telp);
+        $('#customer_fax').val(data.customer_fax);
+        $('#shipping_address').val(data.shipping_address);
+        $('#remaining_bill').val(data.remaining_bill);
+        $('#remaining_bill_bsi').val(BSI.data.data[0].SisaPiutang);
+        $('#total_bill').val(data.total_bill);
+
+        Swal.close();
       } else {
         let check = BSI.data.status;
 

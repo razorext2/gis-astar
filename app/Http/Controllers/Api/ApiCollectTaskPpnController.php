@@ -44,6 +44,8 @@ class ApiCollectTaskPpnController extends Controller
 
         $task = CollectTaskPpn::withTrashed()->where('no_sr', '=', $data['no_sr'])->first();
 
+        $status_terbaru = "Menunggu Piutang untuk Assign ke Kolektor [tipe: " . $data['sr_type'] . "].";
+
         try {
             DB::beginTransaction();
 
@@ -64,18 +66,12 @@ class ApiCollectTaskPpnController extends Controller
                 CollectTaskPpn::create($data);
             }
 
-            // check ketersediaan data di Invoice
-            $invoice = Invoice::where('no_faktur_pajak', $data['tax_invoice'])->first();
-
-            if ($invoice) {
-                InvoiceDetail::create([
-                    'no_faktur_pajak' => $data['tax_invoice'],
-                    'status_btt' => 'ada',
-                    'status' => "Menunggu Piutang untuk Assign ke Kolektor [tipe: " . $data['sr_type'] . "].",
-                    'informasi_pengiriman' => [],
-                    'added_by' => Auth::id(),
-                ]);
-            }
+            // update detail dan status invoice
+            $this->updateInvoiceStatus(
+                $data['tax_invoice'],
+                $status_terbaru,
+                0
+            );
 
             DB::commit();
             return new ApiResource(true, 'Tagihan berhasil diproses!', null);
@@ -128,6 +124,7 @@ class ApiCollectTaskPpnController extends Controller
 
     public function assignProcess(Request $request, $id)
     {
+        // validasi input
         $validator = Validator::make($request->all(), [
             'assign_to' => 'required|integer',
             'assign_by' => 'required|integer'
@@ -137,38 +134,38 @@ class ApiCollectTaskPpnController extends Controller
             return new ApiResource(false, 'Validasi gagal', $validator->errors()->first());
         }
 
+        // cari data kolektor
         $collector = Pegawai::where('kode_pegawai', $request->assign_to)->first();
 
         if (!$collector) {
+            // kalo ga ada return pesan ini
             return new ApiResource(false, "Kolektor dengan kode jari $request->assign_to, tidak ditemukan.", null);
         }
 
+        // kalo ada, lanjut cari data tagihan
         $query = CollectTaskPpn::find($id);
 
         if (!$query) {
+            // kalo ga ada return pesan ini
             return new ApiResource(false, "Tagihan dengan kode $id tidak ditemukan", null);
         }
+
+        $sr_type = $this->getSrType($query->sr_type);
+
+        $status_terbaru = 'Sedang dibawa Kolektor [' . $collector->full_name . '] ke alamat penagihan [' . $query->customer_address . '] dengan tipe ' . $sr_type . '.';
 
         try {
             DB::beginTransaction();
 
+            // update status tagihan
             $query->update([
-                'bill_status' => 3,
+                'bill_status' => 3, // status tagihan tertunda (3)
                 'assign_to' => $request->assign_to,
                 'assign_by' => $request->assign_by,
             ]);
 
-            $type = $query->sr_type;
-
-            $sr_type = match ($type) {
-                'TTT' => 'Tanda Terima Tagihan',
-                'TTST' => 'Tanda Terima Sertifikat Tera',
-                'AT' => 'Ambil Tagihan',
-                'ABL' => 'Antar Bon Lunas',
-                default => null,
-            };
-
-            Collector::create([
+            // buat data laporan kolektor untuk diupdate oleh kolektor
+            $collector = Collector::create([
                 'bill_type' => 'idcppn',
                 'no_sr' => $query->tax_invoice,
                 'kode_pegawai' => $request->assign_to,
@@ -177,21 +174,15 @@ class ApiCollectTaskPpnController extends Controller
                 'assign_date' => $query->assign_date,
             ]);
 
-            // update status invoice lagi
-            if ($query) {
-                InvoiceDetail::create([
-                    'no_faktur_pajak' => $query['tax_invoice'],
-                    'status_btt' => 'ada',
-                    'status' => 'Sedang dibawa Kolektor [' . $collector->full_name . '] ke alamat penagihan [' . $query->customer_address . '] dengan tipe ' . $sr_type . '.',
-                    'informasi_pengiriman' => [],
-                    'added_by' => Auth::id(),
-                ]);
-            }
-
-            $data = Collector::where('kode_pegawai', $request->assign_to)->latest()->first();
+            // update detail dan status invoice
+            $this->updateInvoiceStatus(
+                $query->tax_invoice,
+                $status_terbaru,
+                1
+            );
 
             // berikan notifikasi
-            NotifyCollectorNewAssignedJob::dispatch($request->assign_to, $data->id, $query->no_sr)
+            NotifyCollectorNewAssignedJob::dispatch($request->assign_to, $collector->id, $query->no_sr)
                 ->delay(now()->addSeconds(5));
 
             DB::commit();
@@ -202,79 +193,39 @@ class ApiCollectTaskPpnController extends Controller
         }
     }
 
-    public function massAssignProcess(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'kode_pegawai' => 'required|integer',
-            'sr_data' => 'required|array',
-            'sr_data.*' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return new ApiResource(false, 'Validasi gagal', $validator->errors());
-        }
-
-        try {
-            DB::beginTransaction();
-
-            CollectTaskPpn::whereIn('no_sr', $request->sr_data)->update([
-                'bill_status' => 3,
-                'assign_to' => $request->kode_pegawai,
-                'assign_by' => $request->assign_by,
-            ]);
-
-            $query = CollectTaskPpn::whereIn('no_sr', $request->sr_data)->get();
-
-            foreach ($query as $data) {
-                $collector = Collector::create([
-                    'bill_type' => 'idcppn',
-                    'no_sr' => $data->tax_invoice,
-                    'kode_pegawai' => $request->kode_pegawai,
-                    'title' => $data->customer_name,
-                    'location' => $data->customer_address,
-                    'assign_date' => $data->assign_date,
-                ]);
-
-                if (!$collector) {
-                    return new ApiResource(false, 'Terjadi kesalahan saat assign tagihan', null);
-                }
-
-                $data = Collector::where('kode_pegawai', $request->kode_pegawai)->latest()->first();
-
-                NotifyCollectorNewAssignedJob::dispatch($request->kode_pegawai, $data->id, $data->no_sr)
-                    ->delay(now()->addSeconds(5));
-            }
-
-            DB::commit();
-            return new ApiResource(true, 'Berhasil menambah assigment', null);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return new ApiResource(false, 'Terjadi kesalahan saat assign tagihan', $e->getMessage());
-        }
-    }
-
     public function reschedule(Request $request, $id)
     {
+        // validasi input
         $validator = Validator::make($request->all(), [
             'date' => 'required|date',
         ]);
 
+        // return error jika validasi gagal
         if ($validator->fails()) {
             return new ApiResource(false, 'Validasi gagal', $validator->errors());
         }
 
-        $data = $request->all();
-
+        // cari data berdasarkan id
         $query = CollectTaskPpn::find($id);
 
+        // kalo ga ada, return error
         if (!$query) {
             return new ApiResource(false, 'Tagihan tidak ditemukan', 'Tagihan yang ingin direschedule tidak ditemukan');
         }
 
+        // kalo ada
         try {
+            // update tanggal
             $query->update([
-                'assign_date' => $data['date']
+                'assign_date' => $request['date']
             ]);
+
+            // update invoice detail dan statusnya
+            $this->updateInvoiceStatus(
+                $query->tax_invoice,
+                'Tagihan [' . $query->tax_invoice . '] telah direschedule ke tanggal ' . $request['date'] . '.',
+                0
+            );
 
             return new ApiResource(true, 'Berhasil melakukan reschedule', null);
         } catch (\Exception $e) {
@@ -297,5 +248,39 @@ class ApiCollectTaskPpnController extends Controller
         } catch (\Exception $e) {
             return new ApiResource(false, 'Terjadi kesalahan saat menghapus tagihan', $e->getMessage());
         }
+    }
+
+    protected function updateInvoiceStatus($no_faktur_pajak, $status_terbaru, $status_pengiriman)
+    {
+        $invoice = Invoice::where('no_faktur_pajak', $no_faktur_pajak)->update([
+            'status_pengiriman' => $status_pengiriman,
+            'status_terbaru' => $status_terbaru,
+        ]);
+
+        if ($invoice === 0) {
+            // jika tidak ada yg diupdate, return false
+            return false;
+        }
+
+        InvoiceDetail::create([
+            'no_faktur_pajak' => $no_faktur_pajak,
+            'status_btt' => 'ada',
+            'status' => $status_terbaru,
+            'informasi_pengiriman' => [],
+            'added_by' => Auth::id(),
+        ]);
+
+        return true;
+    }
+
+    protected function getSrType($sr_type)
+    {
+        return match ($sr_type) {
+            'TTT' => 'Tanda Terima Tagihan',
+            'TTST' => 'Tanda Terima Sertifikat Tera',
+            'AT' => 'Ambil Tagihan',
+            'ABL' => 'Antar Bon Lunas',
+            default => null,
+        };
     }
 }

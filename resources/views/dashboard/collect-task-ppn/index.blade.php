@@ -42,19 +42,6 @@
 						</x-button.success>
 					</div>
 				@endcan
-
-				@can('collect-task-ppn-assign')
-					<div>
-						<form id="mass-assign-collect" action="{{ route('collect-task-ppn.mass-assign') }}"></form>
-						<x-button.primary id="assign-button" form="mass-assign-collect" type="submit">
-							<x-slot name="icon">
-								<x-icons.file-circle-plus class="h-6 w-6 text-green-500 dark:text-white" />
-							</x-slot>
-							Mass Assign
-						</x-button.primary>
-					</div>
-				@endcan
-
 			</div>
 		@endif
 

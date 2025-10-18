@@ -196,7 +196,7 @@
 										} elseif ($item->have_paid == 3) {
 										    $status = 'Tanda terima';
 										} elseif ($item->have_paid == 4) {
-										    $status = 'Belum sempat';
+										    $status = 'Ada Kendala';
 										} elseif ($item->have_paid == 5) {
 										    $status = 'Antar bon lunas';
 										} else {

@@ -41,6 +41,11 @@ class ApiCollectController extends Controller
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        // jika validasi gagal, kembalikan response JSON
+        if ($validator->fails()) {
+            return new ApiResource(false, 'Validasi gagal', $validator->errors());
+        }
+
         $remaining_bill = match ($query->bill_type) {
             'idcnonppn' => $query->collectTaskRelasi->remaining_bill,
             'idcppn' => $query->collectTaskPpnRelasi->remaining_bill,
@@ -53,15 +58,22 @@ class ApiCollectController extends Controller
             return new ApiResource(false, 'Gagal melakukan update', '<b>Total bayar</b> tidak boleh melebihi <b>sisa tagihan</b>.');
         }
 
-        // jika validasi gagal, kembalikan response JSON
-        if ($validator->fails()) {
-            return new ApiResource(false, 'Validasi gagal', $validator->errors());
-        }
-
         // Jika data tidak ditemukan
         if (!$query) {
             return new ApiResource(false, 'Laporan tidak ditemukan', null);
         }
+
+        $paid_status = match ($request->have_paid) {
+            '0' => 'Belum bayar',
+            '1' => 'Cicil',
+            '2' => 'Lunas',
+            '3' => 'Tanda terima',
+            '4' => 'Ada Kendala',
+            '5' => 'Antar Bon Lunas',
+            default => 'Status tidak diketahui',
+        };
+
+        $status = 'Tagihan sudah tiba dialamat tujuan dengan status tagihan [' . $paid_status . ', ket: ' . strip_tags($request->keterangan) . ']';
 
         try {
             DB::beginTransaction();
@@ -82,41 +94,9 @@ class ApiCollectController extends Controller
                 'revised_by' => $request->user()->id,
             ]);
 
-            // check ketersediaan data di Invoice
-            $invoice = Invoice::where('no_faktur_pajak', $query->no_sr)->first();
-
-            // jika invoice ditemukan
-            if ($invoice) {
-                $paid_status = match ($request->have_paid) {
-                    '5' => 'Antar Bon Lunas',
-                    '3' => 'Tanda terima',
-                    '0' => 'Belum bayar',
-                    '1' => 'Cicil',
-                    '2' => 'Lunas',
-                    '4' => 'Belum sempat',
-                    default => 'Status tidak diketahui',
-                };
-
-                $status = 'Tagihan sudah tiba dialamat tujuan dengan status tagihan [' . $paid_status . ', ket: ' . strip_tags($request->keterangan) . ']';
-
-                // update status invoice
-                $invoice->update([
-                    'status_terbaru' => $status,
-                    'latest_update_by' => Auth::id(),
-                ]);
-
-                // tambah data detail invoice
-                InvoiceDetail::create([
-                    'no_faktur_pajak' => $query->no_sr,
-                    'status_btt' => 'ada',
-                    'status' => $status,
-                    'informasi_pengiriman' => [],
-                    'added_by' => Auth::id(),
-                ]);
-            }
-
             // upload dokumentasi
             $folderPath = 'collectors';
+            $documents = [];
 
             if (!Storage::disk('public')->exists($folderPath)) {
                 Storage::disk('public')->makeDirectory($folderPath);
@@ -134,8 +114,21 @@ class ApiCollectController extends Controller
                         'id_collect' => $id,
                         'photourl' => $imageUrl,
                     ]);
+
+                    $documents[] = [
+                        'nama_file' => $image->getClientOriginalName(),
+                        'path_file' => $folderPath . '/' . $imageName,
+                    ];
                 }
             }
+
+            // update invoice dan detail invoice
+            $this->updateInvoiceStatus(
+                $query->no_sr,
+                $status,
+                $request->have_paid != '4' ? '2' : '3', // kalo have_paid != 4, status pengiriman sudah diterima, kalo 4, status pengiriman belum diterima
+                $documents
+            );
 
             NotifyCollectorHasUpdatedReportJob::dispatch($query->no_sr, $query->id, now())
                 ->delay(now()->addSeconds(5));
@@ -195,7 +188,7 @@ class ApiCollectController extends Controller
 
             // Update task
             $task->update([
-                'bill_status' => 1,
+                'bill_status' => 1, // ubah status tagihan menjadi berjalan (1)
                 'remaining_bill' => $task->remaining_bill - $query->payment_amount,
             ]);
 
@@ -233,23 +226,23 @@ class ApiCollectController extends Controller
                 'idcnonppn' => CollectTask::where('no_sr', $query->no_sr)->update([
                     'assign_by' => null,
                     'assign_to' => null,
-                    'bill_status' => 0,
+                    'bill_status' => 1, // ubah bill_status menjadi berjalan ketika ditolak
                 ]),
                 'idcppn' => CollectTaskPpn::where('tax_invoice', $query->no_sr)->update([
                     'assign_by' => null,
                     'assign_to' => null,
-                    'bill_status' => 0,
+                    'bill_status' => 1, // ubah bill_status menjadi berjalan ketika ditolak
                 ]),
                 'idyppn' => CollectIdyPpn::where('tax_invoice', $query->no_sr)->update([
                     'assign_by' => null,
                     'assign_to' => null,
-                    'bill_status' => 0,
+                    'bill_status' => 1, // ubah bill_status menjadi berjalan ketika ditolak
                 ]),
-                default => null,
+                default => 'Kode tagihan tidak diketahui.',
             };
 
             $query->update([
-                'status' => 3,
+                'status' => 3, // ubah status laporan menjadi ditolak (3)
                 'notes' => $request->notes,
                 'validate_by' => $validate_by,
             ]);
@@ -320,5 +313,29 @@ class ApiCollectController extends Controller
         } catch (\Exception $e) {
             return new ApiResource(false, 'Terjadi kesalahan saat menghapus laporan', null);
         }
+    }
+
+    protected function updateInvoiceStatus($no_faktur_pajak, $status_terbaru, $status_pengiriman, array $documents)
+    {
+        $invoice = Invoice::where('no_faktur_pajak', $no_faktur_pajak)->update([
+            'status_pengiriman' => $status_pengiriman,
+            'status_terbaru' => $status_terbaru,
+        ]);
+
+        if ($invoice === 0) {
+            // jika tidak ada yg diupdate, return false
+            return false;
+        }
+
+        InvoiceDetail::create([
+            'no_faktur_pajak' => $no_faktur_pajak,
+            'status_btt' => 'ada',
+            'status' => $status_terbaru,
+            'informasi_pengiriman' => [],
+            'documentations' => $documents,
+            'added_by' => Auth::id(),
+        ]);
+
+        return true;
     }
 }
