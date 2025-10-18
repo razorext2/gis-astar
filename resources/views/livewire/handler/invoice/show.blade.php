@@ -110,7 +110,14 @@
 	</div>
 
 	<div
-		class="flex flex-col rounded-b-xl bg-white p-2 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:text-white dark:shadow-none dark:ring-gray-700 lg:p-6">
+		class="flex flex-col gap-4 rounded-b-xl bg-white p-2 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:text-white dark:shadow-none dark:ring-gray-700 lg:p-6">
+
+		<div class="w-fit items-center justify-between self-end">
+			<x-input.select id="sort" name="sort" wire:model.live="sort" :defaultOption="'Urutkan'" :options="[
+			    'desc' => 'Terbaru',
+			    'asc' => 'Terlama',
+			]" />
+		</div>
 
 		@forelse ($invoice->details as $detail)
 			<div
