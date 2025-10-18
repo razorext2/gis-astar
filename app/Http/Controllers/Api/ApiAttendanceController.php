@@ -211,19 +211,4 @@ class ApiAttendanceController extends Controller
             return new ApiResource(false, 'Terjadi kegagalan.', $e->getMessage());
         }
     }
-
-    protected function formatNomorDokumen($input)
-    {
-        // Hapus spasi di awal/akhir
-        $input = trim($input);
-
-        // Hilangkan semua spasi di dalam input
-        $input = preg_replace('/\s+/', '', $input);
-
-        // Pastikan format menjadi VT-XXXXX
-        // Ganti 'VT' diikuti angka langsung menjadi 'VT-' + angka
-        $input = preg_replace('/^VT-?(\d+)$/i', 'VT-$1', $input);
-
-        return strtoupper($input); // pastikan huruf besar
-    }
 }
