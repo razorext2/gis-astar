@@ -5,7 +5,9 @@
 		@include('dashboard.layoutsDash.head')
 	</head>
 
-	<body class="relative bg-gray-100 dark:bg-[#09090b]" x-data="{ openSidebar: true }">
+	<body class="bg-gray-100 dark:bg-[#09090b]" x-data="{ openSidebar: true }">
+		<x-dashboard.date-picker id="datepicker-actions" name="date" form="dateForm" :text="'Filter tanggal'" />
+
 		@if (session('status'))
 			<x-notification-popup>
 				{{ session('status') }}
