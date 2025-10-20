@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use \App\Models\Team;
 use \App\Models\Technician;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,6 +24,7 @@ final class TechnicianTable extends PowerGridComponent
     public bool $deferLoading = true;
     public bool $showFilters = false;
     public string $status;
+    public $teams = [];
 
     public function setUp(): array
     {
@@ -31,6 +33,7 @@ final class TechnicianTable extends PowerGridComponent
         }
 
         $this->status = Request::query('status') ?? '';
+        $this->teams = Team::all();
 
         return [
             PowerGrid::header()
@@ -49,8 +52,11 @@ final class TechnicianTable extends PowerGridComponent
     public function datasource(): Builder
     {
         $query = Technician::query()
+            ->select('tb_technician.*', 'tb_team_members.team_code', 'tb_teams.team_name')
             ->with('pegawai', 'point')
-            ->orderBy('visit_date', 'desc');
+            ->leftJoin('tb_team_members', 'tb_team_members.kode_pegawai', '=', 'tb_technician.kode_pegawai')
+            ->leftJoin('tb_teams', 'tb_teams.team_code', '=', 'tb_team_members.team_code')
+            ->orderBy('tb_technician.visit_date', 'desc');
 
         if ($this->status != '') {
             match ($this->status) {
@@ -96,7 +102,7 @@ final class TechnicianTable extends PowerGridComponent
             ->add('visit_date')
             ->add('created_at')
             ->add('updated_at')
-            // custom
+            ->add('team_code', fn($query) => $query->team_code)
             ->add('no_vt_formatted', function ($query) {
                 if ($query->status == 0) {
                     $status = 'Diajukan';
@@ -121,6 +127,7 @@ final class TechnicianTable extends PowerGridComponent
             ->add('pegawai_info', fn($query) => view('components.dashboard.name-w-code', [
                 'code' => $query->kode_pegawai,
                 'name' => $query->pegawai->full_name ?? 'Teknisi belum terdaftar di sistem',
+                'item3' => $query->team_code
             ]))
             ->add('customer_info', fn($query) => view('components.dashboard.name-w-code', [
                 'code' => $query->customer_address,
@@ -151,6 +158,9 @@ final class TechnicianTable extends PowerGridComponent
             Column::make('Teknisi', 'pegawai_info', 'kode_pegawai')
                 ->sortable()
                 ->searchable(),
+
+            Column::make('Tim', 'team_code', 'team_code')
+                ->hidden(true),
 
             Column::make('Customer', 'customer_info', 'customer_contact')
                 ->sortable()
@@ -189,7 +199,11 @@ final class TechnicianTable extends PowerGridComponent
             Filter::inputText('weight_type', 'weight_type')
                 ->placeholder('Cari tipe timbangan'),
             Filter::datepicker('tanggal_kunjungan_formatted', 'visit_date')
-                ->filterRelation('visit_date', 'visit_date')
+                ->filterRelation('visit_date', 'visit_date'),
+            Filter::select('team_code', 'tb_team_members.team_code')
+                ->dataSource($this->teams)
+                ->optionLabel('team_name')
+                ->optionValue('team_code'),
         ];
     }
 
