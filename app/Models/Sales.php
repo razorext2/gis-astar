@@ -37,19 +37,6 @@ class Sales extends Model
      */
     protected $dates = ['deleted_at'];
 
-    /**
-     * Boot method for the Sales model.
-     *
-     * This method is called when the model is booted. It sets up an event listener
-     * for the deleting event. When a Sales instance is being deleted, this
-     * listener will:
-     * - Iterate through each related photo in the photoCollectRelasi relationship.
-     * - Convert the photo URL from a storage path to a public path.
-     * - Check if the file exists in storage and delete it if it does.
-     * - Delete the related photo records from the database.
-     *
-     * @return void
-     */
     public static function boot()
     {
         parent::boot();
@@ -74,31 +61,16 @@ class Sales extends Model
         return $this->title;
     }
 
-    /**
-     * Get the photoCollectRelasi record associated with the Sales.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
     public function photoCollectRelasi()
     {
         return $this->hasMany(PhotoCollect::class, 'id_sales');
     }
 
-    /**
-     * Get the pegawaiRelasi record associated with the Sales.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
     public function pegawaiRelasi()
     {
         return $this->belongsTo(Pegawai::class, 'kode_pegawai', 'kode_pegawai');
     }
 
-    /**
-     * Get the userRelasi record associated with the Sales.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
     public function userRelasi()
     {
         return $this->belongsTo(User::class, 'kode_pegawai', 'kode_pegawai');

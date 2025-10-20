@@ -88,4 +88,19 @@ class Pegawai extends Model
     {
         return $this->hasMany(Deduction::class, 'kode_pegawai', 'kode_pegawai');
     }
+
+    public function salesReport()
+    {
+        return $this->hasMany(Sales::class, 'kode_pegawai', 'kode_pegawai');
+    }
+
+    public function driverReport()
+    {
+        return $this->hasMany(Driver::class, 'kode_pegawai', 'kode_pegawai');
+    }
+
+    public function collectorReport()
+    {
+        return $this->hasMany(Collector::class, 'kode_pegawai', 'kode_pegawai');
+    }
 }

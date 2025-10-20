@@ -89,8 +89,8 @@
 											@endphp
 
 											<p class="mb-2 block text-sm font-normal leading-none text-gray-400 dark:text-gray-300">
-												+{{ countDistance($prevRecord->latitude, $prevRecord->longitude, $data->latitude, $data->longitude) }} dari
-												titik sebelumnya
+												+{{ countDistance($prevRecord->latitude, $prevRecord->longitude, $data->latitude, $data->longitude) != null ? countDistance($prevRecord->latitude, $prevRecord->longitude, $data->latitude, $data->longitude) : 'Tidak ada data koordinat' }}
+												dari titik sebelumnya
 											</p>
 
 											<p class="mb-2 block text-sm font-normal leading-none text-gray-400 dark:text-gray-300">
@@ -144,7 +144,7 @@
 						{
 							coords: L.latLng({{ $data->latitude ? $data->latitude : '3.591516090416829' }},
 								{{ $data->longitude ? $data->longitude : '98.66902828216554' }}),
-							name: '{{ $data->title ?? 'N/A' }}' // Ganti 'location_name' dengan nama lokasi atau deskripsi lain
+							name: ' <p> {{ $data->title }} </p> <p> {{ $data->location }} </p>'
 						},
 					@endforeach
 				];

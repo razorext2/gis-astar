@@ -84,8 +84,8 @@
 											@endphp
 
 											<p class="mb-2 block text-sm font-normal leading-none text-gray-400 dark:text-gray-300">
-												+{{ countDistance($prevRecord->latitude, $prevRecord->longitude, $data->latitude, $data->longitude) }} dari
-												titik sebelumnya
+												+{{ countDistance($prevRecord->latitude, $prevRecord->longitude, $data->latitude, $data->longitude) != null ? countDistance($prevRecord->latitude, $prevRecord->longitude, $data->latitude, $data->longitude) : 'Tidak ada data koordinat' }}
+												dari titik sebelumnya
 											</p>
 
 											<p class="mb-2 block text-sm font-normal leading-none text-gray-400 dark:text-gray-300">

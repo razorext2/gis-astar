@@ -18,20 +18,26 @@ class RouteController extends Controller
 
     public function detailDriver($id, Request $request)
     {
+        $date = Carbon::today(); // Ambil tanggal dari query string
+
         if ($request->query('date')) {
             $date = Carbon::parse($request->query('date'))->isoFormat('YYYY-MM-DD');
-        } else {
-            $date = Carbon::today(); // Ambil tanggal dari query string
         }
 
-        $pegawai = Pegawai::select('kode_pegawai', 'full_name')->where('kode_pegawai', $id)->firstOrFail();
-
-        $report = Driver::where('kode_pegawai', $id)
-            ->whereDate('created_at', $date)
-            ->get();
+        $report = Pegawai::with([
+            'driverReport' => function ($query) use ($date) {
+                $query->with('pegawai')
+                    ->whereDate('created_at', $date)
+                    ->orderBy('created_at', 'asc');
+            }
+        ])->where('kode_pegawai', $id)
+            ->firstOrFail();
 
         // Kembalikan view dengan data $pegawai
-        return view('dashboard.routes.driver.detail', compact('pegawai', 'report'));
+        return view('dashboard.routes.driver.detail', [
+            'report' => $report->driverReport,
+            'pegawai' => $report,
+        ]);
     }
 
     public function collector()
@@ -41,20 +47,26 @@ class RouteController extends Controller
 
     public function detailCollector($id, Request $request)
     {
+        $date = Carbon::today();
+
         if ($request->query('date')) {
             $date = Carbon::parse($request->query('date'))->isoFormat('YYYY-MM-DD');
-        } else {
-            $date = Carbon::today();
         }
 
-        $pegawai = Pegawai::select('kode_pegawai', 'full_name')->where('kode_pegawai', $id)->firstOrFail();
-
-        $report = Collector::where('kode_pegawai', $id)
-            ->whereDate('created_at', $date)
-            ->get();
+        $report = Pegawai::with([
+            'collectorReport' => function ($query) use ($date) {
+                $query->with('pegawaiRelasi')
+                    ->whereDate('assign_date', $date)
+                    ->orderBy('updated_at', 'desc');
+            }
+        ])->where('kode_pegawai', $id)
+            ->firstOrFail();
 
         // Kembalikan view dengan data $pegawai
-        return view('dashboard.routes.collector.detail', compact('pegawai', 'report'));
+        return view('dashboard.routes.collector.detail', [
+            'report' => $report->collectorReport,
+            'pegawai' => $report,
+        ]);
     }
 
     public function sales()
@@ -64,19 +76,24 @@ class RouteController extends Controller
 
     public function detailSales($id, Request $request)
     {
+        $date = Carbon::today();
+
         if ($request->query('date')) {
             $date = Carbon::parse($request->query('date'))->isoFormat('YYYY-MM-DD');
-        } else {
-            $date = Carbon::today();
         }
 
-        $pegawai = Pegawai::select('kode_pegawai', 'full_name')->where('kode_pegawai', $id)->firstOrFail();
-
-        $report = Sales::where('kode_pegawai', $id)
-            ->whereDate('created_at', $date)
-            ->get();
+        $pegawai = Pegawai::with([
+            'salesReport' => function ($query) use ($date) {
+                $query->with('pegawaiRelasi')
+                    ->whereDate('created_at', $date)
+                    ->orderBy('created_at', 'asc');
+            }
+        ])->where('kode_pegawai', $id)->firstOrFail();
 
         // Kembalikan view dengan data $pegawai
-        return view('dashboard.routes.sales.detail', compact('pegawai', 'report'));
+        return view('dashboard.routes.sales.detail', [
+            'report' => $pegawai->salesReport,
+            'pegawai' => $pegawai,
+        ]);
     }
 }
