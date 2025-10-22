@@ -72,7 +72,7 @@ final class TechnicianTable extends PowerGridComponent
                 $query->where('status', '!=', 4);
             }
         } else {
-            $query->where('kode_pegawai', auth()->user()->kode_pegawai);
+            $query->where('tb_technician.kode_pegawai', auth()->user()->kode_pegawai);
         }
 
         return $query;
@@ -187,7 +187,9 @@ final class TechnicianTable extends PowerGridComponent
 
     public function filters(): array
     {
-        return [
+        $filters = [];
+
+        $filters = [
             Filter::inputText('no_vt', 'no_vt')
                 ->placeholder('Cari no vt'),
             Filter::inputText('kode_pegawai', 'kode_pegawai')
@@ -200,11 +202,16 @@ final class TechnicianTable extends PowerGridComponent
                 ->placeholder('Cari tipe timbangan'),
             Filter::datepicker('tanggal_kunjungan_formatted', 'visit_date')
                 ->filterRelation('visit_date', 'visit_date'),
-            Filter::select('team_code', 'tb_team_members.team_code')
+        ];
+
+        if (auth()->user()->can('technician-approve')) {
+            $filters[] = Filter::select('team_code', 'tb_team_members.team_code')
                 ->dataSource($this->teams)
                 ->optionLabel('team_name')
-                ->optionValue('team_code'),
-        ];
+                ->optionValue('team_code');
+        }
+
+        return $filters;
     }
 
     public function actions(Technician $row): array
