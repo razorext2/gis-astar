@@ -60,16 +60,16 @@ final class TechnicianTable extends PowerGridComponent
 
         if ($this->status != '') {
             match ($this->status) {
-                'unapproved' => $query->where('status', 0),
-                'needrevision' => $query->where('status', 2),
-                'approved' => $query->where('status', 1),
-                'rejected' => $query->where('status', 3),
+                'unapproved' => $query->where('tb_technician.status', 0),
+                'needrevision' => $query->where('tb_technician.status', 2),
+                'approved' => $query->where('tb_technician.status', 1),
+                'rejected' => $query->where('tb_technician.status', 3),
             };
         }
 
         if (auth()->user()->can('technician-approve')) {
             if (!auth()->user()->can('technician-all')) {
-                $query->where('status', '!=', 4);
+                $query->where('tb_technician.status', '!=', 4);
             }
         } else {
             $query->where('tb_technician.kode_pegawai', auth()->user()->kode_pegawai);
@@ -190,25 +190,24 @@ final class TechnicianTable extends PowerGridComponent
         $filters = [];
 
         $filters = [
-            Filter::inputText('no_vt', 'no_vt')
+            Filter::inputText('no_vt', 'tb_technician.no_vt')
                 ->placeholder('Cari no vt'),
-            Filter::inputText('kode_pegawai', 'kode_pegawai')
-                ->placeholder('Cari kode jari'),
-            Filter::inputText('pegawai_info')
-                ->filterRelation('pegawai', 'full_name'),
-            Filter::inputText('customer_info')
-                ->filterRelation('customer', 'full_name'),
-            Filter::inputText('weight_type', 'weight_type')
+            Filter::inputText('customer_contact', 'tb_technician.customer_contact')
+                ->placeholder('Cari customer'),
+            Filter::inputText('weight_type', 'tb_technician.weight_type')
                 ->placeholder('Cari tipe timbangan'),
-            Filter::datepicker('tanggal_kunjungan_formatted', 'visit_date')
-                ->filterRelation('visit_date', 'visit_date'),
+            Filter::datepicker('visit_date', 'tb_technician.visit_date')
         ];
 
         if (auth()->user()->can('technician-approve')) {
-            $filters[] = Filter::select('team_code', 'tb_team_members.team_code')
-                ->dataSource($this->teams)
-                ->optionLabel('team_name')
-                ->optionValue('team_code');
+            $filters = array_merge($filters, [
+                Filter::select('team_code', 'tb_team_members.team_code')
+                    ->dataSource($this->teams)
+                    ->optionLabel('team_name')
+                    ->optionValue('team_code'),
+                Filter::inputText('kode_pegawai', 'tb_technician.kode_pegawai')
+                    ->placeholder('Cari kode jari')
+            ]);
         }
 
         return $filters;
