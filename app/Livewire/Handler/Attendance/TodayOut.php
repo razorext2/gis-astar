@@ -79,11 +79,10 @@ class TodayOut extends Component
     public function render()
     {
         $data = AttendanceOut::whereDate('created_at', $this->date)
-            ->when($this->role, function ($query) {
-                return $query->whereHas('user.roles', function ($role) {
-                    $role->where('name', $this->role);
-                });
-            })
+            ->where('status', '=', 1)
+            ->when($this->role, fn($query)
+                => $query->whereHas('user.roles', fn($role)
+                    => $role->where('name', $this->role)))
             ->paginate(6);
 
         return view('livewire.handler.attendance.today-out', compact('data'));
