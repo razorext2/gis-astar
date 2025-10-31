@@ -9,6 +9,7 @@ var filesToCache = [
     '/images/icons/icon-192x192.png',
     '/images/icons/icon-384x384.png',
     '/images/icons/icon-512x512.png',
+    '/assets/img/500.svg',
 ];
 
 // Cache on install
