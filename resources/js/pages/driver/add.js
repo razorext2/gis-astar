@@ -4,8 +4,6 @@ import { backCameraStream } from "../../utils/cameraStream";
 import { getLocation } from '../../utils/geoLocation';
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // Inisialisasi editor Quill
-  quillEditor();
   // Inisialisasi kamera belakang
   backCameraStream();
   // Inisialisasi handler data
