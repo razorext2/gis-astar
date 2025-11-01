@@ -98,8 +98,10 @@
                     </div>
 
                     <div class="col-span-2 w-full">
-                        <x-input.textarea id="keterangan" name="keterangan" :labels="true" :textLabel="'Keterangan'"
-                            :rows="15" />
+                        <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                            for="keterangan">Keterangan</label>
+
+                        <x-input.textarea id="keterangan" name="keterangan" :labels="false" :rows="15" />
 
                         <div class="mt-2 hidden text-sm text-red-500" id="alert-keterangan"></div>
                     </div>
