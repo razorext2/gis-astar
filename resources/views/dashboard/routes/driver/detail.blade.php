@@ -8,7 +8,7 @@
 				<div class="w-full md:col-span-2">
 					<form id="dateForm" action="{{ route('routes.driver.detail', ['pegawai' => $pegawai->kode_pegawai]) }}"
 						method="GET">
-						<x-dashboard.date-picker id="datepicker-actions" name="date" form="dateForm" :text="'Filter tanggal'" />
+						<x-dashboard.date-picker id="tanggal-rute-driver" name="date" form="dateForm" :text="'Filter tanggal'" />
 					</form>
 				</div>
 				{{-- endsearch --}}
@@ -193,7 +193,7 @@
 		});
 
 		document.getElementById('dateForm').addEventListener('submit', function(e) {
-			const dateInput = document.getElementById('datepicker-actions').value;
+			const dateInput = document.getElementById('tanggal-rute-driver').value;
 
 			if (dateInput) {
 				// Update action URL to include 'date' parameter
