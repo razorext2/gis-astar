@@ -43,6 +43,6 @@ class Add extends Form
     #[Validate(['max:30'])]
     public ?int $delivery_status = null;
 
-    #[Validate(['documentations.*' => 'image|max:1024'])]
+    #[Validate(['documentations.*' => 'image|max:4096'])]
     public $documentations = [];
 }
