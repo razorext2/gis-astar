@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Blade;
 use \Spatie\Permission\Models\Role;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
@@ -56,7 +55,10 @@ final class RolesTable extends PowerGridComponent
             ->add('name')
             ->add('guard_name')
             ->add('permissions', function ($query) {
-                $data = $query->permissions->pluck('name');
+                $data = $query->permissions
+                    ->pluck('name')
+                    ->sort()
+                    ->values();
 
                 return view('components.table-component.tags', ['items' => $data]);
             })
