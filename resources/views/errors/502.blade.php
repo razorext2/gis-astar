@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>404: Not Found</title>
+    <title>502: Bad Gateway</title>
 
     <!-- Fonts -->
     <link href="https://fonts.bunny.net" rel="preconnect">
@@ -27,22 +27,21 @@
 </head>
 
 <body class="bg-white antialiased dark:bg-gray-900">
-    <div class="container mx-auto px-8">
-        <div class="grid md:grid-cols-2">
+    <div class="container mx-auto mt-32 px-8 md:mt-0">
+        <div class="grid gap-6 md:grid-cols-2">
             <div class="flex flex-col justify-evenly md:h-screen md:flex-row">
-                <img class="w-64 md:w-full" src="{{ asset('assets/img/404.svg') }}" alt="" loading="lazy">
+                <img class="w-64 md:w-full" src="{{ asset('assets/img/500.svg') }}" alt="" loading="lazy">
             </div>
 
             <div class="flex flex-col justify-evenly md:h-screen md:flex-row md:items-center">
                 <div class="mx-auto max-w-screen-xl lg:px-6 lg:py-16">
                     <div class="mx-auto max-w-screen-sm">
-                        <span class="mb-4 text-8xl font-bold text-blue-500">404</span>
+                        <span class="mb-4 text-8xl font-bold text-blue-500">502</span>
                         <p
                             class="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white md:text-4xl">
-                            Whoops! That
-                            page doesn’t exist.</p>
-                        <p class="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">The page that you're looking
-                            for is nowhere.
+                            Bad Gateway.</p>
+                        <p class="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">Gateway/proxy received a bad
+                            response from upstream.
                         </p>
                     </div>
                 </div>

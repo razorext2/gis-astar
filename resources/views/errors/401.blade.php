@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>404: Not Found</title>
+    <title>401: Unauthorized</title>
 
     <!-- Fonts -->
     <link href="https://fonts.bunny.net" rel="preconnect">
@@ -28,26 +28,29 @@
 
 <body class="bg-white antialiased dark:bg-gray-900">
     <div class="container mx-auto px-8">
-        <div class="grid md:grid-cols-2">
-            <div class="flex flex-col justify-evenly md:h-screen md:flex-row">
-                <img class="w-64 md:w-full" src="{{ asset('assets/img/404.svg') }}" alt="" loading="lazy">
+        <div class="grid h-screen md:grid-cols-2">
+            <!-- Left section (Image) -->
+            <div class="flex items-center justify-center">
+                <img class="w-64 md:w-full" src="{{ asset('assets/img/403.png') }}" alt="403 Image" loading="lazy">
             </div>
 
-            <div class="flex flex-col justify-evenly md:h-screen md:flex-row md:items-center">
+            <!-- Right section (Text) -->
+            <div class="flex items-center justify-center">
                 <div class="mx-auto max-w-screen-xl lg:px-6 lg:py-16">
                     <div class="mx-auto max-w-screen-sm">
-                        <span class="mb-4 text-8xl font-bold text-blue-500">404</span>
+                        <span class="mb-4 text-8xl font-bold text-blue-500">401</span>
                         <p
                             class="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white md:text-4xl">
-                            Whoops! That
-                            page doesn’t exist.</p>
-                        <p class="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">The page that you're looking
-                            for is nowhere.
+                            Unauthorized.
+                        </p>
+                        <p class="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">
+                            You need authorized account to do this!
                         </p>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 
 </body>
