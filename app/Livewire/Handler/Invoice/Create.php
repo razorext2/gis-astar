@@ -18,8 +18,11 @@ class Create extends Component
     use WithFileUploads;
 
     public Fetch $fetchDataForm;
+
     public Add $addForm;
+
     public ?string $status = null;
+
     public ?string $id = null;
 
     public function mount($id)
@@ -30,7 +33,7 @@ class Create extends Component
 
         $invoice = Invoice::with('details')->where('id', $this->id)->first();
 
-        if (!empty($invoice)) {
+        if (! empty($invoice)) {
             $this->fetchDataForm->nofakturpajak = $invoice->no_faktur_pajak;
             $this->addForm->btt_number = $invoice->nomor_btt;
             $this->addForm->btt_created_at = $invoice->tgl_btt;
@@ -96,6 +99,7 @@ class Create extends Component
             $this->addForm->tax_number = $data['NomorFakturPajak'];
         } else {
             $this->fetchDataForm->reset();
+
             return $this->dispatch('swal', icon: 'error', text: 'Gagal mengambil data. Invoice tidak ditemukan.', title: 'Gagal');
         }
     }
@@ -108,7 +112,7 @@ class Create extends Component
         // cek sudah ada apa belum invoice nya
         $invoice = Invoice::where('no_faktur_pajak', $this->addForm->tax_number)->first();
 
-        if (!$invoice) {
+        if (! $invoice) {
             $this->addAll($userId);
         } else {
             $this->updateHistory($userId);
@@ -163,7 +167,7 @@ class Create extends Component
                 ],
             ]);
 
-            return $this->dispatch('swal', icon: 'error', text: 'Gagal menyimpan data: ' . $th, title: 'Gagal');
+            return $this->dispatch('swal', icon: 'error', text: 'Gagal menyimpan data: '.$th, title: 'Gagal');
         }
     }
 
@@ -205,7 +209,7 @@ class Create extends Component
                 ],
             ]);
 
-            return $this->dispatch('swal', icon: 'error', text: 'Gagal menyimpan data: ' . $th, title: 'Gagal');
+            return $this->dispatch('swal', icon: 'error', text: 'Gagal menyimpan data: '.$th, title: 'Gagal');
         }
     }
 
@@ -217,7 +221,7 @@ class Create extends Component
             $shippingInfo = array_filter([
                 'tujuan' => $this->addForm->invoice_destination ?: null,
                 'resi' => $this->addForm->resi_number ?: null,
-            ], static fn($value) => filled($value));
+            ], static fn ($value) => filled($value));
         }
 
         $invoiceDetail = InvoiceDetail::create([
@@ -247,6 +251,14 @@ class Create extends Component
         }
 
         $this->redirect(route('invoice.index'), navigate: true);
+    }
+
+    public function removeDocumentation($index)
+    {
+        if (isset($this->addForm->documentations[$index])) {
+            unset($this->addForm->documentations[$index]);
+            $this->addForm->documentations = array_values($this->addForm->documentations);
+        }
     }
 
     public function render()

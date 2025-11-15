@@ -176,7 +176,7 @@
 
         <div class="col-span-2 w-full">
 
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                 for="documentations">Dokumentasi</label>
 
             @if (!$addForm->documentations)
@@ -188,7 +188,7 @@
                             <p class="mb-0.5 text-sm text-gray-500 dark:text-gray-400">
                                 <span class="font-semibold"> Klik untuk upload</span>
                             </p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                            <p class="w-full text-center text-xs text-gray-500 dark:text-gray-400">
                                 *Dokumentasi dapat berupa <b>foto dokumen BTT, resi </b> atau lainnya (PNG, JPG, Jpeg)
                             </p>
                             <p>
@@ -196,26 +196,26 @@
                             </p>
                         </div>
                         <input id="documentations" name="documentations" type="file" accept="image/*"
-                            capture="environment" wire:model="addForm.documentations" class="hidden" multiple />
+                            wire:model="addForm.documentations" class="hidden" multiple />
                     </label>
                 </div>
             @else
                 <div class="mt-2 flex flex-col gap-2">
                     <div
-                        class="relative rounded-xl overflow-auto bg-gray-50 min-w-0 dark:bg-gray-700 dark:highlight-white/5 border border-gray-300 dark:border-gray-600">
+                        class="dark:highlight-white/5 relative min-w-0 overflow-auto rounded-xl border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700">
 
-                        <div class="overflow-x-scroll flex">
+                        <div class="flex overflow-x-scroll">
 
                             @foreach ($addForm->documentations as $index => $doc)
-                                <div class="flex-none py-3 px-1.5 first:pl-3 last:pr-3">
+                                <div class="flex-none px-1.5 py-3 first:pl-3 last:pr-3">
                                     <div class="relative flex flex-col items-center justify-center gap-3">
                                         <img class="w-24 rounded-lg" src="{{ $doc->temporaryUrl() }}">
                                         <button type="button"
-                                            class="absolute top-0 end-0 rounded-lg bg-red-500 p-1 text-white hover:bg-red-600"
+                                            class="absolute end-0 top-0 rounded-lg bg-red-500 p-1 text-white hover:bg-red-600"
                                             wire:click="removeDocumentation({{ $index }})">
                                             <x-icons.close class="h-4 w-4" />
                                         </button>
-                                        <p class="text-xs dark:text-white text-gray-600">
+                                        <p class="text-xs text-gray-600 dark:text-white">
                                             @php
                                                 $name = $doc->getClientOriginalName();
                                                 $label =
@@ -235,7 +235,7 @@
                         </div>
                     </div>
 
-                    <p class="text-xs dark:text-gray-100 text-gray-600">Total {{ $total ?? '0' }} file.</p>
+                    <p class="text-xs text-gray-600 dark:text-gray-100">Total {{ $total ?? '0' }} file.</p>
 
                 </div>
             @endif

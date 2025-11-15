@@ -62,13 +62,13 @@ export default defineConfig({
                 "resources/js/pages/technician/add.js",
                 "resources/js/pages/technician/detail.js",
 
-                // dayoff 
+                // dayoff
                 "resources/js/pages/dayoff/index.js",
                 "resources/js/pages/dayoff/add.js",
                 "resources/js/pages/dayoff/edit.js",
                 "resources/js/pages/dayoff/detail.js",
 
-                // announcement 
+                // announcement
                 "resources/js/pages/announcement/index.js",
 
                 // pegawai
@@ -84,7 +84,6 @@ export default defineConfig({
                 "resources/js/pages/user/edit.js",
 
                 // invoice
-                "resources/js/pages/invoice/create.js",
                 "resources/js/pages/invoice/detail.js",
             ],
             refresh: true,
