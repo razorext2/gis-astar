@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Events\RecognitionEvent;
-use App\Http\Resources\ApiResource;
 use App\Models\User;
 use App\Notifications\SendNotifAttendance;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,17 +16,25 @@ class ProcessFaceRecognition implements ShouldQueue
     use Queueable;
 
     protected string $img_path;
+
     protected int $user_id;
+
     protected int $kode_pegawai;
+
     protected string $filename;
+
     protected int $id;
+
     protected string $model;
+
     protected $no_vt;
+
+    protected ?string $keterangan;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($model, $id, $img_path, $user_id, $kode_pegawai, $filename, $no_vt)
+    public function __construct($model, $id, $img_path, $user_id, $kode_pegawai, $filename, $no_vt, $keterangan)
     {
         $this->model = $model;
         $this->id = $id;
@@ -36,6 +43,7 @@ class ProcessFaceRecognition implements ShouldQueue
         $this->kode_pegawai = $kode_pegawai;
         $this->filename = $filename;
         $this->no_vt = $no_vt;
+        $this->keterangan = $keterangan;
     }
 
     /**
@@ -49,11 +57,11 @@ class ProcessFaceRecognition implements ShouldQueue
         $type = $this->model == 'Attendance' ? 'Masuk' : 'Keluar';
 
         // path ke file
-        $fullPath = storage_path('app/' . $this->img_path . '/' . $this->filename);
+        $fullPath = storage_path('app/'.$this->img_path.'/'.$this->filename);
 
         try {
             // Pastikan file ada
-            if (!file_exists($fullPath)) {
+            if (! file_exists($fullPath)) {
                 throw new \Exception('File tidak ditemukan.');
             }
 
@@ -72,13 +80,13 @@ class ProcessFaceRecognition implements ShouldQueue
 
             $responseData = $response->json();
 
-            if (!is_array($responseData) || !isset($responseData['error'])) {
+            if (! is_array($responseData) || ! isset($responseData['error'])) {
                 throw new \Exception('Respons dari API tidak valid.');
             }
 
             // Pindahkan file
             $targetPath = "public/labels/{$this->kode_pegawai}/capturedImg/{$this->filename}";
-            if (!Storage::move("{$this->img_path}/{$this->filename}", $targetPath)) {
+            if (! Storage::move("{$this->img_path}/{$this->filename}", $targetPath)) {
                 throw new \Exception('Gagal memindahkan file hasil capture.');
             }
 
@@ -90,7 +98,7 @@ class ProcessFaceRecognition implements ShouldQueue
                 ]); // lebih aman daripada delete
 
                 // kirim notifikasi
-                $this->sendNotif("Absensi {$type} gagal: " . $responseData['error_message'], $this->id, $this->model);
+                $this->sendNotif("Absensi {$type} gagal: ".$responseData['error_message'], $this->id, $this->model);
 
                 return broadcast(new RecognitionEvent(
                     $this->user_id,
@@ -114,6 +122,7 @@ class ProcessFaceRecognition implements ShouldQueue
                     'kode_jari' => $this->kode_pegawai,
                     'waktu' => $data->waktuori,
                     'kodebarcode' => $this->no_vt,
+                    'keterangan' => $this->keterangan,
                 ]);
 
                 dump($api->json());

@@ -62,7 +62,8 @@ class ApiAttendanceController extends Controller
         ]);
 
         $this->saveImages($request);
-        return redirect()->to(route('landing.page') . '/#Scan')->with('success', 'Data berhasil diperbarui!');
+
+        return redirect()->to(route('landing.page').'/#Scan')->with('success', 'Data berhasil diperbarui!');
     }
 
     public function saveImages(Request $request)
@@ -72,9 +73,9 @@ class ApiAttendanceController extends Controller
         $folderPath = "public/labels/{$kodePegawai}";
         $folderToDB = "labels/{$kodePegawai}/";
 
-        if (!Storage::exists($folderPath)) {
+        if (! Storage::exists($folderPath)) {
             Storage::makeDirectory($folderPath);
-            chmod(storage_path("app/public/labels"), 0755);
+            chmod(storage_path('app/public/labels'), 0755);
             chmod(storage_path("app/{$folderPath}"), 0755);
         }
 
@@ -125,11 +126,11 @@ class ApiAttendanceController extends Controller
 
         // cek apakah pegawai sudah punya foto selfie
         $pegawai = Pegawai::where('kode_pegawai', $kode_pegawai)->first();
-        if (!$pegawai || !$pegawai->storage) {
+        if (! $pegawai || ! $pegawai->storage) {
             return new ApiResource(false, 'Terjadi kegagalan.', 'Foto selfie belum diatur.');
         }
 
-        if (!$request->has('image') || empty($request->image)) {
+        if (! $request->has('image') || empty($request->image)) {
             return new ApiResource(false, 'Terjadi kegagalan.', 'Image data is required.');
         }
 
@@ -138,9 +139,9 @@ class ApiAttendanceController extends Controller
         try {
             // simpan foto sementara
             $img_path = "public/labels/{$kode_pegawai}/_temp/";
-            $filename = $kode_pegawai . "_" . getCurrentDate();
+            $filename = $kode_pegawai.'_'.getCurrentDate();
 
-            if (!$request->image->storeAs($img_path, $filename . ".png")) {
+            if (! $request->image->storeAs($img_path, $filename.'.png')) {
                 return new ApiResource(false, 'Terjadi kegagalan.', 'Gagal menyimpan gambar.');
             }
 
@@ -176,14 +177,15 @@ class ApiAttendanceController extends Controller
             ];
 
             if (preg_match('/\bVT\s*-?\s*(\d+)\b/i', $request->keterangan, $m)) {
-                $no_vt = 'VT-' . $m[1];  // vt123123123 → VT-123123123
+                $no_vt = 'VT-'.$m[1];  // vt123123123 → VT-123123123
             }
 
             // simpan data absen (masuk/keluar)
             $absen = $modelClass::create($absenData);
 
-            if (!$absen || !$absen->exists) {
+            if (! $absen || ! $absen->exists) {
                 DB::rollBack();
+
                 return new ApiResource(false, 'Terjadi kegagalan.', 'Gagal menyimpan data absensi. Silahkan lakukan absensi ulang.');
             }
 
@@ -196,16 +198,17 @@ class ApiAttendanceController extends Controller
                 $img_path,
                 $user_id,
                 $kode_pegawai,
-                $filename . '.png',
-                $no_vt
+                $filename.'.png',
+                $no_vt,
+                $request->keterangan,
             );
 
             return new ApiResource(true, 'Verifikasi absensi sedang diproses...', 'Silahkan menunggu beberapa saat.');
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error in verify attendance: ' . $e->getMessage(), [
+            Log::error('Error in verify attendance: '.$e->getMessage(), [
                 'exception' => $e,
-                'user_id' => $user_id
+                'user_id' => $user_id,
             ]);
 
             return new ApiResource(false, 'Terjadi kegagalan.', $e->getMessage());
