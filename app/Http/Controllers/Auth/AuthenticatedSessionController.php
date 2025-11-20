@@ -28,15 +28,21 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         // cek status is_active
-        if (!$request->user()->is_active) {
+        if (! $request->user()->is_active) {
+            if (! empty($request->user()->deactivation_reason)) {
+                $pesan = $request->user()->deactivation_reason;
+            } else {
+                $pesan = 'Status akun anda sudah tidak aktif. ';
+            }
+
             Auth::guard('web')->logout();
 
             $request->session()->invalidate();
 
-            $request->session()->regenerateToken(); 
+            $request->session()->regenerateToken();
 
             throw ValidationException::withMessages([
-                'email' => 'Status akun anda sudah tidak aktif.',
+                'email' => $pesan,
             ]);
         }
 

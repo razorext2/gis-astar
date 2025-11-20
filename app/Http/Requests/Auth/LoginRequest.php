@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -41,8 +43,9 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (!Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
+            $this->throwSoftDeletedMessageIfNeeded();
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
@@ -59,7 +62,7 @@ class LoginRequest extends FormRequest
      */
     public function ensureIsNotRateLimited(): void
     {
-        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
@@ -80,6 +83,25 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')) . '|' . $this->ip());
+        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+    }
+
+    /**
+     * Provide a specific error when the account has been deleted with a reason.
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function throwSoftDeletedMessageIfNeeded(): void
+    {
+        $user = User::withTrashed()
+            ->where('email', $this->input('email'))
+            ->first();
+
+        if ($user && $user->trashed() && Hash::check($this->input('password'), $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => $user->deactivation_reason
+                    ?? 'Akun Anda telah dihapus. Silahkan hubungi administrator untuk mengaktifkannya kembali.',
+            ]);
+        }
     }
 }

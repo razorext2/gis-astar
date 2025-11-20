@@ -97,6 +97,14 @@ class UserController extends Controller
 
         $input = $request->all();
 
+        if ($request->is_active == 0) {
+            $input['deactivation_reason'] = $request->deactivation_reason;
+            $input['deactivation_at'] = now();
+        } else {
+            $input['deactivation_reason'] = null;
+            $input['deactivation_at'] = null;
+        }
+
         if (! empty($input['password'])) {
             $input['password'] = Hash::make($input['password']);
         } else {

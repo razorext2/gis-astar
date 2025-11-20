@@ -105,7 +105,9 @@ class ProfileController extends Controller
         $user->delete();
 
         $user->update([
+            'deactivation_reason' => 'Anda telah melakukan penghapusan akun pada '.now()->toDateTimeString().'. Silahkan hubungi administrator untuk mengaktifkan akun anda kembali.',
             'deleted_by' => $user->id,
+            'deactivation_at' => now(),
             'deleted_at' => now(),
         ]);
 
