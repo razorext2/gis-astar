@@ -7,15 +7,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
 use Laravel\Sanctum\HasApiTokens;
 use NotificationChannels\WebPush\HasPushSubscriptions;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles, HasApiTokens, HasPushSubscriptions;
+    use HasApiTokens, HasFactory, HasPushSubscriptions, HasRoles, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -31,7 +32,8 @@ class User extends Authenticatable
         'is_active',
         'deactivation_at',
         'deactivation_reason',
-        'profile_pic'
+        'profile_pic',
+        'deleted_by',
     ];
 
     /**
@@ -77,5 +79,10 @@ class User extends Authenticatable
     public function technicianPoint(): HasMany
     {
         return $this->hasMany(TechnicianPoints::class, 'kode_pegawai', 'kode_pegawai');
+    }
+
+    public function deletedBy()
+    {
+        return $this->belongsTo(Pegawai::class, 'deleted_by', 'kode_pegawai');
     }
 }

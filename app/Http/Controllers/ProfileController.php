@@ -41,7 +41,7 @@ class ProfileController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $request->user()->id],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email,'.$request->user()->id],
             'nick_name' => ['required', 'string', 'max:255'],
             'nik_pegawai' => ['required', 'string', 'max:255'],
             'no_telp' => ['required', 'string', 'max:255'],
@@ -80,9 +80,11 @@ class ProfileController extends Controller
             ]);
 
             DB::commit();
+
             return Redirect::route('profile.edit')->with('status', 'Data profil berhasil diperbaharui.');
         } catch (\Exception $e) {
             DB::rollBack();
+
             return Redirect::route('profile.edit')->with('status', $e->getMessage());
         }
     }
@@ -101,6 +103,11 @@ class ProfileController extends Controller
         Auth::logout();
 
         $user->delete();
+
+        $user->update([
+            'deleted_by' => $user->id,
+            'deleted_at' => now(),
+        ]);
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
