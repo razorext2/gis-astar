@@ -65,11 +65,11 @@
             </div>
         </div>
 
-        {{-- <div
-			class="col-span-2 rounded-lg bg-white p-4 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 sm:p-8">
-			<div class="w-full">
-				@include('dashboard.profile.partials.delete-user-form')
-			</div>
-		</div> --}}
+        <div
+            class="col-span-2 rounded-lg bg-white p-4 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 sm:p-8">
+            <div class="w-full">
+                @include('dashboard.profile.partials.delete-user-form')
+            </div>
+        </div>
     </div>
 @endsection
