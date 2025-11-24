@@ -2,19 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ApiResource;
-use Carbon\Carbon;
-use App\Models\User;
 use App\Models\Collector;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Number;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Yajra\DataTables\Facades\DataTables;
 
 class CollectController extends Controller
 {
-    function __construct()
+    public function __construct()
     {
         $this->middleware('permission:collect-list', ['only' => ['index', 'approved', 'submitted', 'rejected', 'revision']]);
         $this->middleware('permission:collect-edit', ['only' => 'edit']);
@@ -51,8 +48,8 @@ class CollectController extends Controller
             ->with(['pegawaiRelasi:kode_pegawai,full_name', 'collectTaskRelasi', 'collectTaskPpnRelasi', 'collectIdyPpnRelasi'])
             ->whereNull('deleted_at');
 
-        if (!Auth::user()->can('collect-approve')) {
-            $query->where('kode_pegawai', Auth::user()->kode_pegawai);
+        if (auth()->user()->hasRole('Collector')) {
+            $query->where('kode_pegawai', auth()->user()->kode_pegawai);
         }
 
         $status = $request->get('s');
@@ -71,8 +68,8 @@ class CollectController extends Controller
             $query->where('status', 4);
         } else {
             $query->where('status', 0);
-            if (!Auth::user()->can('collect-approve')) {
-                $query->whereDate('assign_date', Carbon::now());
+            if (! auth()->user()->can('collect-approve')) {
+                $query->whereDate('assign_date', today());
             }
         }
 
@@ -95,9 +92,9 @@ class CollectController extends Controller
                             'idcppn' => strtoupper($data->collectTaskPpnRelasi->customer_recipient ?? 'N/A'),
                             'idyppn' => strtoupper($data->collectIdyPpnRelasi->customer_recipient ?? 'N/A'),
                             default => 'N/A',
-                        } . " ( " . strtoupper($data->bill_type ?? 'N/A') . " )",
+                        }.' ( '.strtoupper($data->bill_type ?? 'N/A').' )',
                         'status' => $data->status ?? 'N/A',
-                        'item3' => $data->location ?? 'N/A'
+                        'item3' => $data->location ?? 'N/A',
                     ]);
                 })
                 ->editColumn('payment_type', function ($data) {
@@ -139,10 +136,10 @@ class CollectController extends Controller
                                 ],
                                 [
                                     'title' => 'Bayar',
-                                    'data' => Number::currency($data->payment_amount ?? 0, 'IDR', 'id')
+                                    'data' => Number::currency($data->payment_amount ?? 0, 'IDR', 'id'),
                                 ],
 
-                            ]
+                            ],
                         ]);
                     } else {
                         return $status;
@@ -158,7 +155,7 @@ class CollectController extends Controller
 
                     return view('components.dashboard.custom-date', [
                         'date' => Carbon::parse($date)->locale('id')->isoFormat('D MMMM YYYY'),
-                        'time' => Carbon::parse($date)->locale('id')->isoFormat('HH:mm:ss')
+                        'time' => Carbon::parse($date)->locale('id')->isoFormat('HH:mm:ss'),
                     ]);
                 })
                 ->addColumn('actions', function ($data) {
@@ -166,29 +163,27 @@ class CollectController extends Controller
                         [
                             'id' => 'show-btn',
                             'action' => route('collect.show', $data->id),
-                            'label' => 'Detail'
-                        ]
+                            'label' => 'Detail',
+                        ],
                     ];
 
-                    if (Auth::user()->can('collect-approve')) {
-                        if ($data->status != 1) {
-                            $actions[] = [
-                                'id' => 'edit-btn',
-                                'action' => route('collect.edit', $data->id),
-                                'label' => 'Edit'
-                            ];
-                        }
-
-                        if (Auth::user()->hasRole('Admin')) {
-                            $actions[] = [
-                                'id' => 'delete-btn',
-                                'action' => 'javascript:void(0)',
-                                'label' => 'Hapus',
-                            ];
-                        }
+                    if (auth()->user()->can('collect-edit')) {
+                        $actions[] = [
+                            'id' => 'edit-btn',
+                            'action' => route('collect.edit', $data->id),
+                            'label' => 'Edit',
+                        ];
                     }
 
-                    if (Auth::user()->can('collect-approve')) {
+                    if (auth()->user()->can('collect-delete')) {
+                        $actions[] = [
+                            'id' => 'delete-btn',
+                            'action' => 'javascript:void(0)',
+                            'label' => 'Hapus',
+                        ];
+                    }
+
+                    if (! auth()->user()->hasRole('Collector')) {
                         return view('components.dashboard.action-buttons', [
                             'id' => $data->id,
                             'datas' => $actions,
@@ -198,25 +193,25 @@ class CollectController extends Controller
                             return view('components.dashboard.single-button', [
                                 'id' => $data->id,
                                 'data' => [
-                                    'id' => 'editBtn' . $data->id,
+                                    'id' => 'editBtn'.$data->id,
                                     'action' => route('collect.edit', $data->id),
                                     'label' => 'Lengkapi',
-                                ]
+                                ],
                             ]);
                         } else {
                             return view('components.dashboard.single-button', [
                                 'id' => $data->id,
                                 'data' => [
-                                    'id' => 'detailBtn' . $data->id,
+                                    'id' => 'detailBtn'.$data->id,
                                     'action' => route('collect.show', $data->id),
                                     'label' => 'Detail',
-                                ]
+                                ],
                             ]);
                         }
                     }
                 })
                 ->filter(function ($query) use ($request) {
-                    if ($request->filled("title")) {
+                    if ($request->filled('title')) {
                         $query->whereHas('collectTaskRelasi', function ($query) use ($request) {
                             $query->where('customer_name', 'LIKE', "%{$request->title}%");
                         })
@@ -228,19 +223,19 @@ class CollectController extends Controller
                             });
                     }
 
-                    if ($request->filled("no_sr")) {
-                        $query->where('no_sr', "LIKE", "%{$request->no_sr}%");
+                    if ($request->filled('no_sr')) {
+                        $query->where('no_sr', 'LIKE', "%{$request->no_sr}%");
                     }
 
                     if ($request->filled('bill_type')) {
                         $query->where('bill_type', $request->bill_type);
                     }
 
-                    if ($request->filled("kode_pegawai")) {
-                        $query->where('kode_pegawai', "LIKE", "%{$request->kode_pegawai}%");
+                    if ($request->filled('kode_pegawai')) {
+                        $query->where('kode_pegawai', 'LIKE', "%{$request->kode_pegawai}%");
                     }
 
-                    if ($request->filled("startDate") && $request->filled("endDate")) {
+                    if ($request->filled('startDate') && $request->filled('endDate')) {
                         $query->whereBetween('created_at', [$request->startDate, $request->endDate]);
                     }
                 })
@@ -253,11 +248,7 @@ class CollectController extends Controller
     {
         $data = Collector::with('photoCollectRelasi', 'pegawaiRelasi')->findOrFail($id);
 
-        if (
-            !auth()->user()->hasRole('Admin') &&
-            auth()->user()->kode_pegawai != $data->kode_pegawai &&
-            !auth()->user()->can('collect-approve')
-        ) {
+        if (auth()->user()->hasRole('Collector') && auth()->user()->kode_pegawai != $data->kode_pegawai) {
             return abort(403);
         }
 
@@ -270,11 +261,7 @@ class CollectController extends Controller
     {
         $data = Collector::with('photoCollectRelasi', 'pegawaiRelasi', 'collectTaskRelasi', 'collectTaskPpnRelasi')->findOrFail($id);
 
-        if (
-            !auth()->user()->hasRole('Admin')
-            && !auth()->user()->can('collect-approve')
-            && auth()->user()->kode_pegawai != $data->kode_pegawai
-        ) {
+        if (auth()->user()->hasRole('Collector') && auth()->user()->kode_pegawai != $data->kode_pegawai) {
             return abort(403);
         }
 
