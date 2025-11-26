@@ -30,7 +30,7 @@ class ApiCollectIdyPpnController extends Controller
             'customer_address' => 'required|string|max:128',
             'customer_telp' => 'required|string|min:1|max:128',
             'customer_fax' => 'required|string|min:1|max:128',
-            'shipping_address' => 'required|string',
+            'shipping_address' => 'min:0',
             'total_bill' => 'required|numeric|min:0',
             'remaining_bill' => 'required|numeric|min:0',
             'assign_date' => 'required|date',
@@ -44,7 +44,7 @@ class ApiCollectIdyPpnController extends Controller
 
         $task = CollectIdyPpn::withTrashed()->where('no_sr', '=', $data['no_sr'])->first();
 
-        $status_terbaru = "Menunggu Piutang untuk Assign ke Kolektor [tipe: " . $data['sr_type'] . "].";
+        $status_terbaru = 'Menunggu Piutang untuk Assign ke Kolektor [tipe: '.$data['sr_type'].'].';
 
         try {
             DB::beginTransaction();
@@ -60,7 +60,7 @@ class ApiCollectIdyPpnController extends Controller
                     'bill_status' => 0,
                     'assign_to' => null,
                     'assign_by' => null,
-                    'assign_date' => $data['assign_date']
+                    'assign_date' => $data['assign_date'],
                 ]);
             } else {
                 CollectIdyPpn::create($data);
@@ -74,9 +74,11 @@ class ApiCollectIdyPpnController extends Controller
             );
 
             DB::commit();
+
             return new ApiResource(true, 'Tagihan berhasil diproses!', null);
         } catch (\Exception $e) {
             DB::rollBack();
+
             return new ApiResource(false, 'Terjadi kesalahan saat memproses tagihan', $e->getMessage());
         }
     }
@@ -87,7 +89,7 @@ class ApiCollectIdyPpnController extends Controller
             ->where('no_sr', $no_sr)
             ->first();
 
-        if (!$query) {
+        if (! $query) {
             return new ApiResource(false, 'Tagihan tidak ditemukan', null);
         }
 
@@ -106,7 +108,7 @@ class ApiCollectIdyPpnController extends Controller
 
         $query = CollectIdyPpn::find($id);
 
-        if (!$query) {
+        if (! $query) {
             return new ApiResource(false, 'Tagihan tidak ditemukan', null);
         }
 
@@ -127,7 +129,7 @@ class ApiCollectIdyPpnController extends Controller
         // validasi input
         $validator = Validator::make($request->all(), [
             'assign_to' => 'required|integer',
-            'assign_by' => 'required|integer'
+            'assign_by' => 'required|integer',
         ]);
 
         if ($validator->fails()) {
@@ -137,7 +139,7 @@ class ApiCollectIdyPpnController extends Controller
         // cari data kolektor
         $collector = Pegawai::where('kode_pegawai', $request->assign_to)->first();
 
-        if (!$collector) {
+        if (! $collector) {
             // kalo ga ada return pesan error
             return new ApiResource(false, "Kolektor dengan kode jari $request->assign_to, tidak ditemukan.", null);
         }
@@ -145,14 +147,14 @@ class ApiCollectIdyPpnController extends Controller
         // kalo ada, lanjut cari data tagihan
         $query = CollectIdyPpn::find($id);
 
-        if (!$query) {
+        if (! $query) {
             // kalo ga ada return pesan error
             return new ApiResource(false, "Tagihan dengan kode $id tidak ditemukan", null);
         }
 
         $sr_type = $this->getSrType($query->sr_type);
 
-        $status_terbaru = 'Sedang dibawa Kolektor [' . $collector->full_name . '] ke alamat penagihan [' . $query->customer_address . '] dengan tipe ' . $sr_type . '.';
+        $status_terbaru = 'Sedang dibawa Kolektor ['.$collector->full_name.'] ke alamat penagihan ['.$query->customer_address.'] dengan tipe '.$sr_type.'.';
 
         try {
             DB::beginTransaction();
@@ -185,9 +187,11 @@ class ApiCollectIdyPpnController extends Controller
                 ->delay(now()->addSeconds(5));
 
             DB::commit();
+
             return new ApiResource(true, 'Tagihan berhasil di assign', null);
         } catch (\Exception $e) {
             DB::rollBack();
+
             return new ApiResource(false, 'Terjadi kesalahan saat assign tagihan', $e->getMessage());
         }
     }
@@ -208,7 +212,7 @@ class ApiCollectIdyPpnController extends Controller
         $query = CollectIdyPpn::find($id);
 
         // kalo ga ada, return error
-        if (!$query) {
+        if (! $query) {
             return new ApiResource(false, 'Tagihan tidak ditemukan', 'Tagihan yang ingin direschedule tidak ditemukan');
         }
 
@@ -216,13 +220,13 @@ class ApiCollectIdyPpnController extends Controller
         try {
             // update tanggal
             $query->update([
-                'assign_date' => $request['date']
+                'assign_date' => $request['date'],
             ]);
 
             // update detail dan status invoice
             $this->updateInvoiceStatus(
                 $query->tax_invoice,
-                'Tagihan [' . $query->tax_invoice . '] telah direschedule ke tanggal ' . $request['date'] . '.',
+                'Tagihan ['.$query->tax_invoice.'] telah direschedule ke tanggal '.$request['date'].'.',
                 1
             );
 
@@ -236,7 +240,7 @@ class ApiCollectIdyPpnController extends Controller
     {
         $query = CollectIdyPpn::find($id);
 
-        if (!$query) {
+        if (! $query) {
             return new ApiResource(false, 'Tagihan tidak ditemukan', null);
         }
 
