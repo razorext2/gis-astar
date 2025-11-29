@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Collector;
-use App\Models\Driver;
 use App\Models\Pegawai;
-use App\Models\Sales;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -29,7 +26,7 @@ class RouteController extends Controller
                 $query->with('pegawai')
                     ->whereDate('created_at', $date)
                     ->orderBy('created_at', 'asc');
-            }
+            },
         ])->where('kode_pegawai', $id)
             ->firstOrFail();
 
@@ -57,8 +54,8 @@ class RouteController extends Controller
             'collectorReport' => function ($query) use ($date) {
                 $query->with('pegawaiRelasi')
                     ->whereDate('assign_date', $date)
-                    ->orderBy('updated_at', 'desc');
-            }
+                    ->orderBy('assign_at', 'asc');
+            },
         ])->where('kode_pegawai', $id)
             ->firstOrFail();
 
@@ -87,7 +84,7 @@ class RouteController extends Controller
                 $query->with('pegawaiRelasi')
                     ->whereDate('created_at', $date)
                     ->orderBy('created_at', 'asc');
-            }
+            },
         ])->where('kode_pegawai', $id)->firstOrFail();
 
         // Kembalikan view dengan data $pegawai
