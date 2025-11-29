@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Storage;
 class Collector extends Model
 {
     use HasFactory, SoftDeletes;
+
     protected $table = 'tb_collect';
+
     protected $fillable = [
         'no_sr',
         'bill_type',
@@ -27,10 +29,14 @@ class Collector extends Model
         'payment_amount',
         'no_giro',
         'validate_by',
+        'validated_at',
         'assign_date',
         'assign_at',
         'total_revision',
         'revised_by',
+        'revised_at',
+        'filled_by',
+        'filled_at',
     ];
 
     protected $dates = ['deleted_at'];
@@ -54,8 +60,9 @@ class Collector extends Model
     {
         $words = explode(' ', $this->location);
         if (count($words) > 4) {
-            return implode(' ', array_slice($words, 0, 8)) . ' ...';
+            return implode(' ', array_slice($words, 0, 8)).' ...';
         }
+
         return $this->location;
     }
 
@@ -63,8 +70,9 @@ class Collector extends Model
     {
         $words = explode(' ', $this->title);
         if (count($words) > 3) {
-            return implode(' ', array_slice($words, 0, 3)) . '';
+            return implode(' ', array_slice($words, 0, 3)).'';
         }
+
         return $this->title;
     }
 
@@ -101,5 +109,20 @@ class Collector extends Model
     public function scopeNeedApprove($query)
     {
         return $query->where('status', 2);
+    }
+
+    public function filledBy()
+    {
+        return $this->belongsTo(User::class, 'filled_by', 'id');
+    }
+
+    public function revisedBy()
+    {
+        return $this->belongsTo(User::class, 'revised_by', 'id');
+    }
+
+    public function validatedBy()
+    {
+        return $this->belongsTo(User::class, 'validate_by', 'id');
     }
 }

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Http\Resources\ApiResource;
+use App\Jobs\NotifyCollectorHasUpdatedReportJob;
 use App\Models\CollectIdyPpn;
 use App\Models\Collector;
 use App\Models\CollectTask;
@@ -9,15 +12,12 @@ use App\Models\CollectTaskPpn;
 use App\Models\Invoice;
 use App\Models\InvoiceDetail;
 use App\Models\PhotoCollect;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\ApiResource;
-use App\Jobs\NotifyCollectorHasUpdatedReportJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class ApiCollectController extends Controller
 {
@@ -25,6 +25,11 @@ class ApiCollectController extends Controller
     {
         // cari data
         $query = Collector::find($id);
+
+        // Jika data tidak ditemukan
+        if (! $query) {
+            return new ApiResource(false, 'Laporan tidak ditemukan', null);
+        }
 
         // validasi input
         $validator = Validator::make($request->all(), [
@@ -58,11 +63,6 @@ class ApiCollectController extends Controller
             return new ApiResource(false, 'Gagal melakukan update', '<b>Total bayar</b> tidak boleh melebihi <b>sisa tagihan</b>.');
         }
 
-        // Jika data tidak ditemukan
-        if (!$query) {
-            return new ApiResource(false, 'Laporan tidak ditemukan', null);
-        }
-
         $paid_status = match ($request->have_paid) {
             '0' => 'Belum bayar',
             '1' => 'Cicil',
@@ -73,10 +73,22 @@ class ApiCollectController extends Controller
             default => 'Status tidak diketahui',
         };
 
-        $status = 'Tagihan sudah tiba dialamat tujuan dengan status tagihan [' . $paid_status . ', ket: ' . strip_tags($request->keterangan) . ']';
+        $status = 'Tagihan sudah tiba dialamat tujuan dengan status tagihan ['.$paid_status.', ket: '.strip_tags($request->keterangan).']';
 
+        // cek statusnya = revisi atau bukan
         try {
             DB::beginTransaction();
+
+            // cek revisi bukannya
+            if ($query->status === 4) {
+                $query->update([
+                    // 'total_revision' => $query->total_revision + 1,
+                    'revised_by' => $request->user()->id,
+                    'revised_at' => now(),
+                    'validate_by' => null,
+                    'validated_at' => null,
+                ]);
+            }
 
             // update data collector
             $query->update([
@@ -88,27 +100,27 @@ class ApiCollectController extends Controller
                 'payment_amount' => $request->payment_amount,
                 'no_giro' => $request->no_giro,
                 'status' => 2,
-                'assign_at' => now(),
+                'assign_at' => now(), // sama kaya filled_at
                 'location' => $request->location,
-                'total_revision' => $query->total_revision + 1,
-                'revised_by' => $request->user()->id,
+                'filled_by' => $request->user()->id,
+                'filled_at' => now(), // sama kaya assign_at
             ]);
 
             // upload dokumentasi
             $folderPath = 'collectors';
             $documents = [];
 
-            if (!Storage::disk('public')->exists($folderPath)) {
+            if (! Storage::disk('public')->exists($folderPath)) {
                 Storage::disk('public')->makeDirectory($folderPath);
             }
 
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
-                    $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
+                    $imageName = uniqid().'.'.$image->getClientOriginalExtension();
 
                     Storage::disk('public')->putFileAs($folderPath, $image, $imageName);
 
-                    $imageUrl = '/storage/' . $folderPath . '/' . $imageName;
+                    $imageUrl = '/storage/'.$folderPath.'/'.$imageName;
 
                     PhotoCollect::create([
                         'id_collect' => $id,
@@ -117,7 +129,7 @@ class ApiCollectController extends Controller
 
                     $documents[] = [
                         'nama_file' => $image->getClientOriginalName(),
-                        'path_file' => $folderPath . '/' . $imageName,
+                        'path_file' => $folderPath.'/'.$imageName,
                     ];
                 }
             }
@@ -134,9 +146,11 @@ class ApiCollectController extends Controller
                 ->delay(now()->addSeconds(5));
 
             DB::commit();
+
             return new ApiResource(true, 'Laporan berhasil diubah!', null);
         } catch (\Exception $e) {
             DB::rollBack();
+
             return new ApiResource(false, 'Terjadi kesalahan saat memproses request', $e->getMessage());
         }
     }
@@ -154,7 +168,7 @@ class ApiCollectController extends Controller
         // Cari data berdasarkan ID
         $query = Collector::find($id);
 
-        if (!$query) {
+        if (! $query) {
             return new ApiResource(false, 'Laporan tidak ditemukan', null);
         }
 
@@ -168,7 +182,7 @@ class ApiCollectController extends Controller
             default => null,
         };
 
-        if (!$task) {
+        if (! $task) {
             return new ApiResource(false, 'Nomor tagihan tidak ditemukan', null);
         }
 
@@ -184,6 +198,7 @@ class ApiCollectController extends Controller
             $query->update([
                 'status' => 1,
                 'validate_by' => $validate_by,
+                'validated_at' => now(),
             ]);
 
             // Update task
@@ -193,9 +208,11 @@ class ApiCollectController extends Controller
             ]);
 
             DB::commit();
+
             return new ApiResource(true, 'Laporan berhasil dikonfirmasi', null);
         } catch (\Exception $e) {
             DB::rollBack();
+
             return new ApiResource(false, 'Terjadi kesalahan saat memproses request', $e->getMessage());
         }
     }
@@ -204,7 +221,7 @@ class ApiCollectController extends Controller
     {
         $query = Collector::find($id); // Cari data berdasarkan ID
 
-        if (!$query) {
+        if (! $query) {
             return new ApiResource(false, 'Laporan tidak ditemukan', null);
         }
 
@@ -245,12 +262,15 @@ class ApiCollectController extends Controller
                 'status' => 3, // ubah status laporan menjadi ditolak (3)
                 'notes' => $request->notes,
                 'validate_by' => $validate_by,
+                'validated_at' => now(),
             ]);
 
             DB::commit();
+
             return new ApiResource(true, 'Laporan berhasil ditolak', null); // Kembalikan response JSON
         } catch (\Exception $e) {
             DB::rollBack();
+
             return new ApiResource(false, 'Terjadi kesalahan saat memproses request', $e->getMessage());
         }
     }
@@ -258,7 +278,7 @@ class ApiCollectController extends Controller
     public function revisionCollect(Request $request, $id)
     {
         $query = Collector::find($id); // Cari data berdasarkan ID
-        if (!$query) {
+        if (! $query) {
             return new ApiResource(false, 'Laporan tidak ditemukan', null);
         }
 
@@ -285,12 +305,15 @@ class ApiCollectController extends Controller
                 'notes' => $request->notes,
                 'validate_by' => $validate_by,
                 'total_revision' => $query->total_revision + 1,
+                'validated_at' => now(),
             ]);
 
             DB::commit();
+
             return new ApiResource(true, 'Permintaan revisi sudah dikirim.', null); // Kembalikan response JSON
         } catch (\Exception $e) {
             DB::rollBack();
+
             return new ApiResource(false, 'Terjadi kesalahan saat memproses request', $e->getMessage());
         }
     }
@@ -299,16 +322,17 @@ class ApiCollectController extends Controller
     {
         $query = Collector::findOrFail($id);
 
-        if (!$query) {
+        if (! $query) {
             return new ApiResource(false, 'Data tidak ditemukan', null);
         }
 
-        if (!$request->user()->can('collect-delete')) {
+        if (! $request->user()->can('collect-delete')) {
             return abort(403);
         }
 
         try {
             $query->delete();
+
             return new ApiResource(true, 'Laporan berhasil dihapus', null);
         } catch (\Exception $e) {
             return new ApiResource(false, 'Terjadi kesalahan saat menghapus laporan', null);
@@ -317,16 +341,19 @@ class ApiCollectController extends Controller
 
     protected function updateInvoiceStatus($no_faktur_pajak, $status_terbaru, $status_pengiriman, array $documents)
     {
-        $invoice = Invoice::where('no_faktur_pajak', $no_faktur_pajak)->update([
-            'status_pengiriman' => $status_pengiriman,
-            'status_terbaru' => $status_terbaru,
-        ]);
+        // update status pengiriman dan status terbaru invoice
+        $invoice = Invoice::where('no_faktur_pajak', $no_faktur_pajak)
+            ->update([
+                'status_pengiriman' => $status_pengiriman,
+                'status_terbaru' => $status_terbaru,
+            ]);
 
         if ($invoice === 0) {
             // jika tidak ada yg diupdate, return false
             return false;
         }
 
+        // tambah riwayat invoice
         InvoiceDetail::create([
             'no_faktur_pajak' => $no_faktur_pajak,
             'status_btt' => 'ada',
@@ -336,6 +363,5 @@ class ApiCollectController extends Controller
             'added_by' => Auth::id(),
         ]);
 
-        return true;
     }
 }
