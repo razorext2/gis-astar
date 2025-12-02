@@ -1,7 +1,7 @@
 @props(['class' => '', 'id', 'name', 'labels' => true, 'type' => 'text', 'default' => null])
 
 @if ($labels)
-	<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+	<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
 		for="{{ $id }}">{{ $slot }}</label>
 @endif
 

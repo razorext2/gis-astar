@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
 class Pegawai extends Model
 {
     use HasFactory;
 
     protected $table = 'tb_pegawai';
+
     protected $fillable = [
         'id',
         'kode_pegawai',
@@ -23,13 +24,8 @@ class Pegawai extends Model
         'golongan',
         'tgl_lahir',
         'gender',
-        'bio'
+        'bio',
     ];
-
-    public function collectorReportRelasi()
-    {
-        return $this->hasMany(Collector::class, 'kode_pegawai', 'kode_pegawai');
-    }
 
     public function userRelasi()
     {

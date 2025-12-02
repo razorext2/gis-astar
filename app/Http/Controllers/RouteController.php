@@ -42,27 +42,15 @@ class RouteController extends Controller
         return view('dashboard.routes.collector.show');
     }
 
-    public function detailCollector($id, Request $request)
+    public function detailCollector($id)
     {
-        $date = Carbon::today();
-
-        if ($request->query('date')) {
-            $date = Carbon::parse($request->query('date'))->isoFormat('YYYY-MM-DD');
-        }
-
-        $report = Pegawai::with([
-            'collectorReport' => function ($query) use ($date) {
-                $query->with('pegawaiRelasi')
-                    ->whereDate('assign_date', $date)
-                    ->orderBy('assign_at', 'asc');
-            },
-        ])->where('kode_pegawai', $id)
+        $pegawai = Pegawai::select('kode_pegawai', 'full_name')
+            ->where('kode_pegawai', $id)
             ->firstOrFail();
 
         // Kembalikan view dengan data $pegawai
         return view('dashboard.routes.collector.detail', [
-            'report' => $report->collectorReport,
-            'pegawai' => $report,
+            'pegawai' => $pegawai,
         ]);
     }
 
