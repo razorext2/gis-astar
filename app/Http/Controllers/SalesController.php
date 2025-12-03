@@ -12,11 +12,11 @@ use Yajra\DataTables\Facades\DataTables;
 
 class SalesController extends Controller
 {
-    function __construct()
+    public function __construct()
     {
-        $this->middleware("permission:sales-list", ['only' => 'index', 'show']);
-        $this->middleware("permission:sales-create", ['only' => 'create']);
-        $this->middleware("permission:sales-edit", ['only' => 'edit']);
+        $this->middleware('permission:sales-list', ['only' => 'index', 'show']);
+        $this->middleware('permission:sales-create', ['only' => 'create']);
+        $this->middleware('permission:sales-edit', ['only' => 'edit']);
     }
 
     /**
@@ -31,8 +31,15 @@ class SalesController extends Controller
                 $user = Auth::user();
 
                 // Jika user tidak memiliki izin 'sales-approve', batasi berdasarkan kode pegawai
-                if (!$user->can('sales-approve')) {
+                if (! $user->can('sales-approve')) {
                     $query->where('kode_pegawai', $user->kode_pegawai);
+                }
+
+                // Filter relasi user yang memiliki role 'Kurir-Bank
+                if ($user->hasRole('Kasir')) {
+                    $query->whereHas('userRelasi.roles', function ($role) {
+                        $role->where('name', 'Kurir-Bank');
+                    });
                 }
 
                 // Filter relasi user yang memiliki role 'Sales'
@@ -66,8 +73,8 @@ class SalesController extends Controller
                             [
                                 'id' => 'show-btn',
                                 'action' => route('sales.show', $data->id),
-                                'label' => 'Detail'
-                            ]
+                                'label' => 'Detail',
+                            ],
                         ];
 
                         if (auth()->user()->can('sales-approve')) {
@@ -81,7 +88,7 @@ class SalesController extends Controller
                                 $actions[] = [
                                     'id' => 'edit-btn',
                                     'action' => route('sales.edit', $data->id),
-                                    'label' => 'Edit'
+                                    'label' => 'Edit',
                                 ];
 
                                 $actions[] = [
@@ -100,10 +107,10 @@ class SalesController extends Controller
                             return view('components.dashboard.single-button', [
                                 'id' => $data->id,
                                 'data' => [
-                                    'id' => 'detailBtn' . $data->id,
+                                    'id' => 'detailBtn'.$data->id,
                                     'action' => route('sales.show', $data->id),
                                     'label' => 'Detail',
-                                ]
+                                ],
                             ])->render();
                         }
                     })
@@ -139,25 +146,25 @@ class SalesController extends Controller
                         ])->render();
                     })
                     ->filter(function ($query) use ($request) {
-                        if ($request->filled("kode_pegawai")) {
+                        if ($request->filled('kode_pegawai')) {
                             $query->whereHas('pegawaiRelasi', function ($query) use ($request) {
-                                $query->where('full_name', "LIKE", "%{$request->kode_pegawai}%");
+                                $query->where('full_name', 'LIKE', "%{$request->kode_pegawai}%");
                             });
                         }
 
-                        if ($request->filled("title")) {
-                            $query->where('title', "LIKE", "%{$request->title}%");
+                        if ($request->filled('title')) {
+                            $query->where('title', 'LIKE', "%{$request->title}%");
                         }
 
-                        if ($request->filled("customer_name")) {
-                            $query->where('customer_name', "LIKE", "%{$request->customer_name}%");
+                        if ($request->filled('customer_name')) {
+                            $query->where('customer_name', 'LIKE', "%{$request->customer_name}%");
                         }
 
-                        if ($request->filled("status")) {
-                            $query->where('status', "LIKE", "%{$request->status}%");
+                        if ($request->filled('status')) {
+                            $query->where('status', 'LIKE', "%{$request->status}%");
                         }
 
-                        if ($request->filled("startDate") && $request->filled("endDate")) {
+                        if ($request->filled('startDate') && $request->filled('endDate')) {
                             $query->whereBetween('created_at', [$request->startDate, $request->endDate]);
                         }
 
@@ -171,11 +178,11 @@ class SalesController extends Controller
                     ->rawColumns(['actions', 'title', 'customer_name', 'kode_pegawai', 'lokasi', 'created_at'])
                     ->toJson();
             } catch (\Exception $e) {
-                return new ApiResource(false, "Terjadi kesalahan saat mengambil data", $e->getMessage());
+                return new ApiResource(false, 'Terjadi kesalahan saat mengambil data', $e->getMessage());
             }
         }
 
-        return view("dashboard.sales.index");
+        return view('dashboard.sales.index');
     }
 
     /**
@@ -183,7 +190,7 @@ class SalesController extends Controller
      */
     public function create()
     {
-        if (!auth()->user()->can('sales-create')) {
+        if (! auth()->user()->can('sales-create')) {
             return abort(403);
         }
 
@@ -197,7 +204,7 @@ class SalesController extends Controller
     {
         $data = Sales::with(['pegawaiRelasi:kode_pegawai,full_name', 'photoCollectRelasi', 'validateBy'])->findOrFail($id);
 
-        if ($data->kode_pegawai != auth()->user()->kode_pegawai && !auth()->user()->can('sales-approve')) {
+        if ($data->kode_pegawai != auth()->user()->kode_pegawai && ! auth()->user()->can('sales-approve')) {
             return abort(403);
         }
 
@@ -211,7 +218,7 @@ class SalesController extends Controller
     {
         $data = Sales::with(['pegawaiRelasi:kode_pegawai,full_name', 'photoCollectRelasi'])->findOrFail($id);
 
-        if ($data->kode_pegawai != auth()->user()->kode_pegawai && !auth()->user()->can('sales-approve')) {
+        if ($data->kode_pegawai != auth()->user()->kode_pegawai && ! auth()->user()->can('sales-approve')) {
             return abort(403);
         }
 

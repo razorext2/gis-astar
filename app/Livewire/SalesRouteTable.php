@@ -38,20 +38,24 @@ final class SalesRouteTable extends PowerGridComponent
         $this->user = Auth::user();
         $query = User::query()->with(['pegawai', 'roles']);
 
-        if ($this->user->hasRole(['Marketing'])) {
-            $query->role(['sales']);
+        if ($this->user->hasRole('Kasir')) {
+            $query->whereHas('roles', fn ($role) => $role->where('name', 'Kurir-Bank'));
+        }
+
+        if ($this->user->hasRole('Marketing')) {
+            $query->whereHas('roles', fn ($role) => $role->where('name', 'Sales'));
         }
 
         if ($this->user->hasRole(['Marketing-PKU', 'Management-PKU'])) {
-            $query->role(['sales-pku']);
+            $query->whereHas('roles', fn ($role) => $role->where('name', 'Sales-PKU'));
         }
 
         if ($this->user->hasRole(['Marketing-JKT', 'Management-JKT'])) {
-            $query->role(['sales-jkt']);
+            $query->whereHas('roles', fn ($role) => $role->where('name', 'Sales-JKT'));
         }
 
         if ($this->user->hasRole(['Admin', 'Management', 'Management-Special'])) {
-            $query->role(['sales', 'sales-jkt', 'sales-pku']);
+            $query->whereHas('roles', fn ($role) => $role->whereIn('name', ['Sales', 'Sales-PKU', 'Sales-JKT']));
         }
 
         return $query;
@@ -81,7 +85,9 @@ final class SalesRouteTable extends PowerGridComponent
         return [
             Column::action('Action')
                 ->bodyAttribute('text-center'),
+
             Column::make('UserID', 'id'),
+
             Column::make('Kode Pegawai', 'kode_pegawai')
                 ->sortable()
                 ->searchable(),
@@ -100,16 +106,32 @@ final class SalesRouteTable extends PowerGridComponent
 
     public function filters(): array
     {
-        return [
-            Filter::select('role', 'role')
+        $filters = [];
+
+        if (Auth::user()->can('sales-export-all')) {
+            $filters[] = Filter::select('role', 'role')
                 ->dataSource([
-                    ['name' => 'Sales Medan', 'value' => 'sales'],
-                    ['name' => 'Sales Pekanbaru', 'value' => 'sales-pku'],
-                    ['name' => 'Sales Jakarta', 'value' => 'sales-jkt'],
+                    ['name' => 'Sales Medan', 'value' => 'Sales'],
+                    ['name' => 'Sales Pekanbaru', 'value' => 'Sales-PKU'],
+                    ['name' => 'Sales Jakarta', 'value' => 'Sales-JKT'],
+                    ['name' => 'Kurir Bank', 'value' => 'Kurir-Bank'],
                 ])
                 ->optionLabel('name')
-                ->optionValue('value'),
-        ];
+                ->optionValue('value')
+                ->builder(fn (Builder $builder, string $value) => $builder->whereHas(
+                    'roles',
+                    fn (Builder $roleQuery) => $roleQuery->where('name', $value)
+                ));
+        }
+
+        $filters[] = Filter::inputText('name', 'name')
+            ->placeholder('Nama');
+
+        $filters[] = Filter::inputText('kode_pegawai', 'kode_pegawai')
+            ->placeholder('Kode Jari');
+
+        return $filters;
+
     }
 
     public function actions(User $row): array
