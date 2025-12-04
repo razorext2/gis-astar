@@ -141,16 +141,23 @@
 
         // Fungsi untuk inisialisasi peta dengan koordinat yang diberikan
         function initializeMap() {
+            // Titik tengah Indonesia
             var defaultCoords = [-2.544021, 118.042905];
+            var defaultZoom = 5;
+            // Batas kasar wilayah Indonesia (barat ke timur)
+            var indoBounds = L.latLngBounds([
+                [-11.2, 94.5],
+                [6.1, 141.1]
+            ]);
 
             // Inisialisasi peta tanpa titik awal
-            map = L.map('map').setView(defaultCoords, 4); // Default location
+            map = L.map('map').setView(defaultCoords, defaultZoom); // Default location
 
-            // Menambahkan Tile Layer dari OpenStreetMap
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 18,
-                attribution: '&copy; OpenStreetMap contributors'
-            }).addTo(map);
+            // Menambahkan Tile Layer satelit (Esri World Imagery)
+            L.tileLayer(
+                'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                    maxZoom: 18
+                }).addTo(map);
 
 
             // Ambil data rute dari Blade sekali, lalu olah di JS
@@ -199,9 +206,20 @@
             });
 
             // Menentukan bounds (batas) untuk menampilkan semua marker
-            if (waypoints.length > 1) {
+            if (waypoints.length > 0) {
                 var bounds = L.latLngBounds(waypoints.map(point => point.coords));
-                map.fitBounds(bounds); // Otomatis menyesuaikan peta agar mencakup semua titik
+                // Perluas bounds agar tetap mencakup wilayah timur Indonesia
+                bounds.extend(indoBounds);
+                map.fitBounds(bounds, {
+                    padding: [30, 30],
+                    maxZoom: 18
+                });
+            } else {
+                // Tanpa data, tetap tampilkan keseluruhan Indonesia
+                map.fitBounds(indoBounds, {
+                    padding: [30, 30],
+                    maxZoom: 6
+                });
             }
 
             attachHoverEvents();
