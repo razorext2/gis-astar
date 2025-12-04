@@ -144,6 +144,10 @@ class ApiCollectTaskPpnController extends Controller
             return new ApiResource(false, "Kolektor dengan kode jari $request->assign_to, tidak ditemukan.", null);
         }
 
+        if (! $collector->userRelasi->hasAnyRole('Collector')) {
+            return new ApiResource(false, "Staff dengan kode jari $request->assign_to, bukan seorang kolektor.", null);
+        }
+
         // kalo ada, lanjut cari data tagihan
         $query = CollectTaskPpn::find($id);
 

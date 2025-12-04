@@ -129,6 +129,10 @@ class ApiCollectTaskController extends Controller
             return new ApiResource(false, "Kolektor dengan kode jari $request->assign_to, tidak ditemukan.", null);
         }
 
+        if (! $collector->userRelasi->hasAnyRole('Collector')) {
+            return new ApiResource(false, "Staff dengan kode jari $request->assign_to, bukan seorang kolektor.", null);
+        }
+
         $query = CollectTask::find($id);
 
         if (! $query) {
