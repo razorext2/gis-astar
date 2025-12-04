@@ -20,7 +20,8 @@
             Filter:
         </p>
 
-        <form class="flex flex-row items-end gap-2" wire:submit="search" method="POST">
+        <form class="grid grid-cols-2 items-end gap-2 lg:flex lg:grid-cols-none lg:flex-row" wire:submit="search"
+            method="POST">
 
             <div class="w-full">
                 <input id="datepicker-route-collector" name="datepicker-route-colelctor" type="date"
@@ -40,7 +41,7 @@
                     wire:model="role" />
             </div>
 
-            <div class="flex flex-row gap-2">
+            <div class="flex flex-row justify-end gap-2">
                 <x-button.primary class="h-fit items-center" id="submit" type="submit">
                     Cari
                 </x-button.primary>
@@ -147,7 +148,7 @@
 
             // Menambahkan Tile Layer dari OpenStreetMap
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 5,
+                maxZoom: 18,
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(map);
 
@@ -182,12 +183,8 @@
                         icon: L.icon({
                             iconUrl: icon, // Ganti dengan path ke ikon Anda
                             iconSize: [25, 41], // Ukuran ikon
-                            iconAnchor: [12,
-                                41
-                            ], // Titik untuk mengaitkan ikon ke koordinat
-                            popupAnchor: [0, -
-                                25
-                            ], // Geser popup agar lebih rapi terhadap marker
+                            iconAnchor: [12, 41],
+                            popupAnchor: [0, -25],
                             shadowUrl: "{{ asset('assets/img/marker-shadow.png') }}", // Ganti dengan path ke bayangan Anda
                             shadowSize: [41, 41] // Ukuran bayangan
                         })
