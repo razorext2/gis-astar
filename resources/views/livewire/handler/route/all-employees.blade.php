@@ -222,13 +222,13 @@
                 });
             }
 
-            attachHoverEvents();
+            attachClickEvent();
         }
 
         // Inisialisasi peta dengan koordinat default
         initializeMap();
 
-        function attachHoverEvents() {
+        function attachClickEvent() {
             var listItems = document.querySelectorAll('#collectContent [data-marker-index]');
 
             listItems.forEach(function(item) {
@@ -244,7 +244,15 @@
                     });
 
                     marker.openPopup();
-                    map.panTo(marker.getLatLng());
+                    var targetLatLng = marker.getLatLng();
+                    var targetZoom = Math.max(map.getZoom(), 7);
+                    map.setView(targetLatLng, targetZoom, {
+                        animate: true,
+                        duration: 0.4
+                    });
+                    map.once('moveend', function() {
+                        marker.openPopup();
+                    });
 
                     var mapElement = document.getElementById('map');
                     if (mapElement) {
@@ -255,6 +263,14 @@
                             top: targetY,
                             behavior: 'smooth'
                         });
+                        // Setelah scroll selesai, pastikan ukuran map valid lalu pusatkan lagi ke marker
+                        setTimeout(function() {
+                            map.invalidateSize();
+                            map.setView(targetLatLng, targetZoom, {
+                                animate: false
+                            });
+                            marker.openPopup();
+                        }, 250);
                     }
                 });
             });
