@@ -20,14 +20,15 @@
 @vite('resources/js/app.js')
 
 @if (Route::is('pegawai.timeline') ||
-		Route::is('placement.create') ||
-		Route::is('placement.edit') ||
-		Route::is('pegawai.collectors') ||
-		Route::is('pegawai.sales') ||
-		Route::is('routes.driver.detail') ||
-		Route::is('routes.collector.detail') ||
-		Route::is('routes.sales.detail'))
-	@vite('resources/js/global/leaflet.js')
+        Route::is('placement.create') ||
+        Route::is('placement.edit') ||
+        Route::is('pegawai.collectors') ||
+        Route::is('pegawai.sales') ||
+        Route::is('routes.driver.detail') ||
+        Route::is('routes.collector.detail') ||
+        Route::is('routes.sales.detail') ||
+        Route::is('map.distribution'))
+    @vite('resources/js/global/leaflet.js')
 @endif
 
 <!-- Datatables Tailwind -->
