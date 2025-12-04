@@ -654,7 +654,7 @@
 								href="{{ route('kuesioner.index') }}" wire:navigate
 								wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-dark-primary">
 								<x-icons.question-circle class="h-6 w-6 group-hover:text-red-600" />
-								<span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Kuesioner</span>
+								<span class="ms-3 flex-1  text-sm group-hover:text-red-600">Kuesioner</span>
 							</a>
 						</li> --}}
 
@@ -772,7 +772,7 @@
                 <li>
                     <a href="{{ route('map.distribution') }}"
                         class="group flex flex-row items-center rounded-xl p-2 text-gray-900 hover:text-red-600 dark:text-gray-300"
-                        wire:navigate wire:current.href="!text-red-600 font-bold bg-gray-100 dark:bg-dark-primary">
+                        wire:current.href="!text-red-600 font-bold bg-gray-100 dark:bg-dark-primary">
 
                         <x-icons.book-open wire:current="!text-red-600" class="h-6 w-6 group-hover:text-red-600" />
                         <span class="ms-3 inline-flex text-sm group-hover:text-red-600">
