@@ -201,6 +201,7 @@ class ApiAttendanceController extends Controller
                 $filename.'.png',
                 $no_vt,
                 $request->keterangan,
+                $this->isInMedan($request->latitude, $request->longitude) ? 'MEDAN' : 'NON MEDAN',
             );
 
             return new ApiResource(true, 'Verifikasi absensi sedang diproses...', 'Silahkan menunggu beberapa saat.');
@@ -213,5 +214,10 @@ class ApiAttendanceController extends Controller
 
             return new ApiResource(false, 'Terjadi kegagalan.', $e->getMessage());
         }
+    }
+
+    protected function isInMedan($latitude, $longitude)
+    {
+        return $latitude >= 3.50 && $latitude <= 3.78 && $longitude >= 98.58 && $longitude <= 98.75;
     }
 }

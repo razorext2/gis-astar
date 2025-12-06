@@ -31,10 +31,12 @@ class ProcessFaceRecognition implements ShouldQueue
 
     protected ?string $keterangan;
 
+    protected ?string $lokasi;
+
     /**
      * Create a new job instance.
      */
-    public function __construct($model, $id, $img_path, $user_id, $kode_pegawai, $filename, $no_vt, $keterangan)
+    public function __construct($model, $id, $img_path, $user_id, $kode_pegawai, $filename, $no_vt, $keterangan, $lokasi)
     {
         $this->model = $model;
         $this->id = $id;
@@ -44,6 +46,7 @@ class ProcessFaceRecognition implements ShouldQueue
         $this->filename = $filename;
         $this->no_vt = $no_vt;
         $this->keterangan = $keterangan;
+        $this->lokasi = $lokasi;
     }
 
     /**
@@ -123,6 +126,7 @@ class ProcessFaceRecognition implements ShouldQueue
                     'waktu' => $data->waktuori,
                     'kodebarcode' => $this->no_vt,
                     'keterangan' => $this->keterangan,
+                    'lokasi' => $this->lokasi,
                 ]);
 
                 dump($api->json());
