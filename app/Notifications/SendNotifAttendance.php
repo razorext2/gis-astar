@@ -3,8 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\WebPush\WebPushChannel;
 use NotificationChannels\WebPush\WebPushMessage;
@@ -14,7 +12,9 @@ class SendNotifAttendance extends Notification
     use Queueable;
 
     protected $data_id;
+
     protected $message;
+
     protected $type;
 
     /**
@@ -53,11 +53,11 @@ class SendNotifAttendance extends Notification
 
         return [
             'message' => $this->message,
-            "button" => [
-                "url" => route("{$route}.index", $this->data_id),
-                "label" => "Periksa",
+            'button' => [
+                'url' => route("{$route}.index", $this->data_id),
+                'label' => 'Periksa',
             ],
-            "created_at" => now(),
+            'created_at' => now(),
 
         ];
     }
@@ -74,8 +74,8 @@ class SendNotifAttendance extends Notification
         return (new WebPushMessage)
             ->title('PT. Indodacin Presisi Utama')
             ->body($this->message)
-            ->icon('https://indodacin.dev/assets/img/logo.ico')
-            ->badge('https://indodacin.dev/assets/img/logo.ico')
+            ->icon(asset('assets/img/logo.ico'))
+            ->badge(asset('assets/img/logo.ico'))
             ->action('Periksa', route("{$route}.index", $this->data_id))
             ->tag('Indodacin')
             ->data([
