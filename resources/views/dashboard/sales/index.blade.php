@@ -83,7 +83,7 @@
                         '3' => 'Judul Laporan',
                         '4' => 'Customer',
                         '5' => 'Lokasi',
-                        '6' => 'Created / Updated',
+                        '6' => 'Waktu Dibuat',
                     ]" />
                 </div>
 

@@ -141,8 +141,8 @@ class SalesController extends Controller
                     })
                     ->editColumn('created_at', function ($data) {
                         return view('components.dashboard.created-updated', [
-                            'created' => $data->created_at->locale('id')->isoFormat('D MMM YYYY / HH:MM:ss') ?? 'N/A',
-                            'updated' => $data->updated_at->locale('id')->isoFormat('D MMM YYYY / HH:MM:ss') ?? 'N/A',
+                            'created' => $data->created_at,
+                            'updated' => '',
                         ])->render();
                     })
                     ->filter(function ($query) use ($request) {
