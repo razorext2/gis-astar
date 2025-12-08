@@ -44,9 +44,9 @@ class ProcessFaceRecognition implements ShouldQueue
         $this->user_id = $user_id;
         $this->kode_pegawai = $kode_pegawai;
         $this->filename = $filename;
-        $this->no_vt = $no_vt;
-        $this->keterangan = $keterangan;
-        $this->lokasi = $lokasi;
+        $this->no_vt = $this->sanitizeValue($no_vt);
+        $this->keterangan = $this->sanitizeValue($keterangan);
+        $this->lokasi = $this->sanitizeValue($lokasi);
     }
 
     /**
@@ -182,5 +182,15 @@ class ProcessFaceRecognition implements ShouldQueue
         $user = User::where('kode_pegawai', $this->kode_pegawai)->first();
 
         $user->notify(new SendNotifAttendance($message, $data_id, $type));
+    }
+
+    private function sanitizeValue($value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        // Hilangkan simbol yang berpotensi dipakai untuk injection
+        return preg_replace("/['\"]/", '', (string) $value);
     }
 }
