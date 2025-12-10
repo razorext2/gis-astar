@@ -35,6 +35,7 @@ class Create extends Component
 
         if (! empty($invoice)) {
             $this->fetchDataForm->nofakturpajak = $invoice->no_faktur_pajak;
+            $this->fetchDataForm->tipe_tagihan = $invoice->tipe_tagihan;
             $this->addForm->btt_number = $invoice->nomor_btt;
             $this->addForm->btt_created_at = $invoice->tgl_btt;
             $this->addForm->company_name = $invoice->nama_customer;
@@ -61,11 +62,26 @@ class Create extends Component
 
     public function fetchFakturPajak()
     {
+        // validasi
+        $this->fetchDataForm->validate();
+
         // tampilkan loading modal
-        $data = $this->fetchDataForm->fetch();
+        $api = null;
+
+        if ($this->fetchDataForm->tipe_tagihan == 'idcppn') {
+            $api = $this->fetchDataForm->fetchIdc();
+        } elseif ($this->fetchDataForm->tipe_tagihan == 'idyppn') {
+            $api = $this->fetchDataForm->fetchIdy();
+        } else {
+            $api = null;
+        }
+
+        if ($api['status'] == 'error') {
+            return $this->dispatch('swal', icon: 'error', text: $api['message'], title: 'Error');
+        }
 
         // check dari database
-        $invoice = Invoice::with('details')->where('no_faktur_pajak', $data['data'][0]['NomorFakturPajak'])->first();
+        $invoice = Invoice::with('details')->where('no_faktur_pajak', $api['data'][0]['NomorFakturPajak'])->first();
 
         if ($invoice) {
             $this->status = $invoice->status_terbaru;
@@ -84,24 +100,18 @@ class Create extends Component
             $this->dispatch('swal', icon: 'success', text: 'Riwayat invoice sudah ada didatabase, saat ini anda sedang menambah riwayat data.', title: 'Berhasil');
         }
 
-        // cek sudah ada apa belum invoice nya
-        if ($data['status'] == 'success') {
-            // ambil data dari json api
-            $data = $data['data'][0];
+        // ambil data dari json api
+        $data = $api['data'][0];
 
-            // set data
-            $this->addForm->btt_number = $data['Nomor'];
-            $this->addForm->btt_created_at = Carbon::parse($data['TanggalCreate']['date'])->format('Y-m-d H:i:s');
-            $this->addForm->company_name = $data['NamaCustomer'];
-            $this->addForm->invoice_date = Carbon::parse($data['Tanggal']['date'])->format('Y-m-d H:i:s');
-            $this->addForm->receivable_number = $data['NomorPiutang'];
-            $this->addForm->sale_number = $data['NomorPenjualan'];
-            $this->addForm->tax_number = $data['NomorFakturPajak'];
-        } else {
-            $this->fetchDataForm->reset();
+        // set data
+        $this->addForm->btt_number = $data['Nomor'];
+        $this->addForm->btt_created_at = Carbon::parse($data['TanggalCreate']['date'])->format('Y-m-d H:i:s');
+        $this->addForm->company_name = $data['NamaCustomer'];
+        $this->addForm->invoice_date = Carbon::parse($data['Tanggal']['date'])->format('Y-m-d H:i:s');
+        $this->addForm->receivable_number = $data['NomorPiutang'];
+        $this->addForm->sale_number = $data['NomorPenjualan'];
+        $this->addForm->tax_number = $data['NomorFakturPajak'];
 
-            return $this->dispatch('swal', icon: 'error', text: 'Gagal mengambil data. Invoice tidak ditemukan.', title: 'Gagal');
-        }
     }
 
     public function store()
@@ -133,6 +143,7 @@ class Create extends Component
                 'no_faktur_pajak' => $this->addForm->tax_number,
                 'nama_customer' => $this->addForm->company_name,
                 'tipe_invoice' => $this->addForm->invoice_type,
+                'tipe_tagihan' => $this->fetchDataForm->tipe_tagihan,
                 'status_pengiriman' => $this->addForm->delivery_status,
                 'status_awal' => 'Sudah ready untuk diteruskan ke Piutang.',
                 'status_terbaru' => $this->addForm->newest_status,
@@ -151,19 +162,22 @@ class Create extends Component
             Log::error('Gagal menyimpan data invoice', [
                 'exception' => $th,
                 'payload' => [
-                    'invoice' => $this->addForm->only([
-                        'btt_number',
-                        'invoice_date',
-                        'btt_created_at',
-                        'receivable_number',
-                        'sale_number',
-                        'tax_number',
-                        'company_name',
-                        'invoice_type',
-                        'newest_status',
-                        'invoice_destination',
-                        'resi_number',
-                    ]),
+                    'invoice' => [
+                        $this->addForm->only([
+                            'btt_number',
+                            'invoice_date',
+                            'btt_created_at',
+                            'receivable_number',
+                            'sale_number',
+                            'tax_number',
+                            'company_name',
+                            'invoice_type',
+                            'newest_status',
+                            'invoice_destination',
+                            'resi_number',
+                        ]),
+                        $this->fetchDataForm->all(),
+                    ],
                 ],
             ]);
 
@@ -179,6 +193,7 @@ class Create extends Component
             Invoice::where('no_faktur_pajak', $this->addForm->tax_number)->update([
                 'status_pengiriman' => $this->addForm->delivery_status,
                 'status_terbaru' => $this->addForm->newest_status,
+                'tipe_tagihan' => $this->fetchDataForm->tipe_tagihan,
                 'latest_update_by' => $userId,
             ]);
 
@@ -193,7 +208,7 @@ class Create extends Component
             Log::error('Gagal menyimpan data invoice', [
                 'exception' => $th,
                 'payload' => [
-                    'invoice' => $this->addForm->only([
+                    'invoice' => [$this->addForm->only([
                         'btt_number',
                         'invoice_date',
                         'btt_created_at',
@@ -205,7 +220,7 @@ class Create extends Component
                         'newest_status',
                         'invoice_destination',
                         'resi_number',
-                    ]),
+                    ]), $this->fetchDataForm->all()],
                 ],
             ]);
 

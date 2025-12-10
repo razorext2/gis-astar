@@ -4,26 +4,39 @@
             Cari Bukti Tanda Terima Invoice
         </label>
 
-        <form wire:submit="fetchFakturPajak" class="flex flex-col gap-2">
-            <div class="relative">
-                <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
-                    <x-icons.search class="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                </div>
-
-                <x-input.basic class="ps-10" wire:model.live="fetchDataForm.nofakturpajak" id="nofakturpajak" required
-                    name="nofakturpajak" placeholder="No. Faktur Pajak" :labels="false" />
-
-                <x-button.primary type="submit" class="absolute bottom-[1px] end-0 focus:outline"
-                    id="nofakturpajak_submit">
-                    <span wire:loading wire:target="fetchFakturPajak">Loading...</span>
-                    <span wire:loading.remove wire:target="fetchFakturPajak">Cek Data</span>
-                </x-button.primary>
+        <div class="flex flex-row items-start gap-2 lg:gap-4">
+            <div class="w-fit">
+                <x-input.select id="tipe_tagihan" required name="tipe_tagihan" :labels="false" :defaultOption="'Pilih tipe tagihan'"
+                    :options="[
+                        'idcppn' => 'IDC PPN',
+                        'idyppn' => 'IDY PPN',
+                    ]" wire:model="fetchDataForm.tipe_tagihan" :value="$fetchDataForm->tipe_tagihan" />
             </div>
 
-            @error('fetchDataForm.nofakturpajak')
-                <span class="error text-sm text-red-500">{{ $message }}</span>
-            @enderror
-        </form>
+            <form wire:submit="fetchFakturPajak" class="flex w-full flex-col gap-2">
+                <div class="relative">
+                    <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
+                        <x-icons.search class="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                    </div>
+
+                    <x-input.basic class="ps-10" wire:model.live="fetchDataForm.nofakturpajak" id="nofakturpajak"
+                        name="nofakturpajak" placeholder="No. Faktur Pajak" :labels="false" />
+
+                    <x-button.primary type="submit" class="absolute bottom-[1px] end-0 focus:outline"
+                        id="nofakturpajak_submit">
+                        <span wire:loading wire:target="fetchFakturPajak">Loading...</span>
+                        <span wire:loading.remove wire:target="fetchFakturPajak">Cek</span>
+                    </x-button.primary>
+                </div>
+
+                @error('fetchDataForm.nofakturpajak')
+                    <span class="error text-sm text-red-500">{{ $message }}</span>
+                @enderror
+                @error('fetchDataForm.tipe_tagihan')
+                    <span class="error text-sm text-red-500">{{ $message }}</span>
+                @enderror
+            </form>
+        </div>
 
     </div>
 

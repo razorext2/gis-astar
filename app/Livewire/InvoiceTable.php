@@ -3,15 +3,15 @@
 namespace App\Livewire;
 
 use App\Models\Invoice;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
-use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 
 final class InvoiceTable extends PowerGridComponent
@@ -19,10 +19,15 @@ final class InvoiceTable extends PowerGridComponent
     use WithExport;
 
     public string $tableName = 'InvoiceTable';
+
     public bool $deferLoading = true;
+
     public bool $showFilters = false;
+
     public string $sortField = 'updated_at';
+
     public string $sortDirection = 'desc';
+
     public bool $multiSort = true;
 
     public $user;
@@ -44,9 +49,9 @@ final class InvoiceTable extends PowerGridComponent
                 ->showPerPage()
                 ->showRecordCount(),
             // PowerGrid::responsive(),
-            PowerGrid::exportable(now()->format('ymdhis') . '-InvoiceTable.xlsx')
+            PowerGrid::exportable(now()->format('ymdhis').'-InvoiceTable.xlsx')
                 ->type(Exportable::TYPE_XLS)
-                ->stripTags(true)
+                ->stripTags(true),
         ];
     }
 
@@ -78,13 +83,13 @@ final class InvoiceTable extends PowerGridComponent
             'addedBy' => [
                 'id',
                 'kode_pegawai',
-                'name'
+                'name',
             ],
             'latestUpdateBy' => [
                 'id',
                 'kode_pegawai',
-                'name'
-            ]
+                'name',
+            ],
         ];
     }
 
@@ -106,23 +111,25 @@ final class InvoiceTable extends PowerGridComponent
             ->add('added_by')
             ->add('latest_update_by')
             ->add('created_at')
+            ->add('tipe_tagihan')
             ->add('invoice_formatted', function ($query) {
                 return view('components.dashboard.name-w-code', [
                     'code' => $query->nama_customer,
                     'name' => $query->no_faktur_pajak,
-                    'item3' => $query->tgl_invoice
+                    'item3' => $query->tgl_invoice,
                 ]);
             })
             ->add('btt_formatted', function ($query) {
                 return view('components.dashboard.name-w-code', [
                     'code' => $query->tgl_btt,
-                    'name' => $query->nomor_btt
+                    'name' => $query->nomor_btt,
+                    'item3' => \Illuminate\Support\Str::upper($query->tipe_tagihan) ?? '-',
                 ]);
             })
             ->add('no_penjualan_formatted', function ($query) {
                 return view('components.dashboard.name-w-code', [
                     'code' => $query->no_penjualan,
-                    'name' => $query->no_piutang
+                    'name' => $query->no_piutang,
                 ]);
             })
             ->add('status_formatted', function ($query) {
@@ -137,14 +144,14 @@ final class InvoiceTable extends PowerGridComponent
                 return view('components.dashboard.name-w-code', [
                     'code' => $query->tipe_invoice,
                     'name' => $status,
-                    'item3' => $query->status_terbaru
+                    'item3' => $query->status_terbaru,
                 ]);
             })
             ->add('user_info_formatted', function ($query) {
                 return view('components.dashboard.name-w-code', [
-                    'code' => 'Ditambah oleh: ' . $query->addedBy->name,
-                    'name' => 'Terakhir update: ' . $query->latestUpdateBy->name,
-                    'item3' => 'Dibuat Tanggal: ' . Carbon::parse($query->created_at)->locale('id')->isoFormat('DD MMMM YYYY')
+                    'code' => 'Ditambah oleh: '.$query->addedBy->name,
+                    'name' => 'Terakhir update: '.$query->latestUpdateBy->name,
+                    'item3' => 'Dibuat Tanggal: '.Carbon::parse($query->created_at)->locale('id')->isoFormat('DD MMMM YYYY'),
                 ]);
             });
     }
@@ -203,6 +210,14 @@ final class InvoiceTable extends PowerGridComponent
                 ])
                 ->optionLabel('name')
                 ->optionValue('value'),
+
+            Filter::select('invoice_formatted', 'tipe_tagihan')
+                ->dataSource([
+                    ['name' => 'IDC PPN', 'value' => 'idcppn'],
+                    ['name' => 'IDY PPN', 'value' => 'idyppn'],
+                ])
+                ->optionLabel('name')
+                ->optionValue('value'),
         ];
     }
 
@@ -213,7 +228,7 @@ final class InvoiceTable extends PowerGridComponent
                 ->slot('Detail')
                 ->id($row->id)
                 ->class('dark:bg-green-800 text-sm dark:hover:bg-green-900 dark:text-white dark:border-gray-700 rounded-lg bg-green-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-green-700')
-                ->route('invoice.show', ['invoice' => $row->id])
+                ->route('invoice.show', ['invoice' => $row->id]),
         ];
 
         return $button;

@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Invoice extends Model
 {
-    use SoftDeletes, HasUlids;
+    use HasUlids, SoftDeletes;
 
     protected $table = 'tb_invoice';
+
     protected $fillable = [
         'nomor_btt',
         'tgl_btt',
@@ -18,6 +19,7 @@ class Invoice extends Model
         'no_piutang',
         'no_penjualan',
         'no_faktur_pajak',
+        'tipe_tagihan',
         'nama_customer',
         'tipe_invoice',
         'status_pengiriman',
