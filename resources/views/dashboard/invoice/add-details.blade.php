@@ -15,6 +15,6 @@
             </p>
         </div>
 
-        @livewire('handler.invoice.create', ['id' => $id])
+        @livewire('handler.invoice.create', ['id' => $id, 'tipe_tagihan' => null])
     </div>
 @endsection

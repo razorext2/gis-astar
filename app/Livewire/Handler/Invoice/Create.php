@@ -25,10 +25,14 @@ class Create extends Component
 
     public ?string $id = null;
 
-    public function mount($id)
+    public function mount($id, $tipe_tagihan)
     {
         if ($id) {
             $this->id = $id;
+        }
+
+        if ($tipe_tagihan) {
+            $this->fetchDataForm->tipe_tagihan = $tipe_tagihan;
         }
 
         $invoice = Invoice::with('details')->where('id', $this->id)->first();

@@ -9,12 +9,11 @@
             </span>
 
             <p class="mt-0.5 text-base text-gray-600 dark:text-gray-400">
-                Cari terlebih dahulu invoice yang ingin ditambah berdasarkan <span class="font-semibold text-green-500">Nomor
-                    Faktur
-                    Pajak</span>
+                Cari terlebih dahulu invoice yang ingin ditambah berdasarkan <span class="font-semibold text-green-500">
+                    Nomor Faktur Pajak ({{ Request::get('tipe_tagihan') }})</span>
             </p>
         </div>
 
-        @livewire('handler.invoice.create', ['id' => null])
+        @livewire('handler.invoice.create', ['id' => null, 'tipe_tagihan' => Request::get('tipe_tagihan')])
     </div>
 @endsection
