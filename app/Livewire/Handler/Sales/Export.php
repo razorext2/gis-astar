@@ -12,9 +12,13 @@ use Livewire\Component;
 class Export extends Component
 {
     public $showModal = false;
+
     public $fromDate;
+
     public $toDate;
+
     public $role;
+
     public $sales;
 
     public function authUser()
@@ -69,7 +73,7 @@ class Export extends Component
             $data = $data->where('kode_pegawai', $this->sales);
         }
 
-        if (!$data->exists()) {
+        if (! $data->exists()) {
             return $this->dispatch('swal', title: 'Gagal', text: 'Data tidak ditemukan', icon: 'error');
         }
 
@@ -82,28 +86,35 @@ class Export extends Component
         ExportSalesToExcelJob::dispatch($user, $fromDate, $toDate, $role, $sales)->delay(now()->addSeconds(5));
 
         $this->showModal = false;
+
         return $this->dispatch('swal', title: 'Berhasil', text: 'Data berhasil di export', icon: 'success');
     }
 
     public function render()
     {
+        $user = $this->authUser();
+
+        $allowedRoles = match (true) {
+            $user->can('sales-export-all') => ['Sales', 'Sales-JKT', 'Sales-PKU', 'Sales-IDY', 'Kurir-Bank'],
+            $user->can('sales-export-medan') => ['Sales'],
+            $user->can('sales-export-idy') => ['Sales-IDY'],
+            $user->can('sales-export-jkt') => ['Sales-JKT'],
+            $user->can('sales-export-kurir-bank') => ['Kurir-Bank'],
+            $user->can('sales-export-pku') => ['Sales-PKU'],
+            default => [],
+        };
+
+        if (empty($allowedRoles)) {
+            abort(403);
+        }
+
         $sales = User::select(['id', 'kode_pegawai', 'name'])
-            ->whereHas('roles', function ($query) {
-                if ($this->authUser()->hasAnyRole(['Management', 'Marketing'])) {
-                    $query->where('name', 'Sales');
-                } elseif ($this->authUser()->hasAnyRole(['Management-JKT', 'Marketing-JKT'])) {
-                    $query->where('name', 'Sales-JKT');
-                } elseif ($this->authUser()->hasAnyRole(['Management-PKU', 'Marketing-PKU'])) {
-                    $query->where('name', 'Sales-PKU');
-                } else {
-                    $query->whereIn('name', ['Sales', 'Sales-JKT', 'Sales-PKU']);
-                }
-            })
+            ->whereHas('roles', fn ($query) => $query->whereIn('name', $allowedRoles))
             ->orderBy('kode_pegawai', 'asc')
             ->get();
 
         return view('livewire.handler.sales.export', [
-            'salesData' => $sales
+            'salesData' => $sales,
         ]);
     }
 }

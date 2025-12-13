@@ -15,7 +15,7 @@
                 </div>
             @endcan
 
-            @can('sales-export')
+            @can(['sales-export'])
                 <div class="max-w-xs">
                     <livewire:handler.sales.export />
                 </div>

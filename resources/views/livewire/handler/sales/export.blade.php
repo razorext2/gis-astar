@@ -14,7 +14,8 @@
             <!-- Modal box -->
             <div
                 class="flex max-w-md flex-col gap-2 rounded-xl bg-white p-6 shadow-2xl dark:bg-gray-800 md:w-1/2 xl:w-1/3">
-                <h2 class="mb-4 text-center text-2xl font-semibold text-gray-900 dark:text-white lg:text-3xl">Export Data
+                <h2 class="mb-4 text-center text-2xl font-semibold text-gray-900 dark:text-white lg:text-3xl">
+                    Export Data
                 </h2>
 
                 <form wire:submit="export">
@@ -39,9 +40,9 @@
                         </div>
 
                         <div>
-                            <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                                for="roles">Pilih data yg mau
-                                diekspor</label>
+                            <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="roles">
+                                Pilih data yg mau diekspor
+                            </label>
                             @php
                                 $roles = [];
                                 if (auth()->user()->can('sales-export-all')) {
@@ -68,9 +69,9 @@
                         </div>
 
                         <div>
-                            <label for="sales"
-                                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Pilih nama
-                                sales</label>
+                            <label for="sales" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                                Pilih nama sales
+                            </label>
                             <select
                                 class="block w-full rounded-lg border border-gray-200 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                                 wire:model="sales">
