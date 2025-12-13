@@ -64,6 +64,7 @@
                                     'Sales' => 'Sales Medan',
                                     'Sales-JKT' => 'Sales Jakarta',
                                     'Sales-PKU' => 'Sales Pekanbaru',
+                                    'Sales-IDY' => 'Sales Indodaya',
                                     'Kurir-Bank' => 'Kurir Bank',
                                 ]"
                                     default-option="Filter by roles" />

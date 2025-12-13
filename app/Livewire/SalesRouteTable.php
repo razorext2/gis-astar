@@ -42,6 +42,10 @@ final class SalesRouteTable extends PowerGridComponent
             $query->whereHas('roles', fn ($role) => $role->where('name', 'Kurir-Bank'));
         }
 
+        if ($this->user->hasRole(['HRD-IDY', 'Marketing-IDY'])) {
+            $query->whereHas('roles', fn ($role) => $role->where('name', 'Sales-IDY'));
+        }
+
         if ($this->user->hasRole('Marketing')) {
             $query->whereHas('roles', fn ($role) => $role->where('name', 'Sales'));
         }
@@ -114,6 +118,7 @@ final class SalesRouteTable extends PowerGridComponent
                     ['name' => 'Sales Medan', 'value' => 'Sales'],
                     ['name' => 'Sales Pekanbaru', 'value' => 'Sales-PKU'],
                     ['name' => 'Sales Jakarta', 'value' => 'Sales-JKT'],
+                    ['name' => 'Sales Indodaya', 'value' => 'Sales-Indodaya'],
                     ['name' => 'Kurir Bank', 'value' => 'Kurir-Bank'],
                 ])
                 ->optionLabel('name')

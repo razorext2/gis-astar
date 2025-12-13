@@ -36,6 +36,13 @@ class SalesController extends Controller
                 }
 
                 // Filter relasi user yang memiliki role 'Kurir-Bank
+                if ($user->hasAnyRole(['HRD-IDY', 'Marketing-IDY'])) {
+                    $query->whereHas('userRelasi.roles', function ($role) {
+                        $role->where('name', 'Sales-IDY');
+                    });
+                }
+
+                // Filter relasi user yang memiliki role 'Kurir-Bank
                 if ($user->hasRole('Kasir')) {
                     $query->whereHas('userRelasi.roles', function ($role) {
                         $role->where('name', 'Kurir-Bank');
