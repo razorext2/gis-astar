@@ -2,11 +2,11 @@
 
 namespace App\Livewire\Handler\Attendance;
 
-use Livewire\Component;
 use App\Models\AttendanceOut;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Livewire\Component;
 use Livewire\WithPagination;
 
 class TodayOut extends Component
@@ -14,9 +14,13 @@ class TodayOut extends Component
     use WithPagination;
 
     public $attendance;
+
     public string $date;
+
     public string $role;
+
     public string $address;
+
     public bool $showModalOut = false;
 
     public function mount()
@@ -30,12 +34,12 @@ class TodayOut extends Component
         try {
             $response = Http::withHeaders([
                 'User-Agent' => 'MyAbsensiApp/1.0 (email@example.com)',
-            ])->get("https://nominatim.openstreetmap.org/reverse.php", [
-                        'lat' => $lat,
-                        'lon' => $long,
-                        'zoom' => 18,
-                        'format' => 'jsonv2',
-                    ]);
+            ])->get('https://nominatim.openstreetmap.org/reverse.php', [
+                'lat' => $lat,
+                'lon' => $long,
+                'zoom' => 18,
+                'format' => 'jsonv2',
+            ]);
 
             if ($response->successful()) {
                 return $response->json()['display_name'] ?? 'Alamat tidak ditemukan';
@@ -43,7 +47,8 @@ class TodayOut extends Component
                 return 'Gagal mengambil alamat';
             }
         } catch (\Exception $e) {
-            Log::error('Gagal fetch alamat: ' . $e->getMessage());
+            Log::error('Gagal fetch alamat: '.$e->getMessage());
+
             return 'Terjadi kesalahan';
         }
     }
@@ -70,8 +75,9 @@ class TodayOut extends Component
         $target = $masuk->copy()->setTime(17, 0, 0);
         $diffInSeconds = $masuk->diffInSeconds($target, false);
 
-        if ($diffInSeconds <= 0)
+        if ($diffInSeconds <= 0) {
             return null;
+        }
 
         return gmdate('H \j\a\m i \m\e\n\i\t s \d\e\t\i\k', $diffInSeconds);
     }
@@ -80,9 +86,7 @@ class TodayOut extends Component
     {
         $data = AttendanceOut::whereDate('created_at', $this->date)
             ->where('status', '=', 1)
-            ->when($this->role, fn($query)
-                => $query->whereHas('user.roles', fn($role)
-                    => $role->where('name', $this->role)))
+            ->when($this->role, fn ($query) => $query->whereHas('user.roles', fn ($role) => $role->where('name', $this->role)))
             ->paginate(6);
 
         return view('livewire.handler.attendance.today-out', compact('data'));

@@ -11,6 +11,7 @@ class Attendance extends Model
     use HasFactory, SoftDeletes;
 
     protected $connection = 'mysql';
+
     protected $table = 'tb_attendance';
 
     protected $fillable = [
@@ -31,7 +32,7 @@ class Attendance extends Model
         'verified',
         'distance',
         'verified_by',
-        'keterangan'
+        'keterangan',
     ];
 
     protected $casts = [

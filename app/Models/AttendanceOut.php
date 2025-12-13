@@ -11,6 +11,7 @@ class AttendanceOut extends Model
     use HasFactory, SoftDeletes;
 
     protected $connection = 'mysql';
+
     protected $table = 'tb_attendance_out';
 
     protected $fillable = [
@@ -31,7 +32,7 @@ class AttendanceOut extends Model
         'verified',
         'distance',
         'verified_by',
-        'keterangan'
+        'keterangan',
     ];
 
     protected $casts = [
@@ -42,5 +43,10 @@ class AttendanceOut extends Model
     public function pegawaiRelasi()
     {
         return $this->belongsTo(Pegawai::class, 'kode_pegawai', 'kode_pegawai');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'kode_pegawai', 'kode_pegawai');
     }
 }

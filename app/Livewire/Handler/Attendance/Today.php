@@ -8,16 +8,19 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Spatie\Permission\Models\Role;
 
 class Today extends Component
 {
     use WithPagination;
 
     public $attendance;
+
     public string $date;
+
     public string $role;
+
     public string $address;
+
     public bool $showModal = false;
 
     public function mount()
@@ -31,12 +34,12 @@ class Today extends Component
         try {
             $response = Http::withHeaders([
                 'User-Agent' => 'MyAbsensiApp/1.0 (email@example.com)',
-            ])->get("https://nominatim.openstreetmap.org/reverse.php", [
-                        'lat' => $lat,
-                        'lon' => $long,
-                        'zoom' => 18,
-                        'format' => 'jsonv2',
-                    ]);
+            ])->get('https://nominatim.openstreetmap.org/reverse.php', [
+                'lat' => $lat,
+                'lon' => $long,
+                'zoom' => 18,
+                'format' => 'jsonv2',
+            ]);
 
             if ($response->successful()) {
                 return $response->json()['display_name'] ?? 'Alamat tidak ditemukan';
@@ -44,7 +47,8 @@ class Today extends Component
                 return 'Gagal mengambil alamat';
             }
         } catch (\Exception $e) {
-            Log::error('Gagal fetch alamat: ' . $e->getMessage());
+            Log::error('Gagal fetch alamat: '.$e->getMessage());
+
             return 'Terjadi kesalahan';
         }
     }
@@ -71,8 +75,9 @@ class Today extends Component
         $target = $masuk->copy()->setTime(8, 0, 0);
         $diffInSeconds = $target->diffInSeconds($masuk, false);
 
-        if ($diffInSeconds <= 0)
+        if ($diffInSeconds <= 0) {
             return null;
+        }
 
         return gmdate('H \j\a\m i \m\e\n\i\t s \d\e\t\i\k', $diffInSeconds);
     }
@@ -81,9 +86,7 @@ class Today extends Component
     {
         $data = Attendance::whereDate('created_at', $this->date)
             ->where('status', '=', 1)
-            ->when($this->role, fn($query)
-                => $query->whereHas('user.roles', fn($role)
-                    => $role->where('name', $this->role)))
+            ->when($this->role, fn ($query) => $query->whereHas('user.roles', fn ($role) => $role->where('name', $this->role)))
             ->paginate(6);
 
         return view('livewire.handler.attendance.today', compact('data'));
