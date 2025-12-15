@@ -2,12 +2,7 @@
 
     <div class="flex w-full flex-col items-center gap-2 md:flex-row lg:gap-4">
         @php
-            $options = [
-                'Driver' => 'Driver',
-                'Employee' => 'Karyawan',
-                'Teknisi' => 'Teknisi',
-                'Mekanik' => 'Mekanik',
-            ];
+            $options = [];
 
             $user = auth()->user();
 
@@ -31,6 +26,12 @@
                 $options['Kurir-Bank'] = 'Kurir Bank';
             }
 
+            $options = array_merge($options, [
+                'Driver' => 'Driver',
+                'Employee' => 'Karyawan',
+                'Teknisi' => 'Teknisi',
+                'Mekanik' => 'Mekanik',
+            ]);
         @endphp
 
         <x-input.select wire:model.live="role" :labels="false" id="role" name="role" :defaultOption="'Pilih Role'"
