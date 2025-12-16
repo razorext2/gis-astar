@@ -33,7 +33,7 @@ class TodayOut extends Component
     {
         try {
             $response = Http::withHeaders([
-                'User-Agent' => 'MyAbsensiApp/1.0 (email@example.com)',
+                'User-Agent' => 'IndodacinFaceID/1.1 (indodacinfaceid@gmail.com)',
             ])->get('https://nominatim.openstreetmap.org/reverse.php', [
                 'lat' => $lat,
                 'lon' => $long,
