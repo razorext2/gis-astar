@@ -1,0 +1,129 @@
+<?php
+
+namespace App\Models\Spk;
+
+use App\Models\User;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class SpkMain extends Model
+{
+    use HasUuids, SoftDeletes;
+
+    protected $table = 'tb_spk';
+
+    protected $fillable = [
+        'nomor_order',
+        'tipe_tagihan',
+        'status_nomor_tagihan',
+        'nomor_tagihan',
+        'nomor_purchasing_request',
+        'tipe_bayar',
+        'tgl_cetak',
+        'tgl_kirim',
+        'keterangan',
+        'customer',
+        'products',
+        'informasi_pengiriman',
+        'status',
+        'added_by',
+        'assign_to',
+        'update_by',
+        'pengiriman_updated_by',
+        'no_tagihan_updated_by',
+        'purchasing_list_updated_by',
+    ];
+
+    protected $casts = [
+        'customer' => 'array',
+        'products' => 'array',
+        'informasi_pengiriman' => 'array',
+    ];
+
+    protected $appends = [
+        'status_description',
+        'status_nomor_tagihan_description',
+    ];
+
+    public function addedBy()
+    {
+        return $this->belongsTo(User::class, 'added_by', 'id');
+    }
+
+    public function updateBy()
+    {
+        return $this->belongsTo(User::class, 'update_by', 'id');
+    }
+
+    public function assignTo()
+    {
+        return $this->belongsTo(User::class, 'assign_to', 'id');
+    }
+
+    public function pengirimanUpdatedBy()
+    {
+        return $this->belongsTo(User::class, 'pengiriman_updated_by', 'id');
+    }
+
+    public function noTagihanUpdatedBy()
+    {
+        return $this->belongsTo(User::class, 'no_tagihan_updated_by', 'id');
+    }
+
+    public function invoice()
+    {
+        return $this->belongsTo(\App\Models\Invoice::class, 'nomor_tagihan', 'no_faktur_pajak');
+    }
+
+    public function purchasingRequests()
+    {
+        return $this->hasMany(\App\Models\Spk\PurchasingRequest::class, 'id_spk', 'id');
+    }
+
+    public function spkHistories()
+    {
+        return $this->hasMany(\App\Models\Spk\SpkHistory::class, 'spk_id', 'id');
+    }
+
+    public function laporanFondasi()
+    {
+        return $this->hasMany(\App\Models\Spk\LaporanFondasi::class, 'id_spk', 'id');
+    }
+
+    public function laporanHarianSpk()
+    {
+        return $this->hasMany(\App\Models\Spk\LaporanHarian::class, 'id_spk', 'id');
+    }
+
+    public function production()
+    {
+        return $this->hasOne(\App\Models\Spk\Production::class, 'id_spk', 'id');
+    }
+
+    public function getStatusDescriptionAttribute(): string
+    {
+        $status = (int) ($this->attributes['status'] ?? 0);
+
+        return match ($status) {
+            0 => 'SPK telah dibuat',
+            1 => 'Menunggu Gudang Assign PR',
+            2 => 'Dalam proses produksi',
+            3 => 'Sedang diproses Purchasing untuk pengiriman',
+            4 => 'Dalam proses penagihan',
+            5 => 'Dalam proses pemasangan',
+            6 => 'Finished',
+            default => 'Status SPK tidak diketahui',
+        };
+    }
+
+    public function getStatusNomorTagihanDescriptionAttribute(): string
+    {
+        $status = (bool) ($this->attributes['status_nomor_tagihan'] ?? false);
+
+        return match ($status) {
+            true => 'Nomor tagihan sudah diassign.',
+            false => 'Nomor tagihan belum diassign.',
+        };
+    }
+}

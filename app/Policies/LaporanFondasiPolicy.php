@@ -1,0 +1,64 @@
+<?php
+
+namespace App\Policies;
+
+use App\Models\User;
+
+class LaporanFondasiPolicy
+{
+    /**
+     * Determine whether the user can view any models.
+     */
+    public function viewAny(User $user): bool
+    {
+        return $user->hasPermissionTo('laporan-fondasi-list');
+    }
+
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $user): bool
+    {
+        return $user->hasPermissionTo('laporan-fondasi-list');
+    }
+
+    /**
+     * Determine whether the user can create models.
+     */
+    public function create(User $user): bool
+    {
+        return $user->hasPermissionTo('laporan-fondasi-create');
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user): bool
+    {
+        return $user->hasPermissionTo('laporan-fondasi-edit');
+    }
+
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function delete(User $user): bool
+    {
+        return $user->hasPermissionTo('laporan-fondasi-delete');
+    }
+
+    /**
+     * Determine whether the user can restore the model.
+     */
+    public function restore(User $user): bool
+    {
+        return $user->hasPermissionTo('laporan-fondasi-restore');
+    }
+
+    /**
+     * Determine whether the user can permanently delete the model.
+     */
+    public function forceDelete(User $user): bool
+    {
+        return $user->hasPermissionTo('laporan-fondasi-force-delete');
+    }
+}

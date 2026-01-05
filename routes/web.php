@@ -23,6 +23,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('notifications/{id}/mark-as-read', function ($id) {
         $notification = Auth::user()->unreadNotifications->find($id);
         $notification->markAsRead();
+
         return back()->with('success', 'Notification has readed');
     })->name('notification.mark-as-read');
     Route::get('notifications/fetch', [\App\Http\Controllers\NotificationController::class, 'fetch'])->name('notification.fetch');
@@ -90,7 +91,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('technician', \App\Http\Controllers\TechnicianController::class);
         Route::get('technician/fetch/update/{id}', [\App\Http\Controllers\TechnicianController::class, 'fetchUpdate'])->name('technician.fetch.update');
 
-        // route collect 
+        // route collect
         // tampilkan semua data where status = 0 (belum dilengkapi)
         Route::get('collect/show', [\App\Http\Controllers\CollectController::class, 'showdata'])->name('collect.showdata');
         // tampilkan semua data where status = 1 (approved)
@@ -232,17 +233,41 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('teams', \App\Http\Controllers\TeamController::class)->only('index', 'create', 'edit');
 
         // invoice
-        Route::resource('invoice', \App\Http\Controllers\InvoiceController::class);
+        Route::resource('invoice', \App\Http\Controllers\InvoiceController::class)->only('index', 'create', 'show');
         Route::get('invoice/{id}/add', [\App\Http\Controllers\InvoiceController::class, 'addDetails'])->name('invoice.addDetails');
 
         // ini untuk event
-        Route::resource('event', \App\Http\Controllers\BigEventController::class);
         Route::get('event/{event}/participant/{participant}', [\App\Http\Controllers\BigEventController::class, 'participantDetails'])->name('event.participant.show');
         Route::delete('event/{event}/participant/{participant}', [\App\Http\Controllers\BigEventController::class, 'participantDelete'])->name('event.participant.delete');
+        Route::resource('event', \App\Http\Controllers\BigEventController::class);
+
+        Route::prefix('spk')->as('')->group(function () {
+            // 1. spk purchasing request
+            Route::resource('purchasing-request', \App\Http\Controllers\Spk\PurchasingRequestController::class)->only('index', 'edit', 'show');
+
+            // 2. spk spk
+            Route::get('stream/pdf/spk', [\App\Http\Controllers\Spk\SpkController::class, 'streamPdf'])->name('spk.pdf');
+            Route::get('download/{id}', [\App\Http\Controllers\Spk\SpkController::class, 'download'])->name('spk.download');
+            Route::resource('spk', \App\Http\Controllers\Spk\SpkController::class)->only('index', 'create', 'show', 'edit');
+
+            // 3. spk produksi
+            Route::get('production/{production}/packing-list/create', [\App\Http\Controllers\Spk\ProductionController::class, 'packingListCreate'])->name('production.packing-list.add');
+            Route::get('stream/pdf/packing-list', [\App\Http\Controllers\Spk\ProductionController::class, 'streamPackingListPdf'])->name('packing-list.pdf');
+            Route::get('production/{id}/history/create', [\App\Http\Controllers\Spk\ProductionHistoriesController::class, 'create'])->name('production.history.add');
+            Route::resource('production', \App\Http\Controllers\Spk\ProductionController::class)->only('index', 'show');
+
+            // 4. penagihan
+            Route::get('billing', [\App\Http\Controllers\Spk\SpkController::class, 'billingIndex'])->name('billing.index');
+            Route::get('billing/{id}/update', [\App\Http\Controllers\Spk\SpkController::class, 'billingEdit'])->name('billing.edit');
+
+            // 5. delivery
+            Route::get('delivery', [\App\Http\Controllers\Spk\SpkController::class, 'deliveryIndex'])->name('delivery.index');
+            Route::get('delivery/{id}/update', [\App\Http\Controllers\Spk\SpkController::class, 'deliveryEdit'])->name('delivery.edit');
+        });
     });
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
 
 // api for get pegawai data
 Route::get('api/getPegawai/{id}', [\App\Http\Controllers\PegawaiController::class, 'getPegawaiByCode']);
@@ -255,13 +280,13 @@ Route::post('store-attendance-out', [\App\Http\Controllers\AttendanceOutControll
 // route untuk manipulasi url pemanggilan foto
 $libs = sha1('libs');
 
-Route::get('/' . $libs . '/{filename}', function ($filename) {
+Route::get('/'.$libs.'/{filename}', function ($filename) {
     $directories = Storage::directories('public/labels');
 
     $filePath = null;
 
     foreach ($directories as $directory) {
-        $fullpath = $directory . '/capturedImg/' . $filename;
+        $fullpath = $directory.'/capturedImg/'.$filename;
 
         if (Storage::exists($fullpath)) {
             $filePath = $fullpath;
@@ -282,6 +307,7 @@ Route::get('ping', function () {
 
     try {
         \Illuminate\Support\Facades\Http::timeout(5)->get($targetUrl);
+
         return response()->json(['success' => true]);
     } catch (\Exception $e) {
         return response()->json(['success' => false], 500);

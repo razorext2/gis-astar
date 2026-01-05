@@ -2,22 +2,23 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
+use Carbon\Carbon;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Carbon\Carbon;
 
 class ExportCompletedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     protected $notification_id;
+
     protected $userId;
+
     protected $fileName;
+
     protected $date;
 
     /**
@@ -45,22 +46,22 @@ class ExportCompletedEvent implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        return "exportCompleted";
+        return 'exportCompleted';
     }
 
     public function broadcastWith(): array
     {
-        $date = Carbon::parse($this->date)->locale("id")->isoFormat("DD MMMM YYYY");
+        $date = Carbon::parse($this->date)->locale('id')->isoFormat('DD MMMM YYYY');
 
         return [
-            "id" => $this->notification_id,
-            "message" => "Proses ekspor telah selesai. Laporan penagihan untuk tanggal $date telah berhasil diekspor. Silahkan download berkas dengan klik tombol berikut.",
-            "button" => [
-                "url" => route("export.collector.download", $this->fileName),
-                "label" => "Download Laporan",
+            'id' => $this->notification_id,
+            'message' => "Proses ekspor telah selesai. Laporan penagihan untuk tanggal $date telah berhasil diekspor. Silahkan download berkas dengan klik tombol berikut.",
+            'button' => [
+                'url' => route('export.collector.download', $this->fileName),
+                'label' => 'Download Laporan',
             ],
-            "mark_as_read" => route("notification.mark-as-read", $this->notification_id),
-            "created_at" => Carbon::now()->locale("id")->isoFormat("DD MMM YYYY HH:mm:ss"),
+            'mark_as_read' => route('notification.mark-as-read', $this->notification_id),
+            'created_at' => Carbon::now()->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss'),
         ];
     }
 }

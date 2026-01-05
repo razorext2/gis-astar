@@ -1,7 +1,8 @@
-@props(['labels' => true, 'id', 'name', 'placeholder' => null, 'rows' => 4])
+@props(['labels' => true, 'id', 'name', 'placeholder' => null, 'rows' => 4, 'textLabel' => null])
 
 @if ($labels)
-	<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="{{ $id }}"></label>
+	<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+		for="{{ $id }}">{{ $textLabel }}</label>
 @endif
 
 <textarea id="{{ $id }}" name="{{ $name }}"

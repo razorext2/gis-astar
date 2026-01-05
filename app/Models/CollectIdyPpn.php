@@ -8,12 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class CollectIdyPpn extends Model
 {
     use SoftDeletes;
-    protected $table = "tb_collect_idy_ppn";
+
+    protected $table = 'tb_collect_idy_ppn';
+
     protected $fillable = [
         'no_sr',
         'sales_invoice',
         'tax_invoice',
-        'collect_type',
         'sr_type',
         'sr_date',
         'customer_name',
@@ -55,8 +56,9 @@ class CollectIdyPpn extends Model
     {
         $words = explode(' ', $this->customer_name);
         if (count($words) > 4) {
-            return implode(' ', array_slice($words, 0, 4)) . ' ...';
+            return implode(' ', array_slice($words, 0, 4)).' ...';
         }
+
         return $this->customer_name;
     }
 
@@ -64,8 +66,9 @@ class CollectIdyPpn extends Model
     {
         $words = explode(' ', $this->customer_address);
         if (count($words) > 5) {
-            return implode(' ', array_slice($words, 0, 8)) . ' ...';
+            return implode(' ', array_slice($words, 0, 8)).' ...';
         }
+
         return $this->customer_address;
     }
 }
