@@ -37,6 +37,8 @@
         'spk.*' => 'Manajemen SPK',
         'purchasing-request.*' => 'Manajemen PR',
         'production.*' => 'Laporan Produksi',
+        'delivery.*' => 'Pengiriman',
+        'billing.*' => 'Penagihan',
     ];
 
     // Temukan judul berdasarkan rute dengan wildcard
