@@ -69,7 +69,7 @@
                 <td width="20%">Nomor</td>
                 <td width="5%">:</td>
                 <td>{{ $data['nomor_order'] ?? '-' }}</td>
-                <td width="50%" class="text-right">Lembaran __</td>
+                <td width="50%" class="text-right">Lembaran _</td>
             </tr>
             <tr>
                 <td width="20%">Tanggal SPK</td>
@@ -80,7 +80,11 @@
                 <td width="20%">Waktu Penyerahan</td>
                 <td width="5%">:</td>
                 <td colspan="2">
-                    {{ $data['tgl_kirim'] <= 1 ? 'SEGERA' : $data['tgl_kirim'] }}
+                    @if ($data['tgl_kirim'] <= 1)
+                        SEGERA
+                    @else
+                        {{ $data['tgl_kirim'] . ' Hari' }}
+                    @endif
                 </td>
             </tr>
         </table>
@@ -163,13 +167,13 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="3" height="40px" class="text-center">Disetujui Oleh,</td>
+                <td colspan="3" height="40px">Disetujui Oleh,</td>
             </tr>
             <tr>
                 <td height="60px" colspan="3"></td>
             </tr>
             <tr>
-                <td colspan="3" class="text-center underline">
+                <td colspan="3" class="underline">
                     (Suriyatini)
                 </td>
             </tr>
