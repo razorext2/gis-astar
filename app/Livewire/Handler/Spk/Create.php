@@ -24,7 +24,15 @@ class Create extends Component
 
     public ?int $jumlah_unit;
 
+    public ?string $spesifikasi = null;
+
     public bool $showSummary = false;
+
+    public function mount()
+    {
+        // buat nomor order baru
+        $this->createForm->nomor_order = $this->makeNomorOrder($this->createForm->tipe_tagihan)['baru'];
+    }
 
     public function tambahBarang()
     {
@@ -32,6 +40,7 @@ class Create extends Component
         $this->validate([
             'nama_barang' => 'required|min:5|string',
             'jumlah_unit' => 'required|numeric|min:1',
+            'spesifikasi' => 'nullable|string',
         ], [
             'nama_barang.required' => 'Kolom nama barang wajib diisi.',
             'nama_barang.min' => 'Kolom nama barang minimal berisi 5 karakter.',
@@ -39,16 +48,19 @@ class Create extends Component
             'jumlah_unit.required' => 'Kolom jumlah unit wajib diisi.',
             'jumlah_unit.numeric' => 'Kolom jumlah unit harus berupa angka.',
             'jumlah_unit.min' => 'Kolom jumlah unit minimal berjumlah 1 buah.',
+            'spesifikasi.string' => 'Kolom spesifikasi harus berupa string.',
         ]);
 
         // assign barang ke array
         $this->createForm->barang[] = [
             'nama_barang' => $this->nama_barang,
             'jumlah_unit' => $this->jumlah_unit,
+            'spesifikasi' => $this->spesifikasi,
         ];
 
         $this->nama_barang = null;
         $this->jumlah_unit = null;
+        $this->spesifikasi = null;
     }
 
     public function hapusBarang($index)
@@ -89,7 +101,7 @@ class Create extends Component
                     'nomor_tagihan' => $this->createForm->nomor_tagihan,
                     'tipe_bayar' => $this->createForm->tipe_bayar,
                     'tgl_cetak' => $this->createForm->tgl_cetak,
-                    'tgl_kirim' => $this->createForm->tgl_kirim,
+                    'tgl_kirim' => $this->createForm->tgl_kirim <= 1 ? 'SEGERA' : $this->createForm->tgl_kirim,
                     'keterangan' => $this->createForm->keterangan,
                     'customer' => $customer,
                     'products' => $barangs,
@@ -151,7 +163,7 @@ class Create extends Component
     public function summary()
     {
         // validasi form
-        $this->createForm->validate();
+        // $this->createForm->validate();
 
         // ambil data dari form createForm
         $spk_data = $this->createForm->all();
@@ -205,12 +217,10 @@ class Create extends Component
             $tahunSekarang = today()->year; // 2025
 
             // jika bulan sekarang lebih besar dari bulan nomor urut terakhir
-            if (today()->month > $lastBulanNomorUrut) {
-                // reset nomor urut
+            if (today()->month > $lastBulanNomorUrut || (today()->month == 1 && $lastBulanNomorUrut == 12)) {
                 $lastNomorUrut = 1;
             } else {
-                // increment nomor urut
-                $lastNomorUrut = $lastNomorUrut + 1;
+                $lastNomorUrut++;
             }
 
             // format nomor urut
@@ -317,9 +327,6 @@ class Create extends Component
         // ambil user dengan role Produksi
         $teamProduksi = User::whereHas('roles', fn ($role) => $role->where('name', 'Produksi'))
             ->get();
-
-        // buat nomor order baru
-        $this->createForm->nomor_order = $this->makeNomorOrder($this->createForm->tipe_tagihan)['baru'];
 
         return view('livewire.handler.spk.create', [
             'users' => $teamProduksi,

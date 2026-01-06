@@ -115,7 +115,7 @@ final class SpkTable extends PowerGridComponent
                         $name = $product['nama_barang'] ?? '-';
                         $qty = $product['jumlah_unit'] ?? null;
 
-                        return $qty !== null ? "{$name} ({$qty} Unit)" : $name;
+                        return $qty !== null ? "- {$name} ({$qty} Unit)" : $name;
                     })
                     ->filter()
                     ->values()

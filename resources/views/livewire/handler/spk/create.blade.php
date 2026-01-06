@@ -99,8 +99,20 @@
                         </div>
                     </div>
 
-                    <div class="flex w-full justify-center">
+                    <div class="w-full">
+                        <x-input.textarea id="spesifikasi" name="spesifikasi" wire:model="spesifikasi" rows="8"
+                            :labels="true" :textLabel="'Spesifikasi'" />
+
+                        @error('spesifikasi')
+                            <span class="mt-2 text-xs text-red-500"> {{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="flex w-full justify-end">
                         <x-button.primary id="tambah-barang" wire:click="tambahBarang">
+                            <x-slot name="icon">
+                                <x-icons.plus class="h-5 w-5" />
+                            </x-slot>
                             Tambah
                         </x-button.primary>
                     </div>
@@ -108,21 +120,55 @@
 
                 <div class="col-span-2 flex w-full flex-col">
                     <p class="mb-2 text-sm font-medium text-gray-900 dark:text-white">Daftar Barang Yang Dipesan</p>
-                    <div class="flex flex-col gap-y-1 rounded-xl p-4 dark:bg-gray-600">
-                        @forelse ($createForm->barang as $index => $row)
-                            <div class="flex flex-row items-center gap-2">
-                                <p class="w-full text-gray-800 dark:text-white">{{ $index + 1 }}.
-                                    {{ $row['nama_barang'] . ' (' . $row['jumlah_unit'] . ' Unit)' }}
-                                </p>
 
-                                <x-button.danger class="!p-1 text-xs" id="hapus-barang"
-                                    wire:click="hapusBarang({{ $index }})">
-                                    <x-icons.trash-bin class="h-4 w-4" />
-                                </x-button.danger>
-                            </div>
-                        @empty
-                            <p class="text-center text-sm text-gray-800 dark:text-white">Belum ada barang pada list.</p>
-                        @endforelse
+                    <div class="flex flex-col gap-y-1 rounded-xl p-4 dark:bg-gray-600">
+                        <table id="barang-list-table" class="w-full">
+                            <thead
+                                class="border-b border-gray-200 text-sm font-semibold text-gray-800 dark:border-gray-400 dark:text-white">
+                                <th class="py-2">#</th>
+                                <th class="py-2">Nama Barang</th>
+                                <th class="py-2">Jumlah</th>
+                                <th class="py-2">Aksi</th>
+                            </thead>
+
+                            <tbody>
+                                @forelse ($createForm->barang as $index => $row)
+                                    <tr>
+                                        <td rowspan="2"
+                                            class="w-10 items-center text-center text-sm text-gray-800 dark:text-white">
+                                            {{ $index + 1 }}.
+                                        </td>
+                                        <td class="text-sm text-gray-800 dark:text-white">
+                                            {{ $row['nama_barang'] }}
+                                        </td>
+                                        <td rowspan="2"
+                                            class="items-center text-center text-sm text-gray-800 dark:text-white">
+                                            {{ $row['jumlah_unit'] }}
+                                        </td>
+                                        <td rowspan="2" class="items-center">
+                                            <x-button.danger class="!p-1 text-xs" id="hapus-barang"
+                                                wire:click="hapusBarang({{ $index }})">
+                                                <x-icons.trash-bin class="h-4 w-4" />
+                                            </x-button.danger>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="border-b border-gray-200 dark:border-gray-400">
+                                        <td class="text-sm text-gray-800 dark:text-white">
+                                            {!! nl2br(e($row['spesifikasi'] ?? '')) !!}
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4"
+                                            class="h-10 items-center text-center text-sm italic text-red-500">
+                                            Belum ada barang pada
+                                            list.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
 
                     @error('createForm.barang')
@@ -232,10 +278,20 @@
 
                 <div class="w-full">
 
-                    <x-input.basic id="tgl_kirim" name="tgl_kirim" wire:model.live="createForm.tgl_kirim"
-                        placeholder="Tanggal Kirim" type="date">
-                        Tanggal Kirim
-                    </x-input.basic>
+                    <div class="flex items-center justify-center gap-2">
+                        <div class="grow">
+                            <x-input.basic id="tgl_kirim" name="tgl_kirim" wire:model.live="createForm.tgl_kirim"
+                                placeholder="Waktu Penyerahan" type="number" min="1">
+                                Waktu Penyerahan
+                            </x-input.basic>
+                        </div>
+
+                        <span class="mt-7 text-gray-800 dark:text-white">Hari</span>
+                    </div>
+
+                    <span class="mt-2 text-xs text-green-500">
+                        * Isi dengan 1 Hari jika ingin mendapatkan output (SEGERA)
+                    </span>
 
                     @error('createForm.tgl_kirim')
                         <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
@@ -279,7 +335,7 @@
             </div>
         </div>
 
-        <div class="flex w-full flex-row justify-end gap-2">
+        <div class="flex w-full flex-row justify-start gap-2 lg:pl-[8.75rem] xl:pl-48 2xl:pl-[12.5rem]">
             <x-button.primary id="summary-button" wire:click="summary">
                 Summary
             </x-button.primary>

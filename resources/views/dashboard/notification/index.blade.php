@@ -23,7 +23,7 @@
             <div class="grid gap-2 md:gap-4" id="notificationCenterContainer">
                 @forelse($notifications as $notification)
                     <div
-                        class="{{ $notification->read_at == null ? 'bg-gray-100 dark:bg-gray-800' : '' }} flex rounded-lg transition-all duration-300 hover:scale-110 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        class="{{ $notification->read_at == null ? 'bg-gray-100 dark:bg-gray-800' : '' }} flex rounded-lg transition-all duration-300 hover:scale-[1.01] hover:bg-gray-100 dark:hover:bg-gray-700">
 
                         <div class="w-full px-3.5 py-3 md:p-4">
                             <div class="grid gap-1 text-sm text-gray-500 dark:text-gray-400">

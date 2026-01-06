@@ -24,6 +24,8 @@ class Edit extends Component
 
     public ?int $jumlah_unit;
 
+    public ?string $spesifikasi = null;
+
     public ?int $assign_to;
 
     public function mount($id)
@@ -68,6 +70,7 @@ class Edit extends Component
         $this->validate([
             'nama_barang' => 'required|min:5|string',
             'jumlah_unit' => 'required|numeric|min:1',
+            'spesifikasi' => 'nullable|string',
         ], [
             'nama_barang.required' => 'Kolom nama barang wajib diisi.',
             'nama_barang.min' => 'Kolom nama barang minimal berisi 5 karakter.',
@@ -75,6 +78,7 @@ class Edit extends Component
             'jumlah_unit.required' => 'Kolom jumlah unit wajib diisi.',
             'jumlah_unit.numeric' => 'Kolom jumlah unit harus berupa angka.',
             'jumlah_unit.min' => 'Kolom jumlah unit minimal berjumlah 1 buah.',
+            'spesifikasi.string' => 'Kolom spesifikasi harus berupa string.',
         ]);
 
         // assign barang ke array

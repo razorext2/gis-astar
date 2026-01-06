@@ -5,7 +5,7 @@
     @include('dashboard.layoutsDash.head')
 </head>
 
-<body class="bg-gray-100 dark:bg-[#09090b]" x-data="{ openSidebar: true }">
+<body id="container" class="bg-gray-100 dark:bg-[#09090b]" x-data="{ openSidebar: true }">
 
     @if (session('status'))
         <x-notification-popup>
@@ -50,8 +50,53 @@
     <div class="fixed inset-0 z-50 bg-white dark:bg-[#09090b] md:z-[9999]" id="preloader">
     </div>
 
+    {{-- scroll to top --}}
+    <div x-data="scrollToggle()" x-init="init()">
+        <a href="javascript:void(0)" @click="handleScroll" :class="atTop ? 'rotate-0' : 'rotate-180'"
+            class="fixed bottom-4 right-4 h-fit w-fit rounded-full bg-blue-600 p-2.5 transition-all duration-300 ease-in-out lg:block">
+            <x-icons.carred-down class="h-6 w-6 text-white" id="scroll-to-top-icon" />
+        </a>
+    </div>
+
     <!-- js -->
     @include('dashboard.layoutsDash.js')
+    <script>
+        function scrollToggle() {
+            return {
+                atTop: true,
+                atBottom: false,
+
+                init() {
+                    this.onScroll()
+                    window.addEventListener('scroll', () => this.onScroll())
+                },
+
+                onScroll() {
+                    const bottomOffset =
+                        document.documentElement.scrollHeight - window.innerHeight
+
+                    this.atTop = window.scrollY <= 10
+                    this.atBottom = window.scrollY >= bottomOffset - 10
+                },
+
+                handleScroll() {
+                    if (this.atTop) {
+                        // scroll ke PALING BAWAH
+                        window.scrollTo({
+                            top: document.documentElement.scrollHeight,
+                            behavior: 'smooth'
+                        })
+                    } else {
+                        // scroll ke PALING ATAS
+                        window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                        })
+                    }
+                }
+            }
+        }
+    </script>
 </body>
 
 </html>

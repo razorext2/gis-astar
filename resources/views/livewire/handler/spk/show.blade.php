@@ -38,8 +38,11 @@
 
             <div
                 class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
-                <p class="text-xs italic">Tanggal Kirim</p>
-                <p class="font-semibold"> {{ $data->tgl_kirim }} </p>
+                <p class="text-xs italic">Waktu Penyerahan</p>
+                <p class="font-semibold">
+                    {{ $data->tgl_kirim }} Hari
+                    {{ $data->tgl_kirim <= 1 ? '(SEGERA)' : '' }}
+                </p>
             </div>
 
             <div
@@ -57,7 +60,7 @@
                 <p class="text-xs italic"> Produk Dipesan </p>
                 <p class="font-semibold">
                     @forelse ($data->products as $row)
-                        {{ $row['nama_barang'] . ' (' . $row['jumlah_unit'] . ' Unit)' . ($loop->last ? '.' : ', ') }}
+                        - {{ $row['nama_barang'] . ' (' . $row['jumlah_unit'] . ' Unit)' }}
                     @empty
                         Tidak ada produk dipesan
                     @endforelse

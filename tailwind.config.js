@@ -25,15 +25,14 @@ export default {
             fontFamily: {
                 sans: ["Poppins", ...defaultTheme.fontFamily.sans],
                 gaming: ["Bungee", "cursive"],
+                montserrat: ["Montserrat"],
             },
             colors: {
                 "pg-primary": colors.zinc,
-                "dark-primary": '#18181b',
-                "dark-secondary": '#242427',
+                "dark-primary": "#18181b",
+                "dark-secondary": "#242427",
             },
         },
     },
-    plugins: [
-        forms,
-    ],
+    plugins: [forms],
 };

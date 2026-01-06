@@ -147,11 +147,10 @@ class Create extends Form
     public ?string $tgl_cetak = null;
 
     #[Validate(
-        ['string', 'after_or_equal:tgl_cetak'],
+        ['integer'],
         message: [
             'required' => 'Kolom :attribute wajib diisi.',
-            'string' => 'Format :attribute tidak valid.',
-            'after_or_equal' => 'Kolom :attribute harus sama atau setelah tanggal cetak.',
+            'integer' => 'Format :attribute tidak valid.',
         ],
         attribute: [
             'tgl_kirim' => 'tanggal kirim',
@@ -160,12 +159,10 @@ class Create extends Form
     public ?string $tgl_kirim = null;
 
     #[Validate(
-        ['required', 'string', 'min:10', 'max:5000'],
+        ['required', 'string'],
         message: [
             'required' => 'Kolom :attribute wajib diisi.',
             'string' => 'Kolom :attribute harus berupa teks.',
-            'min' => 'Kolom :attribute minimal :min karakter.',
-            'max' => 'Kolom :attribute maksimal :max karakter.',
         ],
         attribute: [
             'keterangan' => 'keterangan',

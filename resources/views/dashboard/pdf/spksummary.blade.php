@@ -77,9 +77,11 @@
                 <td colspan="2">{{ $data->tgl_cetak ?? '-' }}</td>
             </tr>
             <tr>
-                <td width="20%">Tanggal Selesai</td>
+                <td width="20%">Waktu Penyerahan</td>
                 <td width="5%">:</td>
-                <td colspan="2">{{ $data->tgl_kirim ?? '-' }}</td>
+                <td colspan="2">
+                    {{ $data->tgl_kirim <= 1 ? 'SEGERA' : $data->tgl_kirim . ' Hari' }}
+                </td>
             </tr>
         </table>
 
@@ -89,20 +91,27 @@
     </div>
 
     <div id="content" class="flex flex-col text-justify">
-        <p style="margin-bottom: 10px">
+        <p style="padding: 0; margin: 0;">
             Mohon dapat dilaksanakan / dikerjakan, hal - hal dibawah ini :
         </p>
 
-        <p class="font-semibold uppercase">
-            @forelse ($data['barang'] as $barang)
-                {{ $barang['nama_barang'] . ' (' . $barang['jumlah_unit'] . ' Unit)' }}{{ $loop['last'] ? '.' : ',' }}
-            @empty
-                Tidak ada barang yang dilist.
-            @endforelse
-        </p>
+        <div>
+            <ul style="list-style:lower-alpha">
+                @forelse ($data->products as $item)
+                    <li>
+                        <p style="padding: 0; margin:0" class="font-semibold">{{ $item['jumlah_unit'] }} Unit
+                            {{ $item['nama_barang'] }}</p>
+                        <span>
+                            {!! nl2br(e($item['spesifikasi'] ?? '')) !!}
+                        </span>
+                    </li>
+                @empty
+                @endforelse
+            </ul>
+        </div>
 
-        <p style="margin-top: 10px">
-            {{ $data->keterangan ?? '-' }}
+        <p>
+            {!! nl2br(e($data->keterangan ?? '')) !!}
         </p>
     </div>
 
@@ -120,7 +129,7 @@
                 <td>{{ $data->customer['alamat'] ?? '-' }}</td>
             </tr>
             <tr>
-                <td colspan="2" class="uppercase" width="15%">c. personel</td>
+                <td colspan="2" class="uppercase" width="15%">c. person</td>
                 <td>{{ $data->customer['contact_person'] ?? '-' }}</td>
             </tr>
             <tr>

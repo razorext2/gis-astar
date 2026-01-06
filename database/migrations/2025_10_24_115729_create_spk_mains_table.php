@@ -38,7 +38,7 @@ return new class extends Migration
             $table->date('tgl_cetak')
                 ->comment('tanggal spk dicetak');
             $table->string('tgl_kirim', 50)
-                ->comment('tangggal spk dikirim');
+                ->comment('tanggal spk dikirim');
             $table->text('keterangan')->comment('keterangan spk');
             $table->json('customer')
                 ->comment('nama_customer, alamat, no_telp, contact');
