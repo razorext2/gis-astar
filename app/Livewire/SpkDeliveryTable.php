@@ -30,7 +30,11 @@ final class SpkDeliveryTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return SpkMain::query();
+        return SpkMain::query()
+            ->with('production')
+            ->whereHas('production', fn ($query) => $query->whereNotNull('packing_list')
+                ->whereHas('productionHistories', fn ($query) => $query->where('status_produksi', 10)))
+            ->orderBy('created_at', 'desc');
     }
 
     public function relationSearch(): array

@@ -139,6 +139,11 @@ class PackingList extends Component
                         'pack' => $part['pack'],
                     ]);
                 }
+
+                // ubah status spk
+                $this->production->spk->update([
+                    'status' => 3., // sedang diproses purchasing untuk pengiriman
+                ]);
             });
 
             // tampilkan pesan swal
