@@ -30,12 +30,6 @@ class PurchasingRequestSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'purchasing-request-create',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
                 'name' => 'purchasing-request-update',
                 'guard_name' => 'web',
                 'created_at' => now(),

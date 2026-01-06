@@ -19,7 +19,7 @@ class SpkMainPolicy
      */
     public function view(User $user): bool
     {
-        return $user->hasPermissionTo('spk-list');
+        return $user->hasPermissionTo('spk-detail');
     }
 
     /**
@@ -62,6 +62,16 @@ class SpkMainPolicy
         return $user->hasPermissionTo('spk-force-delete');
     }
 
+    public function billingIndex(User $user)
+    {
+        return $user->hasPermissionTo('spk-billing-index');
+    }
+
+    public function billingUpdate(User $user)
+    {
+        return $user->hasPermissionTo('spk-billing-update');
+    }
+
     /**
      * Check if user has permission to update no tagihan IDC PPN
      */
@@ -76,14 +86,6 @@ class SpkMainPolicy
     public function updateNoTagihanIdcNonPpn(User $user)
     {
         return $user->hasPermissionTo('spk-update-no-tagihan-idcnonppn');
-    }
-
-    /**
-     * Check if user has permission to update no tagihan IDC YPPN
-     */
-    public function updateNoTagihanIdyPpn(User $user)
-    {
-        return $user->hasPermissionTo('spk-update-no-tagihan-idyppn');
     }
 
     /**

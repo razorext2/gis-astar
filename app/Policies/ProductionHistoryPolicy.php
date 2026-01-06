@@ -46,22 +46,6 @@ class ProductionHistoryPolicy
         return $user->can('produksi-delete');
     }
 
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user): bool
-    {
-        return $user->can('produksi-restore');
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user): bool
-    {
-        return $user->can('produksi-force-delete');
-    }
-
     public function validate(User $user)
     {
         return $user->can('produksi-validate');

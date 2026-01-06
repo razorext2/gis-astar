@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class ProductionRole extends Seeder
+class ProductionRoleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -64,6 +64,18 @@ class ProductionRole extends Seeder
             ],
             [
                 'name' => 'spk-update-no-tagihan-idyppn',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'spk-billing-index',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'spk-billing-update',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

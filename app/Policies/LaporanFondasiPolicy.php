@@ -45,20 +45,4 @@ class LaporanFondasiPolicy
     {
         return $user->hasPermissionTo('laporan-fondasi-delete');
     }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user): bool
-    {
-        return $user->hasPermissionTo('laporan-fondasi-restore');
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user): bool
-    {
-        return $user->hasPermissionTo('laporan-fondasi-force-delete');
-    }
 }

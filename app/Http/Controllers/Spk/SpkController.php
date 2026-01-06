@@ -12,16 +12,22 @@ class SpkController extends Controller
     // controller spk
     public function index()
     {
+        $this->authorize('viewAny', SpkMain::class);
+
         return view('dashboard.spk.index');
     }
 
     public function create()
     {
+        $this->authorize('create', SpkMain::class);
+
         return view('dashboard.spk.create');
     }
 
     public function show($id)
     {
+        $this->authorize('view', SpkMain::class);
+
         $spk = SpkMain::select('id', 'nomor_order', 'tipe_tagihan')
             ->findOrFail($id);
 
@@ -30,6 +36,8 @@ class SpkController extends Controller
 
     public function edit($id)
     {
+        $this->authorize('update', SpkMain::class);
+
         $spk = SpkMain::select('id', 'nomor_order', 'tipe_tagihan')
             ->findOrFail($id);
 
@@ -56,11 +64,15 @@ class SpkController extends Controller
     // penagihan
     public function billingIndex()
     {
+        $this->authorize('billingIndex', SpkMain::class);
+
         return view('dashboard.spk.billing.index');
     }
 
     public function billingEdit($id)
     {
+        $this->authorize('billingUpdate', SpkMain::class);
+
         return view('dashboard.spk.billing.edit', compact('id'));
     }
     // penagihan end
@@ -68,11 +80,15 @@ class SpkController extends Controller
     // delivery
     public function deliveryIndex()
     {
+        $this->authorize('updateInformasiPengiriman', SpkMain::class);
+
         return view('dashboard.spk.delivery.index');
     }
 
     public function deliveryEdit($id)
     {
+        $this->authorize('updateInformasiPengiriman', SpkMain::class);
+
         return view('dashboard.spk.delivery.edit', compact('id'));
     }
     // delivery end

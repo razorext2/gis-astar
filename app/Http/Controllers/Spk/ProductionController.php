@@ -10,11 +10,15 @@ class ProductionController extends Controller
 {
     public function index()
     {
+        $this->authorize('viewAny', Production::class);
+
         return view('dashboard.spk.production.index');
     }
 
     public function show($id)
     {
+        $this->authorize('view', Production::class);
+
         $data = $this->getData($id);
 
         return view('dashboard.spk.production.show', [
@@ -24,6 +28,8 @@ class ProductionController extends Controller
 
     public function packingListCreate($id)
     {
+        $this->authorize('updatePackingList', Production::class);
+
         $data = $this->getData($id);
 
         return view('dashboard.spk.production.packing-list.create', [

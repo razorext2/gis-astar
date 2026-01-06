@@ -11,7 +11,7 @@ class ProductionPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('produksi-detail');
+        return $user->can('produksi-list');
     }
 
     /**
@@ -19,7 +19,7 @@ class ProductionPolicy
      */
     public function view(User $user): bool
     {
-        return $user->can('produksi-list');
+        return $user->can('produksi-detail');
     }
 
     /**
@@ -44,22 +44,6 @@ class ProductionPolicy
     public function delete(User $user): bool
     {
         return $user->can('produksi-delete');
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user): bool
-    {
-        return $user->can('produksi-restore');
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user): bool
-    {
-        return $user->can('produksi-force-delete');
     }
 
     public function updatePackingList(User $user)
