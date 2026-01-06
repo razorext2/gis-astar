@@ -60,66 +60,70 @@
             </div>
             {{-- end notifications --}}
 
-            {{-- Profile Photo --}}
-            <button
-                class="flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"
-                id="user-menu-button" data-dropdown-toggle="dropdown" data-dropdown-placement="bottom-end"
-                data-dropdown-offset-distance="13" type="button" aria-expanded="false">
-                <span class="sr-only">Open user menu</span>
-                <img class="h-9 w-9 rounded-full object-cover"
-                    src="{{ auth()->user()->profile_pic ? asset('storage/profile-pictures/' . auth()->user()->profile_pic) : asset('assets/img/profile-picture-5.jpg') }}"
-                    alt="user photo" loading="lazy" onerror="this.src = '{{ asset('assets/img/noImage.webp') }}'">
-            </button>
+            {{-- profile container --}}
+            <div id="profile-content">
+                {{-- Profile Photo --}}
+                <button
+                    class="flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"
+                    id="user-menu-button" data-dropdown-toggle="profile-dropdown" data-dropdown-placement="bottom-end"
+                    data-dropdown-offset-distance="13" type="button" aria-expanded="false">
+                    <span class="sr-only">Open user menu</span>
+                    <img class="h-9 w-9 rounded-full object-cover"
+                        src="{{ auth()->user()->profile_pic ? asset('storage/profile-pictures/' . auth()->user()->profile_pic) : asset('assets/img/profile-picture-5.jpg') }}"
+                        alt="user photo" loading="lazy" onerror="this.src = '{{ asset('assets/img/noImage.webp') }}'">
+                </button>
 
-            {{-- Dropdown Profile --}}
-            <div id="profile-container"
-                class="z-50 my-4 hidden w-56 list-none divide-y divide-gray-100 rounded-b-lg bg-white text-base shadow-md dark:divide-gray-600 dark:border-x dark:border-b dark:border-gray-700 dark:bg-dark-primary"
-                id="dropdown">
-                <div class="px-4 py-3">
-                    <span
-                        class="block text-sm font-semibold text-gray-900 dark:text-white">{{ auth()->user()->name }}</span>
-                    <span
-                        class="block truncate text-sm text-gray-500 dark:text-gray-400">{{ auth()->user()->email }}</span>
+                {{-- Dropdown Profile --}}
+                <div class="z-50 my-4 hidden w-56 list-none divide-y divide-gray-100 rounded-b-lg bg-white text-base shadow-md dark:divide-gray-600 dark:border-x dark:border-b dark:border-gray-700 dark:bg-dark-primary"
+                    id="profile-dropdown">
+                    <div class="px-4 py-3">
+                        <span
+                            class="block text-sm font-semibold text-gray-900 dark:text-white">{{ auth()->user()->name }}</span>
+                        <span
+                            class="block truncate text-sm text-gray-500 dark:text-gray-400">{{ auth()->user()->email }}</span>
+                    </div>
+                    <ul class="py-1 text-gray-500 dark:text-gray-400" aria-labelledby="dropdown-item">
+                        <li>
+                            <a class="block px-4 py-2 text-sm hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+                                href="{{ route('profile.me') }}">My profile</a>
+                        </li>
+                        <li>
+                            <form id="editProfile" action="{{ route('profile.edit') }}"
+                                onclick="event.preventDefault();">
+                            </form>
+                            <button
+                                class="block w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+                                form="editProfile" type="submit">
+                                Account settings
+                            </button>
+                        </li>
+                        <li>
+                            <div class="flex flex-row gap-x-4 px-4 py-2">
+                                <x-button-dark />
+                                <x-button-light />
+                            </div>
+                        </li>
+                    </ul>
+
+                    <ul class="py-1 text-gray-500 dark:text-gray-400" aria-labelledby="dropdown-item">
+                        <li>
+                            <form id="logout" method="post" action="{{ route('logout') }}"
+                                onclick="event.preventDefault();">@csrf</form>
+                            <button
+                                class="block w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                form="logout" type="submit">Sign out</button>
+                        </li>
+                        <li class="flex items-center px-4 py-3" id="installAppContainer">
+                            <button
+                                class="rounded-lg bg-green-600 px-4 py-2 text-center text-sm text-white ring-1 ring-gray-200 transition-colors duration-500 ease-in-out hover:bg-green-700 dark:bg-green-700 dark:ring-gray-700 dark:hover:bg-green-800 dark:hover:text-white"
+                                id="installApp">
+                                Install App
+                            </button>
+                        </li>
+                    </ul>
                 </div>
-                <ul class="py-1 text-gray-500 dark:text-gray-400" aria-labelledby="dropdown">
-                    <li>
-                        <a class="block px-4 py-2 text-sm hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                            href="{{ route('profile.me') }}">My profile</a>
-                    </li>
-                    <li>
-                        <form id="editProfile" action="{{ route('profile.edit') }}" onclick="event.preventDefault();">
-                        </form>
-                        <button
-                            class="block w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                            form="editProfile" type="submit">
-                            Account settings
-                        </button>
-                    </li>
-                    <li>
-                        <div class="flex flex-row gap-x-4 px-4 py-2">
-                            <x-button-dark />
-                            <x-button-light />
-                        </div>
-                    </li>
-                </ul>
-
-                <ul class="py-1 text-gray-500 dark:text-gray-400" aria-labelledby="dropdown">
-                    <li>
-                        <form id="logout" method="post" action="{{ route('logout') }}"
-                            onclick="event.preventDefault();">@csrf</form>
-                        <button
-                            class="block w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                            form="logout" type="submit">Sign out</button>
-                    </li>
-                    <li class="flex items-center px-4 py-3" id="installAppContainer">
-                        <button
-                            class="rounded-lg bg-green-600 px-4 py-2 text-center text-sm text-white ring-1 ring-gray-200 transition-colors duration-500 ease-in-out hover:bg-green-700 dark:bg-green-700 dark:ring-gray-700 dark:hover:bg-green-800 dark:hover:text-white"
-                            id="installApp">
-                            Install App
-                        </button>
-                    </li>
-                </ul>
             </div>
+            {{-- end profile container --}}
         </div>
     </div>
 </nav>
