@@ -2,8 +2,8 @@
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Schedule;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schedule;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
@@ -16,7 +16,7 @@ Schedule::call(function () {
         ->delete();
 })
     ->timezone('Asia/Jakarta')
-    ->dailyAt('09:30')
+    ->dailyAt('00:30')
     ->name('Purge notifications >7 hari')
     ->onOneServer()
     ->withoutOverlapping()
@@ -29,7 +29,7 @@ Schedule::call(function () {
         ->delete();
 })
     ->timezone('Asia/Jakarta')
-    ->dailyAt('09:50')
+    ->dailyAt('00:50')
     ->name('Purge logs >7 hari')
     ->onOneServer()
     ->withoutOverlapping()
@@ -38,7 +38,7 @@ Schedule::call(function () {
 // Maintenance window harian (opsional)
 Schedule::command('down')  // tambah opsi --retry/--secret kalau perlu
     ->timezone('Asia/Jakarta')
-    ->dailyAt('09:20')
+    ->dailyAt('23:00')
     ->name('Maintenance harian')
     ->onOneServer()
     ->evenInMaintenanceMode();
@@ -46,6 +46,6 @@ Schedule::command('down')  // tambah opsi --retry/--secret kalau perlu
 Schedule::command('up')
     ->timezone('Asia/Jakarta')
     ->name('Aplikasi live lagi')
-    ->dailyAt('10:59')
+    ->dailyAt('02:00')
     ->onOneServer()
     ->evenInMaintenanceMode();
