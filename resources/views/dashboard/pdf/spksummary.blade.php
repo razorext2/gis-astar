@@ -167,14 +167,17 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="3" height="40px">Disetujui Oleh,</td>
+                <td colspan="3" height="20px"></td>
             </tr>
             <tr>
-                <td height="60px" colspan="3"></td>
+                <td colspan="3">Disetujui Oleh,</td>
             </tr>
             <tr>
-                <td colspan="3" class="underline">
-                    (Suriyatini)
+                <td colspan="3" height="60px">
+                    <p
+                        style="padding:0; margin-left: -40px; margin-top: 0; margin-bottom: 0; font-size: 2rem; font-weight: bold;">
+                        SURIYATINI</p>
+                    <p style="padding:0; margin: 0; font-size: 0.75rem;">Digitally Signed.</p>
                 </td>
             </tr>
         </table>

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Creagia\LaravelSignPad\Concerns\RequiresSignature;
+use Creagia\LaravelSignPad\Contracts\CanBeSigned;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,9 +16,9 @@ use Laravel\Sanctum\HasApiTokens;
 use NotificationChannels\WebPush\HasPushSubscriptions;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements CanBeSigned
 {
-    use HasApiTokens, HasFactory, HasPushSubscriptions, HasRoles, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, HasPushSubscriptions, HasRoles, Notifiable, RequiresSignature, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

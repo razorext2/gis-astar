@@ -32,6 +32,10 @@
             width: 100%;
         }
 
+        .h-full {
+            height: 100%;
+        }
+
         .text-right {
             text-align: right;
         }
@@ -58,6 +62,11 @@
 
         .relative {
             position: relative;
+        }
+
+        .page-break {
+            page-break-before: always;
+            break-before: page;
         }
     </style>
 </head>
@@ -119,7 +128,9 @@
         </p>
     </div>
 
-    <div id="footer" style="margin-top: 100px" class="w-full">
+    <div class="page-break"></div>
+
+    <div id="footer" class="h-full w-full" style="position: relative;">
         <table class="w-full">
             <tr height="40px">
                 <td colspan="3" class="uppercase">waktu penyerahan :</td>
@@ -142,12 +153,12 @@
             </tr>
         </table>
 
-        <table class="w-full" style="margin-top: 10px">
+        <table class="w-full" style="margin-top: 10px; position: absolute; bottom: 20rem;">
             <tr>
                 <td></td>
                 <td></td>
                 <td width="30%" class="text-center">
-                    <p style="margin: 6px">Medan, Tanggal</p>
+                    <p style="margin: 6px">Medan, </p>
                     <p style="margin: 6px">Dilaksanakan Oleh,</p>
                 </td>
             </tr>
@@ -167,10 +178,18 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="3" height="40px">Disetujui Oleh,</td>
+                <td colspan="3" height="20px"></td>
             </tr>
             <tr>
-                <td height="60px" colspan="3"></td>
+                <td colspan="3">Disetujui Oleh,</td>
+            </tr>
+            <tr>
+                <td colspan="3" height="60px">
+                    <p
+                        style="padding:0; margin-left: -40px; margin-top: 0; margin-bottom: 0; font-size: 2rem; font-weight: bold;">
+                        SURIYATINI</p>
+                    <p style="padding:0; margin: 0; font-size: 0.75rem;">Digitally Signed.</p>
+                </td>
             </tr>
             <tr>
                 <td colspan="3" class="underline">

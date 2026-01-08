@@ -49,7 +49,11 @@
                 @livewire('inspire-component')
 
             </div>
+
+
         </div>
+
+        @livewire('utils.digital-signature')
 
         <div
             class="col-span-2 rounded-lg bg-white p-4 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 sm:p-8 lg:col-span-1">
