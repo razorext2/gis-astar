@@ -1,4 +1,4 @@
-<form class="grid gap-4 lg:grid-cols-2" method="POST" wire:submit.prevent="store">
+<form class="grid items-start gap-4 lg:grid-cols-2" method="POST" wire:submit.prevent="store">
 
     <div
         class="col-span-2 grid grow gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:col-span-1 lg:gap-4 lg:p-6">
