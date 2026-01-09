@@ -295,7 +295,7 @@
             @if (auth()->user()->hasAnyPermission(['spk-list', 'purchasing-request-list', 'produksi-list', 'spk-update-informasi-pengiriman']))
                 <li x-data="{ lokasi: {{ Route::is('spk.*') || Route::is('production.*') || Route::is('purchasing-request.*') || Route::is('billing.*') || Route::is('delivery.*') ? 'true' : 'false' }} }">
                     <button
-                        class="{{ Route::is('spk.*') || Route::is('production.*') || Route::is('purchasing-request.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
+                        class="{{ Route::is('spk.*') || Route::is('production.*') || Route::is('purchasing-request.*') || Route::is('billing.*') || Route::is('delivery.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
                         type="button" aria-controls="lokasi-dropdown" @click="lokasi = !lokasi"
                         :aria-expanded="lokasi">
 
