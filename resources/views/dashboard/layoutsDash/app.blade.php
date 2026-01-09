@@ -43,7 +43,7 @@
 
     {{-- bikin navigasi ala android --}}
     @persist('mobile-drawer')
-        <x-mobile-drawer></x-mobile-drawer>
+        <x-drawer.mobile-menu />
     @endpersist
 
     {{-- preload --}}
