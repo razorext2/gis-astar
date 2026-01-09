@@ -82,7 +82,7 @@ class FetchPurchasingRequest extends Component
     public function assign()
     {
         // cek authorization
-        $this->authorize('create', PurchasingRequest::class);
+        $this->authorize('update', PurchasingRequest::class);
 
         // validasi form
         $this->validate();
