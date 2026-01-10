@@ -2,20 +2,22 @@
 
 namespace App\Livewire;
 
-use Illuminate\Support\Facades\Blade;
-use \Spatie\Permission\Models\Role;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Blade;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
-use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use PowerComponents\LivewirePowerGrid\PowerGridFields;
+use Spatie\Permission\Models\Role;
 
 final class RolesTable extends PowerGridComponent
 {
     public string $tableName = 'RolesTable';
+
     public bool $deferLoading = true;
+
     public bool $showFilters = true;
 
     public function setUp(): array
@@ -30,7 +32,7 @@ final class RolesTable extends PowerGridComponent
                 ->showPerPage(25, [0, 10, 25, 50, 500])
                 ->showRecordCount(),
             PowerGrid::responsive()
-                ->fixedColumns('name', 'guard_name', 'created_at', 'updated_at')
+                ->fixedColumns('name', 'guard_name', 'created_at', 'updated_at'),
         ];
     }
 
@@ -55,10 +57,12 @@ final class RolesTable extends PowerGridComponent
             ->add('name')
             ->add('guard_name')
             ->add('permissions', function ($query) {
-                $data = $query->permissions
+                $permissions = $query->permissions
                     ->pluck('name')
                     ->sort()
                     ->values();
+
+                $data = $permissions->count() > 5 ? $permissions->take(5)->push('...') : $permissions;
 
                 return view('components.table-component.tags', ['items' => $data]);
             })
@@ -98,7 +102,7 @@ final class RolesTable extends PowerGridComponent
     {
         return [
             Filter::inputText('name', 'name'),
-            Filter::datepicker('created_at', 'created_at')
+            Filter::datepicker('created_at', 'created_at'),
         ];
     }
 
