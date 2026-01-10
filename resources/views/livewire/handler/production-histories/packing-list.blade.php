@@ -57,21 +57,7 @@
 
                             <div class="w-full">
                                 <x-input.select id="satuan_barang" name="satuan_barang" wire:model="satuan_barang"
-                                    :textLabel="'Satuan'" :labels="true" :defaultOption="'Pilih satuan'" :options="[
-                                        'blok' => 'Blok',
-                                        'buah' => 'Buah',
-                                        'cd' => 'CD',
-                                        'gulung' => 'Gulung',
-                                        'koli' => 'Koli',
-                                        'lot' => 'Lot',
-                                        'meter' => 'Meter',
-                                        'pcs' => 'Pcs',
-                                        'peti' => 'Peti',
-                                        'potong' => 'Potong',
-                                        'section' => 'Section',
-                                        'set' => 'Set',
-                                        'unit' => 'Unit',
-                                    ]" />
+                                    :textLabel="'Satuan'" :labels="true" :defaultOption="'Pilih satuan'" :options="config('spk-config.satuan')" />
 
                                 @error('satuan_barang')
                                     <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
@@ -167,13 +153,7 @@
 
                             <div>
                                 <x-input.select id="satuan" name="satuan" :labels="true" :textLabel="'Satuan'"
-                                    :defaultOption="'Pilih satuan'" :options="[
-                                        'Potong' => 'Potong',
-                                        'Unit' => 'Unit',
-                                        'Gulung' => 'Gulung',
-                                        'Koli' => 'Koli',
-                                        'Pcs' => 'Pcs',
-                                    ]" wire:model="form.satuan" />
+                                    :defaultOption="'Pilih satuan'" :options="config('spk-config.satuan')" wire:model="form.satuan" />
 
                                 @error('form.satuan')
                                     <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
@@ -285,21 +265,7 @@
 
                         <div class="col-span-2 lg:col-span-1">
                             <x-input.select id="satuan_peti" name="satuan_peti" wire:model="satuan_peti"
-                                :textLabel="'Satuan'" :labels="true" :defaultOption="'Pilih satuan'" :options="[
-                                    'blok' => 'Blok',
-                                    'buah' => 'Buah',
-                                    'cd' => 'CD',
-                                    'gulung' => 'Gulung',
-                                    'koli' => 'Koli',
-                                    'lot' => 'Lot',
-                                    'meter' => 'Meter',
-                                    'pcs' => 'Pcs',
-                                    'peti' => 'Peti',
-                                    'potong' => 'Potong',
-                                    'section' => 'Section',
-                                    'set' => 'Set',
-                                    'unit' => 'Unit',
-                                ]" />
+                                :textLabel="'Satuan'" :labels="true" :defaultOption="'Pilih satuan'" :options="config('spk-config.satuan')" />
 
                             @error('satuan_peti')
                                 <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
