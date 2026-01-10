@@ -141,19 +141,19 @@
                 <td colspan="3" class="uppercase">waktu penyerahan :</td>
             </tr>
             <tr>
-                <td colspan="2" class="uppercase" width="15%">untuk</td>
+                <td colspan="2" class="uppercase" width="20%">untuk</td>
                 <td>{{ $data->customer['nama_perusahaan'] ?? '-' }}</td>
             </tr>
             <tr>
-                <td colspan="2" class="uppercase" width="15%">alamat</td>
+                <td colspan="2" class="uppercase" width="20%">alamat</td>
                 <td>{{ $data->customer['alamat'] ?? '-' }}</td>
             </tr>
             <tr>
-                <td colspan="2" class="uppercase" width="15%">c. person</td>
+                <td colspan="2" class="uppercase" width="20%">c. person</td>
                 <td>{{ $data->customer['contact_person'] ?? '-' }}</td>
             </tr>
             <tr>
-                <td colspan="2" class="uppercase" width="15%">no tlp / hp</td>
+                <td colspan="2" class="uppercase" width="20%">no tlp / hp</td>
                 <td>{{ $data->customer['no_hp'] ?? '-' }}</td>
             </tr>
         </table>
