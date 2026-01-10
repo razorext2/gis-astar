@@ -208,9 +208,9 @@
                     </div>
 
                     <div
-                        class="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-row text-center text-xs font-medium leading-none text-white mix-blend-difference">
+                        class="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-row text-center text-xs font-medium leading-none text-white">
                         <span>{{ $laporanFondasiLastProgress['value'] }}%</span>
-                        <span>({{ $laporanFondasiLastProgress['description'] }})</span>
+                        {{-- <span>({{ $laporanFondasiLastProgress['description'] }})</span> --}}
                     </div>
                 </div>
 

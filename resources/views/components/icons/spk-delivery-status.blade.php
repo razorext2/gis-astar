@@ -17,11 +17,10 @@
 
                 <span class="relative flex h-24 w-24 items-center justify-center">
                     <span
-                        class="{{ $ping ? 'animate-ping' : '' }} {{ $status > $itemstatus ?? 'bg-green-500' }} absolute inline-flex h-14 w-14 self-center rounded-full opacity-60"></span>
+                        class="{{ $ping ? 'animate-ping' : '' }} {{ $status == $itemstatus ? 'bg-green-500' : '' }} absolute inline-flex h-14 w-14 self-center rounded-full opacity-60"></span>
                     <span
-                        class="{{ $status > $itemstatus ?? 'bg-green-200' }} relative inline-flex h-12 w-12 rounded-full"></span>
+                        class="{{ $status == $itemstatus ? 'bg-green-200' : '' }} relative inline-flex h-12 w-12 rounded-full"></span>
                 </span>
-
             </div>
         </div>
 
