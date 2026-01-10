@@ -173,11 +173,11 @@ class Create extends Component
 
         // siapa yg bikin spk nya
         $spk_data['added_by'] = Auth::user()->name;
-        $spk_data['added_by_signature_img'] = Auth::user()?->signature?->getSignatureImagePath() ?? 'Not set';
+        $spk_data['added_by_signature_img'] = Auth::user()?->signature?->getSignatureImagePath() ?? null;
 
         // assign user yang sedang login
         $spk_data['assign_to'] = User::find($spk_data['assign_to'])->name ?? '';
-        $spk_data['assign_to_signature_img'] = User::find($spk_data['assign_to'])?->signature?->getSignatureImagePath() ?? 'Not set';
+        $spk_data['assign_to_signature_img'] = User::find($spk_data['assign_to'])?->signature?->getSignatureImagePath() ?? null;
 
         // ttd bu tini
         // $spk_data['bu_tini_signature_img'] = User::find(1105)?->signature?->getSignatureImagePath() ?? 'Not set';

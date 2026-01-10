@@ -179,13 +179,16 @@
             <tr style="padding:0; margin: 0;">
                 <td style="position:relative; padding: 0; line-height: 0;">
                     <div style="position: relative; height: 115px;">
-                        <img class="items-center"
-                            src="{{ asset('storage/' . $data->addedBy?->signature?->getSignatureImagePath()) }}"
-                            style="position: absolute; top:0; left:20%; width: 125px;display: block;margin: 0;">
 
-                        <span style="position: absolute; right: 10px;bottom: 10;font-size: 10px;line-height: 1;">
-                            Digitally sign at:<br>{{ now() }}
-                        </span>
+                        @if ($data->addedBy->signature)
+                            <img class="items-center"
+                                src="{{ asset('storage/' . $data->addedBy->signature->getSignatureImagePath()) }}"
+                                style="position: absolute; top:0; left:20%; width: 125px;display: block;margin: 0;">
+
+                            <span style="position: absolute; right: 10px;bottom: 10;font-size: 10px;line-height: 1;">
+                                Digitally sign at:<br>{{ now() }}
+                            </span>
+                        @endif
 
                         <p style="position: absolute; width:100%;  bottom: -20px; text-decoration: underline;">
                             ({{ $data->addedBy->name }})
