@@ -72,6 +72,15 @@
                         <span class="mt-2 text-xs text-red-500"> {{ $message }}</span>
                     @enderror
                 </div>
+
+                <div class="w-full">
+                    <x-input.select id="satuan_barang" name="satuan_barang" :labels="true" :textLabel="'Satuan'"
+                        :defaultOption="'Pilih satuan'" wire:model="satuan_barang" :options="config('spk-config.satuan')" />
+
+                    @error('satuan_barang')
+                        <span class="mt-2 text-xs text-red-500"> {{ $message }}</span>
+                    @enderror
+                </div>
             </div>
 
             <div class="w-full">
@@ -97,10 +106,11 @@
                 <table id="barang-list-table" class="w-full">
                     <thead
                         class="border-b border-gray-200 text-sm font-semibold text-gray-800 dark:border-gray-400 dark:text-white">
-                        <th class="py-2">#</th>
-                        <th class="py-2">Nama Barang</th>
-                        <th class="py-2">Jumlah</th>
-                        <th class="py-2">Aksi</th>
+                        <th class="p-2">#</th>
+                        <th class="p-2">Nama Barang</th>
+                        <th class="p-2">Jumlah</th>
+                        <th class="p-2">Satuan</th>
+                        <th class="p-2">Aksi</th>
                     </thead>
 
                     <tbody>
@@ -117,6 +127,10 @@
                                     class="items-center text-center text-sm text-gray-800 dark:text-white">
                                     {{ $row['jumlah_unit'] }}
                                 </td>
+                                <td rowspan="2"
+                                    class="items-center text-center text-sm text-gray-800 dark:text-white">
+                                    {{ $row['satuan_barang'] ?? 'Not set.' }}
+                                </td>
                                 <td rowspan="2" class="items-center">
                                     <x-button.danger class="!p-1 text-xs" id="hapus-barang"
                                         wire:click="hapusBarang({{ $index }})">
@@ -132,7 +146,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="h-10 items-center text-center text-sm italic text-red-500">
+                                <td colspan="5" class="h-10 items-center text-center text-sm italic text-red-500">
                                     Belum ada barang pada
                                     list.
                                 </td>
@@ -290,6 +304,52 @@
         </div>
 
     </div>
+
+    {{-- accordion form tambah packing list --}}
+    <div class="col-span-2" id="accordion-packing-form" x-data="{ accordionOpen: $wire.is_delayed, onDelay: $wire.is_delayed }">
+        <button type="button"
+            class="flex w-full items-center justify-between gap-3 rounded-lg border border-gray-200 bg-white p-5 font-medium text-gray-500 shadow-md transition-all duration-300 ease-in-out hover:bg-blue-100 dark:border-gray-600 dark:bg-dark-primary dark:text-gray-400 dark:shadow-none dark:hover:bg-gray-800"
+            @click="accordionOpen = !accordionOpen" :class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
+            <span class="flex flex-col text-left">
+                <h3 class="text-base font-semibold text-red-500">
+                    SPK Mengalami Delay?
+                </h3>
+                <p class="block text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Klik untuk menambahkan detail jika SPK mengalami Delay.
+                </p>
+            </span>
+
+            <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
+                <x-icons.carred-down class="h-4 w-4" />
+            </span>
+        </button>
+
+        <div class="rounded-b-lg border border-gray-200 bg-white p-5 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none"
+            x-show="accordionOpen" x-collapse x-cloak>
+
+            <div>
+                <label class="mb-5 inline-flex cursor-pointer items-center">
+                    <input type="checkbox" x-on:click="onDelay = !onDelay" wire:model="is_delayed" value=""
+                        class="peer sr-only">
+                    <div
+                        class="peer relative h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full">
+                    </div>
+                    <span x-show="onDelay == true" class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                        SPK Mengalami Delay
+                    </span>
+                    <span x-show="onDelay == false" class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                        SPK Tidak Mengalami Delay</span>
+                </label>
+            </div>
+
+            <div x-show="onDelay">
+                <x-input.textarea id="delay_note" name="delay_note" wire:model="delay_note" :labels="true"
+                    :textLabel="'Catatan'" rows="6" />
+            </div>
+
+        </div>
+    </div>
+    {{-- end accordion form tambah packing list --}}
 
     <div class="flex w-full flex-row justify-end gap-2 lg:col-span-2">
         <x-button.success id="ubah-button" type="submit">

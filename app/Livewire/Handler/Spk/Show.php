@@ -40,10 +40,18 @@ class Show extends Component
 
     public ?array $newDocumentations = [];
 
+    public $data = null;
+
     public function construct($id)
     {
         // assign id
         $this->id = $id;
+    }
+
+    public function mount()
+    {
+        $this->data = SpkMain::with('addedBy', 'assignTo', 'updateBy', 'pengirimanUpdatedBy', 'noTagihanUpdatedBy', 'laporanFondasi', 'spkHistories')
+            ->findOrFail($this->id);
     }
 
     public function storeLaporanFondasi()
@@ -280,22 +288,41 @@ class Show extends Component
         $this->form->newDocumentations = [];
     }
 
+    public function validateSpk()
+    {
+        $this->authorize('validate', SpkMain::class);
+
+        $this->data->update([
+            'status_approval' => 1,
+            'approved_by' => Auth::id(),
+            'approved_at' => now(),
+        ]);
+
+        $this->data->spkHistories()->create([
+            'title' => 'SPK telah disetujui.',
+            'keterangan' => Auth::user()->name.' telah menyetujui SPK. Sekarang SPK dapat lanjut ke tahap selanjutnya.',
+            'added_by' => Auth::id(),
+        ]);
+
+        $this->dispatch(
+            event: 'swal',
+            icon: 'success',
+            title: 'Berhasil.',
+            text: 'Berhasil Approve SPK.');
+    }
+
     public function render()
     {
-        // ambil data spk
-        $spk = SpkMain::with('addedBy', 'assignTo', 'updateBy', 'pengirimanUpdatedBy', 'noTagihanUpdatedBy', 'laporanFondasi', 'spkHistories')
-            ->findOrFail($this->id);
-
         // ambil laporan fondasi terakhir
-        $lastLaporanFondasi = $spk->laporanFondasi()->latest()->first();
+        $lastLaporanFondasi = $this->data->laporanFondasi()->latest()->first();
 
         // cek apakah file pdf spk ditemukan
         $file = Storage::disk('pdf')->exists($this->id.'.pdf');
 
         return view('livewire.handler.spk.show', [
-            'data' => $spk,
-            'spkHistories' => $spk->spkHistories()->latest()->paginate(5, pageName: 'spk-page'),
-            'laporanFondasi' => $spk->laporanFondasi()->latest()->paginate(5, pageName: 'fondasi-page'),
+            'data' => $this->data,
+            'spkHistories' => $this->data->spkHistories()->latest()->paginate(5, pageName: 'spk-page'),
+            'laporanFondasi' => $this->data->laporanFondasi()->latest()->paginate(5, pageName: 'fondasi-page'),
             'laporanFondasiLastProgress' => [
                 'value' => $lastLaporanFondasi?->status_pengerjaan ?? 0,
                 'description' => $lastLaporanFondasi?->status_pengerjaan_description ?? 'Belum ada progres.',

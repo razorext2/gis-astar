@@ -97,6 +97,15 @@
                                 <span class="mt-2 text-xs text-red-500"> {{ $message }}</span>
                             @enderror
                         </div>
+
+                        <div class="w-full">
+                            <x-input.select id="satuan_barang" name="satuan_barang" :labels="true" :textLabel="'Satuan'"
+                                :defaultOption="'Pilih satuan'" wire:model="satuan_barang" :options="config('spk-config.satuan')" />
+
+                            @error('satuan_barang')
+                                <span class="mt-2 text-xs text-red-500"> {{ $message }}</span>
+                            @enderror
+                        </div>
                     </div>
 
                     <div class="w-full">
@@ -125,15 +134,15 @@
                         <table id="barang-list-table" class="w-full">
                             <thead
                                 class="border-b border-gray-200 text-sm font-semibold text-gray-800 dark:border-gray-400 dark:text-white">
-                                <th class="py-2">#</th>
-                                <th class="py-2">Nama Barang</th>
-                                <th class="py-2">Jumlah</th>
-                                <th class="py-2">Aksi</th>
+                                <th class="px-2 py-2">#</th>
+                                <th class="px-2 py-2">Nama Barang</th>
+                                <th class="px-2 py-2">Jumlah</th>
+                                <th class="px-2 py-2">Satuan</th>
+                                <th class="px-2 py-2">Aksi</th>
                             </thead>
-
                             <tbody>
                                 @forelse ($createForm->barang as $index => $row)
-                                    <tr>
+                                    <tr class="py-1">
                                         <td rowspan="2"
                                             class="w-10 items-center text-center text-sm text-gray-800 dark:text-white">
                                             {{ $index + 1 }}.
@@ -144,6 +153,10 @@
                                         <td rowspan="2"
                                             class="items-center text-center text-sm text-gray-800 dark:text-white">
                                             {{ $row['jumlah_unit'] }}
+                                        </td>
+                                        <td rowspan="2"
+                                            class="items-center text-center text-sm text-gray-800 first-letter:uppercase dark:text-white">
+                                            {{ $row['satuan_barang'] }}
                                         </td>
                                         <td rowspan="2" class="items-center">
                                             <x-button.danger class="!p-1 text-xs" id="hapus-barang"
@@ -160,10 +173,9 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4"
+                                        <td colspan="5"
                                             class="h-10 items-center text-center text-sm italic text-red-500">
-                                            Belum ada barang pada
-                                            list.
+                                            Belum ada barang pada list.
                                         </td>
                                     </tr>
                                 @endforelse
@@ -239,18 +251,20 @@
                     @endif
                 </div>
 
-                <div class="flex w-full flex-col gap-1">
-                    <x-input.basic id="nomor_order" name="nomor_order" wire:model.live="createForm.nomor_order"
-                        placeholder="000.XXVXXX20XX">
-                        No. Order
-                    </x-input.basic>
+                <div class="w-full">
+                    <div>
+                        <x-input.basic id="nomor_order" name="nomor_order" wire:model.live="createForm.nomor_order"
+                            placeholder="000.XXVXXX20XX">
+                            No. Order
+                        </x-input.basic>
+                    </div>
 
-                    <span class="text-sm text-green-500">
+                    <span class="mt-2 text-sm text-green-500">
                         SPK Terakhir: {{ $nomor_order_lama }}
                     </span>
 
                     @error('createForm.nomor_order')
-                        <span class="text-xs text-red-500">{{ $message }}</span>
+                        <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
                     @enderror
                 </div>
 

@@ -24,7 +24,13 @@ class Edit extends Component
 
     public ?int $jumlah_unit;
 
+    public ?string $satuan_barang;
+
     public ?string $spesifikasi = null;
+
+    public bool $is_delayed;
+
+    public ?string $delay_note;
 
     public ?int $assign_to;
 
@@ -62,6 +68,9 @@ class Edit extends Component
         $this->createForm->assign_to = $data->assign_to;
         $this->assign_to = $data->assign_to;
         $this->createForm->keterangan = $data->keterangan;
+
+        $this->is_delayed = $data->on_delay;
+        $this->delay_note = $data->on_delay_notes;
     }
 
     public function tambahBarang()
@@ -70,6 +79,7 @@ class Edit extends Component
         $this->validate([
             'nama_barang' => 'required|min:5|string',
             'jumlah_unit' => 'required|numeric|min:1',
+            'satuan_barang' => 'required|string',
             'spesifikasi' => 'nullable|string',
         ], [
             'nama_barang.required' => 'Kolom nama barang wajib diisi.',
@@ -78,6 +88,8 @@ class Edit extends Component
             'jumlah_unit.required' => 'Kolom jumlah unit wajib diisi.',
             'jumlah_unit.numeric' => 'Kolom jumlah unit harus berupa angka.',
             'jumlah_unit.min' => 'Kolom jumlah unit minimal berjumlah 1 buah.',
+            'satuan_barang.required' => 'Kolom satuan wajib diisi.',
+            'satuan_barang.string' => 'Kolom satuan harus berupa string',
             'spesifikasi.string' => 'Kolom spesifikasi harus berupa string.',
         ]);
 
@@ -85,11 +97,15 @@ class Edit extends Component
         $this->createForm->barang[] = [
             'nama_barang' => $this->nama_barang,
             'jumlah_unit' => $this->jumlah_unit,
+            'satuan_barang' => $this->satuan_barang,
+            'spesifikasi' => $this->spesifikasi,
         ];
 
         // kosongkan nama_barang
         $this->nama_barang = null;
         $this->jumlah_unit = null;
+        $this->satuan_barang = null;
+        $this->spesifikasi = null;
     }
 
     public function hapusBarang($index)
@@ -147,7 +163,7 @@ class Edit extends Component
         return $this->runSafely(function () use ($barangs, $customer) {
             $spk = DB::transaction(function () use ($barangs, $customer) {
                 // update data spk
-                $this->data->update([
+                $data = [
                     'nomor_order' => $this->createForm->nomor_order,
                     'tipe_tagihan' => $this->createForm->tipe_tagihan,
                     'status_nomor_tagihan' => $this->createForm->status_nomor_tagihan,
@@ -160,7 +176,20 @@ class Edit extends Component
                     'products' => $barangs,
                     'assign_to' => $this->createForm->assign_to,
                     'updated_by' => Auth::id(),
-                ]);
+                    'on_delay' => $this->is_delayed,
+                ];
+
+                if ($this->is_delayed) {
+                    $data['on_delay_at'] = now();
+                    $data['on_delay_notes'] = $this->delay_note;
+                    $data['on_delay_by'] = Auth::id();
+                } else {
+                    $data['on_delay_at'] = null;
+                    $data['on_delay_notes'] = null;
+                    $data['on_delay_by'] = null;
+                }
+
+                $this->data->update($data);
 
                 // tambah history spk
                 SpkHistory::create([
@@ -170,20 +199,32 @@ class Edit extends Component
                     'added_by' => Auth::id(),
                 ]);
 
+                // tambah history spk untuk status delay
+                if ($this->is_delayed) {
+                    SpkHistory::create([
+                        'spk_id' => $this->data->id,
+                        'title' => 'SPK mengalami Delay.',
+                        'keterangan' => Auth::user()->name." mengubah status SPK menjadi Delay karena: $this->delay_note",
+                        'added_by' => Auth::id(),
+                    ]);
+                }
+
                 // refresh data
                 return $this->data->refresh();
             });
 
             // jalankan job untuk download PDF
-            ExportPdfJob::dispatch(
-                ['spk-create'],
-                'App\Models\Spk\SpkMain',
-                $spk->id,
-                'f4',
-                'portrait',
-                'dashboard.pdf.spksummary',
-                "SPK $spk->nomor_order anda telah siap untuk didownload. Silahkan klik tombol download dibawah ini:",
-                'spk.download');
+            if (! $this->is_delayed) {
+                ExportPdfJob::dispatch(
+                    ['spk-create'],
+                    'App\Models\Spk\SpkMain',
+                    $spk->id,
+                    'f4',
+                    'portrait',
+                    'dashboard.pdf.spksummary',
+                    "SPK $spk->nomor_order anda telah siap untuk didownload. Silahkan klik tombol download dibawah ini:",
+                    'spk.download');
+            }
 
             // tampilkan pesan swal
             $this->dispatch(

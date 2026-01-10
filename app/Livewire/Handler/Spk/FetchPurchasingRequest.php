@@ -92,7 +92,7 @@ class FetchPurchasingRequest extends Component
 
         // ambil data spk
         $spk = \App\Models\Spk\SpkMain::with('production')
-            ->find($this->spk_id);
+            ->findOrFail($this->spk_id);
 
         // jika belum ada item
         if ($count == 0) {
@@ -100,10 +100,10 @@ class FetchPurchasingRequest extends Component
             return $this->dispatch('swal', icon: 'error', text: 'Pilih minimal 1 item untuk di assign.', title: 'Gagal');
         }
 
-        // jika spk tidak ditemukan
-        if (! $spk) {
+        // jika status approval blm approve
+        if ($spk->status_approval != 1) {
             // return error
-            return $this->dispatch('swal', icon: 'error', text: 'Tidak ada spk dengan ID yang dimaksud.', title: 'Gagal');
+            return $this->dispatch('swal', icon: 'error', text: 'SPK belum di approve.', title: 'Gagal');
         }
 
         // run safely

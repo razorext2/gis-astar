@@ -33,6 +33,14 @@ class SpkMain extends Model
         'pengiriman_updated_by',
         'no_tagihan_updated_by',
         'purchasing_list_updated_by',
+        'status_approval',
+        'catatan_approval',
+        'approved_by',
+        'approved_at',
+        'on_delay',
+        'on_delay_at',
+        'on_delay_notes',
+        'on_delay_by',
     ];
 
     protected $casts = [
@@ -44,6 +52,7 @@ class SpkMain extends Model
     protected $appends = [
         'status_description',
         'status_nomor_tagihan_description',
+        'status_approval_description',
     ];
 
     public function addedBy()
@@ -59,6 +68,16 @@ class SpkMain extends Model
     public function assignTo()
     {
         return $this->belongsTo(User::class, 'assign_to', 'id');
+    }
+
+    public function approvedBy()
+    {
+        return $this->belongsTo(User::class, 'approved_by', 'id');
+    }
+
+    public function onDelayBy()
+    {
+        return $this->belongsTo(User::class, 'on_delay_by', 'id');
     }
 
     public function pengirimanUpdatedBy()
@@ -124,6 +143,19 @@ class SpkMain extends Model
         return match ($status) {
             true => 'Nomor tagihan sudah diassign.',
             false => 'Nomor tagihan belum diassign.',
+        };
+    }
+
+    public function getStatusApprovalDescriptionAttribute(): string
+    {
+        $status = (int) ($this->attributes['status_approval'] ?? null);
+
+        return match ($status) {
+            0 => 'Menunggu Approval',
+            1 => 'Sudah Disetujui',
+            2 => 'Ditolak',
+            3 => 'Butuh Revisi',
+            default => 'Status Approval tidak diketahui',
         };
     }
 }

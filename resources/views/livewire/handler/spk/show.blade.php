@@ -7,7 +7,31 @@
             <div
                 class="col-span-2 rounded-t-lg border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1 lg:rounded-tl-lg lg:rounded-tr-none">
                 <p class="text-xs italic">Nomor Order </p>
-                <p class="font-semibold"> {{ $data->nomor_order }} </p>
+                <div class="flex flex-col gap-y-2 font-semibold">
+                    <div class="flex items-center gap-x-2">
+                        <p> {{ $data->nomor_order }} </p>
+
+                        @php
+                            $color = match ($data->status_approval) {
+                                0 => 'yellow',
+                                1 => 'green',
+                                2 => 'red',
+                                3 => 'yellow',
+                                default => 'yellow',
+                            };
+                        @endphp
+
+                        <span
+                            class="bg-{{ $color }}-500 text-{{ $color }}-700 rounded-full px-2 py-1 text-xs">
+                            {{ $data->status_approval_description }} </span>
+                    </div>
+
+                    @if ($data->status_approval != 1 && auth()->user()->can('spk-validate'))
+                        <x-button.primary class="w-fit text-sm" id="btn-validate-spk" wire:click="validateSpk">
+                            Validasi
+                        </x-button.primary>
+                    @endif
+                </div>
             </div>
 
             <div
@@ -58,13 +82,17 @@
             <div
                 class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
                 <p class="text-xs italic"> Produk Dipesan </p>
-                <p class="font-semibold">
+                <ul class="ml-5 list-disc text-sm font-semibold">
                     @forelse ($data->products as $row)
-                        - {{ $row['nama_barang'] . ' (' . $row['jumlah_unit'] . ' Unit)' }}
+                        <li>
+                            {{ $row['jumlah_unit'] ?? '' }}
+                            {{ $row['satuan_barang'] ?? '' }}
+                            {{ $row['nama_barang'] ?? '' }}
+                        </li>
                     @empty
                         Tidak ada produk dipesan
                     @endforelse
-                </p>
+                </ul>
             </div>
 
             <div
@@ -83,8 +111,8 @@
         {{-- end informasi spk --}}
 
         {{-- progress spk --}}
-        <div class="flex w-full flex-row items-center gap-2 overflow-x-auto dark:text-white">
-
+        <div
+            class="{{ $data->on_delay ? 'overflow-hidden' : 'overflow-x-scroll' }} relative flex w-full flex-row items-center gap-2 dark:text-white">
             @php
                 $status = [
                     [
@@ -124,6 +152,23 @@
                 <x-icons.spk-delivery-status :desc="$item['desc']" :itemstatus="$item['status']" :status="$data->status" :icon="$item['icon']"
                     :last="$loop->last" :ping="$item['status'] == $data->status" />
             @endforeach
+
+            @if ($data->on_delay)
+                <div
+                    class="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center rounded-b-lg bg-red-500/75 text-white">
+                    <div class="flex flex-col gap-1">
+                        <p class="text-center text-sm">
+                            {{ $data->on_delay_at }}
+                        </p>
+                        <p class="rounded-full bg-red-500 px-4 py-1 text-center font-semibold italic shadow-md">
+                            SPK mengalami delay.
+                        </p>
+                        <p class="text-center text-sm">
+                            {{ $data->on_delay_notes }} (by: {{ $data->onDelayBy->name }})
+                        </p>
+                    </div>
+                </div>
+            @endif
         </div>
         {{-- end progress spk --}}
 

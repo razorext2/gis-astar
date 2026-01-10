@@ -24,6 +24,8 @@ class Create extends Component
 
     public ?int $jumlah_unit;
 
+    public ?string $satuan_barang;
+
     public ?string $spesifikasi = null;
 
     public bool $showSummary = false;
@@ -40,6 +42,7 @@ class Create extends Component
         $this->validate([
             'nama_barang' => 'required|min:5|string',
             'jumlah_unit' => 'required|numeric|min:1',
+            'satuan_barang' => 'required|string',
             'spesifikasi' => 'nullable|string',
         ], [
             'nama_barang.required' => 'Kolom nama barang wajib diisi.',
@@ -48,6 +51,8 @@ class Create extends Component
             'jumlah_unit.required' => 'Kolom jumlah unit wajib diisi.',
             'jumlah_unit.numeric' => 'Kolom jumlah unit harus berupa angka.',
             'jumlah_unit.min' => 'Kolom jumlah unit minimal berjumlah 1 buah.',
+            'satuan_barang.required' => 'Kolom satuan wajib diisi.',
+            'satuan_barang.string' => 'Kolom harus berupa string.',
             'spesifikasi.string' => 'Kolom spesifikasi harus berupa string.',
         ]);
 
@@ -55,11 +60,13 @@ class Create extends Component
         $this->createForm->barang[] = [
             'nama_barang' => $this->nama_barang,
             'jumlah_unit' => $this->jumlah_unit,
+            'satuan_barang' => $this->satuan_barang,
             'spesifikasi' => $this->spesifikasi,
         ];
 
         $this->nama_barang = null;
         $this->jumlah_unit = null;
+        $this->satuan_barang = null;
         $this->spesifikasi = null;
     }
 
@@ -109,13 +116,14 @@ class Create extends Component
                     'assign_to' => $this->createForm->assign_to,
                     'added_by' => Auth::id(),
                     'update_by' => Auth::id(),
+                    'status_approval' => 0,
                 ]);
 
                 // tambah data history SPK
                 SpkHistory::create([
                     'spk_id' => $spk->id,
                     'title' => 'SPK dibuat.',
-                    'keterangan' => Auth::user()->name.' telah membuat SPK baru.',
+                    'keterangan' => Auth::user()->name.' telah membuat SPK baru. Sedang menunggu approval dari tim Management.',
                     'added_by' => Auth::id(),
                 ]);
 
@@ -328,6 +336,11 @@ class Create extends Component
 
         // return nilai
         return $angka;
+    }
+
+    public function updatedCreateFormTipeTagihan()
+    {
+        $this->createForm->nomor_order = $this->makeNomorOrder($this->createForm->tipe_tagihan)['baru'];
     }
 
     public function render()

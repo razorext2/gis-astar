@@ -47,8 +47,9 @@ final class PurchasingRequestTable extends PowerGridComponent
                 'customer_contact_person' => DB::raw("JSON_UNQUOTE(JSON_EXTRACT(customer, '$.contact_person'))"),
                 'products_name' => DB::raw("JSON_UNQUOTE(JSON_EXTRACT(products, '$'))"),
             ])
+            ->where('status_approval', 1)
+            ->where('on_delay', 0)
             ->orderBy('nomor_purchasing_request', 'asc');
-        // ->whereNull('nomor_purchasing_request');
     }
 
     protected function datasourceTableColumns(): array

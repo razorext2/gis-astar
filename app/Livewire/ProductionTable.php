@@ -41,6 +41,7 @@ final class ProductionTable extends PowerGridComponent
     {
         return Production::query()
             ->with(['spk', 'assignTo', 'productionHistories'])
+            ->whereHas('spk', fn ($query) => $query->where('status_approval', 1)->where('on_delay', 0))
             ->whereHas('productionHistories', fn ($query) => $query->where('status_produksi', '>', 0))
             ->orderBy('created_at', 'desc');
     }

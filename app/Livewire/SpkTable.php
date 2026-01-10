@@ -137,6 +137,33 @@ final class SpkTable extends PowerGridComponent
                     'item3' => $data['estimated_time_arrival'] ?? '-',
                 ]);
             })
+            ->add('status_approval')
+            ->add('status_approval_formatted', function ($query) {
+                $colors = match ($query->status_approval) {
+                    0 => 'yellow',
+                    1 => 'green',
+                    2 => 'red',
+                    3 => 'yellow',
+                    default => 'yellow'
+                };
+
+                $template = "
+                    <div class='flex flex-col  gap-1'>
+                        <span class='bg-{$colors}-400 w-fit text-xs px-2 py-1 text-{$colors}-700 items-center flex rounded-full'>
+                            {$query->status_approval_description}
+                        </span>";
+
+                if ($query->on_delay === 1) {
+                    $template .= "
+                        <span class='bg-red-400 text-xs px-2 py-1 text-red-700 text-center w-fit items-center flex rounded-full'>
+                            DELAYED
+                        </span>";
+                }
+
+                $template .= '</div>';
+
+                return $template;
+            })
             ->add('status')
             ->add('created_at');
     }
@@ -154,6 +181,10 @@ final class SpkTable extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
 
+            Column::make('Status SPK', 'status_approval_formatted', 'status_approval')
+                ->sortable()
+                ->searchable(),
+
             Column::make('Nomor Penagihan', 'nomor_tagihan_formatted', 'nomor_tagihan')
                 ->sortable()
                 ->searchable(),
@@ -163,11 +194,11 @@ final class SpkTable extends PowerGridComponent
                 ->searchableRaw("JSON_UNQUOTE(JSON_EXTRACT($table.customer, '$.nama_perusahaan')) LIKE ?")
                 ->searchableRaw("JSON_UNQUOTE(JSON_EXTRACT($table.customer, '$.contact_person')) LIKE ?"),
 
-            Column::make('Barang Dipesan', 'products_formatted', 'products')
-                ->searchable()
-                ->searchableRaw("JSON_SEARCH($table.products, 'one', ?, NULL, '$[*].nama_barang') IS NOT NULL"),
+            // Column::make('Barang Dipesan', 'products_formatted', 'products')
+            //     ->searchable()
+            //     ->searchableRaw("JSON_SEARCH($table.products, 'one', ?, NULL, '$[*].nama_barang') IS NOT NULL"),
 
-            Column::make('Pengiriman', 'informasi_pengiriman_formatted'),
+            Column::make('Status Pengiriman', 'informasi_pengiriman_formatted'),
         ];
     }
 
@@ -197,6 +228,13 @@ final class SpkTable extends PowerGridComponent
                 ->class('dark:bg-blue-800 text-sm dark:hover:bg-blue-900 dark:text-white dark:border-gray-700 rounded-lg bg-blue-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-blue-700')
                 ->route('spk.show', ['spk' => $row->id]);
         }
+
+        // if ($this->user->can('spk-validate')) {
+        //     $button[] = Button::make('detail')
+        //         ->slot('Approve')
+        //         ->id($row->id)
+        //         ->class('dark:bg-green-800 text-sm dark:hover:bg-green-900 dark:text-white dark:border-gray-700 rounded-lg bg-green-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-green-700');
+        // }
 
         return $button;
     }

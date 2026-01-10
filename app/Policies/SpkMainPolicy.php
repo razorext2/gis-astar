@@ -103,4 +103,12 @@ class SpkMainPolicy
     {
         return $user->hasPermissionTo('spk-update-kontrak-pengiriman');
     }
+
+    /**
+     * Check if user has permission to validate SPK
+     */
+    public function validate(User $user)
+    {
+        return $user->hasPermissionTo('spk-validate');
+    }
 }
