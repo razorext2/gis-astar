@@ -6,15 +6,12 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class LogUserActions
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
@@ -41,9 +38,27 @@ class LogUserActions
                         LaravelIP: {$request->ip()},
                         X-Forwarded-For: {$request->header('X-Forwarded-For')},
                         X-Real-IP: {$request->header('X-Real-IP')},
-                        Remote-Addr: {$_SERVER['REMOTE_ADDR']}
+                        Remote-Addr: {$_SERVER['REMOTE_ADDR']},
+                        Path: {$request->path()},
                     ]
                 ",
+                'user_agent' => $request->header('User-Agent'),
+                'user_location' => 'Unknown', // Implementasi untuk user location opsional
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            // simpan ke laravel.log
+            Log::info('User accessed:', [
+                'user_id' => $user->id,
+                'user_action' => "{$entityName} > {$actionName}",
+                'ip_address' => [
+                    'LaravelIP' => $request->ip(),
+                    'X-Forwarded-For' => $request->header('X-Forwarded-For'),
+                    'X-Real-IP' => $request->header('X-Real-IP'),
+                    'Remote-Addr' => $_SERVER['REMOTE_ADDR'],
+                    'Path' => $request->path(),
+                ],
                 'user_agent' => $request->header('User-Agent'),
                 'user_location' => 'Unknown', // Implementasi untuk user location opsional
                 'created_at' => now(),
@@ -57,7 +72,6 @@ class LogUserActions
     /**
      * Menentukan nama aksi berdasarkan metode HTTP request.
      *
-     * @param \Illuminate\Http\Request $request
      * @return string
      */
     private function getActionName(Request $request)
@@ -76,7 +90,6 @@ class LogUserActions
     /**
      * Menentukan apakah request melibatkan perubahan data di database.
      *
-     * @param \Illuminate\Http\Request $request
      * @return bool
      */
     private function isDatabaseAction(Request $request)
@@ -87,7 +100,6 @@ class LogUserActions
     /**
      * Menentukan nama entitas berdasarkan URL atau nama route.
      *
-     * @param \Illuminate\Http\Request $request
      * @return string
      */
     private function getEntityName(Request $request)
@@ -98,6 +110,7 @@ class LogUserActions
         if ($routeName) {
             // Asumsikan nama route memiliki format seperti 'pegawai.store', 'division.update'
             $parts = explode('.', $routeName);
+
             return $parts[0] ?? 'unknown';
         }
 
