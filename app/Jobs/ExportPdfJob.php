@@ -88,7 +88,10 @@ class ExportPdfJob implements ShouldQueue
                 label: 'Download PDF',
             ));
         } catch (Throwable $e) {
-            ErrorLogger::log($e, 'Gagal menjalankan ExportPdfJob', ['data' => $data]);
+            ErrorLogger::log($e, 'Gagal menjalankan ExportPdfJob', [
+                'model' => $this->data_model,
+                'id' => $this->data_id,
+            ]);
         }
     }
 }

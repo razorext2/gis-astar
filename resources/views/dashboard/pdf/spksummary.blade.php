@@ -223,7 +223,7 @@
             <tr style="vertical-align: top;">
                 <td style="position:relative; padding: 0; line-height: 0;">
                     <div style="position: relative; height: 115px;">
-                        @if ($data->approvedBy->signature)
+                        @if ($data->approvedBy?->signature)
                             <img class="items-center"
                                 src="{{ asset('storage/' . $data->approvedBy->signature->getSignatureImagePath()) }}"
                                 style="position: absolute; top:0; left:20%; width: 125px;display: block;margin: 0;">
@@ -234,7 +234,7 @@
                         @endif
 
                         <p style="position: absolute; width:100%; bottom: -20px; text-decoration: underline;">
-                            ({{ $data->approvedBy->name }})
+                            ({{ $data->approvedBy->name ?? 'Suriatini' }})
                         </p>
                     </div>
                 </td>
