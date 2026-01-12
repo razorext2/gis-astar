@@ -78,7 +78,6 @@ final class SpkTable extends PowerGridComponent
                 ]);
             })
             ->add('tipe_tagihan')
-            ->add('status_nomor_tagihan')
             ->add('nomor_tagihan')
             ->add('nomor_tagihan_formatted', function ($query) {
                 return view('components.dashboard.name-w-code', [
@@ -86,9 +85,6 @@ final class SpkTable extends PowerGridComponent
                     'name' => $query->nomor_tagihan ?? '-',
                 ]);
             })
-            ->add('tipe_bayar')
-            ->add('keterangan')
-            ->add('customer_company', fn ($query) => $query->customer_nama_perusahaan ?? data_get($query->customer, 'nama_perusahaan', '-'))
             ->add('customer_formatted', function ($query) {
                 return view('components.dashboard.name-w-code', [
                     'code' => $query->customer_contact_person ?? data_get($query->customer, 'contact_person', '-'),
@@ -149,7 +145,7 @@ final class SpkTable extends PowerGridComponent
 
                 $template = "
                     <div class='flex flex-col  gap-1'>
-                        <span class='bg-{$colors}-400 w-fit text-xs px-2 py-1 text-{$colors}-700 items-center flex rounded-full'>
+                        <span class='bg-{$colors}-500 w-fit text-xs px-4 py-1 text-{$colors}-700 items-center flex rounded-full'>
                             {$query->status_approval_description}
                         </span>";
 
@@ -181,6 +177,9 @@ final class SpkTable extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
 
+            Column::make('Tipe Tagihan', 'tipe_tagihan')
+                ->hidden(),
+
             Column::make('Status SPK', 'status_approval_formatted', 'status_approval')
                 ->sortable()
                 ->searchable(),
@@ -205,7 +204,25 @@ final class SpkTable extends PowerGridComponent
     public function filters(): array
     {
         return [
-            Filter::datepicker('tgl_cetak'),
+            Filter::inputText('nomor_order', 'nomor_order')
+                ->placeholder('Nomor SPK'),
+            Filter::select('tipe_tagihan', 'tipe_tagihan')
+                ->dataSource([
+                    ['value' => 'idcnonppn', 'label' => 'IDC Non PPN'],
+                    ['value' => 'idcppn', 'label' => 'IDC PPN'],
+                    ['value' => 'idyppn', 'label' => 'IDY PPN'],
+                ])
+                ->optionLabel('label')
+                ->optionValue('value'),
+            Filter::select('status_approval', 'status_approval')
+                ->dataSource([
+                    ['label' => 'Menunggu Persetujuan', 'value' => 0],
+                    ['label' => 'Disetujui', 'value' => 1],
+                    ['label' => 'Ditolak', 'value' => 2],
+                    ['label' => 'Butuh Revisi', 'value' => 3],
+                ])
+                ->optionLabel('label')
+                ->optionValue('value'),
         ];
     }
 
