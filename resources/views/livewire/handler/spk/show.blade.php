@@ -57,7 +57,9 @@
             <div
                 class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
                 <p class="text-xs italic">Tanggal Cetak </p>
-                <p class="font-semibold"> {{ $data->tgl_cetak }} </p>
+                <p class="font-semibold">
+                    {{ $data->tgl_cetak ? \Carbon\Carbon::parse($data->tgl_cetak)->locale('id')->isoFormat('D MMMM Y') : '-' }}
+                </p>
             </div>
 
             <div
@@ -74,7 +76,7 @@
                 <p class="text-xs italic">Nama Customer </p>
                 <p class="font-semibold"> {{ $data->customer['nama_perusahaan'] ?? 'N/A' }} </p>
                 <p class="text-sm"> {{ $data->customer['contact_person'] ?? '-' }}
-                    ({{ $data->customer['no_hp'] ?? '-' }})
+                    (telp: {{ $data->customer['no_hp'] ?? '-' }})
                 </p>
                 <p class="text-sm"> {{ $data->customer['alamat'] ?? '-' }} </p>
             </div>
@@ -82,6 +84,8 @@
             <div
                 class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
                 <p class="text-xs italic"> Produk Dipesan </p>
+                <p class="text-sm font-semibold capitalize">
+                    {{ $data->tipe_timbangan ?? 'Tipe timbangan tidak diatur.' }} </p>
                 <ul class="ml-5 list-disc text-sm font-semibold">
                     @forelse ($data->products as $row)
                         <li>
@@ -98,13 +102,29 @@
             <div
                 class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
                 <p class="text-xs italic"> Ditambah Oleh </p>
-                <p class="font-semibold"> {{ $data->addedBy->name }}</p>
+                <p class="font-semibold capitalize"> {{ $data->addedBy->name }}</p>
             </div>
 
             <div
                 class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
                 <p class="text-xs italic"> Diproduksi Oleh </p>
-                <p class="font-semibold"> {{ $data->assignTo->name ?? '-' }}</p>
+                <p class="font-semibold capitalize"> {{ $data->assignTo->name ?? '-' }}</p>
+            </div>
+
+            <div
+                class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
+                <p class="text-xs italic"> Divalidasi Oleh </p>
+                <p class="font-semibold capitalize"> {{ $data->approvedBy->name ?? '-' }}</p>
+            </div>
+
+            <div
+                class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
+                <p class="text-xs italic"> Divalidasi Pada </p>
+                <p class="font-semibold capitalize">
+                    {{ $data->approved_at
+                        ? \Carbon\Carbon::parse($data->approved_at)->locale('id')->isoFormat('D MMMM Y HH:mm:ss')
+                        : '-' }}
+                </p>
             </div>
 
         </div>
