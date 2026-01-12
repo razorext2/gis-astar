@@ -68,6 +68,7 @@ class Edit extends Component
         $this->createForm->assign_to = $data->assign_to;
         $this->assign_to = $data->assign_to;
         $this->createForm->keterangan = $data->keterangan;
+        $this->createForm->tipe_timbangan = $data->tipe_timbangan;
 
         $this->is_delayed = $data->on_delay;
         $this->delay_note = $data->on_delay_notes;
@@ -132,6 +133,7 @@ class Edit extends Component
             'alamat_customer',
             'contact_person',
             'no_telp',
+            'tipe_timbangan',
             'barang.*',
             'tipe_tagihan',
             'status_nomor_tagihan',
@@ -173,6 +175,7 @@ class Edit extends Component
                     'tgl_kirim' => $this->createForm->tgl_kirim,
                     'keterangan' => $this->createForm->keterangan,
                     'customer' => $customer,
+                    'tipe_timbangan' => $this->createForm->tipe_timbangan,
                     'products' => $barangs,
                     'assign_to' => $this->createForm->assign_to,
                     'updated_by' => Auth::id(),

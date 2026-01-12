@@ -16,4 +16,8 @@ return [
         'set' => 'Set',
         'unit' => 'Unit',
     ],
+    'tipe_timbangan' => [
+        'non timbangan jembatan' => 'Timbangan Lainnya',
+        'timbangan jembatan' => 'Timbangan Jembatan',
+    ],
 ];

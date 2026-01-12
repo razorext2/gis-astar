@@ -111,6 +111,7 @@ class Create extends Component
                     'tgl_kirim' => $this->createForm->tgl_kirim <= 1 ? 'SEGERA' : $this->createForm->tgl_kirim,
                     'keterangan' => $this->createForm->keterangan,
                     'customer' => $customer,
+                    'tipe_timbangan' => $this->createForm->tipe_timbangan,
                     'products' => $barangs,
                     'status' => 0,
                     'assign_to' => $this->createForm->assign_to,

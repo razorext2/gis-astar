@@ -55,6 +55,16 @@ class Create extends Form
     )]
     public ?string $alamat_customer;
 
+    #[Validate(['required', 'string'],
+        message: [
+            'required' => 'Kolom :attribute wajib diisi.',
+            'string' => 'Kolom :attribute harus berupa teks.',
+        ],
+        attribute: [
+            'tipe_timbangan' => 'tipe timbangan',
+        ])]
+    public ?string $tipe_timbangan;
+
     #[Validate(
         ['required', 'array', 'min:1'],
         message: [

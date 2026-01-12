@@ -50,6 +50,15 @@
         class="col-span-2 flex flex-col items-start gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:col-span-1 lg:gap-4 lg:p-6">
 
         <div class="col-span-2 flex w-full flex-col items-start gap-4">
+            <div class="w-full">
+                <x-input.select id="tipe_timbangan" name="tipe_timbangan" :labels="true" :textLabel="'Tipe Timbangan Yang Dipesan'"
+                    :defaultOption="'Pilih tipe timbangan'" wire:model="createForm.tipe_timbangan" :options="config('spk-config.tipe_timbangan')" />
+
+                @error('createForm.tipe_timbangan')
+                    <span class="mt-2 text-xs text-red-500"> {{ $message }}</span>
+                @enderror
+            </div>
+
             <div class="flex w-full gap-2 lg:gap-4">
                 <div class="w-full">
                     <x-input.basic id="nama_barang" name="nama_barang" wire:model="nama_barang"
@@ -167,8 +176,8 @@
         class="col-span-2 grid grow grid-cols-2 gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
 
         <div class="w-full">
-            <x-input.select id="tipe_tagihan" name="tipe_tagihan" wire:model="createForm.tipe_tagihan" :defaultOption="'Pilih tipe tagihan'"
-                :options="[
+            <x-input.select id="tipe_tagihan" name="tipe_tagihan" wire:model="createForm.tipe_tagihan"
+                :defaultOption="'Pilih tipe tagihan'" :options="[
                     'idcnon' => 'IDC Non PPN',
                     'idcppn' => 'IDC PPN',
                     'idyppn' => 'IDY PPN',
