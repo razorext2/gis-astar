@@ -88,7 +88,9 @@
                 <td width="20%">Tanggal SPK</td>
                 <td width="5%">:</td>
                 <td colspan="2">
-                    {{ \Carbon\Carbon::parse($data->tgl_cetak)->locale('id')->format('d F Y') }}
+                    {{ $data->tgl_cetak
+                        ? \Carbon\Carbon::parse($data->tgl_cetak)->locale('id')->isoFormat('D MMMM Y HH:mm:ss')
+                        : '-' }}
                 </td>
             </tr>
             <tr>
@@ -164,7 +166,7 @@
                 <td width="34%"></td>
                 <td width="33%">
                     <p style="margin: 0">
-                        Medan, {{ today()->locale('id')->format('d F Y') }}
+                        Medan, {{ today()->locale('id')->isoFormat('D MMMM Y') }}
                     </p>
                     <p style="margin: 0">Dilaksanakan Oleh,</p>
                 </td>
