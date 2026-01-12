@@ -216,7 +216,7 @@ class Edit extends Component
             // jalankan job untuk download PDF
             if (! $this->is_delayed) {
                 ExportPdfJob::dispatch(
-                    ['spk-create'],
+                    Auth::id(),
                     'App\Models\Spk\SpkMain',
                     $spk->id,
                     'f4',

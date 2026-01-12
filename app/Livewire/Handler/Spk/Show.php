@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Handler\Spk;
 
+use App\Jobs\ExportPdfJob;
 use App\Livewire\Concerns\HandlesErrors;
 use App\Livewire\Forms\Spk\LaporanFondasi;
 use App\Models\Spk\LaporanFondasi as LaporanFondasiModel;
@@ -309,6 +310,27 @@ class Show extends Component
             icon: 'success',
             title: 'Berhasil.',
             text: 'Berhasil Approve SPK.');
+    }
+
+    public function export()
+    {
+        $this->runSafely(function () {
+            ExportPdfJob::dispatch(
+                Auth::id(),
+                'App\Models\Spk\SpkMain',
+                $this->id,
+                'f4',
+                'portrait',
+                'dashboard.pdf.spksummary',
+                'SPK '.$this->data->nomor_order.' anda telah siap untuk didownload. Silahkan klik tombol download dibawah ini:',
+                'spk.download');
+
+            $this->dispatch(event: 'swal', icon: 'success', title: 'Berhasil', text: 'Berhasil melakukan ekspor, silahkan menunggu notifikasi ekspor telah selesai.');
+        }, 'Gagal melakukan ekspor', [
+            'user_id' => Auth::id(),
+            'action' => 'export',
+            'data' => $this->id,
+        ]);
     }
 
     public function render()

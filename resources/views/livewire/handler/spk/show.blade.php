@@ -173,14 +173,11 @@
         {{-- end progress spk --}}
 
         {{-- download button --}}
-        @if ($file)
-            <div class="absolute right-0 top-0">
-                <x-button.link id="spk-pdf-download" class="bg-blue-700 text-white"
-                    href="{{ route('spk.download', $data->id) }}">
-                    PDF
-                </x-button.link>
-            </div>
-        @endif
+        <div class="absolute right-0 top-0">
+            <x-button.primary id="spk-pdf-export" wire:click="export">
+                Ekspor SPK
+            </x-button.primary>
+        </div>
         {{-- end download button --}}
     </div>
 

@@ -143,7 +143,7 @@ class Create extends Component
 
             // jalankan job untuk download pdf
             ExportPdfJob::dispatch(
-                ['spk-create'],
+                Auth::id(),
                 'App\Models\Spk\SpkMain',
                 $spk->id,
                 'f4',

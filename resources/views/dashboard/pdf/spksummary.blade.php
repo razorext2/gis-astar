@@ -186,7 +186,7 @@
                                 style="position: absolute; top:0; left:20%; width: 125px;display: block;margin: 0;">
 
                             <span style="position: absolute; right: 10px;bottom: 10;font-size: 10px;line-height: 1;">
-                                Digitally sign at:<br>{{ now() }}
+                                Digitally sign at:<br>{{ $data->created_at }}
                             </span>
                         @endif
 
@@ -223,15 +223,18 @@
             <tr style="vertical-align: top;">
                 <td style="position:relative; padding: 0; line-height: 0;">
                     <div style="position: relative; height: 115px;">
-                        {{-- <img class="items-center" src="{{ asset('storage/' . $data['bu_tini_signature_img']) }}"
-                            style="position: absolute; top:0; left:20%; width: 125px;display: block;margin: 0;">
+                        @if ($data->approvedBy->signature)
+                            <img class="items-center"
+                                src="{{ asset('storage/' . $data->approvedBy->signature->getSignatureImagePath()) }}"
+                                style="position: absolute; top:0; left:20%; width: 125px;display: block;margin: 0;">
 
-                        <span style="position: absolute; right: 10px;bottom: 10;font-size: 10px;line-height: 1;">
-                            Digitally sign at:<br>{{ now() }}
-                        </span> --}}
+                            <span style="position: absolute; right: 10px;bottom: 10;font-size: 10px;line-height: 1;">
+                                Digitally sign at:<br>{{ $data->approved_at }}
+                            </span>
+                        @endif
 
                         <p style="position: absolute; width:100%; bottom: -20px; text-decoration: underline;">
-                            (Suriyatini)
+                            ({{ $data->approvedBy->name }})
                         </p>
                     </div>
                 </td>

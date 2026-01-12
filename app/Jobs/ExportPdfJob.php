@@ -15,7 +15,7 @@ class ExportPdfJob implements ShouldQueue
 {
     use Queueable;
 
-    protected array $permissions;
+    protected int $user_id;
 
     protected string $data_model;
 
@@ -34,9 +34,9 @@ class ExportPdfJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(array $permissions, string $data_model, string $data_id, string $paper_type, string $paper_orientation, string $view_template, string $message, string $route)
+    public function __construct(int $user_id, string $data_model, string $data_id, string $paper_type, string $paper_orientation, string $view_template, string $message, string $route)
     {
-        $this->permissions = $permissions;
+        $this->user_id = $user_id;
         $this->data_model = $data_model;
         $this->data_id = $data_id;
         $this->paper_type = $paper_type;
@@ -53,10 +53,9 @@ class ExportPdfJob implements ShouldQueue
     {
         $data = $this->data_model::where('id', $this->data_id)->first();
 
-        $users = User::permission($this->permissions)->get();
+        $user = User::find($this->user_id);
 
         try {
-
             // buat pdf
             $pdf = Pdf::loadView($this->view_template, [
                 'data' => $data,
@@ -69,27 +68,25 @@ class ExportPdfJob implements ShouldQueue
             $pdf->save($this->data_id.'.pdf', 'pdf');
 
             // berikan notifikasi ke user yang memiliki permission spk-create
-            foreach ($users as $user) {
-                $user->notify(new BaseFileDownload(
-                    route: $this->route,
-                    parameters: [$this->data_id],
-                    message: $this->message,
-                    label: 'Download PDF'
-                ));
+            $user->notify(new BaseFileDownload(
+                route: $this->route,
+                parameters: [$this->data_id],
+                message: $this->message,
+                label: 'Download PDF'
+            ));
 
-                // ambil id notifikasi terakhir
-                $latest_notification_id = $user->notifications()->latest()->first()->id;
+            // ambil id notifikasi terakhir
+            $latest_notification_id = $user->notifications()->latest()->first()->id;
 
-                // broadcast pesan
-                broadcast(new BasicMakePdfCompletedEvent(
-                    notification_id: $latest_notification_id,
-                    user_id: $user->id,
-                    message: $this->message,
-                    route: 'spk.download',
-                    parameters: [$this->data_id],
-                    label: 'Download PDF',
-                ));
-            }
+            // broadcast pesan
+            broadcast(new BasicMakePdfCompletedEvent(
+                notification_id: $latest_notification_id,
+                user_id: $user->id,
+                message: $this->message,
+                route: 'spk.download',
+                parameters: [$this->data_id],
+                label: 'Download PDF',
+            ));
         } catch (Throwable $e) {
             ErrorLogger::log($e, 'Gagal menjalankan ExportPdfJob', ['data' => $data]);
         }
