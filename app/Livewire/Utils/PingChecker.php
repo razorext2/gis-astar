@@ -2,18 +2,18 @@
 
 namespace App\Livewire\Utils;
 
-use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 
 class PingChecker extends Component
 {
     public int $latency = 0;
+
     public string $pingClass = 'text-gray-500 dark:text-white';
 
     #[\Livewire\Attributes\On('updateLatency')]
     public function updateLatency($ms)
     {
-        $this->latency = (int) $ms - 50;
+        $this->latency = (int) $ms - 25;
 
         $this->pingClass = match (true) {
             $this->latency < 100 => 'text-green-500 dark:text-green-400',
