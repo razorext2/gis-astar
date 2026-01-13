@@ -91,6 +91,10 @@ class TodayOut extends Component
                 if (auth()->user()->hasAnyRole(['HRD-IDY', 'Marketing-IDY'])) {
                     return $query->whereHas('user.roles', fn ($role) => $role->where('name', 'Sales-IDY'));
                 }
+
+                if (auth()->user()->hasRole('Produksi')) {
+                    return $query->whereHas('user.roles', fn ($role) => $role->where('name', 'Mekanik'));
+                }
             })
             ->paginate(6);
 

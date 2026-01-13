@@ -6,32 +6,41 @@
 
             $user = auth()->user();
 
-            if ($user->can('sales-export-medan')) {
+            if ($user->can('sales-export-medan') || $user->can('attendance-approve')) {
                 $options['Sales'] = 'Sales Medan';
             }
 
-            if ($user->can('sales-export-pku')) {
+            if ($user->can('sales-export-pku') || $user->can('attendance-approve')) {
                 $options['Sales-PKU'] = 'Sales Pekanbaru';
             }
 
-            if ($user->can('sales-export-jkt')) {
+            if ($user->can('sales-export-jkt') || $user->can('attendance-approve')) {
                 $options['Sales-JKT'] = 'Sales Jakarta';
             }
 
-            if ($user->can('sales-export-idy')) {
+            if ($user->can('sales-export-idy') || $user->can('attendance-approve')) {
                 $options['Sales-IDY'] = 'Sales Indodaya';
             }
 
-            if ($user->can('sales-export-kurir-bank')) {
+            if ($user->can('sales-export-kurir-bank') || $user->can('attendance-approve')) {
                 $options['Kurir-Bank'] = 'Kurir Bank';
             }
 
-            $options = array_merge($options, [
-                'Driver' => 'Driver',
-                'Employee' => 'Karyawan',
-                'Teknisi' => 'Teknisi',
-                'Mekanik' => 'Mekanik',
-            ]);
+            if ($user->can('driver-approve') || $user->can('attendance-approve')) {
+                $options['Driver'] = 'Driver';
+            }
+
+            if ($user->can('attendance-approve')) {
+                $options['Employee'] = 'Karyawan';
+            }
+
+            if ($user->can('technician-approve')) {
+                $options['Teknisi'] = 'Teknisi';
+            }
+
+            if ($user->can('spk-list')) {
+                $options['Mekanik'] = 'Mekanik';
+            }
         @endphp
 
         <x-input.select wire:model.live="role" :labels="false" id="role" name="role" :defaultOption="'Pilih Role'"
