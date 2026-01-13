@@ -193,13 +193,22 @@
         {{-- end progress spk --}}
 
         {{-- download button --}}
-        @hasanyrole(['Admin', 'Marketing', 'Management', 'Management-Special'])
-            <div class="absolute right-0 top-0">
+        <div
+            class="flex justify-center gap-x-1 rounded-b-lg bg-gray-50 p-2 text-center dark:bg-gray-700 lg:absolute lg:right-0 lg:top-0 lg:rounded-none lg:bg-transparent lg:p-0">
+            @hasanyrole(['Admin', 'Marketing', 'Management', 'Management-Special'])
                 <x-button.primary id="spk-pdf-export" wire:click="export">
                     Ekspor SPK
                 </x-button.primary>
-            </div>
-        @endhasanyrole
+            @endhasanyrole
+
+            @hasanyrole(['Produksi', 'Admin'])
+                <x-button.link
+                    class="ring-1 ring-blue-700 hover:bg-blue-300 dark:bg-blue-800 dark:text-white dark:ring-gray-700 dark:hover:bg-blue-900"
+                    href="{{ route('spk.generate.pdf', ['id' => $data->id]) }}" id="spk-pdf-export">
+                    Ekspor SPK (Produksi)
+                </x-button.link>
+            @endhasanyrole
+        </div>
         {{-- end download button --}}
     </div>
 
