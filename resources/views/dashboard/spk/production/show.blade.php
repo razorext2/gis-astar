@@ -29,12 +29,30 @@
         {{-- end header --}}
 
         {{-- informasi produksi --}}
-        <div class="grid grid-cols-2 rounded-lg bg-gray-50 transition-all duration-500 dark:bg-gray-700">
+        <div class="relative grid grid-cols-2 rounded-lg bg-gray-50 transition-all duration-500 dark:bg-gray-700">
 
             <div
                 class="col-span-2 rounded-t-lg border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1 lg:rounded-tl-lg lg:rounded-tr-none">
                 <p class="text-xs italic">Nomor Order </p>
-                <p class="font-semibold"> {{ $data->spk->nomor_order }} </p>
+                <div class="flex flex-col gap-y-2 font-semibold">
+                    <div class="flex items-center gap-x-2">
+                        <p> {{ $data->spk->nomor_order }} </p>
+
+                        @php
+                            $color = match ($data->spk->status_approval) {
+                                0 => 'yellow',
+                                1 => 'green',
+                                2 => 'red',
+                                3 => 'yellow',
+                                default => 'yellow',
+                            };
+                        @endphp
+
+                        <span
+                            class="bg-{{ $color }}-500 text-{{ $color }}-700 rounded-full px-2 py-1 text-xs">
+                            {{ $data->spk->status_approval_description }} </span>
+                    </div>
+                </div>
             </div>
 
             <div
@@ -46,13 +64,18 @@
             <div
                 class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
                 <p class="text-xs italic">Tanggal Cetak </p>
-                <p class="font-semibold"> {{ $data->spk->tgl_cetak }} </p>
+                <p class="font-semibold">
+                    {{ \Carbon\carbon::parse($data->spk->tgl_cetak)->locale('id')->isoFormat('D MMMM Y') }}
+                </p>
             </div>
 
             <div
                 class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
-                <p class="text-xs italic">Tanggal Kirim</p>
-                <p class="font-semibold"> {{ $data->spk->tgl_kirim }} </p>
+                <p class="text-xs italic">Waktu Penyerahan</p>
+                <p class="font-semibold">
+                    {{ $data->spk->tgl_kirim }} Hari
+                    {{ $data->spk->tgl_kirim <= 1 ? '(SEGERA)' : '' }}
+                </p>
             </div>
 
             <div
@@ -60,7 +83,7 @@
                 <p class="text-xs italic">Nama Customer </p>
                 <p class="font-semibold"> {{ $data->spk->customer['nama_perusahaan'] ?? 'N/A' }} </p>
                 <p class="text-sm"> {{ $data->spk->customer['contact_person'] ?? '-' }}
-                    ({{ $data->spk->customer['no_hp'] ?? '-' }})
+                    (telp: {{ $data->spk->customer['no_hp'] ?? '-' }})
                 </p>
                 <p class="text-sm"> {{ $data->spk->customer['alamat'] ?? '-' }} </p>
             </div>
@@ -68,26 +91,58 @@
             <div
                 class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
                 <p class="text-xs italic"> Produk Dipesan </p>
-                <p class="font-semibold">
+                <p class="text-sm font-semibold capitalize">
+                    {{ $data->spk->tipe_timbangan ?? 'Tipe timbangan tidak diatur.' }} </p>
+                <ul class="ml-5 list-disc text-sm font-semibold">
                     @forelse ($data->spk->products as $row)
-                        {{ $row['nama_barang'] . ' (' . $row['jumlah_unit'] . ' Unit)' . ($loop->last ? '.' : ', ') }}
+                        <li>
+                            {{ $row['jumlah_unit'] ?? '' }}
+                            {{ $row['satuan_barang'] ?? '' }}
+                            {{ $row['nama_barang'] ?? '' }}
+                        </li>
                     @empty
                         Tidak ada produk dipesan
                     @endforelse
-                </p>
+                </ul>
+            </div>
+
+            <div
+                class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
+                <p class="text-xs italic"> Ditambah Oleh </p>
+                <p class="font-semibold capitalize"> {{ $data->spk->addedBy->name }}</p>
+            </div>
+
+            <div
+                class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
+                <p class="text-xs italic"> Diproduksi Oleh </p>
+                <p class="font-semibold capitalize"> {{ $data->spk->assignTo->name ?? '-' }}</p>
             </div>
 
             <div
                 class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1 lg:rounded-bl-lg">
-                <p class="text-xs italic"> Ditambah Oleh </p>
-                <p class="font-semibold"> {{ $data->spk->addedBy->name }}</p>
+                <p class="text-xs italic"> Divalidasi Oleh </p>
+                <p class="font-semibold capitalize"> {{ $data->spk->approvedBy->name ?? '-' }}</p>
             </div>
 
             <div
                 class="col-span-2 rounded-b-lg border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1 lg:rounded-bl-none lg:rounded-br-lg">
-                <p class="text-xs italic"> Diproduksi Oleh </p>
-                <p class="font-semibold"> {{ $data->spk->assignTo->name ?? '-' }}</p>
+                <p class="text-xs italic"> Divalidasi Pada </p>
+                <p class="font-semibold capitalize">
+                    {{ $data->spk->approved_at
+                        ? \Carbon\Carbon::parse($data->spk->approved_at)->locale('id')->isoFormat('D MMMM Y HH:mm:ss')
+                        : '-' }}
+                </p>
             </div>
+
+            @hasanyrole(['Admin', 'Produksi'])
+                <div class="absolute right-0 top-0">
+                    <x-button.link
+                        class="ring-1 ring-blue-700 hover:bg-blue-300 dark:bg-blue-800 dark:text-white dark:ring-gray-700 dark:hover:bg-blue-900"
+                        href="{{ route('spk.generate.pdf', ['id' => $data->spk->id]) }}" id="spk-pdf-export">
+                        Ekspor SPK
+                    </x-button.link>
+                </div>
+            @endhasanyrole
 
         </div>
         {{-- end informasi produksi --}}
@@ -96,12 +151,8 @@
         <div class="relative w-full rounded-lg bg-gray-200 dark:bg-gray-700">
             <div class="rounded-lg bg-blue-600 p-4 text-center text-xs font-medium leading-none text-blue-100"
                 style="width: {{ $data->productionHistories->last()->status_produksi_description['percentage'] . '%' }}">
-                {{ $data->productionHistories->last()->status_produksi_description['percentage'] . '%' }}
-            </div>
-            <span
-                class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sm font-medium leading-none text-blue-100">
                 {{ $data->productionHistories->last()->status_produksi_description['label'] }}
-            </span>
+            </div>
         </div>
         {{-- end progress produksi --}}
 

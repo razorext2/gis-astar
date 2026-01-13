@@ -51,7 +51,7 @@ class ExportPdfJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $data = $this->data_model::where('id', $this->data_id)->first();
+        $data = $this->data_model::find($this->data_id);
 
         $user = User::find($this->user_id);
 
@@ -88,6 +88,18 @@ class ExportPdfJob implements ShouldQueue
                 label: 'Download PDF',
             ));
         } catch (Throwable $e) {
+            // tambahkan ke database
+            $data->spkHistories()->create([
+                'title' => 'Laporan SPK Gagal Digenerate.',
+                'keterangan' => $user->name.' gagal melakukan generate laporan SPK.',
+                'added_by' => $user->id,
+            ]);
+
+            $data->update([
+                'production_has_download_spk_pdf' => false,
+                'production_has_download_spk_pdf_at' => null,
+            ]);
+
             ErrorLogger::log($e, 'Gagal menjalankan ExportPdfJob', [
                 'model' => $this->data_model,
                 'id' => $this->data_id,

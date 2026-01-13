@@ -12,11 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tb_spk', function (Blueprint $table) {
-            $table->string('tipe_timbangan', 50)
-                ->index()
-                ->after('products')
+            $table->boolean('production_has_download_spk_pdf')
+                ->default(0)
+                ->after('on_delay_by')
+                ->comment('apakah produksi sudah download pdf?');
+            $table->dateTime('production_has_download_spk_pdf_at')
                 ->nullable()
-                ->comment('tipe timbangan yang dipesan');
+                ->after('production_has_download_spk_pdf')
+                ->comment('kapan dia download?');
         });
     }
 
@@ -26,7 +29,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('tb_spk', function (Blueprint $table) {
-            $table->dropColumn('tipe_timbangan');
+            $table->dropColumn('production_has_download_spk_pdf');
+            $table->dropColumn('production_has_download_spk_pdf_at');
         });
     }
 };

@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Spk;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ExportPdfJob;
 use App\Models\Spk\SpkMain;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 
 class SpkController extends Controller
@@ -58,6 +61,36 @@ class SpkController extends Controller
     public function download($id)
     {
         return Storage::download('pdf/'.$id.'.pdf');
+    }
+
+    public function generatePdf($id)
+    {
+        $data = SpkMain::findOrFail($id);
+
+        if ($data->assign_to === Auth::id()) {
+            $data->update([
+                'production_has_download_spk_pdf' => true,
+                'production_has_download_spk_pdf_at' => now(),
+            ]);
+        }
+
+        $data->spkHistories()->create([
+            'title' => 'Laporan SPK Sedang Digenerate.',
+            'keterangan' => Auth::user()->name.' melakukan generate laporan SPK.',
+            'added_by' => Auth::id(),
+        ]);
+
+        ExportPdfJob::dispatch(
+            Auth::id(),
+            'App\Models\Spk\SpkMain',
+            $data->id,
+            'f4',
+            'portrait',
+            'dashboard.pdf.spksummary-for-produksi',
+            "SPK $data->nomor_order anda telah siap untuk didownload. Silahkan klik tombol download dibawah ini:",
+            'spk.download');
+
+        return Redirect::back()->with('status', 'Laporan SPK sedang disiapkan sistem, mohon menunggu.');
     }
     // spk end
 

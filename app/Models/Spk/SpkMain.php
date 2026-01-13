@@ -42,12 +42,15 @@ class SpkMain extends Model
         'on_delay_at',
         'on_delay_notes',
         'on_delay_by',
+        'production_has_download_spk_pdf',
+        'production_has_download_spk_pdf_at',
     ];
 
     protected $casts = [
         'customer' => 'array',
         'products' => 'array',
         'informasi_pengiriman' => 'array',
+        'production_has_download_spk_pdf' => 'boolean',
     ];
 
     protected $appends = [

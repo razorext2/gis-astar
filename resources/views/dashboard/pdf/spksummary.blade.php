@@ -88,9 +88,7 @@
                 <td width="20%">Tanggal SPK</td>
                 <td width="5%">:</td>
                 <td colspan="2">
-                    {{ $data->tgl_cetak
-                        ? \Carbon\Carbon::parse($data->tgl_cetak)->locale('id')->isoFormat('D MMMM Y HH:mm:ss')
-                        : '-' }}
+                    {{ $data->tgl_cetak ? \Carbon\Carbon::parse($data->tgl_cetak)->locale('id')->isoFormat('D MMMM Y') : '-' }}
                 </td>
             </tr>
             <tr>

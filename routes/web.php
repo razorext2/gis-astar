@@ -246,6 +246,7 @@ Route::middleware(['auth'])->group(function () {
             Route::resource('purchasing-request', \App\Http\Controllers\Spk\PurchasingRequestController::class)->only('index', 'edit', 'show');
 
             // 2. spk spk
+            Route::get('generate/pdf/{id}', [\App\Http\Controllers\Spk\SpkController::class, 'generatePdf'])->name('spk.generate.pdf');
             Route::get('stream/pdf/spk', [\App\Http\Controllers\Spk\SpkController::class, 'streamPdf'])->name('spk.pdf');
             Route::get('download/{id}', [\App\Http\Controllers\Spk\SpkController::class, 'download'])->name('spk.download');
             Route::resource('spk', \App\Http\Controllers\Spk\SpkController::class)->only('index', 'create', 'show', 'edit');
