@@ -5,7 +5,7 @@
         <div class="grid grid-cols-2 rounded-t-lg bg-gray-50 transition-all duration-500 dark:bg-gray-700">
 
             <div
-                class="col-span-2 rounded-t-lg border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1 lg:rounded-tl-lg lg:rounded-tr-none">
+                class="{{ auth()->user()->cannot('spk-create') ? '' : 'lg:col-span-1 ' }} col-span-2 rounded-t-lg border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:rounded-tl-lg lg:rounded-tr-none">
                 <p class="text-xs italic">Nomor Order </p>
                 <div class="flex flex-col gap-y-2 font-semibold">
                     <div class="flex items-center gap-x-2">
@@ -34,25 +34,27 @@
                 </div>
             </div>
 
-            <div
-                class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1 lg:rounded-tr-lg">
-                <p class="text-xs italic">Tipe Tagihan</p>
-                <p class="font-semibold"> {{ $data->tipe_tagihan }} </p>
-            </div>
+            @if (auth()->user()->can('spk-create'))
+                <div
+                    class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1 lg:rounded-tr-lg">
+                    <p class="text-xs italic">Tipe Tagihan</p>
+                    <p class="font-semibold"> {{ $data->tipe_tagihan }} </p>
+                </div>
 
-            <div
-                class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
-                <p class="text-xs italic"> Nomor Tagihan </p>
-                <p class="font-semibold">
-                    {{ $data->status_nomor_tagihan ? $data->nomor_tagihan : $data->status_nomor_tagihan_description }}
-                </p>
-            </div>
+                <div
+                    class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
+                    <p class="text-xs italic"> Nomor Tagihan </p>
+                    <p class="font-semibold">
+                        {{ $data->status_nomor_tagihan ? $data->nomor_tagihan : $data->status_nomor_tagihan_description }}
+                    </p>
+                </div>
 
-            <div
-                class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
-                <p class="text-xs italic">Tipe Bayar </p>
-                <p class="font-semibold"> {{ $data->tipe_bayar }}</p>
-            </div>
+                <div
+                    class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
+                    <p class="text-xs italic">Tipe Bayar </p>
+                    <p class="font-semibold"> {{ $data->tipe_bayar }}</p>
+                </div>
+            @endif
 
             <div
                 class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
