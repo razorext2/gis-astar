@@ -71,20 +71,22 @@
                 </p>
             </div>
 
-            @if (!auth()->user()->hasRole('Produksi'))
-                <div
-                    class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
-                    <p class="text-xs italic">Nama Customer </p>
-                    <p class="font-semibold"> {{ $data->customer['nama_perusahaan'] ?? 'N/A' }} </p>
+            <div
+                class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
+                <p class="text-xs italic">Nama Customer </p>
+                <p class="font-semibold"> {{ $data->customer['nama_perusahaan'] ?? 'N/A' }} </p>
+
+
+                @hasanyrole(['Admin', 'Marketing', 'Management', 'Management-Special'])
                     <p class="text-sm"> {{ $data->customer['contact_person'] ?? '-' }}
                         (telp: {{ $data->customer['no_hp'] ?? '-' }})
                     </p>
-                    <p class="text-sm"> {{ $data->customer['alamat'] ?? '-' }} </p>
-                </div>
-            @endif
+                    <p class="text-sm"> {{ $data->customer['alamat'] ?? '-' }} </p>'
+                @endhasanyrole
+            </div>
 
             <div
-                class="{{ auth()->user()->hasRole('Produksi') ? '' : 'lg:col-span-1' }} col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white">
+                class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
                 <p class="text-xs italic"> Produk Dipesan </p>
                 <p class="text-sm font-semibold capitalize">
                     {{ $data->tipe_timbangan ?? 'Tipe timbangan tidak diatur.' }} </p>
