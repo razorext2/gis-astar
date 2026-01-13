@@ -150,8 +150,8 @@
         {{-- progress produksi --}}
         <div class="relative w-full rounded-lg bg-gray-200 dark:bg-gray-700">
             <div class="rounded-lg bg-blue-600 p-4 text-center text-xs font-medium leading-none text-blue-100"
-                style="width: {{ $data->productionHistories->last()->status_produksi_description['percentage'] . '%' }}">
-                {{ $data->productionHistories->last()->status_produksi_description['label'] }}
+                style="width: {{ $data->productionHistories?->last()->status_produksi_description['percentage'] ?? '0' . '%' }}">
+                {{ $data->productionHistories?->last()->status_produksi_description['label'] ?? '' }}
             </div>
         </div>
         {{-- end progress produksi --}}

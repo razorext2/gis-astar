@@ -120,7 +120,7 @@ final class ProductionTable extends PowerGridComponent
             ->add('status_produksi_formatted', function ($query) {
                 return view('components.dashboard.name-w-code', [
                     'code' => '',
-                    'name' => ucfirst($query->productionHistories?->last()->status_produksi_description['label']),
+                    'name' => ucfirst($query->productionHistories?->last()->status_produksi_description['label'] ?? '-'),
                 ]);
             })
             ->add('packing_list')
