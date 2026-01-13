@@ -45,13 +45,20 @@ final class SpkTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return SpkMain::query()
+        $query = SpkMain::query()
             ->select($this->datasourceTableColumns())
             ->addSelect([
                 'customer_nama_perusahaan' => DB::raw("JSON_UNQUOTE(JSON_EXTRACT(customer, '$.nama_perusahaan'))"),
                 'customer_contact_person' => DB::raw("JSON_UNQUOTE(JSON_EXTRACT(customer, '$.contact_person'))"),
                 'products_name' => DB::raw("JSON_UNQUOTE(JSON_EXTRACT(products, '$.nama_barang'))"),
             ]);
+
+        if (! $this->user->can('spk-create')) {
+            $query->where('assign_to', $this->user->id)
+                ->where('status_approval', 1);
+        }
+
+        return $query;
     }
 
     protected function datasourceTableColumns(): array

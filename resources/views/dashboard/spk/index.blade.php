@@ -16,15 +16,17 @@
                     </p>
                 </div>
 
-                <div class="max-w-xs">
-                    <x-button.link href="{{ route('spk.create') }}" id="add-button" wire:navigate
-                        class="w-fit ring-1 ring-green-700 dark:bg-green-800 dark:text-white">
-                        <x-slot name="icon">
-                            <x-icons.plus class="h-6 w-6 text-green-500 dark:text-white" />
-                        </x-slot>
-                        SPK
-                    </x-button.link>
-                </div>
+                @can('spk-create')
+                    <div class="max-w-xs">
+                        <x-button.link href="{{ route('spk.create') }}" id="add-button" wire:navigate
+                            class="w-fit ring-1 ring-green-700 dark:bg-green-800 dark:text-white">
+                            <x-slot name="icon">
+                                <x-icons.plus class="h-6 w-6 text-green-500 dark:text-white" />
+                            </x-slot>
+                            SPK
+                        </x-button.link>
+                    </div>
+                @endcan
 
             </div>
 
