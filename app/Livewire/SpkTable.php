@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Spk\SpkMain;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
@@ -94,9 +95,9 @@ final class SpkTable extends PowerGridComponent
             })
             ->add('customer_formatted', function ($query) {
                 return view('components.dashboard.name-w-code', [
-                    'code' => $query->customer_contact_person ?? data_get($query->customer, 'contact_person', '-'),
+                    'code' => $this->user->can('spk-create') ? $query->customer_contact_person ?? data_get($query->customer, 'contact_person', '-') : '',
                     'name' => $query->customer_nama_perusahaan ?? data_get($query->customer, 'nama_perusahaan', '-'),
-                    'item3' => $query->customer['no_hp'] ?? '-',
+                    'item3' => $this->user->can('spk-create') ? $query->customer['no_hp'] ?? '-' : '',
                 ]);
             })
             ->add('products_formatted', function ($query) {
@@ -193,7 +194,8 @@ final class SpkTable extends PowerGridComponent
 
             Column::make('Nomor Penagihan', 'nomor_tagihan_formatted', 'nomor_tagihan')
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->hidden(Auth::user()->cannot('spk-create')),
 
             Column::make('Customer', 'customer_formatted', 'customer')
                 ->searchable()
