@@ -3,9 +3,8 @@
 namespace App\Livewire;
 
 use App\Models\Driver;
-use App\Models\User;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
@@ -14,8 +13,8 @@ use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
-use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 
 final class DriverTable extends PowerGridComponent
@@ -23,14 +22,19 @@ final class DriverTable extends PowerGridComponent
     use WithExport;
 
     public string $tableName = 'DriverTable';
+
     public string $status;
+
     public bool $deferLoading = true;
+
     public bool $showFilters = false;
-    public $pegawai;
+
+    public $user;
 
     public function setUp(): array
     {
-        $this->pegawai = User::role('Driver')->get();
+        $this->user = Auth::user();
+
         $this->status = Request::query('status') ?? '';
 
         return [
@@ -41,7 +45,7 @@ final class DriverTable extends PowerGridComponent
             PowerGrid::footer()
                 ->showPerPage()
                 ->showRecordCount(),
-            PowerGrid::exportable(fileName: 'driverReport-' . now()->format('YmdHis'))
+            PowerGrid::exportable(fileName: 'driverReport-'.now()->format('YmdHis'))
                 ->type(Exportable::TYPE_XLS)
                 ->stripTags(true),
         ];
@@ -49,10 +53,10 @@ final class DriverTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        $data = Driver::query()
-            ->with(['user', 'photoCollect']);
+        $roles = [];
+        $data = Driver::query()->with(['user', 'photoCollect']);
 
-        if (!auth()->user()->can('driver-approve')) {
+        if (! auth()->user()->can('driver-approve')) {
             $data->where('kode_pegawai', auth()->user()->kode_pegawai)
                 ->where(function ($query) {
                     $query->whereDate('assign_date', '<=', now())
@@ -71,8 +75,20 @@ final class DriverTable extends PowerGridComponent
             };
         }
 
-        return $data->orderBy('created_at', 'desc')
+        if ($this->user->can('driver-list-jkt')) {
+            $roles[] = 'Driver-Jkt';
+        }
+
+        if ($this->user->can('driver-list-medan')) {
+            $roles[] = 'Driver-Medan';
+        }
+
+        $data->whereHas('user.roles', fn ($role) => $role->whereIn('name', $roles));
+
+        $data->orderBy('created_at', 'desc')
             ->orderBy('status', 'desc');
+
+        return $data;
     }
 
     public function relationSearch(): array
@@ -80,7 +96,7 @@ final class DriverTable extends PowerGridComponent
         return [
             'user' => [
                 'name',
-                'kode_pegawai'
+                'kode_pegawai',
             ],
         ];
     }
@@ -96,8 +112,8 @@ final class DriverTable extends PowerGridComponent
                 ])->render();
             })
             ->add('title')
-            ->add('lokasi', fn($query) => view('components.table-component.title-location-coordinate', ['data' => $query])->render())
-            ->add('status', fn($query) => $query->status ?? '-')
+            ->add('lokasi', fn ($query) => view('components.table-component.title-location-coordinate', ['data' => $query])->render())
+            ->add('status', fn ($query) => $query->status ?? '-')
             ->add('status_formatted', function ($query) {
                 $status = $query->status;
 
@@ -115,15 +131,13 @@ final class DriverTable extends PowerGridComponent
                 ])->render();
             })
             ->add('created_at')
-            ->add('created_at_formatted', fn($query)
-                => Carbon::parse($query->created_at)
-                    ->locale('id')
-                    ->isoFormat('D MMMM YYYY HH:mm:ss'))
+            ->add('created_at_formatted', fn ($query) => Carbon::parse($query->created_at)
+                ->locale('id')
+                ->isoFormat('D MMMM YYYY HH:mm:ss'))
             ->add('assign_date')
-            ->add('assign_date_formatted', fn($query)
-                => Carbon::parse($query->assign_date)
-                    ->locale('id')
-                    ->isoFormat('D MMMM YYYY HH:mm:ss'));
+            ->add('assign_date_formatted', fn ($query) => Carbon::parse($query->assign_date)
+                ->locale('id')
+                ->isoFormat('D MMMM YYYY HH:mm:ss'));
     }
 
     public function columns(): array
@@ -167,15 +181,8 @@ final class DriverTable extends PowerGridComponent
                 ])
                 ->optionLabel('label')
                 ->optionValue('value'),
-            Filter::datepicker('created_at', 'created_at')
+            Filter::datepicker('created_at', 'created_at'),
         ];
-
-        if (auth()->user()->can('driver-approve')) {
-            $filters[] = Filter::select('kode_pegawai', 'kode_pegawai')
-                ->dataSource(collect($this->pegawai))
-                ->optionLabel('name')
-                ->optionValue('kode_pegawai');
-        }
 
         return $filters;
     }
@@ -186,7 +193,7 @@ final class DriverTable extends PowerGridComponent
             [
                 'id' => 'show-btn',
                 'action' => route('driver.show', $row->id),
-                'label' => 'Detail'
+                'label' => 'Detail',
             ],
         ];
 
@@ -194,7 +201,7 @@ final class DriverTable extends PowerGridComponent
             $actions[] = [
                 'id' => 'edit-btn',
                 'action' => route('driver.edit', $row->id),
-                'label' => 'Edit'
+                'label' => 'Edit',
             ];
         }
 
@@ -217,8 +224,9 @@ final class DriverTable extends PowerGridComponent
     {
         $data = Driver::find($id);
 
-        if (!$data) {
+        if (! $data) {
             $this->swal('Gagal!', "Terjadi kesalahan saat menghapus data dengan ID <b>$id</b>", 'error');
+
             return;
         }
 
@@ -227,11 +235,11 @@ final class DriverTable extends PowerGridComponent
 
             $this->swal('Terhapus!', 'Data yang dipilih berhasil dihapus.', 'success');
 
-            Log::info($request->user() . " : Menghapus data {$id}");
+            Log::info($request->user()." : Menghapus data {$id}");
         } catch (\Exception $e) {
             $this->swal('Gagal!', "Terjadi kesalahan saat menghapus data dengan ID <b>$id</b>", 'error');
 
-            Log::info($request->user()->kode_pegawai . " : Gagal menghapus data {$id}. {$e->getMessage()}");
+            Log::info($request->user()->kode_pegawai." : Gagal menghapus data {$id}. {$e->getMessage()}");
         }
     }
 
@@ -242,8 +250,9 @@ final class DriverTable extends PowerGridComponent
             ->where('id', $id)
             ->first();
 
-        if (!$data) {
+        if (! $data) {
             $this->swal('Gagal!', 'Data tidak ditemukan', 'error');
+
             return;
         }
 
@@ -256,8 +265,9 @@ final class DriverTable extends PowerGridComponent
         $user_id = Auth::id();
         $query = Driver::find($id);
 
-        if (!$query) {
-            $this->swal("Gagal!", 'Data tidak ditemukan.', 'error');
+        if (! $query) {
+            $this->swal('Gagal!', 'Data tidak ditemukan.', 'error');
+
             return;
         }
 
@@ -267,9 +277,10 @@ final class DriverTable extends PowerGridComponent
                 'validate_by' => $user_id,
             ]);
 
-            $this->swal("Dikonfirmasi!", 'Data yang dipilih berhasil dikonfirmasi.', 'success');
+            $this->swal('Dikonfirmasi!', 'Data yang dipilih berhasil dikonfirmasi.', 'success');
         } catch (\Exception $e) {
-            $this->swal("Terjadi kesalahan saat konfirmasi data", $e->getMessage(), 'error');
+            $this->swal('Terjadi kesalahan saat konfirmasi data', $e->getMessage(), 'error');
+
             return;
         }
     }
@@ -280,8 +291,9 @@ final class DriverTable extends PowerGridComponent
         $user_id = Auth::id();
         $query = Driver::find($id);
 
-        if (!$query) {
-            $this->swal("Gagal!", 'Data tidak ditemukan.', 'error');
+        if (! $query) {
+            $this->swal('Gagal!', 'Data tidak ditemukan.', 'error');
+
             return;
         }
 
@@ -294,7 +306,8 @@ final class DriverTable extends PowerGridComponent
 
             $this->swal('Ditolak!', 'Laporan yang dipilih berhasil ditolak', 'success');
         } catch (\Exception $e) {
-            $this->swal("Terjadi kesalahan saat konfirmasi data", $e->getMessage(), 'error');
+            $this->swal('Terjadi kesalahan saat konfirmasi data', $e->getMessage(), 'error');
+
             return;
         }
     }
@@ -305,8 +318,9 @@ final class DriverTable extends PowerGridComponent
         $user_id = Auth::id();
         $query = Driver::find($id);
 
-        if (!$query) {
-            $this->swal("Gagal!", 'Data tidak ditemukan.', 'error');
+        if (! $query) {
+            $this->swal('Gagal!', 'Data tidak ditemukan.', 'error');
+
             return;
         }
 
@@ -319,7 +333,8 @@ final class DriverTable extends PowerGridComponent
 
             $this->swal('Direvisi!', 'Laporan yang dipilih berhasil direvisi', 'success');
         } catch (\Exception $e) {
-            $this->swal("Terjadi kesalahan saat konfirmasi data", $e->getMessage(), 'error');
+            $this->swal('Terjadi kesalahan saat konfirmasi data', $e->getMessage(), 'error');
+
             return;
         }
     }
