@@ -81,11 +81,7 @@ final class PurchasingRequestTable extends PowerGridComponent
             })
             ->add('customer_company', fn ($query) => $query->customer_nama_perusahaan ?? data_get($query->customer, 'nama_perusahaan', '-'))
             ->add('customer_formatted', function ($query) {
-                return view('components.dashboard.name-w-code', [
-                    'code' => $query->customer_contact_person ?? data_get($query->customer, 'contact_person', '-'),
-                    'name' => $query->customer_nama_perusahaan ?? data_get($query->customer, 'nama_perusahaan', '-'),
-                    'item3' => $query->customer['no_hp'] ?? '-',
-                ]);
+                return $query->customer_nama_perusahaan ?? data_get($query->customer, 'nama_perusahaan', '-');
             })
             ->add('created_at');
     }
