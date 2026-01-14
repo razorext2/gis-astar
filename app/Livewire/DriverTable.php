@@ -135,9 +135,17 @@ final class DriverTable extends PowerGridComponent
                 ->locale('id')
                 ->isoFormat('D MMMM YYYY HH:mm:ss'))
             ->add('assign_date')
-            ->add('assign_date_formatted', fn ($query) => Carbon::parse($query->assign_date)
-                ->locale('id')
-                ->isoFormat('D MMMM YYYY HH:mm:ss'));
+            ->add('assign_date_formatted', function ($query) {
+                $date = $query->assign_date;
+
+                if ($date) {
+                    return Carbon::parse($date)
+                        ->locale('id')
+                        ->isoFormat('D MMMM YYYY HH:mm:ss');
+                } else {
+                    return '-';
+                }
+            });
     }
 
     public function columns(): array

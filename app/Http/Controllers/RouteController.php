@@ -23,11 +23,10 @@ class RouteController extends Controller
 
         $report = Pegawai::with([
             'driverReport' => function ($query) use ($date) {
-                $query->with('pegawai')
-                    ->whereDate('created_at', $date)
+                $query->whereDate('created_at', $date)
                     ->orderBy('created_at', 'asc');
             },
-        ])->where('kode_pegawai', $id)
+        ])->whereHas('userRelasi', fn ($query) => $query->where('id', $id))
             ->firstOrFail();
 
         // Kembalikan view dengan data $pegawai

@@ -6,7 +6,7 @@
 
                 {{-- search --}}
                 <div class="w-full md:col-span-2">
-                    <form id="dateForm" action="{{ route('routes.driver.detail', ['pegawai' => $pegawai->kode_pegawai]) }}"
+                    <form id="dateForm" action="{{ route('routes.driver.detail', ['pegawai' => $pegawai->userRelasi->id]) }}"
                         method="GET">
                         <x-dashboard.date-picker id="tanggal-rute-driver" name="date" form="dateForm"
                             :text="'Filter tanggal'" />
