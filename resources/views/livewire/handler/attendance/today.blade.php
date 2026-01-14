@@ -26,8 +26,12 @@
                 $options['Kurir-Bank'] = 'Kurir Bank';
             }
 
-            if ($user->can('driver-approve') || $user->can('attendance-approve')) {
-                $options['Driver'] = 'Driver';
+            if ($user->can('driver-list-jkt') || $user->can('driver-approve') || $user->can('attendance-approve')) {
+                $options['Driver-Jkt'] = 'Driver Jakarta';
+            }
+
+            if ($user->can('driver-list-medan') || $user->can('driver-approve') || $user->can('attendance-approve')) {
+                $options['Driver-Medan'] = 'Driver Medan';
             }
 
             if ($user->can('attendance-approve')) {
