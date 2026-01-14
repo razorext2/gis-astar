@@ -35,31 +35,38 @@ final class SalesRouteTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        $this->user = Auth::user();
+        $this->user = auth()->user();
+
         $query = User::query()->with(['pegawai', 'roles']);
 
+        $roles = [];
+
         if ($this->user->hasRole('Kasir')) {
-            $query->whereHas('roles', fn ($role) => $role->where('name', 'Kurir-Bank'));
+            $roles = ['Kurir-Bank'];
         }
 
         if ($this->user->hasRole(['HRD-IDY', 'Marketing-IDY'])) {
-            $query->whereHas('roles', fn ($role) => $role->where('name', 'Sales-IDY'));
+            $roles = ['Sales-IDY'];
         }
 
         if ($this->user->hasRole('Marketing')) {
-            $query->whereHas('roles', fn ($role) => $role->where('name', 'Sales'));
+            $roles = ['Sales'];
         }
 
         if ($this->user->hasRole(['Marketing-PKU', 'Management-PKU'])) {
-            $query->whereHas('roles', fn ($role) => $role->where('name', 'Sales-PKU'));
+            $roles = ['Sales-PKU'];
         }
 
         if ($this->user->hasRole(['Marketing-JKT', 'Management-JKT'])) {
-            $query->whereHas('roles', fn ($role) => $role->where('name', 'Sales-JKT'));
+            $roles = ['Sales-JKT'];
         }
 
         if ($this->user->hasRole(['Admin', 'Management', 'Management-Special'])) {
-            $query->whereHas('roles', fn ($role) => $role->whereIn('name', ['Sales', 'Sales-PKU', 'Sales-JKT']));
+            $roles = ['Sales', 'Sales-PKU', 'Sales-JKT'];
+        }
+
+        if (! empty($roles)) {
+            $query->role($roles);
         }
 
         return $query;
