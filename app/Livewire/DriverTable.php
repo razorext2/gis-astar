@@ -62,6 +62,16 @@ final class DriverTable extends PowerGridComponent
                     $query->whereDate('assign_date', '<=', now())
                         ->orWhereNull('assign_date');
                 });
+        } else {
+            if ($this->user->can('driver-list-jkt')) {
+                $roles[] = 'Driver-Jkt';
+            }
+
+            if ($this->user->can('driver-list-medan')) {
+                $roles[] = 'Driver-Medan';
+            }
+
+            $data->whereHas('user.roles', fn ($role) => $role->whereIn('name', $roles));
         }
 
         if ($this->status != '') {
@@ -74,16 +84,6 @@ final class DriverTable extends PowerGridComponent
                 'notupdated' => $data->where('status', 5)
             };
         }
-
-        if ($this->user->can('driver-list-jkt')) {
-            $roles[] = 'Driver-Jkt';
-        }
-
-        if ($this->user->can('driver-list-medan')) {
-            $roles[] = 'Driver-Medan';
-        }
-
-        $data->whereHas('user.roles', fn ($role) => $role->whereIn('name', $roles));
 
         $data->orderBy('created_at', 'desc')
             ->orderBy('status', 'desc');
