@@ -37,12 +37,9 @@ class SpkController extends Controller
         return view('dashboard.spk.show', compact('spk'));
     }
 
-    public function edit($id)
+    public function edit(SpkMain $spk)
     {
-        $this->authorize('update', SpkMain::class);
-
-        $spk = SpkMain::select('id', 'nomor_order', 'tipe_tagihan')
-            ->findOrFail($id);
+        $this->authorize('update', $spk);
 
         return view('dashboard.spk.edit', compact('spk'));
     }

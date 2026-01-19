@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Spk\SpkMain;
 use App\Models\User;
 
 class SpkMainPolicy
@@ -33,9 +34,14 @@ class SpkMainPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user): bool
+    public function update(User $user, SpkMain $spk): bool
     {
-        return $user->hasPermissionTo('spk-edit');
+        if ($user->hasAnyRole(['Admin', 'Management'])) {
+            return $user->hasPermissionTo('spk-edit');
+        }
+
+        return $user->hasPermissionTo('spk-edit')
+            && $user->id === $spk->added_by;
     }
 
     /**

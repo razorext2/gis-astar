@@ -239,7 +239,7 @@ final class SpkTable extends PowerGridComponent
     {
         $button = [];
 
-        if ($this->user->can('spk-edit')) {
+        if ($this->user->can('spk-edit') && ($this->user->hasAnyRole(['Admin', 'Management']) || $this->user->id === $row->added_by)) {
             $button[] = Button::make('edit')
                 ->slot('Edit')
                 ->id($row->id)

@@ -121,7 +121,7 @@ class Edit extends Component
     public function store()
     {
         // cek authorization
-        $this->authorize('update', \App\Models\Spk\SpkMain::class);
+        $this->authorize('update', $this->data);
 
         // inisialisasi variabel
         $customer = [];
