@@ -137,7 +137,7 @@
 
     <div id="footer" class="h-full w-full">
         <table id="sign-header-table" class="w-full">
-            <tr height="40px">
+            <tr>
                 <td colspan="3" class="uppercase">waktu penyerahan :</td>
             </tr>
             <tr>
