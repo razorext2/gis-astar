@@ -141,20 +141,20 @@
                 <td colspan="3" class="uppercase">waktu penyerahan :</td>
             </tr>
             <tr>
-                <td colspan="2" class="uppercase" width="20%">untuk</td>
-                <td>{{ $data['nama_customer'] ?? '-' }}</td>
+                <td class="uppercase" width="20%">untuk</td>
+                <td colspan="2">{{ $data['nama_customer'] ?? '-' }}</td>
             </tr>
             <tr>
-                <td colspan="2" class="uppercase" width="20%">alamat</td>
-                <td>{{ $data['alamat_customer'] ?? '-' }}</td>
+                <td class="uppercase" width="20%">alamat</td>
+                <td colspan="2">{{ $data['alamat_customer'] ?? '-' }}</td>
             </tr>
             <tr>
-                <td colspan="2" class="uppercase" width="20%">c. person</td>
-                <td>{{ $data['contact_person'] ?? '-' }}</td>
+                <td class="uppercase" width="20%">c. person</td>
+                <td colspan="2">{{ $data['contact_person'] ?? '-' }}</td>
             </tr>
             <tr>
-                <td colspan="2" class="uppercase" width="20%">no tlp / hp</td>
-                <td>{{ $data['no_telp'] ?? '-' }}</td>
+                <td class="uppercase" width="20%">no tlp / hp</td>
+                <td colspan="2">{{ $data['no_telp'] ?? '-' }}</td>
             </tr>
         </table>
 
