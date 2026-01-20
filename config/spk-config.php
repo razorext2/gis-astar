@@ -15,6 +15,7 @@ return [
         'section' => 'Section',
         'set' => 'Set',
         'unit' => 'Unit',
+        'package' => 'Package',
     ],
     'tipe_timbangan' => [
         'non timbangan jembatan' => 'Timbangan Lainnya',
