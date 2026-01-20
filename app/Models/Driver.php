@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Storage;
 class Driver extends Model
 {
     use SoftDeletes;
+
     protected $table = 'tb_drivers';
+
     protected $fillable = [
         'no_sr',
         'tipe_kunjungan',
@@ -27,8 +29,9 @@ class Driver extends Model
         'total_revision',
         'revised_by',
         'assign_date',
-        'assign_by'
+        'assign_by',
     ];
+
     protected $dates = ['deleted_at'];
 
     public static function boot()
@@ -50,8 +53,9 @@ class Driver extends Model
     {
         $words = explode(' ', $this->title);
         if (count($words) > 3) {
-            return implode(' ', array_slice($words, 0, 3)) . '';
+            return implode(' ', array_slice($words, 0, 3)).'';
         }
+
         return $this->title;
     }
 
@@ -73,5 +77,10 @@ class Driver extends Model
     public function validateBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'validate_by', 'id');
+    }
+
+    public function scopeNeedApprove($query)
+    {
+        return $query->where('status', 0);
     }
 }

@@ -8,6 +8,7 @@ use Livewire\Component;
 class ReportCounter extends Component
 {
     public string $id;
+
     public function render()
     {
         $user = Auth::user();
@@ -15,28 +16,39 @@ class ReportCounter extends Component
         $models = [
             'sales' => \App\Models\Sales::needApprove(),
             'collect' => \App\Models\Collector::needApprove(),
-            'driver' => \App\Models\Driver::query()->where('status', 0),
-            'technician' => \App\Models\Technician::query()->where('status', 0),
+            'driver' => \App\Models\Driver::needApprove(),
+            'technician' => \App\Models\Technician::needApprove(),
         ];
 
         $query = $models[$this->id] ?? null;
 
-        if ($query) {
-            $query->with('pegawaiRelasi');
+        $roleMap = [
+            'sales' => [
+                'sales-export-medan' => ['rel' => 'userRelasi.roles', 'role' => 'Sales'],
+                'sales-export-jkt' => ['rel' => 'userRelasi.roles', 'role' => 'Sales-JKT'],
+                'sales-export-pku' => ['rel' => 'userRelasi.roles', 'role' => 'Sales-PKU'],
+            ],
+            'driver' => [
+                'driver-list-jkt' => ['rel' => 'user.roles', 'role' => 'Driver-Jkt'],
+                'driver-list-medan' => ['rel' => 'user.roles', 'role' => 'Driver-Medan'],
+            ],
+        ];
 
-            if ($this->id === 'sales' && $user->hasRole('Marketing')) {
-                $query->whereHas('userRelasi.roles', fn($r) => $r->where('name', 'Sales'));
-            } elseif ($this->id === 'sales' && $user->hasAnyRole(['Marketing-JKT', 'Management-JKT'])) {
-                $query->whereHas('userRelasi.roles', fn($r) => $r->where('name', 'Sales-JKT'));
-            } elseif ($this->id === 'sales' && $user->hasAnyRole(['Marketing-PKU', 'Management-PKU'])) {
-                $query->whereHas('userRelasi.roles', fn($r) => $r->where('name', 'Sales-PKU'));
+        $count = 0;
+
+        if ($query && isset($roleMap[$this->id])) {
+            foreach ($roleMap[$this->id] as $permission => $config) {
+                if ($user->can($permission)) {
+                    $count += (clone $query)
+                        ->whereHas($config['rel'], fn ($r) => $r->where('name', $config['role']))
+                        ->count();
+                }
             }
         }
 
         return view('livewire.utils.report-counter', [
-            'count' => $query?->count() ?? 0,
+            'count' => $count ?? 0,
             'id' => $this->id,
         ]);
     }
-
 }

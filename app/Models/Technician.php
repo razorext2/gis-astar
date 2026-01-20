@@ -10,7 +10,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Technician extends Model
 {
     use SoftDeletes;
+
     protected $table = 'tb_technician';
+
     protected $fillable = [
         'no_vt',
         'id_permintaan',
@@ -35,7 +37,7 @@ class Technician extends Model
         'total_revision',
         'notes',
         'revised_by',
-        'revised_at'
+        'revised_at',
     ];
 
     public function pegawai(): BelongsTo
@@ -66,5 +68,10 @@ class Technician extends Model
     public function photo_collects(): HasMany
     {
         return $this->hasMany(PhotoCollect::class, 'no_vt', 'no_vt');
+    }
+
+    public function scopeNeedApprove($query)
+    {
+        return $query->where('status', 0);
     }
 }
