@@ -253,6 +253,7 @@ Route::middleware(['auth'])->group(function () {
 
             // 3. spk produksi
             Route::get('production/{production}/packing-list/create', [\App\Http\Controllers\Spk\ProductionController::class, 'packingListCreate'])->name('production.packing-list.add');
+            Route::get('production/{production}/packing-list/kits/{idbarang}/create', [\App\Http\Controllers\Spk\ProductionController::class, 'packingListKits'])->name('production.packing-list.kits.add');
             Route::get('stream/pdf/packing-list', [\App\Http\Controllers\Spk\ProductionController::class, 'streamPackingListPdf'])->name('packing-list.pdf');
             Route::get('production/{id}/history/create', [\App\Http\Controllers\Spk\ProductionHistoriesController::class, 'create'])->name('production.history.add');
             Route::resource('production', \App\Http\Controllers\Spk\ProductionController::class)->only('index', 'show');

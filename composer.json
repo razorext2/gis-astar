@@ -26,6 +26,7 @@
         "power-components/livewire-powergrid": "^6.1",
         "predis/predis": "2.0",
         "pusher/pusher-php-server": "^7.2",
+        "riskihajar/terbilang": "^2.0",
         "silviolleite/laravelpwa": "^2.0",
         "spatie/laravel-backup": "^9.2",
         "spatie/laravel-permission": "^6.9",

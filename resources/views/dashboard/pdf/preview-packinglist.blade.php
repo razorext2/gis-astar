@@ -72,24 +72,63 @@
             page-break-before: always;
             break-before: page;
         }
+
+        .signature-footer {
+            page-break-inside: avoid;
+            margin-top: 40px;
+        }
     </style>
 </head>
 
 <body>
-    <div id="item-details" class="relative" style="min-height: 100vh">
-        <div id="header" class="flex w-full justify-center" style="margin-bottom: 40px">
-            <h4 class="text-center"
-                style="
-                        padding: 0.5rem;
-                        border: 4px solid #000;
-                        width: fit-content;
-                    ">
-                Daftar Alat & Barang yang Dibawa
-            </h4>
-        </div>
-    </div>
 
-    <div class="page-break"></div>
+    @foreach ($data['daftar_box'] as $row)
+        <div id="item-details" class="relative" style="min-height: 100vh">
+            <div class="flex flex-col text-justify">
+                <table class="w-full" style="margin-bottom: 50px; font-size: large">
+                    <tr>
+                        <td width="25%">
+                            {{ $row['jumlah_kit'] }}
+                            ({{ Terbilang::make($row['jumlah_kit']) }})
+                            {{ $row['satuan_kit'] }}
+                        </td>
+                        <td>{{ $row['nama_kit'] }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="border-bottom: 1px solid #000">{{ $data['nama_customer'] }}</td>
+                    </tr>
+                </table>
+
+                @foreach ($row['peti'] as $row)
+                    {{-- <p style="font-weight: bold">{{ $row['box_name'] }}</p> --}}
+
+                    <table class="w-full" style="margin-bottom:10px">
+                        <tr>
+                            <td></td>
+                            <td colspan="3" style="font-weight: bold; font-size: larger">
+                                <span style="background-color: yellow;">
+                                    {{ $row['box_name'] }}
+                                </span>
+
+                            </td>
+                        </tr>
+
+                        @foreach ($row['kits'] as $index => $kit)
+                            <tr>
+                                <td width="5%">{{ $index + 1 }}.</td>
+                                <td width="75%" style="border-bottom: 1px solid #000">{{ $kit['kit_name'] }}</td>
+                                <td width="10%" style="border-bottom: 1px solid #000">{{ $kit['kit_qty'] }}</td>
+                                <td width="10%" style="border-bottom: 1px solid #000">{{ $kit['kit_unit'] }}</td>
+                            </tr>
+                        @endforeach
+                    </table>
+                @endforeach
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+    @endforeach
 
     <div id="packing-list" class="relative" style="min-height: 100vh">
         <div id="header" class="flex flex-col">
@@ -109,7 +148,7 @@
                 <tr>
                     <td>Pada hari ini tanggal:</td>
                     <td colspan="2">
-                        {{ today()->locale('id')->format('d F Y') }}
+                        {{ $data['created_at'] }}
                     </td>
                 </tr>
                 <tr>
@@ -201,65 +240,67 @@
 
             <br />
 
-            <table class="w-full">
-                <tr>
-                    <td class="text-center" colspan="2"></td>
-                    <td class="text-center" width="33%">
-                        Medan, {{ today()->locale('id')->format('d F Y') }}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-center">Dikirim Oleh:</td>
-                    <td class="text-center">Dibawa & Diserahkan Oleh:</td>
-                    <td class="text-center">Diterima Oleh:</td>
-                </tr>
-                <tr>
-                    <td colspan="3" height="60px"></td>
-                </tr>
-                <tr>
-                    <td colspan="3" class="text-center"></td>
-                </tr>
-                <tr>
-                    <td class="text-center" style="text-decoration: underline">
-                        S u r y a C a i
-                    </td>
-                    <td class="text-center">
-                        <span
-                            style="
+            <div class="signature-footer">
+                <table class="w-full">
+                    <tr>
+                        <td class="text-center" colspan="2"></td>
+                        <td class="text-center" width="33%">
+                            Medan, {{ $data['created_at'] }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">Dikirim Oleh:</td>
+                        <td class="text-center">Dibawa & Diserahkan Oleh:</td>
+                        <td class="text-center">Diterima Oleh:</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" height="60px"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-center"></td>
+                    </tr>
+                    <tr>
+                        <td class="text-center" style="text-decoration: underline">
+                            S u r y a C a i
+                        </td>
+                        <td class="text-center">
+                            <span
+                                style="
                                     border-bottom: 1px solid #000;
                                     padding: 0 0.5em 0 0.5em;
                                 ">{{ $data['nama_ekspedisi'] }}</span>
-                    </td>
-                    <td class="text-center">
-                        a/n :
-                        <span
-                            style="
+                        </td>
+                        <td class="text-center">
+                            a/n :
+                            <span
+                                style="
                                     border-bottom: 1px solid #000;
                                     padding: 0 0.5em 0 0.5em;
                                 ">{{ $data['contact_person'] }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="text-center"></td>
-                    <td class="text-center">
-                        {{ $data['nama_customer'] }}
-                    </td>
-                </tr>
-            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="text-center"></td>
+                        <td class="text-center">
+                            {{ $data['nama_customer'] }}
+                        </td>
+                    </tr>
+                </table>
 
-            <p style="font-style: italic">Catatan:</p>
+                <p style="font-style: italic">Catatan:</p>
 
-            <ul style="font-size: 0.75em">
-                <li>
-                    Semua biaya yang terjadi dalam Perjalanan merupakan
-                    tanggung jawab pihak pengangkutan.
-                </li>
-                <li>
-                    Semua biaya yang terjadi di Lokasi merupakan tanggung
-                    jawab Penerima barang ( Customers ) Sesuai dengan
-                    perjanjian & kontrak yang disepakati.
-                </li>
-            </ul>
+                <ul style="font-size: 0.75em">
+                    <li>
+                        Semua biaya yang terjadi dalam Perjalanan merupakan
+                        tanggung jawab pihak pengangkutan.
+                    </li>
+                    <li>
+                        Semua biaya yang terjadi di Lokasi merupakan tanggung
+                        jawab Penerima barang ( Customers ) Sesuai dengan
+                        perjanjian & kontrak yang disepakati.
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </body>

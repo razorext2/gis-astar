@@ -5,6 +5,7 @@ namespace App\Livewire\Handler\ProductionHistories;
 use App\Livewire\Concerns\HandlesErrors;
 use App\Livewire\Forms\Spk\PackingList as SpkPackingList;
 use App\Models\Spk\Production;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
@@ -34,11 +35,7 @@ class PackingList extends Component
 
     public array $packs = [];
 
-    public array $kits = [];
-
     public bool $showDetailModal = false;
-
-    public bool $showAddKitModal = false;
 
     public bool $accordionOpen = false;
 
@@ -119,6 +116,8 @@ class PackingList extends Component
                 'qty_barang' => $this->qty_barang,
                 'satuan_barang' => $this->satuan_barang,
                 'note' => $this->note,
+                'created_at' => now(),
+                'updated_at' => now(),
             ];
 
             DB::transaction(function () use ($barang_baru) {
@@ -165,11 +164,6 @@ class PackingList extends Component
         ]);
     }
 
-    public function storeKit()
-    {
-        dd('oke');
-    }
-
     protected function clear()
     {
         $this->form->reset();
@@ -184,22 +178,25 @@ class PackingList extends Component
     #[On('printPackingList')]
     public function detail($id, $nama_ekspedisi, $nama_barang, $jumlah_barang, $satuan_barang, $note)
     {
-        $customer = Production::with('spk')
+        $produksi = Production::with('spk')
             ->where('id', $this->id)
-            ->first()
-            ->spk
-            ->customer;
+            ->first();
+
+        $item = collect($produksi->packing_list)
+            ->firstWhere('id_barang', $id);
 
         $data = [];
 
         $data['id'] = $id;
         $data['nama_ekspedisi'] = $nama_ekspedisi;
-        $data['nama_customer'] = $customer['nama_perusahaan'];
-        $data['contact_person'] = $customer['contact_person'];
+        $data['nama_customer'] = $produksi->spk->customer['nama_perusahaan'];
+        $data['contact_person'] = $produksi->spk->customer['contact_person'];
         $data['nama_barang'] = $nama_barang;
         $data['jumlah_barang'] = $jumlah_barang.' ['.ucfirst($satuan_barang).']';
         $data['note'] = $note;
         $data['daftar_part'] = \App\Models\Spk\PackingList::where('id_barang', $id)->get()->toArray();
+        $data['daftar_box'] = \App\Models\Spk\PackingListKit::where('id_barang_produksi', $id)->get()->toArray();
+        $data['created_at'] = Carbon::parse($item['created_at'])->locale('id')->isoFormat('D MMMM Y');
 
         session(['packing_list_data' => $data]);
 
@@ -208,12 +205,6 @@ class PackingList extends Component
 
         // munculkan modal pdf
         $this->dispatch('show-detail-modal', url: route('packing-list.pdf'));
-    }
-
-    #[On('addKit')]
-    public function addKit($id)
-    {
-        $this->showAddKitModal = true;
     }
 
     public function render()

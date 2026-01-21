@@ -1,11 +1,11 @@
-<div class="flex flex-col gap-2 lg:gap-4" x-data="{ pdfUrl: '' }"
+<div class="flex flex-col gap-2 lg:gap-4" x-data="{ pdfUrl: null }"
     x-on:show-detail-modal.window="pdfUrl = $event.detail.url">
     {{-- accordion form tambah packing list --}}
     <div id="accordion-packing-form" x-data="{ accordionOpen: false }">
         <button type="button"
-            class="flex w-full items-center justify-between gap-3 rounded-lg border border-gray-200 p-5 font-medium text-gray-500 transition-all duration-300 ease-in-out hover:bg-blue-100 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-800"
+            class="d flex w-full items-center justify-between gap-3 rounded-lg border border-gray-200 bg-blue-500 p-5 font-medium text-white transition-all duration-300 ease-in-out hover:bg-blue-400 dark:border-gray-600 dark:bg-blue-600 dark:hover:bg-blue-500"
             @click="accordionOpen = !accordionOpen" :class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
-            <h3 class="text-base font-semibold text-gray-800 dark:text-white">
+            <h3 class="text-base font-semibold text-white">
                 Tambah Packing List?
             </h3>
 
@@ -234,136 +234,4 @@
         </x-modal.base-modal>
     @endif
     {{-- end modal print packing list --}}
-
-    {{-- modal add kit --}}
-    @if ($showAddKitModal)
-        <x-modal.base-modal id="modalAddKit" :title="'Tambah Kit Packing List'" :actionName="'showAddKitModal'">
-            <div class="p-2 lg:p-4">
-                <form class="grid grid-cols-2 gap-2 lg:gap-4" wire:submit.prevent="storeKit" method="post">
-                    <div class="col-span-2 lg:col-span-1">
-                        <x-input.basic id="nama_kit" name="nama_kit" :labels="true" :type="'text'"
-                            wire:model="nama_kit" placeholder="Input nama Kit...">
-                            Nama Kit
-                        </x-input.basic>
-
-                        @error('nama_kit')
-                            <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="col-span-2 grid grid-cols-2 gap-2 lg:col-span-1 lg:gap-4">
-                        <div class="col-span-2 lg:col-span-1">
-                            <x-input.basic id="jumlah_kit" name="jumlah_kit" :labels="true" :type="'text'"
-                                wire:model="jumlah_kit" placeholder="Input nama Kit...">
-                                Jumlah Kit
-                            </x-input.basic>
-
-                            @error('jumlah_kit')
-                                <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="col-span-2 lg:col-span-1">
-                            <x-input.select id="satuan_peti" name="satuan_peti" wire:model="satuan_peti"
-                                :textLabel="'Satuan'" :labels="true" :defaultOption="'Pilih satuan'" :options="config('spk-config.satuan')" />
-
-                            @error('satuan_peti')
-                                <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div
-                        class="col-span-2 flex flex-col gap-2 rounded-lg border-[1px] border-gray-600 p-2 dark:border-gray-200 lg:gap-4 lg:p-4">
-                        <div class="flex flex-col gap-y-2">
-                            <h4 class="block text-sm font-medium text-gray-900 dark:text-white">Daftar Peti</h4>
-
-                            {{-- daftar peti dan itemnya --}}
-                            <table id="pack-table"
-                                class="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
-                                <thead
-                                    class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
-                                    <tr>
-                                        <th scope="col" class="py-3 text-center">#</th>
-                                        <th scope="col" class="py-3 text-center">Nama Peti</th>
-                                        <th scope="col" class="py-3 text-center">Detail Item</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @forelse ($packs as $index => $row)
-                                        <tr
-                                            class="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-                                            <td class="px-3 py-2 text-center">
-                                                {{ $index + 1 }}
-                                            </td>
-                                            <td class="px-3 py-2">
-                                                {{ $row['nama_peti'] }}
-                                            </td>
-                                            <td class="px-3 py-2 text-center">
-                                                {{-- table untuk kit --}}
-                                                @foreach ($kits as $index => $row)
-                                                    test
-                                                @endforeach
-                                                {{-- end table untuk kit --}}
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr
-                                            class="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-                                            <td colspan="6"
-                                                class="px-6 py-4 text-center text-sm font-semibold italic text-red-500">
-                                                Belum ada data kit
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                            {{-- end daftar peti dan itemnya --}}
-
-                            {{-- form tambah peti --}}
-                            <div class="grid grid-cols-2 gap-2 lg:gap-4">
-
-                                <div class="col-span-2 lg:col-span-1">
-                                    <x-input.basic id="nama_kit" name="nama_kit" :labels="true"
-                                        :type="'text'" wire:model="nama_kit" placeholder="Input nama Kit...">
-                                        Nama Kit
-                                    </x-input.basic>
-
-                                    @error('nama_kit')
-                                        <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <div class="col-span-2 lg:col-span-1">
-                                    <x-input.basic id="qty_kit" name="qty_kit" :labels="true" :type="'number'"
-                                        wire:model="qty_kit" placeholder="Input nama Kit...">
-                                        Nama Kit
-                                    </x-input.basic>
-
-                                    @error('qty_kit')
-                                        <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                            </div>
-                            {{-- end form tambah peti --}}
-                        </div>
-
-
-                    </div>
-
-                    {{-- tombol --}}
-                    <div class="col-span-2 flex w-full justify-center gap-2 lg:gap-4">
-                        <x-button.success type="submit" id="storeKit">
-                            <span wire:loading.remove wire:target="storeKit">Simpan Data</span>
-                            <span wire:loading wire:target="storeKit">Memproses...</span>
-                        </x-button.success>
-                    </div>
-                    {{-- end tombol --}}
-                </form>
-            </div>
-        </x-modal.base-modal>
-    @endif
-    {{-- end modal add kit --}}
 </div>

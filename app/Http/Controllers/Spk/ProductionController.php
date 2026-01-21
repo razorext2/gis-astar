@@ -37,13 +37,27 @@ class ProductionController extends Controller
         ]);
     }
 
+    public function packingListKits($production, $idbarang)
+    {
+        $this->authorize('updatePackingList', Production::class);
+
+        $data = $this->getData($production);
+
+        $barang = collect($data->packing_list)->firstWhere('id_barang', $idbarang);
+
+        return view('dashboard.spk.production.packing-list.kits', [
+            'data' => $data,
+            'barang' => $barang,
+        ]);
+    }
+
     public function streamPackingListPdf()
     {
         $data = session('packing_list_data');
 
         $pdf = Pdf::loadView('dashboard.pdf.preview-packinglist', [
             'data' => $data,
-        ]);
+        ])->setPaper('F5', 'portrait');
 
         return $pdf->stream('packing-list-'.$data['id'].'.pdf');
     }

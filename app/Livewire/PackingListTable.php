@@ -15,6 +15,8 @@ final class PackingListTable extends PowerGridComponent
 
     public ?string $id;
 
+    public $production;
+
     public function setUp(): array
     {
         return [
@@ -25,8 +27,8 @@ final class PackingListTable extends PowerGridComponent
 
     public function datasource()
     {
-        $production = Production::where('id', $this->id)->first();
-        $packingList = $production?->packing_list ?? [];
+        $this->production = Production::select('id', 'packing_list')->where('id', $this->id)->first();
+        $packingList = $this->production?->packing_list ?? [];
 
         if (is_string($packingList)) {
             $decoded = json_decode($packingList, true);
@@ -89,9 +91,9 @@ final class PackingListTable extends PowerGridComponent
                     'note' => $row->note,
                 ]),
             Button::add('addKit')
-                ->slot('Tambah Kit')
+                ->slot('Tambah Peti')
                 ->class('dark:bg-green-800 text-sm dark:hover:bg-green-900 dark:text-white dark:border-gray-700 rounded-lg bg-green-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-green-700')
-                ->dispatch('addKit', ['id' => $row->id_barang]),
+                ->route('production.packing-list.kits.add', ['idbarang' => $row->id_barang, 'production' => $this->production->id]),
         ];
     }
 }
