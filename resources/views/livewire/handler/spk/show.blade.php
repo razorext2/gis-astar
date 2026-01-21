@@ -144,32 +144,32 @@
                     [
                         'status' => 0,
                         'desc' => 'SPK telah dibuat',
-                        'icon' => 'woman-holding-certificate.svg',
+                        'icon' => 'spk-selesai.webp',
                     ],
                     [
                         'status' => 1,
                         'desc' => 'Dalam proses produksi',
-                        'icon' => 'hand-wash.svg',
+                        'icon' => 'diproduksi.webp',
                     ],
                     [
                         'status' => 2,
                         'desc' => 'Dalam proses pengiriman',
-                        'icon' => 'convenience-store-cash-register-female.svg',
+                        'icon' => 'dikirim.webp',
                     ],
                     [
                         'status' => 3,
                         'desc' => 'Dalam proses penagihan',
-                        'icon' => 'credit-card-payment.svg',
+                        'icon' => 'penagihan.webp',
                     ],
                     [
                         'status' => 4,
                         'desc' => 'Dalam proses pemasangan',
-                        'icon' => 'factory-male-worker-upper-body.svg',
+                        'icon' => 'pemasangan.webp',
                     ],
                     [
                         'status' => 5,
                         'desc' => 'Selesai',
-                        'icon' => 'hands-to-shake-hands.svg',
+                        'icon' => 'selesai.webp',
                     ],
                 ];
             @endphp
