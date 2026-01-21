@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use Illuminate\Support\Collection;
+use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
@@ -91,11 +92,22 @@ final class PackingListKitTable extends PowerGridComponent
     public function columns(): array
     {
         return [
+            Column::action('Action'),
+
             Column::make('Name', 'nama_kit_formatted', 'nama_kit'),
 
             Column::make('Peti', 'peti'),
 
-            // Column::action('Action'),
+        ];
+    }
+
+    public function actions($row)
+    {
+        return [
+            Button::add('remove')
+                ->slot('Hapus')
+                ->class('dark:bg-red-800 text-sm dark:hover:bg-red-900 dark:text-white dark:border-gray-700 rounded-lg bg-red-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-red-700')
+                ->dispatch('deletePackingListKit', ['id' => $row->id]),
         ];
     }
 }

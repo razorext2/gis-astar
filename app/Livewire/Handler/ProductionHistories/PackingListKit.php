@@ -7,6 +7,7 @@ use App\Livewire\Forms\Spk\PackingList\Box;
 use App\Livewire\Forms\Spk\PackingList\Kit;
 use App\Models\Spk\SpkMain;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class PackingListKit extends Component
@@ -101,6 +102,23 @@ class PackingListKit extends Component
     {
         $this->formBox->reset();
         $this->formKit->reset();
+    }
+
+    #[On('deletePackingListKit')]
+    public function deletePackingListKit($id)
+    {
+        $this->runSafely(function () use ($id) {
+            \App\Models\Spk\PackingListKit::findOrFail($id)->delete();
+
+            $this->dispatch(event: 'swal', icon: 'success', title: 'Berhasil', text: 'Berhasil menghapus packing list kit');
+            $this->dispatch('pg:eventRefresh-PackingListKitTable');
+
+        }, 'Gagal menghapus packing list kit.', [
+            'user_id' => Auth::id(),
+            'method' => 'deletePackingListKit',
+            'model' => '\App\Models\Spk\PackingListKit',
+            'record_id' => $id,
+        ]);
     }
 
     public function render()

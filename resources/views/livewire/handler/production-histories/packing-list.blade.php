@@ -3,7 +3,7 @@
     {{-- accordion form tambah packing list --}}
     <div id="accordion-packing-form" x-data="{ accordionOpen: false }">
         <button type="button"
-            class="d flex w-full items-center justify-between gap-3 rounded-lg border border-gray-200 bg-blue-500 p-5 font-medium text-white transition-all duration-300 ease-in-out hover:bg-blue-400 dark:border-gray-600 dark:bg-blue-600 dark:hover:bg-blue-500"
+            class="d flex w-full items-center justify-between gap-3 rounded-lg border border-gray-200 bg-green-500 p-5 font-medium text-white transition-all duration-300 ease-in-out hover:bg-green-400 dark:border-gray-600 dark:bg-green-600 dark:hover:bg-green-500"
             @click="accordionOpen = !accordionOpen" :class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
             <h3 class="text-base font-semibold text-white">
                 Tambah Packing List?
