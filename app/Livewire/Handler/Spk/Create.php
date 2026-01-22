@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Handler\Spk;
 
-use App\Jobs\ExportPdfJob;
 use App\Livewire\Concerns\HandlesErrors;
 use App\Livewire\Forms\Spk\Create as SpkCreate;
 use App\Models\Spk\Production;
@@ -60,31 +59,30 @@ class Create extends Component
             'spesifikasi.string' => 'Kolom spesifikasi harus berupa string.',
         ]);
 
-        if ($this->is_edit && $this->index_barang !== null) {
-            // update barang sesuai index
-            $this->createForm->barang[$this->index_barang] = [
-                'nama_barang' => $this->nama_barang,
-                'jumlah_unit' => $this->jumlah_unit,
-                'satuan_barang' => $this->satuan_barang,
-                'spesifikasi' => $this->spesifikasi,
-            ];
+        // data barang dengan _key
+        $payload = [
+            '_key' => (string) Str::uuid(),
+            'nama_barang' => $this->nama_barang,
+            'jumlah_unit' => $this->jumlah_unit,
+            'satuan_barang' => $this->satuan_barang,
+            'spesifikasi' => $this->spesifikasi,
+        ];
 
-            // kosongkan field setelah diupdate
+        if ($this->is_edit && $this->index_barang !== null) {
+
+            // pertahankan _key lama saat edit
+            $payload['_key'] = $this->createForm->barang[$this->index_barang]['_key'];
+
+            $this->createForm->barang[$this->index_barang] = $payload;
+
             $this->resetBarang();
 
             return;
-        } else {
-            // assign barang ke array
-            $this->createForm->barang[] = [
-                'nama_barang' => $this->nama_barang,
-                'jumlah_unit' => $this->jumlah_unit,
-                'satuan_barang' => $this->satuan_barang,
-                'spesifikasi' => $this->spesifikasi,
-            ];
-
-            // kosongkan field setelah ditambahkan
-            $this->resetBarang();
         }
+
+        $this->createForm->barang[] = $payload;
+
+        $this->resetBarang();
     }
 
     public function editBarang($index)
@@ -187,17 +185,6 @@ class Create extends Component
 
             // reset dan refresh komponen
             $this->createForm->reset();
-
-            // jalankan job untuk download pdf
-            // ExportPdfJob::dispatch(
-            //     Auth::id(),
-            //     'App\Models\Spk\SpkMain',
-            //     $spk->id,
-            //     'f4',
-            //     'portrait',
-            //     'dashboard.pdf.spksummary',
-            //     "SPK $spk->nomor_order anda telah siap untuk didownload. Silahkan klik tombol download dibawah ini:",
-            //     'spk.download');
 
             // munculkan pesan swal
             $this->dispatch(

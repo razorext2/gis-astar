@@ -155,7 +155,7 @@
                             </thead>
                             <tbody>
                                 @forelse ($createForm->barang as $index => $row)
-                                    <tr class="py-1">
+                                    <tr class="py-1" wire:key="{{ $row['_key'] }}">
                                         <td rowspan="2"
                                             class="w-10 items-center text-center text-sm text-gray-800 dark:text-white">
                                             {{ $index + 1 }}.
@@ -171,14 +171,15 @@
                                             class="items-center text-center text-sm text-gray-800 first-letter:uppercase dark:text-white">
                                             {{ $row['satuan_barang'] }}
                                         </td>
-                                        <td rowspan="2">
-                                            <div class="flex justify-center gap-x-1">
+                                        <td rowspan="2" class="h-full">
+                                            <div
+                                                class="flex h-full w-full items-center justify-center gap-x-1 py-1.5 lg:gap-x-2">
                                                 <x-button.primary class="!p-2 text-xs" id="edit-barang"
                                                     wire:click="editBarang({{ $index }})">
-                                                    <x-icons.arrow-right-bracket class="h-4 w-4" />
+                                                    <x-icons.pen class="h-4 w-4" />
                                                 </x-button.primary>
 
-                                                <x-button.danger class="!p-1 text-xs" id="hapus-barang"
+                                                <x-button.danger class="!p-2 text-xs" id="hapus-barang"
                                                     wire:click="hapusBarang({{ $index }})">
                                                     <x-icons.trash-bin class="h-4 w-4" />
                                                 </x-button.danger>

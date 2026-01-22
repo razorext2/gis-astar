@@ -128,7 +128,7 @@
 
                     <tbody>
                         @forelse ($createForm->barang as $index => $row)
-                            <tr>
+                            <tr wire:key="{{ $row['_key'] }}">
                                 <td rowspan="2"
                                     class="w-10 items-center text-center text-sm text-gray-800 dark:text-white">
                                     {{ $index + 1 }}.
@@ -145,16 +145,29 @@
                                     {{ $row['satuan_barang'] ?? 'Not set.' }}
                                 </td>
                                 <td rowspan="2" class="h-full">
-                                    <div class="flex items-center gap-x-1">
+                                    <div
+                                        class="flex h-full w-full items-center justify-center gap-x-1 py-1.5 lg:gap-x-2">
+                                        <x-button.success class="{{ $index !== 0 ? 'block' : 'hidden' }} !p-2 text-xs"
+                                            id="barang-up" wire:click="upBarang({{ $index }})">
+                                            <x-icons.carred-down class="h-4 w-4 rotate-180" />
+                                        </x-button.success>
+
+                                        <x-button.success
+                                            class="{{ $index === count($createForm->barang) - 1 ? 'hidden' : 'block' }} !p-2 text-xs"
+                                            id="barang-down" wire:click="downBarang({{ $index }})">
+                                            <x-icons.carred-down class="h-4 w-4" />
+                                        </x-button.success>
+
                                         <x-button.primary class="!p-2 text-xs" id="edit-barang"
                                             wire:click="editBarang({{ $index }})">
-                                            <x-icons.arrow-right-bracket class="h-4 w-4" />
+                                            <x-icons.pen class="h-4 w-4" />
                                         </x-button.primary>
 
                                         <x-button.danger class="!p-2 text-xs" id="hapus-barang"
                                             wire:click="hapusBarang({{ $index }})">
                                             <x-icons.trash-bin class="h-4 w-4" />
                                         </x-button.danger>
+
                                     </div>
                                 </td>
                             </tr>

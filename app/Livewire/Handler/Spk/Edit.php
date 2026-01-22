@@ -2,12 +2,12 @@
 
 namespace App\Livewire\Handler\Spk;
 
-use App\Jobs\ExportPdfJob;
 use App\Livewire\Concerns\HandlesErrors;
 use App\Livewire\Forms\Spk\Create as SpkCreate;
 use App\Models\Spk\SpkHistory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class Edit extends Component
@@ -57,9 +57,15 @@ class Edit extends Component
         $this->createForm->alamat_customer = $data->customer['alamat'];
 
         // assign data spk barang ke form
-        foreach ($data->products as $row) {
-            $this->createForm->barang[] = $row;
-        }
+        // foreach ($data->products as $row) {
+        //     $this->createForm->barang[] = $row;
+        // }
+
+        // assign _key ke setiap item barang
+        $this->createForm->barang = collect($data->products)
+            ->map(fn ($item) => array_merge($item, [
+                '_key' => (string) Str::uuid(),
+            ]))->toArray();
 
         // assign data spk tagihan ke form
         $this->createForm->status_nomor_tagihan = $data->status_nomor_tagihan;
@@ -98,32 +104,30 @@ class Edit extends Component
             'spesifikasi.string' => 'Kolom spesifikasi harus berupa string.',
         ]);
 
-        // cek jika sedang edit barang
-        if ($this->is_edit && $this->index_barang !== null) {
-            // update barang sesuai index
-            $this->createForm->barang[$this->index_barang] = [
-                'nama_barang' => $this->nama_barang,
-                'jumlah_unit' => $this->jumlah_unit,
-                'satuan_barang' => $this->satuan_barang,
-                'spesifikasi' => $this->spesifikasi,
-            ];
+        // data barang dengan _key
+        $payload = [
+            '_key' => (string) Str::uuid(),
+            'nama_barang' => $this->nama_barang,
+            'jumlah_unit' => $this->jumlah_unit,
+            'satuan_barang' => $this->satuan_barang,
+            'spesifikasi' => $this->spesifikasi,
+        ];
 
-            // kosongkan field setelah diupdate
+        if ($this->is_edit && $this->index_barang !== null) {
+
+            // pertahankan _key lama saat edit
+            $payload['_key'] = $this->createForm->barang[$this->index_barang]['_key'];
+
+            $this->createForm->barang[$this->index_barang] = $payload;
+
             $this->resetBarang();
 
             return;
-        } else {
-            // assign barang ke array
-            $this->createForm->barang[] = [
-                'nama_barang' => $this->nama_barang,
-                'jumlah_unit' => $this->jumlah_unit,
-                'satuan_barang' => $this->satuan_barang,
-                'spesifikasi' => $this->spesifikasi,
-            ];
-
-            // kosongkan field setelah ditambahkan
-            $this->resetBarang();
         }
+
+        $this->createForm->barang[] = $payload;
+
+        $this->resetBarang();
     }
 
     public function editBarang($index)
@@ -161,6 +165,31 @@ class Edit extends Component
         $this->jumlah_unit = null;
         $this->satuan_barang = null;
         $this->spesifikasi = null;
+    }
+
+    public function upBarang(int $index)
+    {
+        $this->moveItem($index, $index - 1);
+    }
+
+    public function downBarang(int $index)
+    {
+        $this->moveItem($index, $index + 1);
+    }
+
+    protected function moveItem(int $from, int $to)
+    {
+        if (! isset($this->createForm->barang[$from]) || $to < 0 || $to >= count($this->createForm->barang)) {
+            return;
+        }
+
+        $item = $this->createForm->barang[$from];
+
+        unset($this->createForm->barang[$from]);
+
+        $this->createForm->barang = array_values($this->createForm->barang);
+
+        array_splice($this->createForm->barang, $to, 0, [$item]);
     }
 
     public function store()
@@ -260,19 +289,6 @@ class Edit extends Component
                 // refresh data
                 return $this->data->refresh();
             });
-
-            // jalankan job untuk download PDF
-            // if (! $this->is_delayed) {
-            //     ExportPdfJob::dispatch(
-            //         Auth::id(),
-            //         'App\Models\Spk\SpkMain',
-            //         $spk->id,
-            //         'f4',
-            //         'portrait',
-            //         'dashboard.pdf.spksummary',
-            //         "SPK $spk->nomor_order anda telah siap untuk didownload. Silahkan klik tombol download dibawah ini:",
-            //         'spk.download');
-            // }
 
             // tampilkan pesan swal
             $this->dispatch(
