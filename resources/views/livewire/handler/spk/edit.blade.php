@@ -340,10 +340,10 @@
     {{-- accordion form tambah packing list --}}
     <div class="w-full" id="accordion-packing-form" x-data="{ accordionOpen: $wire.is_delayed, onDelay: $wire.is_delayed }">
         <button type="button"
-            class="flex w-full items-center justify-between gap-3 rounded-lg border border-gray-200 bg-white p-5 font-medium text-gray-500 shadow-md transition-all duration-300 ease-in-out hover:bg-blue-100 dark:border-gray-600 dark:bg-dark-primary dark:text-gray-400 dark:shadow-none dark:hover:bg-gray-800"
+            class="flex w-full items-center justify-between gap-3 rounded-lg border border-gray-200 bg-red-200 p-5 font-medium text-gray-500 shadow-md transition-all duration-300 ease-in-out hover:bg-blue-100 dark:border-gray-600 dark:bg-dark-primary dark:text-gray-400 dark:shadow-none dark:hover:bg-gray-800"
             @click="accordionOpen = !accordionOpen" :class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
             <span class="flex flex-col text-left">
-                <h3 class="text-base font-semibold text-red-500">
+                <h3 class="text-base font-semibold text-red-600 dark:text-red-500">
                     SPK Mengalami Delay?
                 </h3>
                 <p class="block text-sm font-medium text-gray-600 dark:text-gray-400">
