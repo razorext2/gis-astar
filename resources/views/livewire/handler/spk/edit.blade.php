@@ -115,7 +115,7 @@
         <div class="flex max-h-96 w-full flex-col">
             <p class="mb-2 text-sm font-medium text-gray-900 dark:text-white">Daftar Barang Yang Dipesan</p>
 
-            <div class="flex flex-col gap-y-1 overflow-y-auto rounded-xl p-4 dark:bg-gray-600">
+            <div class="flex flex-col gap-y-1 overflow-y-auto rounded-xl bg-gray-50 p-4 dark:bg-gray-600">
                 <table id="barang-list-table" class="w-full">
                     <thead
                         class="border-b border-gray-200 text-sm font-semibold text-gray-800 dark:border-gray-400 dark:text-white">
