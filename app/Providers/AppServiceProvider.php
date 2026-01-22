@@ -2,14 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\URL;
-use App\Models\Dayoff;
-use App\Models\Collector;
-use App\Observers\CollectObserver;
-use App\Observers\DayoffObserver;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,23 +20,24 @@ class AppServiceProvider extends ServiceProvider
                 $ignoreQuery[] = 'signature';
 
                 $absoluteUrl = url($request->path());
-                $url = $absolute ? $absoluteUrl : '/' . $request->path();
+                $url = $absolute ? $absoluteUrl : '/'.$request->path();
 
                 $queryString = collect(explode('&', (string) $request
                     ->server->get('QUERY_STRING')))
-                    ->reject(fn($parameter) => in_array(Str::before($parameter, '='), $ignoreQuery))
+                    ->reject(fn ($parameter) => in_array(Str::before($parameter, '='), $ignoreQuery))
                     ->join('&');
 
-                $original = rtrim($url . '?' . $queryString, '?');
+                $original = rtrim($url.'?'.$queryString, '?');
 
                 // Use the application key as the HMAC key
                 $key = config('app.key'); // Ensure app.key is properly set in .env
-    
+
                 if (empty($key)) {
                     throw new \RuntimeException('Application key is not set.');
                 }
 
                 $signature = hash_hmac('sha256', $original, $key);
+
                 return hash_equals($signature, (string) $request->query('signature', ''));
             }
         );
@@ -65,9 +62,5 @@ class AppServiceProvider extends ServiceProvider
 
         // force root url
         $this->app['url']->forceRootUrl($this->app['config']->get('app.url'));
-
-        // oberserver
-        Dayoff::observe(DayoffObserver::class);
-        Collector::observe(CollectObserver::class);
     }
 }
