@@ -189,15 +189,15 @@ class Create extends Component
             $this->createForm->reset();
 
             // jalankan job untuk download pdf
-            ExportPdfJob::dispatch(
-                Auth::id(),
-                'App\Models\Spk\SpkMain',
-                $spk->id,
-                'f4',
-                'portrait',
-                'dashboard.pdf.spksummary',
-                "SPK $spk->nomor_order anda telah siap untuk didownload. Silahkan klik tombol download dibawah ini:",
-                'spk.download');
+            // ExportPdfJob::dispatch(
+            //     Auth::id(),
+            //     'App\Models\Spk\SpkMain',
+            //     $spk->id,
+            //     'f4',
+            //     'portrait',
+            //     'dashboard.pdf.spksummary',
+            //     "SPK $spk->nomor_order anda telah siap untuk didownload. Silahkan klik tombol download dibawah ini:",
+            //     'spk.download');
 
             // munculkan pesan swal
             $this->dispatch(

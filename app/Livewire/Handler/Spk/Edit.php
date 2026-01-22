@@ -262,17 +262,17 @@ class Edit extends Component
             });
 
             // jalankan job untuk download PDF
-            if (! $this->is_delayed) {
-                ExportPdfJob::dispatch(
-                    Auth::id(),
-                    'App\Models\Spk\SpkMain',
-                    $spk->id,
-                    'f4',
-                    'portrait',
-                    'dashboard.pdf.spksummary',
-                    "SPK $spk->nomor_order anda telah siap untuk didownload. Silahkan klik tombol download dibawah ini:",
-                    'spk.download');
-            }
+            // if (! $this->is_delayed) {
+            //     ExportPdfJob::dispatch(
+            //         Auth::id(),
+            //         'App\Models\Spk\SpkMain',
+            //         $spk->id,
+            //         'f4',
+            //         'portrait',
+            //         'dashboard.pdf.spksummary',
+            //         "SPK $spk->nomor_order anda telah siap untuk didownload. Silahkan klik tombol download dibawah ini:",
+            //         'spk.download');
+            // }
 
             // tampilkan pesan swal
             $this->dispatch(
