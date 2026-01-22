@@ -1,8 +1,8 @@
-<form class="grid items-start gap-4 lg:grid-cols-2" method="POST" wire:submit.prevent="store">
+<form class="flex flex-col items-start gap-2 lg:gap-4" method="POST" wire:submit.prevent="store">
 
+    {{-- form info customer --}}
     <div
-        class="col-span-2 grid grow gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:col-span-1 lg:gap-4 lg:p-6">
-
+        class="grid w-full gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
         <div class="w-full">
             <x-input.basic id="nama_customer" name="nama_customer" wire:model="createForm.nama_customer"
                 placeholder="Nama Bon Customer">
@@ -43,12 +43,12 @@
                 <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
             @enderror
         </div>
-
     </div>
+    {{-- end form info customer --}}
 
+    {{-- form barang --}}
     <div
-        class="col-span-2 flex flex-col items-start gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:col-span-1 lg:gap-4 lg:p-6">
-
+        class="flex w-full flex-col items-start gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
         <div class="col-span-2 flex w-full flex-col items-start gap-4">
             <div class="w-full">
                 <x-input.select id="tipe_timbangan" name="tipe_timbangan" :labels="true" :textLabel="'Tipe Timbangan Yang Dipesan'"
@@ -101,14 +101,18 @@
                 @enderror
             </div>
 
-            <div class="flex w-full justify-center">
-                <x-button.primary id="tambah-barang" wire:click="tambahBarang">
-                    Tambah
+            <div class="flex w-full justify-end gap-x-2">
+                <x-button.primary id="tambah-barang" wire:click="storeBarang">
+                    {{ $is_edit ? 'Ubah' : 'Tambah' }}
                 </x-button.primary>
+
+                <x-button.danger id="reset-barang" wire:click="resetBarang">
+                    Clear
+                </x-button.danger>
             </div>
         </div>
 
-        <div class="flex max-h-44 w-full flex-col lg:max-h-80">
+        <div class="flex max-h-96 w-full flex-col">
             <p class="mb-2 text-sm font-medium text-gray-900 dark:text-white">Daftar Barang Yang Dipesan</p>
 
             <div class="flex flex-col gap-y-1 overflow-y-auto rounded-xl p-4 dark:bg-gray-600">
@@ -140,11 +144,18 @@
                                     class="items-center text-center text-sm text-gray-800 dark:text-white">
                                     {{ $row['satuan_barang'] ?? 'Not set.' }}
                                 </td>
-                                <td rowspan="2" class="items-center">
-                                    <x-button.danger class="!p-1 text-xs" id="hapus-barang"
-                                        wire:click="hapusBarang({{ $index }})">
-                                        <x-icons.trash-bin class="h-4 w-4" />
-                                    </x-button.danger>
+                                <td rowspan="2" class="h-full">
+                                    <div class="flex items-center gap-x-1">
+                                        <x-button.primary class="!p-2 text-xs" id="edit-barang"
+                                            wire:click="editBarang({{ $index }})">
+                                            <x-icons.arrow-right-bracket class="h-4 w-4" />
+                                        </x-button.primary>
+
+                                        <x-button.danger class="!p-2 text-xs" id="hapus-barang"
+                                            wire:click="hapusBarang({{ $index }})">
+                                            <x-icons.trash-bin class="h-4 w-4" />
+                                        </x-button.danger>
+                                    </div>
                                 </td>
                             </tr>
 
@@ -169,13 +180,13 @@
                 <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
             @enderror
         </div>
-
     </div>
+    {{-- end form barang --}}
 
+    {{-- form spk --}}
     <div
-        class="col-span-2 grid grow grid-cols-2 gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
-
-        <div class="w-full">
+        class="grid w-full grid-cols-2 gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
+        <div class="col-span-2 w-full lg:col-span-1">
             <x-input.select id="tipe_tagihan" name="tipe_tagihan" wire:model="createForm.tipe_tagihan"
                 :defaultOption="'Pilih tipe tagihan'" :options="[
                     'idcnon' => 'IDC Non PPN',
@@ -188,7 +199,7 @@
             @enderror
         </div>
 
-        <div class="flex w-full flex-row items-center gap-4">
+        <div class="col-span-2 flex w-full flex-row items-center gap-4 lg:col-span-1">
             <div class="{{ $createForm->status_nomor_tagihan == 0 ? 'w-full' : 'w-fit' }}">
                 <x-input.select id="status_nomor_tagihan" name="status_nomor_tagihan"
                     wire:model.live="createForm.status_nomor_tagihan" :defaultOption="'Pilih status no. tagihan'" :options="[
@@ -223,7 +234,7 @@
             @endif
         </div>
 
-        <div class="w-full">
+        <div class="col-span-2 w-full lg:col-span-1">
             <x-input.basic id="nomor_order" name="nomor_order" readonly wire:model="createForm.nomor_order"
                 placeholder="000.XXVXXX20XX">
                 No. Order
@@ -234,7 +245,7 @@
             @enderror
         </div>
 
-        <div class="w-full">
+        <div class="col-span-2 w-full lg:col-span-1">
             <x-input.select id="tipe_bayar" name="tipe_bayar" wire:model="createForm.tipe_bayar" :textLabel="'Tipe Bayar'"
                 :labels="true" :defaultOption="'Pilih Tipe Bayar'" :options="[
                     'Cash' => 'Tagih Cash',
@@ -246,7 +257,7 @@
             @enderror
         </div>
 
-        <div class="w-full">
+        <div class="col-span-2 w-full lg:col-span-1">
             <x-input.basic id="tgl_cetak" name="tgl_cetak" wire:model="createForm.tgl_cetak"
                 placeholder="Tanggal Cetak" type="date">
                 Tanggal Cetak
@@ -256,7 +267,7 @@
             @enderror
         </div>
 
-        <div class="w-full">
+        <div class="col-span-2 w-full lg:col-span-1">
 
             <div class="flex items-center justify-center gap-2">
                 <div class="grow">
@@ -279,7 +290,6 @@
         </div>
 
         <div class="col-span-2 w-full">
-
             <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="assign_to">
                 Assign Ke
             </label>
@@ -311,11 +321,11 @@
                 <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
             @enderror
         </div>
-
     </div>
+    {{-- end form spk --}}
 
     {{-- accordion form tambah packing list --}}
-    <div class="col-span-2" id="accordion-packing-form" x-data="{ accordionOpen: $wire.is_delayed, onDelay: $wire.is_delayed }">
+    <div class="w-full" id="accordion-packing-form" x-data="{ accordionOpen: $wire.is_delayed, onDelay: $wire.is_delayed }">
         <button type="button"
             class="flex w-full items-center justify-between gap-3 rounded-lg border border-gray-200 bg-white p-5 font-medium text-gray-500 shadow-md transition-all duration-300 ease-in-out hover:bg-blue-100 dark:border-gray-600 dark:bg-dark-primary dark:text-gray-400 dark:shadow-none dark:hover:bg-gray-800"
             @click="accordionOpen = !accordionOpen" :class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
@@ -360,7 +370,7 @@
     </div>
     {{-- end accordion form tambah packing list --}}
 
-    <div class="flex w-full flex-row justify-end gap-2 lg:col-span-2">
+    <div class="flex w-full flex-row justify-end gap-2">
         <x-button.success id="ubah-button" type="submit">
             Simpan Perubahan
         </x-button.success>

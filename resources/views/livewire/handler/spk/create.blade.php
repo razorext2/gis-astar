@@ -126,13 +126,17 @@
                         @enderror
                     </div>
 
-                    <div class="flex w-full justify-end">
+                    <div class="flex w-full justify-end gap-x-2">
                         <x-button.primary id="tambah-barang" wire:click="tambahBarang">
                             <x-slot name="icon">
                                 <x-icons.plus class="h-5 w-5" />
                             </x-slot>
-                            Tambah
+                            {{ $is_edit ? 'Ubah' : 'Tambah' }}
                         </x-button.primary>
+
+                        <x-button.danger id="reset-barang" wire:click="resetBarang">
+                            Clear
+                        </x-button.danger>
                     </div>
                 </div>
 
@@ -167,11 +171,18 @@
                                             class="items-center text-center text-sm text-gray-800 first-letter:uppercase dark:text-white">
                                             {{ $row['satuan_barang'] }}
                                         </td>
-                                        <td rowspan="2" class="items-center">
-                                            <x-button.danger class="!p-1 text-xs" id="hapus-barang"
-                                                wire:click="hapusBarang({{ $index }})">
-                                                <x-icons.trash-bin class="h-4 w-4" />
-                                            </x-button.danger>
+                                        <td rowspan="2">
+                                            <div class="flex justify-center gap-x-1">
+                                                <x-button.primary class="!p-2 text-xs" id="edit-barang"
+                                                    wire:click="editBarang({{ $index }})">
+                                                    <x-icons.arrow-right-bracket class="h-4 w-4" />
+                                                </x-button.primary>
+
+                                                <x-button.danger class="!p-1 text-xs" id="hapus-barang"
+                                                    wire:click="hapusBarang({{ $index }})">
+                                                    <x-icons.trash-bin class="h-4 w-4" />
+                                                </x-button.danger>
+                                            </div>
                                         </td>
                                     </tr>
 

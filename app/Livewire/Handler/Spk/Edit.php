@@ -22,17 +22,21 @@ class Edit extends Component
 
     public ?string $nama_barang;
 
-    public ?int $jumlah_unit;
-
     public ?string $satuan_barang;
 
     public ?string $spesifikasi = null;
 
-    public bool $is_delayed;
-
     public ?string $delay_note;
 
+    public ?string $index_barang = null;
+
     public ?int $assign_to;
+
+    public ?int $jumlah_unit;
+
+    public bool $is_delayed;
+
+    public bool $is_edit = false;
 
     public function mount($id)
     {
@@ -74,7 +78,7 @@ class Edit extends Component
         $this->delay_note = $data->on_delay_notes;
     }
 
-    public function tambahBarang()
+    public function storeBarang()
     {
         // validasi field nama_barang
         $this->validate([
@@ -94,19 +98,47 @@ class Edit extends Component
             'spesifikasi.string' => 'Kolom spesifikasi harus berupa string.',
         ]);
 
-        // assign barang ke array
-        $this->createForm->barang[] = [
-            'nama_barang' => $this->nama_barang,
-            'jumlah_unit' => $this->jumlah_unit,
-            'satuan_barang' => $this->satuan_barang,
-            'spesifikasi' => $this->spesifikasi,
-        ];
+        // cek jika sedang edit barang
+        if ($this->is_edit && $this->index_barang !== null) {
+            // update barang sesuai index
+            $this->createForm->barang[$this->index_barang] = [
+                'nama_barang' => $this->nama_barang,
+                'jumlah_unit' => $this->jumlah_unit,
+                'satuan_barang' => $this->satuan_barang,
+                'spesifikasi' => $this->spesifikasi,
+            ];
 
-        // kosongkan nama_barang
-        $this->nama_barang = null;
-        $this->jumlah_unit = null;
-        $this->satuan_barang = null;
-        $this->spesifikasi = null;
+            // kosongkan field setelah diupdate
+            $this->resetBarang();
+
+            return;
+        } else {
+            // assign barang ke array
+            $this->createForm->barang[] = [
+                'nama_barang' => $this->nama_barang,
+                'jumlah_unit' => $this->jumlah_unit,
+                'satuan_barang' => $this->satuan_barang,
+                'spesifikasi' => $this->spesifikasi,
+            ];
+
+            // kosongkan field setelah ditambahkan
+            $this->resetBarang();
+        }
+    }
+
+    public function editBarang($index)
+    {
+        // set is_edit true
+        $this->is_edit = true;
+
+        // set index_barang
+        $this->index_barang = $index;
+
+        // set form fields sesuai index
+        $this->nama_barang = $this->createForm->barang[$index]['nama_barang'];
+        $this->jumlah_unit = $this->createForm->barang[$index]['jumlah_unit'];
+        $this->satuan_barang = $this->createForm->barang[$index]['satuan_barang'];
+        $this->spesifikasi = $this->createForm->barang[$index]['spesifikasi'];
     }
 
     public function hapusBarang($index)
@@ -116,6 +148,19 @@ class Edit extends Component
 
         // refresh value didalam array
         $this->createForm->barang = array_values($this->createForm->barang);
+    }
+
+    public function resetBarang()
+    {
+        if ($this->is_edit) {
+            $this->is_edit = false;
+            $this->index_barang = null;
+        }
+
+        $this->nama_barang = null;
+        $this->jumlah_unit = null;
+        $this->satuan_barang = null;
+        $this->spesifikasi = null;
     }
 
     public function store()
