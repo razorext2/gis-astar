@@ -14,14 +14,14 @@ class Kit extends Form
         ],
     ];
 
-    public $rules = [
+    public array $rules = [
         'kits' => 'required|array|min:1',
         'kits.*.kit_name' => 'required|string|min:5|max:255',
         'kits.*.kit_qty' => 'required|integer|min:1',
         'kits.*.kit_unit' => 'required|string',
     ];
 
-    public $messages = [
+    public array $messages = [
         'kits.required' => 'Minimal harus ada 1 item.',
         'kits.*.kit_name.required' => 'Nama kit harus diisi.',
         'kits.*.kit_qty.required' => 'Jumlah kit harus diisi.',
