@@ -294,16 +294,16 @@ class Create extends Component
     {
         $statuses = [
             ['value' => 0, 'label' => 'SPK Dibuat'],
-            ['value' => 1, 'label' => 'Purchasing Materials'],
-            ['value' => 2, 'label' => 'Marking & Cutting'],
-            ['value' => 3, 'label' => 'Setting'],
-            ['value' => 4, 'label' => 'Welding'],
-            ['value' => 5, 'label' => 'Drilling & Tapping'],
-            ['value' => 6, 'label' => 'Assembly & Testing'],
-            ['value' => 7, 'label' => 'NDT Procedures'],
+            ['value' => 1, 'label' => 'Pengadaan Material'],
+            ['value' => 2, 'label' => 'Penandaan & Pemotognan'],
+            ['value' => 3, 'label' => 'Penyetelan'],
+            ['value' => 4, 'label' => 'Pengelasan'],
+            ['value' => 5, 'label' => 'Pengeboran & Tapping'],
+            ['value' => 6, 'label' => 'Perakitan & Pengujian'],
+            ['value' => 7, 'label' => 'Prosedur NDT'],
             ['value' => 8, 'label' => 'Sandblasting'],
-            ['value' => 9, 'label' => 'Painting'],
-            ['value' => 10, 'label' => 'Finished'],
+            ['value' => 9, 'label' => 'Pengecatan'],
+            ['value' => 10, 'label' => 'Selesai'],
         ];
 
         return view('livewire.handler.production-histories.create',
