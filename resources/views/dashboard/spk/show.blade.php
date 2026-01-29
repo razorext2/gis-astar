@@ -16,7 +16,9 @@
 
             <div>
                 <h2 class="text-xl font-semibold text-gray-900 dark:bg-dark-primary dark:text-white">
-                    Detail SPK {{ $spk->nomor_order }} <span class="text-sm uppercase italic">( {{ $spk->tipe_tagihan }}
+                    Detail SPK
+                    {{ $spk->nomor_order . ($spk->revision_count ? 'R' . str_pad($spk->revision_count, 2, '0', STR_PAD_LEFT) : '') }}
+                    <span class="text-sm uppercase italic">( {{ $spk->tipe_tagihan }}
                         )</span>
                 </h2>
 

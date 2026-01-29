@@ -31,7 +31,7 @@ class SpkController extends Controller
     {
         $this->authorize('view', SpkMain::class);
 
-        $spk = SpkMain::select('id', 'nomor_order', 'tipe_tagihan')
+        $spk = SpkMain::select('id', 'nomor_order', 'tipe_tagihan', 'revision_count')
             ->findOrFail($id);
 
         return view('dashboard.spk.show', compact('spk'));
