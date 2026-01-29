@@ -166,7 +166,7 @@
                     class="mt-2 flex flex-col divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white shadow-sm dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-700">
                     @forelse ($this->filteredAttachmentsOnlyRequestFondasi as $index => $row)
                         <a href="{{ route('spk.attachment.download', $row['url']) }}"
-                            class="p-2 transition hover:bg-gray-50 dark:hover:bg-gray-800">
+                            class="p-2 transition hover:bg-gray-50 dark:hover:bg-gray-800 lg:p-4">
                             <p class="text-base font-medium text-gray-900 dark:text-gray-100">
                                 {{ $row['nama_file'] }}
                             </p>
@@ -175,7 +175,7 @@
                             </p>
                         </a>
                     @empty
-                        <p class="text-xs font-semibold capitalize italic">
+                        <p class="p-2 text-xs font-semibold capitalize italic lg:p-4">
                             Tidak ada request fondasi dari Customer.
                         </p>
                     @endforelse
@@ -191,7 +191,7 @@
                         class="mt-2 flex flex-col divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white shadow-sm dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-700">
                         @forelse ($this->filteredAttachmentsExcludeRequestFondasi as $index => $row)
                             <a href="{{ route('spk.attachment.download', $row['url']) }}"
-                                class="p-2 transition hover:bg-gray-50 dark:hover:bg-gray-800">
+                                class="p-2 transition hover:bg-gray-50 dark:hover:bg-gray-800 lg:p-4">
                                 <p class="text-base font-medium text-gray-900 dark:text-gray-100">
                                     {{ $row['nama_file'] }}
                                 </p>
@@ -200,7 +200,7 @@
                                 </p>
                             </a>
                         @empty
-                            <p class="text-xs font-semibold capitalize italic">
+                            <p class="p-2 text-xs font-semibold capitalize italic lg:p-4">
                                 Tidak ada lampiran.
                             </p>
                         @endforelse
