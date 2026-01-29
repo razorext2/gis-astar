@@ -61,42 +61,42 @@
 
             <div class="flex w-full gap-2 lg:gap-4">
                 <div class="w-full">
-                    <x-input.basic id="nama_barang" name="nama_barang" wire:model="nama_barang"
+                    <x-input.basic id="nama_barang" name="nama_barang" wire:model="barangForm.nama_barang"
                         placeholder="Ketik nama barang">
                         Nama Barang
                     </x-input.basic>
 
-                    @error('nama_barang')
+                    @error('barangForm.nama_barang')
                         <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="w-full">
                     <x-input.basic type="number" min="1" id="jumlah_unit" name="jumlah_unit"
-                        wire:model="jumlah_unit" placeholder="cth: 1, 2, 3, dst">
+                        wire:model="barangForm.jumlah_unit" placeholder="cth: 1, 2, 3, dst">
                         Jumlah Unit
                     </x-input.basic>
 
-                    @error('jumlah_unit')
+                    @error('barangForm.jumlah_unit')
                         <span class="mt-2 text-xs text-red-500"> {{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="w-full">
                     <x-input.select id="satuan_barang" name="satuan_barang" :labels="true" :textLabel="'Satuan'"
-                        :defaultOption="'Pilih satuan'" wire:model="satuan_barang" :options="config('spk-config.satuan')" />
+                        :defaultOption="'Pilih satuan'" wire:model="barangForm.satuan_barang" :options="config('spk-config.satuan')" />
 
-                    @error('satuan_barang')
+                    @error('barangForm.satuan_barang')
                         <span class="mt-2 text-xs text-red-500"> {{ $message }}</span>
                     @enderror
                 </div>
             </div>
 
             <div class="w-full">
-                <x-input.textarea id="spesifikasi" name="spesifikasi" wire:model="spesifikasi" rows="8"
+                <x-input.textarea id="spesifikasi" name="spesifikasi" wire:model="barangForm.spesifikasi" rows="8"
                     :labels="true" :textLabel="'Spesifikasi'" />
 
-                @error('spesifikasi')
+                @error('barangForm.spesifikasi')
                     <span class="mt-2 text-xs text-red-500"> {{ $message }}</span>
                 @enderror
             </div>
@@ -199,7 +199,7 @@
     {{-- form spk --}}
     <div
         class="grid w-full grid-cols-2 gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
-        <div class="col-span-2 w-full lg:col-span-1">
+        <div class="col-span-2 w-full">
             <x-input.select id="tipe_tagihan" name="tipe_tagihan" wire:model="createForm.tipe_tagihan"
                 :defaultOption="'Pilih tipe tagihan'" :options="[
                     'idcnon' => 'IDC Non PPN',
@@ -210,41 +210,6 @@
             @error('createForm.tipe_tagihan')
                 <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
             @enderror
-        </div>
-
-        <div class="col-span-2 flex w-full flex-row items-center gap-4 lg:col-span-1">
-            <div class="{{ $createForm->status_nomor_tagihan == 0 ? 'w-full' : 'w-fit' }}">
-                <x-input.select id="status_nomor_tagihan" name="status_nomor_tagihan"
-                    wire:model.live="createForm.status_nomor_tagihan" :defaultOption="'Pilih status no. tagihan'" :options="[
-                        '0' => 'Belum ada',
-                        '1' => 'Sudah ada',
-                    ]"
-                    :labels="true" :textLabel="'Status No. Tagihan'" />
-
-                @error('createForm.status_nomor_tagihan')
-                    <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
-                @enderror
-            </div>
-
-            @if ($createForm->status_nomor_tagihan == 1)
-                <div class="flex w-full flex-row gap-2" wire:transition>
-                    <div class="w-full">
-                        <x-input.basic id="nomor_tagihan" name="nomor_tagihan" wire:model="createForm.nomor_tagihan"
-                            placeholder="Nomor SR / Nomor Faktur Pajak">
-                            No. SR / Faktur Pajak
-                        </x-input.basic>
-                    </div>
-
-                    <x-button.primary class="h-fit w-fit self-end" id="cek-nomor-tagihan" name="cek-nomor-tagihan"
-                        wire:click="cekNomorTagihan">
-                        Check
-                    </x-button.primary>
-
-                    @error('createForm.nomor_tagihan')
-                        <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
-                    @enderror
-                </div>
-            @endif
         </div>
 
         <div class="col-span-2 w-full lg:col-span-1">
@@ -334,10 +299,212 @@
                 <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
             @enderror
         </div>
+
+        @if ($this->data->status_approval === 0)
+            <div class="col-span-2 w-full">
+                <div class="flex items-center">
+                    <input id="is_booked" type="checkbox" wire:model.live="createForm.is_booked"
+                        class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800 lg:h-5 lg:w-5">
+                    <label for="is_booked"
+                        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 lg:text-base">
+                        Book Nomor SPK
+                    </label>
+                </div>
+
+                @error('createForm.is_booked')
+                    <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                @enderror
+            </div>
+        @endif
     </div>
     {{-- end form spk --}}
 
-    {{-- accordion form tambah packing list --}}
+    {{-- form info tambahan --}}
+    <div id="informasi-tambahan"
+        class="grid w-full grid-cols-2 gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:grow lg:gap-4 lg:p-6">
+
+        <div
+            class="col-span-2 grid w-full grid-cols-1 gap-2 rounded-lg border border-gray-200 p-2 dark:border-gray-600 lg:gap-4 lg:p-4">
+
+            <div x-show="$wire.docForm.new_attachments.length > 0">
+                <span class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                    Daftar Lampiran
+                </span>
+
+                <ul
+                    class="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white shadow-sm dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-700">
+
+                    @foreach ($docForm->new_attachments as $index => $row)
+                        <li class="flex items-center gap-2 p-2 transition hover:bg-gray-50 dark:hover:bg-gray-800">
+                            <div class="w-8 text-center text-sm font-medium text-gray-600 dark:text-gray-400">
+                                {{ $index + 1 }}.
+                            </div>
+
+                            <div class="flex-1">
+                                <p class="text-base font-medium text-gray-900 dark:text-gray-100">
+                                    {{ $row['nama_file'] }}
+                                </p>
+                                <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
+                                    {{ $row['tipe_dokumen'] }}
+                                </p>
+                            </div>
+
+                            <button type="button" wire:click="removeAttachment({{ $index }})"
+                                class="text-sm font-medium text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                                Hapus
+                            </button>
+                        </li>
+                    @endforeach
+
+                </ul>
+
+                @error('docForm.new_attachments.*')
+                    <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="w-full">
+                <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                    for="attachment">Lampiran</label>
+
+                <div class="flex w-full flex-col gap-y-2" x-data="{ uploading: false, progress: 0 }"
+                    x-on:livewire-upload-start="uploading = true" x-on:livewire-upload-finish="uploading = false"
+                    x-on:livewire-upload-cancel="uploading = false" x-on:livewire-upload-error="uploading = false"
+                    x-on:livewire-upload-progress="progress = $event.detail.progress">
+                    <label for="attachment"
+                        class="flex h-36 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-800">
+                        <div class="flex flex-col items-center justify-center pb-6 pt-5">
+                            <x-icons.cloud-upload class="mb-2 h-8 w-8 text-gray-500 dark:text-gray-400" />
+
+                            <p wire:loading.remove wire:target="docForm.attachment"
+                                class="mb-0.5 text-sm text-gray-500 dark:text-white"> Klik untuk upload
+                            </p>
+
+                            <p class="mb-0.5 text-sm text-gray-500 dark:text-gray-400">
+                                @if ($docForm->attachment)
+                                    <span class="font-semibold dark:text-white">
+                                        {{ $docForm->attachment->getClientOriginalName() }}</span>
+                                @endif
+                            </p>
+
+                            <div x-show="uploading"
+                                class="mb-2 flex flex-col items-center gap-2 text-gray-800 dark:text-white">
+                                <span wire:target="docForm.attachment" class="font-semibold">
+                                    Sedang Mengupload...</span>
+
+                                <x-button.danger id="cancel-upload" type="button" class="text-xs"
+                                    wire:click="$cancelUpload('docForm.attachment')">
+                                    Cancel
+                                </x-button.danger>
+                            </div>
+
+                            <p class="w-full text-center text-xs text-gray-500 dark:text-gray-400">
+                                *Dokumentasi dapat berupa file PNG, JPG, PDF, DOC, XLS (Min, 10KB, Maks 5MB)
+                            </p>
+                        </div>
+                        <input id="attachment" name="attachment" type="file" wire:model="docForm.attachment"
+                            class="hidden" accept=".png,.jpg,.jpeg,.pdf,.doc,.docx,.xls,.xlsx" />
+                    </label>
+
+                    <div x-show="uploading" class="h-4 w-full rounded-full bg-gray-200 dark:bg-gray-700">
+                        <div class="h-4 rounded-full bg-blue-600" x-bind:style="{ width: progress + '%' }">
+                        </div>
+                    </div>
+
+                </div>
+
+                @error('docForm.attachment')
+                    <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="w-full">
+                <x-input.select id="attachment_type" name="attachment_type" :defaultOption="'Pilih Tipe Dokumen'" :options="config('spk-config.tipe_dokumen')"
+                    :labels="true" :textLabel="'Tipe Dokumen'" wire:model.live="docForm.attachment_type" />
+
+                @error('docForm.attachment_type')
+                    <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="flex w-full justify-end">
+                <x-button.primary id="add-attachment" wire:click="storeLampiran" type="button">
+                    Tambah
+                </x-button.primary>
+            </div>
+
+        </div>
+
+        <div class="col-span-2 flex w-full items-center gap-4">
+            <div class="{{ $createForm->status_nomor_tagihan == 0 ? 'w-full' : 'w-fit' }}">
+                <x-input.select id="status_nomor_tagihan" name="status_nomor_tagihan"
+                    wire:model.live="createForm.status_nomor_tagihan" :defaultOption="'Pilih status no. tagihan'" :options="[
+                        '0' => 'Belum ada',
+                        '1' => 'Sudah ada',
+                    ]"
+                    :labels="true" :textLabel="'Status No. Tagihan'" />
+
+                @error('createForm.status_nomor_tagihan')
+                    <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                @enderror
+            </div>
+
+            @if ($createForm->status_nomor_tagihan == 1)
+                <div class="flex w-full gap-2" wire:transition>
+                    <div class="w-full">
+                        <x-input.basic id="nomor_tagihan" name="nomor_tagihan" wire:model="createForm.nomor_tagihan"
+                            placeholder="Nomor SR / Nomor Faktur Pajak">
+                            No. SR / Faktur Pajak
+                        </x-input.basic>
+                    </div>
+
+                    <x-button.primary class="h-fit w-fit self-end" id="cek-nomor-tagihan" name="cek-nomor-tagihan"
+                        wire:click="cekNomorTagihan">
+                        Check
+                    </x-button.primary>
+
+                    @error('createForm.nomor_tagihan')
+                        <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
+            @endif
+        </div>
+
+        <div class="col-span-2 w-full">
+            <div>
+                <x-input.basic id="nomor_dokumen_penawaran" name="nomor_dokumen_penawaran"
+                    wire:model="createForm.nomor_dokumen_penawaran" placeholder="00XX.XX/X/X-X/X/XX">
+                    No. Dokumen Penawaran
+                </x-input.basic>
+            </div>
+
+            <span class="mt-2 text-xs text-green-500 lg:text-sm">
+                Kosongkan kolom No. Dokumen Penawaran jika tidak ada, Anda dapat mengeditnya nanti.
+            </span>
+
+            @error('createForm.nomor_dokumen_penawaran')
+                <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+            @enderror
+        </div>
+
+        <div class="col-span-2 w-full">
+            <div class="flex items-center">
+                <input id="is_booked" type="checkbox" wire:model.live="createForm.is_booked"
+                    class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800 lg:h-5 lg:w-5">
+                <label for="is_booked" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 lg:text-base">
+                    Book Nomor SPK
+                </label>
+            </div>
+
+            @error('createForm.is_booked')
+                <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+            @enderror
+        </div>
+
+    </div>
+    {{-- end form info tambahan --}}
+
+    {{-- accordion delay SPK --}}
     <div class="w-full" id="accordion-packing-form" x-data="{ accordionOpen: $wire.is_delayed, onDelay: $wire.is_delayed }">
         <button type="button"
             class="flex w-full items-center justify-between gap-3 rounded-lg border border-gray-200 bg-red-200 p-5 font-medium text-gray-500 shadow-md transition-all duration-300 ease-in-out hover:bg-blue-100 dark:border-gray-600 dark:bg-dark-primary dark:text-gray-400 dark:shadow-none dark:hover:bg-gray-800"
@@ -381,7 +548,7 @@
 
         </div>
     </div>
-    {{-- end accordion form tambah packing list --}}
+    {{-- end accordion delay SPK --}}
 
     <div class="flex w-full flex-row justify-end gap-2">
         <x-button.success id="ubah-button" type="submit">

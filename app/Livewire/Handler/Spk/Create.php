@@ -3,31 +3,27 @@
 namespace App\Livewire\Handler\Spk;
 
 use App\Livewire\Concerns\HandlesErrors;
+use App\Livewire\Forms\Spk\Attachment;
+use App\Livewire\Forms\Spk\Barang;
 use App\Livewire\Forms\Spk\Create as SpkCreate;
 use App\Models\Spk\Production;
-use App\Models\Spk\SpkHistory;
 use App\Models\Spk\SpkMain;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class Create extends Component
 {
-    use HandlesErrors;
+    use HandlesErrors, WithFileUploads;
 
     public SpkCreate $createForm;
 
-    public ?string $nama_barang;
+    public Barang $barangForm;
 
-    public ?string $satuan_barang;
-
-    public ?string $spesifikasi = null;
-
-    public ?string $index_barang = null;
-
-    public ?int $jumlah_unit;
+    public Attachment $docForm;
 
     public bool $showSummary = false;
 
@@ -36,52 +32,39 @@ class Create extends Component
     public function mount()
     {
         // buat nomor order baru
-        $this->createForm->nomor_order = $this->makeNomorOrder($this->createForm->tipe_tagihan)['baru'];
+        $this->createForm->nomor_order = $this->createForm->makeNomorOrder($this->createForm->tipe_tagihan)['baru'];
     }
 
     public function tambahBarang()
     {
         // validasi nama barang
-        $this->validate([
-            'nama_barang' => 'required|min:5|string',
-            'jumlah_unit' => 'required|numeric|min:1',
-            'satuan_barang' => 'required|string',
-            'spesifikasi' => 'nullable|string',
-        ], [
-            'nama_barang.required' => 'Kolom nama barang wajib diisi.',
-            'nama_barang.min' => 'Kolom nama barang minimal berisi 5 karakter.',
-            'nama_barang.string' => 'Kolom nama barang harus berupa string.',
-            'jumlah_unit.required' => 'Kolom jumlah unit wajib diisi.',
-            'jumlah_unit.numeric' => 'Kolom jumlah unit harus berupa angka.',
-            'jumlah_unit.min' => 'Kolom jumlah unit minimal berjumlah 1 buah.',
-            'satuan_barang.required' => 'Kolom satuan wajib diisi.',
-            'satuan_barang.string' => 'Kolom harus berupa string.',
-            'spesifikasi.string' => 'Kolom spesifikasi harus berupa string.',
-        ]);
+        $this->barangForm->validate();
 
         // data barang dengan _key
-        $payload = [
+        $barangs = [
             '_key' => (string) Str::uuid(),
-            'nama_barang' => $this->nama_barang,
-            'jumlah_unit' => $this->jumlah_unit,
-            'satuan_barang' => $this->satuan_barang,
-            'spesifikasi' => $this->spesifikasi,
+            'nama_barang' => $this->barangForm->nama_barang,
+            'jumlah_unit' => $this->barangForm->jumlah_unit,
+            'satuan_barang' => $this->barangForm->satuan_barang,
+            'spesifikasi' => $this->barangForm->spesifikasi,
         ];
 
-        if ($this->is_edit && $this->index_barang !== null) {
-
+        if ($this->is_edit && $this->barangForm->index_barang !== null) {
             // pertahankan _key lama saat edit
-            $payload['_key'] = $this->createForm->barang[$this->index_barang]['_key'];
+            $barangs['_key'] = $this->createForm->barang[$this->barangForm->index_barang]['_key'];
 
-            $this->createForm->barang[$this->index_barang] = $payload;
+            $this->createForm->barang[$this->barangForm->index_barang] = $barangs;
 
+            // reset form barang dan edit state
             $this->resetBarang();
 
             return;
         }
 
-        $this->createForm->barang[] = $payload;
+        // tambahkan barang ke array
+        $this->createForm->barang[] = $barangs;
 
+        // reset form barang dan edit state
         $this->resetBarang();
     }
 
@@ -91,13 +74,13 @@ class Create extends Component
         $this->is_edit = true;
 
         // set index_barang
-        $this->index_barang = $index;
+        $this->barangForm->index_barang = $index;
 
         // set form fields sesuai index
-        $this->nama_barang = $this->createForm->barang[$index]['nama_barang'];
-        $this->jumlah_unit = $this->createForm->barang[$index]['jumlah_unit'];
-        $this->satuan_barang = $this->createForm->barang[$index]['satuan_barang'];
-        $this->spesifikasi = $this->createForm->barang[$index]['spesifikasi'];
+        $this->barangForm->nama_barang = $this->createForm->barang[$index]['nama_barang'];
+        $this->barangForm->jumlah_unit = $this->createForm->barang[$index]['jumlah_unit'];
+        $this->barangForm->satuan_barang = $this->createForm->barang[$index]['satuan_barang'];
+        $this->barangForm->spesifikasi = $this->createForm->barang[$index]['spesifikasi'];
     }
 
     public function hapusBarang($index)
@@ -111,16 +94,20 @@ class Create extends Component
 
     public function resetBarang()
     {
-        if ($this->is_edit && $this->index_barang !== null) {
-            // reset edit state
-            $this->is_edit = false;
-            $this->index_barang = null;
-        }
+        // reset form barang dan edit state
+        $this->is_edit = $this->barangForm->resetBarang($this->is_edit);
+    }
 
-        $this->nama_barang = null;
-        $this->jumlah_unit = null;
-        $this->satuan_barang = null;
-        $this->spesifikasi = null;
+    public function summary()
+    {
+        // panggil stream dari form create
+        $this->createForm->stream();
+
+        // munculkan modal summary
+        $this->showSummary = true;
+
+        // munculkan modal pdf
+        $this->dispatch('show-pdf-modal', url: route('spk.pdf'));
     }
 
     public function store()
@@ -131,30 +118,42 @@ class Create extends Component
         // validasi form
         $this->createForm->validate();
 
-        // assign data customer ke array
-        $customer = [
-            'nama_perusahaan' => $this->createForm->nama_customer,
-            'alamat' => $this->createForm->alamat_customer ?? '',
-            'contact_person' => $this->createForm->contact_person ?? '',
-            'no_hp' => $this->createForm->no_telp ?? '',
-        ];
+        if ($this->createForm->is_booked) {
+            $this->createForm->barang[] = [
+                '_key' => (string) Str::uuid(),
+                'nama_barang' => 'Dummy',
+                'jumlah_unit' => 0,
+                'satuan_barang' => 'lot',
+                'spesifikasi' => null,
+            ];
+            $this->createForm->tgl_cetak = now()->toDateString();
+            $this->createForm->tgl_kirim = 1;
+            $this->createForm->tipe_bayar = 'Bon';
+            $this->createForm->keterangan = 'Nomor SPK ini sudah dibooking untuk penawaran.';
+        }
 
         // assign daftar barang ke array
         $barangs = array_values($this->createForm->barang);
 
-        return $this->runSafely(function () use ($barangs, $customer) {
+        return $this->runSafely(function () use ($barangs) {
+            // panggil method simpan lampiran ke folder
+            $lampiran = $this->docForm->storeAttachment();
+
             // tambah data SPK
-            $spk = DB::transaction(function () use ($barangs, $customer) {
+            DB::transaction(function () use ($barangs, $lampiran) {
                 $spk = SpkMain::create([
                     'nomor_order' => $this->createForm->nomor_order,
+                    'nomor_dokumen_penawaran' => $this->createForm->nomor_dokumen_penawaran,
                     'tipe_tagihan' => $this->createForm->tipe_tagihan,
                     'status_nomor_tagihan' => $this->createForm->status_nomor_tagihan,
                     'nomor_tagihan' => $this->createForm->nomor_tagihan,
                     'tipe_bayar' => $this->createForm->tipe_bayar,
                     'tgl_cetak' => $this->createForm->tgl_cetak,
-                    'tgl_kirim' => $this->createForm->tgl_kirim <= 1 ? 'SEGERA' : $this->createForm->tgl_kirim,
+                    'tgl_kirim' => $this->createForm->tgl_kirim <= 1
+                        ? 'SEGERA'
+                        : $this->createForm->tgl_kirim,
                     'keterangan' => $this->createForm->keterangan,
-                    'customer' => $customer,
+                    'customer' => $this->createForm->generateCustomerData(),
                     'tipe_timbangan' => $this->createForm->tipe_timbangan,
                     'products' => $barangs,
                     'status' => 0,
@@ -162,15 +161,19 @@ class Create extends Component
                     'added_by' => Auth::id(),
                     'update_by' => Auth::id(),
                     'status_approval' => 0,
+                    'is_booked' => (bool) $this->createForm->is_booked,
+                    'booked_at' => $this->createForm->is_booked ? now() : null,
+                    'booked_by' => $this->createForm->is_booked ? Auth::id() : null,
+                    'documentations' => $lampiran ?? [],
                 ]);
 
                 // tambah data history SPK
-                SpkHistory::create([
-                    'spk_id' => $spk->id,
-                    'title' => 'SPK dibuat.',
-                    'keterangan' => Auth::user()->name.' telah membuat SPK baru. Sedang menunggu approval dari tim Management.',
-                    'added_by' => Auth::id(),
-                ]);
+                $this->createForm->generateHistory(
+                    $spk->id,
+                    'SPK Dibuat.',
+                    Auth::user()->name.' telah membuat SPK baru. Sedang menunggu approval dari tim Management.',
+                    Auth::id()
+                );
 
                 // tambah data produksi
                 Production::create([
@@ -202,179 +205,21 @@ class Create extends Component
         ]);
     }
 
-    public function summary()
+    public function storeLampiran()
     {
-        // validasi form
-        // $this->createForm->validate();
+        $this->docForm->validate();
 
-        // ambil data dari form createForm
-        $spk_data = $this->createForm->all();
-
-        // generate id
-        $spk_data['id'] = Str::uuid();
-
-        // siapa yg bikin spk nya
-        $spk_data['added_by'] = Auth::user()->name;
-        $spk_data['added_by_signature_img'] = Auth::user()?->signature?->getSignatureImagePath() ?? null;
-
-        // assign user yang sedang login
-        $spk_data['assign_to'] = User::find($spk_data['assign_to'])->name ?? '';
-        $spk_data['assign_to_signature_img'] = User::find($spk_data['assign_to'])?->signature?->getSignatureImagePath() ?? null;
-
-        // ttd bu tini
-        // $spk_data['bu_tini_signature_img'] = User::find(1105)?->signature?->getSignatureImagePath() ?? 'Not set';
-
-        // buat session untuk data spk ke pdf
-        session(['spk_pdf_data' => $spk_data]);
-
-        // munculkan modal summary
-        $this->showSummary = true;
-
-        // munculkan modal pdf
-        $this->dispatch('show-pdf-modal', url: route('spk.pdf'));
+        $this->docForm->addAttachment();
     }
 
-    private function makeNomorOrder($tipe_tagihan)
+    public function removeAttachment($index)
     {
-        // ambil nomor_order terakhir sesuai tipe tagihan
-        $lastNomorOrder = SpkMain::select('nomor_order')
-            ->where('tipe_tagihan', $tipe_tagihan)
-            ->get()
-            ->last();
-
-        // set array romawi untuk bulan
-        $bulanRomawi = [
-            1 => 'I',
-            2 => 'II',
-            3 => 'III',
-            4 => 'IV',
-            5 => 'V',
-            6 => 'VI',
-            7 => 'VII',
-            8 => 'VIII',
-            9 => 'IX',
-            10 => 'X',
-            11 => 'XI',
-            12 => 'XII',
-        ];
-
-        // jika lastNomorOrder ada
-        if ($lastNomorOrder) {
-            // 000.05/X/25
-            $lastBulanNomorUrut = $this->diffBulanUrut($lastNomorOrder->nomor_order); // return bulan 10 (sesuai nomor_order terakhir)
-            $lastNomorUrut = $this->ambilNomorUrut($lastNomorOrder->nomor_order); // return 6 ( 5 + 1 )
-            $bulanSekarang = $bulanRomawi[today()->month]; // XI
-            $tahunSekarang = today()->year; // 2025
-
-            // jika bulan sekarang lebih besar dari bulan nomor urut terakhir
-            if (today()->month > $lastBulanNomorUrut || (today()->month == 1 && $lastBulanNomorUrut == 12)) {
-                $lastNomorUrut = 1;
-            } else {
-                $lastNomorUrut++;
-            }
-
-            // format nomor urut
-            $formatNomorUrut = $this->formatNomor($lastNomorUrut, $tipe_tagihan);
-
-            // buat nomor order
-            $nomorOrderBaru = '000.'.$formatNomorUrut.'/'.$bulanSekarang.'/'.$tahunSekarang; // 000.06/XI/2025
-        } else {
-            // format nomor urut
-            $formatNomorUrut = $this->formatNomor(1, $tipe_tagihan);
-
-            // buat nomor order
-            $nomorOrderBaru = '000.'.$formatNomorUrut.'/'.$bulanRomawi[today()->month].'/'.today()->year; // 000.06/XI/2025
-        }
-
-        // kembalikan nilai nomor order lama dan baru
-        return [
-            'lama' => $lastNomorOrder->nomor_order ?? '-',
-            'baru' => $nomorOrderBaru,
-        ];
-    }
-
-    private function ambilNomorUrut($nomor_order)
-    {
-        // cari karakter setelah titik pertama
-        $awal = strpos($nomor_order, '.') + 1;
-
-        // cari posisi garis miring terdekat setelah titik
-        $akhir = strpos($nomor_order, '/', $awal);
-
-        // ambil nilai di antara titik dan slash
-        $angka = substr($nomor_order, $awal, $akhir - $awal);
-
-        // kembalikan nilai
-        return $angka;
-    }
-
-    private function diffBulanUrut($nomor_order)
-    {
-        // inisialisasi array bulan
-        $bulanArray = [
-            'I' => 1,
-            'II' => 2,
-            'III' => 3,
-            'IV' => 4,
-            'V' => 5,
-            'VI' => 6,
-            'VII' => 7,
-            'VIII' => 8,
-            'IX' => 9,
-            'X' => 10,
-            'XI' => 11,
-            'XII' => 12,
-        ];
-
-        // cari posisi slash pertama
-        $awal = strpos($nomor_order, '/') + 1;
-
-        // cari posisi slash terdekat setelah slash pertama
-        $akhir = strpos($nomor_order, '/', $awal);
-
-        // ambil nilai diantara slash pertama dan setelahnya
-        $bulanRomawi = substr($nomor_order, $awal, $akhir - $awal); // return X
-
-        // ambil nilai
-        $bulan = $bulanArray[$bulanRomawi]; // return sesuai array, 10
-
-        // kembalikan nilai
-        return $bulan;
-    }
-
-    private function formatNomor($nomor_urut, $tipe_tagihan)
-    {
-        // konversi ke string
-        $angka = (string) $nomor_urut;
-
-        // jika tipe tagihan idcppn
-        if ($tipe_tagihan === 'idcppn') {
-            // return str_pad($angka, 2, '0', STR_PAD_LEFT); minimal 2 digit
-            return str_pad($angka, 2, '0', STR_PAD_LEFT);
-        }
-
-        // jika tipe tagihan idcnon
-        if ($tipe_tagihan === 'idcnon') {
-            // hitung panjang angka
-            $panjang = strlen($angka);
-
-            // jika panjang angka besar sama dengan 3
-            if ($panjang >= 3) {
-                // return angka dengan 0 didepannya
-                return '0'.$angka;
-            }
-
-            // return str_pad($angka, 3, '0', STR_PAD_LEFT); minimal 3 digit
-            return str_pad($angka, 3, '0', STR_PAD_LEFT);
-        }
-
-        // return nilai
-        return $angka;
+        $this->docForm->removeAttachment($index);
     }
 
     public function updatedCreateFormTipeTagihan()
     {
-        $this->createForm->nomor_order = $this->makeNomorOrder($this->createForm->tipe_tagihan)['baru'];
+        $this->createForm->nomor_order = $this->createForm->makeNomorOrder($this->createForm->tipe_tagihan)['baru'];
     }
 
     public function render()
@@ -385,7 +230,7 @@ class Create extends Component
 
         return view('livewire.handler.spk.create', [
             'users' => $teamProduksi,
-            'nomor_order_lama' => $this->makeNomorOrder($this->createForm->tipe_tagihan)['lama'],
+            'nomor_order_lama' => $this->createForm->makeNomorOrder($this->createForm->tipe_tagihan)['lama'],
         ]);
     }
 }

@@ -21,4 +21,11 @@ return [
         'non timbangan jembatan' => 'Timbangan Lainnya',
         'timbangan jembatan' => 'Timbangan Jembatan',
     ],
+    'tipe_dokumen' => [
+        'penawaran' => 'Dokumen Penawaran',
+        'draft_kontrak' => 'Draft Kontrak',
+        'kontrak' => 'Kontrak',
+        'po_customer' => 'PO Customer',
+        'request_fondasi' => 'Request Fondasi / Ukuran',
+    ],
 ];

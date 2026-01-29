@@ -293,6 +293,14 @@ class Show extends Component
     {
         $this->authorize('validate', SpkMain::class);
 
+        if ($this->data->is_booked) {
+            return $this->dispatch(event: 'swal', icon: 'error', title: 'Gagal', text: 'SPK masih dalam status booking, tidak bisa diapprove.');
+        }
+
+        if ($this->data->on_delay) {
+            return $this->dispatch(event: 'swal', icon: 'error', title: 'Gagal', text: 'SPK sedang dalam status on delay, tidak bisa diapprove.');
+        }
+
         $this->data->update([
             'status_approval' => 1,
             'approved_by' => Auth::id(),
@@ -305,7 +313,7 @@ class Show extends Component
             'added_by' => Auth::id(),
         ]);
 
-        $this->dispatch(
+        return $this->dispatch(
             event: 'swal',
             icon: 'success',
             title: 'Berhasil.',
@@ -333,13 +341,24 @@ class Show extends Component
         ]);
     }
 
+    public function getFilteredAttachmentsExcludeRequestFondasiProperty()
+    {
+        return collect($this->data->documentations)
+            ->where('tipe_dokumen', '!=', 'request_fondasi')
+            ->values();
+    }
+
+    public function getFilteredAttachmentsOnlyRequestFondasiProperty()
+    {
+        return collect($this->data->documentations)
+            ->where('tipe_dokumen', '=', 'request_fondasi')
+            ->values();
+    }
+
     public function render()
     {
         // ambil laporan fondasi terakhir
         $lastLaporanFondasi = $this->data->laporanFondasi()->latest()->first();
-
-        // cek apakah file pdf spk ditemukan
-        $file = Storage::disk('pdf')->exists($this->id.'.pdf');
 
         return view('livewire.handler.spk.show', [
             'data' => $this->data,
@@ -349,7 +368,6 @@ class Show extends Component
                 'value' => $lastLaporanFondasi?->status_pengerjaan ?? 0,
                 'description' => $lastLaporanFondasi?->status_pengerjaan_description ?? 'Belum ada progres.',
             ],
-            'file' => $file,
         ]);
     }
 }

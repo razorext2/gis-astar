@@ -249,6 +249,9 @@ Route::middleware(['auth'])->group(function () {
             Route::get('generate/pdf/{id}', [\App\Http\Controllers\Spk\SpkController::class, 'generatePdf'])->name('spk.generate.pdf');
             Route::get('stream/pdf/spk', [\App\Http\Controllers\Spk\SpkController::class, 'streamPdf'])->name('spk.pdf');
             Route::get('download/{id}', [\App\Http\Controllers\Spk\SpkController::class, 'download'])->name('spk.download');
+            Route::get('attachment/download/{path}', [\App\Http\Controllers\Spk\SpkController::class, 'attachmentDownload'])
+                ->where('path', '.*')
+                ->name('spk.attachment.download');
             Route::resource('spk', \App\Http\Controllers\Spk\SpkController::class)->only('index', 'create', 'show', 'edit');
 
             // 3. spk produksi

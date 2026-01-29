@@ -15,6 +15,7 @@ class SpkMain extends Model
 
     protected $fillable = [
         'nomor_order',
+        'nomor_dokumen_penawaran',
         'tipe_tagihan',
         'status_nomor_tagihan',
         'nomor_tagihan',
@@ -27,6 +28,7 @@ class SpkMain extends Model
         'tipe_timbangan',
         'products',
         'informasi_pengiriman',
+        'documentations',
         'status',
         'added_by',
         'assign_to',
@@ -44,13 +46,19 @@ class SpkMain extends Model
         'on_delay_by',
         'production_has_download_spk_pdf',
         'production_has_download_spk_pdf_at',
+        'is_booked',
+        'booked_at',
+        'booked_by',
     ];
 
     protected $casts = [
         'customer' => 'array',
         'products' => 'array',
         'informasi_pengiriman' => 'array',
+        'documentations' => 'array',
+        'on_delay' => 'boolean',
         'production_has_download_spk_pdf' => 'boolean',
+        'is_booked' => 'boolean',
     ];
 
     protected $appends = [
@@ -94,6 +102,11 @@ class SpkMain extends Model
         return $this->belongsTo(User::class, 'no_tagihan_updated_by', 'id');
     }
 
+    public function bookedBy()
+    {
+        return $this->belongsTo(User::class, 'booked_by', 'id');
+    }
+
     public function invoice()
     {
         return $this->belongsTo(\App\Models\Invoice::class, 'nomor_tagihan', 'no_faktur_pajak');
@@ -124,6 +137,16 @@ class SpkMain extends Model
         return $this->hasOne(\App\Models\Spk\Production::class, 'id_spk', 'id');
     }
 
+    public function getStatusNomorTagihanDescriptionAttribute(): string
+    {
+        $status = (bool) ($this->attributes['status_nomor_tagihan'] ?? false);
+
+        return match ($status) {
+            true => 'Nomor tagihan sudah diassign.',
+            false => 'Nomor tagihan belum diassign.',
+        };
+    }
+
     public function getStatusDescriptionAttribute(): string
     {
         $status = (int) ($this->attributes['status'] ?? 0);
@@ -140,22 +163,12 @@ class SpkMain extends Model
         };
     }
 
-    public function getStatusNomorTagihanDescriptionAttribute(): string
-    {
-        $status = (bool) ($this->attributes['status_nomor_tagihan'] ?? false);
-
-        return match ($status) {
-            true => 'Nomor tagihan sudah diassign.',
-            false => 'Nomor tagihan belum diassign.',
-        };
-    }
-
     public function getStatusApprovalDescriptionAttribute(): string
     {
         $status = (int) ($this->attributes['status_approval'] ?? null);
 
         return match ($status) {
-            0 => 'Menunggu Approval',
+            0 => 'Menunggu Validasi',
             1 => 'Sudah Disetujui',
             2 => 'Ditolak',
             3 => 'Butuh Revisi',

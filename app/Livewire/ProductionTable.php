@@ -116,6 +116,27 @@ final class ProductionTable extends PowerGridComponent
 
                 return implode('<br>', $list);
             })
+            ->add('status_spk', function ($query) {
+                $template = "<div class='flex flex-col gap-1 w-fit font-semibold'>";
+
+                if ($query->spk->on_delay) {
+                    $template .= "
+                        <span class='bg-red-500 text-xs px-2 flex justify-center items-center py-1.5 text-red-100 w-fit rounded-full'>
+                            Delayed
+                        </span>";
+                }
+
+                if ($query->spk->status_approval === 2) {
+                    $template .= "
+                        <span class='bg-red-500 text-xs px-2 flex justify-center items-center py-1.5 text-red-100 w-fit rounded-full'>
+                            SPK Ditolak
+                        </span>";
+                }
+
+                $template .= '</div>';
+
+                return $template;
+            })
             ->add('status_produksi', fn ($query) => $query->productionHistories->last()->status_produksi ?? 0)
             ->add('status_produksi_formatted', function ($query) {
                 return view('components.dashboard.name-w-code', [
@@ -134,6 +155,7 @@ final class ProductionTable extends PowerGridComponent
             Column::action('Action'),
             Column::make('Nomor SPK', 'nomor_order_formatted', 'nomor_order')
                 ->searchable(),
+            Column::make('Status SPK', 'status_spk', 'status_spk'),
             Column::make('Customer', 'customer_info'),
             Column::make('Assign to', 'assign_to_formatted', 'assign_to'),
             Column::make('Products', 'products_formatted'),
@@ -151,9 +173,17 @@ final class ProductionTable extends PowerGridComponent
     {
         $button = [];
 
+        if ($this->user->can('spk-detail')) {
+            $button[] = Button::make('detail', 'Detail')
+                ->slot('👁 SPK')
+                ->id($row->spk->id)
+                ->class('dark:bg-blue-800 text-sm dark:hover:bg-blue-900 dark:text-white dark:border-gray-700 rounded-lg bg-blue-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-blue-700')
+                ->route('spk.show', ['spk' => $row->spk->id]);
+        }
+
         if ($this->user->can('produksi-detail')) {
             $button[] = Button::make('detail', 'Detail')
-                ->slot('Detail')
+                ->slot('+ Produksi')
                 ->id($row->id)
                 ->class('dark:bg-blue-800 text-sm dark:hover:bg-blue-900 dark:text-white dark:border-gray-700 rounded-lg bg-blue-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-blue-700')
                 ->route('production.show', ['production' => $row->id]);
@@ -161,7 +191,7 @@ final class ProductionTable extends PowerGridComponent
 
         if ($row->productionHistories?->last()?->status_produksi === 10 && $this->user->can('produksi-update-packing-list')) {
             $button[] = Button::make('packinglist', 'Packing List')
-                ->slot('Packing List')
+                ->slot('+ Packing List')
                 ->id($row->id)
                 ->class('dark:bg-green-800 text-sm dark:hover:bg-green-900 dark:text-white dark:border-gray-700 rounded-lg bg-green-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-green-700')
                 ->route('production.packing-list.add', ['production' => $row->id]);

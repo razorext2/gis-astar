@@ -23,7 +23,15 @@
 
                         <span
                             class="bg-{{ $color }}-500 text-{{ $color }}-700 rounded-full px-2 py-1 text-xs">
-                            {{ $data->status_approval_description }} </span>
+                            {{ $data->status_approval_description }}
+                        </span>
+
+                        @if ($data->is_booked)
+                            <span
+                                class='flex w-fit items-center justify-center rounded-full bg-blue-500 px-2 py-1.5 text-xs text-blue-800'>
+                                Booked
+                            </span>
+                        @endif
                     </div>
 
                     @if ($data->status_approval != 1 && auth()->user()->can('spk-validate'))
@@ -34,11 +42,18 @@
                 </div>
             </div>
 
-            @if (auth()->user()->can('spk-create'))
+            @if (auth()->user()->can('spk-create') || auth()->user()->can('spk-validate'))
                 <div
-                    class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1 lg:rounded-tr-lg">
-                    <p class="text-xs italic">Tipe Tagihan</p>
-                    <p class="font-semibold"> {{ $data->tipe_tagihan }} </p>
+                    class="col-span-2 flex flex-col gap-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1 lg:rounded-tr-lg">
+                    <div>
+                        <p class="text-xs italic">Tipe Tagihan</p>
+                        <p class="font-semibold"> {{ $data->tipe_tagihan }} </p>
+                    </div>
+
+                    <div>
+                        <p class="text-xs italic">No. Dokumen Penawaran</p>
+                        <p class="font-semibold"> {{ $data->nomor_dokumen_penawaran ?? 'Belum diatur.' }} </p>
+                    </div>
                 </div>
 
                 <div
@@ -133,6 +148,56 @@
                 </p>
             </div>
 
+            <div
+                class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white">
+                <p class="text-xs italic"> Request Fondasi </p>
+                <div
+                    class="mt-2 flex flex-col divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white shadow-sm dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-700">
+                    @forelse ($this->filteredAttachmentsOnlyRequestFondasi as $index => $row)
+                        <a href="{{ route('spk.attachment.download', $row['url']) }}"
+                            class="p-2 transition hover:bg-gray-50 dark:hover:bg-gray-800">
+                            <p class="text-base font-medium text-gray-900 dark:text-gray-100">
+                                {{ $row['nama_file'] }}
+                            </p>
+                            <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
+                                {{ $row['tipe_dokumen'] }}
+                            </p>
+                        </a>
+                    @empty
+                        <p class="text-xs font-semibold capitalize italic">
+                            Tidak ada request fondasi dari Customer.
+                        </p>
+                    @endforelse
+                </div>
+            </div>
+
+            @if (auth()->user()->can('spk-validate') || auth()->user()->can('spk-create'))
+                <div
+                    class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white">
+                    <p class="text-xs italic"> Lampiran </p>
+
+                    <div
+                        class="mt-2 flex flex-col divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white shadow-sm dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-700">
+                        @forelse ($this->filteredAttachmentsExcludeRequestFondasi as $index => $row)
+                            <a href="{{ route('spk.attachment.download', $row['url']) }}"
+                                class="p-2 transition hover:bg-gray-50 dark:hover:bg-gray-800">
+                                <p class="text-base font-medium text-gray-900 dark:text-gray-100">
+                                    {{ $row['nama_file'] }}
+                                </p>
+                                <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
+                                    {{ $row['tipe_dokumen'] }}
+                                </p>
+                            </a>
+                        @empty
+                            <p class="text-xs font-semibold capitalize italic">
+                                Tidak ada lampiran.
+                            </p>
+                        @endforelse
+                    </div>
+
+                </div>
+            @endif
+
         </div>
         {{-- end informasi spk --}}
 
@@ -199,22 +264,24 @@
         {{-- end progress spk --}}
 
         {{-- download button --}}
-        <div
-            class="flex justify-center gap-x-1 rounded-b-lg bg-gray-50 p-2 text-center dark:bg-gray-700 lg:absolute lg:right-0 lg:top-0 lg:rounded-none lg:bg-transparent lg:p-0">
-            @can('spk-create')
-                <x-button.primary id="spk-pdf-export" wire:click="export">
-                    Ekspor SPK
-                </x-button.primary>
-            @endcan
+        @if ($data->status_approval === 1)
+            <div
+                class="flex justify-center gap-x-1 rounded-b-lg bg-gray-50 p-2 text-center dark:bg-gray-700 lg:absolute lg:right-0 lg:top-0 lg:rounded-none lg:bg-transparent lg:p-0">
+                @can('spk-create')
+                    <x-button.primary id="spk-pdf-export" wire:click="export">
+                        Ekspor SPK
+                    </x-button.primary>
+                @endcan
 
-            @hasanyrole(['Produksi', 'Admin', 'Management'])
-                <x-button.link
-                    class="ring-1 ring-blue-700 hover:bg-blue-300 dark:bg-blue-800 dark:text-white dark:ring-gray-700 dark:hover:bg-blue-900"
-                    href="{{ route('spk.generate.pdf', ['id' => $data->id]) }}" id="spk-pdf-export">
-                    Ekspor SPK (Produksi)
-                </x-button.link>
-            @endhasanyrole
-        </div>
+                @hasanyrole(['Produksi', 'Admin', 'Management'])
+                    <x-button.link
+                        class="ring-1 ring-blue-700 hover:bg-blue-300 dark:bg-blue-800 dark:text-white dark:ring-gray-700 dark:hover:bg-blue-900"
+                        href="{{ route('spk.generate.pdf', ['id' => $data->id]) }}" id="spk-pdf-export">
+                        Ekspor SPK (Produksi)
+                    </x-button.link>
+                @endhasanyrole
+            </div>
+        @endif
         {{-- end download button --}}
     </div>
 

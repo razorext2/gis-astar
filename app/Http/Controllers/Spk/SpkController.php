@@ -57,7 +57,25 @@ class SpkController extends Controller
 
     public function download($id)
     {
+        // auth / permission check (opsional)
+        abort_if(! auth()->check(), 403);
+
+        // pastikan file ada
+        abort_if(! Storage::disk('local')->exists('pdf/'.$id.'.pdf'), 404);
+
         return Storage::download('pdf/'.$id.'.pdf');
+    }
+
+    public function attachmentDownload(string $path)
+    {
+        // auth / permission check (opsional)
+        abort_if(! auth()->check(), 403);
+
+        // pastikan file ada
+        abort_if(! Storage::disk('local')->exists($path), 404);
+
+        // download (force)
+        return Storage::download($path);
     }
 
     public function generatePdf($id)

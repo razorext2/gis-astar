@@ -3,38 +3,34 @@
 namespace App\Livewire\Handler\Spk;
 
 use App\Livewire\Concerns\HandlesErrors;
+use App\Livewire\Forms\Spk\Attachment;
+use App\Livewire\Forms\Spk\Barang;
 use App\Livewire\Forms\Spk\Create as SpkCreate;
 use App\Models\Spk\SpkHistory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class Edit extends Component
 {
-    use HandlesErrors;
+    use HandlesErrors, WithFileUploads;
 
     public SpkCreate $createForm;
+
+    public Barang $barangForm;
+
+    public Attachment $docForm;
 
     public $id;
 
     public $data;
 
-    public ?string $nama_barang;
-
-    public ?string $satuan_barang;
-
-    public ?string $spesifikasi = null;
-
     public ?string $delay_note;
 
-    public ?string $index_barang = null;
-
-    public ?int $assign_to;
-
-    public ?int $jumlah_unit;
-
-    public bool $is_delayed;
+    public bool $is_delayed = false;
 
     public bool $is_edit = false;
 
@@ -56,11 +52,6 @@ class Edit extends Component
         $this->createForm->contact_person = $data->customer['contact_person'];
         $this->createForm->alamat_customer = $data->customer['alamat'];
 
-        // assign data spk barang ke form
-        // foreach ($data->products as $row) {
-        //     $this->createForm->barang[] = $row;
-        // }
-
         // assign _key ke setiap item barang
         $this->createForm->barang = collect($data->products)
             ->map(fn ($item) => array_merge($item, [
@@ -74,11 +65,13 @@ class Edit extends Component
         $this->createForm->nomor_order = $data->nomor_order;
         $this->createForm->tipe_bayar = $data->tipe_bayar;
         $this->createForm->tgl_cetak = $data->tgl_cetak;
-        $this->createForm->tgl_kirim = $data->tgl_kirim;
+        $this->createForm->tgl_kirim = $data->tgl_kirim === 'SEGERA' ?? 1;
         $this->createForm->assign_to = $data->assign_to;
-        $this->assign_to = $data->assign_to;
         $this->createForm->keterangan = $data->keterangan;
         $this->createForm->tipe_timbangan = $data->tipe_timbangan;
+        $this->createForm->nomor_dokumen_penawaran = $data->nomor_dokumen_penawaran;
+        $this->createForm->is_booked = $data->is_booked;
+        $this->docForm->new_attachments = $data->documentations ?? [];
 
         $this->is_delayed = $data->on_delay;
         $this->delay_note = $data->on_delay_notes;
@@ -86,23 +79,8 @@ class Edit extends Component
 
     public function storeBarang()
     {
-        // validasi field nama_barang
-        $this->validate([
-            'nama_barang' => 'required|min:5|string',
-            'jumlah_unit' => 'required|numeric|min:1',
-            'satuan_barang' => 'required|string',
-            'spesifikasi' => 'nullable|string',
-        ], [
-            'nama_barang.required' => 'Kolom nama barang wajib diisi.',
-            'nama_barang.min' => 'Kolom nama barang minimal berisi 5 karakter.',
-            'nama_barang.string' => 'Kolom nama barang harus berupa string.',
-            'jumlah_unit.required' => 'Kolom jumlah unit wajib diisi.',
-            'jumlah_unit.numeric' => 'Kolom jumlah unit harus berupa angka.',
-            'jumlah_unit.min' => 'Kolom jumlah unit minimal berjumlah 1 buah.',
-            'satuan_barang.required' => 'Kolom satuan wajib diisi.',
-            'satuan_barang.string' => 'Kolom satuan harus berupa string',
-            'spesifikasi.string' => 'Kolom spesifikasi harus berupa string.',
-        ]);
+        // validasi nama barang
+        $this->barangForm->validate();
 
         // data barang dengan _key
         $payload = [
@@ -114,7 +92,6 @@ class Edit extends Component
         ];
 
         if ($this->is_edit && $this->index_barang !== null) {
-
             // pertahankan _key lama saat edit
             $payload['_key'] = $this->createForm->barang[$this->index_barang]['_key'];
 
@@ -136,13 +113,13 @@ class Edit extends Component
         $this->is_edit = true;
 
         // set index_barang
-        $this->index_barang = $index;
+        $this->barangForm->index_barang = $index;
 
         // set form fields sesuai index
-        $this->nama_barang = $this->createForm->barang[$index]['nama_barang'];
-        $this->jumlah_unit = $this->createForm->barang[$index]['jumlah_unit'];
-        $this->satuan_barang = $this->createForm->barang[$index]['satuan_barang'];
-        $this->spesifikasi = $this->createForm->barang[$index]['spesifikasi'];
+        $this->barangForm->nama_barang = $this->createForm->barang[$index]['nama_barang'];
+        $this->barangForm->jumlah_unit = $this->createForm->barang[$index]['jumlah_unit'];
+        $this->barangForm->satuan_barang = $this->createForm->barang[$index]['satuan_barang'];
+        $this->barangForm->spesifikasi = $this->createForm->barang[$index]['spesifikasi'];
     }
 
     public function hapusBarang($index)
@@ -156,15 +133,16 @@ class Edit extends Component
 
     public function resetBarang()
     {
-        if ($this->is_edit) {
+        if ($this->is_edit && $this->barangForm->index_barang !== null) {
+            // reset edit state
             $this->is_edit = false;
-            $this->index_barang = null;
+            $this->barangForm->index_barang = null;
         }
 
-        $this->nama_barang = null;
-        $this->jumlah_unit = null;
-        $this->satuan_barang = null;
-        $this->spesifikasi = null;
+        $this->barangForm->nama_barang = null;
+        $this->barangForm->jumlah_unit = null;
+        $this->barangForm->satuan_barang = null;
+        $this->barangForm->spesifikasi = null;
     }
 
     public function upBarang(int $index)
@@ -192,89 +170,114 @@ class Edit extends Component
         array_splice($this->createForm->barang, $to, 0, [$item]);
     }
 
+    public function storeLampiran()
+    {
+        $this->docForm->validate();
+
+        $this->docForm->addAttachment();
+    }
+
+    public function removeAttachment($index)
+    {
+        if (isset($this->docForm->new_attachments[$index]['url'])) {
+            $this->runSafely(function () use ($index) {
+                // hapus file dari storage
+                Storage::delete($this->docForm->new_attachments[$index]['url']);
+
+                // hapus object dari array
+                unset($this->docForm->new_attachments[$index]);
+
+                // refresh value didalam array
+                $this->docForm->new_attachments = array_values($this->docForm->new_attachments);
+
+                // update array di database
+                $this->data->update([
+                    'documentations' => $this->docForm->new_attachments,
+                ]);
+
+                // munculkan pesan swal
+                $this->dispatch(
+                    event: 'swal',
+                    icon: 'success',
+                    title: 'Berhasil.',
+                    text: 'File lampiran telah dihapus.');
+            }, 'Gagal menghapus lampiran dari storage dan database.', [
+                'form_input' => $this->docForm->new_attachments[$index],
+                'user_id' => Auth::id(),
+            ]);
+        }
+
+        $this->docForm->removeAttachment($index);
+    }
+
     public function store()
     {
         // cek authorization
         $this->authorize('update', $this->data);
 
-        // inisialisasi variabel
-        $customer = [];
-        $barangs = [];
-
-        // inisialisasi field yang akan divalidasi
-        $fieldsToValidate = [
-            'nama_customer',
-            'alamat_customer',
-            'contact_person',
-            'no_telp',
-            'tipe_timbangan',
-            'barang.*',
-            'tipe_tagihan',
-            'status_nomor_tagihan',
-            'nomor_tagihan',
-            'tipe_bayar',
-            'tgl_cetak',
-            'tgl_kirim',
-            'keterangan',
-            'assign_to',
-        ];
-
         // validasi form
-        foreach ($fieldsToValidate as $field) {
+        foreach ($this->createForm->fieldToValidate() as $field) {
             $this->createForm->validateOnly($field);
         }
-
-        // assign data customer ke array
-        $customer = [
-            'nama_perusahaan' => $this->createForm->nama_customer,
-            'alamat' => $this->createForm->alamat_customer,
-            'contact_person' => $this->createForm->contact_person,
-            'no_hp' => $this->createForm->no_telp,
-        ];
 
         // assign data barang ke array
         $barangs = array_values($this->createForm->barang);
 
         // run safely
-        return $this->runSafely(function () use ($barangs, $customer) {
-            $spk = DB::transaction(function () use ($barangs, $customer) {
+        return $this->runSafely(function () use ($barangs) {
+            // panggil method simpan lampiran ke folder
+            $lampiran = $this->docForm->storeAttachment();
+
+            $spk = DB::transaction(function () use ($barangs, $lampiran) {
                 // update data spk
                 $data = [
                     'nomor_order' => $this->createForm->nomor_order,
+                    'nomor_dokumen_penawaran' => $this->createForm->nomor_dokumen_penawaran,
                     'tipe_tagihan' => $this->createForm->tipe_tagihan,
                     'status_nomor_tagihan' => $this->createForm->status_nomor_tagihan,
                     'nomor_tagihan' => $this->createForm->nomor_tagihan,
                     'tipe_bayar' => $this->createForm->tipe_bayar,
                     'tgl_cetak' => $this->createForm->tgl_cetak,
-                    'tgl_kirim' => $this->createForm->tgl_kirim,
+                    'tgl_kirim' => $this->createForm->tgl_kirim <= 1
+                        ? 'SEGERA'
+                        : $this->createForm->tgl_kirim,
                     'keterangan' => $this->createForm->keterangan,
-                    'customer' => $customer,
+                    'customer' => $this->createForm->generateCustomerData(),
                     'tipe_timbangan' => $this->createForm->tipe_timbangan,
                     'products' => $barangs,
                     'assign_to' => $this->createForm->assign_to,
                     'updated_by' => Auth::id(),
                     'on_delay' => $this->is_delayed,
+                    'is_booked' => $this->createForm->is_booked,
+                    'booked_at' => $this->createForm->is_booked ? now() : null,
+                    'booked_by' => $this->createForm->is_booked ? Auth::id() : null,
+                    'documentations' => $lampiran ?? [],
                 ];
 
+                // jika bukan user dengan permission spk-validate, reset approval
+                if (auth()->user()->cannot('spk-validate')) {
+                    $data['status_approval'] = 0;
+                    $data['approved_by'] = null;
+                    $data['approved_at'] = null;
+                    $data['catatan_approval'] = null;
+                }
+
+                // jika status delay diaktifkan
                 if ($this->is_delayed) {
                     $data['on_delay_at'] = now();
                     $data['on_delay_notes'] = $this->delay_note;
                     $data['on_delay_by'] = Auth::id();
-                } else {
-                    $data['on_delay_at'] = null;
-                    $data['on_delay_notes'] = null;
-                    $data['on_delay_by'] = null;
                 }
 
                 $this->data->update($data);
 
                 // tambah history spk
-                SpkHistory::create([
-                    'spk_id' => $this->data->id,
-                    'title' => 'SPK mengalami perubahan.',
-                    'keterangan' => Auth::user()->name.' telah mengubah data SPK.',
-                    'added_by' => Auth::id(),
-                ]);
+                $this->createForm->generateHistory(
+                    $this->data->id,
+                    'SPK mengalami perubahan.',
+                    Auth::user()->name.' telah mengubah data SPK.',
+                    Auth::id(),
+                );
 
                 // tambah history spk untuk status delay
                 if ($this->is_delayed) {
