@@ -77,31 +77,31 @@ class ProductionHistory extends Model
                 'percentage' => 0,
             ],
             1 => [
-                'label' => 'Purchasing Materials',
+                'label' => 'Pengadaan Material',
                 'percentage' => 10,
             ],
             2 => [
-                'label' => 'Marking & Cutting',
+                'label' => 'Penandaan & Pemotongan',
                 'percentage' => 20,
             ],
             3 => [
-                'label' => 'Setting',
+                'label' => 'Penyetelan',
                 'percentage' => 30,
             ],
             4 => [
-                'label' => 'Welding',
+                'label' => 'Pengelasan',
                 'percentage' => 40,
             ],
             5 => [
-                'label' => 'Drilling & Tapping',
+                'label' => 'Pengeboran & Tapping',
                 'percentage' => 50,
             ],
             6 => [
-                'label' => 'Assembly & Testing',
+                'label' => 'Perakitan & Pengujian',
                 'percentage' => 60,
             ],
             7 => [
-                'label' => 'NDT Procedures',
+                'label' => 'Prosedur NDT',
                 'percentage' => 70,
             ],
             8 => [
@@ -109,14 +109,17 @@ class ProductionHistory extends Model
                 'percentage' => 80,
             ],
             9 => [
-                'label' => 'Painting',
+                'label' => 'Pengecatan',
                 'percentage' => 90,
             ],
             10 => [
-                'label' => 'Finished',
+                'label' => 'Selesai',
                 'percentage' => 100,
             ],
-            default => 'Status Produksi tidak diketahui',
+            default => [
+                'label' => 'Status Produksi Tidak Diketahui',
+                'percentage' => null,
+            ],
         };
     }
 }
