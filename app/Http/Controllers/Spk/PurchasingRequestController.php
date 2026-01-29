@@ -18,7 +18,7 @@ class PurchasingRequestController extends Controller
     {
         $this->authorize('update', PurchasingRequest::class);
 
-        $data = \App\Models\Spk\SpkMain::select('id', 'nomor_order', 'tipe_tagihan', 'customer', 'nomor_purchasing_request')
+        $data = \App\Models\Spk\SpkMain::select('id', 'nomor_order', 'tipe_tagihan', 'customer', 'nomor_purchasing_request', 'revision_count')
             ->findOrFail($id);
 
         if (! empty($data->nomor_purchasing_request)) {

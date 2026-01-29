@@ -79,7 +79,7 @@ final class ProductionTable extends PowerGridComponent
             ->add('nomor_order_formatted', function ($query) {
                 return view('components.dashboard.name-w-code', [
                     'code' => $query->spk->nomor_tagihan ?? 'Nomor tagihan belum ada.',
-                    'name' => $query->spk->nomor_order ?? '-',
+                    'name' => $query->spk->nomor_order.($query->spk->revision_count ? 'R'.str_pad($query->spk->revision_count, 2, '0', STR_PAD_LEFT) : ''),
                 ]);
             })
             ->add('assign_to')

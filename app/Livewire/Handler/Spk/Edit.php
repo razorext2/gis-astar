@@ -65,13 +65,16 @@ class Edit extends Component
         $this->createForm->nomor_order = $data->nomor_order;
         $this->createForm->tipe_bayar = $data->tipe_bayar;
         $this->createForm->tgl_cetak = $data->tgl_cetak;
-        $this->createForm->tgl_kirim = $data->tgl_kirim === 'SEGERA' ?? 1;
+        $this->createForm->tgl_kirim = $data->tgl_kirim === 'SEGERA' ? 1 : $data->tgl_kirim;
         $this->createForm->assign_to = $data->assign_to;
         $this->createForm->keterangan = $data->keterangan;
         $this->createForm->tipe_timbangan = $data->tipe_timbangan;
         $this->createForm->nomor_dokumen_penawaran = $data->nomor_dokumen_penawaran;
         $this->createForm->is_booked = $data->is_booked;
         $this->docForm->new_attachments = $data->documentations ?? [];
+
+        // untuk keperluan validasi
+        $this->createForm->spk_id = $data->id;
 
         $this->is_delayed = $data->on_delay;
         $this->delay_note = $data->on_delay_notes;
@@ -85,17 +88,17 @@ class Edit extends Component
         // data barang dengan _key
         $payload = [
             '_key' => (string) Str::uuid(),
-            'nama_barang' => $this->nama_barang,
-            'jumlah_unit' => $this->jumlah_unit,
-            'satuan_barang' => $this->satuan_barang,
-            'spesifikasi' => $this->spesifikasi,
+            'nama_barang' => $this->barangForm->nama_barang,
+            'jumlah_unit' => $this->barangForm->jumlah_unit,
+            'satuan_barang' => $this->barangForm->satuan_barang,
+            'spesifikasi' => $this->barangForm->spesifikasi,
         ];
 
-        if ($this->is_edit && $this->index_barang !== null) {
+        if ($this->is_edit && $this->barangForm->index_barang !== null) {
             // pertahankan _key lama saat edit
-            $payload['_key'] = $this->createForm->barang[$this->index_barang]['_key'];
+            $payload['_key'] = $this->createForm->barang[$this->barangForm->index_barang]['_key'];
 
-            $this->createForm->barang[$this->index_barang] = $payload;
+            $this->createForm->barang[$this->barangForm->index_barang] = $payload;
 
             $this->resetBarang();
 
@@ -216,9 +219,7 @@ class Edit extends Component
         $this->authorize('update', $this->data);
 
         // validasi form
-        foreach ($this->createForm->fieldToValidate() as $field) {
-            $this->createForm->validateOnly($field);
-        }
+        $this->createForm->validate();
 
         // assign data barang ke array
         $barangs = array_values($this->createForm->barang);
@@ -254,12 +255,19 @@ class Edit extends Component
                     'documentations' => $lampiran ?? [],
                 ];
 
+                $history_message = Auth::user()->name.' telah mengubah data SPK.';
+
                 // jika bukan user dengan permission spk-validate, reset approval
                 if (auth()->user()->cannot('spk-validate')) {
                     $data['status_approval'] = 0;
                     $data['approved_by'] = null;
                     $data['approved_at'] = null;
                     $data['catatan_approval'] = null;
+                    $data['revision_count'] = $this->data->revision_count + 1;
+                    $data['latest_revision_request_by'] = Auth::id();
+                    $data['latest_revision_request_detail'] = $this->createForm->revision_request_detail;
+
+                    $history_message = Auth::user()->name.' telah meminta approval kembali dikarenakan revisi: '.$this->createForm->revision_request_detail;
                 }
 
                 // jika status delay diaktifkan
@@ -275,7 +283,7 @@ class Edit extends Component
                 $this->createForm->generateHistory(
                     $this->data->id,
                     'SPK mengalami perubahan.',
-                    Auth::user()->name.' telah mengubah data SPK.',
+                    $history_message,
                     Auth::id(),
                 );
 

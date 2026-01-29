@@ -1,9 +1,9 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
     <div
-        class="flex flex-col gap-2 lg:gap-4 rounded-xl bg-white p-2 shadow-md border-[1px] border-gray-200 dark:bg-dark-primary dark:shadow-none dark:border-gray-700 lg:p-6 w-full ">
+        class="flex w-full flex-col gap-2 rounded-xl border-[1px] border-gray-200 bg-white p-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
 
-        <div class="flex flex-row gap-2 lg:gap-4 items-center">
+        <div class="flex flex-row items-center gap-2 lg:gap-4">
 
             <div>
                 <x-button.link href="{{ route('purchasing-request.index') }}"
@@ -15,14 +15,14 @@
                 </x-button.link>
             </div>
 
-            <div class="w-full gap-0.5 p-2 lg:p-0 flex flex-col">
-                <h3 class="text-lg dark:text-white font-semibold text-gray-800">Purchasing Request
-                    {{ $data->nomor_order ?? 'N/A' }}
+            <div class="flex w-full flex-col gap-0.5 p-2 lg:p-0">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Purchasing Request
+                    {{ $data->nomor_order . ($data->revision_count ? 'R' . str_pad($data->revision_count, 2, '0', STR_PAD_LEFT) : '') }}
                 </h3>
-                <h4 class="uppercase text-sm font-semibold dark:text-white text-gray-800">
+                <h4 class="text-sm font-semibold uppercase text-gray-800 dark:text-white">
                     {{ $data->customer['nama_perusahaan' ?? 'N/A'] }}
                 </h4>
-                <p class="text-sm dark:text-gray-400 text-gray-600">
+                <p class="text-sm text-gray-600 dark:text-gray-400">
                     Update nomor PR terlebih dahulu agar laporan produksi dapat diupdate oleh team produksi.
                 </p>
             </div>
@@ -33,17 +33,17 @@
 
             </div>
 
-            {{-- @if(count($data) > 0) --}}
-            <div class="col-span-2 relative max-w-full overflow-x-auto rounded-lg">
-                <table class="min-w-max text-sm w-full text-left text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            {{-- @if (count($data) > 0) --}}
+            <div class="relative col-span-2 max-w-full overflow-x-auto rounded-lg">
+                <table class="w-full min-w-max text-left text-sm text-gray-500 dark:text-gray-400">
+                    <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" class="px-6 text-center py-3 w-fit">#</th>
-                            <th scope="col" class="px-6 text-center py-3 w-[200px]">Kode Item</th>
-                            <th scope="col" class="px-6 text-center py-3 w-[300px]">Nama Item</th>
-                            <th scope="col" class="px-6 text-center py-3 w-[150px]">Jlh Brg</th>
-                            <th scope="col" class="px-6 text-center py-3 ">Rencana Gudang Penerima</th>
-                            <th scope="col" class="px-6 text-center py-3 ">Keterangan</th>
+                            <th scope="col" class="w-fit px-6 py-3 text-center">#</th>
+                            <th scope="col" class="w-[200px] px-6 py-3 text-center">Kode Item</th>
+                            <th scope="col" class="w-[300px] px-6 py-3 text-center">Nama Item</th>
+                            <th scope="col" class="w-[150px] px-6 py-3 text-center">Jlh Brg</th>
+                            <th scope="col" class="px-6 py-3 text-center">Rencana Gudang Penerima</th>
+                            <th scope="col" class="px-6 py-3 text-center">Keterangan</th>
                         </tr>
                     </thead>
 
@@ -51,8 +51,8 @@
                     <tbody>
                         @forelse ($data->purchasingRequests as $index => $row)
                             <tr
-                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                <td class="px-6 py-4 text-center ">
+                                class="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
+                                <td class="px-6 py-4 text-center">
                                     <span>{{ $index + 1 ?? '-' }}</span>
                                 </td>
                                 <td class="px-6 py-4 text-center">
@@ -62,7 +62,7 @@
                                     {{ $row->nama_item ?? '-' }}
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    {{ $row->jumlah_item_dipesan ?? '-' }} {{  $row->satuan ?? '-' }}
+                                    {{ $row->jumlah_item_dipesan ?? '-' }} {{ $row->satuan ?? '-' }}
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     {{ $row->lokasi_gudang_terima ?? '-' }}
@@ -73,7 +73,7 @@
                             </tr>
                         @empty
                             <tr
-                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                class="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
                                 <td colspan="6" class="px-6 py-4 text-center">Tidak ada data yang ditemukan.</td>
                             </tr>
                         @endforelse

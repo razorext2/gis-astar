@@ -14,7 +14,9 @@
 
             <div>
                 <p class="text-xl font-semibold text-gray-900 dark:bg-dark-primary dark:text-white">
-                    Update Packing List {{ $data->spk->nomor_order }} <span class="text-sm uppercase italic">(
+                    Update Packing List
+                    {{ $data->spk->nomor_order . ($data->spk->revision_count ? 'R' . str_pad($data->spk->revision_count, 2, '0', STR_PAD_LEFT) : '') }}
+                    <span class="text-sm uppercase italic">(
                         {{ $data->spk->customer['nama_perusahaan'] }}
                         )</span>
                 </p>

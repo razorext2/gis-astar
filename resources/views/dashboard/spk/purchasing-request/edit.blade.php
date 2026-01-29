@@ -1,9 +1,9 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
     <div
-        class="flex flex-col gap-2 lg:gap-4 rounded-xl bg-white p-2 shadow-md border-[1px] border-gray-200 dark:bg-dark-primary dark:shadow-none dark:border-gray-700 lg:p-6 w-full ">
+        class="flex w-full flex-col gap-2 rounded-xl border-[1px] border-gray-200 bg-white p-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
 
-        <div class="flex flex-row gap-2 lg:gap-4 items-center">
+        <div class="flex flex-row items-center gap-2 lg:gap-4">
 
             <div>
                 <x-button.link href="{{ route('purchasing-request.index') }}"
@@ -15,14 +15,14 @@
                 </x-button.link>
             </div>
 
-            <div class="w-full gap-0.5 p-2 lg:p-0 flex flex-col">
-                <h3 class="text-lg dark:text-white font-semibold text-gray-800">Purchasing Request
-                    {{ $data->nomor_order ?? 'N/A' }}
+            <div class="flex w-full flex-col gap-0.5 p-2 lg:p-0">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Purchasing Request
+                    {{ $data->nomor_order . ($data->revision_count ? 'R' . str_pad($data->revision_count, 2, '0', STR_PAD_LEFT) : '') }}
                 </h3>
-                <h4 class="uppercase text-sm font-semibold dark:text-white text-gray-800">
+                <h4 class="text-sm font-semibold uppercase text-gray-800 dark:text-white">
                     {{ $data->customer['nama_perusahaan' ?? 'N/A'] }}
                 </h4>
-                <p class="text-sm dark:text-gray-400 text-gray-600">
+                <p class="text-sm text-gray-600 dark:text-gray-400">
                     Update nomor PR terlebih dahulu agar laporan produksi dapat diupdate oleh team produksi.
                 </p>
             </div>

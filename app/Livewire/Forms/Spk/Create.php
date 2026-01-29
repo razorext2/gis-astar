@@ -6,10 +6,13 @@ use App\Models\Spk\SpkMain;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Livewire\Form;
 
 class Create extends Form
 {
+    public ?string $spk_id = null;
+
     public ?string $nama_customer;
 
     public ?string $no_telp;
@@ -36,6 +39,8 @@ class Create extends Form
 
     public ?string $keterangan;
 
+    public ?string $revision_request_detail;
+
     public ?int $assign_to = null;
 
     public ?int $status_nomor_tagihan = 0;
@@ -46,7 +51,7 @@ class Create extends Form
 
     protected function rules(): array
     {
-        return [
+        $rules = [
             'nama_customer' => 'required|max:255|string',
             'no_telp' => 'nullable|max:255|string',
             'contact_person' => 'nullable|max:255|string',
@@ -65,6 +70,27 @@ class Create extends Form
             'assign_to' => 'required_if:is_booked,false|nullable|integer',
             'is_booked' => 'boolean',
         ];
+
+        if ($this->spk_id) {
+            $rules['nomor_order'] = [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('tb_spk', 'nomor_order')
+                    ->ignore($this->spk_id),
+            ];
+
+            if (auth()->user()->cannot('spk_validate')) {
+                $rules['revision_request_detail'] = [
+                    'required',
+                    'string',
+                    'min:10',
+                    'max:255',
+                ];
+            }
+        }
+
+        return $rules;
     }
 
     protected array $messages = [
@@ -322,26 +348,5 @@ class Create extends Form
             'keterangan' => $desc,
             'added_by' => $userId,
         ]);
-    }
-
-    public function fieldToValidate(): array
-    {
-        return [
-            'nomor_dokumen_penawaran',
-            'nama_customer',
-            'alamat_customer',
-            'contact_person',
-            'no_telp',
-            'tipe_timbangan',
-            'barang.*',
-            'tipe_tagihan',
-            'status_nomor_tagihan',
-            'nomor_tagihan',
-            'tipe_bayar',
-            'tgl_cetak',
-            'tgl_kirim',
-            'keterangan',
-            'assign_to',
-        ];
     }
 }

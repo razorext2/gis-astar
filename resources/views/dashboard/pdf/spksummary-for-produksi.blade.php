@@ -76,7 +76,9 @@
             <tr>
                 <td width="20%">Nomor</td>
                 <td width="5%">:</td>
-                <td>{{ $data->nomor_order ?? '-' }}</td>
+                <td>
+                    {{ $data->nomor_order . ($data->revision_count ? 'R' . str_pad($data->revision_count, 2, '0', STR_PAD_LEFT) : '') }}
+                </td>
                 <td width="50%" class="text-right">Lembaran _</td>
             </tr>
             <tr>

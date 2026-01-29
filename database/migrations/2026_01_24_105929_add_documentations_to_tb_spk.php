@@ -24,6 +24,7 @@ return new class extends Migration
             $table->boolean('is_booked')
                 ->after('production_has_download_spk_pdf_at')
                 ->default(false)
+                ->index()
                 ->comment('menandakan nomor spk statusnya dibook atau tidak');
             $table->dateTime('booked_at')
                 ->after('is_booked')
@@ -45,11 +46,14 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('tb_spk', function (Blueprint $table) {
-            $table->dropColumn('nomor_dokumen_penawaran');
-            $table->dropColumn('documentations');
-            $table->dropColumn('is_booked');
-            $table->dropColumn('booked_at');
-            $table->dropColumn('booked_by');
+            $table->dropIndex(['nomor_dokumen_penawaran', 'is_booked']);
+            $table->dropConstrainedForeignId('booked_by');
+            $table->dropColumn([
+                'nomor_dokumen_penawaran',
+                'documentations',
+                'is_booked',
+                'booked_at',
+            ]);
         });
     }
 };

@@ -24,6 +24,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('tb_packing_list_kit', function (Blueprint $table) {
+            $table->dropIndex('id_barang_produksi');
             $table->dropColumn('id_barang_produksi');
         });
     }

@@ -49,6 +49,9 @@ class SpkMain extends Model
         'is_booked',
         'booked_at',
         'booked_by',
+        'revision_count',
+        'latest_revision_request_by',
+        'latest_revision_request_detail',
     ];
 
     protected $casts = [

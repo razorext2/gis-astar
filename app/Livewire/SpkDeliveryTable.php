@@ -17,7 +17,9 @@ final class SpkDeliveryTable extends PowerGridComponent
 
     public function setUp(): array
     {
-        $this->showCheckBox();
+        if (auth()->user()->can('spk-validate')) {
+            $this->showCheckBox();
+        }
 
         return [
             PowerGrid::header()
@@ -47,7 +49,7 @@ final class SpkDeliveryTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             ->add('id_formatted', fn ($query, $index) => $index + 1)
-            ->add('nomor_order')
+            ->add('nomor_order', fn ($query) => $query->nomor_order.($query->revision_count ? 'R'.str_pad($query->revision_count, 2, '0', STR_PAD_LEFT) : ''))
             ->add('tipe_tagihan')
             ->add('nomor_tagihan')
             ->add('nomor_tagihan_formatted', function ($query) {

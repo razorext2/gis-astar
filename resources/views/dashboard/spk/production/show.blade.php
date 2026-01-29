@@ -16,7 +16,9 @@
 
             <div>
                 <p class="text-xl font-semibold text-gray-900 dark:bg-dark-primary dark:text-white">
-                    Laporan Progres Produksi {{ $data->spk->nomor_order }} <span class="text-sm uppercase italic">(
+                    Laporan Progres Produksi
+                    {{ $data->spk->nomor_order . ($data->spk->revision_count ? 'R' . str_pad($data->spk->revision_count, 2, '0', STR_PAD_LEFT) : '') }}
+                    <span class="text-sm uppercase italic">(
                         {{ $data->spk->customer['nama_perusahaan'] }}
                         )</span>
                 </p>
@@ -36,7 +38,8 @@
                 <p class="text-xs italic">Nomor Order </p>
                 <div class="flex flex-col gap-y-2 font-semibold">
                     <div class="flex items-center gap-x-2">
-                        <p> {{ $data->spk->nomor_order }} </p>
+                        <p> {{ $data->spk->nomor_order . ($data->spk->revision_count ? 'R' . str_pad($data->spk->revision_count, 2, '0', STR_PAD_LEFT) : '') }}
+                        </p>
 
                         @php
                             $color = match ($data->spk->status_approval) {
@@ -52,6 +55,15 @@
                             class="bg-{{ $color }}-500 text-{{ $color }}-700 rounded-full px-2 py-1 text-xs">
                             {{ $data->spk->status_approval_description }} </span>
                     </div>
+
+                    @if ($data->spk->latest_revision_request_detail)
+                        <p class="text-sm font-light text-red-500">
+                            <span class="font-semibold tracking-wide text-gray-600 dark:text-gray-100">
+                                Revisi Terakhir:
+                            </span>
+                            {{ $data->spk->latest_revision_request_detail }}
+                        </p>
+                    @endif
                 </div>
             </div>
 

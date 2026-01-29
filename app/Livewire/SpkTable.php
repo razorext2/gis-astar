@@ -81,7 +81,7 @@ final class SpkTable extends PowerGridComponent
             ->add('nomor_order_formatted', function ($query) {
                 return view('components.dashboard.name-w-code', [
                     'code' => strtoupper($query->tipe_tagihan).' ('.$query->tipe_bayar.')',
-                    'name' => $query->nomor_order,
+                    'name' => $query->nomor_order.($query->revision_count ? 'R'.str_pad($query->revision_count, 2, '0', STR_PAD_LEFT) : ''),
                     'item3' => $query->status_description,
                 ]);
             })

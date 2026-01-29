@@ -9,7 +9,9 @@
                 <p class="text-xs italic">Nomor Order </p>
                 <div class="flex flex-col gap-y-2 font-semibold">
                     <div class="flex items-center gap-x-2">
-                        <p> {{ $data->nomor_order }} </p>
+                        <p>
+                            {{ $data->nomor_order . ($data->revision_count ? 'R' . str_pad($data->revision_count, 2, '0', STR_PAD_LEFT) : '') }}
+                        </p>
 
                         @php
                             $color = match ($data->status_approval) {
@@ -38,6 +40,15 @@
                         <x-button.primary class="w-fit text-sm" id="btn-validate-spk" wire:click="validateSpk">
                             Validasi
                         </x-button.primary>
+                    @endif
+
+                    @if ($data->latest_revision_request_detail)
+                        <p class="text-sm font-light text-red-500">
+                            <span class="font-semibold tracking-wide text-gray-600 dark:text-gray-100">
+                                Revisi Terakhir:
+                            </span>
+                            {{ $data->latest_revision_request_detail }}
+                        </p>
                     @endif
                 </div>
             </div>

@@ -36,8 +36,8 @@
         </div>
 
         <div class="w-full">
-            <x-input.textarea id="alamat_customer" name="alamat_customer" wire:model="createForm.alamat_customer"
-                :labels="true" :textLabel="'Alamat Customer'" />
+            <x-input.textarea id="alamat_customer" placeholder="Ketik alamat customer..." name="alamat_customer"
+                wire:model="createForm.alamat_customer" :labels="true" :textLabel="'Alamat Customer'" />
 
             @error('createForm.alamat_customer')
                 <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
@@ -93,8 +93,9 @@
             </div>
 
             <div class="w-full">
-                <x-input.textarea id="spesifikasi" name="spesifikasi" wire:model="barangForm.spesifikasi" rows="8"
-                    :labels="true" :textLabel="'Spesifikasi'" />
+                <x-input.textarea id="spesifikasi" placeholder="Jelaskan spesifikasi barang atau produk..."
+                    name="spesifikasi" wire:model="barangForm.spesifikasi" rows="8" :labels="true"
+                    :textLabel="'Spesifikasi'" />
 
                 @error('barangForm.spesifikasi')
                     <span class="mt-2 text-xs text-red-500"> {{ $message }}</span>
@@ -292,7 +293,8 @@
         </div>
 
         <div class="col-span-2 w-full">
-            <x-input.textarea id="keterangan" name="keterangan" wire:model="createForm.keterangan" :labels="true"
+            <x-input.textarea placeholder="Jelaskan keterangan lain seperti garansi, masa pengerjaan, dan lain - lain."
+                id="keterangan" name="keterangan" wire:model="createForm.keterangan" :labels="true"
                 :rows="'10'" :textLabel="'Keterangan Lainnya'" />
 
             @error('createForm.keterangan')
@@ -501,6 +503,16 @@
             @enderror
         </div>
 
+        <div class="col-span-2 w-full">
+            <x-input.textarea placeholder="Silahkan deskripsikan perubahan data..." id="revision_request_detail"
+                name="revision_request_detail" wire:model="createForm.revision_request_detail" :labels="true"
+                :textLabel="'Catatan Perubahan'" rows="6" />
+
+            @error('createForm.revision_request_detail')
+                <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+            @enderror
+        </div>
+
     </div>
     {{-- end form info tambahan --}}
 
@@ -543,7 +555,11 @@
 
             <div x-show="onDelay">
                 <x-input.textarea id="delay_note" name="delay_note" wire:model="delay_note" :labels="true"
-                    :textLabel="'Catatan'" rows="6" />
+                    :textLabel="'Catatan'" placeholder="Jelaskan alasan delay..." rows="6" />
+
+                @error('delay_note')
+                    <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                @enderror
             </div>
 
         </div>
