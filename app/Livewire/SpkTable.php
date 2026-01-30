@@ -128,6 +128,7 @@ final class SpkTable extends PowerGridComponent
                 return implode('<br>', $list);
             })
             ->add('informasi_pengiriman')
+            ->add('added_by', fn ($query): mixed => $query->addedBy->name)
             ->add('informasi_pengiriman_formatted', function ($query) {
                 $data = $query->informasi_pengiriman;
 
@@ -148,7 +149,8 @@ final class SpkTable extends PowerGridComponent
                     1 => 'green',
                     2 => 'red',
                     3 => 'yellow',
-                    default => 'yellow'
+                    4 => 'red',
+                    default => 'gray'
                 };
 
                 $template = "
@@ -168,6 +170,13 @@ final class SpkTable extends PowerGridComponent
                     $template .= "
                         <span class='bg-blue-500 text-xs px-2.5 flex justify-center items-center py-1 text-blue-800 w-fit rounded-lg'>
                             Booked
+                        </span>";
+                }
+
+                if ($query->is_cancelled && $query->status_approval != 4) {
+                    $template .= "
+                        <span class='bg-yellow-500 text-xs px-2.5 flex justify-center items-center py-1 text-yellow-800 w-fit rounded-lg'>
+                            Request Pembatalan
                         </span>";
                 }
 
@@ -218,6 +227,8 @@ final class SpkTable extends PowerGridComponent
                 ->hidden(true),
 
             Column::make('Status Pengiriman', 'informasi_pengiriman_formatted'),
+
+            Column::make('Dibuat Oleh', 'added_by'),
         ];
     }
 
@@ -254,7 +265,7 @@ final class SpkTable extends PowerGridComponent
     {
         $button = [];
 
-        if ($this->user->can('spk-edit') && ($this->user->hasAnyRole(['Admin', 'Management']) || $this->user->id === $row->added_by)) {
+        if ($this->user->can('spk-edit') && ($this->user->hasAnyRole(['Admin', 'Management']) || $this->user->id === $row->added_by) && ($this->user->can('spk-validate') || $row->status_approval !== 4)) {
             $button[] = Button::make('edit')
                 ->slot('Edit')
                 ->id($row->id)

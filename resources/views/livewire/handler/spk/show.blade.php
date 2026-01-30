@@ -19,27 +19,46 @@
                                 1 => 'green',
                                 2 => 'red',
                                 3 => 'yellow',
-                                default => 'yellow',
+                                4 => 'red',
+                                default => 'gray',
                             };
                         @endphp
 
                         <span
-                            class="bg-{{ $color }}-500 text-{{ $color }}-700 rounded-full px-2 py-1 text-xs">
+                            class="bg-{{ $color }}-500 text-{{ $color }}-800 rounded-lg px-2 py-1 text-xs">
                             {{ $data->status_approval_description }}
                         </span>
 
                         @if ($data->is_booked)
                             <span
-                                class='flex w-fit items-center justify-center rounded-full bg-blue-500 px-2 py-1.5 text-xs text-blue-800'>
+                                class='flex w-fit items-center justify-center rounded-lg bg-blue-500 px-2 py-1.5 text-xs text-blue-800'>
                                 Booked
+                            </span>
+                        @endif
+
+                        @if ($data->is_cancelled && $data->cancel_request_validated_by === null)
+                            <span
+                                class='flex w-fit items-center justify-center rounded-lg bg-yellow-500 px-2 py-1.5 text-xs text-yellow-800'>
+                                Request Pembatalan
                             </span>
                         @endif
                     </div>
 
-                    @if ($data->status_approval != 1 && auth()->user()->can('spk-validate'))
+                    @if (
+                        $data->status_approval === 0 &&
+                            auth()->user()->can('spk-validate') &&
+                            ($data->is_booked == false && $data->is_cancelled == false))
                         <x-button.primary class="w-fit text-sm" id="btn-validate-spk" wire:click="validateSpk">
-                            Validasi
+                            Setujui SPK
                         </x-button.primary>
+                    @endif
+
+                    @if ($data->is_cancelled && auth()->user()->can('spk-validate') && $data->cancel_request_validated_by === null)
+                        <x-button.danger class="w-fit text-sm"
+                            wire:confirm.prompt="Apakah anda yakin ingin membatalkan SPK ini? SPK yang dibatalkan tidak dapat diproses lagi.\n\nKetik BATAL untuk mengkonfirmasi.|BATAL"
+                            id="btn-validate-spk" wire:click="cancelSpk">
+                            Setujui Pembatalan
+                        </x-button.danger>
                     @endif
 
                     @if ($data->latest_revision_request_detail)
@@ -48,6 +67,15 @@
                                 Revisi Terakhir:
                             </span>
                             {{ $data->latest_revision_request_detail }}
+                        </p>
+                    @endif
+
+                    @if ($data->is_cancelled && $data->cancel_request_reason)
+                        <p class="text-sm font-light text-red-500">
+                            <span class="font-semibold tracking-wide text-gray-600 dark:text-gray-100">
+                                Alasan Pembatalan:
+                            </span>
+                            {{ $data->cancel_request_reason }}
                         </p>
                     @endif
                 </div>
@@ -133,7 +161,7 @@
 
             <div
                 class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
-                <p class="text-xs italic"> Ditambah Oleh </p>
+                <p class="text-xs italic"> Dibuat Oleh </p>
                 <p class="font-semibold capitalize"> {{ $data->addedBy->name }}</p>
             </div>
 
@@ -144,9 +172,34 @@
             </div>
 
             <div
-                class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
-                <p class="text-xs italic"> Divalidasi Oleh </p>
-                <p class="font-semibold capitalize"> {{ $data->approvedBy->name ?? '-' }}</p>
+                class="col-span-2 flex flex-col gap-y-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
+                @if ($data->is_booked)
+                    <div>
+                        <p class="text-xs italic"> Dibooking Oleh </p>
+                        <p class="font-semibold capitalize"> {{ $data->bookedBy->name ?? '-' }}</p>
+                    </div>
+                @endif
+
+                <div>
+                    <p class="text-xs italic"> Divalidasi Oleh </p>
+                    <p class="font-semibold capitalize"> {{ $data->approvedBy->name ?? '-' }}</p>
+                </div>
+
+                @if ($data->is_cancelled)
+                    <div
+                        class="flex flex-col rounded-lg border border-red-500 bg-red-200 p-2 dark:bg-transparent lg:p-4">
+                        <div class="text-red-500">
+                            <p class="text-xs italic"> Dibatalkan Oleh </p>
+                            <p class="font-semibold capitalize"> {{ $data->cancelRequestBy->name ?? '-' }}</p>
+                        </div>
+
+                        <div>
+                            <p class="text-xs italic"> Pembatalan Divalidasi Oleh </p>
+                            <p class="font-semibold capitalize text-gray-800 dark:text-white">
+                                {{ $data->cancelRequestValidatedBy->name ?? '-' }}</p>
+                        </div>
+                    </div>
+                @endif
             </div>
 
             <div
@@ -255,7 +308,7 @@
                     :last="$loop->last" :ping="$item['status'] == $data->status" />
             @endforeach
 
-            @if ($data->on_delay)
+            @if ($data->on_delay && $data->status_approval !== 4)
                 <div
                     class="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center rounded-b-lg bg-red-500/75 text-white">
                     <div class="flex flex-col gap-1">
@@ -271,11 +324,28 @@
                     </div>
                 </div>
             @endif
+
+            @if ($data->status_approval === 4)
+                <div
+                    class="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center rounded-b-lg bg-red-500/75 text-white">
+                    <div class="flex flex-col gap-1">
+                        <p class="text-center text-sm">
+                            {{ $data->cancel_request_at }} (Divalidasi: {{ $data->cancel_request_validated_at }})
+                        </p>
+                        <p class="rounded-full bg-red-500 px-4 py-1 text-center font-semibold italic shadow-md">
+                            SPK Dibatalkan.
+                        </p>
+                        <p class="text-center text-sm">
+                            {{ $data->cancel_request_reason }} (by: {{ $data->cancelRequestBy->name }})
+                        </p>
+                    </div>
+                </div>
+            @endif
         </div>
         {{-- end progress spk --}}
 
         {{-- download button --}}
-        @if ($data->status_approval === 1)
+        @if ($data->status_approval === 1 || auth()->user()->can('spk-validate'))
             <div
                 class="flex justify-center gap-x-1 rounded-b-lg bg-gray-50 p-2 text-center dark:bg-gray-700 lg:absolute lg:right-0 lg:top-0 lg:rounded-none lg:bg-transparent lg:p-0">
                 @can('spk-create')

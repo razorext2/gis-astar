@@ -6,7 +6,6 @@ use App\Livewire\Concerns\HandlesErrors;
 use App\Livewire\Forms\Spk\Attachment;
 use App\Livewire\Forms\Spk\Barang;
 use App\Livewire\Forms\Spk\Create as SpkCreate;
-use App\Models\Spk\SpkHistory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -30,7 +29,13 @@ class Edit extends Component
 
     public ?string $delay_note;
 
+    public ?string $cancel_note;
+
     public bool $is_delayed = false;
+
+    public bool $is_cancelled = false;
+
+    public bool $is_changed = false;
 
     public bool $is_edit = false;
 
@@ -75,9 +80,15 @@ class Edit extends Component
 
         // untuk keperluan validasi
         $this->createForm->spk_id = $data->id;
+        $this->createForm->status_approval = $data->status_approval;
 
+        // keperluan delay
         $this->is_delayed = $data->on_delay;
         $this->delay_note = $data->on_delay_notes;
+
+        // keperluan pembatalan
+        $this->is_cancelled = $data->is_cancelled;
+        $this->cancel_note = $data->cancel_request_reason;
     }
 
     public function storeBarang()
@@ -150,27 +161,12 @@ class Edit extends Component
 
     public function upBarang(int $index)
     {
-        $this->moveItem($index, $index - 1);
+        $this->createForm->moveItem($index, $index - 1);
     }
 
     public function downBarang(int $index)
     {
-        $this->moveItem($index, $index + 1);
-    }
-
-    protected function moveItem(int $from, int $to)
-    {
-        if (! isset($this->createForm->barang[$from]) || $to < 0 || $to >= count($this->createForm->barang)) {
-            return;
-        }
-
-        $item = $this->createForm->barang[$from];
-
-        unset($this->createForm->barang[$from]);
-
-        $this->createForm->barang = array_values($this->createForm->barang);
-
-        array_splice($this->createForm->barang, $to, 0, [$item]);
+        $this->createForm->moveItem($index, $index + 1);
     }
 
     public function storeLampiran()
@@ -253,21 +249,27 @@ class Edit extends Component
                     'booked_at' => $this->createForm->is_booked ? now() : null,
                     'booked_by' => $this->createForm->is_booked ? Auth::id() : null,
                     'documentations' => $lampiran ?? [],
+                    'is_cancelled' => $this->is_cancelled,
                 ];
 
+                $title = 'SPK mengalami perubahan.';
                 $history_message = Auth::user()->name.' telah mengubah data SPK.';
 
-                // jika bukan user dengan permission spk-validate, reset approval
-                if (auth()->user()->cannot('spk-validate')) {
+                // jika bukan user dengan permission spk-validate dan checkbox revisi diaktifkan, reset approval
+                if (auth()->user()->cannot('spk-validate') && $this->is_changed && $this->data->status_approval == 1) {
                     $data['status_approval'] = 0;
                     $data['approved_by'] = null;
                     $data['approved_at'] = null;
                     $data['catatan_approval'] = null;
-                    $data['revision_count'] = $this->data->revision_count + 1;
+
+                    // masukkan data permintaan revisi ke database
+                    // $data['revision_count'] = $this->data->revision_count + 1; // jangan tambah kalo blm divalidasi
+                    $data['is_revision'] = true;
                     $data['latest_revision_request_by'] = Auth::id();
                     $data['latest_revision_request_detail'] = $this->createForm->revision_request_detail;
 
-                    $history_message = Auth::user()->name.' telah meminta approval kembali dikarenakan revisi: '.$this->createForm->revision_request_detail;
+                    $title = 'SPK telah direvisi.';
+                    $history_message = Auth::user()->name.' telah meminta approval kembali dikarenakan telah mengubah: '.$this->createForm->revision_request_detail;
                 }
 
                 // jika status delay diaktifkan
@@ -275,6 +277,19 @@ class Edit extends Component
                     $data['on_delay_at'] = now();
                     $data['on_delay_notes'] = $this->delay_note;
                     $data['on_delay_by'] = Auth::id();
+
+                    $title = 'SPK mengalami delay.';
+                    $history_message = Auth::user()->name.' mengubah status SPK menjadi Delay karena: '.$this->delay_note;
+                }
+
+                // jika status dibatalkan
+                if ($this->is_cancelled) {
+                    $data['cancel_request_by'] = Auth::id();
+                    $data['cancel_request_reason'] = $this->cancel_note;
+                    $data['cancel_request_at'] = now();
+
+                    $title = 'SPK dibatalkan.';
+                    $history_message = Auth::user()->name.' membatalkan SPK karena: '.$this->cancel_note;
                 }
 
                 $this->data->update($data);
@@ -282,20 +297,10 @@ class Edit extends Component
                 // tambah history spk
                 $this->createForm->generateHistory(
                     $this->data->id,
-                    'SPK mengalami perubahan.',
+                    $title,
                     $history_message,
                     Auth::id(),
                 );
-
-                // tambah history spk untuk status delay
-                if ($this->is_delayed) {
-                    SpkHistory::create([
-                        'spk_id' => $this->data->id,
-                        'title' => 'SPK mengalami Delay.',
-                        'keterangan' => Auth::user()->name." mengubah status SPK menjadi Delay karena: $this->delay_note",
-                        'added_by' => Auth::id(),
-                    ]);
-                }
 
                 // refresh data
                 return $this->data->refresh();
@@ -316,6 +321,11 @@ class Edit extends Component
             'user_id' => Auth::id(),
         ]);
 
+    }
+
+    public function updatedIsChanged()
+    {
+        $this->createForm->is_changed = $this->is_changed;
     }
 
     public function render()

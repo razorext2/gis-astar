@@ -13,6 +13,10 @@ class Create extends Form
 {
     public ?string $spk_id = null;
 
+    public ?int $status_approval = null;
+
+    public ?bool $is_changed = false;
+
     public ?string $nama_customer;
 
     public ?string $no_telp;
@@ -39,7 +43,7 @@ class Create extends Form
 
     public ?string $keterangan;
 
-    public ?string $revision_request_detail;
+    public ?string $revision_request_detail = null;
 
     public ?int $assign_to = null;
 
@@ -80,7 +84,7 @@ class Create extends Form
                     ->ignore($this->spk_id),
             ];
 
-            if (auth()->user()->cannot('spk_validate')) {
+            if (auth()->user()->cannot('spk_validate') && $this->status_approval === 1 && $this->is_changed) {
                 $rules['revision_request_detail'] = [
                     'required',
                     'string',
@@ -348,5 +352,20 @@ class Create extends Form
             'keterangan' => $desc,
             'added_by' => $userId,
         ]);
+    }
+
+    public function moveItem(int $from, int $to)
+    {
+        if (! isset($this->barang[$from]) || $to < 0 || $to >= count($this->barang)) {
+            return;
+        }
+
+        $item = $this->barang[$from];
+
+        unset($this->barang[$from]);
+
+        $this->barang = array_values($this->barang);
+
+        array_splice($this->barang, $to, 0, [$item]);
     }
 }

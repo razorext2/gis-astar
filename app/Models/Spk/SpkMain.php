@@ -52,6 +52,12 @@ class SpkMain extends Model
         'revision_count',
         'latest_revision_request_by',
         'latest_revision_request_detail',
+        'is_cancelled',
+        'cancel_request_by',
+        'cancel_request_at',
+        'cancel_request_reason',
+        'cancel_request_validated_by',
+        'cancel_request_validated_at',
     ];
 
     protected $casts = [
@@ -108,6 +114,21 @@ class SpkMain extends Model
     public function bookedBy()
     {
         return $this->belongsTo(User::class, 'booked_by', 'id');
+    }
+
+    public function latesRevisionRequestBy()
+    {
+        return $this->belongsTo(User::class, 'latest_revision_request_by', 'id');
+    }
+
+    public function cancelRequestBy()
+    {
+        return $this->belongsTo(User::class, 'cancel_request_by', 'id');
+    }
+
+    public function cancelRequestValidatedBy()
+    {
+        return $this->belongsTo(User::class, 'cancel_request_validated_by', 'id');
     }
 
     public function invoice()
@@ -175,6 +196,7 @@ class SpkMain extends Model
             1 => 'Sudah Disetujui',
             2 => 'Ditolak',
             3 => 'Butuh Revisi',
+            4 => 'Dibatalkan',
             default => 'Status Approval tidak diketahui',
         };
     }
