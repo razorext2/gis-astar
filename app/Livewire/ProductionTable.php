@@ -6,6 +6,7 @@ use App\Models\Spk\Production;
 use Illuminate\Database\Eloquent\Builder;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
+use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
@@ -19,6 +20,8 @@ final class ProductionTable extends PowerGridComponent
     public bool $showFilters = false;
 
     public $user;
+
+    public ?string $tipe_timbangan = null;
 
     public function setUp(): array
     {
@@ -42,6 +45,12 @@ final class ProductionTable extends PowerGridComponent
         $query = Production::query()
             ->with(['spk', 'assignTo', 'productionHistories']);
 
+        if (! is_null($this->tipe_timbangan)) {
+            $query->whereHas('spk', function ($query) {
+                return $query->where('tipe_timbangan', $this->tipe_timbangan);
+            });
+        }
+
         if ($this->user->cannot('spk-create')) {
             $query->whereHas('spk', function ($query) {
                 return $query->where('status_approval', 1)
@@ -63,6 +72,7 @@ final class ProductionTable extends PowerGridComponent
         return [
             'spk' => [
                 'nomor_order',
+                'tipe_timbangan',
             ],
         ];
     }
@@ -80,7 +90,7 @@ final class ProductionTable extends PowerGridComponent
                 ]);
             })
             ->add('id_spk')
-            ->add('nomor_order', fn ($query) => $query->spk->nomor_order ?? '-')
+            ->add('nomor_order', fn ($query) => $query->spk->nomor_order)
             ->add('nomor_order_formatted', function ($query) {
                 return view('components.dashboard.name-w-code', [
                     'code' => $query->spk->nomor_tagihan ?? 'Nomor tagihan belum ada.',
@@ -150,7 +160,8 @@ final class ProductionTable extends PowerGridComponent
                 ]);
             })
             ->add('packing_list')
-            ->add('created_at');
+            ->add('created_at')
+            ->add('tipe_timbangan', fn ($query) => $query->spk->tipe_timbangan);
     }
 
     public function columns(): array
@@ -163,6 +174,7 @@ final class ProductionTable extends PowerGridComponent
             Column::make('Status SPK', 'status_spk', 'status_spk'),
             Column::make('Customer', 'customer_info'),
             Column::make('Assign to', 'assign_to_formatted', 'assign_to'),
+            Column::make('Tipe Timbangan', 'tipe_timbangan'),
             Column::make('Products', 'products_formatted'),
             Column::make('Status produksi', 'status_produksi_formatted', 'status_produksi'),
         ];
@@ -171,6 +183,18 @@ final class ProductionTable extends PowerGridComponent
     public function filters(): array
     {
         return [
+            Filter::select('tipe_timbangan', 'tipe_timbangan')
+                ->dataSource([
+                    ['value' => 'non timbangan jembatan', 'label' => 'Timbangan Lainnya'],
+                    ['value' => 'timbangan jembatan', 'label' => 'Timbangan Jembatan'],
+                ])
+                ->optionLabel('label')
+                ->optionValue('value')
+                ->builder(function ($builder, $value) {
+                    $builder->whereHas('spk', function ($q) use ($value) {
+                        $q->where('tipe_timbangan', $value);
+                    });
+                }),
         ];
     }
 

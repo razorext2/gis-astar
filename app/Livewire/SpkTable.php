@@ -27,6 +27,8 @@ final class SpkTable extends PowerGridComponent
 
     public $user;
 
+    public ?string $tipe_timbangan = null;
+
     public function setUp(): array
     {
         $this->user = auth()->user();
@@ -59,6 +61,10 @@ final class SpkTable extends PowerGridComponent
                 ->where('status_approval', 1);
         }
 
+        if (! is_null($this->tipe_timbangan)) {
+            $query->where('tipe_timbangan', $this->tipe_timbangan);
+        }
+
         return $query;
     }
 
@@ -78,6 +84,16 @@ final class SpkTable extends PowerGridComponent
             ->add('id')
             ->add('no', fn ($query, int $index) => $index + 1)
             ->add('nomor_order')
+            ->add('tipe_tagihan')
+            ->add('nomor_tagihan')
+            ->add('informasi_pengiriman')
+            ->add('status_approval')
+            ->add('on_delay')
+            ->add('is_booked')
+            ->add('status')
+            ->add('created_at')
+            ->add('tipe_timbangan')
+            ->add('added_by', fn ($query): mixed => $query->addedBy->name)
             ->add('nomor_order_formatted', function ($query) {
                 return view('components.dashboard.name-w-code', [
                     'code' => strtoupper($query->tipe_tagihan).' ('.$query->tipe_bayar.')',
@@ -85,8 +101,6 @@ final class SpkTable extends PowerGridComponent
                     'item3' => $query->status_description,
                 ]);
             })
-            ->add('tipe_tagihan')
-            ->add('nomor_tagihan')
             ->add('nomor_tagihan_formatted', function ($query) {
                 return view('components.dashboard.name-w-code', [
                     'code' => $query->status_nomor_tagihan_description,
@@ -127,8 +141,6 @@ final class SpkTable extends PowerGridComponent
 
                 return implode('<br>', $list);
             })
-            ->add('informasi_pengiriman')
-            ->add('added_by', fn ($query): mixed => $query->addedBy->name)
             ->add('informasi_pengiriman_formatted', function ($query) {
                 $data = $query->informasi_pengiriman;
 
@@ -142,7 +154,6 @@ final class SpkTable extends PowerGridComponent
                     'item3' => $data['estimated_time_arrival'] ?? '-',
                 ]);
             })
-            ->add('status_approval')
             ->add('status_approval_formatted', function ($query) {
                 $colors = match ($query->status_approval) {
                     0 => 'yellow',
@@ -183,11 +194,7 @@ final class SpkTable extends PowerGridComponent
                 $template .= '</div>';
 
                 return $template;
-            })
-            ->add('on_delay')
-            ->add('is_booked')
-            ->add('status')
-            ->add('created_at');
+            });
     }
 
     public function columns(): array
@@ -219,6 +226,8 @@ final class SpkTable extends PowerGridComponent
                 ->searchable()
                 ->searchableRaw("JSON_UNQUOTE(JSON_EXTRACT($table.customer, '$.nama_perusahaan')) LIKE ?")
                 ->searchableRaw("JSON_UNQUOTE(JSON_EXTRACT($table.customer, '$.contact_person')) LIKE ?"),
+
+            Column::make('Tipe Timbangan', 'tipe_timbangan'),
 
             Column::make('Delay', 'on_delay')
                 ->hidden(true),
@@ -258,6 +267,13 @@ final class SpkTable extends PowerGridComponent
                 ->label('Delayed', 'Not Delayed'),
             Filter::boolean('is_booked', 'is_booked')
                 ->label('Booked', 'Not Booked'),
+            Filter::select('tipe_timbangan', 'tipe_timbangan')
+                ->dataSource([
+                    ['value' => 'non timbangan jembatan', 'label' => 'Timbangan Lainnya'],
+                    ['value' => 'timbangan jembatan', 'label' => 'Timbangan Jembatan'],
+                ])
+                ->optionLabel('label')
+                ->optionValue('value'),
         ];
     }
 
