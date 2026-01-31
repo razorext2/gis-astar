@@ -291,8 +291,8 @@ class Index extends Component
             [
                 'laporanFondasi' => $data,
                 'laporanFondasiLastProgress' => [
-                    'value' => $lastLaporanFondasi?->status_pengerjaan ?? 0,
-                    'description' => $lastLaporanFondasi?->status_pengerjaan_description ?? 'Belum ada progres.',
+                    'value' => $data->last()?->status_pengerjaan ?? 0,
+                    'description' => $data->last()?->status_pengerjaan_description ?? 'Belum ada progres.',
                 ],
             ]);
     }
