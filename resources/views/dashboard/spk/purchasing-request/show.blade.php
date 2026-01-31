@@ -28,13 +28,10 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-2 lg:gap-4" wire:submit.prevent="assign">
-            <div class="col-span-2">
-
-            </div>
+        <div class="grid w-full gap-2 lg:gap-4">
 
             {{-- @if (count($data) > 0) --}}
-            <div class="relative col-span-2 max-w-full overflow-x-auto rounded-lg">
+            <div class="relative overflow-x-auto rounded-lg">
                 <table class="w-full min-w-max text-left text-sm text-gray-500 dark:text-gray-400">
                     <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
@@ -81,6 +78,11 @@
 
                 </table>
             </div>
+            @can('purchasing-request-update')
+                @if ($data->purchasingRequests->count() > 0)
+                    @livewire('handler.spk.unassign-purchasing-request', ['id' => $data->id])
+                @endif
+            @endcan
 
         </div>
     </div>

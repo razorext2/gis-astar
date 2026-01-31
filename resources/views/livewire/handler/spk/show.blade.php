@@ -336,7 +336,7 @@
                             SPK Dibatalkan.
                         </p>
                         <p class="text-center text-sm">
-                            {{ $data->cancel_request_reason }} (by: {{ $data->cancelRequestBy->name }})
+                            {{ $data->cancel_request_reason }} (by: {{ $data->cancelRequestBy?->name }})
                         </p>
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-<form class="grid grid-cols-2 gap-2 lg:gap-4" wire:submit.prevent="assign">
+<div class="grid grid-cols-2 gap-2 lg:gap-4">
     <div class="col-span-2">
         <div class="flex w-full flex-row items-center gap-2">
             <div class="w-full">
@@ -80,9 +80,10 @@
     </div>
 
     <div class="col-span-2 flex w-full flex-row justify-end">
-        <x-button.primary id="assign-pr" type="submit">
+        <x-button.primary id="assign-pr" wire:click="assign" type="button"
+            wire:confirm.prompt="Anda yakin ingin assign PR untuk SPK ini? Periksa item yang akan di assign.\n\nJika sudah yakin, ketik ASSIGN untuk mengkonfirmasi.|ASSIGN">
             Assign PR
         </x-button.primary>
     </div>
     {{-- @endif --}}
-</form>
+</div>
