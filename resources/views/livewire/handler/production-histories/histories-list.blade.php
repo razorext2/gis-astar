@@ -42,7 +42,7 @@
                     @if (count($row->documentations) > 0)
                         <div class="mt-2 flex w-full flex-row gap-2 overflow-x-auto">
                             @foreach ($row->documentations as $i => $img)
-                                <img class="h-20 w-20 rounded-xl object-cover" id="documentations-{{ $i }}"
+                                <img class="h-20 w-20 rounded-xl object-cover" id="documentations"
                                     onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}';"
                                     data-url="{{ asset('storage/' . $img['path_file']) }}"
                                     src="{{ asset('storage/' . $img['path_file']) }}" alt=""

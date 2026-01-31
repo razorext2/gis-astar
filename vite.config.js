@@ -88,6 +88,7 @@ export default defineConfig({
 
                 // spk
                 "resources/js/pages/spk/show.js",
+                "resources/js/pages/spk/production-show.js",
             ],
             refresh: true,
         }),

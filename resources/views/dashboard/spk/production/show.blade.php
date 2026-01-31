@@ -194,4 +194,8 @@
             {{-- end history produksi --}}
         @endcan
     </div>
+
+    @push('script')
+        @vite('resources/js/pages/spk/show.js')
+    @endpush
 @endsection
