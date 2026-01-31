@@ -48,7 +48,7 @@ class LaporanFondasi extends Form
     #[Validate(
         rule: [
             'documentations' => ['required', 'array', 'min:1'],
-            'documentations.*' => 'image|mimes:jpg,jpeg,png|min:20|max:2048',
+            'documentations.*' => 'image|mimes:jpg,jpeg,png,heic,bmp|max:8192',
         ],
         message: [
             'documentations.required' => 'Kolom :attribute wajib diisi.',
@@ -56,8 +56,7 @@ class LaporanFondasi extends Form
             'documentations.min' => 'Minimal unggah satu :attribute.',
             'documentations.*.image' => 'Setiap :attribute harus berupa file gambar.',
             'documentations.*.mimes' => 'Format :attribute harus jpg, jpeg, atau png.',
-            'documentations.*.min' => 'Ukuran :attribute minimal 20KB per file.',
-            'documentations.*.max' => 'Ukuran :attribute maksimal 2MB per file.',
+            'documentations.*.max' => 'Ukuran :attribute maksimal 8MB per file.',
         ],
         attribute: [
             'documentations' => 'dokumentasi',
@@ -68,13 +67,12 @@ class LaporanFondasi extends Form
 
     #[Validate(
         rule: [
-            'newDocumentations.*' => 'image|mimes:jpg,jpeg,png|min:20|max:2048',
+            'newDocumentations.*' => 'image|mimes:jpg,jpeg,png|max:8192',
         ],
         message: [
             'newDocumentations.*.image' => 'Setiap :attribute harus berupa file gambar.',
             'newDocumentations.*.mimes' => 'Format :attribute harus jpg, jpeg, atau png.',
-            'newDocumentations.*.min' => 'Ukuran :attribute minimal 20KB per file.',
-            'newDocumentations.*.max' => 'Ukuran :attribute maksimal 2MB per file.',
+            'newDocumentations.*.max' => 'Ukuran :attribute maksimal 8MB per file.',
         ],
         attribute: [
             'newDocumentations' => 'dokumentasi',
