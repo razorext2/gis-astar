@@ -85,6 +85,9 @@ export default defineConfig({
 
                 // invoice
                 "resources/js/pages/invoice/detail.js",
+
+                // spk
+                "resources/js/pages/spk/show.js",
             ],
             refresh: true,
         }),
