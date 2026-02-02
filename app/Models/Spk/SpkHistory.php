@@ -18,6 +18,11 @@ class SpkHistory extends Model
         'added_by',
     ];
 
+    public function spk()
+    {
+        return $this->belongsTo(SpkMain::class, 'spk_id', 'id');
+    }
+
     public function addedBy()
     {
         return $this->belongsTo(\App\Models\User::class, 'added_by', 'id');

@@ -266,82 +266,7 @@
         {{-- end informasi spk --}}
 
         {{-- progress spk --}}
-        <div
-            class="{{ $data->on_delay ? 'overflow-hidden' : 'overflow-x-scroll' }} relative flex w-full flex-row items-center gap-2 dark:text-white">
-            @php
-                $status = [
-                    [
-                        'status' => 0,
-                        'desc' => 'SPK telah dibuat',
-                        'icon' => 'spk-selesai.webp',
-                    ],
-                    [
-                        'status' => 1,
-                        'desc' => 'Dalam proses produksi',
-                        'icon' => 'diproduksi.webp',
-                    ],
-                    [
-                        'status' => 2,
-                        'desc' => 'Dalam proses pengiriman',
-                        'icon' => 'dikirim.webp',
-                    ],
-                    [
-                        'status' => 3,
-                        'desc' => 'Dalam proses penagihan',
-                        'icon' => 'penagihan.webp',
-                    ],
-                    [
-                        'status' => 4,
-                        'desc' => 'Dalam proses pemasangan',
-                        'icon' => 'pemasangan.webp',
-                    ],
-                    [
-                        'status' => 5,
-                        'desc' => 'Selesai',
-                        'icon' => 'selesai.webp',
-                    ],
-                ];
-            @endphp
-
-            @foreach ($status as $item)
-                <x-icons.spk-delivery-status :desc="$item['desc']" :itemstatus="$item['status']" :status="$data->status" :icon="$item['icon']"
-                    :last="$loop->last" :ping="$item['status'] == $data->status" />
-            @endforeach
-
-            @if ($data->on_delay && $data->status_approval !== 4)
-                <div
-                    class="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center rounded-b-lg bg-red-500/75 text-white">
-                    <div class="flex flex-col gap-1">
-                        <p class="text-center text-sm">
-                            {{ $data->on_delay_at }}
-                        </p>
-                        <p class="rounded-full bg-red-500 px-4 py-1 text-center font-semibold italic shadow-md">
-                            SPK mengalami delay.
-                        </p>
-                        <p class="text-center text-sm">
-                            {{ $data->on_delay_notes }} (by: {{ $data->onDelayBy->name }})
-                        </p>
-                    </div>
-                </div>
-            @endif
-
-            @if ($data->status_approval === 4)
-                <div
-                    class="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center rounded-b-lg bg-red-500/75 text-white">
-                    <div class="flex flex-col gap-1">
-                        <p class="text-center text-sm">
-                            {{ $data->cancel_request_at }} (Divalidasi: {{ $data->cancel_request_validated_at }})
-                        </p>
-                        <p class="rounded-full bg-red-500 px-4 py-1 text-center font-semibold italic shadow-md">
-                            SPK Dibatalkan.
-                        </p>
-                        <p class="text-center text-sm">
-                            {{ $data->cancel_request_reason }} (by: {{ $data->cancelRequestBy?->name }})
-                        </p>
-                    </div>
-                </div>
-            @endif
-        </div>
+        @livewire('utils.progres-spk', ['id' => $data->id])
         {{-- end progress spk --}}
 
         {{-- download button --}}
@@ -367,54 +292,7 @@
     </div>
 
     @can('spk-history')
-        {{-- riwayat spk --}}
-        <section class="rounded-lg text-gray-800 ring-1 ring-gray-200 dark:text-white dark:ring-gray-700 lg:gap-4">
-
-            <div
-                class="{{ $showRiwayatSpk ? 'rounded-t-lg' : 'rounded-lg' }} flex flex-row items-center justify-between p-2.5 transition-all duration-500 ease-in-out hover:cursor-pointer hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-800">
-                <h3 class="text-lg font-[900] text-red-600 dark:text-white">
-                    Riwayat SPK
-                </h3>
-
-                <div>
-                    <x-button.primary class="w-fit" wire:click="$toggle('showRiwayatSpk')">
-                        <x-icons.carred-down
-                            class="{{ $showRiwayatSpk ? 'rotate-180' : '' }} h-5 w-5 transition-all duration-300 ease-in-out dark:text-white" />
-                    </x-button.primary>
-                </div>
-            </div>
-
-            @if ($showRiwayatSpk)
-                <div class="flex flex-col gap-2 p-2 lg:gap-4 lg:p-4">
-                    @forelse ($spkHistories as $row)
-                        <div class="border-b border-gray-200 p-1 text-gray-800 dark:border-gray-600 dark:text-white">
-                            <div class="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-8">
-                                <div class="text-right text-xs lg:text-left">
-                                    <p>
-                                        Pukul {{ \Carbon\Carbon::parse($row->created_at)->isoFormat('hh:mm:ss') }}</p>
-                                    <p>
-                                        {{ \Carbon\Carbon::parse($row->created_at)->isoFormat('dddd, DD MMM YYYY') }}</p>
-                                </div>
-
-                                <div>
-                                    <h4 class="text-base font-semibold"> {{ $row->title }} </h4>
-                                    <p class="text-sm"> {{ $row->keterangan }} </p>
-                                </div>
-                            </div>
-
-                            <p class="text-right text-xs italic">Oleh: {{ $row->addedBy->name }}</p>
-                        </div>
-                    @empty
-                        <p class="text-center text-sm">
-                            Belum ada riwayat SPK.
-                        </p>
-                    @endforelse
-
-                    {{ $spkHistories->links(data: ['scrollTo' => false]) }}
-                </div>
-            @endif
-        </section>
-        {{-- end riwayat spk --}}
+        @livewire('handler.spk.spk-histories', ['id' => $data->id])
     @endcan
 
     {{-- laporan fondasi --}}

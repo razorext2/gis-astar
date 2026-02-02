@@ -491,61 +491,65 @@
     </div>
     {{-- end form info tambahan --}}
 
-    <div class="w-full" id="accordion-packing-form" x-data="{ accordionOpen: $wire.is_changed, isChanged: $wire.is_changed }">
-        <button type="button"
-            class="flex w-full items-center justify-between gap-3 rounded-lg border border-gray-200 bg-green-200 p-5 font-medium text-gray-500 shadow-md transition-all duration-300 ease-in-out hover:bg-blue-100 dark:border-gray-600 dark:bg-dark-primary dark:text-gray-400 dark:shadow-none dark:hover:bg-gray-800"
-            @click="accordionOpen = !accordionOpen" :class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
-            <span class="flex flex-col text-left">
-                <h3 class="text-base font-semibold text-green-600 dark:text-green-500">
-                    SPK Mengalami Perubahan?
-                </h3>
-                <p class="block text-sm font-medium text-gray-600 dark:text-gray-400">
-                    Klik untuk menambahkan detail jika SPK mengalami perubahan.
-                </p>
-            </span>
+    @if ($data->status_approval === 1)
+        <div class="w-full" id="accordion-packing-form" x-data="{ accordionOpen: $wire.is_changed, isChanged: $wire.is_changed }">
+            <button type="button"
+                class="flex w-full items-center justify-between gap-3 rounded-lg border border-gray-200 bg-green-200 p-5 font-medium text-gray-500 shadow-md transition-all duration-300 ease-in-out hover:bg-blue-100 dark:border-gray-600 dark:bg-dark-primary dark:text-gray-400 dark:shadow-none dark:hover:bg-gray-800"
+                @click="accordionOpen = !accordionOpen" :class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
+                <span class="flex flex-col text-left">
+                    <h3 class="text-base font-semibold text-green-600 dark:text-green-500">
+                        SPK Mengalami Perubahan?
+                    </h3>
+                    <p class="block text-sm font-medium text-gray-600 dark:text-gray-400">
+                        Klik untuk menambahkan detail jika SPK mengalami perubahan.
+                    </p>
+                </span>
 
-            <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
-                <x-icons.carred-down class="h-4 w-4" />
-            </span>
-        </button>
+                <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
+                    <x-icons.carred-down class="h-4 w-4" />
+                </span>
+            </button>
 
-        <div class="rounded-b-lg border border-gray-200 bg-white p-5 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none"
-            x-show="accordionOpen" x-collapse x-cloak>
+            <div class="rounded-b-lg border border-gray-200 bg-white p-5 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none"
+                x-show="accordionOpen" x-collapse x-cloak>
 
-            <div>
-                <label class="mb-5 inline-flex cursor-pointer items-center">
-                    <input type="checkbox" x-on:click="isChanged = !isChanged" wire:model.live="is_changed"
-                        value="" class="peer sr-only">
-                    <div
-                        class="peer relative h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full">
-                    </div>
-                    <span x-show="isChanged == true"
-                        class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                        SPK Mengalami Perubahan
-                    </span>
-                    <span x-show="isChanged == false"
-                        class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                        SPK Tidak Mengalami Perubahan</span>
-                </label>
+                <div>
+                    <label class="mb-5 inline-flex cursor-pointer items-center">
+                        <input type="checkbox" x-on:click="isChanged = !isChanged" wire:model.live="is_changed"
+                            value="" class="peer sr-only">
+                        <div
+                            class="peer relative h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full">
+                        </div>
+                        <span x-show="isChanged == true"
+                            class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                            SPK Mengalami Perubahan
+                        </span>
+                        <span x-show="isChanged == false"
+                            class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                            SPK Tidak Mengalami Perubahan</span>
+                    </label>
 
-                <p class="mb-2 text-xs italic text-gray-600 dark:text-gray-400">
-                    *Perubahan meliputi berubahnya spesifikasi produk yang dipesan, penambahan item/produk, perubahan
-                    informasi customer, dan lain - lain yang dapat dikonfirmasi terlebih dahulu ke Manajemen.
-                </p>
+                    <p class="mb-2 text-xs italic text-gray-600 dark:text-gray-400">
+                        *Perubahan meliputi berubahnya spesifikasi produk yang dipesan, penambahan item/produk,
+                        perubahan
+                        informasi customer, dan lain - lain yang dapat dikonfirmasi terlebih dahulu ke Manajemen.
+                    </p>
+                </div>
+
+                <div x-show="isChanged">
+                    <x-input.textarea placeholder="Silahkan deskripsikan perubahan data..."
+                        id="revision_request_detail" name="revision_request_detail"
+                        wire:model="createForm.revision_request_detail" :labels="true" :textLabel="'Catatan Perubahan'"
+                        rows="6" />
+
+                    @error('createForm.revision_request_detail')
+                        <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
+
             </div>
-
-            <div x-show="isChanged">
-                <x-input.textarea placeholder="Silahkan deskripsikan perubahan data..." id="revision_request_detail"
-                    name="revision_request_detail" wire:model="createForm.revision_request_detail" :labels="true"
-                    :textLabel="'Catatan Perubahan'" rows="6" />
-
-                @error('createForm.revision_request_detail')
-                    <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
-                @enderror
-            </div>
-
         </div>
-    </div>
+    @endif
 
     {{-- accordion delay SPK --}}
     <div class="w-full" id="accordion-packing-form" x-data="{ accordionOpen: $wire.is_delayed, onDelay: $wire.is_delayed }">

@@ -8,28 +8,19 @@ use App\Models\Spk\SpkMain;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
-use Livewire\WithPagination;
 
 class Show extends Component
 {
-    use HandlesErrors, WithPagination;
+    use HandlesErrors;
 
     public ?string $id;
 
-    public ?bool $showRiwayatSpk = false;
-
     public $data = null;
 
-    public function construct($id)
+    public function mount($id)
     {
-        // assign id
-        $this->id = $id;
-    }
-
-    public function mount()
-    {
-        $this->data = SpkMain::with('addedBy', 'assignTo', 'updateBy', 'pengirimanUpdatedBy', 'noTagihanUpdatedBy', 'spkHistories')
-            ->findOrFail($this->id);
+        $this->data = SpkMain::with('addedBy', 'assignTo', 'updateBy', 'pengirimanUpdatedBy', 'noTagihanUpdatedBy')
+            ->findOrFail($id);
     }
 
     public function validateSpk()
@@ -138,8 +129,6 @@ class Show extends Component
 
     public function render()
     {
-        return view('livewire.handler.spk.show', [
-            'spkHistories' => $this->data->spkHistories()->latest()->paginate(5, pageName: 'spk-page'),
-        ]);
+        return view('livewire.handler.spk.show');
     }
 }
