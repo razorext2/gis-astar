@@ -27,7 +27,7 @@ class Create extends Form
 
     public ?string $tipe_timbangan = null;
 
-    public ?string $tipe_tagihan = 'idcppn';
+    public ?string $tipe_tagihan = null;
 
     public ?string $nomor_tagihan = null;
 

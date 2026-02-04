@@ -29,12 +29,6 @@ class Create extends Component
 
     public bool $is_edit = false;
 
-    public function mount()
-    {
-        // buat nomor order baru
-        $this->createForm->nomor_order = $this->createForm->makeNomorOrder($this->createForm->tipe_tagihan)['baru'];
-    }
-
     public function tambahBarang()
     {
         // validasi nama barang
@@ -219,7 +213,11 @@ class Create extends Component
 
     public function updatedCreateFormTipeTagihan()
     {
-        $this->createForm->nomor_order = $this->createForm->makeNomorOrder($this->createForm->tipe_tagihan)['baru'];
+        if (! in_array($this->createForm->tipe_tagihan, ['idcppn', 'idcnon'], true)) {
+            $this->createForm->nomor_order = null;
+        } else {
+            $this->createForm->nomor_order = $this->createForm->makeNomorOrder($this->createForm->tipe_tagihan)['baru'];
+        }
     }
 
     public function render()
