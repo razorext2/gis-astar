@@ -314,8 +314,9 @@
                         id="assign_to" name="assign_to" wire:model="createForm.assign_to">
                         <option value="">Pilih Produksi</option>
                         @forelse ($users as $row)
-                            <option value="{{ $row->id ?? '' }}">
-                                {{ $row->name ?? '' }}
+                            <option value="{{ $row->id }}">
+                                {{ $row->name }} - {{ $row->pegawai->jabatanRelasi->nama_jabatan }}
+                                ({{ $row->pegawai->jabatanRelasi?->placementRelasi?->penempatan }})
                             </option>
                         @empty
                             <option value="" disabled> Tidak ada data </option>
@@ -456,7 +457,7 @@
                     <div class="w-full">
                         <x-input.select id="attachment_type" name="attachment_type" :defaultOption="'Pilih Tipe Dokumen'"
                             :options="config('spk-config.tipe_dokumen')" :labels="true" :textLabel="'Tipe Dokumen'"
-                            wire:model.live="docForm.attachment_type" />
+                            wire:model="docForm.attachment_type" />
 
                         @error('docForm.attachment_type')
                             <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
