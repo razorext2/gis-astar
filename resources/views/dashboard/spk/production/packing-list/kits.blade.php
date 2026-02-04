@@ -47,7 +47,7 @@
                 @livewire('handler.production-histories.packing-list-kit', ['idbarang' => $barang['id_barang'], 'idspk' => $data->spk->id])
 
                 <div class="w-full">
-                    <h4 class="text-base font-semibold text-gray-800 dark:text-white">Daftar Peti</h4>
+                    <h4 class="mt-2 text-base font-semibold text-gray-800 dark:text-white lg:mt-4">Daftar Peti</h4>
 
                     @livewire('packing-list-kit-table', ['idbarang' => $barang['id_barang']])
                 </div>
