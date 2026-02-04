@@ -12,9 +12,9 @@ document.addEventListener("livewire:navigated", function () {
         "dark" === localStorage.getItem("color-theme") ||
         (!("color-theme" in localStorage) &&
             window.matchMedia("(prefers-color-scheme: dark)").matches);
-    toggleTheme(isDarkMode),
+    (toggleTheme(isDarkMode),
         themeToggleDarkBtn.addEventListener("click", () => toggleTheme(!0)),
-        themeToggleLightBtn.addEventListener("click", () => toggleTheme(!1));
+        themeToggleLightBtn.addEventListener("click", () => toggleTheme(!1)));
 
     // minta izin notifikasi, subscribeUser
     Notification.requestPermission().then((permission) => {
@@ -77,7 +77,7 @@ document.addEventListener("livewire:navigated", function () {
     const isFirefox = /firefox|fxios/i.test(ua);
     const isInApp =
         /(FBAN|FBAV|Instagram|Line|WhatsApp|TikTok|Twitter|WeChat|Snapchat)/i.test(
-            ua
+            ua,
         );
 
     // Jika sudah terpasang, sembunyikan tombol install
@@ -145,12 +145,12 @@ document.addEventListener("livewire:navigated", function () {
 
     // toggle tema
     function toggleTheme(e) {
-        document.documentElement.classList.toggle("dark", e),
+        (document.documentElement.classList.toggle("dark", e),
             localStorage.setItem("color-theme", e ? "dark" : "light"),
             themeToggleDarkBtn.classList.toggle("text-gray-300", e),
             themeToggleDarkBtn.classList.toggle("text-gray-200", !e),
             themeToggleLightBtn.classList.toggle("text-gray-700", e),
-            themeToggleLightBtn.classList.toggle("text-red-400", !e);
+            themeToggleLightBtn.classList.toggle("text-red-400", !e));
     }
 
     async function subscribeUser() {

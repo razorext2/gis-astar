@@ -36,24 +36,26 @@ class Attachment extends Form
                 'nullable',
                 'file',
                 'mimes:jpg,jpeg,png,pdf,doc,docx,xls,xlsx',
-                'min:10', // 10KB
-                'max:5120', // 5MB
+                'min:5', // 5kb
+                'max:2048', // 2MB
             ],
         ];
     }
 
     protected $messages = [
-        'attachment_type.required' => 'Tipe dokumen wajib dipilih',
-        'attachment.mimes' => 'Format file harus JPG / PNG',
+        'attachment.file' => 'File harus berformat jpg, jpeg, png, pdf, doc, docx, xls, xlsx.',
+        'attachment.mimes' => 'File harus berformat jpg, jpeg, png, pdf, doc, docx, xls, xlsx.',
+        'attachment.min' => 'Ukuran file minimal 5KB.',
         'attachment.max' => 'Ukuran maksimal file 2MB',
+        'attachment_type.required' => 'Tipe dokumen wajib dipilih',
         'new_attachments.*.nama_file.required' => 'Nama file tidak valid',
     ];
 
     public function addAttachment(): void
     {
         // validasi input yang berhubungan saja
-        $this->validateOnly('attachment_type');
         $this->validateOnly('attachment');
+        $this->validateOnly('attachment_type');
 
         if (! $this->attachment) {
             return;

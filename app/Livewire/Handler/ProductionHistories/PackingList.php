@@ -3,74 +3,76 @@
 namespace App\Livewire\Handler\ProductionHistories;
 
 use App\Livewire\Concerns\HandlesErrors;
-use App\Livewire\Forms\Spk\PackingList as SpkPackingList;
+use App\Livewire\Forms\Spk\Attachment;
+use App\Livewire\Forms\Spk\PackingListItem;
+use App\Livewire\Forms\Spk\PackingListPart;
 use App\Models\Spk\Production;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class PackingList extends Component
 {
-    use HandlesErrors;
+    use HandlesErrors, WithFileUploads;
 
-    public SpkPackingList $form;
+    public PackingListPart $partForm;
+
+    public PackingListItem $itemForm;
+
+    public Attachment $docForm;
 
     public Production $production;
 
     public ?string $id = null;
 
-    public ?string $nama_ekspedisi = null;
-
-    public ?string $nama_barang = null;
-
-    public ?int $qty_barang = null;
-
-    public ?string $satuan_barang = null;
-
-    public ?string $note = null;
-
-    public array $parts = [];
-
-    public array $packs = [];
-
     public bool $showDetailModal = false;
 
     public bool $accordionOpen = false;
 
-    public $packing_list;
-
     public function mount($id)
     {
-        $this->production = Production::findOrFail($id);
         $this->id = $id;
+        $this->production = Production::findOrFail($this->id);
     }
 
     public function addPart()
     {
-        $this->form->validate();
+        $this->partForm->validate();
 
-        $this->parts[] = [
-            'nama_part' => $this->form->nama_part,
-            'qty' => $this->form->qty,
-            'satuan' => $this->form->satuan,
-            'pack' => $this->form->pack == 'Pack' ? $this->form->nama_box : $this->form->pack,
+        $this->itemForm->parts[] = [
+            'nama_part' => $this->partForm->nama_part,
+            'qty' => $this->partForm->qty,
+            'satuan' => $this->partForm->satuan,
+            'pack' => $this->partForm->pack == 'Pack' ? $this->partForm->nama_box : $this->partForm->pack,
         ];
 
-        $this->form->reset();
+        $this->partForm->reset();
     }
 
     public function removePart($id)
     {
         // check ada index nya gak
-        if (isset($this->parts[$id])) {
+        if (isset($this->itemForm->parts[$id])) {
             // kalo ada, hapus dari array
-            unset($this->parts[$id]);
+            unset($this->itemForm->parts[$id]);
         }
 
         // refresh value dalam array
-        $this->parts = array_values($this->parts);
+        $this->itemForm->parts = array_values($this->itemForm->parts);
+    }
+
+    public function storeLampiran()
+    {
+        $this->docForm->validate();
+
+        $this->docForm->addAttachment();
+    }
+
+    public function removeAttachment($index)
+    {
+        $this->docForm->removeAttachment($index);
     }
 
     public function store()
@@ -79,47 +81,15 @@ class PackingList extends Component
         $this->authorize('updatePackingList', Production::class);
 
         // validasi
-        $this->validate(rules: [
-            'nama_ekspedisi' => 'required|string|min:3',
-            'nama_barang' => 'required|min:5|string',
-            'qty_barang' => 'required|numeric|min:1',
-            'satuan_barang' => 'required|string',
-            'note' => 'required|string|min:10',
-            'parts' => 'required|array|min:1',
-        ], messages: [
-            'nama_ekspedisi.required' => 'Nama ekspedisi wajib diisi.',
-            'nama_ekspedisi.string' => 'Nama ekspedisi harus berupa string.',
-            'nama_ekspedisi.min' => 'Nama ekspedisi minimal berisi 3 karakter.',
-            'nama_barang.required' => 'Nama barang wajib diisi.',
-            'nama_barang.min' => 'Nama barang minimal berisi 5 karakter.',
-            'nama_barang.string' => 'Nama barang harus berupa string.',
-            'qty_barang.required' => 'Jumlah barang wajib diisi.',
-            'qty_barang.numeric' => 'Jumlah barang harus berupa angka.',
-            'qty_barang.min' => 'Jumlah barang minimal 1 buah.',
-            'satuan_barang.required' => 'Satuan wajib diisi.',
-            'satuan_barang.string' => 'Satuan harus berupa string.',
-            'note.required' => 'Note wajib diisi.',
-            'note.min' => 'Note minimal berisi 10 karakter.',
-            'note.string' => 'Note harus berupa string.',
-            'parts.required' => 'Daftar part wajib diisi.',
-            'parts.array' => 'Daftar part harus berupa array.',
-            'parts.min' => 'Daftar part minimal berjumlah 1 buah.',
-        ]);
+        // $this->itemForm->validate();
 
         // proses tambah data ke model produksi dan packinglist
         $this->runSafely(function () {
-            // assign data barang baru
-            $barang_baru = [
-                'id_barang' => Str::uuid(),
-                'nama_ekspedisi' => $this->nama_ekspedisi,
-                'nama_barang' => $this->nama_barang,
-                'qty_barang' => $this->qty_barang,
-                'satuan_barang' => $this->satuan_barang,
-                'note' => $this->note,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
+            // generate values
+            $lampiran = $this->docForm->storeAttachment();
+            $barang_baru = $this->itemForm->generateBarangBaru($lampiran);
 
+            // assign data barang baru
             DB::transaction(function () use ($barang_baru) {
                 // update packinglist dengan data baru
                 $this->production->update([
@@ -128,15 +98,17 @@ class PackingList extends Component
                     ],
                 ]);
 
-                // tambah data part ke model packing list
-                foreach ($this->parts as $part) {
-                    \App\Models\Spk\PackingList::create([
-                        'id_barang' => $barang_baru['id_barang'],
-                        'nama_part' => $part['nama_part'],
-                        'jumlah' => $part['qty'],
-                        'satuan' => $part['satuan'],
-                        'pack' => $part['pack'],
-                    ]);
+                if ($this->itemForm->cara_input === 'manual') {
+                    // tambah data part ke model packing list
+                    foreach ($this->itemForm->parts as $part) {
+                        \App\Models\Spk\PackingList::create([
+                            'id_barang' => $barang_baru['id_barang'],
+                            'nama_part' => $part['nama_part'],
+                            'jumlah' => $part['qty'],
+                            'satuan' => $part['satuan'],
+                            'pack' => $part['pack'],
+                        ]);
+                    }
                 }
 
                 // ubah status spk
@@ -159,20 +131,15 @@ class PackingList extends Component
             // refresh table
             $this->dispatch('pg:eventRefresh-PackingListTable');
         }, 'Gagal menambah packing list.', [
-            'data' => $this->parts,
+            'data' => $this->itemForm->parts,
             'user_id' => auth()->id(),
         ]);
     }
 
     protected function clear()
     {
-        $this->form->reset();
-        $this->nama_ekspedisi = null;
-        $this->nama_barang = null;
-        $this->satuan_barang = null;
-        $this->qty_barang = null;
-        $this->note = null;
-        $this->parts = [];
+        $this->partForm->reset();
+        $this->itemForm->clearForm();
     }
 
     #[On('printPackingList')]

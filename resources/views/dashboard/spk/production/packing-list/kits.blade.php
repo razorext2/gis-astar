@@ -42,14 +42,21 @@
             </div>
         </div>
 
-        @livewire('handler.production-histories.packing-list-kit', ['idbarang' => $barang['id_barang'], 'idspk' => $data->spk->id])
+        <div>
+            @if ($barang['packing_list_type'] === 'manual')
+                @livewire('handler.production-histories.packing-list-kit', ['idbarang' => $barang['id_barang'], 'idspk' => $data->spk->id])
 
-        <div class="w-full">
-            <h4 class="text-base font-semibold text-gray-800 dark:text-white">Daftar Peti</h4>
+                <div class="w-full">
+                    <h4 class="text-base font-semibold text-gray-800 dark:text-white">Daftar Peti</h4>
 
-            @livewire('packing-list-kit-table', ['idbarang' => $barang['id_barang']])
+                    @livewire('packing-list-kit-table', ['idbarang' => $barang['id_barang']])
+                </div>
+            @endif
+
+            @if ($barang['packing_list_type'] === 'upload')
+                @livewire('handler.production-histories.packing-list-files', ['idbarang' => $barang['id_barang'], 'idspk' => $data->spk->id])
+            @endif
         </div>
-
 
     </div>
 @endsection

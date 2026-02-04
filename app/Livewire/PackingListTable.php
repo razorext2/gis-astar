@@ -58,10 +58,16 @@ final class PackingListTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             ->add('id_barang')
+            ->add('nama_ekspedisi')
+            ->add('nama_ekspedisi_formatted', function ($row) {
+                return view('components.dashboard.name-w-code', [
+                    'code' => strtoupper($row->packing_list_type ?? 'Default'),
+                    'name' => $row->nama_ekspedisi,
+                ]);
+            })
             ->add('nama_barang')
             ->add(fieldName: 'qty_barang')
-            ->add('satuan_barang')
-            ->add('nama_ekspedisi');
+            ->add('satuan_barang');
     }
 
     public function columns(): array
@@ -69,7 +75,9 @@ final class PackingListTable extends PowerGridComponent
         return [
             Column::make('#', 'id'),
             Column::action('Aksi'),
-            Column::make('Nama Ekspedisi', 'nama_ekspedisi'),
+            Column::make('Nama Ekspedisi', 'nama_ekspedisi')
+                ->hidden(),
+            Column::make('Nama Ekspedisi', 'nama_ekspedisi_formatted'),
             Column::make('Nama Barang', 'nama_barang'),
             Column::make('Jumlah', 'qty_barang'),
             Column::make('Satuan', 'satuan_barang'),
@@ -78,8 +86,15 @@ final class PackingListTable extends PowerGridComponent
 
     public function actions($row): array
     {
-        return [
-            Button::add('print')
+        $buttons = [
+            Button::add('addKit')
+                ->slot('Detail')
+                ->class('dark:bg-green-800 text-sm dark:hover:bg-green-900 dark:text-white dark:border-gray-700 rounded-lg bg-green-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-green-700')
+                ->route('production.packing-list.kits.add', ['idbarang' => $row->id_barang, 'production' => $this->production->id]),
+        ];
+
+        if ($row->packing_list_type === 'manual') {
+            $buttons[] = Button::add('print')
                 ->slot('Print')
                 ->class('dark:bg-blue-800 text-sm dark:hover:bg-blue-900 dark:text-white dark:border-gray-700 rounded-lg bg-blue-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-blue-700')
                 ->dispatch('printPackingList', [
@@ -89,11 +104,9 @@ final class PackingListTable extends PowerGridComponent
                     'jumlah_barang' => $row->qty_barang,
                     'satuan_barang' => $row->satuan_barang,
                     'note' => $row->note,
-                ]),
-            Button::add('addKit')
-                ->slot('Tambah Peti')
-                ->class('dark:bg-green-800 text-sm dark:hover:bg-green-900 dark:text-white dark:border-gray-700 rounded-lg bg-green-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-green-700')
-                ->route('production.packing-list.kits.add', ['idbarang' => $row->id_barang, 'production' => $this->production->id]),
-        ];
+                ]);
+        }
+
+        return $buttons;
     }
 }

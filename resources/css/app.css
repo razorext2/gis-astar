@@ -76,3 +76,7 @@
     color: #9ca3af;
     background-color: #18181b;
 }
+
+[x-cloak] {
+    display: none !important;
+}
