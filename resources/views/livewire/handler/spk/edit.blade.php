@@ -206,7 +206,7 @@
                     'idcnon' => 'IDC Non PPN',
                     'idcppn' => 'IDC PPN',
                     'idyppn' => 'IDY PPN',
-                ]" :labels="true" :textLabel="'Tipe Tagihan'" />
+                ]" :labels="true" :textLabel="'Tipe Tagihan'" readonly />
 
             @error('createForm.tipe_tagihan')
                 <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
@@ -405,7 +405,7 @@
 
             <div class="w-full">
                 <x-input.select id="attachment_type" name="attachment_type" :defaultOption="'Pilih Tipe Dokumen'" :options="config('spk-config.tipe_dokumen')"
-                    :labels="true" :textLabel="'Tipe Dokumen'" wire:model.live="docForm.attachment_type" />
+                    :labels="true" :textLabel="'Tipe Dokumen'" wire:model="docForm.attachment_type" />
 
                 @error('docForm.attachment_type')
                     <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
