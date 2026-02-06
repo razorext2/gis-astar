@@ -81,7 +81,7 @@ class PackingList extends Component
         $this->authorize('updatePackingList', Production::class);
 
         // validasi
-        // $this->itemForm->validate();
+        $this->itemForm->validate();
 
         // proses tambah data ke model produksi dan packinglist
         $this->runSafely(function () {
@@ -140,6 +140,7 @@ class PackingList extends Component
     {
         $this->partForm->reset();
         $this->itemForm->clearForm();
+        $this->docForm->reset();
     }
 
     #[On('printPackingList')]

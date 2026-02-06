@@ -34,6 +34,21 @@ class PackingListFiles extends Component
 
     public function store()
     {
+        $this->docForm->validateOnly(
+            field: 'attachment',
+            rules: [
+                'attachment' => 'required|file|mimes:jpg,jpeg,png,pdf,doc,docx,xls,xlsx|min:5|max:2048',
+            ],
+            messages: [
+                'attachment.required' => 'File harus diisi.',
+                'attachment.file' => 'File harus berformat jpg, jpeg, png, pdf, doc, docx, xls, xlsx.',
+                'attachment.mimes' => 'File harus berformat jpg, jpeg, png, pdf, doc, docx, xls, xlsx.',
+                'attachment.min' => 'Ukuran file minimal 5KB.',
+                'attachment.max' => 'Ukuran maksimal file 2MB',
+            ]);
+
+        $this->docForm->validateOnly('attachment_type');
+
         $this->runSafely(function () {
             // tambah array nya dulu
             $this->docForm->addAttachment();
@@ -56,7 +71,7 @@ class PackingListFiles extends Component
             ]);
 
             // munculkan swal sukses
-            $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'File berhasil dihapus');
+            $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Dokumen berhasil ditambah');
         }, 'Gagal menyimpan file baru', [
             'user_id' => auth()->id(),
             'action' => 'add file',

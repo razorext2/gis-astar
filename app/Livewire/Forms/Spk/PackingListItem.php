@@ -29,10 +29,11 @@ class PackingListItem extends Form
             'qty_barang' => 'required|numeric|min:1',
             'satuan_barang' => 'required|string',
             'note' => 'required|string|min:10',
+            'cara_input' => 'required',
         ];
 
         if ($this->cara_input === 'manual') {
-            $rules['parts'] = 'required|array|min:5';
+            $rules['parts'] = 'required|array|min:1';
         }
 
         return $rules;
@@ -50,6 +51,7 @@ class PackingListItem extends Form
         'qty_barang.min' => 'Jumlah barang minimal 1 buah.',
         'satuan_barang.required' => 'Satuan wajib diisi.',
         'satuan_barang.string' => 'Satuan harus berupa string.',
+        'cara_input.required' => 'Cara input wajib diisi.',
         'note.required' => 'Note wajib diisi.',
         'note.min' => 'Note minimal berisi 10 karakter.',
         'note.string' => 'Note harus berupa string.',
