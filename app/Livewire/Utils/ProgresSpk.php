@@ -17,26 +17,31 @@ class ProgresSpk extends Component
         ],
         [
             'status' => 1,
+            'desc' => 'Menunggu Assign PR',
+            'icon' => 'assign-pr.webp',
+        ],
+        [
+            'status' => 2,
             'desc' => 'Dalam proses produksi',
             'icon' => 'diproduksi.webp',
         ],
         [
-            'status' => 2,
+            'status' => 3,
             'desc' => 'Dalam proses pengiriman',
             'icon' => 'dikirim.webp',
         ],
         [
-            'status' => 3,
+            'status' => 4,
             'desc' => 'Dalam proses penagihan',
             'icon' => 'penagihan.webp',
         ],
         [
-            'status' => 4,
+            'status' => 5,
             'desc' => 'Dalam proses pemasangan',
             'icon' => 'pemasangan.webp',
         ],
         [
-            'status' => 5,
+            'status' => 6,
             'desc' => 'Selesai',
             'icon' => 'selesai.webp',
         ],
