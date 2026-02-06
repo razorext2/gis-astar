@@ -39,7 +39,7 @@
                         {{ $row->keterangan }}
                     </p>
 
-                    @if (count($row->documentations) > 0)
+                    @if (isset($row->documentations) && count($row->documentations) > 0)
                         <div class="mt-2 flex w-full flex-row gap-2 overflow-x-auto">
                             @foreach ($row->documentations as $i => $img)
                                 <img class="h-20 w-20 rounded-xl object-cover" id="documentations"

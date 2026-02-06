@@ -43,14 +43,14 @@ class Create extends Component
             'status_produksi' => 'required',
             'status_baru' => 'nullable|integer|max:10',
             'keterangan' => 'required|string|min:10',
-            'newDocumentations.*' => 'image|mimes:jpg,jpeg,png,heic,bmp|max:10240', // 10MB Max
+            'newDocumentations.*' => 'image|mimes:jpg,jpeg,png,heic,bmp|max:5120', // 10MB Max
         ];
 
         // create: documentations adalah file upload
         if (! $this->history_id) {
             return $baseRules + [
-                'documentations' => 'required|array|min:1',
-                'documentations.*' => 'required|image|mimes:jpg,jpeg,png,heic,bmp|max:10240', // 10MB Max
+                'documentations' => 'array',
+                'documentations.*' => 'image|mimes:jpg,jpeg,png,heic,bmp|max:5120', // 10MB Max
             ];
         }
 
@@ -64,8 +64,6 @@ class Create extends Component
         'title.required' => 'Judul tidak boleh kosong.',
         'title.min' => 'Judul minimal 5 karakter.',
         'title.max' => 'Judul maksimal 100 karakter.',
-        'documentations.required' => 'Gambar tidak boleh kosong.',
-        'documentations.*.required' => 'Gambar tidak boleh kosong.',
         'documentations.*.max' => 'Gambar maksimal 10MB.',
         'newDocumentations.*.max' => 'Gambar maksimal 10MB.',
         'status_produksi.required' => 'Status tidak boleh kosong.',
@@ -295,7 +293,7 @@ class Create extends Component
         $statuses = [
             ['value' => 0, 'label' => 'SPK Dibuat'],
             ['value' => 1, 'label' => 'Pengadaan Material'],
-            ['value' => 2, 'label' => 'Penandaan & Pemotognan'],
+            ['value' => 2, 'label' => 'Penandaan & Pemotongan'],
             ['value' => 3, 'label' => 'Penyetelan'],
             ['value' => 4, 'label' => 'Pengelasan'],
             ['value' => 5, 'label' => 'Pengeboran & Tapping'],
