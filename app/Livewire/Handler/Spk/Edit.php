@@ -292,6 +292,14 @@ class Edit extends Component
                     $history_message = Auth::user()->name.' membatalkan SPK karena: '.$this->cancel_note;
                 }
 
+                // cek jika nilai dari field assign_to berubah
+                if ($this->createForm->assign_to !== $this->data->assign_to) {
+                    $this->data->production->update([
+                        'assign_to' => $this->createForm->assign_to,
+                    ]);
+                }
+
+                // update data spk
                 $this->data->update($data);
 
                 // tambah history spk
