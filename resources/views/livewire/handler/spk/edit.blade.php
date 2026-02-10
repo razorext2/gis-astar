@@ -384,7 +384,7 @@
                             </div>
 
                             <p class="w-full text-center text-xs text-gray-500 dark:text-gray-400">
-                                *Dokumentasi dapat berupa file PNG, JPG, PDF, DOC, XLS (Min, 10KB, Maks 5MB)
+                                *Dokumentasi dapat berupa file PNG, JPG, PDF, DOC, XLS (Min, 10KB, Maks 2MB)
                             </p>
                         </div>
                         <input id="attachment" name="attachment" type="file" wire:model="docForm.attachment"
