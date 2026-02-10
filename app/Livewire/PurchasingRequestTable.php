@@ -49,7 +49,7 @@ final class PurchasingRequestTable extends PowerGridComponent
             ])
             ->where('status_approval', 1)
             ->where('on_delay', 0)
-            ->orderBy('nomor_purchasing_request', 'asc');
+            ->orderBy('nomor_order', 'desc');
     }
 
     protected function datasourceTableColumns(): array
@@ -77,7 +77,7 @@ final class PurchasingRequestTable extends PowerGridComponent
             })
             ->add('nomor_purchasing_request')
             ->add('nomor_purchasing_request_formatted', function ($query) {
-                return $query->nomor_purchasing_request ?? 'Belum Diupdate';
+                return $query->nomor_purchasing_request ? $query->nomor_purchasing_request : ($query->nomor_purchasing_request_json ? collect($query->nomor_purchasing_request_json)->implode(', ') : 'Belum di Update');
             })
             ->add('customer_company', fn ($query) => $query->customer_nama_perusahaan ?? data_get($query->customer, 'nama_perusahaan', '-'))
             ->add('customer_formatted', function ($query) {
@@ -118,7 +118,7 @@ final class PurchasingRequestTable extends PowerGridComponent
     {
         $button = [];
 
-        if ($this->user->can('purchasing-request-update') && empty($row->nomor_purchasing_request)) {
+        if ($this->user->can('purchasing-request-update') && empty($row->nomor_purchasing_request || $row->nomor_purchasing_request_json)) {
             $button[] = Button::make('edit')
                 ->slot('Update PR')
                 ->id($row->id)

@@ -14,6 +14,7 @@ class PurchasingRequest extends Model
 
     protected $fillable = [
         'id_spk',
+        'nomor_purchasing_request',
         'kode_item',
         'nama_item',
         'qty',

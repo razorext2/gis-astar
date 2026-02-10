@@ -21,20 +21,20 @@ class UnassignPurchasingRequest extends Component
     {
         $this->authorize('update', \App\Models\Spk\PurchasingRequest::class);
 
-        $this->runSafely(function () {
-            $spk = \App\Models\Spk\SpkMain::select('id')
-                ->with('production')
-                ->findOrFail($this->id);
+        $spk = \App\Models\Spk\SpkMain::with('production', 'purchasingRequests')
+            ->findOrFail($this->id);
 
+        $this->runSafely(function () use ($spk) {
             DB::transaction(function () use ($spk) {
                 // update spk
                 $spk->update([
                     'nomor_purchasing_request' => null,
+                    'nomor_purchasing_request_json' => null,
                     'status' => 1,
                 ]);
 
                 // hapus purchasing request
-                \App\Models\Spk\PurchasingRequest::where('id_spk', $spk->id)->delete();
+                \App\Models\Spk\PurchasingRequest::where('id_spk', $this->id)->delete();
 
                 // update production history
                 \App\Models\Spk\ProductionHistory::create([

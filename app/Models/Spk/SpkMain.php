@@ -20,6 +20,7 @@ class SpkMain extends Model
         'status_nomor_tagihan',
         'nomor_tagihan',
         'nomor_purchasing_request',
+        'nomor_purchasing_request_json',
         'tipe_bayar',
         'tgl_cetak',
         'tgl_kirim',
@@ -63,6 +64,7 @@ class SpkMain extends Model
     protected $casts = [
         'customer' => 'array',
         'products' => 'array',
+        'nomor_purchasing_request_json' => 'array',
         'informasi_pengiriman' => 'array',
         'documentations' => 'array',
         'on_delay' => 'boolean',

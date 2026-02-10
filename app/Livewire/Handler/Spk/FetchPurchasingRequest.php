@@ -5,6 +5,7 @@ namespace App\Livewire\Handler\Spk;
 use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Spk\ProductionHistory;
 use App\Models\Spk\PurchasingRequest;
+use App\Models\Spk\SpkMain;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -24,9 +25,11 @@ class FetchPurchasingRequest extends Component
         ],
         attribute: ['nomor_pr' => 'Nomor Purchasing Request']
     )]
-    public ?string $nomor_pr;
+    public ?string $nomor_pr = null;
 
     public ?array $data = [];
+
+    public ?array $data_pr = [];
 
     public ?string $spk_id;
 
@@ -42,7 +45,7 @@ class FetchPurchasingRequest extends Component
         $this->validateOnly('nomor_pr');
 
         // cek apakah nomor pr sudah digunakan
-        $spk = \App\Models\Spk\SpkMain::select('nomor_purchasing_request')
+        $spk = SpkMain::select('nomor_purchasing_request')
             ->where('nomor_purchasing_request', $this->nomor_pr)
             ->first();
 
@@ -79,26 +82,47 @@ class FetchPurchasingRequest extends Component
         return $this->data = data_get($response->json(), 'data', []);
     }
 
+    public function addPr()
+    {
+        if (empty($this->data)) {
+            return $this->dispatch('swal', icon: 'error', text: 'Data PR belum di fetch.', title: 'Gagal');
+        }
+
+        if ($this->checkExistingPr($this->nomor_pr)) {
+            return $this->dispatch('swal', icon: 'error', text: 'Nomor PR sudah ada di dalam daftar.', title: 'Gagal');
+        }
+
+        $this->data_pr[] = [
+            'nomor_pr' => $this->nomor_pr,
+            'data' => $this->data,
+        ];
+
+        $this->clearPr();
+    }
+
+    public function clearPr()
+    {
+        $this->nomor_pr = null;
+        $this->data = [];
+    }
+
     public function assign()
     {
         // cek authorization
         $this->authorize('update', PurchasingRequest::class);
 
-        // validasi form
-        $this->validate();
-
-        // cek data
-        $count = count($this->data);
-
-        // ambil data spk
-        $spk = \App\Models\Spk\SpkMain::with('production')
-            ->findOrFail($this->spk_id);
+        // validasi data
+        $data = collect($this->data_pr);
 
         // jika belum ada item
-        if ($count == 0) {
+        if ($data->count() == 0) {
             // return error
-            return $this->dispatch('swal', icon: 'error', text: 'Pilih minimal 1 item untuk di assign.', title: 'Gagal');
+            return $this->dispatch('swal', icon: 'error', text: 'Tambah minimal 1 PR untuk di assign.', title: 'Gagal');
         }
+
+        // ambil data spk
+        $spk = SpkMain::with('production')
+            ->findOrFail($this->spk_id);
 
         // jika status approval blm approve
         if ($spk->status_approval != 1) {
@@ -106,28 +130,54 @@ class FetchPurchasingRequest extends Component
             return $this->dispatch('swal', icon: 'error', text: 'SPK belum di approve.', title: 'Gagal');
         }
 
+        $field = match (true) {
+            $data->count() === 1 => 'nomor_purchasing_request',
+            $data->count() > 1 => 'nomor_purchasing_request_json',
+            default => null,
+        };
+
+        if ($field === null) {
+            return $this->dispatch(
+                'swal',
+                icon: 'error',
+                text: 'Data PR belum di fetch.',
+                title: 'Gagal'
+            );
+        }
+
         // run safely
-        $this->runSafely(function () use ($spk) {
-            DB::transaction(function () use ($spk) {
+        $this->runSafely(function () use ($spk, $field, $data) {
+            $nomorPrCollection = $data->pluck('nomor_pr');
+
+            $nomor_pr = $nomorPrCollection->count() === 1
+                ? $nomorPrCollection->first()
+                : $nomorPrCollection->values()->toArray();
+
+            DB::transaction(function () use ($spk, $field, $nomor_pr) {
                 // update spk
                 $spk->update([
-                    'nomor_purchasing_request' => $this->nomor_pr,
-                    'status' => 2,
+                    $field => $nomor_pr,
+                    'status' => $spk->status <= 2 ? 2 : $spk->status,
                     'purchasing_list_updated_by' => Auth::id(),
                 ]);
 
                 // tambah ke PurchasignRequest
-                foreach ($this->data as $row) {
-                    PurchasingRequest::create([
-                        'id_spk' => $this->spk_id,
-                        'kode_item' => $row['KodeItem'],
-                        'nama_item' => $row['NamaItem'],
-                        'qty' => $row['DummySisaStock'] ?? 0,
-                        'satuan' => $row['Satuan'] ?? '-',
-                        'lokasi_gudang_terima' => $row['RencanaGudangPenerimaan'] ?? '-',
-                        'jumlah_item_dipesan' => $row['JumlahBarang'] ?? 0,
-                        'keterangan' => $row['KeteranganDetail'] ?? '-',
-                    ]);
+                foreach ($this->data_pr as $row) {
+                    foreach ($row['data'] as $item) {
+                        PurchasingRequest::create([
+                            'id_spk' => $this->spk_id,
+                            'nomor_purchasing_request' => $row['nomor_pr'],
+
+                            'kode_item' => $item['KodeItem'],
+                            'nama_item' => $item['NamaItem'],
+
+                            'qty' => $item['DummySisaStock'] ?? 0,
+                            'satuan' => $item['Satuan'] ?? '-',
+                            'lokasi_gudang_terima' => $item['RencanaGudangPenerimaan'] ?? '-',
+                            'jumlah_item_dipesan' => $item['JumlahBarang'] ?? 0,
+                            'keterangan' => $item['KeteranganDetail'] ?? '-',
+                        ]);
+                    }
                 }
 
                 // update history gudang
@@ -155,6 +205,14 @@ class FetchPurchasingRequest extends Component
             'form_input' => $this->all(),
             'user_id' => Auth::id(),
         ]);
+    }
+
+    public function checkExistingPr($nomor_pr)
+    {
+        return collect($this->data_pr)
+            ->where('nomor_pr', $nomor_pr)
+            ->values()
+            ->isNotEmpty();
     }
 
     public function render()

@@ -56,7 +56,8 @@ final class ProductionTable extends PowerGridComponent
                 return $query->where('status_approval', 1)
                     ->where('on_delay', 0)
                     ->where('is_booked', 0)
-                    ->where('is_cancelled', 0);
+                    ->where('is_cancelled', 0)
+                    ->where('status', '>=', 2);
             })
                 ->whereHas('productionHistories', fn ($query) => $query->where('status_produksi', '>', 0))
                 ->where('assign_to', $this->user->id);

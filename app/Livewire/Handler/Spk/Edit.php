@@ -48,47 +48,44 @@ class Edit extends Component
         $this->data = \App\Models\Spk\SpkMain::with('production')
             ->findOrFail($id);
 
-        // assign data spk ke variabel
-        $data = $this->data;
-
         // assign data spk ke form
-        $this->createForm->nama_customer = $data->customer['nama_perusahaan'];
-        $this->createForm->no_telp = $data->customer['no_hp'];
-        $this->createForm->contact_person = $data->customer['contact_person'];
-        $this->createForm->alamat_customer = $data->customer['alamat'];
+        $this->createForm->nama_customer = $this->data->customer['nama_perusahaan'];
+        $this->createForm->no_telp = $this->data->customer['no_hp'];
+        $this->createForm->contact_person = $this->data->customer['contact_person'];
+        $this->createForm->alamat_customer = $this->data->customer['alamat'];
 
         // assign _key ke setiap item barang
-        $this->createForm->barang = collect($data->products)
+        $this->createForm->barang = collect($this->data->products)
             ->map(fn ($item) => array_merge($item, [
                 '_key' => (string) Str::uuid(),
             ]))->toArray();
 
         // assign data spk tagihan ke form
-        $this->createForm->status_nomor_tagihan = $data->status_nomor_tagihan;
-        $this->createForm->nomor_tagihan = $data->nomor_tagihan;
-        $this->createForm->tipe_tagihan = $data->tipe_tagihan;
-        $this->createForm->nomor_order = $data->nomor_order;
-        $this->createForm->tipe_bayar = $data->tipe_bayar;
-        $this->createForm->tgl_cetak = $data->tgl_cetak;
-        $this->createForm->tgl_kirim = $data->tgl_kirim === 'SEGERA' ? 1 : $data->tgl_kirim;
-        $this->createForm->assign_to = $data->assign_to;
-        $this->createForm->keterangan = $data->keterangan;
-        $this->createForm->tipe_timbangan = $data->tipe_timbangan;
-        $this->createForm->nomor_dokumen_penawaran = $data->nomor_dokumen_penawaran;
-        $this->createForm->is_booked = $data->is_booked;
-        $this->docForm->new_attachments = $data->documentations ?? [];
+        $this->createForm->status_nomor_tagihan = $this->data->status_nomor_tagihan;
+        $this->createForm->nomor_tagihan = $this->data->nomor_tagihan;
+        $this->createForm->tipe_tagihan = $this->data->tipe_tagihan;
+        $this->createForm->nomor_order = $this->data->nomor_order;
+        $this->createForm->tipe_bayar = $this->data->tipe_bayar;
+        $this->createForm->tgl_cetak = $this->data->tgl_cetak;
+        $this->createForm->tgl_kirim = $this->data->tgl_kirim === 'SEGERA' ? 1 : $this->data->tgl_kirim;
+        $this->createForm->assign_to = $this->data->assign_to;
+        $this->createForm->keterangan = $this->data->keterangan;
+        $this->createForm->tipe_timbangan = $this->data->tipe_timbangan;
+        $this->createForm->nomor_dokumen_penawaran = $this->data->nomor_dokumen_penawaran;
+        $this->createForm->is_booked = $this->data->is_booked;
+        $this->docForm->new_attachments = $this->data->documentations ?? [];
 
         // untuk keperluan validasi
-        $this->createForm->spk_id = $data->id;
-        $this->createForm->status_approval = $data->status_approval;
+        $this->createForm->spk_id = $this->data->id;
+        $this->createForm->status_approval = $this->data->status_approval;
 
         // keperluan delay
-        $this->is_delayed = $data->on_delay;
-        $this->delay_note = $data->on_delay_notes;
+        $this->is_delayed = $this->data->on_delay;
+        $this->delay_note = $this->data->on_delay_notes;
 
         // keperluan pembatalan
-        $this->is_cancelled = $data->is_cancelled;
-        $this->cancel_note = $data->cancel_request_reason;
+        $this->is_cancelled = $this->data->is_cancelled;
+        $this->cancel_note = $this->data->cancel_request_reason;
     }
 
     public function storeBarang()
@@ -297,6 +294,22 @@ class Edit extends Component
                     $this->data->production->update([
                         'assign_to' => $this->createForm->assign_to,
                     ]);
+                }
+
+                // cek assign_to spk dan produksi, kalo diubah / nilainya gak sama
+                if ($this->data->assign_to != $this->createForm->assign_to) {
+                    // ubah assign to yg diproduksi
+                    $this->data->production->update([
+                        'assign_to' => $this->createForm->assign_to,
+                    ]);
+
+                    // tambah history spk
+                    $this->createForm->generateHistory(
+                        $this->data->id,
+                        'Staf Produksi telah diubah.',
+                        'Staf yang mengerjakan Produksi telah diubah dari '.$this->data->assign_to.' menjadi '.$this->createForm->assign_to,
+                        Auth::id(),
+                    );
                 }
 
                 // update data spk
