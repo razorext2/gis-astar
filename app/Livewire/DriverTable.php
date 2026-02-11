@@ -53,16 +53,12 @@ final class DriverTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        $roles = [];
         $data = Driver::query()->with(['user', 'photoCollect']);
 
-        if (! auth()->user()->can('driver-approve')) {
-            $data->where('kode_pegawai', auth()->user()->kode_pegawai)
-                ->where(function ($query) {
-                    $query->whereDate('assign_date', '<=', now())
-                        ->orWhereNull('assign_date');
-                });
-        } else {
+        if ($this->user->can('driver-approve')) {
+
+            $roles = [];
+
             if ($this->user->can('driver-list-jkt')) {
                 $roles[] = 'Driver-Jkt';
             }
@@ -71,18 +67,27 @@ final class DriverTable extends PowerGridComponent
                 $roles[] = 'Driver-Medan';
             }
 
-            $data->whereHas('user.roles', fn ($role) => $role->whereIn('name', $roles));
-        }
+            $data->where(function ($query) use ($roles) {
 
-        if ($this->status != '') {
-            match ($this->status) {
-                'unapproved' => $data->where('status', 0),
-                'approved' => $data->where('status', 1),
-                'rejected' => $data->where('status', 2),
-                'needrevision' => $data->where('status', 3),
-                'notassigned' => $data->where('status', 4),
-                'notupdated' => $data->where('status', 5)
-            };
+                // 1. Jika ada kode_pegawai -> filter berdasarkan role
+                if (! empty($roles)) {
+                    $query->where(function ($q) use ($roles) {
+                        $q->whereNotNull('kode_pegawai')
+                            ->whereHas('user.roles', fn ($role) => $role->whereIn('name', $roles)
+                            );
+                    });
+                }
+
+                // 2. Jika kode_pegawai NULL -> pakai assign_by
+                $query->orWhere(function ($q) {
+                    $q->whereNull('kode_pegawai')
+                        ->where('assign_by', auth()->id());
+                });
+            });
+
+        } else {
+            // User biasa
+            $data->where('kode_pegawai', auth()->user()->kode_pegawai);
         }
 
         $data->orderBy('created_at', 'desc')
