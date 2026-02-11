@@ -193,6 +193,13 @@ final class SpkTable extends PowerGridComponent
                         </span>";
                 }
 
+                if ($query->is_using_old_stock) {
+                    $template .= "
+                        <span class='bg-green-300 text-green-700 text-xs px-2.5 py-1 rounded-lg w-fit'>
+                            Stok Lama
+                        </span>";
+                }
+
                 $template .= '</div>';
 
                 return $template;

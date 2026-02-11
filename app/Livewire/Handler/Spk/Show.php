@@ -4,6 +4,7 @@ namespace App\Livewire\Handler\Spk;
 
 use App\Jobs\ExportPdfJob;
 use App\Livewire\Concerns\HandlesErrors;
+use App\Models\Spk\ProductionHistory;
 use App\Models\Spk\SpkMain;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +20,7 @@ class Show extends Component
 
     public function mount($id)
     {
-        $this->data = SpkMain::with('addedBy', 'assignTo', 'updateBy', 'pengirimanUpdatedBy', 'noTagihanUpdatedBy')
+        $this->data = SpkMain::with('addedBy', 'assignTo', 'updateBy', 'pengirimanUpdatedBy', 'noTagihanUpdatedBy', 'production')
             ->findOrFail($id);
     }
 
@@ -125,6 +126,53 @@ class Show extends Component
         return collect($this->data->documentations)
             ->where('tipe_dokumen', '=', 'request_fondasi')
             ->values();
+    }
+
+    public function setOldStock()
+    {
+        // check autorization
+        $this->authorize('create', \App\Models\Spk\Production::class);
+
+        // check status spk
+        if ($this->data->status_approval != 1) {
+            return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'SPK belum disetujui.');
+        }
+
+        // check status booked
+        if ($this->data->is_booked) {
+            return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'SPK sudah dibooking.');
+        }
+
+        // check status cancelled
+        if ($this->data->is_cancelled) {
+            return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'SPK sudah dibatalkan.');
+        }
+
+        // proses
+        $this->runSafely(function () {
+            DB::transaction(function () {
+                $this->data->update([
+                    'is_using_old_stock' => true,
+                    'status' => 2,
+                    'purchasing_list_updated_by' => Auth::id(),
+                ]);
+
+                // update history gudang
+                ProductionHistory::create([
+                    'id_produksi' => $this->data->production->id,
+                    'judul' => 'SPK telah diset menggunakan stok lama.',
+                    'keterangan' => auth()->user()->name.' telah set SPK menggunakan stok lama.',
+                    'documentations' => [],
+                    'status_produksi' => 1,
+                    'status_validasi' => 1,
+                ]);
+            });
+
+            return $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'SPK telah diset untuk menggunakan stok lama!');
+        }, 'Gagal membuat SPK menggunakan stok lama', [
+            'user_id' => Auth::id(),
+            'spk_id' => $this->data->id,
+        ]);
     }
 
     public function render()

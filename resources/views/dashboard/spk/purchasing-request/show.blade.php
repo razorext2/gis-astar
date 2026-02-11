@@ -30,18 +30,72 @@
 
         <div class="grid w-full gap-2 lg:gap-4">
 
-            {{-- @if (count($data) > 0) --}}
-            <div class="relative overflow-x-auto rounded-lg">
+            @if (!$spk->is_using_old_stock)
+                {{-- @if (count($data) > 0) --}}
+                <div class="relative overflow-x-auto rounded-lg">
+                    @if ($is_multiple)
+                        {{-- KALO NOMOR PR MULTIPLE --}}
+                        @forelse ($data as $nomorPr => $rows)
+                            <h4 class="mb-2 text-gray-800 dark:text-white">{{ $nomorPr }}</h4>
+                            <table class="mb-2 w-full min-w-max text-left text-sm text-gray-500 dark:text-gray-400 lg:mb-4">
+                                <thead
+                                    class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+                                    <tr>
+                                        <th scope="col" class="w-fit px-6 py-3 text-center">#</th>
+                                        <th scope="col" class="w-[200px] px-6 py-3 text-center">Kode Item</th>
+                                        <th scope="col" class="w-[300px] px-6 py-3 text-center">Nama Item</th>
+                                        <th scope="col" class="w-[150px] px-6 py-3 text-center">Jlh Brg</th>
+                                        <th scope="col" class="px-6 py-3 text-center">Rencana Gudang Penerima</th>
+                                        <th scope="col" class="px-6 py-3 text-center">Keterangan</th>
+                                    </tr>
+                                </thead>
 
-                @if ($is_multiple)
-                    {{-- KALO NOMOR PR MULTIPLE --}}
-                    @forelse ($data as $nomorPr => $rows)
-                        <h4 class="mb-2 text-gray-800 dark:text-white">{{ $nomorPr }}</h4>
-                        <table class="mb-2 w-full min-w-max text-left text-sm text-gray-500 dark:text-gray-400 lg:mb-4">
+                                <tbody>
+                                    @forelse ($rows as $index => $row)
+                                        <tr
+                                            class="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
+                                            <td class="px-6 py-4 text-center">
+                                                <span>{{ $index + 1 ?? '-' }}</span>
+                                            </td>
+                                            <td class="px-6 py-4 text-center">
+                                                {{ $row->kode_item ?? '-' }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $row->nama_item ?? '-' }}
+                                            </td>
+                                            <td class="px-6 py-4 text-center">
+                                                {{ $row->jumlah_item_dipesan ?? '-' }} {{ $row->satuan ?? '-' }}
+                                            </td>
+                                            <td class="px-6 py-4 text-center">
+                                                {{ $row->lokasi_gudang_terima ?? '-' }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $row->keterangan ?? '-' }}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr
+                                            class="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
+                                            <td colspan="6" class="px-6 py-4 text-center">Tidak ada data yang ditemukan.
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        @empty
+                            <p
+                                class="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
+                                <span class="px-6 py-4 text-center">Tidak ada data yang ditemukan.</span>
+                            </p>
+                        @endforelse
+                    @else
+                        {{-- KALO NOMOR PR SINGLE --}}
+                        <table class="w-full min-w-max text-left text-sm text-gray-500 dark:text-gray-400">
                             <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="w-fit px-6 py-3 text-center">#</th>
                                     <th scope="col" class="w-[200px] px-6 py-3 text-center">Kode Item</th>
+                                    <th scope="col" class="w-[200px] px-6 py-3 text-center">Nomor Purchasing Request</th>
                                     <th scope="col" class="w-[300px] px-6 py-3 text-center">Nama Item</th>
                                     <th scope="col" class="w-[150px] px-6 py-3 text-center">Jlh Brg</th>
                                     <th scope="col" class="px-6 py-3 text-center">Rencana Gudang Penerima</th>
@@ -50,11 +104,14 @@
                             </thead>
 
                             <tbody>
-                                @forelse ($rows as $index => $row)
+                                @forelse ($data as $index => $row)
                                     <tr
                                         class="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
                                         <td class="px-6 py-4 text-center">
                                             <span>{{ $index + 1 ?? '-' }}</span>
+                                        </td>
+                                        <td class="px-6 py-4 text-center">
+                                            {{ $row->nomor_purchasing_request ?? '-' }}
                                         </td>
                                         <td class="px-6 py-4 text-center">
                                             {{ $row->kode_item ?? '-' }}
@@ -75,76 +132,24 @@
                                 @empty
                                     <tr
                                         class="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
-                                        <td colspan="6" class="px-6 py-4 text-center">Tidak ada data yang ditemukan.
-                                        </td>
+                                        <td colspan="7" class="px-6 py-4 text-center">Tidak ada data yang ditemukan.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>
-                    @empty
-                        <p
-                            class="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
-                            <span class="px-6 py-4 text-center">Tidak ada data yang ditemukan.</span>
-                        </p>
-                    @endforelse
-                @else
-                    {{-- KALO NOMOR PR SINGLE --}}
-                    <table class="w-full min-w-max text-left text-sm text-gray-500 dark:text-gray-400">
-                        <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
-                            <tr>
-                                <th scope="col" class="w-fit px-6 py-3 text-center">#</th>
-                                <th scope="col" class="w-[200px] px-6 py-3 text-center">Kode Item</th>
-                                <th scope="col" class="w-[200px] px-6 py-3 text-center">Nomor Purchasing Request</th>
-                                <th scope="col" class="w-[300px] px-6 py-3 text-center">Nama Item</th>
-                                <th scope="col" class="w-[150px] px-6 py-3 text-center">Jlh Brg</th>
-                                <th scope="col" class="px-6 py-3 text-center">Rencana Gudang Penerima</th>
-                                <th scope="col" class="px-6 py-3 text-center">Keterangan</th>
-                            </tr>
-                        </thead>
+                    @endif
+                </div>
 
-                        <tbody>
-                            @forelse ($data as $index => $row)
-                                <tr
-                                    class="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
-                                    <td class="px-6 py-4 text-center">
-                                        <span>{{ $index + 1 ?? '-' }}</span>
-                                    </td>
-                                    <td class="px-6 py-4 text-center">
-                                        {{ $row->nomor_purchasing_request ?? '-' }}
-                                    </td>
-                                    <td class="px-6 py-4 text-center">
-                                        {{ $row->kode_item ?? '-' }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $row->nama_item ?? '-' }}
-                                    </td>
-                                    <td class="px-6 py-4 text-center">
-                                        {{ $row->jumlah_item_dipesan ?? '-' }} {{ $row->satuan ?? '-' }}
-                                    </td>
-                                    <td class="px-6 py-4 text-center">
-                                        {{ $row->lokasi_gudang_terima ?? '-' }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $row->keterangan ?? '-' }}
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr
-                                    class="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
-                                    <td colspan="7" class="px-6 py-4 text-center">Tidak ada data yang ditemukan.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                @endif
-
-            </div>
-
-            @can('purchasing-request-update')
-                @if (!is_null($spk->nomor_purchasing_request) || !is_null($spk->nomor_purchasing_request_json))
-                    @livewire('handler.spk.unassign-purchasing-request', ['id' => $spk->id])
-                @endif
-            @endcan
+                @can('purchasing-request-update')
+                    @if (!is_null($spk->nomor_purchasing_request) || !is_null($spk->nomor_purchasing_request_json))
+                        @livewire('handler.spk.unassign-purchasing-request', ['id' => $spk->id])
+                    @endif
+                @endcan
+            @else
+                <p class="mt-4 text-center text-lg text-green-600 dark:text-green-400">
+                    SPK ini diproduksi menggunakan barang - barang atau bahan baku sisa stok yang ada digudang.
+                </p>
+            @endif
 
         </div>
     </div>

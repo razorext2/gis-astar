@@ -52,27 +52,24 @@ final class ProductionTable extends PowerGridComponent
             ])
             ->with(['spk', 'assignTo', 'productionHistories'])
             ->whereHas('spk', function (Builder $q) {
-                // FILTER TIPE TIMBANGAN
+                // filter tipe timbangan
                 if (! is_null($this->tipe_timbangan)) {
                     $q->where('tipe_timbangan', $this->tipe_timbangan);
                 }
 
-                // AUTH RULE
+                // auth rule
                 if ($this->user->cannot('spk-create')) {
-                    $q->where('status_approval', 1)
-                        ->where('on_delay', 0)
-                        ->where('is_booked', 0)
-                        ->where('is_cancelled', 0)
-                        ->where('status', '>=', 2);
+                    $q->where('status_approval', 1) // spk udh disetujui
+                        ->where('on_delay', 0) // ga delay
+                        ->where('is_booked', 0) // ga lg booking
+                        ->where('is_cancelled', 0) // ga dicancel
+                        ->where('status', '>=', 2); // dalam proses produksi / update pr / is_using_old_stock
                 }
             });
 
-        // FILTER DI LUAR SPK
+        // filter diluar spk
         if ($this->user->cannot('spk-create')) {
-            $query->whereHas(
-                'productionHistories',
-                fn ($q) => $q->where('status_produksi', '>', 0)
-            )
+            $query->whereHas('productionHistories', fn ($history) => $history->where('status_produksi', '>', 0))
                 ->where('tb_produksi.assign_to', $this->user->id);
         }
 
@@ -159,6 +156,13 @@ final class ProductionTable extends PowerGridComponent
                     $template .= "
                         <span class='bg-red-500 text-xs px-2 flex justify-center items-center py-1.5 text-red-100 w-fit rounded-full'>
                             SPK Ditolak
+                        </span>";
+                }
+
+                if ($query->spk->is_using_old_stock) {
+                    $template .= "
+                        <span class='bg-green-300 text-green-700 text-xs px-2  py-1.5 rounded-lg w-fit'>
+                            Stok Lama
                         </span>";
                 }
 

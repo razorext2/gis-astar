@@ -59,6 +59,7 @@ class SpkMain extends Model
         'cancel_request_reason',
         'cancel_request_validated_by',
         'cancel_request_validated_at',
+        'is_using_old_stock',
     ];
 
     protected $casts = [
@@ -70,6 +71,7 @@ class SpkMain extends Model
         'on_delay' => 'boolean',
         'production_has_download_spk_pdf' => 'boolean',
         'is_booked' => 'boolean',
+        'is_using_old_stock' => 'boolean',
     ];
 
     protected $appends = [

@@ -68,6 +68,12 @@ final class PurchasingRequestTable extends PowerGridComponent
             ->add('id')
             ->add('no', fn ($query, int $index) => $index + 1)
             ->add('nomor_order')
+            ->add('is_using_old_stock')
+            ->add('is_using_old_stock_formatted', function ($query) {
+                if ($query->is_using_old_stock) {
+                    return '<span class="bg-green-300 text-green-700 text-xs px-2.5 py-1 rounded-lg font-semibold"> Stok Lama </span>';
+                }
+            })
             ->add('nomor_order_formatted', function ($query) {
                 return view('components.dashboard.name-w-code', [
                     'code' => strtoupper($query->tipe_tagihan).' ('.$query->tipe_bayar.')',
@@ -97,6 +103,8 @@ final class PurchasingRequestTable extends PowerGridComponent
 
             Column::make('Nomor PR', 'nomor_purchasing_request_formatted', 'nomor_purchasing_request'),
 
+            Column::make('Penggunaan Stok', 'is_using_old_stock_formatted', 'is_using_old_stock'),
+
             Column::make('SPK', 'nomor_order_formatted', 'nomor_order')
                 ->sortable()
                 ->searchable(),
@@ -118,7 +126,7 @@ final class PurchasingRequestTable extends PowerGridComponent
     {
         $button = [];
 
-        if ($this->user->can('purchasing-request-update') && empty($row->nomor_purchasing_request || $row->nomor_purchasing_request_json)) {
+        if ($this->user->can('purchasing-request-update') && empty($row->nomor_purchasing_request || $row->nomor_purchasing_request_json) && ($row->is_using_old_stock == false)) {
             $button[] = Button::make('edit')
                 ->slot('Update PR')
                 ->id($row->id)

@@ -18,8 +18,12 @@ class PurchasingRequestController extends Controller
     {
         $this->authorize('update', PurchasingRequest::class);
 
-        $data = \App\Models\Spk\SpkMain::select('id', 'nomor_order', 'tipe_tagihan', 'customer', 'nomor_purchasing_request', 'revision_count')
+        $data = \App\Models\Spk\SpkMain::select('id', 'nomor_order', 'tipe_tagihan', 'customer', 'nomor_purchasing_request', 'revision_count', 'is_using_old_stock')
             ->findOrFail($id);
+
+        if ($data->is_using_old_stock) {
+            abort(403);
+        }
 
         if (! empty($data->nomor_purchasing_request)) {
             abort(403);
@@ -35,7 +39,7 @@ class PurchasingRequestController extends Controller
         $this->authorize('view', PurchasingRequest::class);
 
         // cek apakah spk ini sudah memiliki purchasing request
-        $spk = \App\Models\Spk\SpkMain::select('id', 'nomor_purchasing_request', 'nomor_purchasing_request_json', 'nomor_order', 'revision_count', 'customer')
+        $spk = \App\Models\Spk\SpkMain::select('id', 'nomor_purchasing_request', 'nomor_purchasing_request_json', 'nomor_order', 'revision_count', 'customer', 'is_using_old_stock')
             ->findOrFail($id);
 
         $data = PurchasingRequest::where('id_spk', $id);

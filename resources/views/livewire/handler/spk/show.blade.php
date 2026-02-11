@@ -110,6 +110,22 @@
                 </div>
             @endif
 
+            @can('produksi-create')
+                <div
+                    class="col-span-2 border-2 border-green-200 bg-green-200 p-2.5 text-green-800 dark:border-green-600 dark:bg-green-600 dark:text-white">
+                    <p class="font-semibold"> Produksi menggunakan bahan stok lama? </p>
+
+                    @if ($data->is_using_old_stock == false)
+                        <x-button.primary class="mt-2 text-sm" id="old-stock" type="button" wire:click="setOldStock"
+                            wire:confirm.prompt="Silahkan ketik YA untuk melanjutkan|YA">
+                            Ya, produksi menggunakan stok lama
+                        </x-button.primary>
+                    @else
+                        <p class="font-bold"> Ya </p>
+                    @endif
+                </div>
+            @endcan
+
             <div
                 class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
                 <p class="text-xs italic">Tanggal Cetak </p>
