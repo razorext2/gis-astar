@@ -89,7 +89,9 @@ class PackingListKit extends Component
             ]);
 
             $this->resetForm();
+
             $this->dispatch(event: 'swal', icon: 'success', title: 'Berhasil', text: 'Berhasil menambahkan packing list');
+
             $this->dispatch('pg:eventRefresh-PackingListKitTable');
         }, 'Gagal menyimpan detail packinglist.', [
             'user_id' => Auth::id(),
@@ -111,6 +113,7 @@ class PackingListKit extends Component
             \App\Models\Spk\PackingListKit::findOrFail($id)->delete();
 
             $this->dispatch(event: 'swal', icon: 'success', title: 'Berhasil', text: 'Berhasil menghapus packing list kit');
+
             $this->dispatch('pg:eventRefresh-PackingListKitTable');
 
         }, 'Gagal menghapus packing list kit.', [

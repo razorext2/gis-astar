@@ -9,6 +9,7 @@ use App\Livewire\Forms\Spk\PackingListPart;
 use App\Models\Spk\Production;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -173,6 +174,47 @@ class PackingList extends Component
 
         // munculkan modal pdf
         $this->dispatch('show-detail-modal', url: route('packing-list.pdf'));
+    }
+
+    #[On('deletePackingList')]
+    public function deletePackingList($id)
+    {
+        // ambil data terlebih dahulu
+        $data = collect($this->production->packing_list)->firstWhere('id_barang', $id);
+
+        $this->runSafely(function () use ($id, $data) {
+            // cek apakah ada file
+            if ($data['packing_list_type'] === 'upload') {
+                $files = $data['files'];
+
+                if (isset($files)) {
+                    foreach ($files as $file) {
+                        Storage::delete($file['url']);
+                    }
+                }
+            }
+
+            // unset/hapus data dari array
+            $new_data = collect($this->production->packing_list)
+                ->reject(fn ($item) => $item['id_barang'] === $id)
+                ->values()
+                ->toArray();
+
+            // update di database
+            $this->production->update([
+                'packing_list' => $new_data,
+            ]);
+
+            // swal message
+            $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Packing list berhasil dihapus.');
+
+            // refresh data table
+            $this->dispatch('pg:eventRefresh-PackingListTable');
+        }, 'Gagal menghapus packing list.', [
+            'user_id' => auth()->id(),
+            'id_spk' => $this->production->spk->id,
+            'id_barang' => $id,
+        ]);
     }
 
     public function render()
