@@ -65,6 +65,8 @@ final class SpkTable extends PowerGridComponent
             $query->where('tipe_timbangan', $this->tipe_timbangan);
         }
 
+        $query->orderBy('nomor_order', 'desc');
+
         return $query;
     }
 
