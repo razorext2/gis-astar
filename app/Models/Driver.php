@@ -69,6 +69,11 @@ class Driver extends Model
         return $this->belongsTo(User::class, 'kode_pegawai', 'kode_pegawai');
     }
 
+    public function assignBy()
+    {
+        return $this->belongsTo(User::class, 'assign_by', 'id');
+    }
+
     public function pegawai(): BelongsTo
     {
         return $this->belongsTo(Pegawai::class, 'kode_pegawai', 'kode_pegawai');

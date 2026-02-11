@@ -90,6 +90,17 @@ final class DriverTable extends PowerGridComponent
             $data->where('kode_pegawai', auth()->user()->kode_pegawai);
         }
 
+        if ($this->status != '') {
+            match ($this->status) {
+                'unapproved' => $data->where('status', 0),
+                'approved' => $data->where('status', 1),
+                'rejected' => $data->where('status', 2),
+                'needrevision' => $data->where('status', 3),
+                'notassigned' => $data->where('status', 4),
+                'notupdated' => $data->where('status', 5)
+            };
+        }
+
         $data->orderBy('created_at', 'desc')
             ->orderBy('status', 'desc');
 
