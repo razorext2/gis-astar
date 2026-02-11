@@ -3,7 +3,9 @@
 namespace App\Livewire;
 
 use App\Models\Spk\Production;
+use App\Models\Spk\SpkMain;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
@@ -43,27 +45,38 @@ final class ProductionTable extends PowerGridComponent
     public function datasource(): Builder
     {
         $query = Production::query()
-            ->with(['spk', 'assignTo', 'productionHistories']);
+            ->join('tb_spk', 'tb_spk.id', '=', 'tb_produksi.id_spk')
+            ->addSelect([
+                'tb_produksi.*',
+                'customer_nama_perusahaan' => DB::raw("JSON_UNQUOTE(JSON_EXTRACT(tb_spk.customer, '$.nama_perusahaan'))"),
+            ])
+            ->with(['spk', 'assignTo', 'productionHistories'])
+            ->whereHas('spk', function (Builder $q) {
+                // FILTER TIPE TIMBANGAN
+                if (! is_null($this->tipe_timbangan)) {
+                    $q->where('tipe_timbangan', $this->tipe_timbangan);
+                }
 
-        if (! is_null($this->tipe_timbangan)) {
-            $query->whereHas('spk', function ($query) {
-                return $query->where('tipe_timbangan', $this->tipe_timbangan);
+                // AUTH RULE
+                if ($this->user->cannot('spk-create')) {
+                    $q->where('status_approval', 1)
+                        ->where('on_delay', 0)
+                        ->where('is_booked', 0)
+                        ->where('is_cancelled', 0)
+                        ->where('status', '>=', 2);
+                }
             });
-        }
 
+        // FILTER DI LUAR SPK
         if ($this->user->cannot('spk-create')) {
-            $query->whereHas('spk', function ($query) {
-                return $query->where('status_approval', 1)
-                    ->where('on_delay', 0)
-                    ->where('is_booked', 0)
-                    ->where('is_cancelled', 0)
-                    ->where('status', '>=', 2);
-            })
-                ->whereHas('productionHistories', fn ($query) => $query->where('status_produksi', '>', 0))
-                ->where('assign_to', $this->user->id);
+            $query->whereHas(
+                'productionHistories',
+                fn ($q) => $q->where('status_produksi', '>', 0)
+            )
+                ->where('tb_produksi.assign_to', $this->user->id);
         }
 
-        $query->orderBy('created_at', 'desc');
+        $query->orderByDesc('tb_produksi.created_at');
 
         return $query;
     }
@@ -85,9 +98,9 @@ final class ProductionTable extends PowerGridComponent
             ->add('no', fn ($query, int $index) => $index + 1)
             ->add('customer_info', function ($query) {
                 return view('components.dashboard.name-w-code', [
-                    'code' => $query->spk->customer['contact_person'] ?? '-',
-                    'name' => $query->spk->customer['nama_perusahaan'] ?? '-',
-                    'item3' => $query->spk->customer['alamat'] ?? '-',
+                    'code' => data_get($query->spk->customer, 'contact_person', '-'),
+                    'name' => data_get($query->spk->customer, 'nama_perusahaan', '-'),
+                    'item3' => data_get($query->spk->customer, 'alamat', '-'),
                 ]);
             })
             ->add('id_spk')
@@ -167,13 +180,17 @@ final class ProductionTable extends PowerGridComponent
 
     public function columns(): array
     {
+        $table = (new SpkMain)->getTable();
+
         return [
             Column::make('No', 'no'),
             Column::action('Action'),
             Column::make('Nomor SPK', 'nomor_order_formatted', 'nomor_order')
                 ->searchable(),
             Column::make('Status SPK', 'status_spk', 'status_spk'),
-            Column::make('Customer', 'customer_info'),
+            Column::make('Customer', 'customer_info')
+                ->searchable()
+                ->searchableRaw("JSON_UNQUOTE(JSON_EXTRACT($table.customer, '$.nama_perusahaan')) LIKE ?"),
             Column::make('Assign to', 'assign_to_formatted', 'assign_to'),
             Column::make('Tipe Timbangan', 'tipe_timbangan'),
             Column::make('Products', 'products_formatted'),
