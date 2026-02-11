@@ -250,7 +250,7 @@ final class SpkTable extends PowerGridComponent
                 ->placeholder('Nomor SPK'),
             Filter::select('tipe_tagihan', 'tipe_tagihan')
                 ->dataSource([
-                    ['value' => 'idcnonppn', 'label' => 'IDC Non PPN'],
+                    ['value' => 'idcnon', 'label' => 'IDC Non PPN'],
                     ['value' => 'idcppn', 'label' => 'IDC PPN'],
                     ['value' => 'idyppn', 'label' => 'IDY PPN'],
                 ])
