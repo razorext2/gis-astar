@@ -39,6 +39,11 @@ class AssignAdd extends Component
     ])]
     public string $assign_date = '';
 
+    public function mount()
+    {
+        $this->assign_date = Carbon::now()->format('Y-m-d');
+    }
+
     public function fetchSR()
     {
         // validasi field no. sr
@@ -61,7 +66,6 @@ class AssignAdd extends Component
         $data = $response['data'][0];
         $this->pt_name = $data['NamaCustomer'];
         $this->pt_address = $data['AlamatContact'];
-        $this->assign_date = Carbon::now()->addDays(1)->format('Y-m-d');
     }
 
     public function store()
