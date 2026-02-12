@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use App\Models\Spk\SpkMain;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
@@ -17,12 +16,8 @@ final class BillingTable extends PowerGridComponent
 {
     public string $tableName = 'BillingTable';
 
-    protected $user;
-
     public function setUp(): array
     {
-        $this->user = Auth::user();
-
         return [
             PowerGrid::header()
                 ->showSearchInput(),
@@ -124,7 +119,11 @@ final class BillingTable extends PowerGridComponent
     {
         return [
             Rule::button('edit')
-                ->when(fn () => $this->user->cannot('spk-update-no-tagihan-idcppn') || $this->user->cannot('spk-update-no-tagihan-idcnonppn') || $this->user->cannot('spk-update-no-tagihan-idyppn'))
+                ->when(fn () => ! auth()->user()->canAny([
+                    'spk-update-no-tagihan-idcppn',
+                    'spk-update-no-tagihan-idcnonppn',
+                    'spk-update-no-tagihan-idyppn',
+                ]))
                 ->hide(),
         ];
     }
