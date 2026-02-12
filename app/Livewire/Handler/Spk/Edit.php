@@ -86,6 +86,9 @@ class Edit extends Component
         // keperluan pembatalan
         $this->is_cancelled = $this->data->is_cancelled;
         $this->cancel_note = $this->data->cancel_request_reason;
+
+        // keperluan pengiriman
+        $this->createForm->is_using_company_driver = $this->data->is_using_company_driver;
     }
 
     public function storeBarang()
@@ -247,6 +250,7 @@ class Edit extends Component
                     'booked_by' => $this->createForm->is_booked ? Auth::id() : null,
                     'documentations' => $lampiran ?? [],
                     'is_cancelled' => $this->is_cancelled,
+                    'is_using_company_driver' => $this->createForm->is_using_company_driver,
                 ];
 
                 $title = 'SPK mengalami perubahan.';

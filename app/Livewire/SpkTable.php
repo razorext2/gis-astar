@@ -88,10 +88,11 @@ final class SpkTable extends PowerGridComponent
             ->add('nomor_order')
             ->add('tipe_tagihan')
             ->add('nomor_tagihan')
-            ->add('informasi_pengiriman')
             ->add('status_approval')
             ->add('on_delay')
             ->add('is_booked')
+            ->add('is_using_old_stock')
+            ->add('is_using_company_driver')
             ->add('status')
             ->add('created_at')
             ->add('tipe_timbangan')
@@ -143,19 +144,6 @@ final class SpkTable extends PowerGridComponent
 
                 return implode('<br>', $list);
             })
-            ->add('informasi_pengiriman_formatted', function ($query) {
-                $data = $query->informasi_pengiriman;
-
-                if (is_null($data)) {
-                    return 'SPK belum dikirim';
-                }
-
-                return view('components.dashboard.name-w-code', [
-                    'code' => $data['estimated_time_departure'] ?? '-',
-                    'name' => $data['no_kontrak'] ?? '-',
-                    'item3' => $data['estimated_time_arrival'] ?? '-',
-                ]);
-            })
             ->add('status_approval_formatted', function ($query) {
                 $colors = match ($query->status_approval) {
                     0 => 'yellow',
@@ -197,6 +185,13 @@ final class SpkTable extends PowerGridComponent
                     $template .= "
                         <span class='bg-green-300 text-green-700 text-xs px-2.5 py-1 rounded-lg w-fit'>
                             Stok Lama
+                        </span>";
+                }
+
+                if ($query->is_using_company_driver) {
+                    $template .= "
+                        <span class='bg-blue-400 text-blue-700 text-xs px-2.5 py-1 rounded-lg w-fit'>
+                            Supir Perusahaan
                         </span>";
                 }
 
@@ -244,9 +239,13 @@ final class SpkTable extends PowerGridComponent
             Column::make('Dibooking', 'is_booked')
                 ->hidden(true),
 
-            Column::make('Status Pengiriman', 'informasi_pengiriman_formatted'),
-
             Column::make('Dibuat Oleh', 'added_by'),
+
+            Column::make('Stok', 'is_using_old_stock')
+                ->hidden(true),
+
+            Column::make('Supir Perusahaan', 'is_using_company_driver')
+                ->hidden(true),
         ];
     }
 
@@ -275,7 +274,7 @@ final class SpkTable extends PowerGridComponent
             Filter::boolean('on_delay', 'on_delay')
                 ->label('Delayed', 'Not Delayed'),
             Filter::boolean('is_booked', 'is_booked')
-                ->label('Booked', 'Not Booked'),
+                ->label('Dibooking', 'Tidak Dibooking'),
             Filter::select('tipe_timbangan', 'tipe_timbangan')
                 ->dataSource([
                     ['value' => 'non timbangan jembatan', 'label' => 'Timbangan Lainnya'],
@@ -283,6 +282,10 @@ final class SpkTable extends PowerGridComponent
                 ])
                 ->optionLabel('label')
                 ->optionValue('value'),
+            Filter::boolean('is_using_old_stock', 'is_using_old_stock')
+                ->label('Ya', 'Tidak'),
+            Filter::boolean('is_using_company_driver', 'is_using_company_driver')
+                ->label('Ya', 'Tidak'),
         ];
     }
 

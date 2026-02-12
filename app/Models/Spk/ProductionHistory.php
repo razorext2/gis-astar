@@ -36,7 +36,7 @@ class ProductionHistory extends Model
 
     public function produksi()
     {
-        return $this->belongsTo(Production::class, 'id_produksi');
+        return $this->belongsTo(Production::class, 'id_produksi', 'id');
     }
 
     public function addedBy()

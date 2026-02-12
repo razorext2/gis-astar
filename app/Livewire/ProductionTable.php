@@ -166,6 +166,13 @@ final class ProductionTable extends PowerGridComponent
                         </span>";
                 }
 
+                if ($query->spk->is_using_company_driver) {
+                    $template .= "
+                        <span class='bg-blue-400 text-blue-700 text-xs px-2  py-1.5 rounded-lg w-fit'>
+                            Supir Perusahaan
+                        </span>";
+                }
+
                 $template .= '</div>';
 
                 return $template;
@@ -240,7 +247,7 @@ final class ProductionTable extends PowerGridComponent
                 ->route('production.show', ['production' => $row->id]);
         }
 
-        if ($row->productionHistories?->last()?->status_produksi === 10 && $this->user->can('produksi-update-packing-list')) {
+        if ($row->productionHistories?->last()?->status_produksi === 10 && $this->user->can('produksi-update-packing-list') && $row->spk->is_using_company_driver == false) {
             $button[] = Button::make('packinglist', 'Packing List')
                 ->slot('+ Packing List')
                 ->id($row->id)

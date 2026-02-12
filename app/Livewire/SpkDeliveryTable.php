@@ -32,11 +32,31 @@ final class SpkDeliveryTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return SpkMain::query()
-            ->with('production')
-            ->whereHas('production', fn ($query) => $query->whereNotNull('packing_list')
-                ->whereHas('productionHistories', fn ($query) => $query->where('status_produksi', 10)))
-            ->orderBy('created_at', 'desc');
+        $query = SpkMain::query()
+            ->whereHas('production', function ($production) {
+
+                if (auth()->user()->cannot('spk-validate')) {
+                    // tampilkan data hanya packing_list not null atau is_using_company_driver = true
+                    $production->where(function ($p) {
+                        $p->whereRaw('COALESCE(JSON_LENGTH(packing_list), 0) > 0')
+                            ->orWhere('is_using_company_driver', true);
+                    });
+                }
+
+                $production->whereHas('productionHistories', function ($history) {
+                    $history->where('status_produksi', 10)
+                        ->whereRaw('id = (SELECT id FROM tb_produksi_histories
+                                                WHERE tb_produksi_histories.id_produksi = tb_produksi.id
+                                                ORDER BY created_at DESC
+                                                LIMIT 1)
+                                                ');
+                });
+
+            });
+
+        $query->orderBy('created_at', 'desc');
+
+        return $query;
     }
 
     public function relationSearch(): array
@@ -65,7 +85,23 @@ final class SpkDeliveryTable extends PowerGridComponent
                 ]);
             })
             ->add('status')
-            ->add('status_formatted', fn ($query) => '<span class="text-sm text-green-500">'.$query->status_description.'</span>')
+            ->add('status_formatted', function ($query) {
+                $template = '<div class="flex flex-col gap-1 w-fit font-semibold">
+                                <span class="text-xs px-2.5 py-1 rounded-lg bg-green-500 text-green-100">'
+                                    .$query->status_description.'
+                                </span>';
+
+                if ($query->is_using_company_driver) {
+                    $template .= "
+                        <span class='bg-blue-400 text-blue-700 text-xs px-2.5 py-1 rounded-lg w-fit'>
+                            Supir Perusahaan
+                        </span>";
+                }
+
+                $template .= '</div>';
+
+                return $template;
+            })
             ->add('no_tagihan_updated_by')
             ->add('no_tagihan_updated_by_formatted', fn ($query) => $query->noTagihanUpdatedBy->name ?? '<span class="text-xs text-red-100 bg-red-500 px-2 py-0.5 rounded-full">Belum Diupdate</span>')
             ->add('created_at');
@@ -98,7 +134,8 @@ final class SpkDeliveryTable extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
 
-            Column::make('No tagihan updated by', 'no_tagihan_updated_by_formatted', 'no_tagihan_updated_by'),
+            Column::make('No tagihan updated by', 'no_tagihan_updated_by_formatted', 'no_tagihan_updated_by')
+                ->hidden(true),
         ];
     }
 

@@ -137,7 +137,11 @@ class SpkController extends Controller
     {
         $this->authorize('updateInformasiPengiriman', SpkMain::class);
 
-        return view('dashboard.spk.delivery.edit', compact('id'));
+        $data = SpkMain::findOrFail($id);
+
+        return view('dashboard.spk.delivery.edit', [
+            'id' => $id,
+            'data' => $data,
+        ]);
     }
-    // delivery end
 }

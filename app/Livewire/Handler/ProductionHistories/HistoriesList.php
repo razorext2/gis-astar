@@ -5,6 +5,7 @@ namespace App\Livewire\Handler\ProductionHistories;
 use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Spk\ProductionHistory;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class HistoriesList extends Component
@@ -25,18 +26,30 @@ class HistoriesList extends Component
         $this->authorize('validate', ProductionHistory::class);
 
         $this->runSafely(function () use ($id) {
-            ProductionHistory::where('id', $id)->update([
-                'status_validasi' => 1,
-                'validated_by' => Auth::id(),
-                'validated_at' => now(),
-            ]);
+            $history = ProductionHistory::with('produksi')
+                ->where('id', $id)
+                ->first();
 
-            $this->dispatch(
-                event: 'swal',
-                icon: 'success',
-                title: 'Berhasil',
-                text: 'Laporan produksi telah disetujui.'
-            );
+            DB::transaction(function () use ($history) {
+                if ($history->status_produksi == 10 && $history->produksi->spk->is_using_company_driver == true) {
+                    $history->produksi->spk->update([
+                        'status' => 3,
+                    ]);
+                }
+
+                $history->update([
+                    'status_validasi' => 1,
+                    'validated_by' => Auth::id(),
+                    'validated_at' => now(),
+                ]);
+
+                $this->dispatch(
+                    event: 'swal',
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: 'Laporan produksi telah disetujui.'
+                );
+            });
         }, 'Gagal menyetujui laporan produksi.', [
             'form_input' => [
                 'id' => $id,

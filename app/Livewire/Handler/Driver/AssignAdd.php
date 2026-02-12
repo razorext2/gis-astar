@@ -48,7 +48,7 @@ class AssignAdd extends Component
         $this->dispatch('loadingProgress', message: 'Mencari data...');
 
         // akses API
-        $response = Http::get('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSR&NomorPermintaanJual=' . $this->no_sr);
+        $response = Http::get('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSR&NomorPermintaanJual='.$this->no_sr);
 
         // jika status = error
         if ($response['status'] == 'error') {

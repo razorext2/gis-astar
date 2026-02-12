@@ -7,9 +7,13 @@
 
             <div class="flex flex-col px-3 md:mb-2 lg:p-0">
 
-                <span class="text-xl font-semibold text-gray-900 dark:bg-dark-primary dark:text-white">
-                    Update Pengiriman
-                </span>
+                <p class="text-xl font-semibold text-gray-900 dark:bg-dark-primary dark:text-white">
+                    Update Pengiriman <span class="text-green-500">[{{ $data->customer['nama_perusahaan'] }}]</span>
+                </p>
+
+                <p class="text-lg font-semibold text-gray-800 dark:text-gray-100">
+                    SPK: {{ $data->nomor_order }}
+                </p>
 
                 <p class="mt-0.5 text-base text-gray-600 dark:text-gray-400">
                     Halaman ini digunakan untuk memperbarui detail pengiriman produk yang telah selesai diproses dan siap

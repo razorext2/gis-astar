@@ -157,7 +157,7 @@ final class DriverTable extends PowerGridComponent
                 if ($date) {
                     return Carbon::parse($date)
                         ->locale('id')
-                        ->isoFormat('D MMMM YYYY HH:mm:ss');
+                        ->isoFormat('D MMMM YYYY');
                 } else {
                     return '-';
                 }

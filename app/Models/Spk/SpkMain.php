@@ -60,6 +60,7 @@ class SpkMain extends Model
         'cancel_request_validated_by',
         'cancel_request_validated_at',
         'is_using_old_stock',
+        'is_using_company_driver',
     ];
 
     protected $casts = [
@@ -72,6 +73,7 @@ class SpkMain extends Model
         'production_has_download_spk_pdf' => 'boolean',
         'is_booked' => 'boolean',
         'is_using_old_stock' => 'boolean',
+        'is_using_company_driver' => 'boolean',
     ];
 
     protected $appends = [
@@ -163,6 +165,11 @@ class SpkMain extends Model
     public function production()
     {
         return $this->hasOne(\App\Models\Spk\Production::class, 'id_spk', 'id');
+    }
+
+    public function deliveries()
+    {
+        return $this->hasMany(\App\Models\Spk\SpkDelivery::class, 'id_spk', 'id');
     }
 
     public function getStatusNomorTagihanDescriptionAttribute(): string

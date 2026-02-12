@@ -53,6 +53,8 @@ class Create extends Form
 
     public ?bool $is_booked = false;
 
+    public ?bool $is_using_company_driver;
+
     protected function rules(): array
     {
         $rules = [
@@ -73,6 +75,7 @@ class Create extends Form
             'keterangan' => 'required|string',
             'assign_to' => 'required_if:is_booked,false|nullable|integer',
             'is_booked' => 'boolean',
+            'is_using_company_driver' => 'boolean',
         ];
 
         if ($this->spk_id) {
@@ -168,6 +171,12 @@ class Create extends Form
         // assign_to
         'assign_to.required' => 'Kolom assign to wajib diisi.',
         'assign_to.integer' => 'Kolom assign to harus berupa angka.',
+
+        // is_booked
+        'is_booked.boolean' => 'Kolom is booked harus berupa boolean.',
+
+        // is_using_company_driver
+        'is_using_company_driver.boolean' => 'Kolom is using driver company harus berupa boolean.',
     ];
 
     public function makeNomorOrder($tipe_tagihan)

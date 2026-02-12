@@ -159,6 +159,7 @@ class Create extends Component
                     'booked_at' => $this->createForm->is_booked ? now() : null,
                     'booked_by' => $this->createForm->is_booked ? Auth::id() : null,
                     'documentations' => $lampiran ?? [],
+                    'is_using_company_driver' => $this->createForm->is_using_company_driver,
                 ]);
 
                 // tambah data history SPK

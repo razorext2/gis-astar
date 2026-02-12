@@ -6,9 +6,9 @@ use Livewire\Form;
 
 class Delivery extends Form
 {
-    public ?string $via = null;
+    public ?string $nomor_sr = null;
 
-    public ?array $barangs = [];
+    public ?string $via = null;
 
     public ?string $partay = null;
 
@@ -20,6 +20,8 @@ class Delivery extends Form
 
     public ?string $nama_supir = null;
 
+    public ?string $id_supir = null;
+
     public ?string $no_telp_supir = null;
 
     public ?string $berat = null;
@@ -29,4 +31,15 @@ class Delivery extends Form
     public ?string $eta = null;
 
     public ?string $note = null;
+
+    public ?array $products = [];
+
+    public ?array $is_delay = [];
+
+    public ?array $history = [];
+
+    protected function rules()
+    {
+        // buat role nya disini
+    }
 }
