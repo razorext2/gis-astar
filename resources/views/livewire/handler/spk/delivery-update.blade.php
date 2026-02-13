@@ -32,7 +32,7 @@
                     @endforeach
                 @else
                     <tr class="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-                        <td colspan="3" class="px-6 py-4 text-center text-sm font-semibold italic text-red-500">
+                        <td colspan="4" class="px-6 py-4 text-center text-sm font-semibold italic text-red-500">
                             Packing list belum ditambah.
                         </td>
                     </tr>
