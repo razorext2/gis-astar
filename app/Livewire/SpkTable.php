@@ -19,11 +19,11 @@ final class SpkTable extends PowerGridComponent
 
     public bool $deferLoading = true;
 
-    public bool $showFilters = false;
+    public bool $showFilters = true;
 
-    public string $sortDirection = 'asc';
+    public string $sortField = 'created_at';
 
-    public bool $multiSort = true;
+    public string $sortDirection = 'desc';
 
     public $user;
 
@@ -32,10 +32,6 @@ final class SpkTable extends PowerGridComponent
     public function setUp(): array
     {
         $this->user = auth()->user();
-
-        if ($this->user->can('spk-delete')) {
-            $this->showCheckBox();
-        }
 
         return [
             PowerGrid::header()
@@ -64,8 +60,6 @@ final class SpkTable extends PowerGridComponent
         if (! is_null($this->tipe_timbangan)) {
             $query->where('tipe_timbangan', $this->tipe_timbangan);
         }
-
-        $query->orderBy('nomor_order', 'desc');
 
         return $query;
     }
@@ -99,6 +93,11 @@ final class SpkTable extends PowerGridComponent
             ->add('added_by', fn ($query): mixed => $query->addedBy->name)
             ->add('nomor_order_formatted', function ($query) {
                 return view('components.dashboard.name-w-code', [
+                    'text_color' => match ($query->tipe_tagihan) {
+                        'idcppn' => 'green',
+                        'idcnon' => 'red',
+                        default => 'gray',
+                    },
                     'code' => strtoupper($query->tipe_tagihan).' ('.$query->tipe_bayar.')',
                     'name' => $query->nomor_order.($query->revision_count ? 'R'.str_pad($query->revision_count, 2, '0', STR_PAD_LEFT) : ''),
                     'item3' => $query->status_description,
@@ -214,10 +213,15 @@ final class SpkTable extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
 
+            Column::make('Customer', 'customer_formatted', 'customer')
+                ->searchable()
+                ->searchableRaw("JSON_UNQUOTE(JSON_EXTRACT($table.customer, '$.nama_perusahaan')) LIKE ?")
+                ->searchableRaw("JSON_UNQUOTE(JSON_EXTRACT($table.customer, '$.contact_person')) LIKE ?"),
+
             Column::make('Tipe Tagihan', 'tipe_tagihan')
                 ->hidden(),
 
-            Column::make('Status SPK', 'status_approval_formatted', 'status_approval')
+            Column::make('Status Approval', 'status_approval_formatted', 'status_approval')
                 ->sortable()
                 ->searchable(),
 
@@ -226,12 +230,8 @@ final class SpkTable extends PowerGridComponent
                 ->searchable()
                 ->hidden(Auth::user()->cannot('spk-create')),
 
-            Column::make('Customer', 'customer_formatted', 'customer')
-                ->searchable()
-                ->searchableRaw("JSON_UNQUOTE(JSON_EXTRACT($table.customer, '$.nama_perusahaan')) LIKE ?")
-                ->searchableRaw("JSON_UNQUOTE(JSON_EXTRACT($table.customer, '$.contact_person')) LIKE ?"),
-
-            Column::make('Tipe Timbangan', 'tipe_timbangan'),
+            Column::make('Tipe Timbangan', 'tipe_timbangan')
+                ->sortable(),
 
             Column::make('Delay', 'on_delay')
                 ->hidden(true),
@@ -239,7 +239,8 @@ final class SpkTable extends PowerGridComponent
             Column::make('Dibooking', 'is_booked')
                 ->hidden(true),
 
-            Column::make('Dibuat Oleh', 'added_by'),
+            Column::make('Dibuat Oleh', 'added_by')
+                ->sortable(),
 
             Column::make('Stok', 'is_using_old_stock')
                 ->hidden(true),
