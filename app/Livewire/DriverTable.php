@@ -161,7 +161,9 @@ final class DriverTable extends PowerGridComponent
                 } else {
                     return '-';
                 }
-            });
+            })
+            ->add('tipe_kunjungan')
+            ->add('tipe_tagihan');
     }
 
     public function columns(): array
@@ -187,6 +189,12 @@ final class DriverTable extends PowerGridComponent
 
             Column::make('Di Buat Tgl', 'created_at_formatted', 'created_at')
                 ->sortable(),
+
+            Column::make('Tipe Kunjungan', 'tipe_kunjungan', 'tipe_kunjungan')
+                ->hidden(),
+
+            Column::make('Tipe Tagihan', 'tipe_tagihan', 'tipe_tagihan')
+                ->hidden(),
         ];
     }
 
@@ -207,6 +215,23 @@ final class DriverTable extends PowerGridComponent
                 ->optionLabel('label')
                 ->optionValue('value'),
             Filter::datepicker('created_at', 'created_at'),
+            Filter::multiSelect('tipe_kunjungan', 'tipe_kunjungan')
+                ->dataSource([
+                    ['value' => 'ATRBRG', 'label' => 'Antar Barang (SR)'],
+                    ['value' => 'JPTBRG', 'label' => 'Jemput Barang'],
+                    ['value' => 'ATRTEK', 'label' => 'Antar Teknisi'],
+                    ['value' => 'JPTTEK', 'label' => 'Jemput Teknisi'],
+                    ['value' => 'DLL', 'label' => 'Lainnya'],
+                ])
+                ->optionLabel('label')
+                ->optionValue('value'),
+            Filter::select('tipe_tagihan', 'tipe_tagihan')
+                ->dataSource([
+                    ['value' => 'idcnon', 'label' => 'IDC Non PPN'],
+                    ['value' => 'idcppn', 'label' => 'IDC PPN'],
+                ])
+                ->optionLabel('label')
+                ->optionValue('value'),
         ];
 
         return $filters;

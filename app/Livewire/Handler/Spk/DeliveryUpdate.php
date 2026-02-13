@@ -130,6 +130,8 @@ class DeliveryUpdate extends Component
         $this->show_customer = false;
         $this->nama_customer = null;
         $this->alamat_customer = null;
+
+        $this->form->via = $this->spk_data->is_using_company_driver ? 'supir' : '';
     }
 
     public function fetchSR()
