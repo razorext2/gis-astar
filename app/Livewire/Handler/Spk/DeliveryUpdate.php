@@ -12,11 +12,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Livewire\Component;
-use Livewire\WithPagination;
 
 class DeliveryUpdate extends Component
 {
-    use HandlesErrors, WithPagination;
+    use HandlesErrors;
 
     public Delivery $form;
 
@@ -35,7 +34,7 @@ class DeliveryUpdate extends Component
     public function mount($id)
     {
         $this->id = $id;
-        $this->spk_data = SpkMain::findOrFail($id);
+        $this->spk_data = SpkMain::with('deliveries', 'production')->findOrFail($id);
 
         if ($this->spk_data->is_using_company_driver) {
             $this->form->via = 'supir';
@@ -171,10 +170,19 @@ class DeliveryUpdate extends Component
         return strtoupper(preg_replace('/[^A-Za-z0-9]/', '', $text));
     }
 
+    public function updatedFormVia()
+    {
+        if ($this->form->via == 'supir') {
+            if (! $this->spk_data->is_using_company_driver) {
+                $this->form->via = '';
+
+                return $this->dispatch('swal', icon: 'error', text: 'SPK ini tidak dikirim menggunakan Supir Perusahaan.', title: 'Gagal');
+            }
+        }
+    }
+
     public function render()
     {
-        $deliveries = SpkDelivery::where('id_spk', $this->id)->paginate(perPage: 4, pageName: 'deliveries');
-
         $drivers = User::role('Driver')
             ->when($this->search_supir, function ($query) {
                 $query->where(function ($q) {
@@ -186,7 +194,6 @@ class DeliveryUpdate extends Component
             ->get();
 
         return view('livewire.handler.spk.delivery-update', [
-            'deliveries' => $deliveries,
             'drivers' => $drivers,
         ]);
     }

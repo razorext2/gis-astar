@@ -43,4 +43,21 @@ class SpkDelivery extends Model
     {
         return $this->belongsTo(\App\Models\User::class, 'id_supir', 'kode_pegawai');
     }
+
+    public function getProductDetailsAttribute()
+    {
+        $production = $this->spk?->production;
+
+        if (! $production || ! $production->packing_list) {
+            return collect();
+        }
+
+        $indexed = collect($production->packing_list)
+            ->keyBy('id_barang');
+
+        return collect($this->products ?? [])
+            ->map(fn ($id) => $indexed[$id] ?? null)
+            ->filter()
+            ->values();
+    }
 }

@@ -2,39 +2,43 @@
 
     {{-- table barang --}}
     <div id="items-table" class="w-full">
-        @if (isset($data['packing_list']))
-            <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
-                <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="py-3 text-center">#</th>
-                        <th scope="col" class="py-3 text-center">ID</th>
-                        <th scope="col" class="py-3 text-center">Barang</th>
-                    </tr>
-                </thead>
+        <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
+            <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="py-3 text-center">#</th>
+                    <th scope="col" class="py-3 text-center">Ekspedisi</th>
+                    <th scope="col" class="py-3 text-center">Barang</th>
+                    <th scope="col" class="py-3 text-center">Jumlah</th>
+                </tr>
+            </thead>
 
-                <tbody>
-                    @forelse ($data['packing_list'] as $index => $row)
+            <tbody>
+                @if (isset($spk_data->production->packing_list))
+                    @foreach ($spk_data->production->packing_list as $index => $row)
                         <tr class="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
                             <td class="px-3 py-2 text-center">
                                 {{ $index + 1 }}
                             </td>
                             <td class="px-3 py-2">
-                                {{ $row['id_barang'] }}
+                                {{ $row['nama_ekspedisi'] }}
                             </td>
                             <td class="px-3 py-2">
                                 {{ $row['nama_barang'] }}
                             </td>
-                        </tr>
-                    @empty
-                        <tr class="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-                            <td colspan="3" class="px-6 py-4 text-center text-sm font-semibold italic text-red-500">
-                                Packing list belum ditambah.
+                            <td class="px-3 py-2">
+                                {{ $row['qty_barang'] }} {{ ucfirst($row['satuan_barang']) }}
                             </td>
                         </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        @endif
+                    @endforeach
+                @else
+                    <tr class="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                        <td colspan="3" class="px-6 py-4 text-center text-sm font-semibold italic text-red-500">
+                            Packing list belum ditambah.
+                        </td>
+                    </tr>
+                @endif
+            </tbody>
+        </table>
     </div>
     {{-- end table barang --}}
 
@@ -62,27 +66,6 @@
 
                 <form type="post" wire:submit.prevent="store" class="mt-2 grid gap-2 lg:grid-cols-2 lg:gap-4">
 
-                    @if (isset($data['packing_list']))
-                        <div class="col-span-2">
-                            <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-                                Pilih Barang yang Dikirim
-                            </label>
-
-
-                            @forelse ($data['packing_list'] as $index => $row)
-                                <div class="flex items-center gap-2">
-                                    <input type="checkbox" id="cb-{{ $index }}" value="{{ $row['id_barang'] }}"
-                                        wire:model="form.barangs">
-                                    <label for="cb-{{ $index }}"
-                                        class="text-sm text-gray-800 dark:text-white">{{ $row['nama_barang'] }}</label>
-                                </div>
-                            @empty
-                                <span class="text-xs italic text-red-500"> Tidak ada barang dalam packing list. </span>
-                            @endforelse
-
-                        </div>
-                    @endif
-
                     <div class="col-span-2">
                         <x-input.select id="via" name="via" :labels="true" :textLabel="'Pilih tipe pengiriman'"
                             :defaultOption="'Pilih tipe pengiriman'" :options="[
@@ -95,6 +78,27 @@
                             <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
                         @enderror
                     </div>
+
+                    @if (isset($spk_data->production->packing_list) && $form->via !== 'supir')
+                        <div class="col-span-2">
+                            <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                                Pilih Barang yang Dikirim
+                            </label>
+
+
+                            @forelse ($spk_data->production->packing_list as $index => $row)
+                                <div class="flex items-center gap-2">
+                                    <input type="checkbox" id="cb-{{ $index }}" value="{{ $row['id_barang'] }}"
+                                        wire:model="form.products">
+                                    <label for="cb-{{ $index }}"
+                                        class="text-sm text-gray-800 dark:text-white">{{ $row['nama_barang'] }}</label>
+                                </div>
+                            @empty
+                                <span class="text-xs italic text-red-500"> Tidak ada barang dalam packing list. </span>
+                            @endforelse
+
+                        </div>
+                    @endif
 
                     @if ($form->via === 'laut')
                         <div class="col-span-2 lg:col-span-1">
@@ -283,145 +287,5 @@
     </div>
     {{-- end form tambah info pengiriman --}}
 
-    {{-- riwayat pengiriman --}}
-    <div id="delivery-history-section" class="flex w-full flex-col gap-2 lg:gap-4">
-        <div id="delivery-history-header">
-            <h3 class="text-sm font-semibold text-gray-900 dark:text-white lg:text-lg">
-                Riwayat Pengiriman
-            </h3>
-
-            <p class="text-base text-gray-600 dark:text-gray-400">
-                Berikut ini adalah riwayat pengiriman SPK dengan no spk: <span
-                    class="font-semibold text-gray-800 dark:text-gray-200">{{ $spk_data->nomor_order }}</span>
-            </p>
-        </div>
-
-        <div id="delivery-history-content" class="grid w-full gap-2 lg:grid-cols-2 lg:gap-4">
-            @forelse ($deliveries as $row)
-                <div id="delivery-history-content-child"
-                    class="flex flex-col gap-2 rounded-lg border-[1px] border-gray-200 bg-gray-100 p-2 text-sm dark:border-gray-600 dark:bg-gray-600 lg:p-4">
-
-                    <span class="w-full text-center text-xs font-semibold text-gray-800 dark:text-white">
-                        {{ \Carbon\Carbon::parse($row->created_at)->isoFormat('dddd, D MMMM YYYY HH:mm:ss') }}
-                    </span>
-
-                    <table id="delivery-history-content-table" class="w-full dark:text-gray-400">
-                        <tr>
-                            <td>Via</td>
-                            <td class="w-8 text-center">:</td>
-                            <td class="text-right text-gray-800 dark:text-white">{{ ucfirst($row->via) }}</td>
-                        </tr>
-
-                        @if ($row['via'] === 'laut')
-                            <tr>
-                                <td>Partay</td>
-                                <td class="w-8 text-center">:</td>
-                                <td class="text-right text-gray-800 dark:text-white">
-                                    {{ $row->partay ?? '-' }} </td>
-                            </tr>
-                            <tr>
-                                <td>No. Container </td>
-                                <td class="w-8 text-center">:</td>
-                                <td class="text-right text-gray-800 dark:text-white">
-                                    {{ $row->no_container ?? '-' }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Nama Kapal</td>
-                                <td class="w-8 text-center">:</td>
-                                <td class="text-right text-gray-800 dark:text-white">
-                                    {{ $row->nama_kapal ?? '-' }}
-                                </td>
-                            </tr>
-                        @else
-                            <tr>
-                                <td>Nomor SR</td>
-                                <td class="w-8 text-center">:</td>
-                                <td class="text-right text-gray-800 dark:text-white">
-                                    {{ $row->nomor_sr ?? '-' }}</td>
-                            </tr>
-                            <tr>
-                                <td>Kode Jari Supir </td>
-                                <td class="w-8 text-center">:</td>
-                                <td class="text-right text-gray-800 dark:text-white">
-                                    {{ $row->id_supir ?? '-' }}
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>Nama Supir </td>
-                                <td class="w-8 text-center">:</td>
-                                <td class="text-right text-gray-800 dark:text-white">
-                                    {{ $row->nama_supir ?? '-' }}
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>No. Telp </td>
-                                <td class="w-8 text-center">:</td>
-                                <td class="text-right text-gray-800 dark:text-white">
-                                    {{ $row->no_telp_supir ?? '-' }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>No. Plat</td>
-                                <td class="w-8 text-center">:</td>
-                                <td class="text-right text-gray-800 dark:text-white">
-                                    {{ $row->no_plat ?? '-' }}</td>
-                            </tr>
-                        @endif
-
-                        <tr>
-                            <td>Estimasi Berat Barang</td>
-                            <td class="w-8 text-center">:</td>
-                            <td class="text-right text-gray-800 dark:text-white">
-                                {{ $row->berat ?? '-' }} </td>
-                        </tr>
-                        <tr>
-                            <td>ETD</td>
-                            <td class="w-8 text-center">:</td>
-                            <td class="text-right text-gray-800 dark:text-white">
-                                {{ $row->etd ?? '-' }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>ETA</td>
-                            <td class="w-8 text-center">:</td>
-                            <td class="text-right text-gray-800 dark:text-white">
-                                {{ $row->eta ?? '-' }}
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>Catatan</td>
-                            <td class="w-8 text-center">:</td>
-                            <td class="text-right text-gray-800 dark:text-white">
-                                {{ $row->note ?? '-' }}
-                            </td>
-                        </tr>
-                    </table>
-
-                    @if ($row->via != 'supir')
-                        <div class="flex w-full flex-col gap-1">
-                            <p
-                                class="text-center font-semibold text-gray-800 underline underline-offset-2 dark:text-gray-400">
-                                Barang yang
-                                dibawah</p>
-                            <ul class="text-gray-600 dark:text-white">
-                                @foreach ($row['products'] as $key => $barang)
-                                    <li>{{ $key + 1 }}. {{ $barang }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-
-                </div>
-            @empty
-                <p class="col-span-2 text-center text-sm italic text-red-500">Belum ada riwayat pengiriman.</p>
-            @endforelse
-        </div>
-
-        {{ $deliveries->links(data: ['scrollTo' => '#delivery-history-section']) }}
-    </div>
-    {{-- end riwayat pengiriman --}}
+    @livewire('handler.spk.delivery-barang-list', ['id' => $spk_data->id])
 </div>
