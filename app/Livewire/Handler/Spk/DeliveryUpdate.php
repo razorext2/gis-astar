@@ -92,6 +92,7 @@ class DeliveryUpdate extends Component
                 if (! is_null($this->form->nomor_sr) && $this->form->via == 'supir' && $this->spk_data->is_using_company_driver == true) {
                     $driver = Driver::create([
                         'no_sr' => $this->form->nomor_sr,
+                        'tipe_tagihan' => $this->spk_data->tipe_tagihan,
                         'kode_pegawai' => $this->form->id_supir,
                         'tipe_kunjungan' => 'ATRBRG',
                         'title' => $this->nama_customer,
@@ -133,7 +134,20 @@ class DeliveryUpdate extends Component
 
     public function fetchSR()
     {
-        $response = Http::get('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSR&NomorPermintaanJual='.$this->form->nomor_sr);
+        // validasi sr
+        $this->validateOnly('form.nomor_sr');
+
+        // cek is_using_company_driver
+        if (! $this->spk_data->is_using_company_driver) {
+            return $this->dispatch('swal', icon: 'error', text: 'SPK ini tidak dikirim menggunakan Supir Perusahaan.', title: 'Gagal');
+        }
+
+        $api_fetch = match ($this->spk_data->tipe_tagihan) {
+            'idcppn' => 'fetchSR3',
+            'idcnon' => 'fetchSR'
+        };
+
+        $response = Http::get('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe='.$api_fetch.'&NomorPermintaanJual='.$this->form->nomor_sr);
 
         if ($response['status'] == 'error') {
             return $this->dispatch('swal', icon: 'error', text: $response['message'], title: 'Gagal');

@@ -136,7 +136,8 @@
                                     <div class="grow">
                                         <x-input.basic type="text" id="nomor_sr" name="nomor_sr"
                                             wire:model="form.nomor_sr" placeholder="SR-XXXXXXXX">
-                                            Nomor SR
+                                            Nomor SR (<span class="font-semibold">SPK:
+                                                {{ strtoupper($spk_data->tipe_tagihan) }}</span>)
                                         </x-input.basic>
 
                                         @error('form.nomor_sr')

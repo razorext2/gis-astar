@@ -170,12 +170,13 @@ final class DriverTable extends PowerGridComponent
             Column::action('Action'),
             Column::make('Kode pegawai', 'kode_pegawai')
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->bodyAttribute('min-w-44'),
 
             Column::make('Lokasi', 'lokasi')
                 ->sortable()
                 ->searchable()
-                ->bodyAttribute('min-w-80'),
+                ->bodyAttribute('min-w-72'),
 
             Column::make('Status', 'status_formatted', 'status')
                 ->sortable()

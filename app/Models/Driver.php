@@ -15,6 +15,7 @@ class Driver extends Model
 
     protected $fillable = [
         'no_sr',
+        'tipe_tagihan',
         'tipe_kunjungan',
         'kode_pegawai',
         'title',

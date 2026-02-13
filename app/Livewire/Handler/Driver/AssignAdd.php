@@ -17,6 +17,13 @@ class AssignAdd extends Component
     ])]
     public string $no_sr = '';
 
+    #[Validate('required|string|min:3|max:10', message: [
+        'tipe_tagihan.required' => 'Tipe tagihan wajib diisi!',
+        'tipe_tagihan.min' => 'Tipe tagihan minimal 3 karakter!',
+        'tipe_tagihan.max' => 'Tipe tagihan maksimal 10 karakter!',
+    ])]
+    public string $tipe_tagihan = '';
+
     #[Validate('required|string|min:6|max:6', message: [
         'pt_type.required' => 'Tipe kunjungan wajib diisi!',
         'pt_type.min' => 'Tipe kunjungan minimal 6 karakter!',
@@ -48,12 +55,19 @@ class AssignAdd extends Component
     {
         // validasi field no. sr
         $this->validateOnly('no_sr');
+        $this->validateOnly('tipe_tagihan');
+
+        // set api berdasarkan tipe tagihan
+        $api_fetch = match ($this->tipe_tagihan) {
+            'idcppn' => 'fetchSR3',
+            'idcnon' => 'fetchSR'
+        };
 
         // tampilkan loading popup
         $this->dispatch('loadingProgress', message: 'Mencari data...');
 
         // akses API
-        $response = Http::get('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSR&NomorPermintaanJual='.$this->no_sr);
+        $response = Http::get('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe='.$api_fetch.'&NomorPermintaanJual='.$this->no_sr);
 
         // jika status = error
         if ($response['status'] == 'error') {
@@ -79,6 +93,7 @@ class AssignAdd extends Component
         try {
             $driver = Driver::create([
                 'no_sr' => $this->no_sr,
+                'tipe_tagihan' => $this->tipe_tagihan,
                 'tipe_kunjungan' => $this->pt_type,
                 'title' => $this->pt_name,
                 'lokasi' => $this->pt_address,
