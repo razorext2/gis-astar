@@ -49,6 +49,65 @@ class DeliveryUpdate extends Component
         $this->skipRender();
     }
 
+    public function clearForm()
+    {
+        $this->form->reset();
+        $this->search_supir = null;
+        $this->show_customer = false;
+        $this->nama_customer = null;
+        $this->alamat_customer = null;
+
+        $this->form->via = $this->spk_data->is_using_company_driver ? 'supir' : '';
+    }
+
+    public function fetchSR()
+    {
+        // validasi sr
+        $this->validateOnly('form.nomor_sr');
+
+        // cek is_using_company_driver
+        if (! $this->spk_data->is_using_company_driver) {
+            return $this->dispatch('swal', icon: 'error', text: 'SPK ini tidak dikirim menggunakan Supir Perusahaan.', title: 'Gagal');
+        }
+
+        $api_fetch = match ($this->spk_data->tipe_tagihan) {
+            'idcppn' => 'fetchSR3',
+            'idcnon' => 'fetchSR'
+        };
+
+        $response = Http::get('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe='.$api_fetch.'&NomorPermintaanJual='.$this->form->nomor_sr);
+
+        if ($response['status'] == 'error') {
+            return $this->dispatch('swal', icon: 'error', text: $response['message'], title: 'Gagal');
+        }
+
+        if ($this->sanitizeAlphaNumeric($response['data'][0]['NamaCustomer']) !== $this->sanitizeAlphaNumeric($this->spk_data->customer['nama_perusahaan'])) {
+            $error_message = 'Nama Customer tidak sama dengan data SPK yang ada di sistem!. <br> SPK: <b>'.$this->spk_data->customer['nama_perusahaan'].'</b> <br> SR BSI: <b>'.$response['data'][0]['NamaCustomer'].'</b>';
+
+            return $this->dispatch('swal', icon: 'error', text: $error_message, title: 'Gagal');
+        }
+
+        $this->show_customer = true;
+        $this->nama_customer = $response['data'][0]['NamaCustomer'];
+        $this->alamat_customer = $response['data'][0]['AlamatContact'];
+    }
+
+    private function sanitizeAlphaNumeric(string $text): string
+    {
+        return strtoupper(preg_replace('/[^A-Za-z0-9]/', '', $text));
+    }
+
+    public function updatedFormVia()
+    {
+        if ($this->form->via == 'supir') {
+            if (! $this->spk_data->is_using_company_driver) {
+                $this->form->via = '';
+
+                return $this->dispatch('swal', icon: 'error', text: 'SPK ini tidak dikirim menggunakan Supir Perusahaan.', title: 'Gagal');
+            }
+        }
+    }
+
     public function store()
     {
         // check authorization
@@ -56,6 +115,13 @@ class DeliveryUpdate extends Component
 
         // validasi form
         $this->form->validate();
+
+        // jika via darat dan laut
+        if ($this->form->via !== 'supir') {
+            if (count($this->form->products) === 0) {
+                return $this->dispatch('swal', icon: 'error', text: 'Barang tidak boleh kosong. Minimal harus centang 1 barang!', title: 'Gagal');
+            }
+        }
 
         // buat history
         $this->form->history[] = [
@@ -120,65 +186,6 @@ class DeliveryUpdate extends Component
             'user_id' => auth()->id(),
             'spk_id' => $this->id,
         ]);
-    }
-
-    public function clearForm()
-    {
-        $this->form->reset();
-        $this->search_supir = null;
-        $this->show_customer = false;
-        $this->nama_customer = null;
-        $this->alamat_customer = null;
-
-        $this->form->via = $this->spk_data->is_using_company_driver ? 'supir' : '';
-    }
-
-    public function fetchSR()
-    {
-        // validasi sr
-        $this->validateOnly('form.nomor_sr');
-
-        // cek is_using_company_driver
-        if (! $this->spk_data->is_using_company_driver) {
-            return $this->dispatch('swal', icon: 'error', text: 'SPK ini tidak dikirim menggunakan Supir Perusahaan.', title: 'Gagal');
-        }
-
-        $api_fetch = match ($this->spk_data->tipe_tagihan) {
-            'idcppn' => 'fetchSR3',
-            'idcnon' => 'fetchSR'
-        };
-
-        $response = Http::get('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe='.$api_fetch.'&NomorPermintaanJual='.$this->form->nomor_sr);
-
-        if ($response['status'] == 'error') {
-            return $this->dispatch('swal', icon: 'error', text: $response['message'], title: 'Gagal');
-        }
-
-        if ($this->sanitizeAlphaNumeric($response['data'][0]['NamaCustomer']) !== $this->sanitizeAlphaNumeric($this->spk_data->customer['nama_perusahaan'])) {
-            $error_message = 'Nama Customer tidak sama dengan data SPK yang ada di sistem!. <br> SPK: <b>'.$this->spk_data->customer['nama_perusahaan'].'</b> <br> SR BSI: <b>'.$response['data'][0]['NamaCustomer'].'</b>';
-
-            return $this->dispatch('swal', icon: 'error', text: $error_message, title: 'Gagal');
-        }
-
-        $this->show_customer = true;
-        $this->nama_customer = $response['data'][0]['NamaCustomer'];
-        $this->alamat_customer = $response['data'][0]['AlamatContact'];
-    }
-
-    private function sanitizeAlphaNumeric(string $text): string
-    {
-        return strtoupper(preg_replace('/[^A-Za-z0-9]/', '', $text));
-    }
-
-    public function updatedFormVia()
-    {
-        if ($this->form->via == 'supir') {
-            if (! $this->spk_data->is_using_company_driver) {
-                $this->form->via = '';
-
-                return $this->dispatch('swal', icon: 'error', text: 'SPK ini tidak dikirim menggunakan Supir Perusahaan.', title: 'Gagal');
-            }
-        }
     }
 
     public function render()

@@ -1,46 +1,48 @@
 <div class="flex flex-col gap-2 p-4 lg:gap-4 lg:p-0">
 
-    {{-- table barang --}}
-    <div id="items-table" class="w-full">
-        <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
-            <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="py-3 text-center">#</th>
-                    <th scope="col" class="py-3 text-center">Ekspedisi</th>
-                    <th scope="col" class="py-3 text-center">Barang</th>
-                    <th scope="col" class="py-3 text-center">Jumlah</th>
-                </tr>
-            </thead>
+    @if (!$spk_data->is_using_company_driver)
+        {{-- table barang --}}
+        <div id="items-table" class="w-full">
+            <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
+                <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="py-3 text-center">#</th>
+                        <th scope="col" class="py-3 text-center">Ekspedisi</th>
+                        <th scope="col" class="py-3 text-center">Barang</th>
+                        <th scope="col" class="py-3 text-center">Jumlah</th>
+                    </tr>
+                </thead>
 
-            <tbody>
-                @if (isset($spk_data->production->packing_list))
-                    @foreach ($spk_data->production->packing_list as $index => $row)
+                <tbody>
+                    @if (isset($spk_data->production->packing_list))
+                        @foreach ($spk_data->production->packing_list as $index => $row)
+                            <tr class="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                                <td class="px-3 py-2 text-center">
+                                    {{ $index + 1 }}
+                                </td>
+                                <td class="px-3 py-2">
+                                    {{ $row['nama_ekspedisi'] }}
+                                </td>
+                                <td class="px-3 py-2">
+                                    {{ $row['nama_barang'] }}
+                                </td>
+                                <td class="px-3 py-2">
+                                    {{ $row['qty_barang'] }} {{ ucfirst($row['satuan_barang']) }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
                         <tr class="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-                            <td class="px-3 py-2 text-center">
-                                {{ $index + 1 }}
-                            </td>
-                            <td class="px-3 py-2">
-                                {{ $row['nama_ekspedisi'] }}
-                            </td>
-                            <td class="px-3 py-2">
-                                {{ $row['nama_barang'] }}
-                            </td>
-                            <td class="px-3 py-2">
-                                {{ $row['qty_barang'] }} {{ ucfirst($row['satuan_barang']) }}
+                            <td colspan="4" class="px-6 py-4 text-center text-sm font-semibold italic text-red-500">
+                                Packing list belum ditambah.
                             </td>
                         </tr>
-                    @endforeach
-                @else
-                    <tr class="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-                        <td colspan="4" class="px-6 py-4 text-center text-sm font-semibold italic text-red-500">
-                            Packing list belum ditambah.
-                        </td>
-                    </tr>
-                @endif
-            </tbody>
-        </table>
-    </div>
-    {{-- end table barang --}}
+                    @endif
+                </tbody>
+            </table>
+        </div>
+        {{-- end table barang --}}
+    @endif
 
     {{-- form tambah info pengiriman --}}
     <div id="accordion-packing-form" x-data="{ accordionOpen: false }">
