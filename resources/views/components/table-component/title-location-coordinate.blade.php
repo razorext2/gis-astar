@@ -11,30 +11,29 @@
             @php
                 $tp = match ((string) $data->tipe_kunjungan) {
                     'ATRBRG' => [
-                        'color' => 'purple',
+                        'color' => 'bg-purple-400 dark:bg-purple-800 text-purple-800 dark:text-purple-400',
                         'label' => 'Antar Barang (SR)',
                     ],
                     'JPTBRG' => [
-                        'color' => 'fuscia',
+                        'color' => 'bg-fuscia-400 dark:bg-fuscia-800 text-fuscia-800 dark:text-fuscia-400',
                         'label' => 'Jemput Barang',
                     ],
                     'ATRTEK' => [
-                        'color' => 'blue',
+                        'color' => 'bg-blue-400 dark:bg-blue-800 text-blue-800 dark:text-blue-400',
                         'label' => 'Antar Teknisi',
                     ],
                     'JPTTEK' => [
-                        'color' => 'emerald',
+                        'color' => 'bg-emerald-400 dark:bg-emerald-800 text-emerald-800 dark:text-emerald-400',
                         'label' => 'Jemput Teknisi',
                     ],
                     default => [
-                        'color' => 'yellow',
+                        'color' => 'bg-yellow-400 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-400',
                         'label' => 'Lainnya',
                     ],
                 };
             @endphp
 
-            <span
-                class="bg-{{ $tp['color'] }}-400 dark:bg-{{ $tp['color'] }}-800 rounded-md px-1.5 py-0.5 text-xs text-gray-600 dark:text-white">{{ $tp['label'] }}</span>
+            <span class="{{ $tp['color'] }} rounded-md px-1.5 py-0.5 text-xs">{{ $tp['label'] }}</span>
         @endif
     </div>
     <span class="w-full text-wrap">{{ $data->title }} </span>
