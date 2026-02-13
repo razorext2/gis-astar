@@ -27,12 +27,9 @@ return new class extends Migration
                 ->nullable();
             $table->string('no_plat', 100)->nullable();
             $table->string('nama_supir', 100)->nullable();
-            $table->foreignId('id_supir')
+            $table->string('id_supir')
                 ->nullable()
-                ->index()
-                ->constrained('users')
-                ->nullOnDelete()
-                ->cascadeOnUpdate();
+                ->index();
             $table->string('no_telp_supir', 20)->nullable();
             $table->string('berat', 20)->nullable();
             $table->date('etd')->nullable();

@@ -41,6 +41,6 @@ class SpkDelivery extends Model
 
     public function supir()
     {
-        return $this->belongsTo(\App\Models\User::class, 'id_supir', 'id');
+        return $this->belongsTo(\App\Models\User::class, 'id_supir', 'kode_pegawai');
     }
 }

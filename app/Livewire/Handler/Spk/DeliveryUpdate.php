@@ -46,10 +46,19 @@ class DeliveryUpdate extends Component
     {
         $this->form->id_supir = $kode_pegawai;
         $this->form->nama_supir = $name;
+
+        $this->skipRender();
     }
 
     public function store()
     {
+        // check authorization
+        $this->authorize('updateInformasiPengiriman', SpkMain::class);
+
+        // validasi form
+        $this->form->validate();
+
+        // buat history
         $this->form->history[] = [
             'id' => (string) Str::uuid(),
             'status' => 'Dalam Pengiriman',
@@ -96,6 +105,11 @@ class DeliveryUpdate extends Component
                         throw new \Exception('Driver gagal dibuat');
                     }
                 }
+
+                // update status spk
+                $this->spk_data->update([
+                    'status' => 4, // proses penagihan
+                ]);
             });
 
             // reset form

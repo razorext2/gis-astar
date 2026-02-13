@@ -90,6 +90,10 @@
                                 'darat' => 'Darat / Truck',
                                 'supir' => 'Supir Perusahaan',
                             ]" wire:model.live="form.via" />
+
+                        @error('form.via')
+                            <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     @if ($form->via === 'laut')
@@ -98,6 +102,10 @@
                                 wire:model="form.partay">
                                 Partay
                             </x-input.basic>
+
+                            @error('form.partay')
+                                <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="col-span-2 lg:col-span-1">
@@ -105,6 +113,10 @@
                                 placeholder="Masukkan nomor container.." wire:model="form.no_container">
                                 No. Container
                             </x-input.basic>
+
+                            @error('form.no_container')
+                                <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="col-span-2">
@@ -112,6 +124,10 @@
                                 wire:model="form.nama_kapal">
                                 Nama Kapal
                             </x-input.basic>
+
+                            @error('form.nama_kapal')
+                                <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                            @enderror
                         </div>
                     @elseif($form->via === 'darat' || $form->via === 'supir')
                         @if ($form->via === 'supir')
@@ -178,6 +194,10 @@
                                     *Otomatis terisi jika pilih supir berdasarkan list pada form supir.
                                 </span>
                             @endif
+
+                            @error('form.nama_supir')
+                                <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         @if ($form->via === 'darat')
@@ -186,6 +206,10 @@
                                     placeholder="Masukkan nomor telepon supir.." wire:model="form.no_telp_supir">
                                     No. Telp Supir
                                 </x-input.basic>
+
+                                @error('form.no_telp_supir')
+                                    <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="col-span-2">
@@ -193,6 +217,10 @@
                                     wire:model="form.no_plat">
                                     Nomor Plat Kendaraan
                                 </x-input.basic>
+
+                                @error('form.no_plat')
+                                    <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                                @enderror
                             </div>
                         @endif
                     @endif
@@ -202,22 +230,38 @@
                             wire:model="form.berat">
                             Estimasi Berat Total Barang
                         </x-input.basic>
+
+                        @error('form.berat')
+                            <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="col-span-2 lg:col-span-1">
                         <x-input.basic id="etd" name="etd" wire:model="form.etd" type="date">
                             Estimasi Waktu Berangkat
                         </x-input.basic>
+
+                        @error('form.etd')
+                            <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="col-span-2 lg:col-span-1">
                         <x-input.basic id="eta" name="eta" wire:model="form.eta" type="date">
                             Estimasi Waktu Sampai
                         </x-input.basic>
+
+                        @error('form.eta')
+                            <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="col-span-2">
                         <x-input.textarea id="note" name="note" wire:model="form.note" :textLabel="'Catatan'" />
+
+                        @error('form.note')
+                            <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="col-span-2 flex justify-end gap-2">
@@ -272,56 +316,57 @@
                                 <td>Partay</td>
                                 <td class="w-8 text-center">:</td>
                                 <td class="text-right text-gray-800 dark:text-white">
-                                    {{ $row->partay }} </td>
+                                    {{ $row->partay ?? '-' }} </td>
                             </tr>
                             <tr>
                                 <td>No. Container </td>
                                 <td class="w-8 text-center">:</td>
                                 <td class="text-right text-gray-800 dark:text-white">
-                                    {{ $row->no_container }}
+                                    {{ $row->no_container ?? '-' }}
                                 </td>
                             </tr>
                             <tr>
                                 <td>Nama Kapal</td>
                                 <td class="w-8 text-center">:</td>
                                 <td class="text-right text-gray-800 dark:text-white">
-                                    {{ $row->nama_kapal }}
+                                    {{ $row->nama_kapal ?? '-' }}
                                 </td>
                             </tr>
-                        @elseif ($row->via === 'supir')
+                        @else
                             <tr>
                                 <td>Nomor SR</td>
                                 <td class="w-8 text-center">:</td>
                                 <td class="text-right text-gray-800 dark:text-white">
-                                    {{ $row->nomor_sr }}</td>
+                                    {{ $row->nomor_sr ?? '-' }}</td>
                             </tr>
                             <tr>
                                 <td>Kode Jari Supir </td>
                                 <td class="w-8 text-center">:</td>
                                 <td class="text-right text-gray-800 dark:text-white">
-                                    {{ $row->nama_supir }}
+                                    {{ $row->id_supir ?? '-' }}
                                 </td>
                             </tr>
-                        @elseif ($row['via'] === 'darat')
+
                             <tr>
                                 <td>Nama Supir </td>
                                 <td class="w-8 text-center">:</td>
                                 <td class="text-right text-gray-800 dark:text-white">
-                                    {{ $row->nama_supir }}
+                                    {{ $row->nama_supir ?? '-' }}
                                 </td>
                             </tr>
+
                             <tr>
                                 <td>No. Telp </td>
                                 <td class="w-8 text-center">:</td>
                                 <td class="text-right text-gray-800 dark:text-white">
-                                    {{ $row->no_telp_supir }}
+                                    {{ $row->no_telp_supir ?? '-' }}
                                 </td>
                             </tr>
                             <tr>
                                 <td>No. Plat</td>
                                 <td class="w-8 text-center">:</td>
                                 <td class="text-right text-gray-800 dark:text-white">
-                                    {{ $row->no_plat }}</td>
+                                    {{ $row->no_plat ?? '-' }}</td>
                             </tr>
                         @endif
 
@@ -329,20 +374,20 @@
                             <td>Estimasi Berat Barang</td>
                             <td class="w-8 text-center">:</td>
                             <td class="text-right text-gray-800 dark:text-white">
-                                {{ $row->berat }} </td>
+                                {{ $row->berat ?? '-' }} </td>
                         </tr>
                         <tr>
                             <td>ETD</td>
                             <td class="w-8 text-center">:</td>
                             <td class="text-right text-gray-800 dark:text-white">
-                                {{ $row->etd }}
+                                {{ $row->etd ?? '-' }}
                             </td>
                         </tr>
                         <tr>
                             <td>ETA</td>
                             <td class="w-8 text-center">:</td>
                             <td class="text-right text-gray-800 dark:text-white">
-                                {{ $row->eta }}
+                                {{ $row->eta ?? '-' }}
                             </td>
                         </tr>
 
