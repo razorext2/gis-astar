@@ -21,6 +21,7 @@ class DeliveryBarangList extends Component
     {
         $deliveries = SpkDelivery::with('spk.production')
             ->where('id_spk', $this->id)
+            ->orderBy('created_at', 'desc')
             ->paginate(perPage: 4, pageName: 'deliveries');
 
         return view('livewire.handler.spk.delivery-barang-list', [
