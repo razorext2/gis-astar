@@ -186,7 +186,9 @@ final class ProductionTable extends PowerGridComponent
             })
             ->add('packing_list')
             ->add('created_at')
-            ->add('tipe_timbangan', fn ($query) => $query->spk->tipe_timbangan);
+            ->add('tipe_timbangan', fn ($query) => $query->spk->tipe_timbangan)
+            ->add('is_using_company_driver', fn ($query) => $query->spk->is_using_company_driver)
+            ->add('is_using_old_stock', fn ($query) => $query->spk->is_using_old_stock);
     }
 
     public function columns(): array
@@ -199,6 +201,8 @@ final class ProductionTable extends PowerGridComponent
             Column::make('Nomor SPK', 'nomor_order_formatted', 'nomor_order')
                 ->searchable(),
             Column::make('Status SPK', 'status_spk', 'status_spk'),
+            Column::make('Supir perusahaan', 'is_using_company_driver')->hidden(),
+            Column::make('Old Stock', 'is_using_old_stock')->hidden(),
             Column::make('Customer', 'customer_info')
                 ->searchable()
                 ->searchableRaw("JSON_UNQUOTE(JSON_EXTRACT($table.customer, '$.nama_perusahaan')) LIKE ?"),
@@ -224,6 +228,10 @@ final class ProductionTable extends PowerGridComponent
                         $q->where('tipe_timbangan', $value);
                     });
                 }),
+            Filter::boolean('is_using_company_driver', field: 'is_using_company_driver')
+                ->label('Ya', 'Tidak'),
+            Filter::boolean('is_using_old_stock', field: 'is_using_old_stock')
+                ->label('Ya', 'Tidak'),
         ];
     }
 

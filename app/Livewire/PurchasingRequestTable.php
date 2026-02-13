@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
+use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
@@ -25,10 +26,6 @@ final class PurchasingRequestTable extends PowerGridComponent
     {
         $this->user = auth()->user();
 
-        if ($this->user->can('spk-delete')) {
-            $this->showCheckBox();
-        }
-
         return [
             PowerGrid::header()
                 ->showSearchInput(),
@@ -45,10 +42,21 @@ final class PurchasingRequestTable extends PowerGridComponent
             ->addSelect([
                 'customer_nama_perusahaan' => DB::raw("JSON_UNQUOTE(JSON_EXTRACT(customer, '$.nama_perusahaan'))"),
                 'customer_contact_person' => DB::raw("JSON_UNQUOTE(JSON_EXTRACT(customer, '$.contact_person'))"),
-                'products_name' => DB::raw("JSON_UNQUOTE(JSON_EXTRACT(products, '$'))"),
             ])
             ->where('status_approval', 1)
             ->where('on_delay', 0)
+            ->when($this->search, function ($query) {
+
+                $search = $this->search;
+
+                $query->where(function ($q) use ($search) {
+
+                    $q->where('nomor_purchasing_request', 'like', "%{$search}%")
+                        ->orWhereJsonContains('nomor_purchasing_request_json', $search)
+                        ->orWhereRaw("JSON_SEARCH(nomor_purchasing_request_json, 'one', ?) IS NOT NULL", [$search]);
+
+                });
+            })
             ->orderBy('nomor_order', 'desc');
     }
 
@@ -103,6 +111,8 @@ final class PurchasingRequestTable extends PowerGridComponent
 
             Column::make('Nomor PR', 'nomor_purchasing_request_formatted', 'nomor_purchasing_request'),
 
+            Column::make('Tipe Tagihan', 'tipe_tagihan')->hidden(),
+
             Column::make('Penggunaan Stok', 'is_using_old_stock_formatted', 'is_using_old_stock'),
 
             Column::make('SPK', 'nomor_order_formatted', 'nomor_order')
@@ -118,8 +128,21 @@ final class PurchasingRequestTable extends PowerGridComponent
 
     public function filters(): array
     {
-        return [
+        $filters = [
+            Filter::inputText('nomor_order', 'nomor_order')
+                ->placeholder('Nomor SPK'),
+            Filter::boolean('is_using_old_stock', 'is_using_old_stock')
+                ->label('Ya', 'Tidak'),
+            Filter::select('tipe_tagihan', 'tipe_tagihan')
+                ->dataSource([
+                    ['value' => 'idcnon', 'label' => 'IDC Non PPN'],
+                    ['value' => 'idcppn', 'label' => 'IDC PPN'],
+                ])
+                ->optionLabel('label')
+                ->optionValue('value'),
         ];
+
+        return $filters;
     }
 
     public function actions(SpkMain $row): array

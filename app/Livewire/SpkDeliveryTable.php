@@ -136,13 +136,25 @@ final class SpkDeliveryTable extends PowerGridComponent
 
             Column::make('No tagihan updated by', 'no_tagihan_updated_by_formatted', 'no_tagihan_updated_by')
                 ->hidden(true),
+
+            Column::make('Supir Perusahaan', 'is_using_company_driver')->hidden(),
         ];
     }
 
     public function filters(): array
     {
         return [
-            Filter::datepicker('tgl_cetak'),
+            Filter::inputText('nomor_order', 'nomor_order')
+                ->placeholder('Nomor SPK'),
+            Filter::select('tipe_tagihan', 'tipe_tagihan')
+                ->dataSource([
+                    ['value' => 'idcnon', 'label' => 'IDC Non PPN'],
+                    ['value' => 'idcppn', 'label' => 'IDC PPN'],
+                ])
+                ->optionLabel('label')
+                ->optionValue('value'),
+            Filter::boolean('is_using_company_driver', 'is_using_company_driver')
+                ->label('Ya', 'Tidak'),
         ];
     }
 
