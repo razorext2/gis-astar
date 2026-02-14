@@ -108,6 +108,14 @@ class DeliveryUpdate extends Component
         }
     }
 
+    public function generateKodeKirim()
+    {
+        $random = strtoupper(Str::random(8));
+        $timestamp = now()->format('dmYHi');
+
+        return 'DLVR-'.$random.'-'.$timestamp;
+    }
+
     public function store()
     {
         // check authorization
@@ -124,18 +132,15 @@ class DeliveryUpdate extends Component
         }
 
         // buat history
-        $this->form->history[] = [
-            'id' => (string) Str::uuid(),
-            'status' => 'Dalam Pengiriman',
-            'desc' => 'Pengiriman sudah dijadwalkan.',
-            'created_at' => now()->toDateTimeString(),
-        ];
+        $this->form->history[] = $this->form->generateHistory('Dalam Pengiriman', 'Pengiriman sudah dijadwalkan.');
 
         $this->runSafely(function () {
             DB::transaction(function () {
                 // tambah history pengiriman
                 SpkDelivery::create([
                     'id_spk' => $this->id,
+                    'kode_kirim' => $this->generateKodeKirim(),
+                    'status_kirim' => 0, // 0 = dalam pengiriman
                     'nomor_sr' => $this->form->nomor_sr,
                     'via' => $this->form->via,
                     'partay' => $this->form->partay,

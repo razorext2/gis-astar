@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Forms\Spk;
 
+use Illuminate\Support\Str;
 use Livewire\Form;
 
 class Delivery extends Form
@@ -128,6 +129,16 @@ class Delivery extends Form
 
             // history
             'history.array' => 'Data riwayat harus berupa array.',
+        ];
+    }
+
+    public function generateHistory($status, $desc)
+    {
+        return [
+            'id' => (string) Str::uuid(),
+            'status' => $status,
+            'desc' => $desc,
+            'created_at' => now()->toDateTimeString(),
         ];
     }
 }

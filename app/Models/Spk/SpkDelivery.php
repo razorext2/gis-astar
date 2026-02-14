@@ -10,6 +10,8 @@ class SpkDelivery extends Model
 
     protected $fillable = [
         'id_spk',
+        'kode_kirim',
+        'status_kirim',
         'nomor_sr',
         'via',
         'partay',
@@ -59,5 +61,19 @@ class SpkDelivery extends Model
             ->map(fn ($id) => $indexed[$id] ?? null)
             ->filter()
             ->values();
+    }
+
+    public function getStatusKirimDescriptionAttribute()
+    {
+        $status = (int) ($this->attributes['status_kirim'] ?? null);
+
+        return match ($status) {
+            0 => 'Dalam Pengiriman',
+            1 => 'Pengiriman Selesai',
+            2 => 'Pengiriman Mengalami Delay',
+            3 => 'Pengiriman Dibatalkan',
+            4 => 'Pengiriman Direschedule',
+            default => 'Status Pengiriman tidak diketahui',
+        };
     }
 }

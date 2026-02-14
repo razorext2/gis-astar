@@ -103,6 +103,14 @@ class SpkMainPolicy
     }
 
     /**
+     * Check if user has permission to update information of pengiriman
+     */
+    public function validatePengiriman(User $user)
+    {
+        return $user->hasPermissionTo('spk-validate-pengiriman');
+    }
+
+    /**
      * Check if user has permission to update kontrak pengiriman
      */
     public function updateKontrakPengiriman(User $user)
