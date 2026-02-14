@@ -15,6 +15,8 @@ final class SpkDeliveryTable extends PowerGridComponent
 {
     public string $tableName = 'SpkDeliveryTable';
 
+    public ?int $status_kirim = null;
+
     public function setUp(): array
     {
         if (auth()->user()->can('spk-validate')) {
@@ -54,6 +56,12 @@ final class SpkDeliveryTable extends PowerGridComponent
 
             });
 
+        if ($this->status_kirim !== '' && $this->status_kirim !== null) {
+            $query->whereHas('latestDelivery', function ($q) {
+                $q->where('status_kirim', '=', $this->status_kirim);
+            });
+        }
+
         $query->orderBy('created_at', 'desc');
 
         return $query;
@@ -87,7 +95,7 @@ final class SpkDeliveryTable extends PowerGridComponent
             ->add('status')
             ->add('status_formatted', function ($query) {
                 $template = '<div class="flex flex-col gap-1 w-fit font-semibold">
-                                <span class="text-xs px-2.5 py-1 rounded-lg bg-green-500 text-green-100">'
+                                <span class="text-xs px-2.5 py-1 rounded-lg bg-green-600 text-green-300">'
                                     .$query->status_description.'
                                 </span>';
 
@@ -95,6 +103,13 @@ final class SpkDeliveryTable extends PowerGridComponent
                     $template .= "
                         <span class='bg-blue-400 text-blue-700 text-xs px-2.5 py-1 rounded-lg w-fit'>
                             Supir Perusahaan
+                        </span>";
+                }
+
+                if ($query->deliveries?->last()->status_kirim == 1) {
+                    $template .= "
+                        <span class='bg-green-400 text-green-700 text-xs px-2.5 py-1 rounded-lg w-fit'>
+                            Pengiriman Selesai
                         </span>";
                 }
 
@@ -122,15 +137,15 @@ final class SpkDeliveryTable extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
 
+            Column::make('Status', 'status_formatted', 'status')
+                ->sortable()
+                ->searchable(),
+
             Column::make('Tipe tagihan', 'tipe_tagihan')
                 ->sortable()
                 ->searchable(),
 
             Column::make('Nomor tagihan', 'nomor_tagihan_formatted', 'nomor_tagihan')
-                ->sortable()
-                ->searchable(),
-
-            Column::make('Status', 'status_formatted', 'status')
                 ->sortable()
                 ->searchable(),
 

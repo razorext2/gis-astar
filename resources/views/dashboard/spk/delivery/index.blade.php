@@ -17,8 +17,48 @@
                 </p>
 
             </div>
+            <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+                <ul class="-mb-px flex flex-wrap text-center text-sm font-medium" id="default-tab"
+                    data-tabs-toggle="#default-tab-content" role="tablist">
+                    <li class="me-2" role="presentation">
+                        <button class="inline-block rounded-t-lg border-b-2 p-4" id="semua-pengiriman-tab"
+                            data-tabs-target="#semua-pengiriman" type="button" role="tab"
+                            aria-controls="semua-pengiriman" aria-selected="false">Semua Pengiriman</button>
+                    </li>
+                    <li class="me-2" role="presentation">
+                        <button class="inline-block rounded-t-lg border-b-2 p-4" id="pengiriman-proses-tab"
+                            data-tabs-target="#pengiriman-proses" type="button" role="tab"
+                            aria-controls="pengiriman-proses" aria-selected="false">
+                            Dalam Proses Pengiriman</button>
+                    </li>
+                    <li class="me-2" role="presentation">
+                        <button
+                            class="inline-block rounded-t-lg border-b-2 p-4 hover:border-gray-300 hover:text-gray-600 dark:hover:text-gray-300"
+                            id="dashboard-tab" data-tabs-target="#pengiriman-selesai" type="button" role="tab"
+                            aria-controls="pengiriman-selesai" aria-selected="false">
+                            Pengiriman Selesai</button>
+                    </li>
+                </ul>
+            </div>
 
-            @livewire('spk-delivery-table')
+            <div id="default-tab-content">
+                <div class="hidden" id="semua-pengiriman" role="tabpanel" aria-labelledby="semua-pengiriman-tab">
+
+                    @livewire('spk-delivery-table')
+
+                </div>
+
+                <div class="hidden" id="pengiriman-proses" role="tabpanel" aria-labelledby="pengiriman-proses-tab">
+
+                    @livewire('spk-delivery-table', ['status_kirim' => 0])
+
+                </div>
+                <div class="hidden" id="pengiriman-selesai" role="tabpanel" aria-labelledby="pengiriman-selesai-tab">
+
+                    @livewire('spk-delivery-table', ['status_kirim' => 1])
+
+                </div>
+            </div>
 
         </div>
     </div>

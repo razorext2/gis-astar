@@ -172,6 +172,12 @@ class SpkMain extends Model
         return $this->hasMany(\App\Models\Spk\SpkDelivery::class, 'id_spk', 'id');
     }
 
+    public function latestDelivery()
+    {
+        return $this->hasOne(SpkDelivery::class, 'id_spk')
+            ->latestOfMany(); // Laravel 9+
+    }
+
     public function getStatusNomorTagihanDescriptionAttribute(): string
     {
         $status = (bool) ($this->attributes['status_nomor_tagihan'] ?? false);
