@@ -106,7 +106,7 @@ final class SpkDeliveryTable extends PowerGridComponent
                         </span>";
                 }
 
-                if ($query->deliveries?->last()->status_kirim == 1) {
+                if ($query->deliveries?->last()?->status_kirim && $query->deliveries?->last()->status_kirim == 1) {
                     $template .= "
                         <span class='bg-green-400 text-green-700 text-xs px-2.5 py-1 rounded-lg w-fit'>
                             Pengiriman Selesai
