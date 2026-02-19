@@ -88,17 +88,29 @@ class TodayOut extends Component
             ->where('status', '=', 1)
             ->when($this->role, fn ($query) => $query->whereHas('user.roles', fn ($role) => $role->where('name', $this->role)))
             ->when(! $this->role, function ($query) {
-                if (auth()->user()->hasAnyRole(['HRD-IDY', 'Marketing-IDY'])) {
-                    return $query->whereHas('user.roles', fn ($role) => $role->where('name', 'Sales-IDY'));
+
+                $authUser = auth()->user();
+                $targetRoles = [];
+
+                if ($authUser->hasAnyRole(['HRD-IDY', 'Marketing-IDY'])) {
+                    $targetRoles[] = 'Sales-IDY';
                 }
 
-                if (auth()->user()->hasRole('Produksi')) {
-                    return $query->whereHas('user.roles', fn ($role) => $role->where('name', 'Mekanik'));
+                if ($authUser->hasRole('Produksi')) {
+                    $targetRoles[] = 'Mekanik';
                 }
 
-                if (auth()->user()->hasRole('Service-Agrotec')) {
-                    return $query->whereHas('user.roles', fn ($role) => $role->where('name', 'Sales-Agrotec'));
+                if ($authUser->hasRole('Service-Agrotec')) {
+                    $targetRoles[] = 'Sales-Agrotec';
                 }
+
+                if (! empty($targetRoles)) {
+                    return $query->whereHas('user.roles', function ($q) use ($targetRoles) {
+                        $q->whereIn('name', $targetRoles);
+                    });
+                }
+
+                return $query;
             })
             ->paginate(6);
 
