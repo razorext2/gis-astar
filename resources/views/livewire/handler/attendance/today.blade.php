@@ -11,7 +11,7 @@
             }
 
             if ($user->can('sales-export-agrotec') || $user->can('attendance-approve')) {
-                $options['Sales'] = 'Sales Agrotec';
+                $options['Sales-Agrotec'] = 'Sales Agrotec';
             }
 
             if ($user->can('sales-export-pku') || $user->can('attendance-approve')) {
@@ -42,11 +42,11 @@
                 $options['Employee'] = 'Karyawan';
             }
 
-            if ($user->can('technician-approve')) {
+            if ($user->can('technician-approve') || $user->can('attendance-approve')) {
                 $options['Teknisi'] = 'Teknisi';
             }
 
-            if ($user->can('spk-list')) {
+            if ($user->can('spk-list') || $user->can('attendance-approve')) {
                 $options['Mekanik'] = 'Mekanik';
             }
         @endphp
