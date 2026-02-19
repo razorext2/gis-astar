@@ -92,16 +92,48 @@ class Today extends Component
                 $authUser = auth()->user();
                 $targetRoles = [];
 
-                if ($authUser->hasAnyRole(['HRD-IDY', 'Marketing-IDY'])) {
+                if ($authUser->can('sales-export-medan') || $authUser->can('attendance-approve')) {
+                    $targetRoles[] = 'Sales';
+                }
+
+                if ($authUser->hasRole('Service-Agrotec') || $authUser->can('sales-export-agrotec') || $authUser->can('attendance-approve')) {
+                    $targetRoles[] = 'Sales-Agrotec';
+                }
+
+                if ($authUser->can('sales-export-pku') || $authUser->can('attendance-approve')) {
+                    $targetRoles[] = 'Sales-PKU';
+                }
+
+                if ($authUser->can('sales-export-jkt') || $authUser->can('attendance-approve')) {
+                    $targetRoles[] = 'Sales-JKT';
+                }
+
+                if ($authUser->hasAnyRole(['HRD-IDY', 'Marketing-IDY']) || $authUser->can('sales-export-idy') || $authUser->can('attendance-approve')) {
                     $targetRoles[] = 'Sales-IDY';
                 }
 
-                if ($authUser->hasRole('Produksi')) {
-                    $targetRoles[] = 'Mekanik';
+                if ($authUser->can('sales-export-kurir-bank') || $authUser->can('attendance-approve')) {
+                    $targetRoles[] = 'Kurir-Bank';
                 }
 
-                if ($authUser->hasRole('Service-Agrotec')) {
-                    $targetRoles[] = 'Sales-Agrotec';
+                if ($authUser->can('driver-list-jkt') || $authUser->can('driver-approve') || $authUser->can('attendance-approve')) {
+                    $targetRoles[] = 'Driver-Jkt';
+                }
+
+                if ($authUser->can('driver-list-medan') || $authUser->can('driver-approve') || $authUser->can('attendance-approve')) {
+                    $targetRoles[] = 'Driver-Medan';
+                }
+
+                if ($authUser->can('attendance-approve')) {
+                    $targetRoles[] = 'Employee';
+                }
+
+                if ($authUser->can('attendance-approve') || $authUser->can('technician-approve')) {
+                    $targetRoles[] = 'Teknisi';
+                }
+
+                if ($authUser->hasRole('Produksi') || $authUser->can('technician-approve') || $authUser->can('attendance-approve')) {
+                    $targetRoles[] = 'Mekanik';
                 }
 
                 if (! empty($targetRoles)) {
