@@ -101,6 +101,7 @@ class Export extends Component
             $user->can('sales-export-jkt') => ['Sales-JKT'],
             $user->can('sales-export-kurir-bank') => ['Kurir-Bank'],
             $user->can('sales-export-pku') => ['Sales-PKU'],
+            $user->can('sales-export-agrotec') => ['Sales-Agrotec'],
             default => [],
         };
 

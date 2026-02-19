@@ -95,6 +95,10 @@ class Today extends Component
                 if (auth()->user()->hasRole('Produksi')) {
                     return $query->whereHas('user.roles', fn ($role) => $role->where('name', 'Mekanik'));
                 }
+
+                if (auth()->user()->hasRole('Service-Agrotec')) {
+                    return $query->whereHas('user.roles', fn ($role) => $role->where('name', 'Sales-Agrotec'));
+                }
             })
             ->paginate(6);
 

@@ -53,6 +53,10 @@ final class SalesRouteTable extends PowerGridComponent
             $roles = ['Sales'];
         }
 
+        if ($this->user->hasRole('Service-Agrotec')) {
+            $roles = ['Sales-Agrotec'];
+        }
+
         if ($this->user->hasRole(['Marketing-PKU', 'Management-PKU'])) {
             $roles = ['Sales-PKU'];
         }
@@ -127,6 +131,7 @@ final class SalesRouteTable extends PowerGridComponent
                     ['name' => 'Sales Jakarta', 'value' => 'Sales-JKT'],
                     ['name' => 'Sales Indodaya', 'value' => 'Sales-Indodaya'],
                     ['name' => 'Kurir Bank', 'value' => 'Kurir-Bank'],
+                    ['name' => 'Sales Agrotec', 'value' => 'Sales-Agrotec'],
                 ])
                 ->optionLabel('name')
                 ->optionValue('value')

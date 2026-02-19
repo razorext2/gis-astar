@@ -70,6 +70,13 @@ class SalesController extends Controller
                     });
                 }
 
+                // Filter relasi user yang memiliki role 'Sales-Agrotec'
+                if ($user->can('sales-export-agrotec') || $user->hasRole('Service-Agrotec')) {
+                    $query->orWhereHas('userRelasi.roles', function ($r) {
+                        $r->where('name', 'Sales-Agrotec');
+                    });
+                }
+
                 $query->orderBy('status')
                     ->latest();
 

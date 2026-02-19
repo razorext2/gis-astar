@@ -27,6 +27,9 @@ class ReportCounter extends Component
                 'sales-export-medan' => ['rel' => 'userRelasi.roles', 'role' => 'Sales'],
                 'sales-export-jkt' => ['rel' => 'userRelasi.roles', 'role' => 'Sales-JKT'],
                 'sales-export-pku' => ['rel' => 'userRelasi.roles', 'role' => 'Sales-PKU'],
+                'sales-export-idy' => ['rel' => 'userRelasi.roles', 'role' => 'Sales-IDY'],
+                'sales-export-kurir-bank' => ['rel' => 'userRelasi.roles', 'role' => 'Sales-IDY'],
+                'sales-export-agrotec' => ['rel' => 'userRelasi.roles', 'role' => 'Sales-Agrotec'],
             ],
             'driver' => [
                 'driver-list-jkt' => ['rel' => 'user.roles', 'role' => 'Driver-Jkt'],

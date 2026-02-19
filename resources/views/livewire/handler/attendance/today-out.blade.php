@@ -10,6 +10,10 @@
                 $options['Sales'] = 'Sales Medan';
             }
 
+            if ($user->can('sales-export-agrotec') || $user->can('attendance-approve')) {
+                $options['Sales'] = 'Sales Agrotec';
+            }
+
             if ($user->can('sales-export-pku') || $user->can('attendance-approve')) {
                 $options['Sales-PKU'] = 'Sales Pekanbaru';
             }

@@ -66,6 +66,7 @@
                                     'Sales-PKU' => 'Sales Pekanbaru',
                                     'Sales-IDY' => 'Sales Indodaya',
                                     'Kurir-Bank' => 'Kurir Bank',
+                                    'Sales-Agrotec' => 'Sales Agrotec',
                                 ]"
                                     default-option="Filter by roles" />
                             </div>
