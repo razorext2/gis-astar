@@ -254,6 +254,9 @@ final class SpkTable extends PowerGridComponent
 
             Column::make('Supir Perusahaan', 'is_using_company_driver')
                 ->hidden(true),
+
+            Column::make('Dijemput Customer', 'is_picked_up_by_customer')
+                ->hidden(true),
         ];
     }
 
@@ -293,6 +296,8 @@ final class SpkTable extends PowerGridComponent
             Filter::boolean('is_using_old_stock', 'is_using_old_stock')
                 ->label('Ya', 'Tidak'),
             Filter::boolean('is_using_company_driver', 'is_using_company_driver')
+                ->label('Ya', 'Tidak'),
+            Filter::boolean('is_picked_up_by_customer', 'is_picked_up_by_customer')
                 ->label('Ya', 'Tidak'),
         ];
     }

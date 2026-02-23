@@ -165,6 +165,7 @@ final class SpkDeliveryTable extends PowerGridComponent
                 ->hidden(true),
 
             Column::make('Supir Perusahaan', 'is_using_company_driver')->hidden(),
+            Column::make('Dijemput Customer', 'is_picked_up_by_customer')->hidden(),
         ];
     }
 
@@ -181,6 +182,8 @@ final class SpkDeliveryTable extends PowerGridComponent
                 ->optionLabel('label')
                 ->optionValue('value'),
             Filter::boolean('is_using_company_driver', 'is_using_company_driver')
+                ->label('Ya', 'Tidak'),
+            Filter::boolean('is_picked_up_by_customer', 'is_picked_up_by_customer')
                 ->label('Ya', 'Tidak'),
         ];
     }
