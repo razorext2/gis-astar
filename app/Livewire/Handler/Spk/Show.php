@@ -38,9 +38,10 @@ class Show extends Component
 
         $this->runSafely(function () {
             DB::transaction(function () {
-                if ($this->data->status_approval == 0 && $this->data->is_revision == true) {
+                // jika data menunggu validasi dan is_revision true
+                if ($this->data->status_approval == 0 && $this->data->is_revision == 1) {
                     $this->data->update([
-                        'is_revision' => false,
+                        'is_revision' => 0,
                         'revision_count' => $this->data->revision_count + 1,
                     ]);
                 }
@@ -58,11 +59,13 @@ class Show extends Component
                 ]);
             });
 
-            return $this->dispatch(
+            $this->dispatch(
                 event: 'swal',
                 icon: 'success',
                 title: 'Berhasil.',
                 text: 'Berhasil Approve SPK.');
+
+            return $this->redirect(route('spk.show', $this->data->id), navigate: true);
         }, 'Gagal menyetujui SPK.', [
             'user_id' => Auth::id(),
             'spk_id' => $this->data->id,

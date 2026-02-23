@@ -265,7 +265,7 @@ class Edit extends Component
 
                     // masukkan data permintaan revisi ke database
                     // $data['revision_count'] = $this->data->revision_count + 1; // jangan tambah kalo blm divalidasi
-                    $data['is_revision'] = true;
+                    $data['is_revision'] = 1; // true
                     $data['latest_revision_request_by'] = Auth::id();
                     $data['latest_revision_request_detail'] = $this->createForm->revision_request_detail;
 
