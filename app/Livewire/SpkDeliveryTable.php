@@ -62,6 +62,10 @@ final class SpkDeliveryTable extends PowerGridComponent
             });
         }
 
+        if (auth()->user()->hasAnyRole(['Marketing', 'Marketing-IDY', 'Marketing-JKT', 'Marketing-PKU'])) {
+            $query->where('added_by', auth()->id());
+        }
+
         $query->orderBy('created_at', 'desc');
 
         return $query;

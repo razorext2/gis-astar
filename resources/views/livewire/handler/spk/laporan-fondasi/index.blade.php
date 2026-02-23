@@ -23,9 +23,11 @@
 
             <div class="flex flex-row gap-x-2">
                 @can('laporan-fondasi-create')
-                    <x-button.success wire:click="openCreateLaporanFondasiModal" class="z-10 w-fit">
-                        <x-icons.plus class="h-5 w-5 dark:text-white" />
-                    </x-button.success>
+                    @if ($spk->added_by == auth()->id() || auth()->user()->can('spk-validate'))
+                        <x-button.success wire:click="openCreateLaporanFondasiModal" class="z-10 w-fit">
+                            <x-icons.plus class="h-5 w-5 dark:text-white" />
+                        </x-button.success>
+                    @endif
                 @endcan
 
                 <x-button.primary class="w-fit" wire:click="$toggle('showLaporanFondasi')">
@@ -73,8 +75,10 @@
 
                         <div class="flex flex-row justify-end gap-2 text-xs">
                             @can('laporan-fondasi-edit')
-                                <a class="cursor-pointer text-gray-500 hover:underline"
-                                    wire:click="editLaporanFondasi('{{ $row->id }}')">Edit</a>
+                                @if ($spk->added_by == auth()->id())
+                                    <a class="cursor-pointer text-gray-500 hover:underline"
+                                        wire:click="editLaporanFondasi('{{ $row->id }}')">Edit</a>
+                                @endif
                             @endcan
 
                             @can('laporan-fondasi-delete')
@@ -94,7 +98,6 @@
         @endif
     </section>
     {{-- end laporan fondasi --}}
-
 
     {{-- modal tambah laporan Fondasi --}}
     <div id="laporan-fondasi-modal" wire:show="showModalAddLaporanFondasi" wire:transition.duration.300ms
@@ -128,7 +131,7 @@
 
 
                             <div class="flex w-full flex-col gap-y-2">
-                                <label for="documentations"
+                                <label for="documentation-input"
                                     class="flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-800">
                                     <div class="flex flex-col items-center justify-center pb-6 pt-5">
                                         <x-icons.cloud-upload class="mb-2 h-8 w-8 text-gray-500 dark:text-gray-400" />
@@ -139,7 +142,7 @@
                                             *Dokumentasi dapat berupa foto progress pengerjaan fondasi.
                                         </p>
                                     </div>
-                                    <input id="documentations" name="documentations" type="file"
+                                    <input id="documentation-input" name="documentations" type="file"
                                         accept=".png,.jpg,.jpeg,.heic,.bmp;capture=camera"
                                         wire:model.live="form.newDocumentations" class="hidden" multiple />
                                 </label>

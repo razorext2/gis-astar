@@ -5,6 +5,7 @@ namespace App\Livewire\Handler\Spk\LaporanFondasi;
 use App\Livewire\Concerns\HandlesErrors;
 use App\Livewire\Forms\Spk\LaporanFondasi;
 use App\Models\Spk\LaporanFondasi as LaporanFondasiModel;
+use App\Models\Spk\SpkMain;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -20,6 +21,8 @@ class Index extends Component
     public LaporanFondasi $form;
 
     public ?string $id_spk;
+
+    public $spk;
 
     public ?bool $showLaporanFondasi = false;
 
@@ -38,6 +41,7 @@ class Index extends Component
     public function mount($id_spk)
     {
         $this->id_spk = $id_spk;
+        $this->spk = SpkMain::with('laporanFondasi')->findOrFail($this->id_spk);
     }
 
     public function storeLaporanFondasi()
@@ -56,7 +60,7 @@ class Index extends Component
                     'judul' => $this->form->title,
                     'status_pengerjaan' => $this->form->progress,
                     'keterangan' => $this->form->description,
-                    'added_by' => auth()->user()->id,
+                    'added_by' => auth()->id(),
                 ]);
 
                 // inisialisasi manager
@@ -115,7 +119,7 @@ class Index extends Component
                 text: 'Berhasil membuat Laporan Fondasi baru.');
         }, 'Gagal menyimpan data laporan fondasi', [
             'form_input' => $this->form->all(),
-            'user_id' => auth()->user()->id,
+            'user_id' => auth()->id(),
         ]);
 
     }
@@ -179,7 +183,7 @@ class Index extends Component
                 text: 'Berhasil menghapus Laporan Fondasi.');
         }, 'Gagal menghapus data laporan fondasi', [
             'form_input' => $this->deleteId,
-            'user_id' => auth()->user()->id,
+            'user_id' => auth()->id(),
         ]);
     }
 
@@ -220,7 +224,7 @@ class Index extends Component
                 text: 'Berhasil memperbarui Laporan Fondasi.');
         }, 'Gagal memperbarui data laporan fondasi', [
             'form_input' => $this->form->all(),
-            'user_id' => auth()->user()->id,
+            'user_id' => auth()->id(),
             'laporan_fondasi_id' => $this->editId,
         ]);
     }
@@ -263,13 +267,22 @@ class Index extends Component
         $this->isEditing = false;
     }
 
-    public function openCreateLaporanFondasiModal(): void
+    public function openCreateLaporanFondasiModal()
     {
+        // cek addedby
+        if (auth()->user()->cannot('spk-validate') && (auth()->id() != $this->spk->added_by)) {
+            return $this->dispatch(
+                event: 'swal',
+                icon: 'warning',
+                title: 'Perhatian.',
+                text: 'Anda tidak dapat menambahkan Laporan Fondasi.');
+        }
+
         // reset form
         $this->resetFormState();
 
         // tampilkan modal
-        $this->showModalAddLaporanFondasi = true;
+        return $this->showModalAddLaporanFondasi = true;
     }
 
     public function closeLaporanFondasiModal(): void
@@ -283,9 +296,8 @@ class Index extends Component
 
     public function render()
     {
-        $data = LaporanFondasiModel::where('id_spk', $this->id_spk)
-            ->latest()
-            ->paginate(5, pageName: 'fondasi-page');
+        $data = $this->spk->laporanFondasi()
+            ->paginate(perPage: 5, pageName: 'fondasi-page');
 
         return view('livewire.handler.spk.laporan-fondasi.index',
             [
