@@ -173,6 +173,13 @@ final class ProductionTable extends PowerGridComponent
                         </span>";
                 }
 
+                if ($query->spk->is_picked_up_by_customer) {
+                    $template .= "
+                        <span class='bg-purple-400 text-purple-700 text-xs px-2.5 py-1 rounded-lg w-fit'>
+                            Dijemput Customer
+                        </span>";
+                }
+
                 $template .= '</div>';
 
                 return $template;
@@ -188,6 +195,7 @@ final class ProductionTable extends PowerGridComponent
             ->add('created_at')
             ->add('tipe_timbangan', fn ($query) => $query->spk->tipe_timbangan)
             ->add('is_using_company_driver', fn ($query) => $query->spk->is_using_company_driver)
+            ->add('is_picked_up_by_customer', fn ($query) => $query->spk->is_picked_up_by_customer)
             ->add('is_using_old_stock', fn ($query) => $query->spk->is_using_old_stock);
     }
 
@@ -202,6 +210,7 @@ final class ProductionTable extends PowerGridComponent
                 ->searchable(),
             Column::make('Status SPK', 'status_spk', 'status_spk'),
             Column::make('Supir perusahaan', 'is_using_company_driver')->hidden(),
+            Column::make('Dijemput Customer', 'is_picked_up_by_customer')->hidden(),
             Column::make('Old Stock', 'is_using_old_stock')->hidden(),
             Column::make('Customer', 'customer_info')
                 ->searchable()
@@ -230,6 +239,8 @@ final class ProductionTable extends PowerGridComponent
                 }),
             Filter::boolean('is_using_company_driver', field: 'is_using_company_driver')
                 ->label('Ya', 'Tidak'),
+            Filter::boolean('is_picked_up_by_customer', field: 'is_picked_up_by_customer')
+                ->label('Ya', 'Tidak'),
             Filter::boolean('is_using_old_stock', field: 'is_using_old_stock')
                 ->label('Ya', 'Tidak'),
         ];
@@ -255,7 +266,7 @@ final class ProductionTable extends PowerGridComponent
                 ->route('production.show', ['production' => $row->id]);
         }
 
-        if ($row->productionHistories?->last()?->status_produksi === 10 && $this->user->can('produksi-update-packing-list') && $row->spk->is_using_company_driver == false) {
+        if ($row->productionHistories?->last()?->status_produksi === 10 && $this->user->can('produksi-update-packing-list') && ($row->spk->is_using_company_driver == false && $row->spk->is_picked_up_by_customer == false)) {
             $button[] = Button::make('packinglist', 'Packing List')
                 ->slot('+ Packing List')
                 ->id($row->id)

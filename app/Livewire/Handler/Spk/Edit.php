@@ -89,6 +89,7 @@ class Edit extends Component
 
         // keperluan pengiriman
         $this->createForm->is_using_company_driver = $this->data->is_using_company_driver;
+        $this->createForm->is_picked_up_by_customer = $this->data->is_picked_up_by_customer;
     }
 
     public function storeBarang()
@@ -214,6 +215,16 @@ class Edit extends Component
         // cek authorization
         $this->authorize('update', $this->data);
 
+        // cek yg dichecklist
+        if ($this->createForm->is_using_company_driver === true && $this->createForm->is_picked_up_by_customer === true) {
+            return $this->dispatch(
+                event: 'swal',
+                icon: 'error',
+                title: 'Gagal.',
+                text: 'Anda tidak boleh mencentang kedua tipe pengiriman sekaligus. Anda hanya dapat memilih salah satu, atau tidak pilih sama sekali.'
+            );
+        }
+
         // validasi form
         $this->createForm->validate();
 
@@ -251,6 +262,7 @@ class Edit extends Component
                     'documentations' => $lampiran ?? [],
                     'is_cancelled' => $this->is_cancelled,
                     'is_using_company_driver' => $this->createForm->is_using_company_driver,
+                    'is_picked_up_by_customer' => $this->createForm->is_picked_up_by_customer,
                 ];
 
                 $title = 'SPK mengalami perubahan.';

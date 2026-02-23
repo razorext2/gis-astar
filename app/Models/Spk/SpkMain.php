@@ -61,6 +61,7 @@ class SpkMain extends Model
         'cancel_request_validated_at',
         'is_using_old_stock',
         'is_using_company_driver',
+        'is_picked_up_by_customer',
         'is_revision',
     ];
 
@@ -72,6 +73,7 @@ class SpkMain extends Model
         'documentations' => 'array',
         'on_delay' => 'boolean',
         'production_has_download_spk_pdf' => 'boolean',
+        'is_picked_up_by_customer' => 'boolean',
         'is_revision' => 'boolean',
         'is_booked' => 'boolean',
         'is_using_old_stock' => 'boolean',

@@ -125,7 +125,7 @@ class DeliveryUpdate extends Component
         $this->form->validate();
 
         // jika via darat dan laut
-        if ($this->form->via !== 'supir') {
+        if ($this->form->via !== 'supir' && $this->spk_data->is_picked_up_by_customer === false) {
             if (count($this->form->products) === 0) {
                 return $this->dispatch('swal', icon: 'error', text: 'Barang tidak boleh kosong. Minimal harus centang 1 barang!', title: 'Gagal');
             }
@@ -187,6 +187,8 @@ class DeliveryUpdate extends Component
             $this->clearForm();
 
             $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Berhasil menambahkan pengiriman dan assign laporan ke driver.');
+
+            return $this->redirect(route('spk.show', $this->id), navigate: true);
         }, 'Gagal menambah data pengiriman', [
             'user_id' => auth()->id(),
             'spk_id' => $this->id,

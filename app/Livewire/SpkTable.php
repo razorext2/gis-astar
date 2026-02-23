@@ -194,6 +194,13 @@ final class SpkTable extends PowerGridComponent
                         </span>";
                 }
 
+                if ($query->is_picked_up_by_customer) {
+                    $template .= "
+                        <span class='bg-purple-400 text-purple-700 text-xs px-2.5 py-1 rounded-lg w-fit'>
+                            Dijemput Customer
+                        </span>";
+                }
+
                 $template .= '</div>';
 
                 return $template;

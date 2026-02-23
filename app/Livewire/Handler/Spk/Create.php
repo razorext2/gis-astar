@@ -109,6 +109,16 @@ class Create extends Component
         // cek authorization
         $this->authorize('create', SpkMain::class);
 
+        // cek yg dichecklist
+        if ($this->createForm->is_using_company_driver === true && $this->createForm->is_picked_up_by_customer === true) {
+            return $this->dispatch(
+                event: 'swal',
+                icon: 'error',
+                title: 'Gagal.',
+                text: 'Anda tidak boleh mencentang kedua tipe pengiriman sekaligus. Anda hanya dapat memilih salah satu, atau tidak pilih sama sekali.'
+            );
+        }
+
         // validasi form
         $this->createForm->validate();
 
@@ -160,6 +170,7 @@ class Create extends Component
                     'booked_by' => $this->createForm->is_booked ? Auth::id() : null,
                     'documentations' => $lampiran ?? [],
                     'is_using_company_driver' => $this->createForm->is_using_company_driver,
+                    'is_picked_up_by_customer' => $this->createForm->is_picked_up_by_customer,
                 ]);
 
                 // tambah data history SPK

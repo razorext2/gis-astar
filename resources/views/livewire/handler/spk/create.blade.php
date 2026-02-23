@@ -542,6 +542,22 @@
 
                 <div class="col-span-2 w-full">
                     <div class="flex items-center">
+                        <input id="is_picked_up_by_customer" type="checkbox"
+                            wire:model.live="createForm.is_picked_up_by_customer"
+                            class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800 lg:h-5 lg:w-5">
+                        <label for="is_picked_up_by_customer"
+                            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 lg:text-base">
+                            Apakah SPK akan dijemput oleh customer?
+                        </label>
+                    </div>
+
+                    @error('createForm.is_picked_up_by_customer')
+                        <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="col-span-2 w-full">
+                    <div class="flex items-center">
                         <input id="is_booked" type="checkbox" wire:model.live="createForm.is_booked"
                             class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800 lg:h-5 lg:w-5">
                         <label for="is_booked"

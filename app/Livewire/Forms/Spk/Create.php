@@ -53,7 +53,9 @@ class Create extends Form
 
     public ?bool $is_booked = false;
 
-    public ?bool $is_using_company_driver;
+    public ?bool $is_using_company_driver = false;
+
+    public ?bool $is_picked_up_by_customer = false;
 
     protected function rules(): array
     {
@@ -76,6 +78,7 @@ class Create extends Form
             'assign_to' => 'required_if:is_booked,false|nullable|integer',
             'is_booked' => 'boolean',
             'is_using_company_driver' => 'boolean',
+            'is_picked_up_by_customer' => 'boolean',
         ];
 
         if ($this->spk_id) {
