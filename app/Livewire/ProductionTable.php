@@ -266,7 +266,7 @@ final class ProductionTable extends PowerGridComponent
                 ->route('production.show', ['production' => $row->id]);
         }
 
-        if ($row->productionHistories?->last()?->status_produksi === 10 && $this->user->can('produksi-update-packing-list') && ($row->spk->is_using_company_driver == false && $row->spk->is_picked_up_by_customer == false)) {
+        if ($row->productionHistories?->last()?->status_produksi === 10 && $this->user->can('produksi-update-packing-list') && $row->spk->is_using_company_driver == false) {
             $button[] = Button::make('packinglist', 'Packing List')
                 ->slot('+ Packing List')
                 ->id($row->id)
