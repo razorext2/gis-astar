@@ -20,65 +20,15 @@ class DeliveryBarangList extends Component
 
     public ?bool $showDetailModal = false;
 
+    public ?bool $showDelayedModal = false;
+
+    public ?string $delayed_reason = '';
+
+    public ?string $delayed_eta = '';
+
     public function mount($id)
     {
         $this->id = $id;
-    }
-
-    public function generateViaColor($via)
-    {
-        return match ($via) {
-            'laut' => [
-                'color' => 'text-blue-700 bg-blue-400',
-                'label' => 'Laut',
-            ],
-            'darat' => [
-                'color' => 'text-green-700 bg-green-400',
-                'label' => 'Darat',
-            ],
-            'supir' => [
-                'color' => 'text-gray-700 bg-gray-400',
-                'label' => 'Supir Internal',
-            ],
-            'bycust' => [
-                'color' => 'text-yellow-700 bg-yellow-400',
-                'label' => 'Dijemput Customer',
-            ],
-            default => [
-                'color' => 'text-red-700 bg-red-400',
-                'label' => 'Tidak diketahui',
-            ],
-        };
-    }
-
-    public function generateStatusColor($status_kirim)
-    {
-        return match ($status_kirim) {
-            0 => [
-                'color' => 'text-blue-700 bg-blue-400',
-                'label' => 'Dalam Pengiriman',
-            ],
-            1 => [
-                'color' => 'text-green-700 bg-green-400',
-                'label' => 'Pengiriman Selesai',
-            ],
-            2 => [
-                'color' => 'text-yellow-700 bg-yellow-400',
-                'label' => 'Pengiriman Mengalami Delay',
-            ],
-            3 => [
-                'color' => 'text-red-700 bg-red-400',
-                'label' => 'Pengiriman Dibatalkan',
-            ],
-            4 => [
-                'color' => 'text-gray-700 bg-gray-400',
-                'label' => 'Pengiriman Direschedule',
-            ],
-            default => [
-                'color' => 'text-red-700 bg-red-400',
-                'label' => 'Tidak diketahui',
-            ],
-        };
     }
 
     public function detailModal($id)
@@ -88,6 +38,56 @@ class DeliveryBarangList extends Component
         $this->modalData = SpkDelivery::with('spk.production')
             ->where('id', $id)
             ->first();
+    }
+
+    public function delayModal($id)
+    {
+        $this->showDelayedModal = true;
+
+        $this->modalData = SpkDelivery::with('spk.production')
+            ->where('id', $id)
+            ->first();
+
+        $this->delayed_eta = $this->modalData->eta;
+    }
+
+    public function delayDelivery($id)
+    {
+        $this->validate([
+            'delayed_reason' => 'required|string|min:5|max:255',
+            'delayed_eta' => 'required|date',
+        ]);
+
+        // cek authorization
+        $this->authorize('validatePengiriman', \App\Models\Spk\SpkMain::class);
+
+        $this->runSafely(function () {
+            // tambahkan informasi delay
+            $history = $this->modalData->history;
+            $delayed_history = $this->modalData->is_delay;
+
+            // tambah array history
+            $hist = $this->form->generateHistory('Pengiriman Mengalami Penundaan', 'Pengiriman telah ditunda oleh: '.auth()->user()->name.', karena: '.$this->delayed_reason.', tiba sekitar tanggal'.$this->delayed_eta);
+
+            $history[] = $hist;
+            $delayed_history[] = $hist;
+
+            // update data
+            $this->modalData->update([
+                'status_kirim' => 2,
+                'eta' => $this->delayed_eta,
+                'history' => $history,
+                'is_delay' => $delayed_history,
+            ]);
+
+            $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Pengiriman telah dijadwalkan tertunda.');
+
+            $this->redirect(route('delivery.edit', $this->modalData->spk->id), navigate: true);
+        }, 'Gagal menambah informasi delay pengiriman.', [
+            'user_id' => auth()->id(),
+            'id_delivery' => $id,
+            'kode_kirim' => $this->modalData->kode_kirim,
+        ]);
     }
 
     public function deliveryArrivedConfirmation()
@@ -109,6 +109,30 @@ class DeliveryBarangList extends Component
 
             $this->redirect(route('delivery.edit', $this->modalData->spk->id), navigate: true);
         }, 'Gagal mengkonfirmasi pengiriman.', [
+            'user_id' => auth()->user()->id,
+            'id_delivery' => $this->modalData->id,
+        ]);
+    }
+
+    public function continueAfterDelayConfirmation()
+    {
+        // cek authorization
+        $this->authorize('validatePengiriman', \App\Models\Spk\SpkMain::class);
+
+        $this->runSafely(function () {
+            $history = $this->modalData->history;
+
+            $history[] = $this->form->generateHistory('Pengiriman Dilanjutkan', 'Pengiriman telah dilanjutkan');
+
+            $this->modalData->update([
+                'status_kirim' => 0,
+                'history' => $history,
+            ]);
+
+            $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Pengiriman telah dilanjutkan.');
+
+            $this->redirect(route('delivery.edit', $this->modalData->spk->id), navigate: true);
+        }, 'Gagal melanjutkan pengiriman.', [
             'user_id' => auth()->user()->id,
             'id_delivery' => $this->modalData->id,
         ]);

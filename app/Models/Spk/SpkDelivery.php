@@ -69,11 +69,11 @@ class SpkDelivery extends Model
 
         return match ($status) {
             0 => 'Dalam Pengiriman',
-            1 => 'Pengiriman Selesai',
-            2 => 'Pengiriman Mengalami Delay',
-            3 => 'Pengiriman Dibatalkan',
-            4 => 'Pengiriman Direschedule',
-            default => 'Status Pengiriman tidak diketahui',
+            1 => 'Selesai',
+            2 => 'Delay',
+            3 => 'Dibatalkan',
+            4 => 'Direschedule',
+            default => 'Tidak diketahui',
         };
     }
 }

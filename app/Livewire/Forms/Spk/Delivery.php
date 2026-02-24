@@ -141,4 +141,60 @@ class Delivery extends Form
             'created_at' => now()->toDateTimeString(),
         ];
     }
+
+    public function generateViaColor($via)
+    {
+        return match ($via) {
+            'laut' => [
+                'color' => 'text-blue-700 bg-blue-400',
+                'label' => 'Laut',
+            ],
+            'darat' => [
+                'color' => 'text-green-700 bg-green-400',
+                'label' => 'Darat',
+            ],
+            'supir' => [
+                'color' => 'text-gray-700 bg-gray-400',
+                'label' => 'Supir Internal',
+            ],
+            'bycust' => [
+                'color' => 'text-yellow-700 bg-yellow-400',
+                'label' => 'Dijemput Customer',
+            ],
+            default => [
+                'color' => 'text-red-700 bg-red-400',
+                'label' => 'Tidak diketahui',
+            ],
+        };
+    }
+
+    public function generateStatusColor($status_kirim)
+    {
+        return match ($status_kirim) {
+            0 => [
+                'color' => 'text-blue-700 bg-blue-400',
+                'label' => 'Dalam Pengiriman',
+            ],
+            1 => [
+                'color' => 'text-green-700 bg-green-400',
+                'label' => 'Selesai',
+            ],
+            2 => [
+                'color' => 'text-yellow-700 bg-yellow-400',
+                'label' => 'Delay',
+            ],
+            3 => [
+                'color' => 'text-red-700 bg-red-400',
+                'label' => 'Dibatalkan',
+            ],
+            4 => [
+                'color' => 'text-gray-700 bg-gray-400',
+                'label' => 'Direschedule',
+            ],
+            default => [
+                'color' => 'text-red-700 bg-red-400',
+                'label' => 'Tidak diketahui',
+            ],
+        };
+    }
 }
