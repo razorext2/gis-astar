@@ -154,11 +154,13 @@
                     @endif
 
                     <div class="mt-2 flex items-center justify-between space-x-2 lg:space-x-4">
-                        <x-button.primary
-                            class="bg-yellow-600 text-white ring-yellow-700 hover:bg-yellow-800 dark:bg-yellow-700 dark:ring-yellow-700 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
-                            type="button" wire:click="delayModal({{ $row->id }})">
-                            Delay?
-                        </x-button.primary>
+                        @if ($row->status_kirim == 0)
+                            <x-button.primary
+                                class="bg-yellow-600 text-white ring-yellow-700 hover:bg-yellow-800 dark:bg-yellow-700 dark:ring-yellow-700 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
+                                type="button" wire:click="delayModal({{ $row->id }})">
+                                Delay?
+                            </x-button.primary>
+                        @endif
 
                         <x-button.primary
                             class="bg-blue-700 text-white hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
