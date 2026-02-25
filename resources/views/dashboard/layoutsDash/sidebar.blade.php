@@ -31,36 +31,6 @@
             'indicator' => true,
         ],
         [
-            'route' => 'invoice.index',
-            'check' => 'invoice.*',
-            'label' => 'Laporan Invoice',
-            'icon' => 'invoice',
-            'permission' => 'invoice-list',
-            'sublinks' => [],
-            'navigate' => true,
-            'indicator' => false,
-        ],
-        [
-            'route' => 'invoice.index',
-            'check' => 'invoice.*',
-            'label' => 'Laporan Invoice PKU',
-            'icon' => 'invoice',
-            'permission' => 'invoice-list-pku',
-            'sublinks' => [],
-            'navigate' => true,
-            'indicator' => false,
-        ],
-        [
-            'route' => 'invoice.index',
-            'check' => 'invoice.*',
-            'label' => 'Laporan Invoice JKT',
-            'icon' => 'invoice',
-            'permission' => 'invoice-list-jkt',
-            'sublinks' => [],
-            'navigate' => true,
-            'indicator' => false,
-        ],
-        [
             'route' => 'capture.index',
             'check' => 'capture.index',
             'label' => 'Record Attendance',
@@ -498,6 +468,73 @@
                             </li>
                         @endcan
 
+                    </ul>
+                </li>
+            @endif
+
+            @if (auth()->user()->hasAnyPermission(['invoice-list', 'invoice-list-pku', 'invoice-list-jkt']))
+                <li x-data="{ lokasi: {{ Route::is('invoice.medan.*') || Route::is('invoice.pku.*') || Route::is('invoice.jkt.*') ? 'true' : 'false' }} }">
+                    <button
+                        class="{{ Route::is('invoice.medan.*') || Route::is('invoice.pku.*') || Route::is('invoice.jkt.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
+                        type="button" aria-controls="lokasi-dropdown" @click="lokasi = !lokasi"
+                        :aria-expanded="lokasi">
+
+                        <x-icons.rectangle-list
+                            class="{{ Route::is('invoice.medan.*') || Route::is('invoice.pku.*') || Route::is('invoice.jkt.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+
+                        <span class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">
+                            Data Invoice
+                        </span>
+
+                        <x-icons.carred-down
+                            class="ml-1 mt-1 inline h-4 w-4 transform transition-transform group-hover:text-red-600"
+                            x-bind:class="{ 'rotate-180 duration-200': lokasi }" />
+                    </button>
+
+                    <ul class="space-y-4 py-4" id="lokasi-dropdown" x-show="lokasi"
+                        x-transition:enter="transition ease-in duration-200"
+                        x-transition:enter-start="transform opacity-0 -translate-y-5"
+                        x-transition:leave="transition ease-out duration-200"
+                        x-transition:leave-end="transform opacity-0 -translate-y-5">
+
+                        @can('invoice-list')
+                            <li>
+                                <a class="{{ Route::is('invoice.medan.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 text-wrap dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+                                    href="{{ route('invoice.medan.index') }}" wire:navigate>
+                                    <x-icons.file-invoice
+                                        class="{{ Route::is('invoice.medan.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+                                    <span class="ms-3 flex-1 text-wrap text-sm group-hover:text-red-600">
+                                        Medan
+                                    </span>
+                                </a>
+                            </li>
+                        @endcan
+
+                        @can('invoice-list-pku')
+                            <li>
+                                <a class="{{ Route::is('invoice.pku.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 text-wrap dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+                                    href="{{ route('invoice.pku.index') }}" wire:navigate>
+                                    <x-icons.file-invoice
+                                        class="{{ Route::is('invoice.pku.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+                                    <span class="ms-3 flex-1 text-wrap text-sm group-hover:text-red-600">
+                                        Pekanbaru
+                                    </span>
+                                </a>
+                            </li>
+                        @endcan
+
+                        @can('invoice-list-jkt')
+                            <li>
+                                <a class="{{ Route::is('invoice.jkt.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+                                    href="{{ route('invoice.jkt.index') }}" wire:navigate>
+                                    <x-icons.file-invoice
+                                        class="{{ Route::is('invoice.jkt.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+                                    <span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">
+                                        Jakarta
+                                    </span>
+                                </a>
+                            </li>
+                        @endcan
                     </ul>
                 </li>
             @endif

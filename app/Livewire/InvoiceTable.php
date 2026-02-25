@@ -32,9 +32,12 @@ final class InvoiceTable extends PowerGridComponent
 
     public $user;
 
+    public string $currentRoute;
+
     public function setUp(): array
     {
         $this->user = auth()->user();
+        $this->currentRoute = request()->route()->getName();
 
         if (auth()->user()->can('invoice-delete')) {
             $this->showCheckBox();
@@ -60,17 +63,15 @@ final class InvoiceTable extends PowerGridComponent
         $query = Invoice::query()
             ->with(['addedBy', 'latestUpdateBy', 'details']);
 
-        if ($this->user->can('invoice-list-pku')) {
-            $query->whereHas('details', function (Builder $detailQuery) {
-                $detailQuery
-                    ->where('informasi_pengiriman->tujuan', 'pku');
-            });
-        }
-
-        if ($this->user->can('invoice-list-jkt')) {
-            $query->whereHas('details', function (Builder $detailQuery) {
-                $detailQuery
-                    ->where('informasi_pengiriman->tujuan', 'jkt');
+        if ($this->currentRoute === 'invoice.medan.index' && $this->user->can('invoice-list')) {
+            $query->where('tipe_invoice', 'dalkot');
+        } else {
+            $query->whereHas('details', function (Builder $detail) {
+                if ($this->currentRoute === 'invoice.pku.index' && $this->user->can('invoice-list-pku')) {
+                    $detail->where('informasi_pengiriman->tujuan', 'pku');
+                } elseif ($this->currentRoute === 'invoice.jkt.index' && $this->user->can('invoice-list-jkt')) {
+                    $detail->where('informasi_pengiriman->tujuan', 'jkt');
+                }
             });
         }
 
@@ -223,12 +224,19 @@ final class InvoiceTable extends PowerGridComponent
 
     public function actions(Invoice $row)
     {
+        $checkRoute = match ($this->currentRoute) {
+            'invoice.medan.index' => 'invoice.medan.show',
+            'invoice.jkt.index' => 'invoice.jkt.show',
+            'invoice.pku.index' => 'invoice.pku.show',
+            default => 'invoice.medan.show',
+        };
+
         $button = [
             Button::make('detail')
                 ->slot('Detail')
                 ->id($row->id)
                 ->class('dark:bg-green-800 text-sm dark:hover:bg-green-900 dark:text-white dark:border-gray-700 rounded-lg bg-green-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-green-700')
-                ->route('invoice.show', ['invoice' => $row->id]),
+                ->route($checkRoute, ['invoice' => $row->id]),
         ];
 
         return $button;

@@ -25,8 +25,12 @@ class Create extends Component
 
     public ?string $id = null;
 
+    public ?string $currentRoute = null;
+
     public function mount($id, $tipe_tagihan)
     {
+        $this->currentRoute = request()->route()->getName();
+
         if ($id) {
             $this->id = $id;
         }
@@ -269,7 +273,7 @@ class Create extends Component
             ]);
         }
 
-        $this->redirect(route('invoice.index'), navigate: true);
+        $this->redirect(route($this->getRoute($this->currentRoute)), navigate: true);
     }
 
     public function removeDocumentation($index)
@@ -278,6 +282,19 @@ class Create extends Component
             unset($this->addForm->documentations[$index]);
             $this->addForm->documentations = array_values($this->addForm->documentations);
         }
+    }
+
+    public function getRoute($currentRoute)
+    {
+        return match ($currentRoute) {
+            'invoice.medan.create' => 'invoice.medan.index',
+            'invoice.jkt.create' => 'invoice.jkt.index',
+            'invoice.pku.create' => 'invoice.pku.index',
+            'invoice.medan.addDetails' => 'invoice.medan.index',
+            'invoice.jkt.addDetails' => 'invoice.jkt.index',
+            'invoice.pku.addDetails' => 'invoice.pku.index',
+            default => $currentRoute,
+        };
     }
 
     public function render()

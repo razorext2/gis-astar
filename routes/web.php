@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\InvoiceController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -233,8 +234,31 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('teams', \App\Http\Controllers\TeamController::class)->only('index', 'create', 'edit');
 
         // invoice
-        Route::resource('invoice', \App\Http\Controllers\InvoiceController::class)->only('index', 'create', 'show');
-        Route::get('invoice/{id}/add', [\App\Http\Controllers\InvoiceController::class, 'addDetails'])->name('invoice.addDetails');
+        Route::prefix('invoice')->group(function () {
+            // MEDAN
+            Route::prefix('medan')->name('invoice.medan.')->group(function () {
+                Route::get('/', [InvoiceController::class, 'index'])->name('index');
+                Route::get('/create', [InvoiceController::class, 'create'])->name('create');
+                Route::get('/{invoice}', [InvoiceController::class, 'show'])->name('show');
+                Route::get('/{id}/add', [InvoiceController::class, 'addDetails'])->name('addDetails');
+            });
+
+            // PKU
+            Route::prefix('pku')->name('invoice.pku.')->group(function () {
+                Route::get('/', [InvoiceController::class, 'indexPku'])->name('index');
+                Route::get('/create', [InvoiceController::class, 'create'])->name('create');
+                Route::get('/{invoice}', [InvoiceController::class, 'show'])->name('show');
+                Route::get('/{id}/add', [InvoiceController::class, 'addDetails'])->name('addDetails');
+            });
+
+            // JKT
+            Route::prefix('jkt')->name('invoice.jkt.')->group(function () {
+                Route::get('/', [InvoiceController::class, 'indexJkt'])->name('index');
+                Route::get('/create', [InvoiceController::class, 'create'])->name('create');
+                Route::get('/{invoice}', [InvoiceController::class, 'show'])->name('show');
+                Route::get('/{id}/add', [InvoiceController::class, 'addDetails'])->name('addDetails');
+            });
+        });
 
         // ini untuk event
         Route::get('event/{event}/participant/{participant}', [\App\Http\Controllers\BigEventController::class, 'participantDetails'])->name('event.participant.show');

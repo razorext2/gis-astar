@@ -9,6 +9,16 @@ class InvoiceController extends Controller
         return view('dashboard.invoice.index');
     }
 
+    public function indexJkt()
+    {
+        return view('dashboard.invoice.index-jkt');
+    }
+
+    public function indexPku()
+    {
+        return view('dashboard.invoice.index-pku');
+    }
+
     public function create()
     {
         return view('dashboard.invoice.create');
