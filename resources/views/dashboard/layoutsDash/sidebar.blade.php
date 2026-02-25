@@ -473,14 +473,14 @@
             @endif
 
             @if (auth()->user()->hasAnyPermission(['invoice-list', 'invoice-list-pku', 'invoice-list-jkt']))
-                <li x-data="{ lokasi: {{ Route::is('invoice.medan.*') || Route::is('invoice.pku.*') || Route::is('invoice.jkt.*') ? 'true' : 'false' }} }">
+                <li x-data="{ lokasi: {{ Route::is('invoice.all.*') || Route::is('invoice.cust.*') || Route::is('invoice.medan.*') || Route::is('invoice.pku.*') || Route::is('invoice.jkt.*') ? 'true' : 'false' }} }">
                     <button
-                        class="{{ Route::is('invoice.medan.*') || Route::is('invoice.pku.*') || Route::is('invoice.jkt.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
+                        class="{{ Route::is('invoice.all.*') || Route::is('invoice.cust.*') || Route::is('invoice.medan.*') || Route::is('invoice.pku.*') || Route::is('invoice.jkt.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
                         type="button" aria-controls="lokasi-dropdown" @click="lokasi = !lokasi"
                         :aria-expanded="lokasi">
 
                         <x-icons.rectangle-list
-                            class="{{ Route::is('invoice.medan.*') || Route::is('invoice.pku.*') || Route::is('invoice.jkt.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+                            class="{{ Route::is('invoice.all.*') || Route::is('invoice.cust.*') || Route::is('invoice.medan.*') || Route::is('invoice.pku.*') || Route::is('invoice.jkt.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
 
                         <span class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">
                             Data Invoice
@@ -498,6 +498,28 @@
                         x-transition:leave-end="transform opacity-0 -translate-y-5">
 
                         @can('invoice-list')
+                            <li>
+                                <a class="{{ Route::is('invoice.all.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 text-wrap dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+                                    href="{{ route('invoice.all.index') }}" wire:navigate>
+                                    <x-icons.file-invoice
+                                        class="{{ Route::is('invoice.all.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+                                    <span class="ms-3 flex-1 text-wrap text-sm group-hover:text-red-600">
+                                        Semua Data
+                                    </span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="{{ Route::is('invoice.cust.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 text-wrap dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+                                    href="{{ route('invoice.cust.index') }}" wire:navigate>
+                                    <x-icons.file-invoice
+                                        class="{{ Route::is('invoice.cust.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+                                    <span class="ms-3 flex-1 text-wrap text-sm group-hover:text-red-600">
+                                        Direct Cust
+                                    </span>
+                                </a>
+                            </li>
+
                             <li>
                                 <a class="{{ Route::is('invoice.medan.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 text-wrap dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
                                     href="{{ route('invoice.medan.index') }}" wire:navigate>

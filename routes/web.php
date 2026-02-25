@@ -58,6 +58,16 @@ Route::middleware(['auth'])->group(function () {
         // fetchVT
         Route::get('get/vt', [\App\Http\Controllers\ProxyController::class, 'getVT'])->name('fetch.vt');
         Route::get('get/vt-db', [\App\Http\Controllers\TechnicianController::class, 'getVTFromDB'])->name('fetch.vt-db');
+
+        // github commit
+        Route::get('commit', function () {
+            $response = Illuminate\Support\Facades\Http::withToken(env('GITHUB_TOKEN'))
+                ->get('https://api.github.com/repos/razorext2/faceAttendanceV2/commits');
+
+            $commits = $response->json();
+
+            return $commits;
+        });
     });
 
     // group ke rute dashboard.
@@ -235,7 +245,23 @@ Route::middleware(['auth'])->group(function () {
 
         // invoice
         Route::prefix('invoice')->group(function () {
-            // MEDAN
+            // semua
+            Route::prefix('all')->name('invoice.all.')->group(function () {
+                Route::get('/', [InvoiceController::class, 'index'])->name('index');
+                Route::get('/create', [InvoiceController::class, 'create'])->name('create');
+                Route::get('/{invoice}', [InvoiceController::class, 'show'])->name('show');
+                Route::get('/{id}/add', [InvoiceController::class, 'addDetails'])->name('addDetails');
+            });
+
+            // cust langsung
+            Route::prefix(prefix: 'cust')->name('invoice.cust.')->group(function () {
+                Route::get('/', [InvoiceController::class, 'index'])->name('index');
+                Route::get('/create', [InvoiceController::class, 'create'])->name('create');
+                Route::get('/{invoice}', [InvoiceController::class, 'show'])->name('show');
+                Route::get('/{id}/add', [InvoiceController::class, 'addDetails'])->name('addDetails');
+            });
+
+            // medan
             Route::prefix('medan')->name('invoice.medan.')->group(function () {
                 Route::get('/', [InvoiceController::class, 'index'])->name('index');
                 Route::get('/create', [InvoiceController::class, 'create'])->name('create');
@@ -243,7 +269,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/{id}/add', [InvoiceController::class, 'addDetails'])->name('addDetails');
             });
 
-            // PKU
+            // pku
             Route::prefix('pku')->name('invoice.pku.')->group(function () {
                 Route::get('/', [InvoiceController::class, 'indexPku'])->name('index');
                 Route::get('/create', [InvoiceController::class, 'create'])->name('create');
@@ -251,7 +277,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/{id}/add', [InvoiceController::class, 'addDetails'])->name('addDetails');
             });
 
-            // JKT
+            // jkt
             Route::prefix('jkt')->name('invoice.jkt.')->group(function () {
                 Route::get('/', [InvoiceController::class, 'indexJkt'])->name('index');
                 Route::get('/create', [InvoiceController::class, 'create'])->name('create');

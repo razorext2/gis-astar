@@ -30,6 +30,15 @@ class Create extends Component
     public function mount($id, $tipe_tagihan)
     {
         $this->currentRoute = request()->route()->getName();
+        $route = $this->currentRoute;
+
+        if ($route == 'invoice.cust.create' || $route == 'invoice.pku.create' || $route == 'invoice.jkt.create') {
+            $this->addForm->invoice_type = 'lukot';
+        } elseif ($route == 'invoice.medan.create') {
+            $this->addForm->invoice_type = 'dalkot';
+        } else {
+            $this->addForm->invoice_type = '';
+        }
 
         if ($id) {
             $this->id = $id;
@@ -290,9 +299,11 @@ class Create extends Component
             'invoice.medan.create' => 'invoice.medan.index',
             'invoice.jkt.create' => 'invoice.jkt.index',
             'invoice.pku.create' => 'invoice.pku.index',
+            'invoice.cust.create' => 'invoice.cust.index',
             'invoice.medan.addDetails' => 'invoice.medan.index',
             'invoice.jkt.addDetails' => 'invoice.jkt.index',
             'invoice.pku.addDetails' => 'invoice.pku.index',
+            'invoice.cust.addDetails' => 'invoice.cust.index',
             default => $currentRoute,
         };
     }

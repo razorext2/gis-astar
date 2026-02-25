@@ -60,18 +60,37 @@ final class InvoiceTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
+        $user = $this->user;
+        $route = $this->currentRoute;
+
         $query = Invoice::query()
             ->with(['addedBy', 'latestUpdateBy', 'details']);
 
-        if ($this->currentRoute === 'invoice.medan.index' && $this->user->can('invoice-list')) {
-            $query->where('tipe_invoice', 'dalkot');
-        } else {
-            $query->whereHas('details', function (Builder $detail) {
-                if ($this->currentRoute === 'invoice.pku.index' && $this->user->can('invoice-list-pku')) {
-                    $detail->where('informasi_pengiriman->tujuan', 'pku');
-                } elseif ($this->currentRoute === 'invoice.jkt.index' && $this->user->can('invoice-list-jkt')) {
-                    $detail->where('informasi_pengiriman->tujuan', 'jkt');
-                }
+        if ($user->can('invoice-list')) {
+            if ($route === 'invoice.all.index') {
+                return $query;
+            }
+
+            if ($route === 'invoice.medan.index') {
+                return $query->where('tipe_invoice', 'dalkot');
+            }
+
+            if ($route === 'invoice.cust.index') {
+                return $query->whereHas('details', function ($details) {
+                    $details->where('informasi_pengiriman->tujuan', 'cust');
+                });
+            }
+        }
+
+        if ($user->can('invoice-list-pku') && $route === 'invoice.pku.index') {
+            return $query->whereHas('details', function ($details) {
+                $details->where('informasi_pengiriman->tujuan', 'pku');
+            });
+        }
+
+        if ($user->can('invoice-list-jkt') && $route === 'invoice.jkt.index') {
+            return $query->whereHas('details', function ($details) {
+                $details->where('informasi_pengiriman->tujuan', 'jkt');
             });
         }
 
@@ -228,6 +247,8 @@ final class InvoiceTable extends PowerGridComponent
             'invoice.medan.index' => 'invoice.medan.show',
             'invoice.jkt.index' => 'invoice.jkt.show',
             'invoice.pku.index' => 'invoice.pku.show',
+            'invoice.all.index' => 'invoice.all.show',
+            'invoice.cust.index' => 'invoice.cust.show',
             default => 'invoice.medan.show',
         };
 

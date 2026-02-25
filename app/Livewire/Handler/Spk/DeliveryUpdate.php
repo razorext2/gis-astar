@@ -188,7 +188,7 @@ class DeliveryUpdate extends Component
 
             $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Berhasil menambahkan pengiriman dan assign laporan ke driver.');
 
-            return $this->redirect(route('spk.show', $this->id), navigate: true);
+            return $this->redirect(route('delivery.edit', $this->id), navigate: true);
         }, 'Gagal menambah data pengiriman', [
             'user_id' => auth()->id(),
             'spk_id' => $this->id,
