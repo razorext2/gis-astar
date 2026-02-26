@@ -30,6 +30,7 @@ class Create extends Component
     public function mount($id, $tipe_tagihan)
     {
         $this->currentRoute = request()->route()->getName();
+
         $route = $this->currentRoute;
 
         if ($route == 'invoice.cust.create' || $route == 'invoice.pku.create' || $route == 'invoice.jkt.create') {
@@ -282,7 +283,7 @@ class Create extends Component
             ]);
         }
 
-        $this->redirect(route($this->getRoute($this->currentRoute)), navigate: true);
+        $this->redirect(route($this->getRoute($this->currentRoute), ['id' => $this->id]), navigate: true);
     }
 
     public function removeDocumentation($index)
