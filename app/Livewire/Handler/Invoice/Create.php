@@ -283,7 +283,7 @@ class Create extends Component
             ]);
         }
 
-        $this->redirect(route($this->getRoute($this->currentRoute), ['id' => $this->id]), navigate: true);
+        $this->redirect(route($this->getRoute($this->currentRoute), ['id' => $this->id]).'?tipe_tagihan='.$this->fetchDataForm->tipe_tagihan, navigate: true);
     }
 
     public function removeDocumentation($index)
@@ -297,14 +297,14 @@ class Create extends Component
     public function getRoute($currentRoute)
     {
         return match ($currentRoute) {
-            'invoice.medan.create' => 'invoice.medan.index',
-            'invoice.jkt.create' => 'invoice.jkt.index',
-            'invoice.pku.create' => 'invoice.pku.index',
-            'invoice.cust.create' => 'invoice.cust.index',
-            'invoice.medan.addDetails' => 'invoice.medan.index',
-            'invoice.jkt.addDetails' => 'invoice.jkt.index',
-            'invoice.pku.addDetails' => 'invoice.pku.index',
-            'invoice.cust.addDetails' => 'invoice.cust.index',
+            'invoice.medan.create' => 'invoice.medan.addDetails',
+            'invoice.jkt.create' => 'invoice.jkt.addDetails',
+            'invoice.pku.create' => 'invoice.pku.addDetails',
+            'invoice.cust.create' => 'invoice.cust.addDetails',
+            'invoice.medan.addDetails' => 'invoice.medan.addDetails',
+            'invoice.jkt.addDetails' => 'invoice.jkt.addDetails',
+            'invoice.pku.addDetails' => 'invoice.pku.addDetails',
+            'invoice.cust.addDetails' => 'invoice.cust.addDetails',
             default => $currentRoute,
         };
     }
