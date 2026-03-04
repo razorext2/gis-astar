@@ -49,3 +49,6 @@ Schedule::command('up')
     ->dailyAt('02:00')
     ->onOneServer()
     ->evenInMaintenanceMode();
+
+Schedule::command('sync:receivable-data')
+    ->everyThirtySeconds();

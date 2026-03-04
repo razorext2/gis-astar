@@ -182,6 +182,11 @@ class SpkMain extends Model
             ->latestOfMany(); // Laravel 9+
     }
 
+    public function receivableHistories()
+    {
+        return $this->hasMany(ReceivableHistory::class, 'spk_id', 'id');
+    }
+
     public function getStatusNomorTagihanDescriptionAttribute(): string
     {
         $status = (bool) ($this->attributes['status_nomor_tagihan'] ?? false);

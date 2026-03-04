@@ -250,7 +250,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/', [InvoiceController::class, 'index'])->name('index');
                 Route::get('/create', [InvoiceController::class, 'create'])->name('create');
                 Route::get('/{invoice}', [InvoiceController::class, 'show'])->name('show');
-                Route::get('/{id}/add', [InvoiceController::class, 'addDetails'])->name('addDetails');
+                Route::get('/add/{id}', [InvoiceController::class, 'addDetails'])->name('addDetails');
             });
 
             // cust langsung
@@ -258,7 +258,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/', [InvoiceController::class, 'index'])->name('index');
                 Route::get('/create', [InvoiceController::class, 'create'])->name('create');
                 Route::get('/{invoice}', [InvoiceController::class, 'show'])->name('show');
-                Route::get('/{id}/add', [InvoiceController::class, 'addDetails'])->name('addDetails');
+                Route::get('/add/{id}', [InvoiceController::class, 'addDetails'])->name('addDetails');
             });
 
             // medan
@@ -266,7 +266,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/', [InvoiceController::class, 'index'])->name('index');
                 Route::get('/create', [InvoiceController::class, 'create'])->name('create');
                 Route::get('/{invoice}', [InvoiceController::class, 'show'])->name('show');
-                Route::get('/{id}/add', [InvoiceController::class, 'addDetails'])->name('addDetails');
+                Route::get('/add/{id}', [InvoiceController::class, 'addDetails'])->name('addDetails');
             });
 
             // pku

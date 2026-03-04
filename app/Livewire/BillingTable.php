@@ -29,9 +29,16 @@ final class BillingTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return SpkMain::query()
-            ->with('noTagihanUpdatedBy')
-            ->orderBy('nomor_tagihan', 'asc');
+        $query = SpkMain::query()
+            ->with('noTagihanUpdatedBy');
+
+        $query->orderBy('status_nomor_tagihan', 'asc');
+
+        if (auth()->user()->can('spk-create') && auth()->user()->hasAnyRole(['Marketing'])) {
+            $query->where('added_by', auth()->user()->id);
+        }
+
+        return $query;
     }
 
     public function relationSearch(): array
@@ -106,11 +113,22 @@ final class BillingTable extends PowerGridComponent
 
     public function actions(SpkMain $row): array
     {
+        $statusColor = match ($row->status_nomor_tagihan) {
+            1 => [
+                'label' => 'Riwayat',
+                'color' => 'dark:bg-blue-800 dark:hover:bg-blue-900 dark:text-white text-white  hover:bg-blue-700',
+            ],
+            0 => [
+                'label' => 'Assign',
+                'color' => 'dark:bg-green-800 dark:hover:bg-green-900 dark:text-white text-white  hover:bg-green-700',
+            ],
+        };
+
         return [
             Button::make('edit')
-                ->slot('Assign Tagihan')
+                ->slot($statusColor['label'])
                 ->id($row->id)
-                ->class('dark:bg-green-800 text-sm dark:hover:bg-green-900 dark:text-white dark:border-gray-700 rounded-lg bg-green-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-green-700')
+                ->class('text-sm dark:border-gray-700 rounded-lg bg-green-400 px-2 py-1.5 font-semibold  border border-gray-200 '.$statusColor['color'])
                 ->route('billing.edit', ['id' => $row->id]),
         ];
     }

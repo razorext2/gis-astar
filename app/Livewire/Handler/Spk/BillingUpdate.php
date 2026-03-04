@@ -3,96 +3,76 @@
 namespace App\Livewire\Handler\Spk;
 
 use App\Livewire\Concerns\HandlesErrors;
-use App\Models\Invoice;
+use App\Livewire\Forms\Billing;
+use App\Models\Spk\ReceivableHistory;
 use App\Models\Spk\SpkMain;
+use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 class BillingUpdate extends Component
 {
     use HandlesErrors;
 
-    public ?string $id;
-
-    public ?string $nomor_tagihan = null;
-
-    public ?string $tipe_tagihan = null;
-
-    public ?bool $status_nomor_tagihan = null;
-
-    public ?string $nama_customer = null;
-
-    public ?string $nomor_tagihan_baru = null;
+    public Billing $form;
 
     public $spk_data;
 
-    protected $rules = [
-        'nomor_tagihan' => 'required|min:8|integer',
-        'tipe_tagihan' => 'required:min:4|string',
-    ];
-
-    protected $messages = [
-        'nomor_tagihan.required' => 'Nomor tagihan harus diisi.',
-        'nomor_tagihan.min' => 'Nomor tagihan minimal 8 karakter.',
-        'nomor_tagihan.integer' => 'Nomor tagihan harus berupa angka.',
-        'tipe_tagihan.required' => 'Tipe tagihan harus diisi.',
-        'tipe_tagihan.min' => 'Tipe tagihan minimal 4 karakter.',
-        'tipe_tagihan.integer' => 'Tipe tagihan harus berupa string.',
-    ];
-
     public function mount($id)
     {
-        $this->id = $id;
-
-        $this->spk_data = SpkMain::with('invoice')
+        $this->spk_data = SpkMain::with('invoice', 'receivableHistories')
             ->findOrFail($id);
 
-        $this->nomor_tagihan = $this->spk_data->nomor_tagihan;
-        $this->status_nomor_tagihan = $this->spk_data->status_nomor_tagihan;
-        $this->tipe_tagihan = $this->spk_data->tipe_tagihan;
+        $this->form->nomor_tagihan = $this->spk_data->nomor_tagihan;
+        $this->form->status_nomor_tagihan = $this->spk_data->status_nomor_tagihan;
+        $this->form->tipe_tagihan = $this->spk_data->tipe_tagihan;
     }
 
     public function search()
     {
-        // validasi data
-        $this->validate();
+        $this->form->validate();
 
-        // cari data berdasarkan model tipe tagihan
-        $model = $this->getModelByTipeTagihan($this->tipe_tagihan, $this->nomor_tagihan);
+        $tipeTagihan = config('spk-config.spk_tipe_tagihan')[$this->form->tipe_tagihan];
 
-        // cek apakah data ada
-        if (! $model->exists()) {
-            $model = Invoice::where('no_faktur_pajak', $this->nomor_tagihan)
-                ->where('tipe_tagihan', $this->tipe_tagihan);
+        try {
+            // Call API utama
+            $mainData = $this->form->fetchApi(
+                $tipeTagihan['api'],
+                $this->form->nomor_tagihan
+            );
 
-            if (! $model->exists()) {
-                $this->clear();
+            // Call API sisa
+            $sisaData = $this->form->fetchApi(
+                $tipeTagihan['api_sisa'],
+                $this->form->nomor_tagihan
+            );
 
-                return $this->dispatch(
-                    event: 'swal',
-                    icon: 'error',
-                    title: 'Gagal',
-                    text: 'Nomor tagihan:'.$this->nomor_tagihan.' tidak ditemukan. Silahkan tambah terlebih dahulu di Invoice, atau buat penagihannya.'
-                );
-            }
+            // Merge data setelah keduanya valid
+            $data = array_merge($mainData, $sisaData);
 
-            $this->nama_customer = $model->first()->nama_customer;
-            $this->nomor_tagihan_baru = $model->first()->no_faktur_pajak;
+            // Set state
+            $this->form->nama_customer = $data['NamaCustomer'] ?? null;
+            $this->form->nomor_tagihan_baru = $data['NomorPermintaanJual'] ?? null;
+            $this->form->total_tagihan = (float) ($data['JumlahPiutang'] ?? 0);
+            $this->form->total_bayar = (float) ($data['TotalBayar'] ?? 0);
+            $this->form->sisa = (float) ($data['SisaPiutang'] ?? 0);
+
+        } catch (\Throwable $e) {
+            return $this->dispatch(
+                event: 'swal',
+                icon: 'error',
+                title: 'Gagal',
+                text: $e->getMessage()
+            );
         }
-
-        $field = match ($this->tipe_tagihan) {
-            'idcnonppn' => 'no_sr',
-            'idcppn' => 'tax_invoice',
-            'idyppn' => 'tax_invoice',
-            default => null,
-        };
-
-        $this->nama_customer = $model->first()->customer_name;
-        $this->nomor_tagihan_baru = $model->first()->$field;
     }
 
     public function assign()
     {
-        $policy = match ($this->tipe_tagihan) {
+        $customer_from_db = (string) $this->form->sanitizeAlphaNumeric($this->spk_data->customer['nama_perusahaan']);
+        $customer_from_api = (string) $this->form->sanitizeAlphaNumeric($this->form->nama_customer);
+
+        $policy = match ($this->form->tipe_tagihan) {
             'idcnonppn' => 'updateNoTagihanIdcNonPpn',
             'idcppn' => 'updateNoTagihanIdcPpn',
             'idyppn' => 'updateNoTagihanIdyPpn',
@@ -101,16 +81,44 @@ class BillingUpdate extends Component
         // check authorization
         $this->authorize($policy, SpkMain::class);
 
+        // check kesamaan data customer
+        if ($customer_from_db !== $customer_from_api) {
+            return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Data customer tidak sama.');
+        }
+
         $this->runSafely(function () {
-            // update nomor tagihan di spk
-            $this->spk_data->update([
-                'tipe_tagihan' => $this->tipe_tagihan,
-                'nomor_tagihan' => $this->nomor_tagihan_baru,
-                'status_nomor_tagihan' => 1, // sudah diassign
-                'status' => 4, // penagihan
-                'updated_by' => auth()->id(),
-                'no_tagihan_updated_by' => auth()->id(),
-            ]);
+            DB::transaction(function () {
+                // update nomor tagihan di spk
+                $spk = $this->spk_data->update([
+                    'tipe_tagihan' => $this->form->tipe_tagihan,
+                    'nomor_tagihan' => $this->form->nomor_tagihan_baru,
+                    'status_nomor_tagihan' => 1, // sudah diassign
+                    'status' => 4, // penagihan
+                    'updated_by' => auth()->id(),
+                    'no_tagihan_updated_by' => auth()->id(),
+                ]);
+
+                if (! $spk) {
+                    throw new \Exception('Gagal update nomor tagihan di SPK.');
+                }
+
+                // update history
+                $history = ReceivableHistory::create([
+                    'spk_id' => $this->spk_data->id,
+                    'nomor_sr' => $this->spk_data->nomor_tagihan,
+                    'total_piutang' => $this->form->total_tagihan,
+                    'sisa_piutang_sebelum' => $this->spk_data->receivableHistories()->latest()?->sisa_piutang_sesudah ?? 0,
+                    'sisa_piutang_sesudah' => $this->form->sisa,
+                    'selisih' => $this->form->total_tagihan - $this->form->sisa,
+                    'source' => 'manual',
+                    'updated_by' => auth()->id(),
+                    'checked_at' => now(),
+                ]);
+
+                if (! $history) {
+                    throw new \Exception('Gagal update history penagihan.');
+                }
+            });
 
             $this->dispatch(
                 event: 'swal',
@@ -124,48 +132,23 @@ class BillingUpdate extends Component
             );
         }, 'Gagal assign nomor tagihan', [
             'form' => [
-                'id_spk' => $this->id,
-                'nomor_tagihan' => $this->nomor_tagihan_baru,
-                'nama_customer' => $this->nama_customer,
+                'id_spk' => $this->spk_data->id,
+                'nomor_tagihan' => $this->form->nomor_tagihan_baru,
             ],
             'user_id' => auth()->id(),
         ]);
     }
 
-    protected function getModelByTipeTagihan($tipe_tagihan, $nomor_tagihan)
+    #[Computed]
+    public function histories()
     {
-        $model = match ($tipe_tagihan) {
-            'idcnonppn' => [
-                'model' => '\App\Models\CollectTask',
-                'field' => 'no_sr',
-            ],
-            'idcppn' => [
-                'model' => '\App\Models\CollectTaskPpn',
-                'field' => 'no_sr',
-            ],
-            'idyppn' => [
-                'model' => '\App\Models\CollectIdyPpn',
-                'field' => 'no_sr',
-            ],
-            default => null,
-        };
+        if (is_null($this->spk_data->nomor_tagihan)) {
+            return [];
+        }
 
-        return $model['model']::where($model['field'], $nomor_tagihan);
-    }
-
-    protected function removeAllUnusedCharacter($value)
-    {
-        $value = preg_replace('/[^\p{L}\p{N}]+/u', '', $value);
-        $value = strtolower($value);
-
-        return $value;
-    }
-
-    public function clear()
-    {
-        $this->nomor_tagihan = null;
-        $this->nama_customer = null;
-        $this->nomor_tagihan_baru = null;
+        return $this->spk_data->receivableHistories()
+            ->orderBy('created_at', 'asc')
+            ->paginate(10, pageName: 'receivable-histories-page');
     }
 
     public function render()

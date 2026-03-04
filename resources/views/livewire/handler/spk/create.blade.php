@@ -230,12 +230,20 @@
                 class="grid w-full grid-cols-2 gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:grow lg:gap-4 lg:rounded-b-xl lg:rounded-tl-none lg:rounded-tr-xl lg:p-6">
 
                 <div class="col-span-2 w-full dark:text-white">
-                    <x-input.select id="tipe_tagihan" name="tipe_tagihan" wire:model.live="createForm.tipe_tagihan"
-                        :defaultOption="'Pilih tipe tagihan'" :options="[
-                            'idcnon' => 'IDC Non PPN',
-                            'idcppn' => 'IDC PPN',
-                            // 'idyppn' => 'IDY PPN',
-                        ]" :labels="true" :textLabel="'Tipe Tagihan'" />
+                    <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="tipe_tagihan">
+                        Tipe Tagihan
+                    </label>
+
+                    <select
+                        class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                        id="tipe_tagihan" name="tipe_tagihan" wire:model.live="createForm.tipe_tagihan">
+                        <option value="">Pilih tipe tagihan...</option>
+                        @foreach (config('spk-config.spk_tipe_tagihan') as $key => $row)
+                            <option value="{{ $key }}">
+                                {{ $row['label'] }}
+                            </option>
+                        @endforeach
+                    </select>
 
                     @error('createForm.tipe_tagihan')
                         <span class="mt-2 text-xs text-red-500">{{ $message }}</span>

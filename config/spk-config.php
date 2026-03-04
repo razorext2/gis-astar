@@ -1,6 +1,20 @@
 <?php
 
 return [
+    'spk_tipe_tagihan' => [
+        'idcnon' => [
+            'label' => 'IDC Non PPN',
+            'value' => 'idcnon',
+            'api' => 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSR',
+            'api_sisa' => 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSisa',
+        ],
+        'idcppn' => [
+            'label' => 'IDC PPN',
+            'value' => 'idcppn',
+            'api' => 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSR3',
+            'api_sisa' => 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSisa1',
+        ],
+    ],
     'satuan' => [
         'blok' => 'Blok',
         'buah' => 'Buah',
