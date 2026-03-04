@@ -31,7 +31,10 @@
                                 $message = $commit['message'] ?? '-';
                                 $name = $commit['committer']['name'] ?? '-';
                                 $email = $commit['committer']['email'] ?? '-';
-                                $date = \Carbon\Carbon::parse($commit['committer']['date'])->format('d M Y H:i');
+                                $date = \Carbon\Carbon::parse($commit['committer']['date'])
+                                    ->timezone('Asia/Jakarta')
+                                    ->locale('id')
+                                    ->translatedFormat('l, d F Y H:i:s');
                             @endphp
 
                             <div class="relative mb-4">
