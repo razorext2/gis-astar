@@ -49,8 +49,6 @@ class SyncReceivableDataHistoriesFromBsi extends Command
 
                 $data = $response->json();
 
-                // dump($spk->receivableHistories->last()->toArray()['sisa_piutang_sesudah']);
-
                 if ($data['status'] !== 'success') {
                     continue;
                 }

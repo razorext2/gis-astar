@@ -51,4 +51,4 @@ Schedule::command('up')
     ->evenInMaintenanceMode();
 
 Schedule::command('sync:receivable-data')
-    ->everyThirtySeconds();
+    ->everyMinute();
