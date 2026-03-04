@@ -98,6 +98,9 @@
                             </button>
                         </li>
                         <li>
+                            @livewire('utils.update-log')
+                        </li>
+                        <li>
                             <div class="flex flex-row gap-x-4 px-4 py-2">
                                 <x-button-dark />
                                 <x-button-light />
