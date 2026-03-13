@@ -154,6 +154,13 @@ return [
             'label' => 'Penagihan',
             'icon' => 'invoice',
         ],
+        [
+            'permission' => 'spk-update-informasi-pengiriman',
+            'link' => 'daily-report.index',
+            'check' => 'daily-report.*',
+            'label' => 'Laporan Harian',
+            'icon' => 'driver',
+        ],
         // end spk
         [
             'permission' => 'driver-approve',

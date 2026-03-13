@@ -133,6 +133,7 @@
     <div class="overflow-y-scroll p-5" wire:scroll>
         <ul class="space-y-2 font-medium">
 
+            {{-- dashboard --}}
             <li>
                 <x-dashboard.sidebar-link href="{{ route('dashboard') }}" wire:navigate :active="Route::is('dashboard')">
                     <x-slot name="icon">
@@ -143,6 +144,7 @@
                 </x-dashboard.sidebar-link>
             </li>
 
+            {{-- absensi --}}
             <li x-data="{ absensi: {{ Route::is('attendanceIn.index') || Route::is('attendanceOut.index') || Route::is('today.attendance') ? 'true' : 'false' }} }">
                 <button
                     class="{{ Route::is('attendanceIn.index') || Route::is('attendanceOut.index') || Route::is('today.attendance') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
@@ -200,6 +202,7 @@
                 </ul>
             </li>
 
+            {{-- kolektor --}}
             @if (auth()->user()->hasAnyPermission(['collect-task-list', 'collect-task-list-ppn', 'collect-idy-ppn-list']))
                 <li x-data="{ lokasi: {{ Route::is('collect-task.*') || Route::is('collect-task-ppn.*') || Route::is('collect-idy-ppn.*') ? 'true' : 'false' }} }">
                     <button
@@ -262,15 +265,16 @@
                 </li>
             @endif
 
+            {{-- spk --}}
             @if (auth()->user()->hasAnyPermission(['spk-list', 'purchasing-request-list', 'produksi-list', 'spk-update-informasi-pengiriman']))
-                <li x-data="{ lokasi: {{ Route::is('spk.*') || Route::is('production.*') || Route::is('purchasing-request.*') || Route::is('billing.*') || Route::is('delivery.*') ? 'true' : 'false' }} }">
+                <li x-data="{ lokasi: {{ Route::is('spk.*') || Route::is('daily-report.*') || Route::is('production.*') || Route::is('purchasing-request.*') || Route::is('billing.*') || Route::is('delivery.*') ? 'true' : 'false' }} }">
                     <button
-                        class="{{ Route::is('spk.*') || Route::is('production.*') || Route::is('purchasing-request.*') || Route::is('billing.*') || Route::is('delivery.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
+                        class="{{ Route::is('spk.*') || Route::is('daily-report.*') || Route::is('production.*') || Route::is('purchasing-request.*') || Route::is('billing.*') || Route::is('delivery.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
                         type="button" aria-controls="lokasi-dropdown" @click="lokasi = !lokasi"
                         :aria-expanded="lokasi">
 
                         <x-icons.clipboard-check
-                            class="{{ Route::is('spk.*') || Route::is('production.*') || Route::is('purchasing-request.*') || Route::is('billing.*') || Route::is('delivery.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+                            class="{{ Route::is('spk.*') || Route::is('daily-report.*') || Route::is('production.*') || Route::is('purchasing-request.*') || Route::is('billing.*') || Route::is('delivery.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
 
                         <span class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">Manajemen
                             SPK</span>
@@ -347,10 +351,79 @@
                                 </a>
                             </li>
                         @endcan
+
+                        @can('laporan-harian-spk-list')
+                            <li>
+                                <a class="{{ Route::is('daily-report.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+                                    href="{{ route('daily-report.index') }}" wire:navigate>
+                                    <x-icons.cash
+                                        class="{{ Route::is('daily-report.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+                                    <span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">
+                                        Laporan Lapangan
+                                    </span>
+                                </a>
+                            </li>
+                        @endcan
+
                     </ul>
                 </li>
             @endif
 
+            {{-- laporan harian VT --}}
+            @can('laporan-harian-list')
+                <li x-data="{ routes: {{ Route::is('report.general.*') ? 'true' : 'false' }} }">
+                    <button
+                        class="{{ Route::is('report.general.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
+                        type="button" aria-controls="routes-dropdown" @click="routes = !routes" :aria-expanded="routes">
+
+                        <x-icons.chalk-board
+                            class="{{ Route::is('report.general.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+
+                        <span class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">
+                            Laporan Harian (VT)
+                        </span>
+
+                        <x-icons.carred-down
+                            class="ml-1 mt-1 inline h-4 w-4 transform transition-transform group-hover:text-red-600"
+                            x-bind:class="{ 'rotate-180 duration-200': routes }" />
+                    </button>
+
+                    <ul class="space-y-4 py-4" id="routes-dropdown" x-show="routes"
+                        x-transition:enter="transition ease-in duration-200"
+                        x-transition:enter-start="transform opacity-0 -translate-y-5"
+                        x-transition:leave="transition ease-out duration-200"
+                        x-transition:leave-end="transform opacity-0 -translate-y-5">
+
+                        @can('assign-laporan-harian')
+                            <li>
+                                <a class="{{ Route::is('report.general.assign') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+                                    href="{{ route('report.general.assign') }}" wire:navigate>
+                                    <x-icons.angle-right
+                                        class="{{ Route::is('report.general.assign') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+                                    <span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">
+                                        Assign VT</span>
+                                </a>
+                            </li>
+                        @endcan
+
+                        @can('laporan-harian-list')
+                            <li>
+                                <a class="{{ Route::is('report.general.index') || Route::is('report.general.daily') || Route::is('report.general.hourly') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+                                    href="{{ route('report.general.index') }}" wire:navigate>
+                                    <x-icons.angle-right
+                                        class="{{ Route::is('report.general.index') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+                                    <span class="ms-3 inline-flex text-sm group-hover:text-red-600">
+                                        Laporan Harian
+                                    </span>
+                                </a>
+                            </li>
+                        @endcan
+
+                    </ul>
+                </li>
+            @endcan
+
+            {{-- rute --}}
             @if (auth()->user()->hasAnyPermission(['driver-approve', 'collect-approve', 'sales-approve']))
                 <li x-data="{ routes: {{ Route::is('routes.*') ? 'true' : 'false' }} }">
                     <button
@@ -415,6 +488,7 @@
                 </li>
             @endif
 
+            {{-- laporan driver --}}
             @if (auth()->user()->hasAnyPermission(['driver-list']))
                 <li x-data="{ routes: {{ Route::is('driver.*') ? 'true' : 'false' }} }">
                     <button
@@ -472,6 +546,7 @@
                 </li>
             @endif
 
+            {{-- laporan invoice --}}
             @if (auth()->user()->hasAnyPermission(['invoice-list', 'invoice-list-pku', 'invoice-list-jkt']))
                 <li x-data="{ lokasi: {{ Route::is('invoice.all.*') || Route::is('invoice.cust.*') || Route::is('invoice.medan.*') || Route::is('invoice.pku.*') || Route::is('invoice.jkt.*') ? 'true' : 'false' }} }">
                     <button
@@ -660,6 +735,7 @@
                 </li>
             @endcan
 
+            {{-- divisi dan placement --}}
             @if (auth()->user()->hasAnyPermission(['divisi-list', 'placement-list']))
                 <li x-data="{ lokasi: {{ Route::is('division.*') || Route::is('placement.*') ? 'true' : 'false' }} }">
                     <button
@@ -710,6 +786,7 @@
                 </li>
             @endif
 
+            {{-- user, role dan ermissions --}}
             @if (auth()->user()->hasAnyPermission(['users-list', 'roles-list', 'permissions-list']))
                 <li x-data="{ usermanage: {{ Route::is('users.*') || Route::is('permissions.*') || Route::is('roles.*') ? 'true' : 'false' }} }">
                     <button
@@ -773,6 +850,7 @@
                 </li>
             @endif
 
+            {{-- announcment, log dan backup --}}
             @if (auth()->user()->hasAnyPermission(['announcement-list', 'log-list', 'backup-list']))
                 <li x-data="{ system: {{ Route::is('announcement.*') || Route::is('log.*') || Route::is('backup.*') || Route::is('kuesioner.*') ? 'true' : 'false' }} }">
                     <button
@@ -847,6 +925,7 @@
                 </li>
             @endif
 
+            {{-- laporan teknisi --}}
             @can('technician-list')
                 <li x-data="{ point: {{ Route::is('points.*') || Route::is('technicianpoints.*') ? 'true' : 'false' }} }">
                     <button
@@ -902,6 +981,7 @@
                 </li>
             @endcan
 
+            {{-- event --}}
             @if (auth()->user()->hasRole(['Admin', 'HRD', 'Management', 'Management-Special']))
                 <li>
                     <a href="{{ route('event.index') }}"
@@ -916,6 +996,7 @@
                 </li>
             @endif
 
+            {{-- peta penyebaran --}}
             @can('technician-approve')
                 <li>
                     <a href="{{ route('map.distribution') }}"

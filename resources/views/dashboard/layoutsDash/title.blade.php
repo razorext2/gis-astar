@@ -39,6 +39,8 @@
         'production.*' => 'Laporan Produksi',
         'delivery.*' => 'Pengiriman',
         'billing.*' => 'Penagihan',
+        'daily-report.*' => 'Laporan Kerja Harian',
+        'report.*' => 'Laporan Kerja Harian',
     ];
 
     // Temukan judul berdasarkan rute dengan wildcard

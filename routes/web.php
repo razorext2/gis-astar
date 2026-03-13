@@ -318,7 +318,19 @@ Route::middleware(['auth'])->group(function () {
             // 5. delivery
             Route::get('delivery', [\App\Http\Controllers\Spk\SpkController::class, 'deliveryIndex'])->name('delivery.index');
             Route::get('delivery/{id}/update', [\App\Http\Controllers\Spk\SpkController::class, 'deliveryEdit'])->name('delivery.edit');
+
+            // 6. laporan harian
+            Route::get('daily-report', [\App\Http\Controllers\Spk\DailyReportController::class, 'index'])->name('daily-report.index');
+            Route::get('daily-report/assign', [\App\Http\Controllers\Spk\DailyReportController::class, 'assign'])->name('daily-report.assign');
+            Route::get('daily-report/{id}/index', [\App\Http\Controllers\Spk\DailyReportController::class, 'daily'])->name('daily-report.daily');
+            Route::get('daily-report/{id}/{hourly}/detail', [\App\Http\Controllers\Spk\DailyReportController::class, 'hourly'])->name('daily-report.hourly');
         });
+
+        // 6.1 laporan harian no spk
+        Route::get('daily-report/general', [\App\Http\Controllers\Spk\DailyReportController::class, 'general'])->name('report.general.index');
+        Route::get('daily-report/general/assign', [\App\Http\Controllers\Spk\DailyReportController::class, 'generalAssign'])->name('report.general.assign');
+        Route::get('daily-report/general/{id}/index', [\App\Http\Controllers\Spk\DailyReportController::class, 'generalDaily'])->name('report.general.daily');
+        Route::get('daily-report/general/{id}/{hourly}/detail', [\App\Http\Controllers\Spk\DailyReportController::class, 'generalHourly'])->name('report.general.hourly');
     });
 });
 

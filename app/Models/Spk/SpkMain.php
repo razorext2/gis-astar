@@ -161,9 +161,9 @@ class SpkMain extends Model
         return $this->hasMany(\App\Models\Spk\LaporanFondasi::class, 'id_spk', 'id');
     }
 
-    public function laporanHarianSpk()
+    public function project()
     {
-        return $this->hasMany(\App\Models\Spk\LaporanHarian::class, 'id_spk', 'id');
+        return $this->hasOne(\App\Models\Spk\Project::class, 'spk_id', 'id');
     }
 
     public function production()
