@@ -3,6 +3,7 @@
 namespace App\Livewire\Forms\Spk;
 
 use App\Livewire\Concerns\HandlesErrors;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\Form;
@@ -89,23 +90,38 @@ class Attachment extends Form
 
     public function storeAttachment()
     {
+        $stored = [];
+
         foreach ($this->new_attachments as $index => $attachment) {
             $path = 'spk/'.$attachment['tipe_dokumen'].'/';
-            $name = Str::uuid().'.'.$attachment['ext'];
+            $name = Str::uuid().'.'.$attachment['file']->extension();
 
-            if (isset($attachment['file'])) {
+            if (! isset($attachment['file'])) {
+                continue;
+            }
+
+            try {
                 $attachment['file']->storeAs(
                     path: $path,
                     name: $name,
                     options: 'local'
                 );
+
+                // update array asli
+                $this->new_attachments[$index]['url'] = $path.$name;
+
+                // hapus object file agar tidak ikut diserialisasi
+                unset($this->new_attachments[$index]['file']);
+
+                // update array
+                $stored[] = $path.$name;
+            } catch (\Exception $e) {
+                foreach ($stored as $file) {
+                    Storage::delete($file);
+                }
+
+                throw $e ?? new \Exception('Terjadi kesalahan saat menyimpan file.');
             }
-
-            // update array asli
-            $this->new_attachments[$index]['url'] = $path.$name;
-
-            // hapus object file agar tidak ikut diserialisasi
-            unset($this->new_attachments[$index]['file']);
         }
 
         return $this->new_attachments;

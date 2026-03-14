@@ -286,8 +286,11 @@
                                 <div class="flex min-w-max gap-3">
                                     @foreach ($row->files as $file)
                                         <div class="flex-shrink-0">
-                                            <img class="h-24 w-24 rounded-lg object-cover lg:w-36"
-                                                src="{{ url('file/' . $file->file_path) }}" alt="Lampiran aktivitas">
+                                            <img id="documentations" class="h-24 w-24 rounded-lg object-cover lg:w-36"
+                                                src="{{ url('file/' . $file->file_path) }}" alt="Lampiran aktivitas"
+                                                onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}';"
+                                                data-url="{{ url('file/' . $file->file_path) }}" alt=""
+                                                onclick="javascript:void(0)" loading="lazy">
                                         </div>
                                     @endforeach
                                 </div>
@@ -329,4 +332,8 @@
             </div>
         </div>
     </div>
+
+    @push('script')
+        @vite('resources/js/pages/spk/show.js')
+    @endpush
 </div>
