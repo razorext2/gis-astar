@@ -15,9 +15,13 @@ class Daily extends Component
 
     public ?string $id;
 
+    public bool $showSummaryModal = false;
+
     public $assignment;
 
     public $route;
+
+    public $modalData;
 
     public function mount($id)
     {
@@ -60,6 +64,37 @@ class Daily extends Component
                 'action' => 'add daily report',
             ]);
         }
+    }
+
+    public function summary(string $id)
+    {
+        $this->modalData = ProjectDailyReport::where('id', $id)->first();
+
+        $this->showSummaryModal = true;
+    }
+
+    public function approve()
+    {
+        $this->runSafely(function () {
+            $this->modalData->update([
+                'status' => 'approved',
+            ]);
+
+            // show swal
+            $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Berhasil menyetujui laporan harian.');
+
+            // reset modal
+            $this->showSummaryModal = false;
+
+            // reset modal data
+            $this->modalData = null;
+
+            // refresh
+            $this->dispatch('$refresh');
+        }, 'Gagal menyetujui laporan harian.', [
+            'user_id' => auth()->id(),
+            'action' => 'approve daily report',
+        ]);
     }
 
     #[Computed]
