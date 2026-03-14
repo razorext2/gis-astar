@@ -4,9 +4,13 @@ namespace App\Livewire\Handler\Spk\DailyReport\Detail;
 
 use App\Livewire\Concerns\HandlesErrors;
 use App\Livewire\Forms\DailyReport\Hourly as HourlyForm;
+use App\Livewire\Forms\Spk\Attachment;
 use App\Models\Spk\ProjectDailyReport;
 use App\Models\Spk\ProjectHourlyReport;
+use App\Models\Spk\ProjectHourlyReportFile;
 use App\Services\HourlyReportServices;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
@@ -17,6 +21,8 @@ class Hourly extends Component
     use HandlesErrors, WithFileUploads, WithPagination;
 
     public HourlyForm $form;
+
+    public Attachment $docForm;
 
     public $id;
 
@@ -39,6 +45,18 @@ class Hourly extends Component
             ->findOrFail($id);
     }
 
+    public function storeLampiran()
+    {
+        $this->docForm->attachment_type = 'report-attachment';
+
+        $this->docForm->addAttachment();
+    }
+
+    public function removeAttachment($index)
+    {
+        $this->docForm->removeAttachment($index);
+    }
+
     public function store()
     {
         $this->form->validate();
@@ -52,18 +70,39 @@ class Hourly extends Component
             $service->compareTime($this->form->start_time, $this->form->end_time);
             $service->validateNoOverlap($this->form->start_time, $this->form->end_time, $activities);
 
-            // tambah detail aktivitas
-            ProjectHourlyReport::create([
-                'daily_report_id' => $this->id,
-                'start_time' => $this->form->start_time,
-                'end_time' => $this->form->end_time,
-                'activity' => $this->form->activity,
-                'location' => null,
-                'notes' => $this->form->notes,
-            ]);
+            DB::transaction(function () {
+                // tambah detail aktivitas
+                $project = ProjectHourlyReport::create([
+                    'daily_report_id' => $this->id,
+                    'start_time' => $this->form->start_time,
+                    'end_time' => $this->form->end_time,
+                    'activity' => $this->form->activity,
+                    'location' => null,
+                    'notes' => $this->form->notes,
+                ]);
+
+                // simpan lampiran ke variabel
+                $attachments = $this->docForm->storeAttachment();
+
+                // map data lampiran
+                $data = array_map(function ($attachment) use ($project) {
+                    return [
+                        'id' => Str::ulid(),
+                        'hourly_report_id' => $project->id,
+                        'file_path' => $attachment['url'],
+                        'file_type' => $attachment['tipe_dokumen'],
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }, $attachments);
+
+                // bulk insert
+                ProjectHourlyReportFile::insert($data);
+            });
 
             // reset form
             $this->form->reset();
+            $this->docForm->reset();
 
             // refresh
             $this->dispatch('$refresh');
@@ -98,6 +137,7 @@ class Hourly extends Component
     {
         return $this->dailyReport
             ->hourlyReport()
+            ->with('files')
             ->orderBy('start_time', 'desc')
             ->paginate(10, pageName: 'hourly-report-page');
     }

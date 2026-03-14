@@ -385,3 +385,12 @@ Route::get('ping', function () {
 Route::get('/offline', function () {
     return view('vendor.laravelpwa.offline');
 });
+
+// stream gambar
+Route::get('/file/{path}', function ($path) {
+
+    abort_unless(Storage::exists($path), 404);
+
+    return Storage::response($path);
+
+})->where('path', '.*');

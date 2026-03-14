@@ -19,6 +19,7 @@ class Project extends Model
         'end_date',
         'deadline',
         'project_name',
+        'customer_name',
         'description',
         'created_by',
     ];

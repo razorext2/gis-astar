@@ -180,7 +180,7 @@
 
                                 <x-button.link
                                     class="text-sm ring-blue-600 hover:bg-blue-100 dark:bg-blue-800 dark:text-white dark:hover:bg-blue-900"
-                                    id="detail-button" href="{{ $redirectRoute }}">
+                                    id="detail-button" href="{{ $redirectRoute }}" wire:navigate>
                                     Detail Aktivitas
                                 </x-button.link>
 

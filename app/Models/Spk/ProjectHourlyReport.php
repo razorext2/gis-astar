@@ -5,6 +5,7 @@ namespace App\Models\Spk;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectHourlyReport extends Model
 {
@@ -20,6 +21,22 @@ class ProjectHourlyReport extends Model
         'location',
         'notes',
     ];
+
+    protected static function booted()
+    {
+        static::deleting(function ($report) {
+
+            foreach ($report->files as $file) {
+
+                if (Storage::exists($file->file_path)) {
+                    Storage::delete($file->file_path);
+                }
+
+                $file->delete();
+            }
+
+        });
+    }
 
     public function dailyReport()
     {
