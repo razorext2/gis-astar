@@ -253,7 +253,7 @@
                 </div>
             </div>
 
-            @if (auth()->user()->can('spk-validate') || auth()->user()->can('spk-create'))
+            @if (auth()->user()->can('spk-validate') || auth()->user()->can('spk-create') || auth()->user()->can('spk-lampiran'))
                 <div
                     class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white">
                     <p class="text-xs italic"> Lampiran </p>
