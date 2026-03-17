@@ -93,12 +93,12 @@ class Attachment extends Form
         $stored = [];
 
         foreach ($this->new_attachments as $index => $attachment) {
-            $path = 'spk/'.$attachment['tipe_dokumen'].'/';
-            $name = Str::uuid().'.'.$attachment['file']->extension();
-
             if (! isset($attachment['file'])) {
                 continue;
             }
+
+            $path = 'spk/'.$attachment['tipe_dokumen'].'/';
+            $name = Str::uuid().'.'.$attachment['file']->extension();
 
             try {
                 $attachment['file']->storeAs(
