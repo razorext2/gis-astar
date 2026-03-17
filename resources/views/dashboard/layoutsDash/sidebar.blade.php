@@ -408,7 +408,7 @@
 
                         @can('laporan-harian-list')
                             <li>
-                                <a class="{{ Route::is('report.general.index') || Route::is('report.general.daily') || Route::is('report.general.hourly') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
+                                <a class="{{ Route::is('report.general.index') || Route::is('report.general.daily') || Route::is('report.general.hourly') || Route::is('report.general.customer-assignment') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
                                     href="{{ route('report.general.index') }}" wire:navigate>
                                     <x-icons.angle-right
                                         class="{{ Route::is('report.general.index') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />

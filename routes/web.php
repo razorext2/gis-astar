@@ -323,6 +323,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('daily-report', [\App\Http\Controllers\Spk\DailyReportController::class, 'index'])->name('daily-report.index');
             Route::get('daily-report/assign', [\App\Http\Controllers\Spk\DailyReportController::class, 'assign'])->name('daily-report.assign');
             Route::get('daily-report/{id}/index', [\App\Http\Controllers\Spk\DailyReportController::class, 'daily'])->name('daily-report.daily');
+            Route::get('daily-report/{id}/customer-assignment', [\App\Http\Controllers\Spk\DailyReportController::class, 'customerAssignment'])->name('daily-report.daily.customer-assignment');
             Route::get('daily-report/{id}/{hourly}/detail', [\App\Http\Controllers\Spk\DailyReportController::class, 'hourly'])->name('daily-report.hourly');
         });
 
@@ -330,6 +331,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('daily-report/general', [\App\Http\Controllers\Spk\DailyReportController::class, 'general'])->name('report.general.index');
         Route::get('daily-report/general/assign', [\App\Http\Controllers\Spk\DailyReportController::class, 'generalAssign'])->name('report.general.assign');
         Route::get('daily-report/general/{id}/index', [\App\Http\Controllers\Spk\DailyReportController::class, 'generalDaily'])->name('report.general.daily');
+        Route::get('daily-report/general/{id}/customer-assignment', [\App\Http\Controllers\Spk\DailyReportController::class, 'generalCustomerAssignment'])->name('report.general.customer-assignment');
         Route::get('daily-report/general/{id}/{hourly}/detail', [\App\Http\Controllers\Spk\DailyReportController::class, 'generalHourly'])->name('report.general.hourly');
     });
 });

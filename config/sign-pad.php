@@ -20,7 +20,7 @@ return [
     /**
      * Route name where you want to redirect users after signing.
      */
-    'redirect_route_name' => 'profile.edit',
+    'redirect_route_name' => null,
 
     /**
      * Width and height of the signature rectangle.

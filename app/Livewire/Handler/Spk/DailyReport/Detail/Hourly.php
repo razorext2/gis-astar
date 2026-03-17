@@ -57,6 +57,31 @@ class Hourly extends Component
         $this->docForm->removeAttachment($index);
     }
 
+    public function reportSubmit()
+    {
+        $model = $this->dailyReport;
+
+        if (count($model->hourlyReport) === 0) {
+            return $this->dispatch('swal', icon: 'warning', title: 'Perhatian', text: 'Anda belum menambahkan aktivitas laporan harian!');
+        }
+
+        $this->runSafely(function () use ($model) {
+            // update status
+            $model->update([
+                'status' => 'submitted',
+            ]);
+
+            // tampilkan swal
+            $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Laporan harian berhasil diajukan');
+
+            // refresh
+            $this->dispatch('$refresh');
+        }, 'Gagal mengajukan laporan', [
+            'user_id' => auth()->id(),
+            'action' => 'submit report',
+        ]);
+    }
+
     public function store()
     {
         $this->form->validate();

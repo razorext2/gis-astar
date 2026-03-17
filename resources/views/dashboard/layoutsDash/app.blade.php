@@ -60,43 +60,6 @@
 
     <!-- js -->
     @include('dashboard.layoutsDash.js')
-    <script>
-        function scrollToggle() {
-            return {
-                atTop: true,
-                atBottom: false,
-
-                init() {
-                    this.onScroll()
-                    window.addEventListener('scroll', () => this.onScroll())
-                },
-
-                onScroll() {
-                    const bottomOffset =
-                        document.documentElement.scrollHeight - window.innerHeight
-
-                    this.atTop = window.scrollY <= 10
-                    this.atBottom = window.scrollY >= bottomOffset - 10
-                },
-
-                handleScroll() {
-                    if (this.atTop) {
-                        // scroll ke PALING BAWAH
-                        window.scrollTo({
-                            top: document.documentElement.scrollHeight,
-                            behavior: 'smooth'
-                        })
-                    } else {
-                        // scroll ke PALING ATAS
-                        window.scrollTo({
-                            top: 0,
-                            behavior: 'smooth'
-                        })
-                    }
-                }
-            }
-        }
-    </script>
 </body>
 
 </html>

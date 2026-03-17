@@ -105,8 +105,8 @@ final class ProjectAssignmentTable extends PowerGridComponent
                 $now = Carbon::now();
 
                 $total = $start->diffInDays($end);
-                $sisaHari = $now->diffInDays($end, false); // false = bisa negatif
-                $sisaJam = $now->diffInHours($end, false);
+                $sisaHari = (int) $now->diffInDays($end, false); // false = bisa negatif
+                $sisaJam = (int) $now->diffInHours($end, false);
 
                 $template = "<div class='flex flex-col gap-1 w-fit font-semibold'>";
 

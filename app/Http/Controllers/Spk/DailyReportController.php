@@ -29,6 +29,11 @@ class DailyReportController extends Controller
         return view('dashboard.spk.daily-report.detail.daily', compact('id'));
     }
 
+    public function customerAssignment($id)
+    {
+        return view('dashboard.spk.daily-report.detail.customer-assignment', compact('id'));
+    }
+
     public function hourly($id, $daily)
     {
         return view('dashboard.spk.daily-report.detail.hourly', compact(['id', 'daily']));
@@ -52,5 +57,10 @@ class DailyReportController extends Controller
     public function generalHourly($id, $daily)
     {
         return view('dashboard.spk.daily-report.general.detail.hourly', compact(['id', 'daily']));
+    }
+
+    public function generalCustomerAssignment($id)
+    {
+        return view('dashboard.spk.daily-report.general.detail.customer-assignment', compact('id'));
     }
 }

@@ -215,20 +215,31 @@
     @endcan
 
     <div>
-        <h3 class="mb-2 text-lg font-semibold text-gray-800 dark:text-white lg:mb-4">
-            Daftar Aktivitas
-        </h3>
+        <div class="mb-2 flex w-full items-center justify-between lg:mb-4">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+                Daftar Aktivitas
+            </h3>
+
+            @if ($dailyReport->status === 'draft')
+                <div class="flex gap-2 lg:gap-4">
+                    @can('laporan-harian-edit')
+                        <x-button.primary id="submit" type="button" wire:click.prevent="reportSubmit">
+                            <span wire:loading.remove wire:target="reportSubmit">Ajukan Laporan</span>
+                            <span wire:loading wire:target="reportSubmit">Mengajukan...</span>
+                        </x-button.primary>
+                    @endcan
+                </div>
+            @endif
+        </div>
 
         {{-- LIST CONTAINER --}}
         <div class="w-full rounded-xl bg-white shadow-sm ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700">
             <div class="flex flex-col divide-y divide-gray-200 dark:divide-gray-700">
                 @forelse ($this->hourlyReports as $index => $row)
                     <div class="p-2 transition hover:bg-gray-50 dark:hover:bg-gray-700/40 lg:p-4">
-
                         {{-- HEADER --}}
                         <div
                             class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 lg:flex-row lg:items-center lg:justify-between lg:gap-4">
-
                             {{-- TIME INFO --}}
                             <div class="text-sm text-gray-600 dark:text-gray-300">
                                 <p class="font-medium">
@@ -300,7 +311,6 @@
                         {{-- FOOTER --}}
                         <div class="mt-4 flex items-center justify-between">
                             {{-- ACTION --}}
-
                             @can('laporan-harian-delete')
                                 <x-button.danger
                                     class="text-sm ring-blue-600 hover:bg-blue-100 dark:bg-blue-800 dark:text-white dark:hover:bg-blue-900"

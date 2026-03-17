@@ -1,18 +1,25 @@
 <div class="w-full">
-
     {{-- informasi project --}}
     <div
         class="mb-2 w-full rounded-xl bg-white shadow-sm ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700 lg:mb-4">
-
         {{-- HEADER --}}
         <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-700">
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
-                Informasi Project
+                Informasi Project <span class="ms-2 rounded-lg bg-green-500 px-2 py-0.5 text-xs text-green-100">
+                    {{ ucfirst($assignment->status) }}
+                </span>
             </h3>
         </div>
 
         {{-- CONTENT --}}
-        <div class="grid grid-cols-1 gap-2 p-2 lg:grid-cols-2 lg:gap-4 lg:p-4">
+        <div class="relative grid grid-cols-1 gap-2 p-2 lg:grid-cols-2 lg:gap-4 lg:p-4">
+            {{-- signature  --}}
+            <x-button.link
+                class="absolute right-2 top-2 bg-green-100 ring-1 ring-green-700 hover:bg-green-300 focus:scale-105 dark:bg-green-800 dark:text-white dark:ring-gray-700 dark:hover:bg-green-900"
+                id="signature-btn" type="button"
+                href="{{ route('report.general.customer-assignment', ['id' => $assignment->id]) }}" wire:navigate>
+                <x-icons.pen-nib class="h-5 w-5" />
+            </x-button.link>
 
             {{-- PROJECT NAME --}}
             <div class="lg:col-span-2">

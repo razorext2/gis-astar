@@ -11,14 +11,6 @@
         </p>
     </header>
 
-    @if ($myModel->hasBeenSigned())
-        <button wire:click="$set('showModalShowSignature', true)"
-            class="flex items-center gap-2 text-blue-500 transition-colors duration-300 ease-in-out hover:text-blue-300">
-            <span> Lihat Tanda Tangan Digital </span>
-            <x-icons.eye class="h-3 w-3" />
-        </button>
-    @endif
-
     {{-- form tambah ttd digital --}}
     @if (!$myModel->hasBeenSigned())
         <div id="accordion-ttd-digital" x-data="{ accordionTtdOpen: false }">
@@ -54,6 +46,12 @@
                 </form>
             </div>
         </div>
+    @else
+        <button wire:click="$set('showModalShowSignature', true)"
+            class="flex items-center gap-2 text-blue-500 transition-colors duration-300 ease-in-out hover:text-blue-300">
+            <span> Lihat Tanda Tangan Digital </span>
+            <x-icons.eye class="h-3 w-3" />
+        </button>
     @endif
     {{-- end form tambah ttd digital --}}
 

@@ -5,6 +5,7 @@ namespace App\Livewire\Handler\Spk\DailyReport\Detail;
 use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Spk\ProjectAssignment;
 use App\Models\Spk\ProjectDailyReport;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -50,15 +51,25 @@ class Daily extends Component
             }
         } else {
             $this->runSafely(function () {
-                // tambah laporan
-                ProjectDailyReport::create([
-                    'assignment_id' => $this->id,
-                    'report_date' => today(),
-                    'submitted_at' => now(),
-                ]);
+                DB::transaction(function () {
+                    // tambah laporan
+                    ProjectDailyReport::create([
+                        'assignment_id' => $this->id,
+                        'report_date' => today(),
+                        'submitted_at' => now(),
+                    ]);
 
-                //
+                    // update status
+                    $this->assignment->update([
+                        'status' => 'in_progress',
+                    ]);
+                });
+
+                // swal
                 $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Berhasil menambah laporan hari ini.');
+
+                // refresh
+                $this->dispatch('$refresh');
             }, 'Gagal menambah laporan hari ini.', [
                 'user_id' => auth()->id(),
                 'action' => 'add daily report',
