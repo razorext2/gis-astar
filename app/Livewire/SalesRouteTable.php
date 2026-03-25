@@ -80,7 +80,7 @@ final class SalesRouteTable extends PowerGridComponent
     {
         return [
             'roles' => [
-                'role',
+                'name',
             ],
         ];
     }
