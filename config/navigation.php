@@ -28,6 +28,8 @@ return [
         'book-open' => 'book-open',
         'event' => 'gift-box',
         'invoice' => 'file-invoice',
+        'daily-report' => 'chalk-board',
+        'cash' => 'cash',
     ],
     'links' => [
         [
@@ -155,13 +157,29 @@ return [
             'icon' => 'invoice',
         ],
         [
-            'permission' => 'spk-update-informasi-pengiriman',
+            'permission' => 'laporan-harian-spk-list',
             'link' => 'daily-report.index',
             'check' => 'daily-report.*',
-            'label' => 'Laporan Harian',
-            'icon' => 'driver',
+            'label' => 'Laporan Lapangan',
+            'icon' => 'cash',
         ],
         // end spk
+        // laporan harian
+        [
+            'permission' => 'assign-laporan-harian',
+            'link' => 'report.general.assign',
+            'check' => 'report.general.assign',
+            'label' => 'Assign Laporan Harian',
+            'icon' => 'daily-report',
+        ],
+        [
+            'permission' => 'laporan-harian-list',
+            'link' => 'report.general.index',
+            'check' => 'report.general.*',
+            'label' => 'Laporan Harian',
+            'icon' => 'daily-report',
+        ],
+        // end laporan harian
         [
             'permission' => 'driver-approve',
             'link' => 'routes.driver',
