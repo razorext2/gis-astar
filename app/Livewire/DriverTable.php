@@ -180,6 +180,10 @@ final class DriverTable extends PowerGridComponent
                 ->searchable()
                 ->bodyAttribute('min-w-72'),
 
+            Column::make('Judul', 'title')
+                ->searchable()
+                ->hidden(),
+
             Column::make('Status', 'status_formatted', 'status')
                 ->sortable()
                 ->searchable(),
