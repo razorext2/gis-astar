@@ -95,9 +95,9 @@ final class ProductionTable extends PowerGridComponent
             ->add('no', fn ($query, int $index) => $index + 1)
             ->add('customer_info', function ($query) {
                 return view('components.dashboard.name-w-code', [
-                    'code' => data_get($query->spk->customer, 'contact_person', '-'),
+                    'code' => '',
                     'name' => data_get($query->spk->customer, 'nama_perusahaan', '-'),
-                    'item3' => data_get($query->spk->customer, 'alamat', '-'),
+                    'item3' => '',
                 ]);
             })
             ->add('id_spk')
