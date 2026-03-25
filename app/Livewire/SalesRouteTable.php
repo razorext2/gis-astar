@@ -65,7 +65,7 @@ final class SalesRouteTable extends PowerGridComponent
             $roles = ['Sales-JKT'];
         }
 
-        if ($this->user->hasRole(['Admin', 'Management', 'Management-Special'])) {
+        if ($this->user->hasRole(['Admin', 'Management', 'Management-Special', 'HRD'])) {
             $roles = ['Sales', 'Sales-PKU', 'Sales-IDY', 'Sales-JKT', 'Sales-Agrotec', 'Kurir-Bank'];
         }
 
