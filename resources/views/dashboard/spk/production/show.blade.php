@@ -103,10 +103,10 @@
                 class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
                 <p class="text-xs italic">Nama Customer </p>
                 <p class="font-semibold"> {{ $data->spk->customer['nama_perusahaan'] ?? 'N/A' }} </p>
-                <p class="text-sm"> {{ $data->spk->customer['contact_person'] ?? '-' }}
+                {{-- <p class="text-sm"> {{ $data->spk->customer['contact_person'] ?? '-' }}
                     (telp: {{ $data->spk->customer['no_hp'] ?? '-' }})
                 </p>
-                <p class="text-sm"> {{ $data->spk->customer['alamat'] ?? '-' }} </p>
+                <p class="text-sm"> {{ $data->spk->customer['alamat'] ?? '-' }} </p> --}}
             </div>
 
             <div
