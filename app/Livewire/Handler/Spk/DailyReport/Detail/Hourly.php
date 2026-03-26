@@ -144,7 +144,15 @@ class Hourly extends Component
     {
         $this->runSafely(function () use ($id) {
             // hapus detail aktivitas
-            ProjectHourlyReport::findOrFail($id)->delete();
+            $project = ProjectHourlyReport::with('dailyReport')
+                ->findOrFail($id);
+
+            if ($project->dailyReport->status === 'submitted' || $project->dailyReport->status === 'approved') {
+                return $this->dispatch('swal', icon: 'warning', title: 'Perhatian', text: 'Anda tidak dapat menghapus aktivitas laporan harian yang sudah diajukan atau disetujui!');
+            }
+
+            // hapus project
+            $project->delete();
 
             // refresh
             $this->dispatch('$refresh');
