@@ -52,3 +52,10 @@ Schedule::command('up')
 
 Schedule::command('sync:receivable-data')
     ->everyMinute();
+
+Schedule::command('app:auto-submit-daily-report')
+    ->timezone('Asia/Jakarta')
+    ->name('Auto submit daily report')
+    ->dailyAt('01:15')
+    ->onOneServer()
+    ->evenInMaintenanceMode();
