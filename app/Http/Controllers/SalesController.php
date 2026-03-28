@@ -36,35 +36,35 @@ class SalesController extends Controller
                 }
 
                 // Filter relasi user yang memiliki role 'Sales-IDY'
-                if ($user->hasAnyRole(['HRD-IDY', 'Marketing-IDY'])) {
+                if ($user->hasAnyRole(['HRD-IDY', 'Marketing-IDY']) || $user->can('sales-export-idy')) {
                     $query->whereHas('userRelasi.roles', function ($role) {
                         $role->where('name', 'Sales-IDY');
                     });
                 }
 
                 // Filter relasi user yang memiliki role 'Kurir-Bank
-                if ($user->hasAnyRole(['Kasir', 'Piutang'])) {
+                if ($user->hasAnyRole(['Kasir', 'Piutang']) || $user->can('sales-export-kurir-bank')) {
                     $query->whereHas('userRelasi.roles', function ($role) {
                         $role->where('name', 'Kurir-Bank');
                     });
                 }
 
                 // Filter relasi user yang memiliki role 'Sales'
-                if ($user->hasRole('Marketing')) {
+                if ($user->hasRole('Marketing') || $user->can('sales-export-medan')) {
                     $query->orWhereHas('userRelasi.roles', function ($r) {
                         $r->where('name', 'Sales');
                     });
                 }
 
                 // Filter relasi user yang memiliki role 'Sales-JKT'
-                if ($user->hasAnyRole(['Marketing-JKT', 'Management-JKT'])) {
+                if ($user->hasAnyRole(['Marketing-JKT', 'Management-JKT']) || $user->can('sales-export-jkt')) {
                     $query->orWhereHas('userRelasi.roles', function ($r) {
                         $r->where('name', 'Sales-JKT');
                     });
                 }
 
                 // Filter relasi user yang memiliki role 'Sales-PKU'
-                if ($user->hasAnyRole(['Marketing-PKU', 'Management-PKU'])) {
+                if ($user->hasAnyRole(['Marketing-PKU', 'Management-PKU']) || $user->can('sales-export-pku')) {
                     $query->orWhereHas('userRelasi.roles', function ($r) {
                         $r->where('name', 'Sales-PKU');
                     });
