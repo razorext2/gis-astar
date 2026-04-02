@@ -51,7 +51,7 @@ final class AttendanceOutTable extends PowerGridComponent
                 ->showPerPage()
                 ->showRecordCount(),
             PowerGrid::responsive(),
-            PowerGrid::exportable(fileName: 'absensi-keluar')
+            PowerGrid::exportable(fileName: 'absensi-keluar-'.now()->format('YmdHis'))
                 ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV)
                 ->stripTags(true),
         ];

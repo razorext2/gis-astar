@@ -52,7 +52,7 @@ final class AttendanceInTable extends PowerGridComponent
                 ->showRecordCount(),
             PowerGrid::responsive()
                 ->fixedColumns('kode_pegawai_formatted', 'action'),
-            PowerGrid::exportable(fileName: 'absensi-masuk'.now()->format('YmdHis'))
+            PowerGrid::exportable(fileName: 'absensi-masuk-'.now()->format('YmdHis'))
                 ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV)
                 ->stripTags(true),
         ];
