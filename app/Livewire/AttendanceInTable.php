@@ -13,17 +13,22 @@ use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
-use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 
 final class AttendanceInTable extends PowerGridComponent
 {
     use WithExport;
+
     public string $tableName = 'AttendanceTable';
+
     public bool $deferLoading = true;
+
     public bool $showFilters = false;
+
     public $pegawai;
+
     public ?int $kodePegawai = null;
 
     public function setUp(): array
@@ -47,10 +52,9 @@ final class AttendanceInTable extends PowerGridComponent
                 ->showRecordCount(),
             PowerGrid::responsive()
                 ->fixedColumns('kode_pegawai_formatted', 'action'),
-            PowerGrid::exportable(fileName: 'absensi-masuk')
+            PowerGrid::exportable(fileName: 'absensi-masuk'.now()->format('YmdHis'))
                 ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV)
-                ->onQueue('absensiMasuk')
-                ->onConnection('redis')
+                ->stripTags(true),
         ];
     }
 
@@ -76,7 +80,7 @@ final class AttendanceInTable extends PowerGridComponent
             'pegawaiRelasi' => [
                 'full_name',
                 'kode_pegawai',
-            ]
+            ],
         ];
     }
 
@@ -85,25 +89,25 @@ final class AttendanceInTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             ->add('kode_pegawai')
-            ->add('kode_pegawai_formatted', fn($query) => Blade::render('components.table-component.codename', ['data' => $query]))
-            ->add('location', fn($query) => Blade::render('components.table-component.location-and-status', ['data' => $query]))
+            ->add('kode_pegawai_formatted', fn ($query) => Blade::render('components.table-component.codename', ['data' => $query]))
+            ->add('location', fn ($query) => Blade::render('components.table-component.location-and-status', ['data' => $query]))
             ->add('jam_masuk')
             ->add('jam_masuk_formatted', function ($query) {
                 $timezone = $query->timezone ?? 'No timezone';
 
                 return Blade::render('components.table-component.two-row-vertical', [
-                    'a' => $query->waktuori . ', ' . $timezone,
-                    'b' => $query->jam_masuk . ', ' . now()->timezone,
+                    'a' => $query->waktuori.', '.$timezone,
+                    'b' => $query->jam_masuk.', '.now()->timezone,
                 ]);
             })
             ->add('status')
-            ->add('status_formatted', fn($query) => Blade::render('components.table-component.attendance-verify', [
+            ->add('status_formatted', fn ($query) => Blade::render('components.table-component.attendance-verify', [
                 'status' => $query->status,
                 'verified' => $query->verified ? 'verified' : 'unverified',
-                'similarity' => (1 - round($query->distance ?? 1, 2)) * 100 . '%',
-                'verified_by' => $query->verifiedBy ? $query->verifiedBy->name : $query->verified_by
+                'similarity' => (1 - round($query->distance ?? 1, 2)) * 100 .'%',
+                'verified_by' => $query->verifiedBy ? $query->verifiedBy->name : $query->verified_by,
             ]))
-            ->add('photo_url', fn($query) => Blade::render('components.table-component.image-column', ['data' => $query]))
+            ->add('photo_url', fn ($query) => Blade::render('components.table-component.image-column', ['data' => $query]))
             ->add('created_at')
             ->add('updated_at')
             ->add('verified');
@@ -112,7 +116,8 @@ final class AttendanceInTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('#', 'photo_url'),
+            Column::make('#', 'photo_url')
+                ->visibleInExport(false),
 
             Column::make('Pegawai', 'kode_pegawai_formatted'),
 
@@ -129,7 +134,8 @@ final class AttendanceInTable extends PowerGridComponent
                 ->fixedOnResponsive(),
 
             Column::make('Created at', 'created_at')
-                ->hidden(isHidden: true, isForceHidden: true),
+                ->hidden(isHidden: true, isForceHidden: true)
+                ->visibleInExport(true),
 
             Column::make('Verified', 'verified')
                 ->hidden(isHidden: true, isForceHidden: true),
@@ -192,7 +198,7 @@ final class AttendanceInTable extends PowerGridComponent
                 $query = Attendance::where('id', $id)->update([
                     'verified' => 1,
                     'verified_by' => Auth::id(),
-                    'status' => 1
+                    'status' => 1,
                 ]);
 
                 if ($query) {
