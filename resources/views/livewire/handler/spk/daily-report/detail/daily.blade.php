@@ -74,6 +74,15 @@
                 <dd class="font-medium text-gray-900 dark:text-white">
                     {{ \Carbon\Carbon::parse($assignment->project->deadline)->isoFormat('DD MMMM YYYY') }}
                 </dd>
+
+                @if (!$assignment->project->extend_request)
+                    @can('laporan-harian-extend')
+                        <x-button.primary class="mt-2 text-sm" wire:click.prevent="$set('showExtendModal', true)"
+                            type="button" id="extend-report-btn">
+                            Permohonan Perpanjang Deadline?
+                        </x-button.primary>
+                    @endcan
+                @endif
             </div>
 
             {{-- CREATED BY --}}
@@ -87,6 +96,88 @@
                 </dd>
             </div>
 
+            {{-- extend request --}}
+            @if ($assignment->project->extend_request)
+                <div class="col-span-2 rounded-lg bg-gray-800 p-2 ring-1 ring-gray-200 dark:ring-gray-700 lg:p-4">
+                    <div class="text-gray-800 dark:text-white">
+                        <p>
+                            <span class="font-semibold">
+                                {{ $assignment->project->extendRequestBy->name }}
+                            </span>
+                            meminta perpanjangan deadline ke tanggal
+                            <span class="font-semibold text-green-500">
+                                {{ $assignment->project->extend_to->isoFormat('DD MMMM YYYY') }}
+                            </span>
+                            dengan alasan:
+                        </p>
+                        <p>
+                            {{ ucfirst($assignment->project->extend_request_notes) }}
+                        </p>
+                    </div>
+
+                    @if ($assignment->project->extend_request_status == 'pending')
+                        @if ($showDenyProcessButton)
+                            <div class="mt-2 border-t border-t-gray-400 pt-2 dark:border-t-gray-700">
+                                <x-input.textarea id="extendRequestNotes" name="extendRequestNotes"
+                                    wire:model="extend_request_rejected_notes" class="mt-2"
+                                    placeholder="Alasan Penolakan" :labels="true" :textLabel="'Alasan penolakan'"
+                                    :rows="6" />
+                            </div>
+                        @endif
+
+                        @can('laporan-harian-validate')
+                            <div class="mt-2 flex gap-2">
+                                {{-- tombol terima --}}
+                                <x-button.success wire:show="showAcceptButton" class="text-sm"
+                                    wire:click.prevent="acceptExtendRequest">
+                                    Terima
+                                </x-button.success>
+
+                                {{-- tombol cancel --}}
+                                <x-button.primary wire:show="showCancelButton" class="text-sm"
+                                    wire:click.prevent="handleCancelButton">
+                                    Cancel
+                                </x-button.primary>
+
+                                {{-- tombol tolak --}}
+                                <x-button.danger wire:show="showDenyButton" class="text-sm"
+                                    wire:click.prevent="rejectExtendRequest">
+                                    Tolak
+                                </x-button.danger>
+
+                                {{-- tombol proses tolak --}}
+                                <x-button.danger wire:show="showDenyProcessButton" class="text-sm"
+                                    wire:click.prevent="rejectExtendRequestProcess">
+                                    Proses Tolak
+                                </x-button.danger>
+                            </div>
+                        @endcan
+                    @else
+                        <div class="mt-2 border-t border-t-gray-400 pt-2 dark:border-t-gray-700">
+                            @if ($assignment->project->extend_request_status == 'approved')
+                                <p class="text-sm font-medium text-green-500">
+                                    {{ '[' . $assignment->project->extend_request_validated_at . '] ' . $assignment->project->extendRequestValidatedBy->name }}
+                                </p>
+                                <p class="text-sm text-green-500">
+                                    Perpanjangan telah
+                                    disetujui. Deadline laporan telah diperpanjang ke tanggal
+                                    <span
+                                        class="font-semibold underline underline-offset-2">{{ $assignment->project->extend_to->isoFormat('DD MMMM YYYY') }}</span>
+                                </p>
+                            @else
+                                <p class="text-sm font-medium text-red-500">
+                                    {{ '[' . $assignment->project->extend_request_validated_at . '] ' . $assignment->project->extendRequestValidatedBy->name }}
+                                </p>
+                                <p class="text-sm text-red-500">
+                                    Perpanjangan telah
+                                    ditolak dengan alasan: <span
+                                        class="font-semibold underline underline-offset-2">{{ $assignment->project->extend_request_validated_notes }}</span>
+                                </p>
+                            @endif
+                        </div>
+                    @endif
+                </div>
+            @endif
         </div>
 
     </div>
@@ -106,7 +197,7 @@
 
             @can('laporan-harian-create')
                 @if (now()->lt(\Carbon\Carbon::parse($assignment->project->end_date)->endOfDay()))
-                    <x-button.success wire:click="add" type="button" id="add-report-btn">
+                    <x-button.success wire:click.prevent="add" type="button" id="add-report-btn">
                         Tambah Laporan
                     </x-button.success>
                 @endif
@@ -201,7 +292,7 @@
 
                                 @can('laporan-harian-validate')
                                     <x-button.success id="summary" class="text-sm" type="button"
-                                        wire:click="summary('{{ $row->id }}')">
+                                        wire:click.prevent="summary('{{ $row->id }}')">
                                         <span wire:loading.remove wire:target="summary">Summary</span>
                                         <span wire:loading wire:target="summary">Memuat...</span>
                                     </x-button.success>
@@ -234,7 +325,8 @@
                 <div class="relative mx-4 my-6 flex w-full flex-col gap-1 overflow-y-auto rounded-xl bg-white p-4 shadow-2xl dark:bg-dark-primary md:w-1/2 md:gap-2 lg:p-6"
                     style="max-height: calc(100vh - 6rem);">
 
-                    <button class="absolute right-2 top-2" type="button" wire:click="$set('showSummaryModal', false)">
+                    <button class="absolute right-2 top-2" type="button"
+                        wire:click.prevent="$set('showSummaryModal', false)">
                         <x-icons.close class="h-6 w-6 text-red-600 hover:text-red-800" />
                     </button>
 
@@ -294,20 +386,71 @@
                     @can('laporan-harian-validate')
                         <div class="mx-auto flex w-fit justify-end gap-x-2">
                             @if ($modalData->status === 'submitted')
-                                <x-button.success id="delivery-btn-done" wire:click="approve"
+                                <x-button.success id="delivery-btn-done" wire:click.prevent="approve"
                                     wire:confirm.prompt="Apakah anda yakin ingin menyetujui laporan ini?\nKetik YA untuk mengkonfirmasi|YA"
                                     type="button">
                                     Approve Laporan
                                 </x-button.success>
-
-                                {{--
-                            <x-button.primary id="continue-btn-done" wire:click="continueAfterDelayConfirmation"
-                                type="button">
-                                Pengiriman Dilanjutkan?
-                            </x-button.primary> --}}
                             @endif
                         </div>
                     @endcan
+
+                </div>
+            @endif
+        </div>
+    @endcan
+
+    {{-- extend deadline modal --}}
+    @can('laporan-harian-extend')
+        <div id="extend-modal" wire:show="showExtendModal" wire:transition.duration.300ms
+            class="fixed inset-0 z-[99] flex items-center justify-center bg-black bg-opacity-70 py-8">
+            @if ($showExtendModal)
+                <div class="relative mx-4 my-6 flex w-full flex-col gap-1 overflow-y-auto rounded-xl bg-white p-4 shadow-2xl dark:bg-dark-primary md:w-1/3 md:gap-2 lg:p-6"
+                    style="max-height: calc(100vh - 6rem);">
+
+                    <button class="absolute right-2 top-2" type="button"
+                        wire:click.prevent="$set('showExtendModal', false)">
+                        <x-icons.close class="h-6 w-6 text-red-600 hover:text-red-800" />
+                    </button>
+
+                    <h2
+                        class="mb-2 flex items-center gap-x-2 text-lg font-semibold text-gray-900 dark:text-white lg:text-xl">
+                        Request Perpanjangan Deadline
+                    </h2>
+
+                    <form wire:submit.prevent="extendProcess" method="POST">
+                        <div class="flex h-96 flex-col gap-2 overflow-auto">
+                            <div class="h-fit">
+                                <x-input.basic id="days" name="days" wire:model="days" type="number"
+                                    min="1" max="20" placeholder="Mau perpanjang berapa hari?">
+                                    Jumlah Hari
+                                </x-input.basic>
+
+                                @error('days')
+                                    <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="h-fit">
+                                <x-input.textarea id="extend-reason" name="extend-reason" wire:model="extend_reason"
+                                    rows="10" placeholder="Apa alasan ingin perpanjang?" :labels="true"
+                                    :textLabel="'Alasan Perpanjang'" />
+
+                                @error('extend_reason')
+                                    <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        @can('laporan-harian-extend')
+                            <div class="mx-auto flex w-fit justify-end gap-x-2">
+                                <x-button.success id="delivery-btn-done" type="submit">
+                                    <span wire:loading.remove wire:target="extendProcess"> Ajukan Permintaan </span>
+                                    <span wire:loading wire:target="extendProcess"> Memproses... </span>
+                                </x-button.success>
+                            </div>
+                        @endcan
+                    </form>
 
                 </div>
             @endif

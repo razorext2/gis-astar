@@ -20,8 +20,25 @@ class Project extends Model
         'deadline',
         'project_name',
         'customer_name',
+        'extend_request',
+        'extend_to',
+        'extend_request_by',
+        'extend_request_at',
+        'extend_request_notes',
+        'extend_request_status',
+        'extend_request_validated_at',
+        'extend_request_validated_notes',
+        'extend_request_validated_by',
         'description',
         'created_by',
+    ];
+
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'deadline' => 'date',
+        'extend_to' => 'date',
+        'extend_request' => 'boolean',
     ];
 
     public function spk()
@@ -37,5 +54,15 @@ class Project extends Model
     public function assignment()
     {
         return $this->hasMany(ProjectAssignment::class, 'project_id', 'id');
+    }
+
+    public function extendRequestBy()
+    {
+        return $this->belongsTo(User::class, 'extend_request_by', 'id');
+    }
+
+    public function extendRequestValidatedBy()
+    {
+        return $this->belongsTo(User::class, 'extend_request_validated_by', 'id');
     }
 }
