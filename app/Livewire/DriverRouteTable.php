@@ -47,6 +47,8 @@ final class DriverRouteTable extends PowerGridComponent
             $roles[] = 'Driver-Jkt';
         }
 
+        $roles[] = 'Driver';
+
         if ($roles) {
             $query->role($roles);
         }
