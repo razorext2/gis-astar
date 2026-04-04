@@ -5,6 +5,7 @@ namespace App\Livewire\Handler\Spk\DailyReport\Detail;
 use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Spk\ProjectAssignment;
 use App\Models\Spk\ProjectDailyReport;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
@@ -225,6 +226,49 @@ class Daily extends Component
             'user_id' => auth()->id(),
             'action' => 'accept extend request',
         ]);
+    }
+
+    public function markAsComplete()
+    {
+        // cek otoritas
+        if (auth()->user()->cannot('laporan-harian-validate')) {
+            return abort(403);
+        }
+
+        $this->runSafely(function () {
+            //    update status
+            $this->assignment->update([
+                'status' => 'completed',
+            ]);
+        }, 'Gagal menandai laporan harian sebagai selesai.', [
+            'user_id' => auth()->id(),
+            'action' => 'daily report mark as complete',
+        ]);
+    }
+
+    public function getSisaHari()
+    {
+        $start = Carbon::parse($this->assignment->project->start_date);
+        $end = Carbon::parse($this->assignment->project->end_date)->endOfDay();
+        $now = Carbon::now();
+
+        $total = $start->diffInDays($end);
+        $sisaHari = (int) $now->diffInDays($end, false);
+        $sisaJam = (int) $now->diffInHours($end, false);
+
+        if ($sisaHari < 0) {
+            return ['type' => 'danger', 'label' => 'Deadline'];
+        }
+
+        if ($sisaJam < 24) {
+            return ['type' => 'danger', 'label' => 'Hari ini!'];
+        }
+
+        if ($sisaHari <= ($total / 2)) {
+            return ['type' => 'warning', 'label' => "{$sisaHari} Hari lagi!"];
+        }
+
+        return ['type' => 'success', 'label' => "{$sisaHari} Hari"];
     }
 
     public function rejectExtendRequest()

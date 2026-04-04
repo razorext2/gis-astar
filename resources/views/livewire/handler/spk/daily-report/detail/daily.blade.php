@@ -5,8 +5,9 @@
         {{-- HEADER --}}
         <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-700">
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
-                Informasi Project <span class="ms-2 rounded-lg bg-green-500 px-2 py-0.5 text-xs text-green-100">
-                    {{ ucfirst($assignment->status) }}
+                Informasi Project <span
+                    class="bg-{{ $assignment->status == 'in_progress' ? 'yellow' : 'green' }}-500 text-{{ $assignment->status == 'in_progress' ? 'yellow' : 'green' }}-100 ms-2 rounded-lg px-2 py-0.5 text-xs">
+                    {{ ucwords(str_replace('_', ' ', $assignment->status)) }}
                 </span>
             </h3>
         </div>
@@ -73,9 +74,22 @@
 
                 <dd class="font-medium text-gray-900 dark:text-white">
                     {{ \Carbon\Carbon::parse($assignment->project->deadline)->isoFormat('DD MMMM YYYY') }}
+
+                    @php
+                        $sisa = $this->getSisaHari();
+                    @endphp
+
+                    <span @class([
+                        'text-xs px-2.5 w-fit py-1 rounded-lg',
+                        'bg-red-500 text-red-100' => $sisa['type'] === 'danger',
+                        'bg-yellow-500 text-yellow-800' => $sisa['type'] === 'warning',
+                        'bg-green-500 text-green-800' => $sisa['type'] === 'success',
+                    ])>
+                        {{ $sisa['label'] }}
+                    </span>
                 </dd>
 
-                @if (!$assignment->project->extend_request)
+                @if (!$assignment->project->extend_request && $assignment->status != 'completed')
                     @can('laporan-harian-extend')
                         <x-button.primary class="mt-2 text-sm" wire:click.prevent="$set('showExtendModal', true)"
                             type="button" id="extend-report-btn">
@@ -178,6 +192,18 @@
                     @endif
                 </div>
             @endif
+
+            {{-- tandai sebagai selesai --}}
+            @if ($assignment->status != 'completed')
+                @can('laporan-harian-validate')
+                    <div>
+                        <x-button.success id="btn-mark-as-complete" type="button" wire:click.prevent="markAsComplete"
+                            wire:confirm.prompt="Apakah anda yakin ingin menandai Laporan ini sebagai Selesai?\nJika ya, silahkan ketik SELESAI|SELESAI">
+                            Tandai Selesai
+                        </x-button.success>
+                    </div>
+                @endcan
+            @endif
         </div>
 
     </div>
@@ -196,7 +222,7 @@
             </x-button.link>
 
             @can('laporan-harian-create')
-                @if (now()->lt(\Carbon\Carbon::parse($assignment->project->end_date)->endOfDay()))
+                @if (now()->lt(\Carbon\Carbon::parse($assignment->project->end_date)->endOfDay()) && $assignment->status != 'completed')
                     <x-button.success wire:click.prevent="add" type="button" id="add-report-btn">
                         Tambah Laporan
                     </x-button.success>

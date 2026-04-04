@@ -22,7 +22,8 @@
     @can('laporan-harian-create')
         @if (
             $dailyReport->report_date == now()->format('Y-m-d') &&
-                now()->lt(\Carbon\Carbon::parse($dailyReport->assignment->project->end_date)->endOfDay()))
+                now()->lt(\Carbon\Carbon::parse($dailyReport->assignment->project->end_date)->endOfDay()) &&
+                $dailyReport->assignment->status != 'completed')
             <div wire:show="showAddForm" id="accordion-packing-form" x-data="{ accordionOpen: true }">
                 <button type="button"
                     class="flex w-full items-center justify-between gap-3 rounded-lg p-5 font-medium text-gray-500 ring-1 ring-gray-200 transition-all duration-300 ease-in-out hover:bg-blue-100 dark:text-gray-400 dark:ring-gray-600 dark:hover:bg-gray-800"
@@ -209,7 +210,8 @@
             </div>
         @else
             <p class="w-full text-center text-sm text-red-500">
-                Anda tidak dapat menambahkan aktivitas karena waktu laporan telah berakhir.
+                Anda tidak dapat menambahkan aktivitas karena waktu laporan telah berakhir atau laporan telah ditandai
+                sebagai Selesai.
             </p>
         @endif
     @endcan
