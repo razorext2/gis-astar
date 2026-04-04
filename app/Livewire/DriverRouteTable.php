@@ -37,23 +37,20 @@ final class DriverRouteTable extends PowerGridComponent
     public function datasource(): Builder
     {
         $roles = [];
-        $query = User::query();
 
-        if ($this->user->can('driver-list-medan')) {
-            $roles[] = 'Driver-Medan';
+        if (auth()->user()->hasAnyRole(['Admin', 'Management'])) {
+            $roles[] = 'Driver';
+        } else {
+            if ($this->user->can('driver-list-medan')) {
+                $roles[] = 'Driver-Medan';
+            }
+
+            if ($this->user->can('driver-list-jkt')) {
+                $roles[] = 'Driver-Jkt';
+            }
         }
 
-        if ($this->user->can('driver-list-jkt')) {
-            $roles[] = 'Driver-Jkt';
-        }
-
-        $roles[] = 'Driver';
-
-        if ($roles) {
-            $query->role($roles);
-        }
-
-        return $query;
+        return User::query()->role($roles);
     }
 
     public function relationSearch(): array
