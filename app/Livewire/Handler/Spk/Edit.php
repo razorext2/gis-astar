@@ -51,7 +51,7 @@ class Edit extends Component
         // assign data spk ke form
         $this->createForm->nama_customer = $this->data->customer['nama_perusahaan'];
         $this->createForm->no_telp = $this->data->customer['no_hp'];
-        $this->createForm->contact_person = $this->data->customer['contact_person'];
+        $this->createForm->contact_person = $this->data->customer['contact_person'] ?? $this->data->company_name;
         $this->createForm->alamat_customer = $this->data->customer['alamat'];
 
         // assign _key ke setiap item barang
@@ -251,6 +251,7 @@ class Edit extends Component
                         : $this->createForm->tgl_kirim,
                     'keterangan' => $this->createForm->keterangan,
                     'customer' => $this->createForm->generateCustomerData(),
+                    'company_name' => $this->createForm->nama_customer,
                     'tipe_timbangan' => $this->createForm->tipe_timbangan,
                     'products' => $barangs,
                     'assign_to' => $this->createForm->assign_to,

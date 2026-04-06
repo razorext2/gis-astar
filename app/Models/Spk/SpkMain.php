@@ -26,6 +26,7 @@ class SpkMain extends Model
         'tgl_kirim',
         'keterangan',
         'customer',
+        'company_name',
         'tipe_timbangan',
         'products',
         'informasi_pengiriman',

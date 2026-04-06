@@ -36,7 +36,6 @@ final class DailyReportTable extends PowerGridComponent
         $query = SpkMain::query()
             ->select($this->datasourceTableColumns())
             ->addSelect([
-                'customer_nama_perusahaan' => DB::raw("JSON_UNQUOTE(JSON_EXTRACT(customer, '$.nama_perusahaan'))"),
                 'customer_contact_person' => DB::raw("JSON_UNQUOTE(JSON_EXTRACT(customer, '$.contact_person'))"),
                 'products_name' => DB::raw("JSON_UNQUOTE(JSON_EXTRACT(products, '$.nama_barang'))"),
             ])
@@ -170,9 +169,8 @@ final class DailyReportTable extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
 
-            Column::make('Customer', 'customer_formatted', 'customer')
+            Column::make('Customer', 'customer_formatted', 'company_name')
                 ->searchable()
-                ->searchableRaw("JSON_UNQUOTE(JSON_EXTRACT($table.customer, '$.nama_perusahaan')) LIKE ?")
                 ->searchableRaw("JSON_UNQUOTE(JSON_EXTRACT($table.customer, '$.contact_person')) LIKE ?"),
 
             Column::make('Tipe Tagihan', 'tipe_tagihan')

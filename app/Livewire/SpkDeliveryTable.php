@@ -89,7 +89,7 @@ final class SpkDeliveryTable extends PowerGridComponent
                 return $query->nomor_tagihan ?? '<span class="text-xs text-red-100 bg-red-500 px-2 py-0.5 rounded-full">Belum Diupdate</span>';
             })
             ->add('tipe_bayar')
-            ->add('customer')
+            ->add('company_name')
             ->add('customer_formatted', function ($query) {
                 return view('components.dashboard.name-w-code', [
                     'code' => ucwords($query->tipe_tagihan).' - '.$query->tipe_bayar,
@@ -145,7 +145,7 @@ final class SpkDeliveryTable extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
 
-            Column::make('Customer', 'customer_formatted', 'customer')
+            Column::make('Customer', 'customer_formatted', 'company_name')
                 ->sortable()
                 ->searchable(),
 

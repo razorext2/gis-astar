@@ -40,23 +40,11 @@ final class PurchasingRequestTable extends PowerGridComponent
         return SpkMain::query()
             ->select($this->datasourceTableColumns())
             ->addSelect([
-                'customer_nama_perusahaan' => DB::raw("JSON_UNQUOTE(JSON_EXTRACT(customer, '$.nama_perusahaan'))"),
                 'customer_contact_person' => DB::raw("JSON_UNQUOTE(JSON_EXTRACT(customer, '$.contact_person'))"),
+                'nomor_purchasing_request_json' => DB::raw("JSON_UNQUOTE(JSON_EXTRACT(nomor_purchasing_request_json, '$'))"),
             ])
             ->where('status_approval', 1)
             ->where('on_delay', 0)
-            ->when($this->search, function ($query) {
-
-                $search = $this->search;
-
-                $query->where(function ($q) use ($search) {
-
-                    $q->where('nomor_purchasing_request', 'like', "%{$search}%")
-                        ->orWhereJsonContains('nomor_purchasing_request_json', $search)
-                        ->orWhereRaw("JSON_SEARCH(nomor_purchasing_request_json, 'one', ?) IS NOT NULL", [$search]);
-
-                });
-            })
             ->orderBy('nomor_order', 'desc');
     }
 
@@ -77,6 +65,7 @@ final class PurchasingRequestTable extends PowerGridComponent
             ->add('no', fn ($query, int $index) => $index + 1)
             ->add('nomor_order')
             ->add('is_using_old_stock')
+            ->add('company_name')
             ->add('is_using_old_stock_formatted', function ($query) {
                 if ($query->is_using_old_stock) {
                     return '<span class="bg-green-300 text-green-700 text-xs px-2.5 py-1 rounded-lg font-semibold"> Stok Lama </span>';
@@ -93,9 +82,8 @@ final class PurchasingRequestTable extends PowerGridComponent
             ->add('nomor_purchasing_request_formatted', function ($query) {
                 return $query->nomor_purchasing_request ? $query->nomor_purchasing_request : ($query->nomor_purchasing_request_json ? collect($query->nomor_purchasing_request_json)->implode(', ') : 'Belum di Update');
             })
-            ->add('customer_company', fn ($query) => $query->customer_nama_perusahaan ?? data_get($query->customer, 'nama_perusahaan', '-'))
             ->add('customer_formatted', function ($query) {
-                return $query->customer_nama_perusahaan ?? data_get($query->customer, 'nama_perusahaan', '-');
+                return $query->company_name ?? data_get($query->customer, 'nama_perusahaan', '-');
             })
             ->add('created_at');
     }
@@ -109,7 +97,12 @@ final class PurchasingRequestTable extends PowerGridComponent
 
             Column::action('Action'),
 
-            Column::make('Nomor PR', 'nomor_purchasing_request_formatted', 'nomor_purchasing_request'),
+            Column::make('Nomor PR', 'nomor_purchasing_request_formatted')
+                ->searchableRaw("JSON_UNQUOTE(JSON_EXTRACT($table.nomor_purchasing_request_json, '$')) LIKE ?"),
+
+            Column::make('Nomor PR', 'nomor_purchasing_request')
+                ->hidden(true)
+                ->searchable(),
 
             Column::make('Tipe Tagihan', 'tipe_tagihan')->hidden(),
 
@@ -119,9 +112,8 @@ final class PurchasingRequestTable extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
 
-            Column::make('Customer', 'customer_formatted', 'customer')
+            Column::make('Customer', 'customer_formatted', 'company_name')
                 ->searchable()
-                ->searchableRaw("JSON_UNQUOTE(JSON_EXTRACT($table.customer, '$.nama_perusahaan')) LIKE ?")
                 ->searchableRaw("JSON_UNQUOTE(JSON_EXTRACT($table.customer, '$.contact_person')) LIKE ?"),
         ];
     }

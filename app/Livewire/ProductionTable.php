@@ -5,7 +5,6 @@ namespace App\Livewire;
 use App\Models\Spk\Production;
 use App\Models\Spk\SpkMain;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\DB;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
@@ -46,10 +45,7 @@ final class ProductionTable extends PowerGridComponent
     {
         $query = Production::query()
             ->join('tb_spk', 'tb_spk.id', '=', 'tb_produksi.id_spk')
-            ->addSelect([
-                'tb_produksi.*',
-                'customer_nama_perusahaan' => DB::raw("JSON_UNQUOTE(JSON_EXTRACT(tb_spk.customer, '$.nama_perusahaan'))"),
-            ])
+            ->addSelect(['tb_produksi.*'])
             ->with(['spk', 'assignTo', 'productionHistories'])
             ->whereHas('spk', function (Builder $q) {
                 // filter tipe timbangan
@@ -84,6 +80,7 @@ final class ProductionTable extends PowerGridComponent
             'spk' => [
                 'nomor_order',
                 'tipe_timbangan',
+                'company_name',
             ],
         ];
     }
@@ -212,9 +209,8 @@ final class ProductionTable extends PowerGridComponent
             Column::make('Supir perusahaan', 'is_using_company_driver')->hidden(),
             Column::make('Dijemput Customer', 'is_picked_up_by_customer')->hidden(),
             Column::make('Old Stock', 'is_using_old_stock')->hidden(),
-            Column::make('Customer', 'customer_info')
-                ->searchable()
-                ->searchableRaw("JSON_UNQUOTE(JSON_EXTRACT($table.customer, '$.nama_perusahaan')) LIKE ?"),
+            Column::make('Customer', 'customer_info', 'company_name')
+                ->searchable(),
             Column::make('Assign to', 'assign_to_formatted', 'assign_to'),
             Column::make('Tipe Timbangan', 'tipe_timbangan'),
             Column::make('Products', 'products_formatted'),

@@ -158,6 +158,7 @@ class Create extends Component
                         : $this->createForm->tgl_kirim,
                     'keterangan' => $this->createForm->keterangan,
                     'customer' => $this->createForm->generateCustomerData(),
+                    'company_name' => $this->createForm->nama_customer,
                     'tipe_timbangan' => $this->createForm->tipe_timbangan,
                     'products' => $barangs,
                     'status' => 0,
