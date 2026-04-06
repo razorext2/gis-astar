@@ -46,7 +46,10 @@ class Assign extends Component
         $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Data VT ditemukan.');
 
         // inisialisasi data partner
-        $this->partnerData = $data;
+        $this->partnerData = $data['partner'];
+
+        // inisialisasi nama customer
+        $this->form->customer_name = $data['CustomerContact'];
     }
 
     public function store()
@@ -91,6 +94,7 @@ class Assign extends Component
                     'end_date' => $this->form->end_date,
                     'deadline' => $this->form->end_date,
                     'project_name' => $this->form->project_name,
+                    'customer_name' => $this->form->customer_name,
                     'description' => $this->form->description,
                     'created_by' => auth()->id(),
                 ]);

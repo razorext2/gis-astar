@@ -20,6 +20,18 @@
 
             <form type="post" wire:submit.prevent="store" class="mt-2 grid gap-2 lg:grid-cols-2 lg:gap-4">
 
+                {{-- nama customer --}}
+                <div class="col-span-2">
+                    <x-input.basic id="customer_name" name="customer_name" placeholder="Input nama customer..."
+                        wire:model="form.customer_name">
+                        Nama Customer
+                    </x-input.basic>
+
+                    @error('form.customer_name')
+                        <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
+
                 {{-- nama project --}}
                 <div class="col-span-2">
                     <x-input.basic id="project_name" name="project_name" placeholder="Input nama projek..."

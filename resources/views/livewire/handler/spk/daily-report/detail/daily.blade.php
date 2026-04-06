@@ -22,6 +22,17 @@
                 <x-icons.pen-nib class="h-5 w-5" />
             </x-button.link>
 
+            {{-- Customer Name --}}
+            <div class="lg:col-span-2">
+                <dt class="text-sm text-gray-500 dark:text-gray-400">
+                    Perusahaan
+                </dt>
+
+                <dd class="font-medium text-gray-900 dark:text-white">
+                    {{ $assignment->project->customer_name ?? '-' }}
+                </dd>
+            </div>
+
             {{-- PROJECT NAME --}}
             <div class="lg:col-span-2">
                 <dt class="text-sm text-gray-500 dark:text-gray-400">
@@ -196,7 +207,7 @@
             {{-- tandai sebagai selesai --}}
             @if ($assignment->status != 'completed')
                 @can('laporan-harian-validate')
-                    <div>
+                    <div id="mark-as-complete-container">
                         <x-button.success id="btn-mark-as-complete" type="button" wire:click.prevent="markAsComplete"
                             wire:confirm.prompt="Apakah anda yakin ingin menandai Laporan ini sebagai Selesai?\nJika ya, silahkan ketik SELESAI|SELESAI">
                             Tandai Selesai

@@ -19,6 +19,8 @@ class Project extends Form
 
     public ?string $project_name = '';
 
+    public ?string $customer_name = '';
+
     public ?string $description = '';
 
     public ?string $no_vt = '';
@@ -32,6 +34,7 @@ class Project extends Form
             'end_date' => 'required|date|after_or_equal:start_date',
             'deadline' => 'nullable|date|after_or_equal:start_date',
             'project_name' => 'required|string|min:5',
+            'customer_name' => 'required|string|min:5',
             'description' => 'required',
             'no_vt' => 'required|string|min:3|max:12|unique:tb_spk_project_assignments,nomor_vt',
         ];
@@ -61,7 +64,9 @@ class Project extends Form
             // inisialisasi id dan tanggal
             $id_permintaan_kunjungan = $data['IDPermintaanKunjungan'];
             $tanggal_kunjungan = $data['TanggalKunjungan'];
+            $customer_contact = $data['CustomerContact'];
 
+            // akses api
             $r_relasi = Http::get($base_url, [
                 'tipe' => 'fetchKunjunganRelasi',
                 'IDPermintaanKunjungan' => $id_permintaan_kunjungan,
@@ -71,11 +76,16 @@ class Project extends Form
             // ambil data json
             $res_relasi = $r_relasi->json();
 
+            // set ulang data
+            $hasil = [];
+            $hasil['data']['partner'] = $res_relasi['data'];
+            $hasil['data']['CustomerContact'] = $customer_contact;
+
             if (! $r_relasi->successful() || $res_relasi['status'] !== 'success') { // jika status error, tampilkan error
                 throw new \Exception('Fetch api gagal, terjadi kesalahan saat fetch data fetchKunjunganRelasi.');
             }
 
-            return $res_relasi['data'];
+            return $hasil['data'];
         } catch (\Exception $e) {
             // tampilkan error jika api fetchKunjungan gagal dipanggil
             throw new \Exception('Failed to fetch data from external API fetchKunjungan: '.$e->getMessage());

@@ -88,7 +88,7 @@ final class ProjectAssignmentTable extends PowerGridComponent
                     'item3' => $query->project->customer_name ?? '-',
                 ]);
             })
-            ->add('customer_name', fn ($query) => $query->project->customer_name)
+            ->add('customer_name', fn ($query) => $query->project->customer_name ?? '-')
             ->add('project_name', fn ($query) => $query->project->project_name)
             ->add('nomor_vt')
             ->add('nomor_vt_formatted', function ($query) {
@@ -163,6 +163,11 @@ final class ProjectAssignmentTable extends PowerGridComponent
             Column::make('Nomor VT', 'nomor_vt_formatted', 'nomor_vt')
                 ->sortable()
                 ->searchable(),
+
+            Column::make('Nama Perusahaan', 'customer_name')
+                ->sortable()
+                ->searchable()
+                ->bodyAttribute('text-wrap'),
 
             Column::make('Deadline', 'deadline_formatted', 'deadline_priority')
                 ->sortable(),
