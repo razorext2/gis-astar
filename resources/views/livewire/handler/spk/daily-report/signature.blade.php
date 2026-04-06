@@ -9,7 +9,7 @@
             <div class="mb-2 lg:mb-4">
                 <x-input.basic id="name" wire:model="name" type="text" name="name"
                     placeholder="Isi dengan nama customer..." required>
-                    Nama Customer
+                    Nama
                 </x-input.basic>
 
                 @error('name')
@@ -20,7 +20,7 @@
             <div class="mb-2 lg:mb-4">
                 <x-input.basic id="email" wire:model="email" type="email" name="email"
                     placeholder="Isi dengan email customer..." required>
-                    Email Customer
+                    Email
                 </x-input.basic>
 
                 @error('email')
