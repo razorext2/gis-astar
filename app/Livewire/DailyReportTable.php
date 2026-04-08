@@ -18,9 +18,13 @@ final class DailyReportTable extends PowerGridComponent
 
     public ?string $tipe_timbangan = null;
 
+    public bool $deferLoading = true;
+
+    public bool $multiSort = true;
+
     public function setUp(): array
     {
-        $this->showCheckBox();
+        // $this->showCheckBox();
 
         return [
             PowerGrid::header()

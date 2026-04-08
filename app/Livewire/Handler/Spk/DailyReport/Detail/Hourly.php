@@ -101,7 +101,7 @@ class Hourly extends Component
                     'daily_report_id' => $this->id,
                     'start_time' => $this->form->start_time,
                     'end_time' => $this->form->end_time,
-                    'activity' => $this->form->activity,
+                    'activity' => '-',
                     'location' => null,
                     'notes' => $this->form->notes,
                 ]);

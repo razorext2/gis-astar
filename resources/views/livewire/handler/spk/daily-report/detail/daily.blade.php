@@ -14,13 +14,15 @@
 
         {{-- CONTENT --}}
         <div class="relative grid grid-cols-1 gap-2 p-2 lg:grid-cols-2 lg:gap-4 lg:p-4">
-            {{-- signature  --}}
-            <x-button.link
-                class="absolute right-2 top-2 bg-green-100 ring-1 ring-green-700 hover:bg-green-300 focus:scale-105 dark:bg-green-800 dark:text-white dark:ring-gray-700 dark:hover:bg-green-900"
-                id="signature-btn" type="button"
-                href="{{ route('report.general.customer-assignment', ['id' => $assignment->id]) }}" wire:navigate>
-                <x-icons.pen-nib class="h-5 w-5" />
-            </x-button.link>
+            @if ($assignment->status === 'completed')
+                {{-- signature dan ekspor  --}}
+                <x-button.link
+                    class="absolute right-2 top-2 bg-green-100 ring-1 ring-green-700 hover:bg-green-300 focus:scale-105 dark:bg-green-800 dark:text-white dark:ring-gray-700 dark:hover:bg-green-900"
+                    id="signature-btn" type="button"
+                    href="{{ route('report.general.customer-assignment', ['id' => $assignment->id]) }}" wire:navigate>
+                    <x-icons.pen-nib class="h-5 w-5" />
+                </x-button.link>
+            @endif
 
             {{-- Customer Name --}}
             <div class="lg:col-span-2">
@@ -387,19 +389,20 @@
                             <div
                                 class="mb-2 rounded-lg border border-gray-100 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 sm:space-y-2 lg:mb-4">
 
-                                <dl class="items-center justify-between gap-4 sm:flex">
-                                    <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">Aktivitas</dt>
+                                <dl class="items-start justify-between gap-4 sm:flex">
+                                    <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">
+                                        Aktivitas</dt>
                                     <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                                        {{ ucwords($row['activity']) }}
+                                        {!! nl2br($row['notes']) !!}
                                     </dd>
                                 </dl>
 
                                 <dl class="items-center justify-between gap-4 sm:flex">
                                     <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">Waktu</dt>
                                     <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                                        {{ \Carbon\Carbon::parse($row['start_time'])->locale('id')->isoFormat('HH:mm:ss') }}
+                                        {{ \Carbon\Carbon::parse($row['start_time'])->locale('id')->isoFormat('HH:mm') }}
                                         -
-                                        {{ \Carbon\Carbon::parse($row['end_time'])->locale('id')->isoFormat('HH:mm:ss') }}
+                                        {{ \Carbon\Carbon::parse($row['end_time'])->locale('id')->isoFormat('HH:mm') }}
                                     </dd>
                                 </dl>
                                 <dl class="items-center justify-between gap-4 sm:flex">

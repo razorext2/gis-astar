@@ -52,7 +52,16 @@ final class ProjectAssignmentTable extends PowerGridComponent
                 END as deadline_priority
             '))
             ->addSelect('tb_spk_projects.end_date as project_end_date')
-            ->orderBy('tb_spk_projects.end_date', 'desc');
+            ->addSelect(DB::raw('
+                CASE
+                    WHEN tb_spk_project_assignments.status = "assigned" THEN 1
+                    WHEN tb_spk_project_assignments.status = "in_progress" THEN 2
+                    WHEN tb_spk_project_assignments.status = "completed" THEN 3
+                    WHEN tb_spk_project_assignments.status = "cancelled" THEN 4
+                    ELSE 0
+                END as status_priority
+            '))
+            ->orderBy('created_at', 'desc');
 
         if ($this->user->cannot('laporan-harian-validate')) {
             $query->where('assign_to', $this->user->id);
@@ -85,10 +94,10 @@ final class ProjectAssignmentTable extends PowerGridComponent
                 return view('components.dashboard.name-w-code', [
                     'code' => '',
                     'name' => $query->project->project_name,
-                    'item3' => $query->project->customer_name ?? '-',
+                    'item3' => $query->project->customer_name,
                 ]);
             })
-            ->add('customer_name', fn ($query) => $query->project->customer_name ?? '-')
+            ->add('company_name', fn ($query) => $query->project->customer_name)
             ->add('project_name', fn ($query) => $query->project->project_name)
             ->add('nomor_vt')
             ->add('nomor_vt_formatted', function ($query) {
@@ -105,36 +114,48 @@ final class ProjectAssignmentTable extends PowerGridComponent
                 $now = Carbon::now();
 
                 $total = $start->diffInDays($end);
-                $sisaHari = (int) $now->diffInDays($end, false); // false = bisa negatif
+                $sisaHari = (int) $now->diffInDays($end, false);
                 $sisaJam = (int) $now->diffInHours($end, false);
 
-                $template = "<div class='flex flex-col gap-1 w-fit font-semibold'>";
+                // helper render badge
+                $badge = fn ($text, $bg, $textColor) => "
+                    <span class='{$bg} text-xs px-2.5 flex justify-center items-center py-1 {$textColor} w-fit rounded-lg'>
+                        {$text}
+                    </span>
+                ";
 
+                // deadline
                 if ($sisaHari < 0) {
-                    $template .= "
-                        <span class='bg-red-500 text-xs px-2.5 flex justify-center items-center py-1 text-red-100 w-fit rounded-lg'>
-                            Deadline
-                        </span>";
+                    $deadlineBadge = $badge('Habis Waktu', 'bg-red-500', 'text-red-100');
                 } elseif ($sisaJam < 24) {
-                    $template .= "
-                        <span class='bg-red-500 text-xs px-2.5 flex justify-center items-center py-1 text-red-100 w-fit rounded-lg'>
-                            Hari ini!
-                        </span>";
+                    $deadlineBadge = $badge('Hari ini!', 'bg-red-500', 'text-red-100');
                 } elseif ($sisaHari <= ($total / 2)) {
-                    $template .= "
-                        <span class='bg-yellow-500 text-xs px-2.5 flex justify-center items-center py-1 text-yellow-800 w-fit rounded-lg'>
-                            {$sisaHari} Hari lagi!
-                        </span>";
+                    $deadlineBadge = $badge("{$sisaHari} Hari", 'bg-yellow-500', 'text-yellow-800');
                 } else {
-                    $template .= "
-                        <span class='bg-green-500 text-xs px-2.5 flex justify-center items-center py-1 text-green-800 w-fit rounded-lg'>
-                            ".(int) $sisaHari.' Hari
-                        </span>';
+                    $deadlineBadge = $badge("{$sisaHari} Hari", 'bg-green-500', 'text-green-800');
                 }
 
-                $template .= '</div>';
+                // status project
+                $statusMap = [
+                    'completed' => ['Selesai', 'bg-green-500', 'text-green-800'],
+                    'canceled' => ['Dibatalkan', 'bg-red-500', 'text-red-100'],
+                    'in_progress' => ['Proses', 'bg-yellow-500', 'text-yellow-800'],
+                    'assigned' => ['Diassign', 'bg-yellow-500', 'text-yellow-800'],
+                ];
 
-                return $template;
+                $statusBadge = '';
+
+                if (isset($statusMap[$query->status])) {
+                    [$text, $bg, $color] = $statusMap[$query->status];
+                    $statusBadge = $badge($text, $bg, $color);
+                }
+
+                return "
+                    <div class='flex gap-1 w-fit font-semibold'>
+                        {$deadlineBadge}
+                        {$statusBadge}
+                    </div>
+                ";
             })
             ->add('assign_to')
             ->add('assign_at')
@@ -144,6 +165,7 @@ final class ProjectAssignmentTable extends PowerGridComponent
 
                 return $start.' <b>s/d</b> '.$end;
             })
+            ->add('deadline_priority')
             ->add('status')
             ->add('created_at')
             ->add('created_at_formatted', fn ($query) => Carbon::parse($query->created_at)->locale('id')->isoFormat('D MMMM YYYY, HH:mm:ss'));
@@ -164,7 +186,7 @@ final class ProjectAssignmentTable extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
 
-            Column::make('Nama Perusahaan', 'customer_name')
+            Column::make('Nama Perusahaan', 'company_name', 'project.customer_name')
                 ->sortable()
                 ->searchable()
                 ->bodyAttribute('text-wrap'),
@@ -192,7 +214,21 @@ final class ProjectAssignmentTable extends PowerGridComponent
     public function filters(): array
     {
         return [
-            // Filter::datetimepicker('assign_at'),
+            Filter::inputText('project_name', 'project_name')
+                ->placeholder('Projek XXX'),
+            Filter::select('status', 'status')
+                ->dataSource([
+                    ['value' => 'assigned', 'label' => 'Diajukan'],
+                    ['value' => 'in_progress', 'label' => 'Dikerjakan'],
+                    ['value' => 'completed', 'label' => 'Selesai'],
+                    ['value' => 'cancelled', 'label' => 'Dibatalkan'],
+                ])
+                ->optionLabel('label')
+                ->optionValue('value'),
+            Filter::inputText('nomor_vt', 'nomor_vt')
+                ->placeholder('VT-XXX'),
+            Filter::inputText('company_name', 'tb_spk_projects.customer_name')
+                ->placeholder('PT. XXX'),
         ];
     }
 
@@ -205,5 +241,10 @@ final class ProjectAssignmentTable extends PowerGridComponent
                 ->class('dark:bg-blue-800 text-sm dark:hover:bg-blue-900 dark:text-white dark:border-gray-700 rounded-lg bg-blue-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-blue-700')
                 ->route('report.general.daily', ['id' => $row->id]),
         ];
+    }
+
+    protected function queryString()
+    {
+        return $this->powerGridQueryString();
     }
 }

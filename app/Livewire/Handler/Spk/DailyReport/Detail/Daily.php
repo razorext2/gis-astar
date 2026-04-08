@@ -236,10 +236,18 @@ class Daily extends Component
         }
 
         $this->runSafely(function () {
-            //    update status
-            $this->assignment->update([
-                'status' => 'completed',
-            ]);
+            // update
+            DB::transaction(function () {
+                // update status daily report menjadi submitted
+                $this->assignment->dailyReports()->update([
+                    'status' => 'submitted',
+                ]);
+
+                // update status assignment menjadi complete
+                $this->assignment->update([
+                    'status' => 'completed',
+                ]);
+            });
         }, 'Gagal menandai laporan harian sebagai selesai.', [
             'user_id' => auth()->id(),
             'action' => 'daily report mark as complete',

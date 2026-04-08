@@ -325,6 +325,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('daily-report/{id}/index', [\App\Http\Controllers\Spk\DailyReportController::class, 'daily'])->name('daily-report.daily');
             Route::get('daily-report/{id}/customer-assignment', [\App\Http\Controllers\Spk\DailyReportController::class, 'customerAssignment'])->name('daily-report.daily.customer-assignment');
             Route::get('daily-report/{id}/{hourly}/detail', [\App\Http\Controllers\Spk\DailyReportController::class, 'hourly'])->name('daily-report.hourly');
+            Route::get('stream/pdf/laporan-harian/{assignmentId}', [\App\Http\Controllers\Spk\DailyReportController::class, 'streamLaporanHarianPdf'])->name('daily-report.pdf.stream');
+            Route::get('stream/pdf/laporan-harian/download/{id}', [\App\Http\Controllers\Spk\DailyReportController::class, 'downloadDailyReportPdf'])->name('daily-report.pdf.download');
         });
 
         // 6.1 laporan harian no spk
@@ -333,6 +335,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('daily-report/general/{id}/index', [\App\Http\Controllers\Spk\DailyReportController::class, 'generalDaily'])->name('report.general.daily');
         Route::get('daily-report/general/{id}/customer-assignment', [\App\Http\Controllers\Spk\DailyReportController::class, 'generalCustomerAssignment'])->name('report.general.customer-assignment');
         Route::get('daily-report/general/{id}/{hourly}/detail', [\App\Http\Controllers\Spk\DailyReportController::class, 'generalHourly'])->name('report.general.hourly');
+
     });
 });
 

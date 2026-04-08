@@ -23,7 +23,8 @@
         @if (
             $dailyReport->report_date == now()->format('Y-m-d') &&
                 now()->lt(\Carbon\Carbon::parse($dailyReport->assignment->project->end_date)->endOfDay()) &&
-                $dailyReport->assignment->status != 'completed')
+                $dailyReport->assignment->status !== 'completed' &&
+                $dailyReport->status !== 'submitted')
             <div wire:show="showAddForm" id="accordion-packing-form" x-data="{ accordionOpen: true }">
                 <button type="button"
                     class="flex w-full items-center justify-between gap-3 rounded-lg p-5 font-medium text-gray-500 ring-1 ring-gray-200 transition-all duration-300 ease-in-out hover:bg-blue-100 dark:text-gray-400 dark:ring-gray-600 dark:hover:bg-gray-800"
@@ -63,18 +64,6 @@
                             </x-input.basic>
 
                             @error('form.end_time')
-                                <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        {{-- ACTIVITY --}}
-                        <div class="col-span-1 space-y-2 lg:col-span-2">
-                            <x-input.basic required type="text" id="activity" name="activity" wire:model="form.activity"
-                                placeholder="Contoh: Instalasi pondasi timbangan">
-                                Aktivitas
-                            </x-input.basic>
-
-                            @error('form.activity')
                                 <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
                             @enderror
                         </div>
@@ -210,7 +199,8 @@
             </div>
         @else
             <p class="w-full text-center text-sm text-red-500">
-                Anda tidak dapat menambahkan aktivitas karena waktu laporan telah berakhir atau laporan telah ditandai
+                Anda tidak dapat menambahkan aktivitas karena waktu laporan telah berakhir atau laporan harian telah
+                disubmit atau laporan telah ditandai
                 sebagai Selesai.
             </p>
         @endif
@@ -267,7 +257,7 @@
 
                             {{-- activity --}}
                             <div class="flex flex-col gap-2 lg:items-end lg:gap-4">
-                                <div class="flex flex-col lg:items-end">
+                                {{-- <div class="flex flex-col lg:items-end">
                                     <span class="text-xs text-gray-500 dark:text-gray-400">
                                         Aktivitas
                                     </span>
@@ -275,7 +265,7 @@
                                     <span class="font-semibold text-gray-900 dark:text-white lg:text-right">
                                         {{ ucfirst($row->activity) }}
                                     </span>
-                                </div>
+                                </div> --}}
 
                                 <div class="flex flex-col lg:items-end">
                                     <span class="text-xs text-gray-500 dark:text-gray-400">
@@ -283,7 +273,7 @@
                                     </span>
 
                                     <span class="font-semibold text-gray-900 dark:text-white lg:text-right">
-                                        {{ $row->notes }}
+                                        {!! nl2br(e($row->notes)) !!}
                                     </span>
                                 </div>
                             </div>

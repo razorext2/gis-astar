@@ -135,13 +135,13 @@
                                                 {{ \Carbon\Carbon::parse($hour->end_time)->format('H:i') }}
                                             </p>
 
-                                            <p class="mt-1 text-sm text-gray-800 dark:text-gray-200">
+                                            {{-- <p class="mt-1 text-sm text-gray-800 dark:text-gray-200">
                                                 {{ $hour->activity }}
-                                            </p>
+                                            </p> --}}
 
                                             @if ($hour->notes)
                                                 <p class="text-xs text-gray-500 dark:text-gray-400">
-                                                    {{ $hour->notes }}
+                                                    {!! nl2br($hour->notes) !!}
                                                 </p>
                                             @endif
 
@@ -165,27 +165,61 @@
         </div>
 
         {{-- form tanda tangan, nama dan email --}}
-        <div class="mt-4">
-            <h2 class="mb-2 flex items-center gap-x-2 text-lg font-semibold text-gray-900 dark:text-white lg:text-xl">
-                Tanda Tangan Customer
-            </h2>
+        <div class="mt-2 lg:mt-4">
+            @if (!$model->assignTo->hasBeenSigned())
+                <div class="my-4 flex justify-center">
+                    @if ($model->assign_to !== auth()->user()->id)
+                        {{-- kalo assignTo dan id auth gak sama --}}
+                        <p class="text-center text-sm italic text-red-500 lg:text-base">
+                            Staf terkait belum melengkapi tanda tangan digital. Hubungi staf terkait untuk melengkapi
+                            tanda tangan digital di Profil.
+                        </p>
+                    @else
+                        <form id="signature-form" method="get" action="{{ route('profile.edit') }}">
+                            @csrf
+                        </form>
 
-            @if (!$model->hasBeenSigned())
-                <form action="{{ $model->getSignatureRoute() }}" method="POST">
-                    @csrf
-                    <x-creagia-signature-pad border-color="#eaeaea" pad-classes="rounded-xl border-2"
-                        button-classes="bg-gray-100 px-4 py-2 rounded-xl" clear-name="Clear" submit-name="Submit" />
-                </form>
-
-                @push('script')
-                    <script src="{{ asset('vendor/sign-pad/sign-pad.min.js') }}"></script>
-                @endpush
-            @else
-                <div class="flex w-fit flex-col gap-2">
-                    <img class="w-full rounded-lg bg-white"
-                        src="{{ asset('storage/' . $model->signature->getSignatureImagePath()) }}" />
+                        <x-button.primary id="btn-update-signature" type="submit" :form="'signature-form'">
+                            Update TTD Staff
+                        </x-button.primary>
+                    @endif
                 </div>
             @endif
+
+            <div>
+                <h2 class="mb-2 text-center text-gray-900 dark:text-white">
+                    Tanda Tangan Customer
+                </h2>
+
+                @if (!$model->hasBeenSigned())
+                    <form action="{{ $model->getSignatureRoute() }}" method="POST">
+                        @csrf
+                        <x-creagia-signature-pad border-color="#eaeaea" pad-classes="rounded-xl border-2"
+                            button-classes="bg-gray-100 px-4 py-2 rounded-xl" clear-name="Clear" submit-name="Submit" />
+                    </form>
+
+                    @push('script')
+                        <script src="{{ asset('vendor/sign-pad/sign-pad.min.js') }}"></script>
+                    @endpush
+                @else
+                    <img class="mx-auto h-48 w-fit rounded-lg bg-white"
+                        src="{{ asset('storage/' . $model->signature->getSignatureImagePath()) }}" />
+                @endif
+            </div>
         </div>
+
+        {{-- kontainer untuk tombol kirim email --}}
+        @if ($model->hasBeenSigned() && $model->assignTo->hasBeenSigned())
+            <div class="mt-2 flex justify-center gap-x-2 lg:mt-4 lg:gap-x-4">
+                @livewire('handler.spk.daily-report.pdf.laporan-harian', ['assignmentId' => $model->id], key($model->id))
+
+                <x-button.success wire:click.prevent="sentPdfToEmail" id="btn-sent-report-to-email">
+                    <span wire:loading.remove wire:target="sentPdfToEmail">Kirim PDF</span>
+                    <span wire:loading wire:target="sentPdfToEmail">Mengirim Email...</span>
+                </x-button.success>
+
+            </div>
+        @endif
+
     </div>
 </div>

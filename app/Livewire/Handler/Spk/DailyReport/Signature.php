@@ -2,8 +2,11 @@
 
 namespace App\Livewire\Handler\Spk\DailyReport;
 
+use App\Jobs\ExportPdfJob;
 use App\Livewire\Concerns\HandlesErrors;
+use App\Mail\SendDailyReportToCustomer;
 use App\Models\Spk\ProjectAssignment;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
@@ -45,12 +48,43 @@ class Signature extends Component
                 'customer_email' => $this->email,
             ]);
 
-            $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Berhasil menyimpan detail packinglist');
+            $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Berhasil menyimpan detail customer');
 
             $this->dispatch('$refresh');
-        }, 'Gagal menyimpan detail packinglist.', [
+        }, 'Gagal menyimpan detail customer.', [
             'user_id' => auth()->id(),
             'action' => 'store customer info',
+        ]);
+    }
+
+    public function sentPdfToEmail()
+    {
+        // cek apakah staf sudah tanda tangan
+        if (! $this->model->assignTo->hasBeenSigned()) {
+            return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Staf belum menandatangani laporan');
+        }
+
+        $this->runSafely(function () {
+            ExportPdfJob::dispatch(
+                auth()->id(),
+                'App\Models\Spk\ProjectAssignment',
+                $this->id,
+                'f4',
+                'portrait',
+                'dashboard.pdf.preview-laporanharian',
+                'Laporan Harian dari kunjungan dengan nomor VT '.$this->model->nomor_vt.' telah siap untuk didownload. Silahkan klik tombol download dibawah ini:',
+                'daily-report.pdf.download');
+
+            // kirim email ke customer
+            Mail::to($this->model->customer_email)
+                ->queue(new SendDailyReportToCustomer(
+                    $this->id,
+                    $this->model->customer_name,
+                    $this->model->project->customer_name,
+                    $this->model->assignTo->name));
+        }, 'Gagal mengirim laporan ke email customer.', [
+            'user_id' => auth()->id(),
+            'action' => 'send daily report to customer',
         ]);
     }
 

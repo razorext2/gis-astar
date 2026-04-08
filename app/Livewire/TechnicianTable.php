@@ -2,18 +2,18 @@
 
 namespace App\Livewire;
 
-use \App\Models\Team;
-use \App\Models\Technician;
-use Illuminate\Support\Carbon;
+use App\Models\Team;
+use App\Models\Technician;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Request;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
-use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 
 final class TechnicianTable extends PowerGridComponent
@@ -21,9 +21,13 @@ final class TechnicianTable extends PowerGridComponent
     use WithExport;
 
     public string $tableName = 'TechnicianTable';
+
     public bool $deferLoading = true;
+
     public bool $showFilters = false;
+
     public string $status;
+
     public $teams = [];
 
     public function setUp(): array
@@ -43,9 +47,9 @@ final class TechnicianTable extends PowerGridComponent
                 ->showPerPage()
                 ->showRecordCount(),
             PowerGrid::responsive(),
-            PowerGrid::exportable(now()->format('ymdhis') . '-TechnicianTable.xlsx')
+            PowerGrid::exportable(now()->format('ymdhis').'-TechnicianTable.xlsx')
                 ->type(Exportable::TYPE_XLS)
-                ->stripTags(true)
+                ->stripTags(true),
         ];
     }
 
@@ -68,7 +72,7 @@ final class TechnicianTable extends PowerGridComponent
         }
 
         if (auth()->user()->can('technician-approve')) {
-            if (!auth()->user()->can('technician-all')) {
+            if (! auth()->user()->can('technician-all')) {
                 $query->where('tb_technician.status', '!=', 4);
             }
         } else {
@@ -84,8 +88,8 @@ final class TechnicianTable extends PowerGridComponent
             'pegawai' => [
                 'kode_pegawai',
                 'full_name',
-                'no_telp'
-            ]
+                'no_telp',
+            ],
         ];
     }
 
@@ -96,13 +100,13 @@ final class TechnicianTable extends PowerGridComponent
             ->add('no_vt')
             ->add('id_permintaan')
             ->add('kode_pegawai')
-            ->add('technician_name', fn($query) => $query->pegawai->full_name ?? 'Teknisi belum terdaftar di sistem')
+            ->add('technician_name', fn ($query) => $query->pegawai->full_name ?? 'Teknisi belum terdaftar di sistem')
             ->add('customer_contact')
             ->add('weight_type')
             ->add('visit_date')
             ->add('created_at')
             ->add('updated_at')
-            ->add('team_code', fn($query) => $query->team_code)
+            ->add('team_code', fn ($query) => $query->team_code)
             ->add('no_vt_formatted', function ($query) {
                 if ($query->status == 0) {
                     $status = 'Diajukan';
@@ -121,26 +125,25 @@ final class TechnicianTable extends PowerGridComponent
                 return view('components.dashboard.name-w-code', [
                     'code' => $query->id_permintaan,
                     'name' => $query->no_vt,
-                    'item3' => $status
+                    'item3' => $status,
                 ]);
             })
-            ->add('pegawai_info', fn($query) => view('components.dashboard.name-w-code', [
+            ->add('pegawai_info', fn ($query) => view('components.dashboard.name-w-code', [
                 'code' => $query->kode_pegawai,
                 'name' => $query->pegawai->full_name ?? 'Teknisi belum terdaftar di sistem',
-                'item3' => $query->team_code
+                'item3' => $query->team_code,
             ]))
-            ->add('customer_info', fn($query) => view('components.dashboard.name-w-code', [
+            ->add('customer_info', fn ($query) => view('components.dashboard.name-w-code', [
                 'code' => $query->customer_address,
                 'name' => $query->customer_contact,
-                'item3' => '+ ' . $query->point?->point . ' Poin'
+                'item3' => '+ '.$query->point?->point.' Poin',
             ]))
-            ->add('tanggal_kunjungan_formatted', fn($query) => view('components.dashboard.title-w-status', [
+            ->add('tanggal_kunjungan_formatted', fn ($query) => view('components.dashboard.title-w-status', [
                 'title' => Carbon::parse($query->visit_date)->locale('id')->isoFormat('DD MMM YYYY'),
-                'status' => $query->status
+                'status' => $query->status,
             ]))
-            ->add('created_at_formatted', fn($query) => Carbon::parse($query->created_at)->locale('id')->isoFormat('HH:mm:ss, DD MMMM YYYY'))
-            ->add('updated_at_formatted', fn($query) => Carbon::parse($query->updated_at)->locale('id')->isoFormat('HH:mm:ss, DD MMMM YYYY'))
-        ;
+            ->add('created_at_formatted', fn ($query) => Carbon::parse($query->created_at)->locale('id')->isoFormat('HH:mm:ss, DD MMMM YYYY'))
+            ->add('updated_at_formatted', fn ($query) => Carbon::parse($query->updated_at)->locale('id')->isoFormat('HH:mm:ss, DD MMMM YYYY'));
     }
 
     public function columns(): array
@@ -181,7 +184,7 @@ final class TechnicianTable extends PowerGridComponent
                 ->sortable(),
 
             Column::make('Updated at', 'updated_at_formatted', 'updated_at')
-                ->sortable()
+                ->sortable(),
         ];
     }
 
@@ -196,7 +199,7 @@ final class TechnicianTable extends PowerGridComponent
                 ->placeholder('Cari customer'),
             Filter::inputText('weight_type', 'tb_technician.weight_type')
                 ->placeholder('Cari tipe timbangan'),
-            Filter::datepicker('visit_date', 'tb_technician.visit_date')
+            Filter::datepicker('visit_date', 'tb_technician.visit_date'),
         ];
 
         if (auth()->user()->can('technician-approve')) {
@@ -205,8 +208,8 @@ final class TechnicianTable extends PowerGridComponent
                     ->dataSource($this->teams)
                     ->optionLabel('team_name')
                     ->optionValue('team_code'),
-                Filter::inputText('kode_pegawai', 'tb_technician.kode_pegawai')
-                    ->placeholder('Cari kode jari')
+                // Filter::inputText('kode_pegawai', 'tb_technician.kode_pegawai')
+                //     ->placeholder('Cari kode jari')
             ]);
         }
 

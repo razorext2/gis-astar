@@ -83,7 +83,7 @@ class ExportPdfJob implements ShouldQueue
                 notification_id: $latest_notification_id,
                 user_id: $user->id,
                 message: $this->message,
-                route: 'spk.download',
+                route: $this->route,
                 parameters: [$this->data_id],
                 label: 'Download PDF',
             ));

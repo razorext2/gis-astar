@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Spk;
 
 use App\Http\Controllers\Controller;
+use App\Models\Spk\ProjectAssignment;
 use App\Models\Spk\SpkMain;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
 
 class DailyReportController extends Controller
 {
@@ -62,5 +65,25 @@ class DailyReportController extends Controller
     public function generalCustomerAssignment($id)
     {
         return view('dashboard.spk.daily-report.general.detail.customer-assignment', compact('id'));
+    }
+
+    // laporan harian
+    public function streamLaporanHarianPdf($assignmentId)
+    {
+        $query = ProjectAssignment::findOrFail($assignmentId);
+
+        $pdf = Pdf::loadView('dashboard.pdf.preview-laporanharian', [
+            'data' => $query,
+        ])->setPaper('F5', 'portrait');
+
+        return $pdf->stream('packing-list-'.$query->nomor_vt.'.pdf');
+    }
+
+    public function downloadDailyReportPdf($id)
+    {
+        // pastikan file ada
+        abort_if(! Storage::disk('local')->exists('pdf/'.$id.'.pdf'), 404);
+
+        return Storage::download('pdf/'.$id.'.pdf');
     }
 }
