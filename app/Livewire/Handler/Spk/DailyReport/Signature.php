@@ -82,6 +82,9 @@ class Signature extends Component
                     $this->model->customer_name,
                     $this->model->project->customer_name,
                     $this->model->assignTo->name));
+
+            // notifikasi
+            $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Berhasil mengirim laporan ke email customer, salinan laporan akan dikirim via notifikasi.');
         }, 'Gagal mengirim laporan ke email customer.', [
             'user_id' => auth()->id(),
             'action' => 'send daily report to customer',
