@@ -3,11 +3,12 @@
 namespace App\Models\Spk;
 
 use Creagia\LaravelSignPad\Concerns\RequiresSignature;
+use Creagia\LaravelSignPad\Contracts\CanBeSigned;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ProjectAssignment extends Model
+class ProjectAssignment extends Model implements CanBeSigned
 {
     use HasUlids, RequiresSignature, SoftDeletes;
 

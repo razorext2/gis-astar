@@ -37,7 +37,9 @@
                 <form action="{{ $myModel->getSignatureRoute() }}" method="POST">
                     @csrf
                     <div style="text-align: center">
-                        <x-creagia-signature-pad />
+                        <x-creagia-signature-pad border-color="#eaeaea" pad-classes="rounded-xl border-2"
+                            button-classes="bg-gray-100 mt-2.5 px-4 py-2 rounded-xl" clear-name="Hapus"
+                            submit-name="Simpan" />
                     </div>
 
                     @push('script')

@@ -195,7 +195,8 @@
                     <form action="{{ $model->getSignatureRoute() }}" method="POST">
                         @csrf
                         <x-creagia-signature-pad border-color="#eaeaea" pad-classes="rounded-xl border-2"
-                            button-classes="bg-gray-100 px-4 py-2 rounded-xl" clear-name="Clear" submit-name="Submit" />
+                            button-classes="bg-gray-100 mt-2.5 px-4 py-2 rounded-xl" clear-name="Hapus"
+                            submit-name="Simpan" />
                     </form>
 
                     @push('script')
