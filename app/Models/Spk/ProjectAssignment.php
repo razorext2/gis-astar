@@ -39,4 +39,9 @@ class ProjectAssignment extends Model implements CanBeSigned
     {
         return $this->hasMany(ProjectDailyReport::class, 'assignment_id', 'id');
     }
+
+    public function scopeNeedsToComplete($query)
+    {
+        return $query->where('status', '!=', 'completed');
+    }
 }

@@ -412,8 +412,13 @@
                                     href="{{ route('report.general.index') }}" wire:navigate>
                                     <x-icons.angle-right
                                         class="{{ Route::is('report.general.index') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+
                                     <span class="ms-3 inline-flex text-sm group-hover:text-red-600">
                                         Laporan Harian
+
+                                        @if (auth()->user()->hasPermissionTo('laporan-harian-validate'))
+                                            @livewire('utils.counter.daily-report-counter')
+                                        @endif
                                     </span>
                                 </a>
                             </li>
@@ -535,7 +540,7 @@
                                         Laporan Driver
 
                                         @if (auth()->user()->hasPermissionTo('driver-approve'))
-                                            @livewire('utils.report-counter', ['id' => 'driver'])
+                                            @livewire('utils.counter.driver-counter')
                                         @endif
                                     </span>
                                 </a>
@@ -709,10 +714,10 @@
                                 </x-slot>
                                 {{ $link['label'] }}
 
-                                @if ($link['indicator'])
-                                    @if (auth()->user()->hasPermissionTo($link['icon'] . '-approve'))
-                                        @livewire('utils.report-counter', ['id' => $link['icon']])
-                                    @endif
+                                @if (
+                                    $link['indicator'] &&
+                                        auth()->user()->hasPermissionTo($link['icon'] . '-approve'))
+                                    @livewire('utils.counter.' . $link['icon'] . '-counter')
                                 @endif
 
                             </x-dashboard.sidebar-link>

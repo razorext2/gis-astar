@@ -74,4 +74,9 @@ class Technician extends Model
     {
         return $query->where('status', 0);
     }
+
+    public function scopeNeedRevision($query)
+    {
+        return $query->where('status', 2);
+    }
 }
