@@ -97,9 +97,12 @@
                                 Account settings
                             </button>
                         </li>
-                        <li>
-                            @livewire('utils.update-log')
-                        </li>
+                        @hasanyrole(['Admin', 'HRD', 'Management', 'Management-PKU', 'Management-JKT',
+                            'Management-Special'])
+                            <li>
+                                @livewire('utils.update-log')
+                            </li>
+                        @endhasanyrole
                         <li>
                             <div class="flex flex-row gap-x-4 px-4 py-2">
                                 <x-button-dark />
