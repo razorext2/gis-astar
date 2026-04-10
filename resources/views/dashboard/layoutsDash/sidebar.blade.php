@@ -186,7 +186,11 @@
                             wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-dark-primary"
                             wire:navigate>
                             <x-icons.arrow-left-bracket class="h-6 w-6 group-hover:text-red-600" />
-                            <span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Masuk</span>
+                            <span class="ms-3 inline-flex text-sm group-hover:text-red-600">
+                                Masuk
+
+                                @livewire('utils.counter.attendance-in-counter')
+                            </span>
                         </a>
                     </li>
 
@@ -196,7 +200,11 @@
                             wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-dark-primary"
                             wire:navigate>
                             <x-icons.arrow-right-bracket class="h-6 w-6 group-hover:text-red-600" />
-                            <span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Keluar</span>
+                            <span class="ms-3 inline-flex text-sm group-hover:text-red-600">
+                                Keluar
+
+                                @livewire('utils.counter.attendance-out-counter')
+                            </span>
                         </a>
                     </li>
                 </ul>

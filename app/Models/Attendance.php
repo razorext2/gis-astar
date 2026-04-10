@@ -54,4 +54,10 @@ class Attendance extends Model
     {
         return $this->belongsTo(User::class, 'verified_by', 'id');
     }
+
+    public function scopeNotVerified($query)
+    {
+        return $query->where('verified', 0)
+            ->where('status', 0);
+    }
 }

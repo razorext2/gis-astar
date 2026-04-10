@@ -88,7 +88,10 @@ final class AttendanceOutTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             ->add('kode_pegawai')
-            ->add('kode_pegawai_formatted', fn ($query) => Blade::render('components.table-component.codename', ['data' => $query]))
+            ->add('kode_pegawai_formatted', fn ($query) => Blade::render('components.table-component.codename', [
+                'waktu' => $query->jam_keluar,
+                'pegawai' => $query->pegawaiRelasi,
+            ]))
             ->add('location', fn ($query) => Blade::render('components.table-component.location-and-status', ['data' => $query]))
             ->add('jam_keluar')
             ->add('jam_keluar_formatted', function ($query) {
@@ -171,7 +174,7 @@ final class AttendanceOutTable extends PowerGridComponent
 
     public function actionsFromView($data)
     {
-        if (Auth::user()->can('attendance-approve') && $data->verified == false) {
+        if (Auth::user()->can('attendance-approve') && $data->verified == false && $data->status == 0) {
             return view('components.table-component.confirm-button', [
                 'data' => $data,
             ]);
