@@ -82,6 +82,9 @@ final class ProductionTable extends PowerGridComponent
                 'tipe_timbangan',
                 'company_name',
             ],
+            'productionHistories' => [
+                'status_produksi',
+            ],
         ];
     }
 
@@ -191,6 +194,17 @@ final class ProductionTable extends PowerGridComponent
             ->add('packing_list')
             ->add('created_at')
             ->add('tipe_timbangan', fn ($query) => $query->spk->tipe_timbangan)
+            ->add('tipe_timbangan_formatted', function ($query) {
+                $latest_status_produksi = $query->productionHistories?->last()?->status_produksi ? $query->productionHistories->last()->status_produksi_description['label'] : 'Belum ada progres.';
+
+                // dump($productionHistories);
+
+                return view('components.dashboard.name-w-code', [
+                    'code' => '',
+                    'name' => ucwords($query->spk->tipe_timbangan),
+                    'item3' => ucwords($latest_status_produksi),
+                ]);
+            })
             ->add('is_using_company_driver', fn ($query) => $query->spk->is_using_company_driver)
             ->add('is_picked_up_by_customer', fn ($query) => $query->spk->is_picked_up_by_customer)
             ->add('is_using_old_stock', fn ($query) => $query->spk->is_using_old_stock);
@@ -212,7 +226,7 @@ final class ProductionTable extends PowerGridComponent
             Column::make('Customer', 'customer_info', 'company_name')
                 ->searchable(),
             Column::make('Assign to', 'assign_to_formatted', 'assign_to'),
-            Column::make('Tipe Timbangan', 'tipe_timbangan'),
+            Column::make('Tipe Timbangan', 'tipe_timbangan_formatted', 'tipe_timbangan'),
             Column::make('Products', 'products_formatted'),
             Column::make('Status produksi', 'status_produksi_formatted', 'status_produksi'),
         ];

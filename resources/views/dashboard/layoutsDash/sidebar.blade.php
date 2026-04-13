@@ -304,7 +304,11 @@
                                     href="{{ route('spk.index') }}" wire:navigate>
                                     <x-icons.cash
                                         class="{{ Route::is('spk.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 flex-1 text-wrap text-sm group-hover:text-red-600">Data SPK</span>
+                                    <span class="ms-3 inline-flex text-wrap text-sm group-hover:text-red-600">
+                                        Data SPK
+
+                                        @livewire('utils.counter.spk-main-counter')
+                                    </span>
                                 </a>
                             </li>
                         @endcan
@@ -315,7 +319,10 @@
                                     href="{{ route('purchasing-request.index') }}" wire:navigate>
                                     <x-icons.cash
                                         class="{{ Route::is('purchasing-request.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 flex-1 text-wrap text-sm group-hover:text-red-600">Purchasing Request
+                                    <span class="ms-3 inline-flex text-wrap text-sm group-hover:text-red-600">
+                                        Purchasing Request
+
+                                        @livewire('utils.counter.spk-purchasing-request-counter')
                                     </span>
                                 </a>
                             </li>
@@ -327,8 +334,11 @@
                                     href="{{ route('production.index') }}" wire:navigate>
                                     <x-icons.cash
                                         class="{{ Route::is('production.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Manajemen
-                                        Produksi</span>
+                                    <span class="ms-3 inline-flex whitespace-nowrap text-sm group-hover:text-red-600">
+                                        Manajemen Produksi
+
+                                        @livewire('utils.counter.spk-production-counter')
+                                    </span>
                                 </a>
                             </li>
                         @endcan
@@ -339,8 +349,10 @@
                                     href="{{ route('delivery.index') }}" wire:navigate>
                                     <x-icons.cash
                                         class="{{ Route::is('delivery.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">
+                                    <span class="ms-3 inline-flex whitespace-nowrap text-sm group-hover:text-red-600">
                                         Pengiriman
+
+                                        @livewire('utils.counter.spk-delivery-counter')
                                     </span>
                                 </a>
                             </li>
@@ -353,7 +365,7 @@
                                     href="{{ route('billing.index') }}" wire:navigate>
                                     <x-icons.cash
                                         class="{{ Route::is('billing.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">
+                                    <span class="ms-3 inline-flex whitespace-nowrap text-sm group-hover:text-red-600">
                                         Penagihan
                                     </span>
                                 </a>
@@ -366,7 +378,7 @@
                                     href="{{ route('daily-report.index') }}" wire:navigate>
                                     <x-icons.cash
                                         class="{{ Route::is('daily-report.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">
+                                    <span class="ms-3 inline-flex whitespace-nowrap text-sm group-hover:text-red-600">
                                         Laporan Lapangan
                                     </span>
                                 </a>
