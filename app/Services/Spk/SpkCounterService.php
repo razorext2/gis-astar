@@ -58,9 +58,11 @@ class SpkCounterService
             });
 
             if ($this->user()->cannot('spk-validate')) {
-                $production->whereRaw('COALESCE(JSON_LENGTH(packing_list), 0) > 0')
-                    ->orWhere('is_using_company_driver', true)
-                    ->orWhere('is_picked_up_by_customer', true);
+                $production->where(function ($q) {
+                    $q->whereRaw('COALESCE(JSON_LENGTH(packing_list), 0) > 0')
+                        ->orWhere('is_using_company_driver', true)
+                        ->orWhere('is_picked_up_by_customer', true);
+                });
             }
         })
             ->whereDoesntHave('deliveries');
