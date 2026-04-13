@@ -240,8 +240,11 @@
                                     href="{{ route('collect-task.index') }}" wire:navigate>
                                     <x-icons.cash
                                         class="{{ Route::is('collect-task.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">IDC Non PPN
-                                        (SR)</span>
+                                    <span class="ms-3 inline-flex whitespace-nowrap text-sm group-hover:text-red-600">
+                                        IDC Non PPN (SR)
+
+                                        @livewire('utils.counter.collector-idc-non-ppn-counter')
+                                    </span>
                                 </a>
                             </li>
                         @endcan
@@ -252,8 +255,11 @@
                                     href="{{ route('collect-task-ppn.index') }}" wire:navigate>
                                     <x-icons.sale-percent
                                         class="{{ Route::is('collect-task-ppn.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">IDC PPN
-                                        (FP)</span>
+                                    <span class="ms-3 inline-flex whitespace-nowrap text-sm group-hover:text-red-600">
+                                        IDC PPN (FP)
+
+                                        @livewire('utils.counter.collector-idc-ppn-counter')
+                                    </span>
                                 </a>
                             </li>
                         @endcan
@@ -264,8 +270,11 @@
                                     href="{{ route('collect-idy-ppn.index') }}" wire:navigate>
                                     <x-icons.cash-register
                                         class="{{ Route::is('collect-idy-ppn.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">IDY PPN
-                                        (FP)</span>
+                                    <span class="ms-3 inline-flex whitespace-nowrap text-sm group-hover:text-red-600">
+                                        IDY PPN (FP)
+
+                                        @livewire('utils.counter.collector-idy-ppn-counter')
+                                    </span>
                                 </a>
                             </li>
                         @endcan
