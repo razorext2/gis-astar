@@ -18,7 +18,7 @@
 
                     <!-- Header (Logo) -->
                     <tr>
-                        <td align="center" style="padding:20px; background-color:#cb2828;">
+                        <td align="center" style="padding:20px; background-color:#ff8e8e;">
                             <img src="https://attendance.indodacin.com/assets/img/logo.png" alt="Logo Perusahaan"
                                 style="height:50px;">
                         </td>
@@ -28,14 +28,13 @@
                     <tr>
                         <td style="padding:30px; color:#333;">
                             <p style="font-size:16px; line-height:1.6;">
-                                Terimakasih <strong>{{ $namaPenanggungJawab }}</strong>, telah memberikan kami
-                                kepercayaan untuk melaksanakan pelayanan yang Anda pilih.
+                                Terima kasih atas kepercayaan Anda memilih pelayanan kami.
+                                Kami sangat menghargai keputusan Anda dan berkomitmen untuk memberikan layanan terbaik.
                             </p>
 
                             <p style="font-size:16px; line-height:1.6;">
-                                Berikut kami lampirkan rekap laporan harian dari Staff kami
-                                <strong>[{{ $namaStaff }}]</strong> yang melaksanakan tugas di
-                                <strong>{{ $namaPerusahaan }}</strong>.
+                                Kepuasan Anda adalah motivasi utama kami untuk terus berkembang, dan kami berharap dapat
+                                kembali melayani Anda di masa mendatang.
                             </p>
                         </td>
                     </tr>
