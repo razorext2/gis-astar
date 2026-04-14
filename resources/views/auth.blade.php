@@ -31,36 +31,10 @@
     </script>
 </head>
 
-<body class="relative min-h-screen overflow-x-hidden bg-white antialiased dark:bg-zinc-950">
+<body id="container" class="relative min-h-screen overflow-x-hidden bg-white antialiased dark:bg-zinc-950"
+    onmousemove="document.getElementById('container').style.setProperty('--mouse-x', event.clientX + 'px'); document.getElementById('container').style.setProperty('--mouse-y', event.clientY + 'px');">
 
-    {{-- Background: Chart-Surge SVG (Light Mode) --}}
-    <div class="pointer-events-none fixed inset-0 z-0 dark:hidden" aria-hidden="true">
-        <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <linearGradient id="chartGradLight" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#ef4444" stop-opacity="0.9" />
-                    <stop offset="100%" stop-color="#fca5a5" stop-opacity="0.5" />
-                </linearGradient>
-            </defs>
-            {{-- Ascending curved path: flat left, surges up toward top-right --}}
-            <path d="M 100 0 L 100 100 L 0 100 C 20 100, 45 99, 58 92 C 68 86, 75 72, 82 55 C 88 40, 92 20, 100 0 Z"
-                fill="url(#chartGradLight)" />
-        </svg>
-    </div>
-
-    {{-- Background: Chart-Surge SVG (Dark Mode) --}}
-    <div class="pointer-events-none fixed inset-0 z-0 hidden dark:block" aria-hidden="true">
-        <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <linearGradient id="chartGradDark" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#7f1d1d" stop-opacity="0.95" />
-                    <stop offset="100%" stop-color="#991b1b" stop-opacity="0.5" />
-                </linearGradient>
-            </defs>
-            <path d="M 100 0 L 100 100 L 0 100 C 20 100, 45 99, 58 92 C 68 86, 75 72, 82 55 C 88 40, 92 20, 100 0 Z"
-                fill="url(#chartGradDark)" />
-        </svg>
-    </div>
+    <x-utils.dynamic-background />
 
     @if (session('status'))
         <div class="fixed bottom-5 right-5 z-50 flex w-full max-w-xs scale-90 transform items-center divide-x rounded-lg transition duration-300"

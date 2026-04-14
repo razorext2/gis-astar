@@ -5,55 +5,61 @@
     @include('dashboard.layoutsDash.head')
 </head>
 
-<body id="container" class="bg-gray-100 dark:bg-[#09090b]" x-data="{ openSidebar: true }">
+<body id="container" class="relative bg-zinc-50 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100"
+    x-data="{ openSidebar: true }"
+    onmousemove="document.getElementById('container').style.setProperty('--mouse-x', event.clientX + 'px'); document.getElementById('container').style.setProperty('--mouse-y', event.clientY + 'px');">
 
-    @if (session('status'))
-        <x-notification-popup>
-            {{ session('status') }}
-        </x-notification-popup>
-    @endif
+    <x-utils.dynamic-background />
 
-    @include('dashboard.layoutsDash.navbar')
+    <div class="relative z-10 flex min-h-screen flex-col">
+        @if (session('status'))
+            <x-notification-popup>
+                {{ session('status') }}
+            </x-notification-popup>
+        @endif
 
-    @include('dashboard.layoutsDash.sidebar')
+        @include('dashboard.layoutsDash.navbar')
 
-    <div :class="openSidebar ? 'max-w-screen-xl sm:ml-72 xl:ml-96' : 'mx-0 md:mx-12 lg:mx-20 xl:mx-44 max-w-screen-2xl'"
-        class="mb-20 mt-32 px-4 transition-all duration-300 ease-in-out sm:mt-24 md:mb-4">
+        @include('dashboard.layoutsDash.sidebar')
 
-        {{-- breadcrumb --}}
-        @livewire('utils.breadcrumb')
+        <div :class="openSidebar ? 'max-w-screen-xl sm:ml-72 xl:ml-96' : 'mx-0 md:mx-12 lg:mx-20 xl:mx-44 max-w-screen-2xl'"
+            class="mb-20 mt-32 px-4 transition-all duration-300 ease-in-out sm:mt-24 md:mb-4">
 
-        {{-- title --}}
-        <div class="grid grid-cols-1">
-            @include('dashboard.layoutsDash.title')
+            {{-- breadcrumb --}}
+            @livewire('utils.breadcrumb')
+
+            {{-- title --}}
+            <div class="grid grid-cols-1">
+                @include('dashboard.layoutsDash.title')
+            </div>
+
+            {{-- carousel for cards --}}
+            @livewire('components.card')
+
+            {{-- announcement --}}
+            @livewire('utils.announcement-container')
+
+            {{-- main content --}}
+            @yield('content')
+
         </div>
 
-        {{-- carousel for cards --}}
-        @livewire('components.card')
+        {{-- bikin navigasi ala android --}}
+        @persist('mobile-drawer')
+            <x-drawer.mobile-menu />
+        @endpersist
 
-        {{-- announcement --}}
-        @livewire('utils.announcement-container')
+        {{-- preload --}}
+        <div class="fixed inset-0 z-50 bg-white dark:bg-zinc-950 md:z-[9999]" id="preloader">
+        </div>
 
-        {{-- main content --}}
-        @yield('content')
-
-    </div>
-
-    {{-- bikin navigasi ala android --}}
-    @persist('mobile-drawer')
-        <x-drawer.mobile-menu />
-    @endpersist
-
-    {{-- preload --}}
-    <div class="fixed inset-0 z-50 bg-white dark:bg-[#09090b] md:z-[9999]" id="preloader">
-    </div>
-
-    {{-- scroll to top --}}
-    <div x-data="scrollToggle()" x-init="init()">
-        <a href="javascript:void(0)" @click="handleScroll" :class="atTop ? 'rotate-0' : 'rotate-180'"
-            class="fixed bottom-4 right-4 h-fit w-fit rounded-full bg-red-600 p-2.5 transition-all duration-300 ease-in-out lg:block">
-            <x-icons.carred-down class="h-6 w-6 text-white" id="scroll-to-top-icon" />
-        </a>
+        {{-- scroll to top --}}
+        <div x-data="scrollToggle()" x-init="init()">
+            <a href="javascript:void(0)" @click="handleScroll" :class="atTop ? 'rotate-0' : 'rotate-180'"
+                class="fixed bottom-4 right-4 h-fit w-fit rounded-full bg-red-600 p-2.5 shadow-lg shadow-red-600/30 transition-all duration-300 ease-in-out hover:bg-red-700 lg:block">
+                <x-icons.carred-down class="h-6 w-6 text-white" id="scroll-to-top-icon" />
+            </a>
+        </div>
     </div>
 
     <!-- js -->
