@@ -16,25 +16,25 @@ class Line extends Component
         $ontime = Attendance::where('created_at', '>=', Carbon::now()->subDays(7))
             ->whereRaw("time(created_at) <= '08:00:00'")
             ->get()
-            ->groupBy(fn($attendance) => Carbon::parse($attendance->created_at)->format('Y-m-d'));
+            ->groupBy(fn ($attendance) => Carbon::parse($attendance->created_at)->format('Y-m-d'));
 
         $backOntime = AttendanceOut::where('created_at', '>=', Carbon::now()->subDays(7))
             ->whereRaw("time(created_at) >= '17:00:00'")
             ->get()
-            ->groupBy(fn($attendance) => Carbon::parse($attendance->created_at)->format('Y-m-d'));
+            ->groupBy(fn ($attendance) => Carbon::parse($attendance->created_at)->format('Y-m-d'));
 
         $late = Attendance::where('created_at', '>=', Carbon::now()->subDays(7))
             ->whereRaw("time(created_at) > '08:00:00'")
             ->get()
-            ->groupBy(fn($attendance) => Carbon::parse($attendance->created_at)->format('Y-m-d'));
+            ->groupBy(fn ($attendance) => Carbon::parse($attendance->created_at)->format('Y-m-d'));
 
         $backTooFast = AttendanceOut::where('created_at', '>=', Carbon::now()->subDays(7))
             ->whereRaw("time(created_at) < '17:00:00'")
             ->get()
-            ->groupBy(fn($attendance) => Carbon::parse($attendance->created_at)->format('Y-m-d'));
+            ->groupBy(fn ($attendance) => Carbon::parse($attendance->created_at)->format('Y-m-d'));
 
         // Buat array dengan tanggal lengkap selama 7 hari terakhir
-        $dateRange = collect(range(0, 6))->map(fn($day) => Carbon::now()->subDays($day)->format('Y-m-d'))->reverse()->values();
+        $dateRange = collect(range(0, 6))->map(fn ($day) => Carbon::now()->subDays($day)->format('Y-m-d'))->reverse()->values();
 
         // Inisialisasi model grafik
         $multiLineChartModel = LivewireCharts::multiLineChartModel()
@@ -46,7 +46,7 @@ class Line extends Component
                 '#3b82f6',
                 '#9333ea',
                 '#f43f5e',
-                '#f59e0b'
+                '#f59e0b',
             ]);
 
         // Tambahkan data ke grafik

@@ -30,7 +30,7 @@
                 </div>
 
                 {{-- Livewire Chart --}}
-                <div class="relative min-h-0 w-full flex-1 overflow-hidden px-1 py-2">
+                <div class="relative h-[340px] lg:h-full w-full lg:flex-1 overflow-hidden px-1 py-4">
                     <livewire:chart.line />
                 </div>
 
@@ -166,27 +166,4 @@
             </div>
             <!-- End Notifications Section -->
         </div>
-    </div>
-
-    {{-- Custom Scrollbar Style Just For This Page --}}
-    <style>
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background-color: #cbd5e1;
-            /* zinc-300 */
-            border-radius: 10px;
-        }
-
-        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-            background-color: #3f3f46;
-            /* zinc-700 */
-        }
-    </style>
 @endsection

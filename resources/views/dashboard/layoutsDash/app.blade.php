@@ -54,7 +54,7 @@
     {{-- scroll to top --}}
     <div x-data="scrollToggle()" x-init="init()">
         <a href="javascript:void(0)" @click="handleScroll" :class="atTop ? 'rotate-0' : 'rotate-180'"
-            class="fixed bottom-24 right-4 z-50 h-fit w-fit rounded-full bg-red-600 p-2.5 shadow-lg shadow-red-600/30 transition-all duration-300 ease-in-out hover:bg-red-700 md:bottom-8 md:right-8 lg:block">
+            class="fixed bottom-24 right-4 z-50 h-fit w-fit rounded-full bg-red-600 p-2.5 transition-all duration-300 ease-in-out hover:bg-red-700 md:bottom-8 md:right-8 lg:block">
             <x-icons.carred-down class="h-6 w-6 text-white" id="scroll-to-top-icon" />
         </a>
     </div>
