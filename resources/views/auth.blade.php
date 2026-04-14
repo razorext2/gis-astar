@@ -85,11 +85,42 @@
             <div class="flex w-full flex-col items-center text-center md:w-1/2 md:items-start md:text-left">
 
                 <h1
-                    class="text-4xl font-black leading-tight tracking-tight text-zinc-900 drop-shadow-sm dark:text-white md:text-5xl lg:text-[3.5rem]">
-                    Indodacin <br class="hidden lg:block" />
-                    <span
-                        class="bg-gradient-to-r from-red-400 to-red-700 bg-clip-text text-transparent dark:from-rose-300 dark:to-red-500">
-                        Presisi Utama
+                    class="flex flex-col items-center text-center text-4xl font-black leading-tight tracking-tight text-zinc-900 drop-shadow-sm dark:text-white md:items-start md:text-left md:text-5xl lg:text-[3.5rem]">
+                    <span>Indodacin</span>
+                    <span x-data="{
+                        words: ['Presisi Utama', 'Pasti Presisi', 'Pasti Berkualitas', 'Pasti Pas'],
+                        currentWord: '',
+                        wordIndex: 0,
+                        charIndex: 0,
+                        isDeleting: false,
+                        type() {
+                            const current = this.words[this.wordIndex];
+
+                            if (this.isDeleting) {
+                                this.currentWord = current.substring(0, this.charIndex - 1);
+                                this.charIndex--;
+                            } else {
+                                this.currentWord = current.substring(0, this.charIndex + 1);
+                                this.charIndex++;
+                            }
+
+                            let typeSpeed = 100 - Math.random() * 50;
+                            if (this.isDeleting) typeSpeed /= 2.5; // Delete faster
+
+                            if (!this.isDeleting && this.currentWord === current) {
+                                typeSpeed = 2000; // Pause at the end before deleting
+                                this.isDeleting = true;
+                            } else if (this.isDeleting && this.currentWord === '') {
+                                this.isDeleting = false;
+                                this.wordIndex = (this.wordIndex + 1) % this.words.length;
+                                typeSpeed = 500; // Pause before starting new word
+                            }
+
+                            setTimeout(() => this.type(), typeSpeed);
+                        }
+                    }" x-init="setTimeout(() => type(), 800)"
+                        class="bg-gradient-to-r from-red-400 to-red-700 bg-clip-text text-transparent after:animate-pulse after:content-['|'] dark:from-rose-300 dark:to-red-500">
+                        <span x-text="currentWord">Presisi Utama</span>
                     </span>
                 </h1>
                 <p class="mx-auto mt-4 max-w-md text-base leading-relaxed text-zinc-600 dark:text-zinc-300 md:mx-0">
