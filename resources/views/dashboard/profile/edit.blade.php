@@ -3,7 +3,10 @@
     {{-- Hero Profile Header --}}
     <div class="relative mb-6 rounded-3xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
         {{-- Decorative gradient background --}}
-        <div class="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-red-600/10 via-transparent to-transparent dark:from-red-900/20"></div>
+        <div
+            class="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-red-600/10 via-transparent to-transparent dark:from-red-900/20">
+        </div>
+
         <div class="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-red-500/5 blur-3xl"></div>
 
         <div class="relative flex flex-col gap-6 p-6 sm:flex-row sm:items-end sm:p-8">
@@ -26,7 +29,7 @@
                     </button>
                 </div>
                 {{-- Uploader panel --}}
-                <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                <div x-show="open" @click.away="open = false" x-transition:enter="transition ease-out duration-200"
                     x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                     class="absolute left-0 top-36 z-20 w-72 rounded-2xl border border-zinc-200 bg-white p-4 shadow-xl dark:border-zinc-700 dark:bg-zinc-900">
                     @livewire('utils.profile-picture-uploader')
