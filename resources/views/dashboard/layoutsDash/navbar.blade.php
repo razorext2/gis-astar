@@ -1,70 +1,66 @@
 <nav
-    class="fixed top-0 z-40 w-full border-b border-gray-200 bg-white px-4 py-2.5 shadow-sm dark:border-[#232327] dark:bg-dark-primary dark:shadow-none lg:px-6">
+    class="fixed top-0 z-40 w-full border-b border-zinc-200 bg-white px-4 py-2.5 shadow-sm dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:px-6">
     <div class="flex flex-wrap items-center justify-between gap-2 sm:flex-nowrap">
-        {{-- title dan icon --}}
+
+        {{-- Logo & Title --}}
         <div :class="openSidebar ? 'translate-x-0 sm:-translate-x-40' : 'translate-x-20 sm:translate-x-20'"
             class="flex items-center justify-start transition-all duration-500 ease-out">
-
-            <a class="flex items-center" href="{{ config('app.url') }}">
-                <img class="h-8" src="{{ asset('assets/img/logo.png') }}" alt="Indodacin Logo" loading="lazy" />
-                <span
-                    class="text-md self-center whitespace-nowrap font-semibold italic dark:text-white">attendance</span>
+            <a class="flex items-center gap-2" href="{{ config('app.url') }}">
+                <img class="h-8 w-auto object-contain" src="{{ asset('assets/img/logo.png') }}" alt="Indodacin Logo"
+                    loading="lazy" />
+                <span class="text-sm font-semibold italic text-zinc-600 dark:text-zinc-400">attendance</span>
             </a>
-
         </div>
 
-        {{-- poin --}}
+        {{-- Points (Teknisi) --}}
         <div id="point-container">
             @if (auth()->user()->hasRole('Teknisi'))
                 @livewire('widget.technician.points-accumulation')
             @endif
         </div>
 
-        {{-- notification, ping checker, profile --}}
-        <div class="flex w-full items-center justify-between gap-2 sm:w-auto lg:gap-4">
+        {{-- Right Actions --}}
+        <div class="flex w-full items-center justify-between gap-2 sm:w-auto lg:gap-3">
 
             @livewire('utils.ping-checker')
 
             {{-- Notification --}}
             <div id="notifications">
-                {{-- notification button --}}
                 <button
-                    class="mr-2 rounded-xl p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 focus:ring-2 focus:ring-gray-300 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-600"
+                    class="relative rounded-xl p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-300 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white dark:focus:ring-zinc-700"
                     id="notificationButton" data-dropdown-toggle="notification-dropdown"
                     data-dropdown-placement="bottom-end" data-dropdown-offset-distance="11" type="button">
                     <span class="sr-only">View notifications</span>
-                    <!-- Bell icon -->
                     @livewire('notification-bell')
                 </button>
-                {{-- end notification button --}}
 
-                {{-- notification container --}}
-                <div class="z-50 my-4 me-4 hidden max-w-full items-center rounded-b-lg bg-white shadow-md dark:border-x dark:border-b dark:border-gray-700 dark:bg-dark-primary dark:shadow-none md:max-w-xl"
+                {{-- Notification Dropdown --}}
+                <div class="z-50 my-3 me-2 hidden w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 md:max-w-md"
                     id="notification-dropdown">
-                    <div class="bg-gray-50 p-4 font-medium text-gray-700 dark:bg-gray-800 dark:text-white">
-                        Notifikasi
+                    <div
+                        class="flex items-center justify-between border-b border-zinc-100 px-4 py-3 dark:border-zinc-800">
+                        <div class="flex items-center gap-2">
+                            <div class="h-1.5 w-1.5 rounded-full bg-red-600 shadow-[0_0_6px_rgba(220,38,38,0.5)]"></div>
+                            <p class="text-sm font-bold text-zinc-800 dark:text-white">Notifikasi</p>
+                        </div>
                     </div>
 
-                    {{-- notifikasi --}}
                     <div class="max-h-72 overflow-y-auto md:max-h-96" id="notificationContainer"></div>
 
-                    <div
-                        class="w-full rounded-b-lg bg-gray-50 p-4 font-medium text-gray-700 dark:bg-gray-800 dark:text-white">
-                        <a class="p-4" href="{{ route('notifications.index') }}">
-                            Lihat semua notifikasi
+                    <div class="border-t border-zinc-100 px-4 py-3 dark:border-zinc-800">
+                        <a class="text-sm font-semibold text-red-600 transition-colors hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                            href="{{ route('notifications.index') }}">
+                            Lihat semua notifikasi →
                         </a>
                     </div>
                 </div>
-
-                {{-- end notification container --}}
             </div>
-            {{-- end notifications --}}
+            {{-- End Notification --}}
 
-            {{-- profile container --}}
+            {{-- Profile --}}
             <div id="profile-content">
-                {{-- Profile Photo --}}
                 <button
-                    class="flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"
+                    class="flex rounded-full ring-2 ring-zinc-200 transition-all hover:ring-red-500 focus:outline-none dark:ring-zinc-700 dark:hover:ring-red-600"
                     id="user-menu-button" data-dropdown-toggle="profile-dropdown" data-dropdown-placement="bottom-end"
                     data-dropdown-offset-distance="13" type="button" aria-expanded="false">
                     <span class="sr-only">Open user menu</span>
@@ -73,28 +69,41 @@
                         alt="user photo" loading="lazy" onerror="this.src = '{{ asset('assets/img/noImage.webp') }}'">
                 </button>
 
-                {{-- Dropdown Profile --}}
-                <div class="z-50 my-4 hidden w-56 list-none divide-y divide-gray-100 rounded-b-lg bg-white text-base shadow-md dark:divide-gray-600 dark:border-x dark:border-b dark:border-gray-700 dark:bg-dark-primary"
+                {{-- Profile Dropdown --}}
+                <div class="z-50 my-3 hidden w-60 overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800"
                     id="profile-dropdown">
-                    <div class="px-4 py-3">
-                        <span
-                            class="block text-sm font-semibold text-gray-900 dark:text-white">{{ auth()->user()->name }}</span>
-                        <span
-                            class="block truncate text-sm text-gray-500 dark:text-gray-400">{{ auth()->user()->email }}</span>
+
+                    {{-- User Info --}}
+                    <div class="flex items-center gap-3 border-b border-zinc-100 px-4 py-3.5 dark:border-zinc-800">
+                        <img class="h-9 w-9 shrink-0 rounded-full object-cover ring-2 ring-zinc-200 dark:ring-zinc-700"
+                            src="{{ auth()->user()->profile_pic ? asset('storage/profile-pictures/' . auth()->user()->profile_pic) : asset('assets/img/profile-picture-5.jpg') }}"
+                            alt="user photo" loading="lazy"
+                            onerror="this.src = '{{ asset('assets/img/noImage.webp') }}'">
+                        <div class="min-w-0">
+                            <p class="truncate text-sm font-bold text-zinc-900 dark:text-white">
+                                {{ auth()->user()->name }}
+                            </p>
+                            <p class="truncate text-xs text-zinc-500 dark:text-zinc-400">
+                                {{ auth()->user()->email }}
+                            </p>
+                        </div>
                     </div>
-                    <ul class="py-1 text-gray-500 dark:text-gray-400" aria-labelledby="dropdown-item">
+
+                    {{-- Menu Items --}}
+                    <ul class="py-1.5" aria-labelledby="dropdown-item">
                         <li>
-                            <a class="block px-4 py-2 text-sm hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                                href="{{ route('profile.me') }}">My profile</a>
+                            <a class="flex items-center gap-2.5 px-4 py-2 text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white"
+                                href="{{ route('profile.me') }}">
+                                My Profile
+                            </a>
                         </li>
                         <li>
                             <form id="editProfile" action="{{ route('profile.edit') }}"
-                                onclick="event.preventDefault();">
-                            </form>
+                                onclick="event.preventDefault();"></form>
                             <button
-                                class="block w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+                                class="flex w-full items-center gap-2.5 px-4 py-2 text-left text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white"
                                 form="editProfile" type="submit">
-                                Account settings
+                                Account Settings
                             </button>
                         </li>
                         @hasanyrole(['Admin', 'HRD', 'Management', 'Management-PKU', 'Management-JKT',
@@ -104,24 +113,27 @@
                             </li>
                         @endhasanyrole
                         <li>
-                            <div class="flex flex-row gap-x-4 px-4 py-2">
+                            <div class="flex items-center gap-3 px-4 py-2.5">
                                 <x-button-dark />
                                 <x-button-light />
                             </div>
                         </li>
                     </ul>
 
-                    <ul class="py-1 text-gray-500 dark:text-gray-400" aria-labelledby="dropdown-item">
+                    {{-- Sign Out & Install --}}
+                    <ul class="border-t border-zinc-100 py-1.5 dark:border-zinc-800" aria-labelledby="dropdown-item">
                         <li>
                             <form id="logout" method="post" action="{{ route('logout') }}"
                                 onclick="event.preventDefault();">@csrf</form>
                             <button
-                                class="block w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                form="logout" type="submit">Sign out</button>
+                                class="flex w-full items-center gap-2.5 px-4 py-2 text-left text-sm font-medium text-red-600 transition-colors hover:bg-red-50 hover:text-red-700 dark:text-red-400 dark:hover:bg-red-900/20 dark:hover:text-red-300"
+                                form="logout" type="submit">
+                                Sign Out
+                            </button>
                         </li>
-                        <li class="flex items-center px-4 py-3" id="installAppContainer">
+                        <li class="flex items-center px-4 py-2" id="installAppContainer">
                             <button
-                                class="rounded-lg bg-green-600 px-4 py-2 text-center text-sm text-white ring-1 ring-gray-200 transition-colors duration-500 ease-in-out hover:bg-green-700 dark:bg-green-700 dark:ring-gray-700 dark:hover:bg-green-800 dark:hover:text-white"
+                                class="w-full rounded-xl bg-red-600 px-4 py-2 text-center text-sm font-semibold text-white shadow-sm shadow-red-600/20 transition-colors hover:bg-red-700 dark:hover:bg-red-700"
                                 id="installApp">
                                 Install App
                             </button>
@@ -129,7 +141,8 @@
                     </ul>
                 </div>
             </div>
-            {{-- end profile container --}}
+            {{-- End Profile --}}
+
         </div>
     </div>
 </nav>

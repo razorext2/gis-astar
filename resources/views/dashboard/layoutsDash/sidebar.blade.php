@@ -102,7 +102,7 @@
         class="mx-auto flex w-full justify-between rounded-br-2xl p-5 shadow-md drop-shadow-lg transition-all duration-200 ease-out dark:border-b-[1px] dark:border-r-[4px] dark:border-red-800 dark:shadow-none dark:drop-shadow-none">
         <div class="flex items-center justify-start">
             <a class="flex items-center" href="{{ config('app.url') }}">
-                <img class="h-8" src="{{ asset('assets/img/logo.png') }}" alt="Indodacin Logo" loading="lazy" />
+                <img class="h-12" src="{{ asset('assets/img/logo.png') }}" alt="Indodacin Logo" loading="lazy" />
             </a>
         </div>
 
