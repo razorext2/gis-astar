@@ -1,75 +1,67 @@
 <x-guest-layout>
+    <div class="mx-auto w-full max-w-md">
+        <div class="flex w-full flex-col rounded-3xl bg-white p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 sm:p-10">
+            
+            <div class="mb-8 border-b border-zinc-100 pb-5 dark:border-zinc-800">
+                <h2 class="text-left text-3xl font-black tracking-tight text-zinc-900 dark:text-white">
+                    Registrasi
+                </h2>
+                <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+                    Daftar akun baru untuk mengakses sistem laporan.
+                </p>
+            </div>
 
-	<div class="mx-auto w-full md:mx-0 md:w-full lg:w-9/12">
-		<div
-			class="flex w-full flex-col rounded-xl bg-white p-10 shadow-xl dark:bg-dark-primary dark:ring-1 dark:ring-gray-700">
-			<h2 class="mb-5 text-left text-2xl font-bold text-gray-800 dark:text-white">
-				Register
-			</h2>
-			<form class="w-full" method="POST" action="{{ route('register') }}">
-				@csrf
+            <form class="w-full" method="POST" action="{{ route('register') }}">
+                @csrf
 
-				<!-- Name -->
-				<div class="my-5 flex w-full flex-col" id="input">
-					<x-input-label class="dark:text-white" for="name" :value="__('Name')" />
-					<x-text-input class="mt-1 block w-full" id="name" name="name" type="text" :value="old('name')" required
-						autofocus autocomplete="name" />
-					<x-input-error class="mt-2" :messages="$errors->get('name')" />
-				</div>
+                <!-- Name -->
+                <div class="mb-5 flex w-full flex-col">
+                    <x-input-label class="mb-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300" for="name" :value="__('Name')" />
+                    <x-text-input class="block w-full rounded-xl border-zinc-200 bg-zinc-50 px-4 py-3 text-zinc-900 placeholder-zinc-400 focus:border-red-500 focus:bg-white focus:ring-red-500 dark:border-zinc-700 dark:bg-dark-secondary dark:text-white dark:placeholder-zinc-500 dark:focus:border-red-500" 
+                        id="name" name="name" type="text" :value="old('name')" required autofocus autocomplete="name" placeholder="Nama Lengkap" />
+                    <x-input-error class="mt-2" :messages="$errors->get('name')" />
+                </div>
 
-				<!-- Email Address -->
-				<div class="my-5 flex w-full flex-col" id="input">
-					<x-input-label class="dark:text-white" for="email" :value="__('Email')" />
-					<x-text-input class="mt-1 block w-full" id="email" name="email" type="email" :value="old('email')" required
-						autocomplete="username" />
-					<x-input-error class="mt-2" :messages="$errors->get('email')" />
-				</div>
+                <!-- Email Address -->
+                <div class="mb-5 flex w-full flex-col">
+                    <x-input-label class="mb-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300" for="email" :value="__('Email Account')" />
+                    <x-text-input class="block w-full rounded-xl border-zinc-200 bg-zinc-50 px-4 py-3 text-zinc-900 placeholder-zinc-400 focus:border-red-500 focus:bg-white focus:ring-red-500 dark:border-zinc-700 dark:bg-dark-secondary dark:text-white dark:placeholder-zinc-500 dark:focus:border-red-500" 
+                        id="email" name="email" type="email" :value="old('email')" required autocomplete="username" placeholder="contoh@indodacin.com" />
+                    <x-input-error class="mt-2" :messages="$errors->get('email')" />
+                </div>
 
-				<!-- Password -->
-				<div class="my-5 flex w-full flex-col" id="input">
-					<x-input-label class="dark:text-white" for="password" :value="__('Password')" />
+                <!-- Password -->
+                <div class="mb-5 flex w-full flex-col">
+                    <x-input-label class="mb-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300" for="password" :value="__('Password')" />
+                    <x-text-input class="block w-full rounded-xl border-zinc-200 bg-zinc-50 px-4 py-3 text-zinc-900 placeholder-zinc-400 focus:border-red-500 focus:bg-white focus:ring-red-500 dark:border-zinc-700 dark:bg-dark-secondary dark:text-white dark:placeholder-zinc-500 dark:focus:border-red-500" 
+                        id="password" name="password" type="password" required autocomplete="new-password" placeholder="••••••••" />
+                    <x-input-error class="mt-2" :messages="$errors->get('password')" />
+                </div>
 
-					<x-text-input class="mt-1 block w-full" id="password" name="password" type="password" required
-						autocomplete="new-password" />
+                <!-- Confirm Password -->
+                <div class="mb-8 flex w-full flex-col">
+                    <x-input-label class="mb-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300" for="password_confirmation" :value="__('Confirm Password')" />
+                    <x-text-input class="block w-full rounded-xl border-zinc-200 bg-zinc-50 px-4 py-3 text-zinc-900 placeholder-zinc-400 focus:border-red-500 focus:bg-white focus:ring-red-500 dark:border-zinc-700 dark:bg-dark-secondary dark:text-white dark:placeholder-zinc-500 dark:focus:border-red-500" 
+                        id="password_confirmation" name="password_confirmation" type="password" required autocomplete="new-password" placeholder="••••••••" />
+                    <x-input-error class="mt-2" :messages="$errors->get('password_confirmation')" />
+                </div>
 
-					<x-input-error class="mt-2" :messages="$errors->get('password')" />
-				</div>
+                <div class="flex w-full flex-col">
+                    <button class="flex w-full items-center justify-center rounded-xl bg-red-600 py-3.5 text-sm font-bold tracking-wide text-white transition-all hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-dark-primary shadow-lg shadow-red-600/20" type="submit">
+                        {{ __('Registrasi Akun') }}
+                        <x-icons.arrow-right class="ml-2 h-4 w-4" />
+                    </button>
 
-				<!-- Confirm Password -->
-				<div class="my-5 flex w-full flex-col" id="input">
-					<x-input-label class="dark:text-white" for="password_confirmation" :value="__('Confirm Password')" />
-
-					<x-text-input class="mt-1 block w-full" id="password_confirmation" name="password_confirmation" type="password"
-						required autocomplete="new-password" />
-
-					<x-input-error class="mt-2" :messages="$errors->get('password_confirmation')" />
-				</div>
-
-				<div class="my-5 flex w-full flex-col" id="button">
-					<x-primary-button class="w-full rounded-lg bg-green-600 py-4 text-green-100">
-						<div class="flex flex-row items-center justify-center">
-							<div class="mr-2">
-								<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-									xmlns="http://www.w3.org/2000/svg">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-										d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
-								</svg>
-							</div>
-							<div class="font-bold">{{ __('Register') }}</div>
-						</div>
-					</x-primary-button>
-
-					<div class="mt-5 flex items-center justify-end">
-						@if (Route::has('login'))
-							<a class="w-full shrink font-medium text-gray-500 dark:text-white" href="{{ route('login') }}">
-								{{ __('Already have an account?') }}
-							</a>
-						@endif
-						<!-- <p> Or </p>
-																																<a class="w-full font-medium text-gray-500" href="#">Register!</a> -->
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
+                    <div class="mt-6 flex items-center justify-center">
+                        @if (Route::has('login'))
+                            <span class="text-sm text-zinc-500 dark:text-zinc-400">Sudah punya akun? </span>
+                            <a class="ml-1 text-sm font-bold text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors" href="{{ route('login') }}">
+                                {{ __('Sign In') }}
+                            </a>
+                        @endif
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </x-guest-layout>
