@@ -50,8 +50,13 @@
         }) ?? 'Default Title';
 @endphp
 
-<div class="py-4 text-gray-800 dark:text-white">
-    <h2 class="text-2xl font-bold tracking-tight text-gray-950 dark:text-white sm:text-3xl">
-        {{ $pageTitle }}
-    </h2>
+<div class="mb-1 flex items-center gap-4 py-4">
+    {{-- Signature Vertical Accent --}}
+    <div class="h-8 w-1.5 rounded-full bg-red-600 shadow-[0_0_20px_rgba(220,38,38,0.4)] dark:bg-red-500"></div>
+
+    <div>
+        <h1 class="text-2xl font-black tracking-tight text-zinc-900 dark:text-white sm:text-4xl">
+            {{ $pageTitle }}
+        </h1>
+    </div>
 </div>
