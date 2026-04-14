@@ -35,23 +35,25 @@
                 </button>
 
                 {{-- Notification Dropdown --}}
-                <div class="z-50 my-3 me-2 hidden w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 md:max-w-md"
+                <div class="z-50 my-3 hidden !w-[100vw] max-w-none sm:!w-[384px]"
                     id="notification-dropdown">
-                    <div
-                        class="flex items-center justify-between border-b border-zinc-100 px-4 py-3 dark:border-zinc-800">
-                        <div class="flex items-center gap-2">
-                            <div class="h-1.5 w-1.5 rounded-full bg-red-600 shadow-[0_0_6px_rgba(220,38,38,0.5)]"></div>
-                            <p class="text-sm font-bold text-zinc-800 dark:text-white">Notifikasi</p>
+                    <div class="mx-4 overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 sm:mx-0">
+                        <div
+                            class="flex items-center justify-between border-b border-zinc-100 px-4 py-3 dark:border-zinc-800">
+                            <div class="flex items-center gap-2">
+                                <div class="h-1.5 w-1.5 rounded-full bg-red-600 shadow-[0_0_6px_rgba(220,38,38,0.5)]"></div>
+                                <p class="text-sm font-bold text-zinc-800 dark:text-white">Notifikasi</p>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="max-h-72 overflow-y-auto md:max-h-96" id="notificationContainer"></div>
+                        <div class="max-h-72 overflow-y-auto md:max-h-96" id="notificationContainer"></div>
 
-                    <div class="border-t border-zinc-100 px-4 py-3 dark:border-zinc-800">
-                        <a class="text-sm font-semibold text-red-600 transition-colors hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
-                            href="{{ route('notifications.index') }}">
-                            Lihat semua notifikasi →
-                        </a>
+                        <div class="border-t border-zinc-100 px-4 py-3 dark:border-zinc-800">
+                            <a class="text-sm font-semibold text-red-600 transition-colors hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                                href="{{ route('notifications.index') }}">
+                                Lihat semua notifikasi →
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
