@@ -30,7 +30,7 @@
                 </div>
 
                 {{-- Livewire Chart --}}
-                <div class="relative h-[340px] lg:h-full w-full lg:flex-1 overflow-hidden px-1 py-4">
+                <div class="relative h-[340px] w-full overflow-hidden px-1 py-4 lg:h-full lg:flex-1">
                     <livewire:chart.line />
                 </div>
 
@@ -84,16 +84,17 @@
                                     <div
                                         class="flex items-start rounded-xl bg-zinc-50 p-3 transition-colors hover:bg-blue-50 dark:bg-dark-secondary dark:hover:bg-blue-900/10">
                                         <img class="me-3 mt-0.5 h-8 w-8 rounded-full border border-zinc-200 object-cover shadow-sm dark:border-zinc-700"
-                                            src="{{ asset('assets/img/profile-picture-5.jpg') }}" alt="User image"
-                                            loading="lazy">
+                                            src="{{ $at->user?->profile_pic ? asset('storage/profile-pictures/' . $at->user->profile_pic) : asset('assets/img/profile-picture-5.jpg') }}"
+                                            alt="{{ $at->pegawaiRelasi->full_name ?? 'User' }}" loading="lazy"
+                                            onerror="this.src = '{{ asset('assets/img/noImage.webp') }}'">
                                         <div class="flex flex-col">
                                             <span class="text-sm font-bold text-zinc-800 dark:text-white">
                                                 {{ $at->pegawaiRelasi->full_name ?? 'Pegawai N/A' }}
                                             </span>
-                                            <span class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-                                                Melakukan absensi masuk pada pukul
+                                            <span class="mt-1 flex flex-col gap-1 text-xs text-zinc-500 dark:text-zinc-400">
+                                                <span>Melakukan absensi masuk pada pukul</span>
                                                 <b
-                                                    class="ml-1 rounded bg-blue-100 px-1.5 py-0.5 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                                                    class="w-fit rounded bg-blue-100 px-1.5 py-0.5 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
                                                     {{ \Carbon\Carbon::parse($at->jam_masuk)->format('H:i') }}
                                                 </b>
                                             </span>
@@ -137,16 +138,17 @@
                                     <div
                                         class="flex items-start rounded-xl bg-zinc-50 p-3 transition-colors hover:bg-red-50 dark:bg-dark-secondary dark:hover:bg-red-900/10">
                                         <img class="me-3 mt-0.5 h-8 w-8 rounded-full border border-zinc-200 object-cover shadow-sm dark:border-zinc-700"
-                                            src="{{ asset('assets/img/profile-picture-5.jpg') }}" alt="User image"
-                                            loading="lazy">
+                                            src="{{ $at->user?->profile_pic ? asset('storage/profile-pictures/' . $at->user->profile_pic) : asset('assets/img/profile-picture-5.jpg') }}"
+                                            alt="{{ $at->pegawaiRelasi->full_name ?? 'User' }}" loading="lazy"
+                                            onerror="this.src = '{{ asset('assets/img/noImage.webp') }}'">
                                         <div class="flex flex-col">
                                             <span class="text-sm font-bold text-zinc-800 dark:text-white">
                                                 {{ $at->pegawaiRelasi->full_name ?? 'Pegawai N/A' }}
                                             </span>
-                                            <span class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-                                                Melakukan absensi keluar pada pukul
+                                            <span class="mt-1 flex flex-col gap-1 text-xs text-zinc-500 dark:text-zinc-400">
+                                                <span>Melakukan absensi keluar pada pukul</span>
                                                 <b
-                                                    class="ml-1 rounded bg-red-100 px-1.5 py-0.5 text-red-700 dark:bg-red-900/30 dark:text-red-500">
+                                                    class="w-fit rounded bg-red-100 px-1.5 py-0.5 text-red-700 dark:bg-red-900/30 dark:text-red-500">
                                                     {{ \Carbon\Carbon::parse($at->jam_keluar)->format('H:i') }}
                                                 </b>
                                             </span>
@@ -166,4 +168,4 @@
             </div>
             <!-- End Notifications Section -->
         </div>
-@endsection
+    @endsection

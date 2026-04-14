@@ -14,7 +14,6 @@ class AdminController extends Controller
     /**
      * Display a listing of the resource.
      */
-
     public function index()
     {
         if (auth()->user()->can('dashboard')) {
@@ -22,7 +21,7 @@ class AdminController extends Controller
 
             $startDate = Carbon::today()->subDays(6);
             $endDate = Carbon::today();
-            $formattedDateRange = $startDate->locale('id')->isoFormat('dddd, D MMM') . ' - ' . $endDate->locale('id')->isoFormat('dddd, D MMM');
+            $formattedDateRange = $startDate->locale('id')->isoFormat('dddd, D MMM').' - '.$endDate->locale('id')->isoFormat('dddd, D MMM');
 
             $yearNow = Carbon::today()->year;
 
@@ -67,7 +66,7 @@ class AdminController extends Controller
             $getPegawai = Pegawai::with([
                 'jadwalRelasi' => function ($query) use ($getDay) {
                     $query->where('hari', $getDay);
-                }
+                },
             ])
                 ->where('kode_pegawai', Auth::user()->kode_pegawai)
                 ->first();
@@ -79,7 +78,7 @@ class AdminController extends Controller
                 'attendanceRelasi' => function ($query) use ($today) {
                     $query->whereDate('jam_masuk', $today);
                 },
-                'latestAttendanceOutRelasi'
+                'latestAttendanceOutRelasi',
             ])
                 ->select('kode_pegawai', 'nick_name')
                 ->where('kode_pegawai', Auth::user()->kode_pegawai)
@@ -101,7 +100,7 @@ class AdminController extends Controller
                     // Sort by jam_masuk ascending (nulls last) and then by latest_jam_keluar descending (nulls last)
                     return [
                         $pegawai['latest_jam_keluar'] ? -$pegawai['latest_jam_keluar']->timestamp : PHP_INT_MAX,  // Sort latest_jam_keluar descending (nulls last)
-                        $pegawai['jam_masuk'] ? $pegawai['jam_masuk']->timestamp : PHP_INT_MAX  // Sort jam_masuk ascending (nulls last)
+                        $pegawai['jam_masuk'] ? $pegawai['jam_masuk']->timestamp : PHP_INT_MAX,  // Sort jam_masuk ascending (nulls last)
                     ];
                 });
 
