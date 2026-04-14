@@ -1,30 +1,61 @@
 <section>
+    {{-- Trigger Button --}}
     <button
-        class="block w-full bg-yellow-100 px-4 py-2 text-left text-sm text-yellow-600 transition-all duration-300 ease-in-out hover:bg-yellow-200 dark:bg-yellow-300 dark:text-yellow-700 dark:hover:bg-yellow-400"
+        class="group flex w-full items-center gap-3 rounded-xl border border-amber-200 bg-amber-50/50 px-4 py-2 text-left transition-all duration-300 hover:border-amber-300 hover:bg-amber-100/80 dark:border-amber-900/30 dark:bg-amber-950/20 dark:hover:bg-amber-900/30"
         type="button" wire:click="$set('showLogUpdateModal', true)">
-        Update Log
+        <div
+            class="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100 text-amber-600 shadow-sm transition-transform group-hover:scale-110 dark:bg-amber-900/50 dark:text-amber-400">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        </div>
+        <div class="flex flex-col">
+            <span class="text-sm font-medium text-amber-600/80 dark:text-amber-500/80">View Update Log</span>
+        </div>
     </button>
 
     @teleport('body')
-        {{-- modal tambah laporan Fondasi --}}
-        <div id="log-modal" wire:show="showLogUpdateModal" wire:transition.duration.300ms
-            class="fixed inset-0 z-[99] flex items-center justify-center bg-black bg-opacity-70 py-8"
-            wire:click="$set('showLogUpdateModal', false)">
-            @if ($showLogUpdateModal)
-                <div class="relative mx-4 my-6 flex w-full flex-col gap-1 overflow-y-auto rounded-xl bg-white p-4 shadow-2xl dark:bg-dark-primary md:w-2/3 md:gap-2 lg:w-1/2 lg:p-6 xl:w-2/5"
-                    style="max-height: calc(100vh - 6rem);">
+        {{-- Custom Modal --}}
+        <div id="log-modal" x-data="{ show: @entangle('showLogUpdateModal') }" x-show="show" x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-md"
+            style="background-color: rgba(9, 9, 11, 0.6);" @click.self="show = false">
 
-                    <x-button.danger class="absolute right-2 top-2 w-fit" wire:click="$set('showLogUpdateModal', false)">
-                        <x-icons.close class="h-4 w-4 text-white" />
-                    </x-button.danger>
+            <div x-show="show" x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                class="relative flex w-full max-w-2xl flex-col rounded-3xl border border-zinc-200 bg-white shadow-2xl dark:border-zinc-800 dark:bg-zinc-900"
+                style="max-height: 85vh;">
 
-                    <h2 class="mb-4 text-center text-lg font-semibold text-gray-900 dark:text-white lg:text-xl">
-                        Log Update
-                    </h2>
+                {{-- Header --}}
+                <div class="flex items-center justify-between border-b border-zinc-100 p-6 dark:border-zinc-800">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="flex h-10 w-10 items-center justify-center rounded-xl bg-red-600 text-white shadow-lg shadow-red-500/20">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-black tracking-tight text-zinc-900 dark:text-white">Update Log</h2>
+                            <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Menampilkan 10 perubahan sistem
+                                terakhir</p>
+                        </div>
+                    </div>
+                    <button @click="show = false"
+                        class="rounded-full p-2 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-white">
+                        <x-icons.close class="h-6 w-6" />
+                    </button>
+                </div>
 
-                    <p class="text-sm text-gray-600 dark:text-gray-100">10 Commit Terakhir</p>
-
-                    <div class="relative border-l border-gray-300 pl-6 dark:border-gray-600">
+                {{-- Timeline Content --}}
+                <div
+                    class="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700 flex-1 overflow-y-auto p-6">
+                    <div class="relative border-l-2 border-zinc-100 pl-8 dark:border-zinc-800">
                         @foreach ($this->logHistories() as $row)
                             @php
                                 $commit = $row['commit'];
@@ -33,46 +64,56 @@
                                 $email = $commit['committer']['email'] ?? '-';
                                 $date = \Carbon\Carbon::parse($commit['committer']['date'])
                                     ->timezone('Asia/Jakarta')
-                                    ->locale('id')
-                                    ->translatedFormat('l, d F Y H:i:s');
+                                    ->locale('id');
                             @endphp
 
-                            <div class="relative mb-4">
-
-                                {{-- Dot Indicator --}}
-                                <span
-                                    class="absolute -left-[9px] top-2 h-4 w-4 rounded-full border-2 border-white bg-blue-500 dark:border-dark-primary">
-                                </span>
-
-                                {{-- Card --}}
+                            <div class="relative mb-10 last:mb-0">
+                                {{-- Milestone Dot --}}
                                 <div
-                                    class="rounded-lg bg-gray-50 p-4 shadow-sm transition hover:shadow-md dark:bg-gray-800">
-
-                                    {{-- Commit Message --}}
-                                    <h3 class="text-sm font-semibold text-gray-900 dark:text-white lg:text-base">
-                                        {{ $message }}
-                                    </h3>
-
-                                    {{-- Meta Info --}}
-                                    <div class="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                                        <span class="font-medium text-gray-700 dark:text-gray-300">
-                                            {{ $name }}
-                                        </span>
-                                        <span class="mx-1">•</span>
-                                        <span>{{ $email }}</span>
-                                        <span class="mx-1">•</span>
-                                        <span>{{ $date }}</span>
-                                    </div>
-
+                                    class="absolute -left-[41px] flex h-6 w-6 items-center justify-center rounded-full border-4 border-white bg-red-600 shadow-sm ring-4 ring-zinc-50 dark:border-zinc-900 dark:ring-zinc-900">
+                                    <div class="h-1.5 w-1.5 rounded-full bg-white"></div>
                                 </div>
 
+                                {{-- Date Label --}}
+                                <time
+                                    class="mb-2 block text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+                                    {{ $date->translatedFormat('d F Y • H:i') }} WIB
+                                </time>
+
+                                {{-- Commit Card --}}
+                                <div
+                                    class="group rounded-2xl border border-zinc-100 bg-zinc-50/50 p-5 transition-all hover:border-red-200 hover:bg-white hover:shadow-xl hover:shadow-red-500/5 dark:border-zinc-800 dark:bg-zinc-800/30 dark:hover:border-red-900/50 dark:hover:bg-zinc-800/60">
+                                    <h3 class="font-bold leading-snug text-zinc-900 dark:text-white sm:text-lg">
+                                        {{ $message }}
+                                    </h3>
+                                    <div
+                                        class="mt-4 flex flex-wrap items-center gap-3 border-t border-zinc-100 pt-4 dark:border-zinc-800/50">
+                                        {{-- Committer Avatar (Placeholder Initials) --}}
+                                        <div
+                                            class="flex h-7 w-7 items-center justify-center rounded-lg bg-zinc-200 text-[10px] font-bold text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400">
+                                            {{ strtoupper(substr($name, 0, 2)) }}
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <span
+                                                class="text-xs font-bold text-zinc-700 dark:text-zinc-300">{{ $name }}</span>
+                                            <span
+                                                class="text-[10px] text-zinc-500 dark:text-zinc-500">{{ $email }}</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         @endforeach
-
                     </div>
                 </div>
-            @endif
+
+                {{-- Footer --}}
+                <div class="border-t border-zinc-100 bg-zinc-50/50 p-5 dark:border-zinc-800 dark:bg-zinc-950/20">
+                    <button @click="show = false"
+                        class="w-full rounded-xl bg-zinc-900 px-4 py-3 text-sm font-bold text-white transition-all hover:bg-zinc-800 active:scale-[0.98] dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200">
+                        Selesai Membaca
+                    </button>
+                </div>
+            </div>
         </div>
-        {{-- end modal tambah laporan fondasi --}}
     @endteleport
 </section>
