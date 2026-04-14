@@ -1,12 +1,32 @@
 <x-drawer.navigation />
 
 <!-- drawer component -->
-<div class="fixed bottom-12 z-50 mx-auto w-11/12 translate-y-full overflow-y-auto rounded-t-2xl border bg-white transition-transform dark:border-gray-700 dark:bg-dark-primary md:hidden"
+<div x-data="{ search: '' }"
+    class="fixed bottom-0 left-0 right-0 z-50 mx-auto w-[96vw] max-w-lg translate-y-full overflow-hidden rounded-t-3xl border-x border-t border-zinc-200 bg-white/95 pb-16 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.3)] backdrop-blur-xl transition-transform dark:border-zinc-800 dark:bg-zinc-950/95 md:hidden"
     id="drawer-swipe" aria-labelledby="drawer-swipe-label" tabindex="-1">
-    <div class="cursor-pointer p-4 hover:bg-gray-50 dark:hover:bg-gray-700" data-drawer-toggle="drawer-swipe">
-        <span class="absolute left-1/2 top-3 h-1 w-8 -translate-x-1/2 rounded-xl bg-gray-300 dark:bg-gray-600"></span>
+
+    <!-- Drag Handle -->
+    <div class="cursor-pointer p-5 transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-900"
+        data-drawer-toggle="drawer-swipe">
+        <span
+            class="absolute left-1/2 top-4 h-1.5 w-12 -translate-x-1/2 rounded-full bg-zinc-300 dark:bg-zinc-700"></span>
     </div>
-    <div class="grid max-h-96 grid-cols-3 gap-6 overflow-y-auto px-4 pb-[60px] pt-4 lg:grid-cols-4">
+
+    <!-- Live Search Field -->
+    <div class="px-5 pb-4">
+        <div class="group relative">
+            <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-4">
+                <x-icons.search class="h-5 w-5 text-zinc-400 transition-colors group-focus-within:text-red-500" />
+            </div>
+            <input type="text" x-model="search"
+                class="block w-full rounded-2xl border-0 bg-zinc-50/50 p-3.5 ps-11 text-sm text-zinc-900 ring-1 ring-zinc-200 transition-all focus:ring-2 focus:ring-red-500 dark:bg-zinc-900/50 dark:text-white dark:placeholder-zinc-500 dark:ring-zinc-800"
+                placeholder="Cari menu...">
+        </div>
+    </div>
+
+    <!-- Menu Grid -->
+    <div
+        class="custom-scrollbar grid max-h-[60vh] grid-cols-3 gap-x-2 gap-y-6 overflow-y-auto px-4 pb-12 pt-2 md:grid-cols-4">
 
         @foreach ($drawerLinks as $item)
             @php
@@ -15,23 +35,31 @@
             @endphp
 
             @can($item['permission'])
-                <a class="{{ $isActive ? 'bg-gray-100 dark:bg-gray-700' : 'dark:bg-dark-primary bg-white' }} group cursor-pointer rounded-xl p-4 hover:bg-gray-100 dark:hover:bg-gray-600"
+                <a x-show="search === '' || '{{ strtolower($item['label']) }}'.includes(search.toLowerCase())"
+                    x-transition.opacity.duration.300ms
+                    class="{{ $isActive ? 'bg-red-50/50 dark:bg-red-500/10 ring-1 ring-red-200 dark:ring-red-900/50' : 'bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800/50' }} group flex cursor-pointer flex-col items-center rounded-2xl p-3 transition-all duration-300"
                     href="{{ route($item['link']) }}">
-                    <div
-                        class="{{ $isActive ? 'bg-gray-100 dark:bg-gray-700' : 'dark:bg-gray-600 bg-gray-200' }} mx-auto mb-2 flex h-[48px] max-h-[48px] w-[48px] max-w-[48px] items-center justify-center rounded-xl group-hover:bg-gray-100 dark:group-hover:bg-gray-600">
 
+                    <div
+                        class="{{ $isActive ? 'bg-red-600 text-white shadow-md shadow-red-500/30' : 'bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400 group-hover:bg-white dark:group-hover:bg-zinc-700 group-hover:shadow-sm group-hover:text-zinc-900 dark:group-hover:text-zinc-100 ring-1 ring-zinc-200 dark:ring-zinc-700' }} mb-3 flex h-14 w-14 items-center justify-center rounded-2xl transition-all duration-300 group-hover:-translate-y-1">
                         @if ($icon)
                             <x-dynamic-component :component="'icons.' . $icon"
-                                class="{{ $isActive ? 'text-red-600' : 'text-gray-400' }} h-7 w-7 transition-transform duration-500 ease-in-out group-hover:scale-125 group-hover:text-red-600" />
+                                class="{{ $isActive ? '' : 'group-hover:scale-110' }} h-7 w-7 transition-transform duration-300" />
                         @endif
-
                     </div>
+
                     <div
-                        class="{{ $isActive ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 ' }} text-center text-sm font-medium group-hover:text-gray-900 group-hover:dark:text-white">
+                        class="{{ $isActive ? 'text-red-700 dark:text-red-400 font-bold' : 'text-zinc-600 dark:text-zinc-400 font-medium group-hover:text-zinc-900 dark:group-hover:text-zinc-200' }} line-clamp-2 text-center text-xs tracking-tight transition-colors">
                         {{ $item['label'] }}
                     </div>
                 </a>
             @endcan
         @endforeach
+
+        <!-- Empty State -->
+        <div x-show="!$el.parentNode.querySelector('a:not([style*=\'display: none\'])')"
+            class="col-span-3 py-10 text-center text-sm text-zinc-500 dark:text-zinc-400" style="display: none;">
+            Menu tidak ditemukan.
+        </div>
     </div>
 </div>

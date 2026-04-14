@@ -11,7 +11,7 @@
 
     <x-utils.dynamic-background />
 
-    <div class="relative z-10 flex min-h-screen flex-col">
+    <div class="relative z-10 mb-5 flex min-h-screen flex-col">
         @if (session('status'))
             <x-notification-popup>
                 {{ session('status') }}
@@ -44,22 +44,23 @@
 
         </div>
 
-        {{-- bikin navigasi ala android --}}
-        @persist('mobile-drawer')
-            <x-drawer.mobile-menu />
-        @endpersist
+    </div>
 
-        {{-- preload --}}
-        <div class="fixed inset-0 z-50 bg-white dark:bg-zinc-950 md:z-[9999]" id="preloader">
-        </div>
+    {{-- bikin navigasi ala android --}}
+    @persist('mobile-drawer')
+        <x-drawer.mobile-menu />
+    @endpersist
 
-        {{-- scroll to top --}}
-        <div x-data="scrollToggle()" x-init="init()">
-            <a href="javascript:void(0)" @click="handleScroll" :class="atTop ? 'rotate-0' : 'rotate-180'"
-                class="fixed bottom-4 right-4 h-fit w-fit rounded-full bg-red-600 p-2.5 shadow-lg shadow-red-600/30 transition-all duration-300 ease-in-out hover:bg-red-700 lg:block">
-                <x-icons.carred-down class="h-6 w-6 text-white" id="scroll-to-top-icon" />
-            </a>
-        </div>
+    {{-- scroll to top --}}
+    <div x-data="scrollToggle()" x-init="init()">
+        <a href="javascript:void(0)" @click="handleScroll" :class="atTop ? 'rotate-0' : 'rotate-180'"
+            class="fixed bottom-24 right-4 z-50 h-fit w-fit rounded-full bg-red-600 p-2.5 shadow-lg shadow-red-600/30 transition-all duration-300 ease-in-out hover:bg-red-700 md:bottom-8 md:right-8 lg:block">
+            <x-icons.carred-down class="h-6 w-6 text-white" id="scroll-to-top-icon" />
+        </a>
+    </div>
+
+    {{-- preload --}}
+    <div class="fixed inset-0 z-50 bg-white dark:bg-zinc-950 md:z-[9999]" id="preloader">
     </div>
 
     <!-- js -->
