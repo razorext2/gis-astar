@@ -1,155 +1,222 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-	<div class="flex flex-col gap-4 rounded-xl">
-		<div
-			class="col-span-2 rounded-xl bg-white p-4 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 lg:p-6">
-			<div class="flex flex-col gap-4">
-				<h3
-					class="border-b border-gray-200 pb-4 text-base font-semibold tracking-wider text-gray-800 dark:border-gray-700 dark:text-white md:text-xl">
-					Data Pegawai
-				</h3>
+    <div class="flex flex-col gap-5">
+        {{-- Main Profile Section --}}
+        <div
+            class="flex flex-col rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 lg:p-7">
+            <div class="flex flex-col gap-6">
 
-				<div class="grid items-center space-y-4 tracking-wider lg:grid-cols-2 lg:space-x-10 lg:space-y-0 xl:space-x-20">
-					<div class="flex flex-col gap-4">
-						<div class="flex flex-row items-center gap-x-4">
-							<img class="h-20 w-20 rounded-lg object-cover"
-								src="{{ auth()->user()->profile_pic ? asset('storage/profile-pictures/' . auth()->user()->profile_pic) : asset('assets/img/profile-picture-5.jpg') }}"
-								alt="user photo" loading="lazy" onerror="this.src = '{{ asset('assets/img/noImage.webp') }}'">
+                <div class="flex items-center gap-2 border-b border-zinc-100 pb-4 dark:border-zinc-800">
+                    <div class="h-2 w-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,0.5)] dark:bg-red-700"></div>
+                    <h3 class="text-base font-bold tracking-wider text-zinc-800 dark:text-white md:text-xl">
+                        Informasi Pegawai
+                    </h3>
+                </div>
 
-							<div class="flex flex-col gap-y-1">
-								<span
-									class="w-fit rounded-md bg-green-700 px-2 text-xs text-green-300">{{ auth()->user()->roles->first()->name }}</span>
-								<h4 class="text-lg font-semibold text-gray-800 dark:text-white">{{ auth()->user()->name }}</h4>
-								<p class="text-xs text-gray-500 dark:text-gray-400">{{ auth()->user()->bio ?? 'Not set' }}</p>
-							</div>
-						</div>
+                <div
+                    class="grid items-start space-y-6 tracking-wide lg:grid-cols-[1.5fr,1fr] lg:space-x-10 lg:space-y-0 xl:space-x-16">
 
-						<div class="flex flex-row justify-between">
-							<div class="space-y-2">
-								<dl>
-									<dt class="font-medium text-gray-800 dark:text-white">Kode Jari</dt>
-									<dd class="text-gray-500 dark:text-gray-400">{{ $data->kode_pegawai ?? 'Not set' }}</dd>
-								</dl>
-								<dl>
-									<dt class="font-medium text-gray-800 dark:text-white">NIK Pegawai</dt>
-									<dd class="text-gray-500 dark:text-gray-400">{{ $data->nik_pegawai ?? 'Not set' }}</dd>
-								</dl>
-								<dl>
-									<dt class="font-medium text-gray-800 dark:text-white">Nama Panggilan</dt>
-									<dd class="text-gray-500 dark:text-gray-400">
-										{{ $data->nick_name ?? 'Not set' }}
-									</dd>
-								</dl>
-								<dl>
-									<dt class="font-medium text-gray-800 dark:text-white">Gender</dt>
-									<dd class="text-gray-500 dark:text-gray-400">
-										{{ $data->gender ?? 'Not set' }}
-									</dd>
-								</dl>
-								<dl>
-									<dt class="font-medium text-gray-800 dark:text-white">Tanggal Lahir</dt>
-									<dd class="text-gray-500 dark:text-gray-400">
-										{{ optional($data)->tgl_lahir ? \Carbon\Carbon::parse($data->tgl_lahir)->translatedFormat('d F Y') : 'Not set' }}
-									</dd>
-								</dl>
+                    {{-- Left Info Area --}}
+                    <div class="flex flex-col gap-6">
 
-							</div>
+                        {{-- User Header --}}
+                        <div class="flex flex-row items-center gap-x-5">
+                            <div class="group relative">
+                                <div
+                                    class="absolute -inset-0.5 rounded-[0.85rem] bg-gradient-to-br from-red-500 to-red-700 opacity-60 blur-sm transition-opacity duration-500 group-hover:opacity-100 dark:from-red-600/50 dark:to-red-900/50">
+                                </div>
+                                <img class="relative h-20 w-20 rounded-xl border-2 border-white object-cover shadow-sm dark:border-dark-secondary lg:h-24 lg:w-24"
+                                    src="{{ auth()->user()->profile_pic ? asset('storage/profile-pictures/' . auth()->user()->profile_pic) : asset('assets/img/profile-picture-5.jpg') }}"
+                                    alt="user photo" loading="lazy"
+                                    onerror="this.src = '{{ asset('assets/img/noImage.webp') }}'">
+                            </div>
 
-							<div class="space-y-2">
-								<dl>
-									<dt class="font-medium text-gray-800 dark:text-white">No. Telp/WA</dt>
-									<dd class="text-gray-500 dark:text-gray-400">
-										{{ $data->no_telp ?? 'Not set' }}
-									</dd>
-								</dl>
-								<dl>
-									<dt class="font-medium text-gray-800 dark:text-white">Alamat</dt>
-									<dd class="text-gray-500 dark:text-gray-400">
-										{{ $data->alamat ?? 'Not set' }}
-									</dd>
-								</dl>
-								<dl>
-									<dt class="font-medium text-gray-800 dark:text-white">Jabatan</dt>
-									<dd class="text-gray-500 dark:text-gray-400">{{ $data->jabatanRelasi->nama_jabatan ?? 'Not set' }}</dd>
-								</dl>
-								<dl>
-									<dt class="font-medium text-gray-800 dark:text-white">Golongan</dt>
-									<dd class="text-gray-500 dark:text-gray-400">
-										{{ $data->golonganRelasi->nama_golongan ?? 'Not set' }}
-									</dd>
-								</dl>
-								<dl>
-									<dt class="font-medium text-gray-800 dark:text-white">Storage</dt>
-									<dd class="text-gray-500 dark:text-gray-400">
-										{{ $data->storage ?? 'Not set' }}
-									</dd>
-								</dl>
-							</div>
-						</div>
-					</div>
+                            <div class="flex flex-col gap-y-1">
+                                <span
+                                    class="w-fit rounded bg-red-50 px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-widest text-red-600 dark:bg-red-500/10 dark:text-red-400">
+                                    {{ auth()->user()->roles->first()->name ?? 'User' }}
+                                </span>
+                                <h4 class="text-xl font-black text-zinc-900 dark:text-white lg:text-2xl">
+                                    {{ auth()->user()->name }}</h4>
+                                <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+                                    {{ auth()->user()->bio ?? 'Biografi belum disetel' }}</p>
+                            </div>
+                        </div>
 
-					<div class="rounded-lg p-4 ring-1 ring-gray-200 dark:border dark:border-gray-700 dark:ring-0">
-						<div class="flex flex-col space-y-2">
-							<p class="text-base font-semibold text-gray-700 dark:text-gray-200">Permissions</p>
+                        {{-- Data Lists --}}
+                        <div class="mt-2 grid grid-cols-1 gap-6 sm:grid-cols-2">
+                            <div class="flex flex-col gap-y-4">
+                                <dl>
+                                    <dt
+                                        class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                                        Kode Jari</dt>
+                                    <dd class="mt-1 text-sm font-medium text-zinc-800 dark:text-zinc-300">
+                                        {{ $data->kode_pegawai ?? '—' }}</dd>
+                                </dl>
+                                <dl>
+                                    <dt
+                                        class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                                        NIK Pegawai</dt>
+                                    <dd class="mt-1 text-sm font-medium text-zinc-800 dark:text-zinc-300">
+                                        {{ $data->nik_pegawai ?? '—' }}</dd>
+                                </dl>
+                                <dl>
+                                    <dt
+                                        class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                                        Nama Panggilan</dt>
+                                    <dd class="mt-1 text-sm font-medium text-zinc-800 dark:text-zinc-300">
+                                        {{ $data->nick_name ?? '—' }}</dd>
+                                </dl>
+                                <dl>
+                                    <dt
+                                        class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                                        Gender</dt>
+                                    <dd class="mt-1 text-sm font-medium text-zinc-800 dark:text-zinc-300">
+                                        {{ $data->gender ?? '—' }}</dd>
+                                </dl>
+                                <dl>
+                                    <dt
+                                        class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                                        Tanggal Lahir</dt>
+                                    <dd class="mt-1 text-sm font-medium text-zinc-800 dark:text-zinc-300">
+                                        {{ optional($data)->tgl_lahir ? \Carbon\Carbon::parse($data->tgl_lahir)->translatedFormat('d F Y') : '—' }}
+                                    </dd>
+                                </dl>
+                            </div>
 
-							<div class="flex max-h-56 flex-row flex-wrap gap-1 overflow-y-auto">
-								@foreach (auth()->user()->getPermissionsViaRoles() as $permission)
-									<span class="w-fit rounded bg-green-400 px-2 py-0.5 text-xs dark:bg-green-700 dark:text-green-300">
-										{{ $permission->name }}</span>
-								@endforeach
+                            <div class="flex flex-col gap-y-4">
+                                <dl>
+                                    <dt
+                                        class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                                        No. Telp/WA</dt>
+                                    <dd class="mt-1 text-sm font-medium text-zinc-800 dark:text-zinc-300">
+                                        {{ $data->no_telp ?? '—' }}</dd>
+                                </dl>
+                                <dl>
+                                    <dt
+                                        class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                                        Alamat</dt>
+                                    <dd class="mt-1 text-sm font-medium leading-relaxed text-zinc-800 dark:text-zinc-300">
+                                        {{ $data->alamat ?? '—' }}</dd>
+                                </dl>
+                                <dl>
+                                    <dt
+                                        class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                                        Jabatan</dt>
+                                    <dd class="mt-1 text-sm font-medium text-zinc-800 dark:text-zinc-300">
+                                        {{ $data->jabatanRelasi->nama_jabatan ?? '—' }}</dd>
+                                </dl>
+                                <dl>
+                                    <dt
+                                        class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                                        Golongan</dt>
+                                    <dd class="mt-1 text-sm font-medium text-zinc-800 dark:text-zinc-300">
+                                        {{ $data->golonganRelasi->nama_golongan ?? '—' }}</dd>
+                                </dl>
+                                <dl>
+                                    <dt
+                                        class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                                        Storage</dt>
+                                    <dd class="mt-1 text-sm font-medium text-zinc-800 dark:text-zinc-300">
+                                        {{ $data->storage ?? '—' }}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
 
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+                    {{-- Right Info Area : Permissions --}}
+                    <div
+                        class="h-full rounded-2xl bg-zinc-50 p-5 ring-1 ring-zinc-200 dark:bg-dark-secondary dark:ring-zinc-800">
+                        <div class="flex flex-col space-y-3">
+                            <div class="flex items-center gap-2">
+                                <x-icons.badge-check class="h-5 w-5 text-zinc-400 dark:text-zinc-500" />
+                                <p class="text-sm font-bold text-zinc-700 dark:text-zinc-300">Hak Akses (Permissions)</p>
+                            </div>
 
-		<div class="flex flex-col gap-4 lg:flex-row">
-			<div
-				class="col-span-2 max-h-fit content-center rounded-xl bg-white px-6 py-10 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 lg:col-span-1">
-				<div class="flex flex-col items-center gap-y-3">
-					<x-icons.file-pen class="h-20 w-20 text-gray-100 dark:text-gray-700/30" />
-					<h3 class="text-lg font-semibold text-gray-700 dark:text-white">Mulai buat laporanmu.</h3>
-					<p class="text-center text-gray-700 dark:text-gray-300">
-						Laporanmu akan membantu kamu untuk mengelola data dengan lebih mudah.
-					</p>
-					<div class="flex flex-wrap justify-center gap-2">
-						@can('collect-create')
-							<x-button.link href="{{ route('collect.index') }}" class="w-44 justify-center">
-								<x-slot name="icon">Laporan Koletor</x-slot>
-								<x-icons.arrow-right class="h-4 w-4 -rotate-45 text-green-500 dark:text-white" />
-							</x-button.link>
-						@endcan
-						@can('driver-create')
-							<x-button.link href="{{ route('driver.create') }}" class="w-44 justify-center">
-								<x-slot name="icon">Laporan Driver</x-slot>
-								<x-icons.arrow-right class="h-4 w-4 -rotate-45 text-green-500 dark:text-white" />
-							</x-button.link>
-						@endcan
-						@can('sales-create')
-							<x-button.link href="{{ route('sales.create') }}" class="w-44 justify-center">
-								<x-slot name="icon">Laporan Sales</x-slot>
-								<x-icons.arrow-right class="h-4 w-4 -rotate-45 text-green-500 dark:text-white" />
-							</x-button.link>
-						@endcan
-						@can('technician-create')
-							<x-button.link href="{{ route('technician.index') }}" class="w-44 justify-center">
-								<x-slot name="icon">Laporan Teknisi</x-slot>
-								<x-icons.arrow-right class="h-4 w-4 -rotate-45 text-green-500 dark:text-white" />
-							</x-button.link>
-						@endcan
-					</div>
-				</div>
-			</div>
+                            <div
+                                class="custom-scrollbar mt-1 flex max-h-80 min-h-72 flex-row flex-wrap content-start gap-1.5 overflow-y-auto pr-2">
+                                @forelse (auth()->user()->getPermissionsViaRoles() as $permission)
+                                    <span
+                                        class="w-fit rounded-md border border-zinc-200 bg-white px-2.5 py-1 text-xs font-medium text-zinc-600 shadow-sm transition hover:border-red-300 hover:text-red-700 dark:border-zinc-700 dark:bg-dark-primary dark:text-zinc-400 dark:hover:border-red-500 dark:hover:text-red-400">
+                                        {{ $permission->name }}
+                                    </span>
+                                @empty
+                                    <p class="text-xs italic text-zinc-500">Tidak ada permission.</p>
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
 
-			@if (auth()->user()->kode_pegawai)
-				<div
-					class="rounded-xl bg-white p-4 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700">
-					@livewire('utils.attendance-calendar')
-				</div>
-			@endif
-		</div>
+                </div>
+            </div>
+        </div>
 
-	</div>
+        {{-- Bottom Sections --}}
+        <div class="flex flex-col items-stretch gap-5 lg:flex-row">
+
+            {{-- Call To Action Widget --}}
+            <div
+                class="group relative flex-1 content-center overflow-hidden rounded-2xl bg-gradient-to-br from-red-600 to-red-800 px-6 py-10 shadow-sm ring-1 ring-red-500/50 dark:from-dark-secondary dark:to-dark-primary dark:shadow-none dark:ring-zinc-800">
+                {{-- Decorative background glow --}}
+                <div
+                    class="absolute -right-12 -top-12 h-44 w-44 rounded-full bg-white/10 blur-3xl transition-transform duration-1000 group-hover:scale-150 dark:bg-red-900/10">
+                </div>
+
+                <div class="relative z-10 flex flex-col items-center gap-y-4">
+                    <div
+                        class="rounded-full bg-white/20 p-4 backdrop-blur-md dark:border dark:border-zinc-700 dark:bg-dark-secondary/50">
+                        <x-icons.file-pen class="h-10 w-10 text-white drop-shadow-sm dark:text-red-400" />
+                    </div>
+
+                    <div class="text-center">
+                        <h3 class="text-xl font-bold tracking-wide text-white drop-shadow-sm lg:text-2xl">Mulai buat
+                            laporanmu!</h3>
+                        <p class="mx-auto mt-2 max-w-sm text-sm text-red-100 dark:text-zinc-400">
+                            Pelaporan yang konsisten mempermudah koordinasi dan tata kelola data sistem secara menyeluruh.
+                        </p>
+                    </div>
+
+                    <div class="mt-2 flex w-full flex-wrap justify-center gap-3">
+                        @can('collect-create')
+                            <x-button.link href="{{ route('collect.index') }}"
+                                class="w-full min-w-[140px] justify-center border-none !bg-white font-semibold !text-red-700 drop-shadow-sm hover:!bg-red-50 dark:!border-zinc-700 dark:!bg-dark-primary dark:!text-white dark:hover:!border-red-500 sm:w-auto">
+                                <x-slot name="icon">Koletor</x-slot>
+                                <x-icons.arrow-right class="h-4 w-4 -rotate-45" />
+                            </x-button.link>
+                        @endcan
+                        @can('driver-create')
+                            <x-button.link href="{{ route('driver.create') }}"
+                                class="w-full min-w-[140px] justify-center border-none !bg-white font-semibold !text-red-700 drop-shadow-sm hover:!bg-red-50 dark:!border-zinc-700 dark:!bg-dark-primary dark:!text-white dark:hover:!border-red-500 sm:w-auto">
+                                <x-slot name="icon">Driver</x-slot>
+                                <x-icons.arrow-right class="h-4 w-4 -rotate-45" />
+                            </x-button.link>
+                        @endcan
+                        @can('sales-create')
+                            <x-button.link href="{{ route('sales.create') }}"
+                                class="w-full min-w-[140px] justify-center border-none !bg-white font-semibold !text-red-700 drop-shadow-sm hover:!bg-red-50 dark:!border-zinc-700 dark:!bg-dark-primary dark:!text-white dark:hover:!border-red-500 sm:w-auto">
+                                <x-slot name="icon">Sales</x-slot>
+                                <x-icons.arrow-right class="h-4 w-4 -rotate-45" />
+                            </x-button.link>
+                        @endcan
+                        @can('technician-create')
+                            <x-button.link href="{{ route('technician.index') }}"
+                                class="w-full min-w-[140px] justify-center border-none !bg-white font-semibold !text-red-700 drop-shadow-sm hover:!bg-red-50 dark:!border-zinc-700 dark:!bg-dark-primary dark:!text-white dark:hover:!border-red-500 sm:w-auto">
+                                <x-slot name="icon">Teknisi</x-slot>
+                                <x-icons.arrow-right class="h-4 w-4 -rotate-45" />
+                            </x-button.link>
+                        @endcan
+                    </div>
+                </div>
+            </div>
+
+            {{-- Calendar Widget --}}
+            @if (auth()->user()->kode_pegawai)
+                <div
+                    class="flex-1 items-start rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800">
+                    @livewire('utils.attendance-calendar')
+                </div>
+            @endif
+        </div>
+
+    </div>
 @endsection
