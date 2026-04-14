@@ -19,9 +19,8 @@
                 <button
                     class="group flex h-[52px] w-[52px] items-center justify-center rounded-full bg-gradient-to-tr from-red-600 to-red-500 shadow-[0_8px_20px_-4px_rgba(220,38,38,0.4)] transition-all duration-300 ease-out will-change-transform hover:scale-105 hover:shadow-[0_12px_25px_-4px_rgba(220,38,38,0.5)] active:scale-95"
                     data-drawer-target="drawer-swipe" data-drawer-toggle="drawer-swipe" data-drawer-placement="bottom"
-                    data-drawer-backdrop-classes="bg-zinc-950/40 backdrop-blur-md dark:bg-zinc-950/70 fixed inset-0 z-40 transition-opacity"
-                    data-drawer-edge="true" data-drawer-edge-offset="-bottom-[6rem]" type="button"
-                    aria-controls="drawer-swipe">
+                    data-drawer-backdrop="false" data-drawer-edge="true" data-drawer-edge-offset="-bottom-[6rem]"
+                    type="button" aria-controls="drawer-swipe">
                     <x-icons.bar
                         class="h-6 w-6 text-white transition-transform duration-500 ease-in-out group-hover:rotate-180 group-hover:scale-110" />
                     <span class="sr-only">Menu Drawer</span>
