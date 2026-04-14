@@ -1,46 +1,53 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div class="mb-4">
-        @livewire('utils.greetings')
-    </div>
-    <div class="mb-4 grid grid-cols-1 gap-4 xl:gap-6">
+    <div class="flex flex-col gap-5">
 
-        <div
-            class="grid max-h-36 w-full grid-cols-3 rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-primary xl:p-6">
-            <div class="col-span-2">
-                <div>
-                    <div class="flex flex-row">
-                        <h2 class="font-base text-sm text-gray-400">
-                            Jadwal Kamu
-                        </h2>
+        {{-- Greetings --}}
+        <div>
+            @livewire('utils.greetings')
+        </div>
+
+        {{-- Schedule Card --}}
+        <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 lg:p-6">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex flex-col gap-1">
+                    <div class="flex items-center gap-2">
+                        <div class="h-2 w-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,0.5)]"></div>
+                        <p class="text-xs font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Jadwal
+                            Kamu</p>
                     </div>
-                    <h2 class="text-md font-medium text-gray-900 dark:text-white md:text-lg">
-                        {{ $getDay }}, 12 November 2024
+                    <h2 class="text-base font-semibold text-zinc-700 dark:text-zinc-300">
+                        {{ $getDay }}, {{ now()->translatedFormat('d F Y') }}
                     </h2>
                 </div>
-                <div>
-                    <p class="text-2xl font-medium text-gray-900 dark:text-white lg:text-4xl">
-                        @if ($getJadwal)
-                            {{ $getJadwal->jam_masuk }} - {{ $getJadwal->jam_keluar }}
-                        @else
-                            No data.
-                        @endif
-                    </p>
+                <div class="flex items-end gap-2">
+                    @if ($getJadwal)
+                        <p class="text-3xl font-black tabular-nums tracking-tight text-zinc-900 dark:text-white lg:text-4xl">
+                            {{ $getJadwal->jam_masuk }}
+                        </p>
+                        <span class="mb-1 text-sm font-medium text-zinc-400 dark:text-zinc-500">–</span>
+                        <p
+                            class="text-3xl font-black tabular-nums tracking-tight text-zinc-900 dark:text-white lg:text-4xl">
+                            {{ $getJadwal->jam_keluar }}
+                        </p>
+                    @else
+                        <p class="text-lg font-medium italic text-zinc-400 dark:text-zinc-500">Tidak ada jadwal hari ini.
+                        </p>
+                    @endif
                 </div>
             </div>
         </div>
 
+        {{-- Sales Percentage --}}
         @can('sales-create')
-            <div
-                class="grid w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-primary xl:p-6">
-
-                <div>
-                    <h2 class="font-base text-sm text-gray-400">
-                        Persentase Laporan diterima
-                    </h2>
+            <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 lg:p-6">
+                <div class="mb-4 flex items-center gap-2 border-b border-zinc-100 pb-4 dark:border-zinc-800">
+                    <div class="h-2 w-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,0.5)]"></div>
+                    <h3 class="text-base font-bold tracking-wide text-zinc-800 dark:text-white">
+                        Persentase Laporan Diterima
+                    </h3>
                 </div>
-
-                <div class="mt-2 grid gap-2 lg:grid-cols-3">
+                <div class="grid gap-3 lg:grid-cols-3">
                     <x-dashboard.plugin.percentage :label="'Laporan Sales Harian'" :total="$sales_total_daily" :approved="$sales_approved_daily" :percentage="$sales_approved_percentage_daily" />
 
                     <x-dashboard.plugin.percentage :label="'Laporan Sales Bulanan'" :total="$sales_total_monthly" :approved="$sales_approved_monthly" :percentage="$sales_approved_percentage_monthly" />
@@ -50,313 +57,266 @@
             </div>
         @endcan
 
+        {{-- Teknisi Report --}}
         @hasrole('Teknisi')
-            <livewire:plugin.tech-report-percentage />
+            <div class="rounded-2xl bg-white shadow-sm ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800">
+                <livewire:plugin.tech-report-percentage />
+            </div>
         @endhasrole
 
+        {{-- Attendance History (Desktop) --}}
         <div
-            class="hidden w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-primary lg:block xl:p-6">
-            <div>
-                <div class="flex flex-row">
-                    <h2 class="font-base text-sm text-gray-400">
-                        History
-                    </h2>
-                </div>
-                <h2 class="text-lg font-medium text-gray-900 dark:text-white">
-                    Absensi Kamu
-                </h2>
+            class="hidden rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 lg:block lg:p-6">
+            <div class="mb-5 flex items-center gap-2 border-b border-zinc-100 pb-4 dark:border-zinc-800">
+                <div class="h-2 w-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,0.5)]"></div>
+                <h3 class="text-base font-bold tracking-wide text-zinc-800 dark:text-white">History Absensi</h3>
             </div>
-            <div class="pl-4 pt-4">
 
-                <ol class="relative border-s border-gray-200 dark:border-gray-700">
-                    @foreach ($attendance_all as $index => $attendance)
-                        @if ($attendance['jam_masuk'])
-                            <li class="mb-5 ms-6">
-                                <span
-                                    class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 ring-8 ring-white dark:bg-blue-900 dark:ring-gray-900">
-                                    <img class="rounded-full shadow-lg"
-                                        src="{{ asset('assets/img/profile-picture-5.jpg') }}" alt="Bonnie image"
-                                        loading="lazy" />
-                                </span>
-                                <div
-                                    class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-md dark:border-gray-600 dark:bg-gray-700 dark:shadow-none sm:flex">
-                                    <div class="text-sm font-normal text-gray-500 dark:text-gray-300">
-                                        Kamu melakukan
-                                        <a class="font-semibold text-green-600 hover:underline dark:text-green-500"
-                                            href="#">
-                                            Clock-in
-                                        </a>
-                                        pada tanggal
-                                        <span
-                                            class="rounded bg-gray-100 px-0.5 py-1 text-xs font-normal text-gray-800 dark:bg-gray-600 dark:text-gray-300">
-                                            {{ \Carbon\Carbon::parse($attendance['jam_masuk'])->locale('id')->isoFormat('DD MMMM YYYY') }}
-                                        </span>, jam
-                                        <span
-                                            class="rounded bg-gray-100 px-0.5 py-1 text-xs font-normal text-gray-800 dark:bg-gray-600 dark:text-gray-300">
-                                            {{ \Carbon\Carbon::parse($attendance['jam_masuk'])->format('H:i:s') }}
-                                        </span>
-                                    </div>
-
-                                    <div class="flex flex-col items-end">
-                                        @php
-                                            $status = $attendance['status_in'];
-                                            $map = [
-                                                0 => [
-                                                    'color' => 'yellow',
-                                                    'text' => 'Diajukan',
-                                                ],
-                                                1 => [
-                                                    'color' => 'green',
-                                                    'text' => 'Diterima',
-                                                ],
-                                                2 => [
-                                                    'color' => 'red',
-                                                    'text' => 'Ditolak',
-                                                ],
-                                            ];
-                                            $color = $map[$status]['color'] ?? 'blue';
-                                            $text = $map[$status]['text'] ?? 'Dibatalkan';
-                                        @endphp
-
-                                        <span
-                                            class="bg-{{ $color }}-300 text-{{ $color }}-800 dark:bg-{{ $color }}-900 dark:text-{{ $color }}-300 rounded-lg px-2 py-0.5 text-xs font-normal">
-                                            {{ $text }}
-                                        </span>
-
-                                        <time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">
-                                            {{ \Carbon\Carbon::parse($attendance['jam_masuk'])->locale('id')->diffForHumans() }}
-                                        </time>
-                                    </div>
+            <ol class="relative border-s border-zinc-200 pl-4 dark:border-zinc-800">
+                @forelse ($attendance_all as $attendance)
+                    {{-- Clock In --}}
+                    @if ($attendance['jam_masuk'])
+                        <li class="mb-5 ms-5">
+                            <span
+                                class="absolute -start-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 ring-4 ring-white dark:bg-emerald-900/40 dark:ring-dark-primary">
+                                <div class="h-2 w-2 rounded-full bg-emerald-500"></div>
+                            </span>
+                            <div
+                                class="flex items-center justify-between rounded-xl border border-zinc-100 bg-zinc-50 px-4 py-3 dark:border-zinc-800 dark:bg-dark-secondary sm:flex">
+                                <div class="text-sm text-zinc-600 dark:text-zinc-300">
+                                    Kamu melakukan
+                                    <span class="font-bold text-emerald-600 dark:text-emerald-400">Clock-in</span>
+                                    pada
+                                    <span
+                                        class="rounded-md bg-zinc-100 px-1.5 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                                        {{ \Carbon\Carbon::parse($attendance['jam_masuk'])->locale('id')->isoFormat('DD MMM YYYY') }}
+                                    </span>
+                                    pukul
+                                    <span
+                                        class="rounded-md bg-zinc-100 px-1.5 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                                        {{ \Carbon\Carbon::parse($attendance['jam_masuk'])->format('H:i:s') }}
+                                    </span>
                                 </div>
-                            </li>
-                        @else
-                            <span class="ml-2 text-gray-900 dark:text-white"> Data tidak ditemukan </span>
-                        @endif
-                        @if ($attendance['latest_jam_keluar'])
-                            <li class="mb-5 ms-6">
-                                <span
-                                    class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 ring-8 ring-white dark:bg-blue-900 dark:ring-gray-900">
-                                    <img class="rounded-full shadow-lg"
-                                        src="{{ asset('assets/img/profile-picture-5.jpg') }}" alt="Bonnie image"
-                                        loading="lazy" />
-                                </span>
-                                <div
-                                    class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-md dark:border-gray-600 dark:bg-gray-700 dark:shadow-none sm:flex">
-                                    <div class="text-sm font-normal text-gray-500 dark:text-gray-300">
-                                        Kamu melakukan
-                                        <a class="font-semibold text-red-600 hover:underline dark:text-red-500"
-                                            href="#">
-                                            Clock-out
-                                        </a>
-                                        pada tanggal
-                                        <span
-                                            class="rounded bg-gray-100 px-0.5 py-0.5 text-xs font-normal text-gray-800 dark:bg-gray-600 dark:text-gray-300">
-                                            {{ \Carbon\Carbon::parse($attendance['latest_jam_keluar'])->locale('id')->isoFormat('DD MMMM YYYY') }}
-                                        </span>, jam
-                                        <span
-                                            class="rounded bg-gray-100 px-0.5 py-0.5 text-xs font-normal text-gray-800 dark:bg-gray-600 dark:text-gray-300">
-                                            {{ \Carbon\Carbon::parse($attendance['latest_jam_keluar'])->format('H:i:s') }}
-                                        </span>
-                                    </div>
-
-                                    <div class="flex flex-col items-end">
-                                        @php
-                                            $status = $attendance['status_out'];
-                                            $map = [
-                                                0 => [
-                                                    'color' => 'yellow',
-                                                    'text' => 'Diajukan',
-                                                ],
-                                                1 => [
-                                                    'color' => 'green',
-                                                    'text' => 'Diterima',
-                                                ],
-                                                2 => [
-                                                    'color' => 'red',
-                                                    'text' => 'Ditolak',
-                                                ],
-                                            ];
-                                            $color = $map[$status]['color'] ?? 'blue';
-                                            $text = $map[$status]['text'] ?? 'Dibatalkan';
-                                        @endphp
-
-                                        <span
-                                            class="bg-{{ $color }}-300 text-{{ $color }}-800 dark:bg-{{ $color }}-900 dark:text-{{ $color }}-300 rounded-lg px-2 py-0.5 text-xs font-normal">
-                                            {{ $text }}
-                                        </span>
-
-                                        <time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">
-                                            {{ \Carbon\Carbon::parse($attendance['latest_jam_keluar'])->locale('id')->diffForHumans() }}
-                                        </time>
-                                    </div>
+                                <div class="mt-2 flex shrink-0 flex-col items-end sm:mt-0">
+                                    @php
+                                        $status = $attendance['status_in'];
+                                        $statusMap = [
+                                            0 => [
+                                                'bg' => 'bg-yellow-100 dark:bg-yellow-900/30',
+                                                'text' => 'text-yellow-700 dark:text-yellow-400',
+                                                'label' => 'Diajukan',
+                                            ],
+                                            1 => [
+                                                'bg' => 'bg-emerald-100 dark:bg-emerald-900/30',
+                                                'text' => 'text-emerald-700 dark:text-emerald-400',
+                                                'label' => 'Diterima',
+                                            ],
+                                            2 => [
+                                                'bg' => 'bg-red-100 dark:bg-red-900/30',
+                                                'text' => 'text-red-700 dark:text-red-400',
+                                                'label' => 'Ditolak',
+                                            ],
+                                        ];
+                                        $s = $statusMap[$status] ?? [
+                                            'bg' => 'bg-zinc-100 dark:bg-zinc-800',
+                                            'text' => 'text-zinc-500',
+                                            'label' => 'Dibatalkan',
+                                        ];
+                                    @endphp
+                                    <span
+                                        class="{{ $s['bg'] }} {{ $s['text'] }} rounded-md px-2 py-0.5 text-xs font-semibold">
+                                        {{ $s['label'] }}
+                                    </span>
+                                    <time class="mt-1 text-xs text-zinc-400">
+                                        {{ \Carbon\Carbon::parse($attendance['jam_masuk'])->locale('id')->diffForHumans() }}
+                                    </time>
                                 </div>
-                            </li>
-                        @endif
-                    @endforeach
+                            </div>
+                        </li>
+                    @else
+                        <li class="mb-5 ms-5">
+                            <span
+                                class="absolute -start-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-zinc-100 ring-4 ring-white dark:bg-zinc-800 dark:ring-dark-primary">
+                                <div class="h-2 w-2 rounded-full bg-zinc-400"></div>
+                            </span>
+                            <p class="text-sm italic text-zinc-400 dark:text-zinc-600">Data tidak ditemukan</p>
+                        </li>
+                    @endif
 
-                </ol>
-
-            </div>
+                    {{-- Clock Out --}}
+                    @if ($attendance['latest_jam_keluar'])
+                        <li class="mb-5 ms-5">
+                            <span
+                                class="absolute -start-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-red-100 ring-4 ring-white dark:bg-red-900/40 dark:ring-dark-primary">
+                                <div class="h-2 w-2 rounded-full bg-red-500"></div>
+                            </span>
+                            <div
+                                class="flex items-center justify-between rounded-xl border border-zinc-100 bg-zinc-50 px-4 py-3 dark:border-zinc-800 dark:bg-dark-secondary sm:flex">
+                                <div class="text-sm text-zinc-600 dark:text-zinc-300">
+                                    Kamu melakukan
+                                    <span class="font-bold text-red-600 dark:text-red-400">Clock-out</span>
+                                    pada
+                                    <span
+                                        class="rounded-md bg-zinc-100 px-1.5 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                                        {{ \Carbon\Carbon::parse($attendance['latest_jam_keluar'])->locale('id')->isoFormat('DD MMM YYYY') }}
+                                    </span>
+                                    pukul
+                                    <span
+                                        class="rounded-md bg-zinc-100 px-1.5 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                                        {{ \Carbon\Carbon::parse($attendance['latest_jam_keluar'])->format('H:i:s') }}
+                                    </span>
+                                </div>
+                                <div class="mt-2 flex shrink-0 flex-col items-end sm:mt-0">
+                                    @php
+                                        $status = $attendance['status_out'];
+                                        $s = $statusMap[$status] ?? [
+                                            'bg' => 'bg-zinc-100 dark:bg-zinc-800',
+                                            'text' => 'text-zinc-500',
+                                            'label' => 'Dibatalkan',
+                                        ];
+                                    @endphp
+                                    <span
+                                        class="{{ $s['bg'] }} {{ $s['text'] }} rounded-md px-2 py-0.5 text-xs font-semibold">
+                                        {{ $s['label'] }}
+                                    </span>
+                                    <time class="mt-1 text-xs text-zinc-400">
+                                        {{ \Carbon\Carbon::parse($attendance['latest_jam_keluar'])->locale('id')->diffForHumans() }}
+                                    </time>
+                                </div>
+                            </div>
+                        </li>
+                    @endif
+                @empty
+                    <li class="ms-5">
+                        <p class="text-sm italic text-zinc-400 dark:text-zinc-600">Belum ada riwayat absensi.</p>
+                    </li>
+                @endforelse
+            </ol>
         </div>
 
-        {{-- all menu --}}
+        {{-- All Menu (Mobile only) --}}
         <div
-            class="w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-primary md:hidden lg:col-span-2 xl:col-span-3 xl:p-6">
-            <div>
-                <div class="flex flex-row">
-                    <h2 class="font-base text-sm text-gray-400">
-                        All
-                    </h2>
-                </div>
-                <h2 class="text-lg font-medium text-gray-900 dark:text-white">
-                    Menu
-                </h2>
+            class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 md:hidden lg:p-6">
+            <div class="mb-4 flex items-center gap-2 border-b border-zinc-100 pb-4 dark:border-zinc-800">
+                <div class="h-2 w-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,0.5)]"></div>
+                <h3 class="text-base font-bold tracking-wide text-zinc-800 dark:text-white">Menu</h3>
             </div>
-            <div class="pt-2">
+            <div class="pt-1">
                 <x-drawer.dashboard-menu />
             </div>
         </div>
-        {{-- end all menu --}}
 
-        {{-- attendance sub menu --}}
+        {{-- Attendance History (Mobile only) --}}
         <div
-            class="w-full rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-primary lg:hidden xl:p-6">
-            <div>
-                <div class="flex flex-row">
-                    <h2 class="font-base text-sm text-gray-400">
-                        History
-                    </h2>
-                </div>
-                <h2 class="text-lg font-medium text-gray-900 dark:text-white">
-                    Absensi Kamu
-                </h2>
+            class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 lg:hidden lg:p-6">
+            <div class="mb-5 flex items-center gap-2 border-b border-zinc-100 pb-4 dark:border-zinc-800">
+                <div class="h-2 w-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,0.5)]"></div>
+                <h3 class="text-base font-bold tracking-wide text-zinc-800 dark:text-white">History Absensi</h3>
             </div>
 
-            <div class="pl-4 pt-4">
-
-                <ol class="relative border-s border-gray-200 dark:border-gray-700">
-                    @foreach ($attendance_all as $index => $attendance)
-                        @if ($attendance['jam_masuk'])
-                            <li class="mb-5 ms-6">
-                                <span
-                                    class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 ring-8 ring-white dark:bg-blue-900 dark:ring-gray-900">
-                                    <img class="rounded-full shadow-lg"
-                                        src="{{ asset('assets/img/profile-picture-5.jpg') }}" alt="Bonnie image"
-                                        loading="lazy" />
-                                </span>
-                                <div
-                                    class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-md dark:border-gray-600 dark:bg-gray-700 dark:shadow-none sm:flex">
-
-                                    <div class="flex flex-row items-center gap-x-1">
-                                        @php
-                                            $status = $attendance['status_in'];
-                                            $map = [
-                                                0 => [
-                                                    'color' => 'yellow',
-                                                    'text' => 'Diajukan',
-                                                ],
-                                                1 => [
-                                                    'color' => 'green',
-                                                    'text' => 'Diterima',
-                                                ],
-                                                2 => [
-                                                    'color' => 'red',
-                                                    'text' => 'Ditolak',
-                                                ],
-                                            ];
-                                            $color = $map[$status]['color'] ?? 'blue';
-                                            $text = $map[$status]['text'] ?? 'Dibatalkan';
-                                        @endphp
-
-                                        <time class="text-xs font-normal text-gray-400">
-                                            {{ \Carbon\Carbon::parse($attendance['jam_masuk'])->locale('id')->diffForHumans() }}
-                                        </time>
-
-                                        <span
-                                            class="bg-{{ $color }}-300 text-{{ $color }}-800 dark:bg-{{ $color }}-900 dark:text-{{ $color }}-300 rounded-md px-2 py-0.5 text-xs font-normal">
-                                            {{ $text }}
-                                        </span>
-                                    </div>
-
-                                    <div class="text-sm font-normal text-gray-500 dark:text-gray-300">
-                                        Kamu melakukan
-                                        <a class="font-semibold text-green-600 hover:underline dark:text-green-500"
-                                            href="#">
-                                            Clock-in
-                                        </a>
-                                        pada jam
-                                        <span
-                                            class="rounded bg-gray-100 px-0.5 py-1 text-xs font-normal text-gray-800 dark:bg-gray-600 dark:text-gray-300">
-                                            {{ \Carbon\Carbon::parse($attendance['jam_masuk'])->format('H:i:s') }}
-                                        </span>
-                                    </div>
+            <ol class="relative border-s border-zinc-200 pl-4 dark:border-zinc-800">
+                @forelse ($attendance_all as $attendance)
+                    @if ($attendance['jam_masuk'])
+                        <li class="mb-5 ms-5">
+                            <span
+                                class="absolute -start-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 ring-4 ring-white dark:bg-emerald-900/40 dark:ring-dark-primary">
+                                <div class="h-2 w-2 rounded-full bg-emerald-500"></div>
+                            </span>
+                            <div
+                                class="rounded-xl border border-zinc-100 bg-zinc-50 px-4 py-3 dark:border-zinc-800 dark:bg-dark-secondary">
+                                <div class="mb-1.5 flex items-center gap-2">
+                                    @php
+                                        $status = $attendance['status_in'];
+                                        $statusMap = [
+                                            0 => [
+                                                'bg' => 'bg-yellow-100 dark:bg-yellow-900/30',
+                                                'text' => 'text-yellow-700 dark:text-yellow-400',
+                                                'label' => 'Diajukan',
+                                            ],
+                                            1 => [
+                                                'bg' => 'bg-emerald-100 dark:bg-emerald-900/30',
+                                                'text' => 'text-emerald-700 dark:text-emerald-400',
+                                                'label' => 'Diterima',
+                                            ],
+                                            2 => [
+                                                'bg' => 'bg-red-100 dark:bg-red-900/30',
+                                                'text' => 'text-red-700 dark:text-red-400',
+                                                'label' => 'Ditolak',
+                                            ],
+                                        ];
+                                        $s = $statusMap[$status] ?? [
+                                            'bg' => 'bg-zinc-100 dark:bg-zinc-800',
+                                            'text' => 'text-zinc-500',
+                                            'label' => 'Dibatalkan',
+                                        ];
+                                    @endphp
+                                    <time class="text-xs text-zinc-400">
+                                        {{ \Carbon\Carbon::parse($attendance['jam_masuk'])->locale('id')->diffForHumans() }}
+                                    </time>
+                                    <span
+                                        class="{{ $s['bg'] }} {{ $s['text'] }} rounded-md px-2 py-0.5 text-xs font-semibold">
+                                        {{ $s['label'] }}
+                                    </span>
                                 </div>
-                            </li>
-                        @else
-                            <span class="ml-2 text-gray-900 dark:text-white"> Data tidak ditemukan </span>
-                        @endif
-                        @if ($attendance['latest_jam_keluar'])
-                            <li class="mb-5 ms-6">
-                                <span
-                                    class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 ring-8 ring-white dark:bg-blue-900 dark:ring-gray-900">
-                                    <img class="rounded-full shadow-lg"
-                                        src="{{ asset('assets/img/profile-picture-5.jpg') }}" alt="Bonnie image"
-                                        loading="lazy" />
-                                </span>
-                                <div
-                                    class="items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-md dark:border-gray-600 dark:bg-gray-700 dark:shadow-none sm:flex">
-                                    <div class="flex flex-row items-center gap-x-1">
-                                        @php
-                                            $status = $attendance['status_out'];
-                                            $map = [
-                                                0 => [
-                                                    'color' => 'yellow',
-                                                    'text' => 'Diajukan',
-                                                ],
-                                                1 => [
-                                                    'color' => 'green',
-                                                    'text' => 'Diterima',
-                                                ],
-                                                2 => [
-                                                    'color' => 'red',
-                                                    'text' => 'Ditolak',
-                                                ],
-                                            ];
-                                            $color = $map[$status]['color'] ?? 'blue';
-                                            $text = $map[$status]['text'] ?? 'Dibatalkan';
-                                        @endphp
+                                <p class="text-sm text-zinc-600 dark:text-zinc-300">
+                                    <span class="font-bold text-emerald-600 dark:text-emerald-400">Clock-in</span>
+                                    pukul
+                                    <span
+                                        class="rounded-md bg-zinc-100 px-1.5 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                                        {{ \Carbon\Carbon::parse($attendance['jam_masuk'])->format('H:i:s') }}
+                                    </span>
+                                </p>
+                            </div>
+                        </li>
+                    @else
+                        <li class="mb-5 ms-5">
+                            <p class="text-sm italic text-zinc-400">Data tidak ditemukan</p>
+                        </li>
+                    @endif
 
-                                        <time class="text-xs font-normal text-gray-400">
-                                            {{ \Carbon\Carbon::parse($attendance['latest_jam_keluar'])->locale('id')->diffForHumans() }}
-                                        </time>
-
-                                        <span
-                                            class="bg-{{ $color }}-300 text-{{ $color }}-800 dark:bg-{{ $color }}-900 dark:text-{{ $color }}-300 rounded-md px-2 py-0.5 text-xs font-normal">
-                                            {{ $text }}
-                                        </span>
-                                    </div>
-                                    <div class="text-sm font-normal text-gray-500 dark:text-gray-300">
-                                        Kamu melakukan
-                                        <a class="font-semibold text-red-600 hover:underline dark:text-red-500"
-                                            href="#">
-                                            Clock-out
-                                        </a>
-                                        pada jam
-                                        <span
-                                            class="rounded bg-gray-100 px-0.5 py-0.5 text-xs font-normal text-gray-800 dark:bg-gray-600 dark:text-gray-300">
-                                            {{ \Carbon\Carbon::parse($attendance['latest_jam_keluar'])->format('H:i:s') }}
-                                        </span>
-
-                                    </div>
+                    @if ($attendance['latest_jam_keluar'])
+                        <li class="mb-5 ms-5">
+                            <span
+                                class="absolute -start-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-red-100 ring-4 ring-white dark:bg-red-900/40 dark:ring-dark-primary">
+                                <div class="h-2 w-2 rounded-full bg-red-500"></div>
+                            </span>
+                            <div
+                                class="rounded-xl border border-zinc-100 bg-zinc-50 px-4 py-3 dark:border-zinc-800 dark:bg-dark-secondary">
+                                <div class="mb-1.5 flex items-center gap-2">
+                                    @php
+                                        $status = $attendance['status_out'];
+                                        $s = $statusMap[$status] ?? [
+                                            'bg' => 'bg-zinc-100 dark:bg-zinc-800',
+                                            'text' => 'text-zinc-500',
+                                            'label' => 'Dibatalkan',
+                                        ];
+                                    @endphp
+                                    <time class="text-xs text-zinc-400">
+                                        {{ \Carbon\Carbon::parse($attendance['latest_jam_keluar'])->locale('id')->diffForHumans() }}
+                                    </time>
+                                    <span
+                                        class="{{ $s['bg'] }} {{ $s['text'] }} rounded-md px-2 py-0.5 text-xs font-semibold">
+                                        {{ $s['label'] }}
+                                    </span>
                                 </div>
-                            </li>
-                        @endif
-                    @endforeach
-
-                </ol>
-
-            </div>
+                                <p class="text-sm text-zinc-600 dark:text-zinc-300">
+                                    <span class="font-bold text-red-600 dark:text-red-400">Clock-out</span>
+                                    pukul
+                                    <span
+                                        class="rounded-md bg-zinc-100 px-1.5 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                                        {{ \Carbon\Carbon::parse($attendance['latest_jam_keluar'])->format('H:i:s') }}
+                                    </span>
+                                </p>
+                            </div>
+                        </li>
+                    @endif
+                @empty
+                    <li class="ms-5">
+                        <p class="text-sm italic text-zinc-400 dark:text-zinc-600">Belum ada riwayat absensi.</p>
+                    </li>
+                @endforelse
+            </ol>
         </div>
-        {{-- end attendance sub menu --}}
+
     </div>
 @endsection
