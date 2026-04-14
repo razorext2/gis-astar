@@ -13,9 +13,10 @@ class Card extends Component
         $datas = [
             [
                 'permission' => 'users-create',
-                'label' => 'Total pengguna',
+                'label' => 'Pengguna',
                 'count' => \App\Models\User::count(),
                 'indicator' => 'Pegawai',
+                'icon' => 'icons.users',
             ],
             [
                 'permission' => 'pegawai-list',
@@ -23,10 +24,11 @@ class Card extends Component
                 'count' => \App\Models\Attendance::whereDate('created_at', \Carbon\Carbon::today())
                     ->count(),
                 'indicator' => 'Orang',
+                'icon' => 'icons.check',
             ],
             [
                 'permission' => 'collect-edit',
-                'label' => 'Lap. kolektor blm acc',
+                'label' => 'Kolektor',
                 'count' => auth()->user()->hasRole('Collector')
                     ? Collector::needApprove()
                         ->where('kode_pegawai', auth()->user()->kode_pegawai)
@@ -34,10 +36,11 @@ class Card extends Component
                     : Collector::needApprove()
                         ->count(),
                 'indicator' => 'Laporan',
+                'icon' => 'icons.wallet',
             ],
             [
                 'permission' => 'sales-edit',
-                'label' => 'Total lap. sales blm acc',
+                'label' => 'Sales',
                 'count' => auth()->user()->hasRole('Sales')
                     ? Sales::needApprove()
                         ->where('kode_pegawai', auth()->user()->kode_pegawai)
@@ -45,6 +48,7 @@ class Card extends Component
                     : Sales::needApprove()
                         ->count(),
                 'indicator' => 'Laporan',
+                'icon' => 'icons.cash-register',
             ],
         ];
 

@@ -29,9 +29,7 @@
         </div>
 
         {{-- carousel for cards --}}
-        @persist('card-carousel')
-            @livewire('components.card')
-        @endpersist
+        @livewire('components.card')
 
         {{-- announcement --}}
         @livewire('utils.announcement-container')
