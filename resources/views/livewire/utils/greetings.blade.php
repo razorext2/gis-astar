@@ -1,6 +1,23 @@
 <div
-    class="flex flex-col rounded-xl bg-red-600 p-4 shadow-md ring-1 ring-gray-200 dark:bg-red-700 dark:shadow-none dark:ring-gray-700 sm:p-6">
-    <span class="text-sm font-bold text-white lg:text-base">{{ $greet }}</span>
-    <span class="font-gaming text-xl text-white lg:text-2xl">{{ auth()->user()->name }}</span>
-    <span class="text-sm italic text-red-200 lg:text-base">"{{ $pesan }}"</span>
+    class="group relative flex flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-red-600 to-red-800 p-5 shadow-lg shadow-red-600/20 ring-1 ring-red-500/50 dark:from-dark-secondary dark:to-dark-primary dark:shadow-none dark:ring-zinc-800 sm:p-6">
+
+    {{-- Decorative Background Pattern --}}
+    <div
+        class="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-3xl transition-transform duration-700 group-hover:scale-150 dark:bg-red-900/10">
+    </div>
+
+    <div class="relative z-10 flex flex-col">
+        <div class="mb-1 flex items-center gap-2">
+            <span class="text-sm font-medium text-red-100 dark:text-zinc-400 lg:text-base">{{ $greet }}</span>
+        </div>
+
+        <span
+            class="font-gaming text-xl tracking-wide text-white drop-shadow-sm lg:text-2xl">{{ auth()->user()->name }}</span>
+
+        <div
+            class="mt-4 border-l-2 border-red-400/50 pl-3 transition-colors duration-300 group-hover:border-red-300 dark:border-zinc-700 dark:group-hover:border-zinc-500">
+            <p class="text-sm italic leading-relaxed text-red-50 dark:text-zinc-400 lg:text-base">"{{ $pesan }}"
+            </p>
+        </div>
+    </div>
 </div>

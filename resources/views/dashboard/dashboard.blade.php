@@ -1,125 +1,192 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-	<div class="flex flex-col">
-		<div class="mb-4">
-			@livewire('utils.greetings')
-		</div>
+    <div class="flex flex-col">
+        {{-- Greetings Section --}}
+        <div class="mb-4">
+            @livewire('utils.greetings')
+        </div>
 
-		<div class="mb-4 flex flex-col lg:grid lg:grid-cols-3 lg:gap-x-4">
+        <div class="mb-4 flex flex-col items-stretch lg:grid lg:grid-cols-3 lg:gap-x-4">
 
-			<form id="attend-in" action="{{ route('attendanceIn.index') }}"></form>
-			<form id="attend-out" action="{{ route('attendanceOut.index') }}"></form>
+            <form id="attend-in" action="{{ route('attendanceIn.index') }}"></form>
+            <form id="attend-out" action="{{ route('attendanceOut.index') }}"></form>
 
-			<!-- Chart -->
-			<div
-				class="col-span-2 mb-4 flex h-full flex-col rounded-xl border border-gray-200 bg-white p-4 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none md:p-6 lg:mb-0">
-				<div class="mb-5 flex justify-between">
-					<div>
-						<p class="mb-2 text-3xl font-bold leading-none text-gray-900 dark:text-white">
-							{{ $yearNow }}
-						</p>
-						<p class="text-base font-normal text-gray-500 dark:text-gray-300">
-							Data 7 hari kebelakang
-						</p>
-					</div>
-					<div class="flex items-center px-2.5 py-0.5 text-center text-base font-semibold text-green-500 dark:text-white">
-						{{ $formattedDateRange }}
-					</div>
-				</div>
+            <!-- Chart Section -->
+            <div
+                class="col-span-2 mb-4 flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none md:p-6 lg:mb-0">
+                <div class="mb-5 flex items-start justify-between">
+                    <div>
+                        <p class="mb-1 text-3xl font-black tracking-tight text-zinc-900 dark:text-white">
+                            {{ $yearNow }}
+                        </p>
+                        <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+                            Menampilkan data 7 hari kebelakang
+                        </p>
+                    </div>
+                    <div
+                        class="flex items-center rounded-lg bg-red-50 px-3 py-1 text-center text-sm font-bold text-red-700 dark:bg-red-700/10 dark:text-red-500">
+                        {{ $formattedDateRange }}
+                    </div>
+                </div>
 
-				{{-- chart here --}}
-				<livewire:chart.line />
+                {{-- Livewire Chart --}}
+                <div class="relative min-h-0 w-full flex-1 overflow-hidden px-1 py-2">
+                    <livewire:chart.line />
+                </div>
 
-				<div class="justify-between border-t border-gray-200 dark:border-gray-700">
-					<div class="flex items-center justify-between pt-5">
+                <div class="mt-4 border-t border-zinc-100 pt-5 dark:border-zinc-800">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
 
-						<x-button.primary form="attend-in" type="submit">
-							<x-slot name="icon">
-								<x-icons.angle-right class="icon h-6 w-6 text-green-500 dark:text-white" />
-							</x-slot>
-							Absen masuk
-						</x-button.primary>
+                        <x-button.primary form="attend-in" type="submit"
+                            class="flex-1 justify-center bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 sm:flex-none">
+                            <x-slot name="icon">
+                                <x-icons.angle-right class="icon h-5 w-5 text-white" />
+                            </x-slot>
+                            Absen Masuk
+                        </x-button.primary>
 
-						<x-button.danger form="attend-out" type="submit">
-							<x-slot name="icon">
-								<x-icons.angle-left class="icon h-6 w-6 text-green-500 dark:text-white" />
-							</x-slot>
-							Absen keluar
-						</x-button.danger>
-					</div>
-				</div>
-			</div>
-			<!-- End Chart -->
+                        <x-button.danger form="attend-out" type="submit"
+                            class="flex-1 justify-center !bg-red-700 text-white hover:!bg-red-800 dark:!bg-red-700 dark:hover:!bg-red-800 sm:flex-none">
+                            <x-slot name="icon">
+                                <x-icons.angle-left class="icon h-5 w-5 text-white" />
+                            </x-slot>
+                            Absen Keluar
+                        </x-button.danger>
+                    </div>
+                </div>
+            </div>
+            <!-- End Chart Section -->
 
-			<!-- Notification -->
-			<div class="grid grid-cols-1 gap-y-4">
+            <!-- Notifications Section -->
+            <div class="grid grid-cols-1 gap-y-4">
 
-				<div
-					class="flex flex-col rounded-xl border border-gray-200 bg-white p-4 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none">
+                {{-- Notification In --}}
+                <div
+                    class="flex h-[340px] flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none">
 
-					<p class="font-base text-sm text-gray-500 dark:text-gray-400">
-						Absen Masuk
-					</p>
-					<p class="text-md font-medium text-gray-900 dark:text-white">
-						{{ \Carbon\Carbon::today()->locale('id')->isoFormat('D MMMM YYYY') }}
-					</p>
-					<ul class="h-44 overflow-y-auto text-gray-700" aria-labelledby="dropdownUsersButton">
+                    <div class="mb-4 flex items-center justify-between border-b border-zinc-100 pb-3 dark:border-zinc-800">
+                        <div class="flex items-center gap-2">
+                            <div class="h-2 w-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
+                            <p class="text-sm font-semibold text-zinc-600 dark:text-zinc-300">
+                                Absen Masuk
+                            </p>
+                        </div>
+                        <p class="text-xs font-medium text-zinc-400 dark:text-zinc-500">
+                            {{ \Carbon\Carbon::today()->locale('id')->isoFormat('D MMMM') }}
+                        </p>
+                    </div>
 
-						@if (!empty($attendance_today))
-							@foreach ($attendance_today as $at)
-								<li>
-									<p
-										class="my-2 flex rounded-lg bg-green-500 bg-none p-2 text-xs text-white hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800">
-										<img class="me-3 h-6 w-6 rounded-full" src="{{ asset('assets/img/profile-picture-5.jpg') }}" alt="Jese image"
-											loading="lazy">
-										<span class="leading-relaxed">
-											{{ $at->pegawaiRelasi->full_name ?? 'N/A' }}, melakukan absensi <b
-												class="rounded bg-green-800 px-1 py-0.5 text-white">Masuk</b> pada
-											pukul
-											{{ \Carbon\Carbon::parse($at->jam_masuk)->format('H:i') }}
-										</span>
-									</p>
-								</li>
-							@endforeach
-						@else
-							<li>
-								<span class="my-2 flex items-center rounded-xl">
-									Belum ada absensi hari ini
-								</span>
-							</li>
-						@endif
+                    <ul class="custom-scrollbar flex-1 space-y-3 overflow-y-auto pr-2 font-sans"
+                        aria-labelledby="dropdownUsersButton">
+                        @if ($attendance_today->isNotEmpty())
+                            @foreach ($attendance_today as $at)
+                                <li class="group">
+                                    <div
+                                        class="flex items-start rounded-xl bg-zinc-50 p-3 transition-colors hover:bg-blue-50 dark:bg-dark-secondary dark:hover:bg-blue-900/10">
+                                        <img class="me-3 mt-0.5 h-8 w-8 rounded-full border border-zinc-200 object-cover shadow-sm dark:border-zinc-700"
+                                            src="{{ asset('assets/img/profile-picture-5.jpg') }}" alt="User image"
+                                            loading="lazy">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-bold text-zinc-800 dark:text-white">
+                                                {{ $at->pegawaiRelasi->full_name ?? 'Pegawai N/A' }}
+                                            </span>
+                                            <span class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+                                                Melakukan absensi masuk pada pukul
+                                                <b
+                                                    class="ml-1 rounded bg-blue-100 px-1.5 py-0.5 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                                                    {{ \Carbon\Carbon::parse($at->jam_masuk)->format('H:i') }}
+                                                </b>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                            @endforeach
+                        @else
+                            <li class="flex h-full items-center justify-center">
+                                <span class="text-center text-sm font-medium italic text-zinc-400 dark:text-zinc-500">
+                                    Belum ada absensi masuk hari ini
+                                </span>
+                            </li>
+                        @endif
+                    </ul>
+                </div>
 
-					</ul>
-				</div>
+                {{-- Notification Out --}}
+                <div
+                    class="flex h-[340px] flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none">
 
-				<div
-					class="flex flex-col rounded-xl border border-gray-200 bg-white p-4 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none">
+                    <div class="mb-4 flex items-center justify-between border-b border-zinc-100 pb-3 dark:border-zinc-800">
+                        <div class="flex items-center gap-2">
+                            <div
+                                class="h-2 w-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,0.5)] dark:bg-red-700">
+                            </div>
+                            <p class="text-sm font-semibold text-zinc-600 dark:text-zinc-300">
+                                Absen Keluar
+                            </p>
+                        </div>
+                        <p class="text-xs font-medium text-zinc-400 dark:text-zinc-500">
+                            {{ \Carbon\Carbon::today()->locale('id')->isoFormat('D MMMM') }}
+                        </p>
+                    </div>
 
-					<p class="font-base text-sm text-gray-400">
-						Absen Keluar
-					</p>
-					<p class="text-md font-medium text-gray-900 dark:text-white">
-						{{ \Carbon\Carbon::today()->locale('id')->isoFormat('D MMMM YYYY') }}
-					</p>
-					<ul class="h-44 overflow-y-auto text-gray-700" aria-labelledby="dropdownUsersButton">
-						@foreach ($attendance_out_today as $at)
-							<p
-								class="my-2 flex rounded-lg bg-red-500 bg-none p-2 text-xs text-white hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800">
-								<img class="me-3 h-6 w-6 rounded-full" src="{{ asset('assets/img/profile-picture-5.jpg') }}" alt="Jese image"
-									loading="lazy">
-								<span class="leading-relaxed">
-									{{ $at->pegawaiRelasi->full_name ?? 'N/A' }}, melakukan absensi <b
-										class="rounded bg-red-800 px-1 py-0.5 text-white">Keluar</b> pada
-									pukul
-									{{ \Carbon\Carbon::parse($at->jam_keluar)->format('H:i') }}
-								</span>
-							</p>
-						@endforeach
-					</ul>
-				</div>
-			</div>
-			<!-- End Notification -->
-		</div>
+                    <ul class="custom-scrollbar flex-1 space-y-3 overflow-y-auto pr-2 font-sans"
+                        aria-labelledby="dropdownUsersButton">
+                        @if ($attendance_out_today->isNotEmpty())
+                            @foreach ($attendance_out_today as $at)
+                                <li class="group">
+                                    <div
+                                        class="flex items-start rounded-xl bg-zinc-50 p-3 transition-colors hover:bg-red-50 dark:bg-dark-secondary dark:hover:bg-red-900/10">
+                                        <img class="me-3 mt-0.5 h-8 w-8 rounded-full border border-zinc-200 object-cover shadow-sm dark:border-zinc-700"
+                                            src="{{ asset('assets/img/profile-picture-5.jpg') }}" alt="User image"
+                                            loading="lazy">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-bold text-zinc-800 dark:text-white">
+                                                {{ $at->pegawaiRelasi->full_name ?? 'Pegawai N/A' }}
+                                            </span>
+                                            <span class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+                                                Melakukan absensi keluar pada pukul
+                                                <b
+                                                    class="ml-1 rounded bg-red-100 px-1.5 py-0.5 text-red-700 dark:bg-red-900/30 dark:text-red-500">
+                                                    {{ \Carbon\Carbon::parse($at->jam_keluar)->format('H:i') }}
+                                                </b>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                            @endforeach
+                        @else
+                            <li class="flex h-full items-center justify-center">
+                                <span class="text-center text-sm font-medium italic text-zinc-400 dark:text-zinc-500">
+                                    Belum ada absensi keluar hari ini
+                                </span>
+                            </li>
+                        @endif
+                    </ul>
+                </div>
+            </div>
+            <!-- End Notifications Section -->
+        </div>
+    </div>
 
-	</div>
+    {{-- Custom Scrollbar Style Just For This Page --}}
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            /* zinc-300 */
+            border-radius: 10px;
+        }
+
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #3f3f46;
+            /* zinc-700 */
+        }
+    </style>
 @endsection

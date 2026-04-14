@@ -42,7 +42,6 @@ class Line extends Component
             ->withOnPointClickEvent('onPointClick')
             ->setSmoothCurve()
             ->multiLine()
-            ->sparklined()
             ->setColors([
                 '#3b82f6',
                 '#9333ea',
