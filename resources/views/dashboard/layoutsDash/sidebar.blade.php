@@ -4,7 +4,7 @@
 
 <!-- Sidebar Navigation -->
 <aside
-    class="left-0 top-0 z-40 hidden h-screen min-w-[265px] flex-col bg-white pb-14 shadow-sm transition-all duration-300 ease-out dark:bg-[#09090b] dark:shadow-none md:fixed md:flex"
+    class="left-0 top-0 z-[60] hidden h-screen w-[272px] flex-col border-r border-zinc-200/50 bg-white/80 pb-14 backdrop-blur-xl transition-all duration-300 ease-out dark:border-white/5 dark:bg-zinc-950/80 dark:shadow-none md:fixed md:flex"
     id="logo-sidebar" aria-label="Sidebar" :class="openSidebar ? 'translate-x-0' : '-translate-x-72'">
 
     {{-- Header / Toggle --}}
@@ -38,7 +38,7 @@
     </div>
 
     {{-- Navigation Links --}}
-    <div class="overflow-y-scroll p-5" wire:scroll>
+    <div class="overflow-x-hidden overflow-y-scroll p-5" wire:scroll>
         <ul class="space-y-2 font-medium">
 
             @foreach ($menu as $item)
@@ -63,20 +63,26 @@
                         @endphp
                         <li>
                             <a href="{{ route($item['route']) }}"
-                                class="{{ $isActive ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 dark:text-gray-300' }} group flex flex-row items-center rounded-xl p-2 hover:text-red-600"
+                                class="{{ $isActive ? 'bg-zinc-100/80 dark:bg-white/5 text-red-600 dark:text-red-400 font-bold border-l-4 border-red-600' : 'text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-200' }} group relative flex items-center gap-3.5 rounded-r-2xl px-4 py-3 transition-all duration-200"
                                 {{ $item['navigate'] ?? true ? 'wire:navigate' : '' }}>
 
                                 <x-dynamic-component :component="'icons.' . $item['icon']"
-                                    class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
+                                    class="{{ $isActive ? 'text-red-600' : 'text-zinc-400 group-hover:text-red-600' }} h-5 w-5 flex-shrink-0 transition-colors duration-200" />
 
-                                <span class="ms-3 inline-flex text-sm group-hover:text-red-600">
-                                    {{ $item['label'] }}
+                                <div class="flex flex-1 items-center justify-between overflow-hidden">
+                                    <span
+                                        class="whitespace-normal break-words text-sm tracking-wide transition-colors duration-200">
+                                        {{ $item['label'] }}
+                                    </span>
+
                                     @if ($item['counter'] ?? null)
-                                        @if (!($item['counter_permission'] ?? null) || auth()->user()->can($item['counter_permission']))
-                                            @livewire($item['counter'])
-                                        @endif
+                                        <div class="flex-shrink-0">
+                                            @if (!($item['counter_permission'] ?? null) || auth()->user()->can($item['counter_permission']))
+                                                @livewire($item['counter'])
+                                            @endif
+                                        </div>
                                     @endif
-                                </span>
+                                </div>
                             </a>
                         </li>
                     @else
@@ -100,13 +106,12 @@
 
                                 @if ($subCan)
                                     <x-dashboard.sidebar-sublink :href="route($sub['route'])" :icon="$sub['icon']" :check="$sub['check']"
-                                        :navigate="$sub['navigate'] ?? true">
+                                        :navigate="$sub['navigate'] ?? true" :counter="($sub['counter'] ?? null) &&
+                                        (!($sub['counter_permission'] ?? null) ||
+                                            auth()->user()->can($sub['counter_permission']))
+                                            ? $sub['counter']
+                                            : null">
                                         {{ $sub['label'] }}
-                                        @if ($sub['counter'] ?? null)
-                                            @if (!($sub['counter_permission'] ?? null) || auth()->user()->can($sub['counter_permission']))
-                                                @livewire($sub['counter'])
-                                            @endif
-                                        @endif
                                     </x-dashboard.sidebar-sublink>
                                 @endif
                             @endforeach
