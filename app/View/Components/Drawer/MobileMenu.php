@@ -14,8 +14,8 @@ class MobileMenu extends Component
 
     public function __construct()
     {
-        $this->drawerLinks = config('navigation.links');
-        $this->iconMap = config('navigation.icons');
+        $this->drawerLinks = config('navigation.mobile.links');
+        $this->iconMap = config('navigation.mobile.icons');
     }
 
     public function render(): View|Closure|string

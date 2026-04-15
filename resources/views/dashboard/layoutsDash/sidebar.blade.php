@@ -1,96 +1,5 @@
 @php
-    $sidebarLinks = [
-        [
-            'route' => 'collect.index',
-            'check' => 'collect.*',
-            'label' => 'Laporan Kolektor',
-            'icon' => 'collect',
-            'permission' => 'collect-list',
-            'sublinks' => [],
-            'navigate' => false,
-            'indicator' => true,
-        ],
-        [
-            'route' => 'sales.index',
-            'check' => 'sales.*',
-            'label' => 'Laporan Sales',
-            'icon' => 'sales',
-            'permission' => 'sales-list',
-            'sublinks' => [],
-            'navigate' => true,
-            'indicator' => true,
-        ],
-        [
-            'route' => 'technician.index',
-            'check' => 'technician.*',
-            'label' => 'Laporan Teknisi',
-            'icon' => 'technician',
-            'permission' => 'technician-list',
-            'sublinks' => [],
-            'navigate' => true,
-            'indicator' => true,
-        ],
-        [
-            'route' => 'capture.index',
-            'check' => 'capture.index',
-            'label' => 'Record Attendance',
-            'icon' => 'capture',
-            'permission' => 'capture',
-            'sublinks' => [],
-            'navigate' => false,
-            'indicator' => false,
-        ],
-        [
-            'route' => 'capture.route',
-            'check' => 'capture.route',
-            'label' => 'Absen Rute',
-            'icon' => 'capture',
-            'permission' => 'capture-route',
-            'sublinks' => [],
-            'navigate' => false,
-            'indicator' => false,
-        ],
-        [
-            'route' => 'dayoff.index',
-            'check' => 'dayoff.*',
-            'label' => 'Pengajuan Off',
-            'icon' => 'dayoff',
-            'permission' => 'dayoff-list',
-            'sublinks' => [],
-            'navigate' => false,
-            'indicator' => false,
-        ],
-        [
-            'route' => 'pegawai.index',
-            'check' => 'pegawai.*',
-            'label' => 'Pegawai',
-            'icon' => 'pegawai',
-            'permission' => 'pegawai-list',
-            'sublinks' => [],
-            'navigate' => false,
-            'indicator' => false,
-        ],
-        [
-            'route' => 'jabatan.index',
-            'check' => 'jabatan.*',
-            'label' => 'Jabatan',
-            'icon' => 'jabatan',
-            'permission' => 'jabatan-list',
-            'sublinks' => [],
-            'navigate' => false,
-            'indicator' => false,
-        ],
-        [
-            'route' => 'golongan.index',
-            'check' => 'golongan.*',
-            'label' => 'Golongan',
-            'icon' => 'golongan',
-            'permission' => 'golongan-list',
-            'sublinks' => [],
-            'navigate' => false,
-            'indicator' => false,
-        ],
-    ];
+    $menu = config('navigation.desktop');
 @endphp
 
 <!-- Sidebar Navigation -->
@@ -98,6 +7,7 @@
     class="left-0 top-0 z-40 hidden h-screen min-w-[265px] flex-col bg-white pb-14 shadow-sm transition-all duration-300 ease-out dark:bg-[#09090b] dark:shadow-none md:fixed md:flex"
     id="logo-sidebar" aria-label="Sidebar" :class="openSidebar ? 'translate-x-0' : '-translate-x-72'">
 
+    {{-- Header / Toggle --}}
     <div id="tombolSidebar" :class="openSidebar ? 'translate-x-0' : 'absolute translate-x-24 bg-white dark:bg-[#09090b]'"
         class="mx-auto flex w-full justify-between rounded-br-2xl p-5 shadow-md drop-shadow-lg transition-all duration-200 ease-out dark:border-b-[1px] dark:border-r-[4px] dark:border-red-800 dark:shadow-none dark:drop-shadow-none">
         <div class="flex items-center justify-start">
@@ -105,12 +15,10 @@
                 <img class="h-8" src="{{ asset('assets/img/logo.png') }}" alt="Indodacin Logo" loading="lazy" />
             </a>
         </div>
-
         <button @click="openSidebar = !openSidebar" class="rounded-lg px-2 py-1">
             <span x-show="!openSidebar">
                 <x-icons.open-sidebar-alt data-tooltip-target="open-sidebar-alt"
                     class="h-6 w-6 text-gray-800 transition-all duration-300 ease-in-out hover:scale-110 dark:text-white" />
-
                 <div id="open-sidebar-alt" role="tooltip"
                     class="shadow-xs tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 transition-opacity duration-300 dark:bg-gray-700">
                     Buka Sidebar
@@ -120,7 +28,6 @@
             <span x-show="openSidebar">
                 <x-icons.close-sidebar-alt data-tooltip-target="close-sidebar-alt"
                     class="h-6 w-6 text-gray-800 transition-all duration-300 ease-in-out hover:scale-110 dark:text-white" />
-
                 <div id="close-sidebar-alt" role="tooltip"
                     class="shadow-xs tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 transition-opacity duration-300 dark:bg-gray-700">
                     Tutup Sidebar
@@ -130,920 +37,86 @@
         </button>
     </div>
 
+    {{-- Navigation Links --}}
     <div class="overflow-y-scroll p-5" wire:scroll>
         <ul class="space-y-2 font-medium">
 
-            {{-- dashboard --}}
-            <li>
-                <x-dashboard.sidebar-link href="{{ route('dashboard') }}" wire:navigate :active="Route::is('dashboard')">
-                    <x-slot name="icon">
-                        <x-icons.home
-                            class="{{ Route::is('dashboard') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                    </x-slot>
-                    Dashboard
-                </x-dashboard.sidebar-link>
-            </li>
-
-            {{-- absensi --}}
-            <li x-data="{ absensi: {{ Route::is('attendanceIn.index') || Route::is('attendanceOut.index') || Route::is('today.attendance') ? 'true' : 'false' }} }">
-                <button
-                    class="{{ Route::is('attendanceIn.index') || Route::is('attendanceOut.index') || Route::is('today.attendance') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
-                    type="button" aria-controls="absensi-dropdown" @click="absensi = !absensi"
-                    :aria-expanded="absensi">
-                    <x-icons.grid-plus
-                        class="{{ Route::is('attendanceIn.index') || Route::is('attendanceOut.index') || Route::is('today.attendance') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                    <span
-                        class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">Absensi</span>
-
-                    <x-icons.carred-down
-                        class="ml-1 mt-1 inline h-4 w-4 transform transition-transform group-hover:text-red-600"
-                        x-bind:class="{ 'rotate-180 duration-200': absensi }" />
-                </button>
-
-                <!-- Dropdown Menu -->
-                <ul class="space-y-4 py-4" id="absensi-dropdown" x-show="absensi"
-                    x-transition:enter="transition ease-in duration-200"
-                    x-transition:enter-start="transform opacity-0 -translate-y-5"
-                    x-transition:leave="transition ease-out duration-200"
-                    x-transition:leave-end="transform opacity-0 -translate-y-5">
-
-                    @can('pegawai-attendance')
-                        <li>
-                            <a class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
-                                href="{{ route('today.attendance') }}"
-                                wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-dark-primary"
-                                wire:navigate>
-                                <x-icons.map-pin-alt class="h-6 w-6 group-hover:text-red-600" />
-                                <span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Today's
-                                    Attendance</span>
-                            </a>
-                        </li>
-                    @endcan
-
-                    <li>
-                        <a class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
-                            href="{{ route('attendanceIn.index') }}"
-                            wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-dark-primary"
-                            wire:navigate>
-                            <x-icons.arrow-left-bracket class="h-6 w-6 group-hover:text-red-600" />
-                            <span class="ms-3 inline-flex text-sm group-hover:text-red-600">
-                                Masuk
-
-                                @livewire('utils.counter.attendance-in-counter')
-                            </span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
-                            href="{{ route('attendanceOut.index') }}"
-                            wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-dark-primary"
-                            wire:navigate>
-                            <x-icons.arrow-right-bracket class="h-6 w-6 group-hover:text-red-600" />
-                            <span class="ms-3 inline-flex text-sm group-hover:text-red-600">
-                                Keluar
-
-                                @livewire('utils.counter.attendance-out-counter')
-                            </span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-            {{-- kolektor --}}
-            @if (auth()->user()->hasAnyPermission(['collect-task-list', 'collect-task-list-ppn', 'collect-idy-ppn-list']))
-                <li x-data="{ lokasi: {{ Route::is('collect-task.*') || Route::is('collect-task-ppn.*') || Route::is('collect-idy-ppn.*') ? 'true' : 'false' }} }">
-                    <button
-                        class="{{ Route::is('collect-task.*') || Route::is('collect-task-ppn.*') || Route::is('collect-idy-ppn.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
-                        type="button" aria-controls="lokasi-dropdown" @click="lokasi = !lokasi"
-                        :aria-expanded="lokasi">
-
-                        <x-icons.wallet
-                            class="{{ Route::is('collect-task.*') || Route::is('collect-task-ppn.*') || Route::is('collect-idy-ppn.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-
-                        <span
-                            class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">Piutang</span>
-
-                        <x-icons.carred-down
-                            class="ml-1 mt-1 inline h-4 w-4 transform transition-transform group-hover:text-red-600"
-                            x-bind:class="{ 'rotate-180 duration-200': lokasi }" />
-                    </button>
-
-                    <ul class="space-y-4 py-4" id="lokasi-dropdown" x-show="lokasi"
-                        x-transition:enter="transition ease-in duration-200"
-                        x-transition:enter-start="transform opacity-0 -translate-y-5"
-                        x-transition:leave="transition ease-out duration-200"
-                        x-transition:leave-end="transform opacity-0 -translate-y-5">
-                        @can('collect-task-list')
-                            <li>
-                                <a class="{{ Route::is('collect-task.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('collect-task.index') }}" wire:navigate>
-                                    <x-icons.cash
-                                        class="{{ Route::is('collect-task.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 inline-flex whitespace-nowrap text-sm group-hover:text-red-600">
-                                        IDC Non PPN (SR)
-
-                                        @livewire('utils.counter.collector-idc-non-ppn-counter')
-                                    </span>
-                                </a>
-                            </li>
-                        @endcan
-
-                        @can('collect-task-ppn-list')
-                            <li>
-                                <a class="{{ Route::is('collect-task-ppn.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('collect-task-ppn.index') }}" wire:navigate>
-                                    <x-icons.sale-percent
-                                        class="{{ Route::is('collect-task-ppn.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 inline-flex whitespace-nowrap text-sm group-hover:text-red-600">
-                                        IDC PPN (FP)
-
-                                        @livewire('utils.counter.collector-idc-ppn-counter')
-                                    </span>
-                                </a>
-                            </li>
-                        @endcan
-
-                        @can('collect-idy-ppn-list')
-                            <li>
-                                <a class="{{ Route::is('collect-idy-ppn.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('collect-idy-ppn.index') }}" wire:navigate>
-                                    <x-icons.cash-register
-                                        class="{{ Route::is('collect-idy-ppn.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 inline-flex whitespace-nowrap text-sm group-hover:text-red-600">
-                                        IDY PPN (FP)
-
-                                        @livewire('utils.counter.collector-idy-ppn-counter')
-                                    </span>
-                                </a>
-                            </li>
-                        @endcan
-                    </ul>
-                </li>
-            @endif
-
-            {{-- spk --}}
-            @if (auth()->user()->hasAnyPermission(['spk-list', 'purchasing-request-list', 'produksi-list', 'spk-update-informasi-pengiriman']))
-                <li x-data="{ lokasi: {{ Route::is('spk.*') || Route::is('daily-report.*') || Route::is('production.*') || Route::is('purchasing-request.*') || Route::is('billing.*') || Route::is('delivery.*') ? 'true' : 'false' }} }">
-                    <button
-                        class="{{ Route::is('spk.*') || Route::is('daily-report.*') || Route::is('production.*') || Route::is('purchasing-request.*') || Route::is('billing.*') || Route::is('delivery.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
-                        type="button" aria-controls="lokasi-dropdown" @click="lokasi = !lokasi"
-                        :aria-expanded="lokasi">
-
-                        <x-icons.clipboard-check
-                            class="{{ Route::is('spk.*') || Route::is('daily-report.*') || Route::is('production.*') || Route::is('purchasing-request.*') || Route::is('billing.*') || Route::is('delivery.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-
-                        <span class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">Manajemen
-                            SPK</span>
-
-                        <x-icons.carred-down
-                            class="ml-1 mt-1 inline h-4 w-4 transform transition-transform group-hover:text-red-600"
-                            x-bind:class="{ 'rotate-180 duration-200': lokasi }" />
-                    </button>
-
-                    <ul class="space-y-4 py-4" id="lokasi-dropdown" x-show="lokasi"
-                        x-transition:enter="transition ease-in duration-200"
-                        x-transition:enter-start="transform opacity-0 -translate-y-5"
-                        x-transition:leave="transition ease-out duration-200"
-                        x-transition:leave-end="transform opacity-0 -translate-y-5">
-
-                        @can('spk-list')
-                            <li>
-                                <a class="{{ Route::is('spk.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 text-wrap dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('spk.index') }}" wire:navigate>
-                                    <x-icons.cash
-                                        class="{{ Route::is('spk.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 inline-flex text-wrap text-sm group-hover:text-red-600">
-                                        Data SPK
-
-                                        @livewire('utils.counter.spk-main-counter')
-                                    </span>
-                                </a>
-                            </li>
-                        @endcan
-
-                        @can('purchasing-request-list')
-                            <li>
-                                <a class="{{ Route::is('purchasing-request.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 text-wrap dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('purchasing-request.index') }}" wire:navigate>
-                                    <x-icons.cash
-                                        class="{{ Route::is('purchasing-request.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 inline-flex text-wrap text-sm group-hover:text-red-600">
-                                        Purchasing Request
-
-                                        @livewire('utils.counter.spk-purchasing-request-counter')
-                                    </span>
-                                </a>
-                            </li>
-                        @endcan
-
-                        @can('produksi-list')
-                            <li>
-                                <a class="{{ Route::is('production.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('production.index') }}" wire:navigate>
-                                    <x-icons.cash
-                                        class="{{ Route::is('production.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 inline-flex whitespace-nowrap text-sm group-hover:text-red-600">
-                                        Manajemen Produksi
-
-                                        @livewire('utils.counter.spk-production-counter')
-                                    </span>
-                                </a>
-                            </li>
-                        @endcan
-
-                        @can('spk-update-informasi-pengiriman')
-                            <li>
-                                <a class="{{ Route::is('delivery.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('delivery.index') }}" wire:navigate>
-                                    <x-icons.cash
-                                        class="{{ Route::is('delivery.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 inline-flex whitespace-nowrap text-sm group-hover:text-red-600">
-                                        Pengiriman
-
-                                        @livewire('utils.counter.spk-delivery-counter')
-                                    </span>
-                                </a>
-                            </li>
-                        @endcan
-
-                        @can(['spk-update-no-tagihan-idcppn', 'spk-update-no-tagihan-idcnonppn',
-                            'spk-update-no-tagihan-idyppn'])
-                            <li>
-                                <a class="{{ Route::is('billing.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('billing.index') }}" wire:navigate>
-                                    <x-icons.cash
-                                        class="{{ Route::is('billing.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 inline-flex whitespace-nowrap text-sm group-hover:text-red-600">
-                                        Penagihan
-                                    </span>
-                                </a>
-                            </li>
-                        @endcan
-
-                        @can('laporan-harian-spk-list')
-                            <li>
-                                <a class="{{ Route::is('daily-report.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('daily-report.index') }}" wire:navigate>
-                                    <x-icons.cash
-                                        class="{{ Route::is('daily-report.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 inline-flex whitespace-nowrap text-sm group-hover:text-red-600">
-                                        Laporan Lapangan
-                                    </span>
-                                </a>
-                            </li>
-                        @endcan
-
-                    </ul>
-                </li>
-            @endif
-
-            {{-- laporan harian VT --}}
-            @can('laporan-harian-list')
-                <li x-data="{ routes: {{ Route::is('report.general.*') ? 'true' : 'false' }} }">
-                    <button
-                        class="{{ Route::is('report.general.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
-                        type="button" aria-controls="routes-dropdown" @click="routes = !routes" :aria-expanded="routes">
-
-                        <x-icons.chalk-board
-                            class="{{ Route::is('report.general.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-
-                        <span class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">
-                            Laporan Harian (VT)
-                        </span>
-
-                        <x-icons.carred-down
-                            class="ml-1 mt-1 inline h-4 w-4 transform transition-transform group-hover:text-red-600"
-                            x-bind:class="{ 'rotate-180 duration-200': routes }" />
-                    </button>
-
-                    <ul class="space-y-4 py-4" id="routes-dropdown" x-show="routes"
-                        x-transition:enter="transition ease-in duration-200"
-                        x-transition:enter-start="transform opacity-0 -translate-y-5"
-                        x-transition:leave="transition ease-out duration-200"
-                        x-transition:leave-end="transform opacity-0 -translate-y-5">
-
-                        @can('assign-laporan-harian')
-                            <li>
-                                <a class="{{ Route::is('report.general.assign') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('report.general.assign') }}" wire:navigate>
-                                    <x-icons.angle-right
-                                        class="{{ Route::is('report.general.assign') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">
-                                        Assign VT</span>
-                                </a>
-                            </li>
-                        @endcan
-
-                        @can('laporan-harian-list')
-                            <li>
-                                <a class="{{ Route::is('report.general.index') || Route::is('report.general.daily') || Route::is('report.general.hourly') || Route::is('report.general.customer-assignment') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('report.general.index') }}" wire:navigate>
-                                    <x-icons.angle-right
-                                        class="{{ Route::is('report.general.index') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-
-                                    <span class="ms-3 inline-flex text-sm group-hover:text-red-600">
-                                        Laporan Harian
-
-                                        @if (auth()->user()->hasPermissionTo('laporan-harian-validate'))
-                                            @livewire('utils.counter.daily-report-counter')
-                                        @endif
-                                    </span>
-                                </a>
-                            </li>
-                        @endcan
-
-                    </ul>
-                </li>
-            @endcan
-
-            {{-- rute --}}
-            @if (auth()->user()->hasAnyPermission(['driver-approve', 'collect-approve', 'sales-approve']))
-                <li x-data="{ routes: {{ Route::is('routes.*') ? 'true' : 'false' }} }">
-                    <button
-                        class="{{ Route::is('routes.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
-                        type="button" aria-controls="routes-dropdown" @click="routes = !routes"
-                        :aria-expanded="routes">
-
-                        <x-icons.map-pin-alt
-                            class="{{ Route::is('routes.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-
-                        <span
-                            class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">Rute</span>
-
-                        <x-icons.carred-down
-                            class="ml-1 mt-1 inline h-4 w-4 transform transition-transform group-hover:text-red-600"
-                            x-bind:class="{ 'rotate-180 duration-200': routes }" />
-                    </button>
-
-                    <ul class="space-y-4 py-4" id="routes-dropdown" x-show="routes"
-                        x-transition:enter="transition ease-in duration-200"
-                        x-transition:enter-start="transform opacity-0 -translate-y-5"
-                        x-transition:leave="transition ease-out duration-200"
-                        x-transition:leave-end="transform opacity-0 -translate-y-5">
-
-                        @can('driver-approve')
-                            <li>
-                                <a class="{{ Route::is('routes.driver') || Route::is('routes.driver.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('routes.driver') }}" wire:navigate>
-                                    <x-icons.angle-right
-                                        class="{{ Route::is('routes.driver') || Route::is('routes.driver.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span
-                                        class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Driver</span>
-                                </a>
-                            </li>
-                        @endcan
-
-                        @can('collect-approve')
-                            <li>
-                                <a class="{{ Route::is('routes.collector') || Route::is('routes.collector.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('routes.collector') }}" wire:navigate>
-                                    <x-icons.angle-right
-                                        class="{{ Route::is('routes.collector') || Route::is('routes.collector.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span
-                                        class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Kolektor</span>
-                                </a>
-                            </li>
-                        @endcan
-
-                        @can('sales-approve')
-                            <li>
-                                <a class="{{ Route::is('routes.sales') || Route::is('routes.sales.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('routes.sales') }}" wire:navigate>
-                                    <x-icons.angle-right
-                                        class="{{ Route::is('routes.sales') || Route::is('routes.sales.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span
-                                        class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Sales</span>
-                                </a>
-                            </li>
-                        @endcan
-
-                    </ul>
-                </li>
-            @endif
-
-            {{-- laporan driver --}}
-            @if (auth()->user()->hasAnyPermission(['driver-list']))
-                <li x-data="{ routes: {{ Route::is('driver.*') ? 'true' : 'false' }} }">
-                    <button
-                        class="{{ Route::is('driver.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
-                        type="button" aria-controls="routes-dropdown" @click="routes = !routes"
-                        :aria-expanded="routes">
-
-                        <x-icons.truck
-                            class="{{ Route::is('driver.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-
-                        <span class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">Laporan
-                            Driver</span>
-
-                        <x-icons.carred-down
-                            class="ml-1 mt-1 inline h-4 w-4 transform transition-transform group-hover:text-red-600"
-                            x-bind:class="{ 'rotate-180 duration-200': routes }" />
-                    </button>
-
-                    <ul class="space-y-4 py-4" id="routes-dropdown" x-show="routes"
-                        x-transition:enter="transition ease-in duration-200"
-                        x-transition:enter-start="transform opacity-0 -translate-y-5"
-                        x-transition:leave="transition ease-out duration-200"
-                        x-transition:leave-end="transform opacity-0 -translate-y-5">
-
-                        @can('driver-approve')
-                            <li>
-                                <a class="{{ Route::is('driver.assign.add') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('driver.assign.add') }}" wire:navigate>
-                                    <x-icons.angle-right
-                                        class="{{ Route::is('driver.assign.add') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Assign
-                                        Laporan (SR)</span>
-                                </a>
-                            </li>
-                        @endcan
-
-                        @can('driver-list')
-                            <li>
-                                <a class="{{ Route::is('driver.index') || Route::is('driver.create') || Route::is('driver.show') || Route::is('driver.edit') || Route::is('driver.assign.to') || Route::is('driver.assign.update') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('driver.index') }}" wire:navigate>
-                                    <x-icons.angle-right
-                                        class="{{ Route::is('driver.index') || Route::is('driver.create') || Route::is('driver.show') || Route::is('driver.edit') || Route::is('driver.assign.to') || Route::is('driver.assign.update') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 inline-flex text-sm group-hover:text-red-600">
-                                        Laporan Driver
-
-                                        @if (auth()->user()->hasPermissionTo('driver-approve'))
-                                            @livewire('utils.counter.driver-counter')
-                                        @endif
-                                    </span>
-                                </a>
-                            </li>
-                        @endcan
-
-                    </ul>
-                </li>
-            @endif
-
-            {{-- laporan invoice --}}
-            @if (auth()->user()->hasAnyPermission(['invoice-list', 'invoice-list-pku', 'invoice-list-jkt']))
-                <li x-data="{ lokasi: {{ Route::is('invoice.all.*') || Route::is('invoice.cust.*') || Route::is('invoice.medan.*') || Route::is('invoice.pku.*') || Route::is('invoice.jkt.*') ? 'true' : 'false' }} }">
-                    <button
-                        class="{{ Route::is('invoice.all.*') || Route::is('invoice.cust.*') || Route::is('invoice.medan.*') || Route::is('invoice.pku.*') || Route::is('invoice.jkt.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
-                        type="button" aria-controls="lokasi-dropdown" @click="lokasi = !lokasi"
-                        :aria-expanded="lokasi">
-
-                        <x-icons.rectangle-list
-                            class="{{ Route::is('invoice.all.*') || Route::is('invoice.cust.*') || Route::is('invoice.medan.*') || Route::is('invoice.pku.*') || Route::is('invoice.jkt.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-
-                        <span class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">
-                            Data Invoice
-                        </span>
-
-                        <x-icons.carred-down
-                            class="ml-1 mt-1 inline h-4 w-4 transform transition-transform group-hover:text-red-600"
-                            x-bind:class="{ 'rotate-180 duration-200': lokasi }" />
-                    </button>
-
-                    <ul class="space-y-4 py-4" id="lokasi-dropdown" x-show="lokasi"
-                        x-transition:enter="transition ease-in duration-200"
-                        x-transition:enter-start="transform opacity-0 -translate-y-5"
-                        x-transition:leave="transition ease-out duration-200"
-                        x-transition:leave-end="transform opacity-0 -translate-y-5">
-
-                        @can('invoice-list')
-                            <li>
-                                <a class="{{ Route::is('invoice.all.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 text-wrap dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('invoice.all.index') }}" wire:navigate>
-                                    <x-icons.file-invoice
-                                        class="{{ Route::is('invoice.all.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 flex-1 text-wrap text-sm group-hover:text-red-600">
-                                        Semua Data
-                                    </span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="{{ Route::is('invoice.cust.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 text-wrap dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('invoice.cust.index') }}" wire:navigate>
-                                    <x-icons.file-invoice
-                                        class="{{ Route::is('invoice.cust.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 flex-1 text-wrap text-sm group-hover:text-red-600">
-                                        Direct Cust
-                                    </span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="{{ Route::is('invoice.medan.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 text-wrap dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('invoice.medan.index') }}" wire:navigate>
-                                    <x-icons.file-invoice
-                                        class="{{ Route::is('invoice.medan.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 flex-1 text-wrap text-sm group-hover:text-red-600">
-                                        Medan
-                                    </span>
-                                </a>
-                            </li>
-                        @endcan
-
-                        @can('invoice-list-pku')
-                            <li>
-                                <a class="{{ Route::is('invoice.pku.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 text-wrap dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('invoice.pku.index') }}" wire:navigate>
-                                    <x-icons.file-invoice
-                                        class="{{ Route::is('invoice.pku.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 flex-1 text-wrap text-sm group-hover:text-red-600">
-                                        Pekanbaru
-                                    </span>
-                                </a>
-                            </li>
-                        @endcan
-
-                        @can('invoice-list-jkt')
-                            <li>
-                                <a class="{{ Route::is('invoice.jkt.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('invoice.jkt.index') }}" wire:navigate>
-                                    <x-icons.file-invoice
-                                        class="{{ Route::is('invoice.jkt.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">
-                                        Jakarta
-                                    </span>
-                                </a>
-                            </li>
-                        @endcan
-                    </ul>
-                </li>
-            @endif
-
-            @foreach ($sidebarLinks as $link)
+            @foreach ($menu as $item)
                 @php
-                    $navigate = false;
-                    $isActive = Route::is($link['check']);
-
-                    if ($link['icon'] != 'capture') {
-                        $navigate = true;
-                    }
+                    // ── Guard check ───────────────────────────────────────────
+                    $guard = $item['guard'] ?? null;
+                    $canSee = match (true) {
+                        $guard === null => true,
+                        $guard[0] === 'any_permission' => auth()->user()->hasAnyPermission($guard[1]),
+                        $guard[0] === 'role' => auth()->user()->hasRole($guard[1]),
+                        $guard[0] === 'can' => auth()->user()->can($guard[1]),
+                        default => true,
+                    };
                 @endphp
 
-                @if ($link['permission'])
-                    @can($link['permission'])
+                @if ($canSee)
+
+                    @if (empty($item['submenu'] ?? []))
+                        {{-- ── Simple link ────────────────────────────────── --}}
+                        @php
+                            $isActive = collect($item['check'])->contains(fn($r) => Route::is($r));
+                        @endphp
                         <li>
-                            <x-dashboard.sidebar-link href="{{ route($link['route']) }}" :active="$isActive"
-                                :navigate="$navigate">
-                                <x-slot name="icon">
+                            <a href="{{ route($item['route']) }}"
+                                class="{{ $isActive ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 dark:text-gray-300' }} group flex flex-row items-center rounded-xl p-2 hover:text-red-600"
+                                {{ $item['navigate'] ?? true ? 'wire:navigate' : '' }}>
 
-                                    {{-- for icons to show --}}
-                                    @switch($link['icon'])
-                                        @case('collect')
-                                            <x-icons.clipboard
-                                                class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                        @break
+                                <x-dynamic-component :component="'icons.' . $item['icon']"
+                                    class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
 
-                                        @case('capture')
-                                            <x-icons.camera
-                                                class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                        @break
-
-                                        @case('another-capture')
-                                            <x-icons.camera
-                                                class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                        @break
-
-                                        @case('dayoff')
-                                            <x-icons.lock-time
-                                                class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                        @break
-
-                                        @case('pegawai')
-                                            <x-icons.address-book
-                                                class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                        @break
-
-                                        @case('jabatan')
-                                            <x-icons.briefcase
-                                                class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                        @break
-
-                                        @case('golongan')
-                                            <x-icons.users-group
-                                                class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                        @break
-
-                                        @case('sales')
-                                            <x-icons.receipt
-                                                class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                        @break
-
-                                        @case('technician')
-                                            <x-icons.hammer
-                                                class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                        @break
-
-                                        @case('invoice')
-                                            <x-icons.file-invoice
-                                                class="{{ $isActive ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                        @break
-                                    @endswitch
-
-                                </x-slot>
-                                {{ $link['label'] }}
-
-                                @if (
-                                    $link['indicator'] &&
-                                        auth()->user()->hasPermissionTo($link['icon'] . '-approve'))
-                                    @livewire('utils.counter.' . $link['icon'] . '-counter')
-                                @endif
-
-                            </x-dashboard.sidebar-link>
+                                <span class="ms-3 inline-flex text-sm group-hover:text-red-600">
+                                    {{ $item['label'] }}
+                                    @if ($item['counter'] ?? null)
+                                        @if (!($item['counter_permission'] ?? null) || auth()->user()->can($item['counter_permission']))
+                                            @livewire($item['counter'])
+                                        @endif
+                                    @endif
+                                </span>
+                            </a>
                         </li>
-                    @endcan
+                    @else
+                        {{-- ── Group with submenu ──────────────────────────── --}}
+                        @php
+                            // Derive active routes from all submenu check arrays
+                            $groupRoutes = collect($item['submenu'])->pluck('check')->flatten()->all();
+                        @endphp
+
+                        <x-dashboard.sidebar-group :label="$item['label']" :icon="$item['icon']" :routes="$groupRoutes">
+
+                            @foreach ($item['submenu'] as $sub)
+                                @php
+                                    $perm = $sub['permission'] ?? null;
+                                    $subCan = match (true) {
+                                        $perm === null => true,
+                                        is_array($perm) => auth()->user()->hasAnyPermission($perm),
+                                        default => auth()->user()->can($perm),
+                                    };
+                                @endphp
+
+                                @if ($subCan)
+                                    <x-dashboard.sidebar-sublink :href="route($sub['route'])" :icon="$sub['icon']" :check="$sub['check']"
+                                        :navigate="$sub['navigate'] ?? true">
+                                        {{ $sub['label'] }}
+                                        @if ($sub['counter'] ?? null)
+                                            @if (!($sub['counter_permission'] ?? null) || auth()->user()->can($sub['counter_permission']))
+                                                @livewire($sub['counter'])
+                                            @endif
+                                        @endif
+                                    </x-dashboard.sidebar-sublink>
+                                @endif
+                            @endforeach
+
+                        </x-dashboard.sidebar-group>
+                    @endif
+
                 @endif
             @endforeach
 
-            @can('team-list')
-                <li>
-                    <a href="{{ route('teams.index') }}"
-                        class="group flex flex-row items-center rounded-xl p-2 text-gray-900 hover:text-red-600 dark:text-gray-300"
-                        wire:navigate wire:current.href="!text-red-600 font-bold bg-gray-100 dark:bg-dark-primary">
-
-                        <x-icons.users wire:current="!text-red-600" class="h-6 w-6 group-hover:text-red-600" />
-                        <span class="ms-3 inline-flex text-sm group-hover:text-red-600">
-                            Tim Teknisi
-                        </span>
-                    </a>
-                </li>
-            @endcan
-
-            {{-- divisi dan placement --}}
-            @if (auth()->user()->hasAnyPermission(['divisi-list', 'placement-list']))
-                <li x-data="{ lokasi: {{ Route::is('division.*') || Route::is('placement.*') ? 'true' : 'false' }} }">
-                    <button
-                        class="{{ Route::is('division.*') || Route::is('placement.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
-                        type="button" aria-controls="lokasi-dropdown" @click="lokasi = !lokasi"
-                        :aria-expanded="lokasi">
-
-                        <x-icons.map-pin
-                            class="{{ Route::is('division.*') || Route::is('placement.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-
-                        <span
-                            class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">Lokasi</span>
-
-                        <x-icons.carred-down
-                            class="ml-1 mt-1 inline h-4 w-4 transform transition-transform group-hover:text-red-600"
-                            x-bind:class="{ 'rotate-180 duration-200': lokasi }" />
-                    </button>
-
-                    <ul class="space-y-4 py-4" id="lokasi-dropdown" x-show="lokasi"
-                        x-transition:enter="transition ease-in duration-200"
-                        x-transition:enter-start="transform opacity-0 -translate-y-5"
-                        x-transition:leave="transition ease-out duration-200"
-                        x-transition:leave-end="transform opacity-0 -translate-y-5">
-                        @can('divisi-list')
-                            <li>
-                                <a class="{{ Route::is('division.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('division.index') }}" wire:navigate>
-                                    <x-icons.object-column
-                                        class="{{ Route::is('division.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span
-                                        class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Divisi</span>
-                                </a>
-                            </li>
-                        @endcan
-
-                        @can('placement-list')
-                            <li>
-                                <a class="{{ Route::is('placement.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('placement.index') }}" wire:navigate>
-                                    <x-icons.landmark
-                                        class="{{ Route::is('placement.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span
-                                        class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Penempatan</span>
-                                </a>
-                            </li>
-                        @endcan
-                    </ul>
-                </li>
-            @endif
-
-            {{-- user, role dan ermissions --}}
-            @if (auth()->user()->hasAnyPermission(['users-list', 'roles-list', 'permissions-list']))
-                <li x-data="{ usermanage: {{ Route::is('users.*') || Route::is('permissions.*') || Route::is('roles.*') ? 'true' : 'false' }} }">
-                    <button
-                        class="{{ Route::is('users.*') || Route::is('permissions.*') || Route::is('roles.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
-                        type="button" aria-controls="user-dropdown" @click="usermanage = !usermanage"
-                        :aria-expanded="usermanage">
-                        <x-icons.user-setting
-                            class="{{ Route::is('users.*') || Route::is('permissions.*') || Route::is('roles.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-
-                        <span class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">User
-                            Settings</span>
-
-                        <x-icons.carred-down
-                            class="ml-1 mt-1 inline h-4 w-4 transform transition-transform group-hover:text-red-600"
-                            x-bind:class="{ 'rotate-180 duration-200': usermanage }" />
-                    </button>
-
-                    <ul class="space-y-4 py-4" id="user-dropdown" x-show="usermanage"
-                        x-transition:enter="transition ease-in duration-200"
-                        x-transition:enter-start="transform opacity-0 -translate-y-5"
-                        x-transition:leave="transition ease-out duration-200"
-                        x-transition:leave-end="transform opacity-0 -translate-y-5">
-
-                        @can('users-list')
-                            <li>
-                                <a class="{{ Route::is('users.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('users.index') }}" wire:navigate>
-                                    <x-icons.profile-card
-                                        class="{{ Route::is('users.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span
-                                        class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Users</span>
-                                </a>
-                            </li>
-                        @endcan
-
-                        @can('roles-list')
-                            <li>
-                                <a class="{{ Route::is('roles.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('roles.index') }}" wire:navigate>
-                                    <x-icons.badge-check
-                                        class="{{ Route::is('roles.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span
-                                        class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Roles</span>
-                                </a>
-                            </li>
-                        @endcan
-
-                        @can('permissions-list')
-                            <li>
-                                <a class="{{ Route::is('permissions.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('permissions.index') }}" wire:navigate>
-                                    <x-icons.adjustment
-                                        class="{{ Route::is('permissions.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-                                    <span
-                                        class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Permissions</span>
-                                </a>
-                            </li>
-                        @endcan
-
-                    </ul>
-                </li>
-            @endif
-
-            {{-- announcment, log dan backup --}}
-            @if (auth()->user()->hasAnyPermission(['announcement-list', 'log-list', 'backup-list']))
-                <li x-data="{ system: {{ Route::is('announcement.*') || Route::is('log.*') || Route::is('backup.*') || Route::is('kuesioner.*') ? 'true' : 'false' }} }">
-                    <button
-                        class="{{ Route::is('announcement.*') || Route::is('log.*') || Route::is('backup.*') || Route::is('kuesioner.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
-                        type="button" aria-controls="system-dropdown" @click="system = !system"
-                        :aria-expanded="system">
-                        <x-icons.computer
-                            class="{{ Route::is('announcement.*') || Route::is('log.*') || Route::is('backup.*') || Route::is('kuesioner.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-
-                        <span class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">System
-                            Settings</span>
-
-                        <x-icons.carred-down
-                            class="ml-1 mt-1 inline h-4 w-4 transform transition-transform group-hover:text-red-600"
-                            x-bind:class="{ 'rotate-180 duration-200': system }" />
-                    </button>
-
-                    <ul class="space-y-4 py-4" id="system-dropdown" x-show="system"
-                        x-transition:enter="transition ease-in duration-200"
-                        x-transition:enter-start="transform opacity-0 -translate-y-5"
-                        x-transition:leave="transition ease-out duration-200"
-                        x-transition:leave-end="transform opacity-0 -translate-y-5">
-
-                        {{-- <li>
-							<a
-								class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
-								href="{{ route('kuesioner.index') }}" wire:navigate
-								wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-dark-primary">
-								<x-icons.question-circle class="h-6 w-6 group-hover:text-red-600" />
-								<span class="ms-3 flex-1  text-sm group-hover:text-red-600">Kuesioner</span>
-							</a>
-						</li> --}}
-
-                        @can('announcement-list')
-                            <li>
-                                <a class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
-                                    href="{{ route('announcement.index') }}" wire:navigate
-                                    wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-dark-primary">
-                                    <x-icons.bullhorn class="h-6 w-6 group-hover:text-red-600" />
-                                    <span
-                                        class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Pemberitahuan</span>
-                                </a>
-                            </li>
-                        @endcan
-
-                        @can('log-list')
-                            <li>
-                                <a class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
-                                    href="{{ route('log.index') }}" wire:navigate
-                                    wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-dark-primary">
-                                    <x-icons.window class="h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Log
-                                        Aktivitas</span>
-                                </a>
-                            </li>
-                        @endcan
-
-                        @can('backup-list')
-                            <li>
-                                <a class="group flex w-full items-center rounded-xl p-2 pl-11 text-gray-900 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-transparent"
-                                    href="{{ route('backup.index') }}"
-                                    wire:current.href="!text-red-600 !dark:text-red-600 !dark:font-bold !font-bold bg-gray-100 dark:bg-dark-primary"
-                                    wire:navigate>
-                                    <x-icons.filezip class="h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 flex-1 whitespace-nowrap text-sm group-hover:text-red-600">Manage
-                                        Backups</span>
-                                </a>
-                            </li>
-                        @endcan
-
-                    </ul>
-                </li>
-            @endif
-
-            {{-- laporan teknisi --}}
-            @can('technician-list')
-                <li x-data="{ point: {{ Route::is('points.*') || Route::is('technicianpoints.*') ? 'true' : 'false' }} }">
-                    <button
-                        class="{{ Route::is('points.*') || Route::is('technicianpoints.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-primary hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 text-base text-gray-900 transition duration-200"
-                        type="button" aria-controls="point-dropdown" @click="point = !point" :aria-expanded="point">
-
-                        <x-icons.wallet
-                            class="{{ Route::is('points.*') || Route::is('technicianpoints.*') ? 'text-red-600' : '' }} h-6 w-6 group-hover:text-red-600" />
-
-                        <span class="ms-3 flex-1 whitespace-nowrap text-left text-sm group-hover:text-red-600">Transaksi
-                            Point</span>
-
-                        <x-icons.carred-down
-                            class="ml-1 mt-1 inline h-4 w-4 transform transition-transform group-hover:text-red-600"
-                            x-bind:class="{ 'rotate-180 duration-200': point }" />
-                    </button>
-
-                    <ul class="space-y-4 py-4" id="point-dropdown" x-show="point"
-                        x-transition:enter="transition ease-in duration-200"
-                        x-transition:enter-start="transform opacity-0 -translate-y-5"
-                        x-transition:leave="transition ease-out duration-200"
-                        x-transition:leave-end="transform opacity-0 -translate-y-5">
-
-                        @can('technician-list')
-                            <li>
-                                <a class="{{ Route::is('points.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('points.index') }}" wire:navigate>
-
-                                    <x-icons.arrow-right wire:current="!text-red-600"
-                                        class="h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 inline-flex text-sm group-hover:text-red-600">
-                                        Poin Masuk
-                                    </span>
-                                </a>
-                            </li>
-                        @endcan
-
-                        @can('point-redeem')
-                            <li>
-                                <a class="{{ Route::is('technicianpoints.*') ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-transparent hover:text-red-600' }} group flex w-full items-center rounded-xl p-2 pl-11"
-                                    href="{{ route('technicianpoints.transactions') }}" wire:navigate>
-
-                                    <x-icons.arrow-left wire:current="!text-red-600"
-                                        class="h-6 w-6 group-hover:text-red-600" />
-                                    <span class="ms-3 inline-flex text-sm group-hover:text-red-600">
-                                        Poin Keluar
-                                    </span>
-                                </a>
-                            </li>
-                        @endcan
-
-                    </ul>
-                </li>
-            @endcan
-
-            {{-- event --}}
-            @if (auth()->user()->hasRole(['Admin', 'HRD', 'Management', 'Management-Special']))
-                <li>
-                    <a href="{{ route('event.index') }}"
-                        class="group flex flex-row items-center rounded-xl p-2 text-gray-900 hover:text-red-600 dark:text-gray-300"
-                        wire:navigate wire:current.href="!text-red-600 font-bold bg-gray-100 dark:bg-dark-primary">
-
-                        <x-icons.gift-box wire:current="!text-red-600" class="h-6 w-6 group-hover:text-red-600" />
-                        <span class="ms-3 inline-flex text-sm group-hover:text-red-600">
-                            Event
-                        </span>
-                    </a>
-                </li>
-            @endif
-
-            {{-- peta penyebaran --}}
-            @can('technician-approve')
-                <li>
-                    <a href="{{ route('map.distribution') }}"
-                        class="group flex flex-row items-center rounded-xl p-2 text-gray-900 hover:text-red-600 dark:text-gray-300"
-                        wire:current.href="!text-red-600 font-bold bg-gray-100 dark:bg-dark-primary">
-
-                        <x-icons.book-open wire:current="!text-red-600" class="h-6 w-6 group-hover:text-red-600" />
-                        <span class="ms-3 inline-flex text-sm group-hover:text-red-600">
-                            Peta Penyebaran Teknisi
-                        </span>
-                    </a>
-                </li>
-            @endcan
         </ul>
     </div>
 
