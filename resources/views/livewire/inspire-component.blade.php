@@ -1,3 +1,3 @@
-<p class="text-gray-600 dark:text-gray-300">
+<p class="text-sm italic leading-relaxed text-red-50 dark:text-zinc-400 lg:text-base">
     {{ $quote }}
 </p>

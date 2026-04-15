@@ -9,8 +9,6 @@ class Greetings extends Component
 {
     public $greet;
 
-    public $pesan;
-
     public function mount()
     {
         $hour = Carbon::now()->hour;
@@ -23,20 +21,6 @@ class Greetings extends Component
             $this->greet = 'Selamat sore,';
         } else {
             $this->greet = 'Selamat malam,';
-        }
-
-        try {
-            // Fetch live API insight/quote
-            $response = \Illuminate\Support\Facades\Http::timeout(2)->get('https://zenquotes.io/api/random');
-
-            if ($response->successful() && isset($response->json()[0]['q'])) {
-                $quote = $response->json()[0];
-                $this->pesan = $quote['q'].' — '.$quote['a'];
-            } else {
-                $this->pesan = 'Setiap hari adalah kesempatan baru untuk menjadi lebih baik.';
-            }
-        } catch (\Exception $e) {
-            $this->pesan = 'Setiap hari adalah kesempatan baru untuk menjadi lebih baik.';
         }
     }
 

@@ -16,8 +16,8 @@
 
         <div
             class="mt-4 border-l-2 border-red-400/50 pl-3 transition-colors duration-300 group-hover:border-red-300 dark:border-zinc-700 dark:group-hover:border-zinc-500">
-            <p class="text-sm italic leading-relaxed text-red-50 dark:text-zinc-400 lg:text-base">"{{ $pesan }}"
-            </p>
+
+            @livewire('inspire-component')
         </div>
     </div>
 </div>
