@@ -60,8 +60,7 @@
     </div>
 
     {{-- preload --}}
-    <div class="fixed inset-0 z-50 bg-white dark:bg-zinc-950 md:z-[9999]" id="preloader">
-    </div>
+    <x-utils.preloader />
 
     <!-- js -->
     @include('dashboard.layoutsDash.js')
