@@ -30,22 +30,29 @@
 
         @foreach ($drawerLinks as $item)
             @php
+                // Unified guard check — same pattern as desktop sidebar
+                $guard = $item['guard'] ?? null;
+                $canSee = match (true) {
+                    $guard === null => true,
+                    $guard[0] === 'any_permission' => auth()->user()->hasAnyPermission($guard[1]),
+                    $guard[0] === 'role' => auth()->user()->hasRole($guard[1]),
+                    $guard[0] === 'can' => auth()->user()->can($guard[1]),
+                    default => true,
+                };
+
                 $isActive = Route::is($item['check']);
-                $icon = $iconMap[$item['icon']] ?? null;
             @endphp
 
-            @can($item['permission'])
-                <a x-show="search === '' || '{{ strtolower($item['label']) }}'.includes(search.toLowerCase())"
+            @if ($canSee)
+                <a x-show="search === '' || '{{ addslashes(strtolower($item['label'])) }}'.includes(search.toLowerCase())"
                     x-transition.opacity.duration.300ms
                     class="{{ $isActive ? 'bg-red-50/50 dark:bg-red-500/10 ring-1 ring-red-200 dark:ring-red-900/50' : 'bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800/50' }} group flex cursor-pointer flex-col items-center rounded-2xl p-3 transition-all duration-300"
                     href="{{ route($item['link']) }}">
 
                     <div
                         class="{{ $isActive ? 'bg-red-600 text-white shadow-md shadow-red-500/30' : 'bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400 group-hover:bg-white dark:group-hover:bg-zinc-700 group-hover:shadow-sm group-hover:text-zinc-900 dark:group-hover:text-zinc-100 ring-1 ring-zinc-200 dark:ring-zinc-700' }} mb-3 flex h-14 w-14 items-center justify-center rounded-2xl transition-all duration-300 group-hover:-translate-y-1">
-                        @if ($icon)
-                            <x-dynamic-component :component="'icons.' . $icon"
-                                class="{{ $isActive ? '' : 'group-hover:scale-110' }} h-7 w-7 transition-transform duration-300" />
-                        @endif
+                        <x-dynamic-component :component="'icons.' . $item['icon']"
+                            class="{{ $isActive ? '' : 'group-hover:scale-110' }} h-7 w-7 transition-transform duration-300" />
                     </div>
 
                     <div
@@ -53,7 +60,7 @@
                         {{ $item['label'] }}
                     </div>
                 </a>
-            @endcan
+            @endif
         @endforeach
 
         <!-- Empty State -->

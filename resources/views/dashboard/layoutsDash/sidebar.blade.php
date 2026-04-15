@@ -1,5 +1,5 @@
 @php
-    $menu = config('navigation.desktop');
+    $menu = config('navigation');
 @endphp
 
 <!-- Sidebar Navigation -->
