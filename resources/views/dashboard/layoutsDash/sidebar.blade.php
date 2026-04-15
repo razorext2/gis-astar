@@ -37,6 +37,23 @@
         </button>
     </div>
 
+    {{-- Search Bar --}}
+    <div class="px-5 pt-4" x-show="openSidebar">
+        <div class="group relative">
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                <x-icons.search
+                    class="h-4 w-4 text-zinc-400 transition-colors duration-200 group-focus-within:text-red-600" />
+            </div>
+            <input type="text" x-model="menuSearch"
+                class="block w-full rounded-xl border-zinc-200 bg-zinc-50/50 py-2.5 pl-10 pr-3 text-sm tracking-wide text-zinc-900 placeholder-zinc-400 transition-all duration-200 focus:border-red-600 focus:bg-white focus:ring-4 focus:ring-red-600/5 dark:border-white/5 dark:bg-white/5 dark:text-white dark:placeholder-zinc-500 dark:focus:border-red-500"
+                placeholder="Cari Menu..." />
+            <button x-show="menuSearch" @click="menuSearch = ''"
+                class="absolute inset-y-0 right-0 flex items-center pr-3 text-zinc-400 hover:text-red-500">
+                <x-icons.close class="h-4 w-4" />
+            </button>
+        </div>
+    </div>
+
     {{-- Navigation Links --}}
     <div class="overflow-x-hidden overflow-y-scroll p-5" wire:scroll>
         <ul class="space-y-2 font-medium">
@@ -61,7 +78,10 @@
                         @php
                             $isActive = collect($item['check'])->contains(fn($r) => Route::is($r));
                         @endphp
-                        <li>
+                        <li x-show="!menuSearch || '{{ strtolower($item['label']) }}'.includes(menuSearch.toLowerCase())"
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 translate-y-1"
+                            x-transition:enter-end="opacity-100 translate-y-0">
                             <a href="{{ route($item['route']) }}"
                                 class="{{ $isActive ? 'bg-zinc-100/80 dark:bg-white/5 text-red-600 dark:text-red-400 font-bold border-l-4 border-red-600' : 'text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-200' }} group relative flex items-center gap-3.5 rounded-r-2xl px-4 py-3 transition-all duration-200"
                                 {{ $item['navigate'] ?? true ? 'wire:navigate' : '' }}>
@@ -88,11 +108,17 @@
                     @else
                         {{-- ── Group with submenu ──────────────────────────── --}}
                         @php
-                            // Derive active routes from all submenu check arrays
+                            // Derive active routes and search terms
                             $groupRoutes = collect($item['submenu'])->pluck('check')->flatten()->all();
+                            $searchTerms = collect($item['submenu'])
+                                ->pluck('label')
+                                ->push($item['label'])
+                                ->map(fn($l) => strtolower($l))
+                                ->toJson();
                         @endphp
 
-                        <x-dashboard.sidebar-group :label="$item['label']" :icon="$item['icon']" :routes="$groupRoutes">
+                        <x-dashboard.sidebar-group :label="$item['label']" :icon="$item['icon']" :routes="$groupRoutes"
+                            :search-terms="$searchTerms">
 
                             @foreach ($item['submenu'] as $sub)
                                 @php

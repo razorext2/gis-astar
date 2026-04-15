@@ -6,7 +6,7 @@
 </head>
 
 <body id="container" class="relative bg-zinc-50 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100"
-    x-data="{ openSidebar: true }"
+    x-data="{ openSidebar: true, menuSearch: '' }"
     onmousemove="document.getElementById('container').style.setProperty('--mouse-x', event.clientX + 'px'); document.getElementById('container').style.setProperty('--mouse-y', event.clientY + 'px');">
 
     <x-utils.dynamic-background />
