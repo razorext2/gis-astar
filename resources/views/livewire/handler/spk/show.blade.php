@@ -184,9 +184,9 @@
             <div
                 class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
                 <p class="text-xs italic"> Diproduksi Oleh </p>
-                <p class="font-semibold capitalize"> {{ $data->assignTo->name ?? '-' }} -
-                    {{ $data->assignTo->pegawai->jabatanRelasi->nama_jabatan }}
-                    ({{ $data->assignTo->pegawai->jabatanRelasi?->placementRelasi?->penempatan }})</p>
+                <p class="font-semibold capitalize"> {{ $data->assignTo?->name ?? 'Belum di assign.' }}
+                    {{ $data->assignTo?->pegawai?->jabatanRelasi?->nama_jabatan ?? '' }}
+                    ({{ $data->assignTo?->pegawai?->jabatanRelasi?->placementRelasi?->penempatan ?? '' }})</p>
             </div>
 
             <div
