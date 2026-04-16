@@ -151,11 +151,11 @@ class CollectController extends Controller
                         ['id' => 'show-btn', 'action' => route('collect.show', $data->id), 'label' => 'Detail'],
                     ];
 
-                    if (auth()->user()->can('collect-edit')) {
+                    if (auth()->user()->can('collect-edit') && $data->status != 1) {
                         $actions[] = ['id' => 'edit-btn', 'action' => route('collect.edit', $data->id), 'label' => 'Edit'];
                     }
 
-                    if (auth()->user()->can('collect-delete')) {
+                    if (auth()->user()->can('collect-delete') && $data->status == 0) {
                         $actions[] = ['id' => 'delete-btn', 'action' => 'javascript:void(0)', 'label' => 'Hapus'];
                     }
 
@@ -163,6 +163,8 @@ class CollectController extends Controller
                         return view('components.dashboard.action-buttons', [
                             'id' => $data->id,
                             'datas' => $actions,
+                            'reschedule' => auth()->user()->can('collect-approve') && $data->status == 0,
+                            'changeCollector' => auth()->user()->can('collect-approve') && $data->status == 0,
                         ]);
                     }
 

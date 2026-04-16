@@ -143,4 +143,6 @@
 			</div>
 		</div>
 	</div>
+
+	<livewire:handler.collect.manage-collect />
 @endsection
