@@ -44,16 +44,6 @@
                     </li>
                 @endif
 
-                @if ($delete)
-                    <li>
-                        <button
-                            class="block rounded-md px-4 py-2.5 text-red-500 transition-colors duration-300 ease-in-out hover:bg-red-500 hover:text-white"
-                            id="delete-btn" wire:click="$dispatch('delete', {id: {{ $id }}})"
-                            wire:key="delete-btn-{{ $id }}">
-                            Hapus
-                        </button>
-                    </li>
-                @endif
 
                 @if ($reschedule)
                     <li>
@@ -81,6 +71,17 @@
                                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                             Ganti Kolektor
+                        </button>
+                    </li>
+                @endif
+
+                @if ($delete)
+                    <li>
+                        <button
+                            class="block rounded-md px-4 py-2.5 text-red-500 transition-colors duration-300 ease-in-out hover:bg-red-500 hover:text-white"
+                            id="delete-btn" wire:click="$dispatch('delete', {id: {{ $id }}})"
+                            wire:key="delete-btn-{{ $id }}">
+                            Hapus
                         </button>
                     </li>
                 @endif
