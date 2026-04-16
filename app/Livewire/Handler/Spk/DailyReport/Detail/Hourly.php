@@ -8,7 +8,7 @@ use App\Livewire\Forms\Spk\Attachment;
 use App\Models\Spk\ProjectDailyReport;
 use App\Models\Spk\ProjectHourlyReport;
 use App\Models\Spk\ProjectHourlyReportFile;
-use App\Services\HourlyReportServices;
+use App\Services\DailyReport\HourlyReportServices;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;

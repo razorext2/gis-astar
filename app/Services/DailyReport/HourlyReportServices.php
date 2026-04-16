@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\DailyReport;
 
 use App\Exceptions\BusinessException;
 use Carbon\Carbon;
