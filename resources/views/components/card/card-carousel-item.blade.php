@@ -35,9 +35,11 @@
     ];
 
     $style = $colorMap[$color] ?? $colorMap['red'];
+    $visibleCount = $visibleCount ?? 4;
+    $itemClasses = $visibleCount <= 4 ? 'flex-1 min-w-0' : 'min-w-[280px] flex-shrink-0';
 @endphp
 
-<div class="group relative min-w-[240px] max-w-[320px] flex-1 flex-shrink-0 snap-start">
+<div class="group relative {{ $itemClasses }} snap-start">
     <div class="relative h-full transition-transform duration-300 ease-out group-hover:-translate-y-1.5">
 
         {{-- Main Card --}}

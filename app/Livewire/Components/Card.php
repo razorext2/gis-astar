@@ -20,13 +20,11 @@ class Card extends Component
     {
         $datas = $this->resolveCards();
 
-        $totalData = 0;
-        foreach ($datas as $data) {
-            $permission = $data['permission'] ?? 'all';
-            if ($permission === 'all' || auth()->user()->can($permission)) {
-                $totalData++;
-            }
-        }
+        $totalData = collect($datas)->filter(function ($card) {
+            $permission = $card['permission'] ?? 'all';
+
+            return $permission === 'all' || auth()->user()->hasPermissionTo($permission);
+        })->count();
 
         return view('livewire.components.card', ['data' => $datas, 'totalData' => $totalData]);
     }
@@ -40,6 +38,7 @@ class Card extends Component
         return match ($this->type) {
             'spk' => $this->getSpkCards(),
             'dashboard' => $this->getDashboardCards(),
+            'attendancetoday' => $this->getAttendanceTodayCards(),
             'attendancein' => $this->getAttendanceCards(Attendance::class),
             'attendanceout' => $this->getAttendanceCards(AttendanceOut::class),
             default => [],
@@ -103,5 +102,10 @@ class Card extends Component
     protected function getAttendanceCards($model)
     {
         return app(AttendanceCardService::class)->getAttendanceCards($model);
+    }
+
+    protected function getAttendanceTodayCards()
+    {
+        return app(AttendanceCardService::class)->getAttendanceTodayCards();
     }
 }
