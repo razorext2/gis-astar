@@ -35,8 +35,19 @@
     ];
 
     $style = $colorMap[$color] ?? $colorMap['red'];
-    $visibleCount = $visibleCount ?? 4;
-    $itemClasses = $visibleCount <= 4 ? 'flex-1 min-w-0' : 'min-w-[280px] flex-shrink-0';
+    $visibleCount = $visibleCount ?? 1;
+
+    // Responsive logic:
+    // 1 card: full width
+    // 2-3 cards: desktop/tab balanced, mobile overflow
+    // 4 cards: desktop balanced, tab/mobile overflow
+    // 5+ cards: all overflow
+    $itemClasses = match (true) {
+        $visibleCount == 1 => 'flex-1 min-w-0',
+        $visibleCount == 2 || $visibleCount == 3 => 'md:flex-1 min-w-[280px] md:min-w-0 flex-shrink-0 md:flex-shrink',
+        $visibleCount == 4 => 'lg:flex-1 min-w-[280px] lg:min-w-0 flex-shrink-0 lg:flex-shrink',
+        default => 'min-w-[280px] flex-shrink-0',
+    };
 @endphp
 
 <div class="group relative {{ $itemClasses }} snap-start">
