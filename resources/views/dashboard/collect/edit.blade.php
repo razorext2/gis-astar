@@ -202,7 +202,9 @@
 		</div>
 	</div>
 
-	@livewire('utils.camera-stream-modal')
+    @push('modals')
+        @livewire('utils.camera-stream-modal')
+    @endpush
 @endsection
 @push('script')
 	@vite(['resources/js/pages/collect/edit.js'])

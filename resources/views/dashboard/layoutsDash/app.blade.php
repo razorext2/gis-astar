@@ -64,6 +64,7 @@
 
     <!-- js -->
     @include('dashboard.layoutsDash.js')
+    @stack('modals')
 </body>
 
 </html>
