@@ -33,48 +33,40 @@ class SalesController extends Controller
                 // Jika user tidak memiliki izin 'sales-approve', batasi berdasarkan kode pegawai
                 if (! $user->can('sales-approve')) {
                     $query->where('kode_pegawai', $user->kode_pegawai);
-                }
+                } else {
+                    // Logic visibilitas berdasarkan wilayah/role untuk Manager/Staf yang berwenang
+                    $allowedRoles = [];
 
-                // Filter relasi user yang memiliki role 'Sales-IDY'
-                if ($user->hasAnyRole(['HRD-IDY', 'Marketing-IDY']) || $user->can('sales-export-idy')) {
-                    $query->whereHas('userRelasi.roles', function ($role) {
-                        $role->where('name', 'Sales-IDY');
-                    });
-                }
+                    if ($user->hasAnyRole(['HRD-IDY', 'Marketing-IDY']) || $user->can('sales-export-idy')) {
+                        $allowedRoles[] = 'Sales-IDY';
+                    }
 
-                // Filter relasi user yang memiliki role 'Kurir-Bank
-                if ($user->hasAnyRole(['Kasir', 'Piutang']) || $user->can('sales-export-kurir-bank')) {
-                    $query->whereHas('userRelasi.roles', function ($role) {
-                        $role->where('name', 'Kurir-Bank');
-                    });
-                }
+                    if ($user->hasAnyRole(['Kasir', 'Piutang']) || $user->can('sales-export-kurir-bank')) {
+                        $allowedRoles[] = 'Kurir-Bank';
+                    }
 
-                // Filter relasi user yang memiliki role 'Sales'
-                if ($user->hasRole('Marketing') || $user->can('sales-export-medan')) {
-                    $query->orWhereHas('userRelasi.roles', function ($r) {
-                        $r->where('name', 'Sales');
-                    });
-                }
+                    if ($user->hasRole('Marketing') || $user->can('sales-export-medan')) {
+                        $allowedRoles[] = 'Sales';
+                    }
 
-                // Filter relasi user yang memiliki role 'Sales-JKT'
-                if ($user->hasAnyRole(['Marketing-JKT', 'Management-JKT']) || $user->can('sales-export-jkt')) {
-                    $query->orWhereHas('userRelasi.roles', function ($r) {
-                        $r->where('name', 'Sales-JKT');
-                    });
-                }
+                    if ($user->hasAnyRole(['Marketing-JKT', 'Management-JKT']) || $user->can('sales-export-jkt')) {
+                        $allowedRoles[] = 'Sales-JKT';
+                    }
 
-                // Filter relasi user yang memiliki role 'Sales-PKU'
-                if ($user->hasAnyRole(['Marketing-PKU', 'Management-PKU']) || $user->can('sales-export-pku')) {
-                    $query->orWhereHas('userRelasi.roles', function ($r) {
-                        $r->where('name', 'Sales-PKU');
-                    });
-                }
+                    if ($user->hasAnyRole(['Marketing-PKU', 'Management-PKU']) || $user->can('sales-export-pku')) {
+                        $allowedRoles[] = 'Sales-PKU';
+                    }
 
-                // Filter relasi user yang memiliki role 'Sales-Agrotec'
-                if ($user->can('sales-export-agrotec') || $user->hasRole('Service-Agrotec')) {
-                    $query->orWhereHas('userRelasi.roles', function ($r) {
-                        $r->where('name', 'Sales-Agrotec');
-                    });
+                    if ($user->can('sales-export-agrotec') || $user->hasRole('Service-Agrotec')) {
+                        $allowedRoles[] = 'Sales-Agrotec';
+                    }
+
+                    // Terapkan filter region jika user memiliki role/kemampuan spesifik wilayah
+                    if (! empty($allowedRoles)) {
+                        $query->whereHas('userRelasi.roles', function ($q) use ($allowedRoles) {
+                            $q->whereIn('name', $allowedRoles);
+                        });
+                    }
                 }
 
                 $query->orderBy('status')

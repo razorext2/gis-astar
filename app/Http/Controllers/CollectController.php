@@ -44,33 +44,37 @@ class CollectController extends Controller
 
     public function showdata(Request $request)
     {
+        // 1. Optimized Eager Loading (Select specific columns for lower memory footprint)
         $query = Collector::query()
-            ->with(['pegawaiRelasi:kode_pegawai,full_name', 'collectTaskRelasi', 'collectTaskPpnRelasi', 'collectIdyPpnRelasi'])
+            ->with([
+                'pegawaiRelasi:kode_pegawai,full_name',
+                'collectTaskRelasi:no_sr,customer_recipient,customer_name',
+                'collectTaskPpnRelasi:tax_invoice,customer_recipient,customer_name',
+                'collectIdyPpnRelasi:tax_invoice,customer_recipient,customer_name',
+            ])
             ->whereNull('deleted_at');
 
-        if (auth()->user()->hasRole('Collector')) {
-            $query->where('kode_pegawai', auth()->user()->kode_pegawai);
+        $user = auth()->user();
+
+        // 2. Base Restriction
+        if ($user->hasRole('Collector')) {
+            $query->where('kode_pegawai', $user->kode_pegawai);
         }
 
-        $status = $request->get('s');
+        // 3. Consolidated Status Filtering
+        $statusValue = match ($request->get('s')) {
+            'approved' => 1,
+            'submitted' => 2,
+            'rejected' => 3,
+            'revision' => 4,
+            default => 0,
+        };
 
-        if ($status == 'approved') {
-            // filter status = 1 (disetujui)
-            $query->where('status', 1);
-        } elseif ($status == 'submitted') {
-            // filter status = 2 (diajukan)
-            $query->where('status', 2);
-        } elseif ($status == 'rejected') {
-            // filter status = 3 (ditolak)
-            $query->where('status', 3);
-        } elseif ($status == 'revision') {
-            // filter status = 4 (perlu revisi)
-            $query->where('status', 4);
-        } else {
-            $query->where('status', 0);
-            if (! auth()->user()->can('collect-approve')) {
-                $query->whereDate('assign_date', today());
-            }
+        $query->where('status', $statusValue);
+
+        // Additional restriction for new data (status 0)
+        if ($statusValue == 0 && ! $user->can('collect-approve')) {
+            $query->whereDate('assign_date', today());
         }
 
         $query->latest();
@@ -86,101 +90,73 @@ class CollectController extends Controller
                     ]);
                 })
                 ->editColumn('title', function ($data) {
+                    // Extract recipient name based on bill type
+                    $recipient = match ($data->bill_type) {
+                        'idcnonppn' => $data->collectTaskRelasi->customer_recipient ?? 'N/A',
+                        'idcppn' => $data->collectTaskPpnRelasi->customer_recipient ?? 'N/A',
+                        'idyppn' => $data->collectIdyPpnRelasi->customer_recipient ?? 'N/A',
+                        default => 'N/A',
+                    };
+
                     return view('components.dashboard.title-w-status', [
-                        'title' => match ($data->bill_type) {
-                            'idcnonppn' => strtoupper($data->collectTaskRelasi->customer_recipient ?? 'N/A'),
-                            'idcppn' => strtoupper($data->collectTaskPpnRelasi->customer_recipient ?? 'N/A'),
-                            'idyppn' => strtoupper($data->collectIdyPpnRelasi->customer_recipient ?? 'N/A'),
-                            default => 'N/A',
-                        }.' ( '.strtoupper($data->bill_type ?? 'N/A').' )',
+                        'title' => strtoupper($recipient).' ( '.strtoupper($data->bill_type ?? 'N/A').' )',
                         'status' => $data->status ?? 'N/A',
                         'item3' => $data->location ?? 'N/A',
                     ]);
                 })
                 ->editColumn('payment_type', function ($data) {
-                    if ($data->have_paid == 0) {
-                        $status = 'Belum bayar';
-                    } elseif ($data->have_paid == 1) {
-                        $status = 'Cicilan';
-                    } elseif ($data->have_paid == 2) {
-                        $status = 'Lunas';
-                    } elseif ($data->have_paid == 3) {
-                        $status = 'Tanda terima';
-                    } elseif ($data->have_paid == 4) {
-                        $status = 'Ada Kendala';
-                    } elseif ($data->have_paid == 5) {
-                        $status = 'Antar bon lunas';
-                    }
+                    $paidStatuses = [
+                        0 => 'Belum bayar',
+                        1 => 'Cicilan',
+                        2 => 'Lunas',
+                        3 => 'Tanda terima',
+                        4 => 'Ada Kendala',
+                        5 => 'Antar bon lunas',
+                    ];
 
-                    if ($data->payment_type == 0) {
-                        $type = 'Tidak ada';
-                    } elseif ($data->payment_type == 1) {
-                        $type = 'Cash';
-                    } elseif ($data->payment_type == 2) {
-                        $type = 'Transfer';
-                    } elseif ($data->payment_type == 3) {
-                        $type = 'Giro';
-                    }
+                    $types = [
+                        0 => 'Tidak ada',
+                        1 => 'Cash',
+                        2 => 'Transfer',
+                        3 => 'Giro',
+                    ];
 
-                    if ($data->have_paid == 1 || $data->have_paid == 2) {
+                    $statusLabel = $paidStatuses[$data->have_paid] ?? 'N/A';
+                    $typeLabel = $types[$data->payment_type] ?? 'N/A';
+
+                    if (in_array($data->have_paid, [1, 2])) {
                         return view('components.table-component.payment-detail', [
                             'status' => $data->have_paid,
                             'data' => [
-                                [
-                                    'title' => 'Status',
-                                    'data' => $status,
-                                ],
-                                [
-                                    'title' => 'Metode',
-                                    'data' => $type,
-                                ],
-                                [
-                                    'title' => 'Bayar',
-                                    'data' => Number::currency($data->payment_amount ?? 0, 'IDR', 'id'),
-                                ],
-
+                                ['title' => 'Status', 'data' => $statusLabel],
+                                ['title' => 'Metode', 'data' => $typeLabel],
+                                ['title' => 'Bayar', 'data' => Number::currency($data->payment_amount ?? 0, 'IDR', 'id')],
                             ],
                         ]);
-                    } else {
-                        return $status;
                     }
+
+                    return $statusLabel;
                 })
                 ->editColumn('created_at', function ($data) {
-
-                    if (is_null($data->assign_at)) {
-                        $date = $data->assign_date ?? '00:00:00';
-                    } else {
-                        $date = $data->assign_at;
-                    }
+                    $date = $data->assign_at ?? ($data->assign_date ?? '00:00:00');
+                    $carbonDate = Carbon::parse($date)->locale('id');
 
                     return view('components.dashboard.custom-date', [
-                        'date' => Carbon::parse($date)->locale('id')->isoFormat('D MMMM YYYY'),
-                        'time' => Carbon::parse($date)->locale('id')->isoFormat('HH:mm:ss'),
+                        'date' => $carbonDate->isoFormat('D MMMM YYYY'),
+                        'time' => $carbonDate->isoFormat('HH:mm:ss'),
                     ]);
                 })
                 ->addColumn('actions', function ($data) {
                     $actions = [
-                        [
-                            'id' => 'show-btn',
-                            'action' => route('collect.show', $data->id),
-                            'label' => 'Detail',
-                        ],
+                        ['id' => 'show-btn', 'action' => route('collect.show', $data->id), 'label' => 'Detail'],
                     ];
 
                     if (auth()->user()->can('collect-edit')) {
-                        $actions[] = [
-                            'id' => 'edit-btn',
-                            'action' => route('collect.edit', $data->id),
-                            'label' => 'Edit',
-                        ];
+                        $actions[] = ['id' => 'edit-btn', 'action' => route('collect.edit', $data->id), 'label' => 'Edit'];
                     }
 
                     if (auth()->user()->can('collect-delete')) {
-                        $actions[] = [
-                            'id' => 'delete-btn',
-                            'action' => 'javascript:void(0)',
-                            'label' => 'Hapus',
-                        ];
+                        $actions[] = ['id' => 'delete-btn', 'action' => 'javascript:void(0)', 'label' => 'Hapus'];
                     }
 
                     if (! auth()->user()->hasRole('Collector')) {
@@ -188,39 +164,30 @@ class CollectController extends Controller
                             'id' => $data->id,
                             'datas' => $actions,
                         ]);
-                    } else {
-                        if ($data->status == 0) {
-                            return view('components.dashboard.single-button', [
-                                'id' => $data->id,
-                                'data' => [
-                                    'id' => 'editBtn'.$data->id,
-                                    'action' => route('collect.edit', $data->id),
-                                    'label' => 'Lengkapi',
-                                ],
-                            ]);
-                        } else {
-                            return view('components.dashboard.single-button', [
-                                'id' => $data->id,
-                                'data' => [
-                                    'id' => 'detailBtn'.$data->id,
-                                    'action' => route('collect.show', $data->id),
-                                    'label' => 'Detail',
-                                ],
-                            ]);
-                        }
                     }
+
+                    // For Collectors
+                    if ($data->status == 0) {
+                        return view('components.dashboard.single-button', [
+                            'id' => $data->id,
+                            'data' => ['id' => 'editBtn'.$data->id, 'action' => route('collect.edit', $data->id), 'label' => 'Lengkapi'],
+                        ]);
+                    }
+
+                    return view('components.dashboard.single-button', [
+                        'id' => $data->id,
+                        'data' => ['id' => 'detailBtn'.$data->id, 'action' => route('collect.show', $data->id), 'label' => 'Detail'],
+                    ]);
                 })
                 ->filter(function ($query) use ($request) {
+                    // Grouped title search to prevent security leaks
                     if ($request->filled('title')) {
-                        $query->whereHas('collectTaskRelasi', function ($query) use ($request) {
-                            $query->where('customer_name', 'LIKE', "%{$request->title}%");
-                        })
-                            ->orWhereHas('collectTaskPpnRelasi', function ($query) use ($request) {
-                                $query->where('customer_name', 'LIKE', "%{$request->title}%");
-                            })
-                            ->orWhereHas('collectIdyPpnRelasi', function ($query) use ($request) {
-                                $query->where('customer_name', 'LIKE', "%{$request->title}%");
-                            });
+                        $query->where(function ($q) use ($request) {
+                            $term = "%{$request->title}%";
+                            $q->whereHas('collectTaskRelasi', fn ($sq) => $sq->where('customer_name', 'LIKE', $term))
+                                ->orWhereHas('collectTaskPpnRelasi', fn ($sq) => $sq->where('customer_name', 'LIKE', $term))
+                                ->orWhereHas('collectIdyPpnRelasi', fn ($sq) => $sq->where('customer_name', 'LIKE', $term));
+                        });
                     }
 
                     if ($request->filled('no_sr')) {
