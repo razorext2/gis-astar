@@ -7,8 +7,6 @@
             class="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-red-600/10 via-transparent to-transparent dark:from-red-900/20">
         </div>
 
-        <div class="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-red-500/5 blur-3xl"></div>
-
         <div class="relative flex flex-col gap-6 p-6 sm:flex-row sm:items-end sm:p-8">
             {{-- Avatar Section --}}
             <div class="group relative w-fit" x-data="{ open: false }">
