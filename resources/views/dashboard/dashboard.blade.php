@@ -1,5 +1,7 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
+    @livewire('components.card', ['type' => 'dashboard'])
+
     <div class="flex flex-col">
         {{-- Greetings Section --}}
         <div class="mb-4">

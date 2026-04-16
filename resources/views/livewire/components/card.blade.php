@@ -4,7 +4,8 @@
 
         @foreach ($data as $row)
             @if ($row['permission'] == 'all' || auth()->user()->hasPermissionTo($row['permission']))
-                <x-card.card-carousel-item :label="$row['label']" :count="$row['count']" :indicator="$row['indicator']" :icon="$row['icon']" />
+                <x-card.card-carousel-item :label="$row['label']" :count="$row['count']" :indicator="$row['indicator']" :icon="$row['icon']"
+                    :color="$row['color']" />
             @endif
         @endforeach
 

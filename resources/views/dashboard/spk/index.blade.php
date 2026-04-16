@@ -1,5 +1,8 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
+    {{-- carousel for cards --}}
+    @livewire('components.card', ['type' => 'spk'])
+
     <div class="grid grid-cols-1 gap-6">
 
         <div

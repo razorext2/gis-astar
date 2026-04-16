@@ -33,9 +33,6 @@
                 @include('dashboard.layoutsDash.title')
             </div>
 
-            {{-- carousel for cards --}}
-            @livewire('components.card')
-
             {{-- announcement --}}
             @livewire('utils.announcement-container')
 
