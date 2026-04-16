@@ -4,9 +4,13 @@ namespace App\Livewire\Components;
 
 use App\Models\Attendance;
 use App\Models\AttendanceOut;
+use App\Models\CollectIdyPpn;
 use App\Models\Collector;
+use App\Models\CollectTask;
+use App\Models\CollectTaskPpn;
 use App\Models\Sales;
 use App\Services\Attendance\AttendanceCardService;
+use App\Services\Collector\CollectorCardService;
 use App\Services\Spk\SpkCardService;
 use Livewire\Component;
 
@@ -41,6 +45,9 @@ class Card extends Component
             'attendancetoday' => $this->getAttendanceTodayCards(),
             'attendancein' => $this->getAttendanceCards(Attendance::class),
             'attendanceout' => $this->getAttendanceCards(AttendanceOut::class),
+            'collectoridcnonppn' => $this->getCollectorCards(CollectTask::class),
+            'collectoridcppn' => $this->getCollectorCards(CollectTaskPpn::class),
+            'collectoridyppn' => $this->getCollectorCards(CollectIdyPpn::class),
             default => [],
         };
     }
@@ -107,5 +114,10 @@ class Card extends Component
     protected function getAttendanceTodayCards()
     {
         return app(AttendanceCardService::class)->getAttendanceTodayCards();
+    }
+
+    protected function getCollectorCards($model)
+    {
+        return app(CollectorCardService::class)->getCollectorCards($model);
     }
 }
