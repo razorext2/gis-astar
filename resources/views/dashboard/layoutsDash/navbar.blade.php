@@ -35,13 +35,14 @@
                 </button>
 
                 {{-- Notification Dropdown --}}
-                <div class="z-50 my-3 hidden !w-[100vw] max-w-none sm:!w-[384px]"
-                    id="notification-dropdown">
-                    <div class="mx-4 overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 sm:mx-0">
+                <div class="z-50 my-3 hidden !w-[100vw] max-w-none sm:!w-[384px]" id="notification-dropdown">
+                    <div
+                        class="mx-4 overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 sm:mx-0">
                         <div
                             class="flex items-center justify-between border-b border-zinc-100 px-4 py-3 dark:border-zinc-800">
                             <div class="flex items-center gap-2">
-                                <div class="h-1.5 w-1.5 rounded-full bg-red-600 shadow-[0_0_6px_rgba(220,38,38,0.5)]"></div>
+                                <div class="h-1.5 w-1.5 rounded-full bg-red-600 shadow-[0_0_6px_rgba(220,38,38,0.5)]">
+                                </div>
                                 <p class="text-sm font-bold text-zinc-800 dark:text-white">Notifikasi</p>
                             </div>
                         </div>
@@ -115,9 +116,28 @@
                             </li>
                         @endhasanyrole
                         <li>
-                            <div class="flex items-center gap-3 px-4 py-2.5">
-                                <x-button-dark />
-                                <x-button-light />
+                            <div class="flex items-center justify-between px-4 py-2.5">
+                                <span class="text-sm font-medium text-zinc-600 dark:text-zinc-400">Theme</span>
+                                <div class="flex items-center gap-1.5">
+                                    <x-button-dark />
+                                    <x-button-light />
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="flex cursor-pointer items-center justify-between px-4 py-2.5 transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800"
+                                @click.stop="dynamicBg = !dynamicBg">
+                                <span class="text-sm font-medium text-zinc-600 dark:text-zinc-400">Dynamic Bg</span>
+                                <button type="button"
+                                    class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-dark-primary"
+                                    role="switch" :aria-checked="dynamicBg.toString()">
+                                    <span class="sr-only">Toggle dynamic background</span>
+                                    <span aria-hidden="true"
+                                        :class="dynamicBg ? 'bg-red-500' : 'bg-zinc-200 dark:bg-zinc-700'"
+                                        class="pointer-events-none absolute mx-auto h-4 w-8 rounded-full transition-colors duration-200 ease-in-out"></span>
+                                    <span aria-hidden="true" :class="dynamicBg ? 'translate-x-4' : 'translate-x-0'"
+                                        class="pointer-events-none absolute left-0.5 inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition-transform duration-200 ease-in-out"></span>
+                                </button>
                             </div>
                         </li>
                     </ul>

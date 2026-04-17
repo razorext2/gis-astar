@@ -6,10 +6,13 @@
 </head>
 
 <body id="container" class="relative bg-zinc-50 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100"
-    x-data="{ openSidebar: true, menuSearch: '' }"
+    x-data="{ openSidebar: true, menuSearch: '', dynamicBg: localStorage.getItem('dynamicBg') === null ? true : localStorage.getItem('dynamicBg') === 'true' }"
+    x-init="$watch('dynamicBg', value => localStorage.setItem('dynamicBg', value))"
     onmousemove="document.getElementById('container').style.setProperty('--mouse-x', event.clientX + 'px'); document.getElementById('container').style.setProperty('--mouse-y', event.clientY + 'px');">
 
-    <x-utils.dynamic-background />
+    <div x-show="dynamicBg" x-transition.opacity.duration.500ms>
+        <x-utils.dynamic-background />
+    </div>
 
     <div class="relative z-10 mb-5 flex min-h-screen flex-col">
         @if (session('status'))
