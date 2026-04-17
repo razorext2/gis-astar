@@ -1,5 +1,7 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
+    @livewire('components.card', ['type' => 'spkproduction'])
+
     <div class="relative grid grid-cols-1 gap-6">
 
         <div

@@ -40,7 +40,6 @@ class Card extends Component
         }
 
         return match ($this->type) {
-            'spk' => $this->getSpkCards(),
             'dashboard' => $this->getDashboardCards(),
             'attendancetoday' => $this->getAttendanceTodayCards(),
             'attendancein' => $this->getAttendanceCards(Attendance::class),
@@ -48,8 +47,28 @@ class Card extends Component
             'collectoridcnonppn' => $this->getCollectorCards(CollectTask::class),
             'collectoridcppn' => $this->getCollectorCards(CollectTaskPpn::class),
             'collectoridyppn' => $this->getCollectorCards(CollectIdyPpn::class),
+            'spk' => $this->getSpkCards(),
+            'spkpurchasingrequest' => $this->getSpkPurchasingRequestCards(),
+            'spkproduction' => $this->getSpkProductionCards(),
+            'spkdelivery' => $this->getSpkDeliveryCards(),
+            'spkbilling' => $this->getSpkBillingCards(),
             default => [],
         };
+    }
+
+    protected function getSpkBillingCards()
+    {
+        return app(SpkCardService::class)->getSpkBillingCards();
+    }
+
+    protected function getSpkDeliveryCards()
+    {
+        return app(SpkCardService::class)->getSpkDeliveryCards();
+    }
+
+    protected function getSpkProductionCards()
+    {
+        return app(SpkCardService::class)->getSpkProductionCards();
     }
 
     protected function getDashboardCards(): array
@@ -119,5 +138,10 @@ class Card extends Component
     protected function getCollectorCards($model)
     {
         return app(CollectorCardService::class)->getCollectorCards($model);
+    }
+
+    protected function getSpkPurchasingRequestCards(): array
+    {
+        return app(SpkCardService::class)->getSpkPurchasingRequestCards();
     }
 }
