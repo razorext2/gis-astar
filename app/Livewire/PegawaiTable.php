@@ -22,7 +22,7 @@ final class PegawaiTable extends PowerGridComponent
 
     public bool $deferLoading = true;
 
-    public bool $showFilters = true;
+    public bool $showFilters = false;
 
     public $golongan;
 
