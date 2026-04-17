@@ -1,87 +1,94 @@
 @extends('dashboard.layoutsDash.app')
+
 @section('content')
-	<div class="w-full space-y-6">
-		<div
-			class="rounded-xl bg-white p-4 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 sm:p-6">
-			<div class="">
-				<header class="flex flex-row">
-					<a
-						class="mb-4 mr-3 flex flex-row rounded-lg px-2.5 py-2.5 align-middle ring-1 ring-red-700 hover:bg-red-300 dark:bg-red-800 dark:text-white dark:ring-gray-700 dark:hover:bg-red-900 md:px-4"
-						href="{{ route('users.index') }}">
-						<x-icons.angle-left class="h-6 w-6 text-red-500 dark:text-white" />
-						Kembali
-					</a>
-					<h2 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
-						{{ __('Tambah Data User') }}
-					</h2>
+    <div class="w-full space-y-6 xl:w-8/12 2xl:w-6/12">
+        <div
+            class="rounded-2xl bg-white/80 p-6 shadow-xl ring-1 ring-gray-200 backdrop-blur-md dark:bg-dark-primary/80 dark:shadow-none dark:ring-gray-800 lg:p-8">
+            <div class="max-w-4xl">
+                <header class="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                    <div class="flex items-center gap-4">
+                        <a href="{{ route('users.index') }}"
+                            class="group inline-flex h-10 w-10 items-center justify-center rounded-xl bg-red-50 text-red-600 transition-all hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50">
+                            <x-icons.angle-left class="h-6 w-6 transition-transform group-hover:-translate-x-1" />
+                        </a>
+                        <div>
+                            <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                {{ __('Tambah Data User') }}
+                            </h2>
+                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                {{ __('Daftarkan akun pengguna baru dengan hak akses yang sesuai.') }}
+                            </p>
+                        </div>
+                    </div>
+                </header>
 
-				</header>
-				<p class="mt-1 text-sm text-gray-600 dark:text-gray-300">
-					{{ __('Silahkan sesuaikan data dibawah ini dengan data yang benar.') }}
-				</p>
+                <form action="{{ route('users.store') }}" method="POST" class="space-y-2 lg:space-y-4">
+                    @csrf
 
-				<form class="mt-4" action="{{ route('users.store') }}" method="POST">
-					@csrf
-					<div class="mb-4 grid gap-6 sm:mb-5 sm:gap-6 md:grid-cols-2">
-						<div class="w-full">
-							<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="name">Nama
-								User</label>
-							<input
-								class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
-								id="name" name="name" type="text" placeholder="User" required="">
-						</div>
+                    <!-- Section: Informasi Dasar -->
+                    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Nama Lengkap</label>
+                            <x-input.basic name="name" id="name" placeholder="John Doe" required />
+                        </div>
 
-						<div c md:grid-cols-2lass="w-full">
-							<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="email">Email
-								User</label>
-							<input
-								class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
-								id="email" name="email" type="email" placeholder="Email">
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Alamat Email</label>
+                            <x-input.basic name="email" id="email" type="email" placeholder="john@example.com"
+                                required />
+                        </div>
+                    </div>
 
-						</div>
-						<div class="w-full">
-							<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="password">Password</label>
-							<input
-								class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
-								id="password" name="password" type="password" placeholder="Password">
+                    <!-- Section: Keamanan -->
+                    <div
+                        class="rounded-2xl border border-blue-100 bg-blue-50/30 p-6 dark:border-blue-900/30 dark:bg-blue-900/10">
+                        <h3
+                            class="mb-4 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                            <span class="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-400"></span>
+                            Keamanan Akun
+                        </h3>
+                        <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                            <div class="space-y-2">
+                                <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Password</label>
+                                <x-input.basic name="password" id="password" type="password" placeholder="••••••••"
+                                    required />
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Konfirmasi
+                                    Password</label>
+                                <x-input.basic name="confirm-password" id="confirm-password" type="password"
+                                    placeholder="••••••••" required />
+                            </div>
+                        </div>
+                    </div>
 
-						</div>
-						<div class="w-full">
-							<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="confirm-password">Confirm
-								Password</label>
-							<input
-								class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
-								id="confirm-password" name="confirm-password" type="password" placeholder="Confirm Password">
+                    <!-- Section: Roles -->
+                    <div class="space-y-2">
+                        <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Roles / Peran Akses</label>
+                        <div class="group relative">
+                            <select name="roles[]" id="roles" multiple="multiple"
+                                class="block w-full rounded-xl border border-gray-200 bg-white p-3 text-sm transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                                @foreach ($roles as $value => $label)
+                                    <option value="{{ $value }}">
+                                        {{ $label }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <p class="text-[10px] italic text-gray-400 sm:text-xs">Tekan Ctrl (Windows) atau Cmd (Mac) untuk
+                            memilih lebih dari satu peran.</p>
+                    </div>
 
-						</div>
-
-						<div class="col-span-2 w-full">
-							<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="roles">Roles</label>
-							<select
-								class="focus:ring-primary-500 focus:border-primary-500 block h-32 w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
-								id="roles" name="roles[]" multiple="multiple">
-								@foreach ($roles as $value => $label)
-									<option value="{{ $value }}">
-										{{ $label }}
-									</option>
-								@endforeach
-							</select>
-						</div>
-					</div>
-					<div class="flex items-center">
-						<button
-							class="inline-flex items-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-gray-900 ring-1 ring-blue-700 hover:bg-blue-800 hover:text-white focus:text-white focus:ring-4 focus:ring-blue-300 dark:bg-blue-800 dark:text-white dark:ring-gray-700 dark:hover:bg-blue-900"
-							type="submit">
-							Submit
-							<svg class="ms-2 h-3.5 w-3.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-								viewBox="0 0 14 10">
-								<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-									d="M1 5h12m0 0L9 1m4 4L9 9" />
-							</svg>
-						</button>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+                    <div class="flex items-center">
+                        <x-button.primary id="store" type="submit" class="w-full sm:w-auto">
+                            <x-slot name="icon">
+                                <x-icons.plus class="h-5 w-5" />
+                            </x-slot>
+                            <span>Daftarkan User</span>
+                        </x-button.primary>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection

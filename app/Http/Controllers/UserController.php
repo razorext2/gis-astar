@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ApiResource;
+use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -64,9 +64,8 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
-        $user = User::find($id);
         $roles = Role::pluck('name', 'name')->all();
         $userRole = $user->roles->pluck('name', 'name')->all();
 
@@ -76,30 +75,15 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,'.$id,
-            'password' => 'same:confirm-password',
-            'roles' => 'required',
-        ]);
+        $input = $request->validated();
 
         if ($request->is_active == 0) {
-            $validator->addRules([
-                'deactivation_reason' => 'required|string|max:100',
-            ]);
-        }
-
-        if ($validator->fails()) {
-            return new ApiResource(false, 'Validasi gagal', $validator->errors());
-        }
-
-        $input = $request->all();
-
-        if ($request->is_active == 0) {
-            $input['deactivation_reason'] = $request->deactivation_reason;
             $input['deactivation_at'] = now();
+            
+            // Hapus session jika user dinonaktifkan
+            DB::table('sessions')->where('user_id', $user->id)->delete();
         } else {
             $input['deactivation_reason'] = null;
             $input['deactivation_at'] = null;
@@ -108,15 +92,13 @@ class UserController extends Controller
         if (! empty($input['password'])) {
             $input['password'] = Hash::make($input['password']);
         } else {
-            $input = Arr::except($input, ['password']);
+            unset($input['password']);
         }
 
-        $user = User::find($id);
         $user->update($input);
 
-        DB::table('model_has_roles')->where('model_id', $id)->delete();
-
-        $user->assignRole($request->input('roles'));
+        // Sync roles menggunakan spatie method (lebih bersih)
+        $user->syncRoles($request->input('roles'));
 
         return redirect()->route('users.index')
             ->with('status', 'Berhasil mengubah data user');

@@ -1,108 +1,119 @@
 @extends('dashboard.layoutsDash.app')
+
 @section('content')
-	<div class="w-full space-y-6 xl:w-6/12 2xl:w-1/3">
-		<div
-			class="rounded-xl bg-white p-4 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 sm:p-6">
-			<div class="max-w-xl">
-				<header class="flex flex-row">
-					<a
-						class="mb-4 mr-3 flex flex-row rounded-lg px-2.5 py-2.5 align-middle ring-1 ring-red-700 hover:bg-red-300 dark:bg-red-800 dark:text-white dark:ring-gray-700 dark:hover:bg-red-900 md:px-4"
-						href="{{ route('users.index') }}">
-						<x-icons.angle-left class="h-6 w-6 text-red-500 dark:text-white" />
-						Kembali
-					</a>
-					<h2 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
-						{{ __('Tambah Data User') }}
-					</h2>
+    <div class="w-full space-y-6 xl:w-8/12 2xl:w-6/12">
+        <div
+            class="rounded-2xl bg-white/80 p-6 shadow-xl ring-1 ring-gray-200 backdrop-blur-md dark:bg-dark-primary/80 dark:shadow-none dark:ring-gray-800 lg:p-8">
+            <div class="max-w-4xl">
+                <header class="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                    <div class="flex items-center gap-4">
+                        <a href="{{ route('users.index') }}"
+                            class="group inline-flex h-10 w-10 items-center justify-center rounded-xl bg-red-50 text-red-600 transition-all hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50">
+                            <x-icons.angle-left class="h-6 w-6 transition-transform group-hover:-translate-x-1" />
+                        </a>
+                        <div>
+                            <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                {{ __('Edit Data User') }}
+                            </h2>
+                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                {{ __('Kelola profil, akun, dan peran akses pengguna di bawah ini.') }}
+                            </p>
+                        </div>
+                    </div>
+                </header>
 
-				</header>
-				<p class="mt-1 text-sm text-gray-600 dark:text-gray-300">
-					{{ __('Silahkan sesuaikan data dibawah ini dengan data yang benar.') }}
-				</p>
+                <form action="{{ route('users.update', $user) }}" method="POST" class="space-y-2 lg:space-y-4">
+                    @csrf
+                    @method('put')
 
-				<form class="mt-4" action="{{ route('users.update', $user) }}" method="POST">
-					@csrf
-					@method('put')
-					<div class="mb-4 grid gap-6 sm:mb-5 sm:gap-6">
-						<div class="w-full">
-							<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="name">Nama
-								User</label>
-							<input
-								class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
-								id="name" name="name" type="text" value="{{ $user->name }}" placeholder="User" required="">
-						</div>
+                    <!-- Section: Informasi Dasar -->
+                    <div class="grid grid-cols-1 gap-2 md:grid-cols-2 lg:gap-4">
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Nama Lengkap</label>
+                            <x-input.basic name="name" id="name" :value="$user->name" placeholder="John Doe"
+                                required />
+                        </div>
 
-						<div class="w-full">
-							<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="email">Email
-								User</label>
-							<input
-								class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
-								id="email" name="email" type="email" value="{{ $user->email }}" placeholder="Email">
-						</div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Alamat Email</label>
+                            <x-input.basic name="email" id="email" type="email" :value="$user->email"
+                                placeholder="john@example.com" required />
+                        </div>
+                    </div>
 
-						<div class="w-full">
-							<label for="is_active" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Status</label>
-							<select name="is_active" id="is_active"
-								class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500">
+                    <!-- Section: Status & Keamanan -->
+                    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Status Akun</label>
+                            <select name="is_active" id="is_active"
+                                class="block w-full rounded-xl border border-gray-200 bg-gray-50 p-2.5 text-sm transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500">
+                                <option value="1" {{ $user->is_active ? 'selected' : '' }}>Aktif</option>
+                                <option value="0" {{ !$user->is_active ? 'selected' : '' }}>Tidak Aktif</option>
+                            </select>
+                        </div>
 
-								<option value="1" {{ $user->is_active ? 'selected' : '' }}>Aktif</option>
-								<option value="0" {{ !$user->is_active ? 'selected' : '' }}>Tidak Aktif</option>
-							</select>
-						</div>
+                        <div class="{{ $user->is_active ? 'hidden' : '' }} space-y-2" id="deactivation_reason_container">
+                            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Alasan Nonaktif</label>
+                            <x-input.textarea name="deactivation_reason" id="deactivation_reason" rows="1"
+                                placeholder="Contoh: Resign atau Cuti">
+                                {{ $user->deactivation_reason }}
+                            </x-input.textarea>
+                        </div>
+                    </div>
 
-						<div class="hidden w-full" id="deactivation_reason_container">
-							<label for="deactivation_reason" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Alasan
-								Akun di Nonaktifkan</label>
-							<textarea name="deactivation_reason" id="deactivation_reason" rows="8"
-							 class="w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-							 placeholder="Tulis alasan...">{{ $user->deactivation_reason }}</textarea>
-						</div>
+                    <!-- Section: Ganti Password -->
+                    <div
+                        class="rounded-2xl border border-blue-100 bg-blue-50/30 p-6 dark:border-blue-900/30 dark:bg-blue-900/10">
+                        <h3
+                            class="mb-4 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                            <span class="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-400"></span>
+                            Ganti Password (Opsional)
+                        </h3>
+                        <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                            <div class="space-y-2">
+                                <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Password Baru</label>
+                                <x-input.basic name="password" id="password" type="password" placeholder="••••••••" />
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Konfirmasi
+                                    Password</label>
+                                <x-input.basic name="confirm-password" id="confirm-password" type="password"
+                                    placeholder="••••••••" />
+                            </div>
+                        </div>
+                        <p class="mt-3 text-xs text-blue-500/80">Kosongkan jika tidak ingin mengubah password.</p>
+                    </div>
 
-						<div class="w-full">
-							<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="password">Password</label>
-							<input
-								class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
-								id="password" name="password" type="password" placeholder="Password">
+                    <!-- Section: Roles -->
+                    <div class="space-y-2">
+                        <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Roles / Peran Akses</label>
+                        <div class="group relative">
+                            <select name="roles[]" id="roles" multiple="multiple"
+                                class="block w-full rounded-xl border border-gray-200 bg-white p-3 text-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                                @foreach ($roles as $value => $label)
+                                    <option value="{{ $value }}" {{ isset($userRole[$value]) ? 'selected' : '' }}>
+                                        {{ $label }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <p class="text-[10px] italic text-gray-400 sm:text-xs">Tekan Ctrl (Windows) atau Cmd (Mac) untuk
+                            memilih lebih dari satu peran.</p>
+                    </div>
 
-						</div>
-						<div class="w-full">
-							<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="confirm-password">Confirm
-								Password</label>
-							<input
-								class="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
-								id="confirm-password" name="confirm-password" type="password" placeholder="Confirm Password">
-						</div>
-
-						<div class="w-full">
-							<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="roles">Roles</label>
-							<select
-								class="focus:ring-primary-500 focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900"
-								id="roles" name="roles[]" multiple="multiple">
-								@foreach ($roles as $value => $label)
-									<option value="{{ $value }}" {{ isset($userRole[$value]) ? 'selected' : '' }}>
-										{{ $label }}
-									</option>
-								@endforeach
-							</select>
-						</div>
-					</div>
-					<div class="flex items-center">
-						<button
-							class="inline-flex items-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-gray-900 ring-1 ring-blue-700 hover:bg-blue-800 hover:text-white focus:text-white focus:ring-4 focus:ring-blue-300 dark:bg-blue-800 dark:text-white dark:ring-gray-700 dark:hover:bg-blue-900"
-							type="submit">
-							Submit
-							<svg class="ms-2 h-3.5 w-3.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-								viewBox="0 0 14 10">
-								<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-									d="M1 5h12m0 0L9 1m4 4L9 9" />
-							</svg>
-						</button>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+                    <div class="flex items-center">
+                        <x-button.primary id="store" type="submit" class="w-fit">
+                            <x-slot name="icon">
+                                <x-icons.checklist-stepper class="h-5 w-5" />
+                            </x-slot>
+                            <span>Update User</span>
+                        </x-button.primary>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 @push('script')
-	@vite('resources/js/pages/user/edit.js')
+    @vite('resources/js/pages/user/edit.js')
 @endpush
