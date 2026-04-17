@@ -28,7 +28,9 @@ class ProxyController extends Controller
             if ($response->successful()) {
                 $result = $response->json();
 
-                $url = 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSisa&NomorPermintaanJual='.$no_sr;
+                $nomorPermintaanJual = $result['data'][0]['NomorPermintaanJual'];
+
+                $url = 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSisa&NomorPermintaanJual='.$nomorPermintaanJual;
 
                 $response = Http::get($url);
 
@@ -76,7 +78,9 @@ class ProxyController extends Controller
             if ($response->successful()) {
                 $result = $response->json();
 
-                $url = 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSisa1&NomorFakturPajak='.$no_sr;
+                $nomorFakturPajak = $result['data'][0]['NomorFakturPajak'];
+
+                $url = 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSisa1&NomorFakturPajak='.$nomorFakturPajak;
 
                 $response = Http::get($url);
 
@@ -124,7 +128,9 @@ class ProxyController extends Controller
             if ($response->successful()) {
                 $result = $response->json();
 
-                $url = 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSisa2&NomorFakturPajak='.$no_sr;
+                $nomorFakturPajak = $result['data'][0]['NomorFakturPajak'];
+
+                $url = 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSisa2&NomorFakturPajak='.$nomorFakturPajak;
 
                 $response = Http::get($url);
 
