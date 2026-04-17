@@ -125,14 +125,18 @@ final class ProjectAssignmentTable extends PowerGridComponent
                 ";
 
                 // deadline
-                if ($sisaHari < 0) {
-                    $deadlineBadge = $badge('Habis Waktu', 'bg-red-500', 'text-red-100');
-                } elseif ($sisaJam < 24) {
-                    $deadlineBadge = $badge('Hari ini!', 'bg-red-500', 'text-red-100');
-                } elseif ($sisaHari <= ($total / 2)) {
-                    $deadlineBadge = $badge("{$sisaHari} Hari", 'bg-yellow-500', 'text-yellow-800');
-                } else {
-                    $deadlineBadge = $badge("{$sisaHari} Hari", 'bg-green-500', 'text-green-800');
+                $deadlineBadge = '';
+
+                if ($query->status !== 'completed') {
+                    if ($sisaHari < 0) {
+                        $deadlineBadge = $badge('Habis Waktu', 'bg-red-500', 'text-red-100');
+                    } elseif ($sisaJam < 24) {
+                        $deadlineBadge = $badge('Hari ini!', 'bg-red-500', 'text-red-100');
+                    } elseif ($sisaHari <= ($total / 2)) {
+                        $deadlineBadge = $badge("{$sisaHari} Hari", 'bg-yellow-500', 'text-yellow-800');
+                    } else {
+                        $deadlineBadge = $badge("{$sisaHari} Hari", 'bg-green-500', 'text-green-800');
+                    }
                 }
 
                 // status project

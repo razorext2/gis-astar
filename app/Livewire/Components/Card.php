@@ -11,6 +11,7 @@ use App\Models\CollectTaskPpn;
 use App\Models\Sales;
 use App\Services\Attendance\AttendanceCardService;
 use App\Services\Collector\CollectorCardService;
+use App\Services\DailyReport\DailyReportCardService;
 use App\Services\Spk\SpkCardService;
 use Livewire\Component;
 
@@ -53,8 +54,14 @@ class Card extends Component
             'spkdelivery' => $this->getSpkDeliveryCards(),
             'spkbilling' => $this->getSpkBillingCards(),
             'spkdailyreport' => $this->getSpkDailyReportCards(),
+            'dailyreport' => $this->getDailyReportCards(),
             default => [],
         };
+    }
+
+    protected function getDailyReportCards()
+    {
+        return app(DailyReportCardService::class)->getDailyReportCards();
     }
 
     protected function getSpkDailyReportCards()

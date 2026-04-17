@@ -1,5 +1,7 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
+    @livewire('components.card', ['type' => 'dailyreport'])
+
     <div
         class="grid grid-cols-1 gap-2 rounded-xl bg-white p-2 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 lg:gap-4 lg:p-6">
 
