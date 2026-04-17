@@ -124,7 +124,7 @@ return [
         'type' => 'group',
         'label' => 'Manajemen SPK',
         'icon' => 'clipboard-check',
-        'guard' => ['any_permission', ['spk-list', 'purchasing-request-list', 'produksi-list', 'spk-update-informasi-pengiriman']],
+        'guard' => ['any_permission', ['spk-list', 'purchasing-request-list', 'produksi-list', 'spk-update-informasi-pengiriman', 'spk-billing-index', 'laporan-harian-spk-list']],
         'submenu' => [
             [
                 'label' => 'Data SPK',
@@ -172,7 +172,7 @@ return [
                 'route' => 'billing.index',
                 'check' => ['billing.*'],
                 'icon' => 'cash',
-                'permission' => ['spk-update-no-tagihan-idcppn', 'spk-update-no-tagihan-idcnonppn', 'spk-update-no-tagihan-idyppn'],
+                'permission' => ['spk-update-no-tagihan-idcppn', 'spk-update-no-tagihan-idcnonppn', 'spk-update-no-tagihan-idyppn', 'billing-index'],
                 'navigate' => true,
             ],
             [
