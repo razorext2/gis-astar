@@ -52,8 +52,14 @@ class Card extends Component
             'spkproduction' => $this->getSpkProductionCards(),
             'spkdelivery' => $this->getSpkDeliveryCards(),
             'spkbilling' => $this->getSpkBillingCards(),
+            'spkdailyreport' => $this->getSpkDailyReportCards(),
             default => [],
         };
+    }
+
+    protected function getSpkDailyReportCards()
+    {
+        return app(SpkCardService::class)->getSpkDailyReportCards();
     }
 
     protected function getSpkBillingCards()

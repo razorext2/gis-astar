@@ -228,4 +228,34 @@ class SpkCardService
             ],
         ];
     }
+
+    public function getSpkDailyReportCards()
+    {
+        $baseQuery = SpkMain::query()
+            ->where('status_approval', 1)
+            ->where('status', '>=', 3);
+
+        return [
+            [
+                'permission' => 'all',
+                'label' => 'Proyek Belum Dilaporkan',
+                'count' => (clone $baseQuery)
+                    ->whereDoesntHave('project')
+                    ->count(),
+                'indicator' => 'Proyek',
+                'icon' => 'icons.close',
+                'color' => 'red',
+            ],
+            [
+                'permission' => 'all',
+                'label' => 'Proyek Dilaporkan',
+                'count' => (clone $baseQuery)
+                    ->whereHas('project')
+                    ->count(),
+                'indicator' => 'Proyek',
+                'icon' => 'icons.lock-time',
+                'color' => 'yellow',
+            ],
+        ];
+    }
 }
