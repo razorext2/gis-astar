@@ -11,6 +11,7 @@ class Create extends Component
     public Post $form;
     public array $permissions = [];
     public bool $selectAll = false;
+    public string $searchPermission = '';
 
     public function mount()
     {
@@ -51,6 +52,12 @@ class Create extends Component
 
     public function render()
     {
-        return view('livewire.handler.roles.create');
+        $filteredPermissions = collect($this->permissions)
+            ->filter(fn($name) => empty($this->searchPermission) || str_contains(strtolower($name), strtolower($this->searchPermission)))
+            ->map(fn($name, $id) => (object) ['id' => $id, 'name' => $name]);
+
+        $groupedPermissions = $filteredPermissions->groupBy(fn($permission) => explode('-', $permission->name)[0]);
+
+        return view('livewire.handler.roles.create', compact('groupedPermissions'));
     }
 }

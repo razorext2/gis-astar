@@ -70,12 +70,14 @@ class Update extends Component
 
     public function render()
     {
-        $permissions = Permission::select('id', 'name')
+        $permissionsQuery = Permission::select('id', 'name')
             ->where('name', 'like', '%' . $this->searchPermission . '%')
             ->get();
 
-        $this->permissions = $permissions;
+        $this->permissions = $permissionsQuery;
 
-        return view('livewire.handler.roles.update', compact('permissions'));
+        $groupedPermissions = $permissionsQuery->groupBy(fn($permission) => explode('-', $permission->name)[0]);
+
+        return view('livewire.handler.roles.update', compact('groupedPermissions'));
     }
 }

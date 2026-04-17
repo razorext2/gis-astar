@@ -18,12 +18,10 @@ final class RolesTable extends PowerGridComponent
 
     public bool $deferLoading = true;
 
-    public bool $showFilters = true;
+    public bool $showFilters = false;
 
     public function setUp(): array
     {
-        $this->showCheckBox();
-
         return [
             PowerGrid::header()
                 ->showSoftDeletes()
@@ -39,6 +37,7 @@ final class RolesTable extends PowerGridComponent
     public function datasource(): Builder
     {
         return Role::query()
+            ->withCount('users')
             ->with('permissions')
             ->orderBy('name', 'asc');
     }
@@ -66,17 +65,14 @@ final class RolesTable extends PowerGridComponent
 
                 return view('components.table-component.tags', ['items' => $data]);
             })
+            ->add('users_count')
+            ->add('users_count_formatted', function ($query) {
+                return '<span class="rounded-lg bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-800 dark:bg-blue-900 dark:text-blue-200">'.$query->users_count.' Pengguna</span>';
+            })
             ->add('created_at')
             ->add('created_at_formatted', function ($query) {
                 $date = Carbon::parse($query->created_at)->locale('id')->isoFormat('D MMMM YYYY');
                 $time = Carbon::parse($query->created_at)->locale('id')->isoFormat('HH:mm:ss');
-
-                return view('components.dashboard.custom-date', ['date' => $date, 'time' => $time]);
-            })
-            ->add('updated_at')
-            ->add('updated_at_formatted', function ($query) {
-                $date = Carbon::parse($query->updated_at)->locale('id')->isoFormat('D MMMM YYYY');
-                $time = Carbon::parse($query->updated_at)->locale('id')->isoFormat('HH:mm:ss');
 
                 return view('components.dashboard.custom-date', ['date' => $date, 'time' => $time]);
             });
@@ -91,10 +87,10 @@ final class RolesTable extends PowerGridComponent
                 ->searchable(),
             Column::make('Guard', 'guard_name')
                 ->sortable(),
+            Column::make('Jumlah Pengguna', 'users_count_formatted', 'users_count')
+                ->sortable(),
             Column::make('Permissions', 'permissions'),
             Column::make('Created at', 'created_at_formatted', 'created_at'),
-            Column::make('Updated at', 'updated_at_formatted', 'updated_at')
-                ->searchable(),
         ];
     }
 
