@@ -24,9 +24,9 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+    <div class="grid grid-cols-1 gap-2 lg:grid-cols-3 lg:gap-4">
         <!-- Left Column: Form Details -->
-        <div class="space-y-8 lg:col-span-2">
+        <div class="space-y-2 lg:col-span-2 lg:space-y-4">
             <!-- Data Personal Section -->
             <div
                 class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60">
@@ -39,7 +39,7 @@
                     <h3 class="text-xl font-bold text-gray-800 dark:text-white">Informasi Personal</h3>
                 </div>
 
-                <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+                <div class="grid grid-cols-1 gap-2 md:grid-cols-2 lg:gap-4">
                     <div class="space-y-2">
                         <x-input.basic wire:model="kode_pegawai" id="kode_pegawai" name="kode_pegawai" type="number"
                             placeholder="Kode pegawai ex: 12345">
@@ -124,7 +124,7 @@
                     <h3 class="text-xl font-bold text-gray-800 dark:text-white">Pekerjaan & Posisi</h3>
                 </div>
 
-                <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+                <div class="grid grid-cols-1 gap-2 md:grid-cols-2 lg:gap-4">
                     <div class="space-y-2">
                         <x-input.select wire:model="jabatan" id="jabatan" name="jabatan">
                             <x-slot name="label">Jabatan / Posisi</x-slot>
@@ -220,7 +220,8 @@
                         </div>
                         <div class="grid grid-cols-2 gap-3 md:grid-cols-3">
                             @foreach ($list_roles as $role)
-                                <label x-show="search === '' || '{{ strtolower($role->name) }}'.includes(search.toLowerCase())"
+                                <label
+                                    x-show="search === '' || '{{ strtolower($role->name) }}'.includes(search.toLowerCase())"
                                     class="role-item group/role flex cursor-pointer items-center gap-3 rounded-2xl border border-gray-200 p-4 transition-all hover:border-blue-300 hover:bg-blue-50 dark:border-gray-700 dark:hover:border-blue-700 dark:hover:bg-blue-900/20">
                                     <input wire:model="selected_roles" type="checkbox" value="{{ $role->name }}"
                                         class="h-5 w-5 rounded-lg border-gray-300 text-blue-600 focus:ring-blue-500">
@@ -246,7 +247,7 @@
         </div>
 
         <!-- Right Column: Photo Labels -->
-        <div class="space-y-8">
+        <div class="space-y-2 lg:space-y-4">
             <div
                 class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60">
                 <div
@@ -258,7 +259,7 @@
                     <h3 class="text-xl font-bold text-gray-800 dark:text-white">Foto Label Pegawai</h3>
                 </div>
 
-                <div class="space-y-8">
+                <div class="space-y-2 lg:space-y-4">
                     <!-- Photo 1 -->
                     <div class="space-y-4">
                         <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Foto Label

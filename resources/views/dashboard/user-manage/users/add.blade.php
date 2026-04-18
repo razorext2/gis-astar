@@ -7,10 +7,11 @@
             <div class="max-w-4xl">
                 <header class="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
                     <div class="flex items-center gap-4">
-                        <a href="{{ route('users.index') }}"
-                            class="group inline-flex h-10 w-10 items-center justify-center rounded-xl bg-red-50 text-red-600 transition-all hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50">
-                            <x-icons.angle-left class="h-6 w-6 transition-transform group-hover:-translate-x-1" />
-                        </a>
+                        <x-button.link id="back-btn"
+                            class="group justify-center bg-white/50 hover:bg-red-700 hover:text-white" wire:navigate
+                            href="{{ route('users.index') }}">
+                            <x-icons.angle-left class="h-6 w-6" />
+                        </x-button.link>
                         <div>
                             <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                                 {{ __('Tambah Data User') }}
@@ -26,7 +27,7 @@
                     @csrf
 
                     <!-- Section: Informasi Dasar -->
-                    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <div class="grid grid-cols-1 gap-2 md:grid-cols-2 lg:gap-4">
                         <div class="space-y-2">
                             <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Nama Lengkap</label>
                             <x-input.basic name="name" id="name" placeholder="John Doe" required />
@@ -47,7 +48,7 @@
                             <span class="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-400"></span>
                             Keamanan Akun
                         </h3>
-                        <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                        <div class="grid grid-cols-1 gap-2 md:grid-cols-2 lg:gap-4">
                             <div class="space-y-2">
                                 <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Password</label>
                                 <x-input.basic name="password" id="password" type="password" placeholder="••••••••"
