@@ -3,9 +3,7 @@
     <div class="flex flex-col gap-5">
 
         {{-- Greetings --}}
-        <div>
-            @livewire('utils.greetings')
-        </div>
+        <livewire:utils.greetings />
 
         {{-- Schedule Card --}}
         <livewire:dashboard.user-schedule-overview />
@@ -17,9 +15,7 @@
 
         {{-- Teknisi Report --}}
         @hasrole('Teknisi')
-            <div class="rounded-2xl bg-white shadow-sm ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800">
-                <livewire:plugin.tech-report-percentage />
-            </div>
+            <livewire:plugin.tech-report-percentage />
         @endhasrole
 
         {{-- Attendance History --}}

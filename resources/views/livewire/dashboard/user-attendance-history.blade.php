@@ -1,7 +1,7 @@
 <div>
     {{-- Attendance History (Desktop) --}}
     <div
-        class="hidden rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 lg:block lg:p-6">
+        class="hidden rounded-2xl bg-white/70 p-4 ring-1 ring-zinc-200 backdrop-blur-3xl dark:bg-zinc-900/60 dark:ring-zinc-800 lg:block lg:p-6">
         <div class="mb-5 flex items-center gap-2 border-b border-zinc-100 pb-4 dark:border-zinc-800">
             <div class="h-2 w-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,0.5)]"></div>
             <h3 class="text-base font-bold tracking-wide text-zinc-800 dark:text-white">History Absensi</h3>
@@ -131,7 +131,7 @@
 
     {{-- Attendance History (Mobile only) --}}
     <div
-        class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 lg:hidden lg:p-6">
+        class="rounded-2xl bg-white p-4 ring-1 ring-zinc-200 backdrop-blur-3xl dark:bg-zinc-900/60 dark:ring-zinc-800 lg:hidden lg:p-6">
         <div class="mb-5 flex items-center gap-2 border-b border-zinc-100 pb-4 dark:border-zinc-800">
             <div class="h-2 w-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,0.5)]"></div>
             <h3 class="text-base font-bold tracking-wide text-zinc-800 dark:text-white">History Absensi</h3>
