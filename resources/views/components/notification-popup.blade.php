@@ -1,23 +1,45 @@
-<div
-	class="fixed left-1/2 top-20 z-[60] flex w-full -translate-x-1/2 items-center divide-x px-4 transition-all duration-300 md:left-auto md:right-4 md:top-20 md:w-fit md:max-w-96 md:translate-x-0 md:px-0"
-	id="toast-top-right" role="alert" x-data="{ showToast: true }" x-init="setTimeout(() => showToast = false, 3000)" x-show="showToast"
-	x-transition:enter="transition ease-in duration-300" x-transition:enter-start="transform scale-90 opacity-0"
-	x-transition:enter-end="transform scale-100 opacity-100" x-transition:leave="transition ease-out duration-300"
-	x-transition:leave-start="transform scale-100 opacity-100" x-transition:leave-end="transform scale-90 opacity-0">
+<div class="fixed left-1/2 top-24 z-[70] flex w-full -translate-x-1/2 items-center px-4 transition-all duration-500 md:left-auto md:right-8 md:top-24 md:w-fit md:max-w-md md:translate-x-0 md:px-0"
+    id="notification-container" role="alert" x-data="{ showToast: true }" x-init="setTimeout(() => showToast = false, 5000)" x-show="showToast"
+    x-transition:enter="transition ease-out duration-500"
+    x-transition:enter-start="transform translate-y-[-20px] opacity-0 scale-95"
+    x-transition:enter-end="transform translate-y-0 opacity-100 scale-100"
+    x-transition:leave="transition ease-in duration-300"
+    x-transition:leave-start="transform translate-y-0 opacity-100 scale-100"
+    x-transition:leave-end="transform translate-y-[-20px] opacity-0 scale-95">
 
-	<div
-		class="relative flex w-full items-center gap-x-2 rounded-xl border border-t-4 border-gray-200 border-t-red-600 bg-white p-4 shadow-md dark:border-gray-700 dark:border-t-red-800 dark:bg-dark-primary md:gap-x-4"
-		id="toast-success" role="alert">
-		<div class="text-justify text-sm font-normal text-black dark:text-white">
-			{{ $slot }}
-		</div>
+    <div
+        class="relative flex w-full items-center gap-4 overflow-hidden rounded-2xl border border-white/40 bg-white/80 p-5 shadow-[0_20px_50px_rgba(0,0,0,0.1)] backdrop-blur-2xl dark:border-white/10 dark:bg-zinc-900/80 dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] md:gap-5">
 
-		<x-button.danger class="absolute -bottom-3 right-1/2 ms-auto translate-x-1/2 !rounded-full !p-2"
-			@click="showToast = false">
-			<span class="sr-only">Close</span>
-			<x-icons.close class="h-3 w-3" />
-		</x-button.danger>
+        <!-- Decoration Gradient -->
+        <div class="absolute -left-10 -top-10 h-24 w-24 rounded-full bg-blue-500/10 blur-2xl"></div>
+        <div class="absolute -bottom-10 -right-10 h-24 w-24 rounded-full bg-indigo-500/10 blur-2xl"></div>
 
-	</div>
+        <!-- Status Icon -->
+        <div
+            class="relative flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/20">
+            <x-icons.checklist-stepper class="h-5 w-5" />
+        </div>
 
+        <!-- Content -->
+        <div class="flex-grow pr-6">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Pemberitahuan</h4>
+            <div class="mt-1 text-sm font-medium leading-relaxed text-gray-700 dark:text-gray-200">
+                {{ $slot }}
+            </div>
+        </div>
+
+        <!-- Close Button -->
+        <button @click="showToast = false"
+            class="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-lg text-gray-400 transition-all hover:bg-gray-100 hover:text-gray-900 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-100">
+            <span class="sr-only">Tutup</span>
+            <x-icons.close class="h-4 w-4" />
+        </button>
+
+        <!-- Progress Bar -->
+        <div class="absolute bottom-0 left-0 h-0.5 w-full bg-gray-100 dark:bg-zinc-800">
+            <div class="h-full bg-gradient-to-r from-blue-500 to-indigo-600 shadow-[0_0_10px_rgba(59,130,246,0.5)]"
+                x-init="$el.style.transition = 'width 5s linear';
+                setTimeout(() => $el.style.width = '0%', 50)" style="width: 100%"></div>
+        </div>
+    </div>
 </div>
