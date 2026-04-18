@@ -174,7 +174,7 @@ Route::middleware(['auth'])->group(function () {
             ->only('index', 'create', 'edit');
 
         // route users
-        Route::resource('users', \App\Http\Controllers\UserController::class);
+        Route::resource('users', \App\Http\Controllers\UserController::class)->except('store', 'update');
 
         // route golongan
         Route::resource('golongan', \App\Http\Controllers\GolonganController::class);
