@@ -78,9 +78,6 @@ export default defineConfig({
                 "resources/js/pages/placement/add.js",
                 "resources/js/pages/placement/edit.js",
 
-                // user
-                "resources/js/pages/user/edit.js",
-
                 // invoice
                 "resources/js/pages/invoice/detail.js",
 
