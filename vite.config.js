@@ -73,7 +73,6 @@ export default defineConfig({
 
                 // pegawai
                 "resources/js/pages/pegawai/personalInfo.js",
-                "resources/js/pages/pegawai/edit.js",
 
                 // placement
                 "resources/js/pages/placement/add.js",

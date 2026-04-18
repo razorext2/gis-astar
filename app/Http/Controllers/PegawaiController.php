@@ -41,40 +41,9 @@ class PegawaiController extends Controller
 
     public function edit(Pegawai $pegawai)
     {
-        $jabatan = Jabatan::all();
-        $golongan = Golongan::all();
-
-        $images = $this->showImages($pegawai);
-
-        return view('dashboard.pegawai.edit', compact('pegawai', 'jabatan', 'images', 'golongan'));
+        return view('dashboard.pegawai.edit', compact('pegawai'));
     }
 
-    public function update(Request $request, Pegawai $pegawai)
-    {
-        $pegawai->update([
-            'nik_pegawai' => $request->input('nik_pegawai'),
-            'full_name' => $request->input('nama_lengkap'),
-            'nick_name' => $request->input('nick_name'),
-            'no_telp' => $request->input('no_telp'),
-            'alamat' => $request->input('alamat'),
-            'jabatan' => $request->input('jabatan'),
-            'golongan' => $request->input('golongan'),
-            'tgl_lahir' => $request->input('tgl_lahir'),
-        ]);
-
-        $photo = $request->input('photo1');
-        if (! is_null($photo)) {
-            $request->validate([
-                'kode_pegawai' => 'required|exists:tb_pegawai,kode_pegawai',
-                'photo1' => 'required|string',
-                'photo2' => 'required|string',
-            ]);
-
-            $this->saveImages($request);
-        }
-
-        return redirect()->route('pegawai.index')->with('status', 'Berhasil mengubah data Pegawai');
-    }
 
     public function autocomplete(Request $request)
     {
@@ -140,62 +109,7 @@ class PegawaiController extends Controller
         return response()->json($data);
     }
 
-    public function storeImage(Request $request)
-    {
-        if ($request->hasFile('image') && $request->input('label')) {
-            $kodePegawai = $request->input('label');
-            $timestamp = getCurrentDate();
-            Session::put('current_date', $timestamp);
 
-            $image = $request->file('image');
-
-            $uploadDir = 'labels/'.$kodePegawai.'/capturedImg';
-            $imageName = $kodePegawai.$timestamp.'.png';
-            $path = $image->move(public_path('storage/'.$uploadDir), $imageName);
-
-            if ($path) {
-                $imageUrl = asset('storage/'.$uploadDir.'/'.$imageName);
-
-                return response()->json(['imageUrl' => $imageUrl]);
-            } else {
-                return response()->json(['error' => 'Failed to save image'], 500);
-            }
-        } else {
-            return response()->json(['error' => 'No image or label received'], 400);
-        }
-    }
-
-    public function saveImages(Request $request)
-    {
-        $kodePegawai = $request->input('kode_pegawai');
-
-        $folderPath = "public/labels/{$kodePegawai}";
-        $folderToDB = "labels/{$kodePegawai}/";
-
-        if (! Storage::exists($folderPath)) {
-            Storage::makeDirectory($folderPath);
-            chmod(storage_path('app/public/labels'), 0755);
-            chmod(storage_path("app/{$folderPath}"), 0755);
-        }
-
-        $photo1Data = $request->input('photo1');
-        $photo2Data = $request->input('photo2');
-
-        $photo1Data = str_replace('data:image/jpeg;base64,', '', $photo1Data);
-        $photo1Data = base64_decode($photo1Data);
-        $photo1Path = "{$folderPath}/photo1.png";
-        Storage::put($photo1Path, $photo1Data);
-
-        $photo2Data = str_replace('data:image/jpeg;base64,', '', $photo2Data);
-        $photo2Data = base64_decode($photo2Data);
-        $photo2Path = "{$folderPath}/photo2.png";
-        Storage::put($photo2Path, $photo2Data);
-
-        Pegawai::where('kode_pegawai', $kodePegawai)
-            ->update([
-                'storage' => $folderToDB,
-            ]);
-    }
 
     public function detail(Request $request, $id)
     {

@@ -1,4 +1,4 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <livewire:pegawai.create />
+    <livewire:handler.pegawai.create />
 @endsection
