@@ -6,6 +6,11 @@
 
 <div class="flex flex-col gap-1">
     <span class="text-sm">{{ $pegawai->kode_pegawai ?? '-' }}</span>
-    <a target="_blank" class="underline transition-colors duration-500 hover:text-blue-600"
-        href="{{ $url }}">{{ $pegawai->nick_name ?? '-' }}</a>
+
+    @can('attendance-approve')
+        <a target="_blank" class="underline transition-colors duration-500 hover:text-blue-600"
+            href="{{ $url }}">{{ $pegawai->nick_name ?? '-' }}</a>
+    @else
+        <span class="text-sm">{{ $pegawai->nick_name ?? '-' }}</span>
+    @endcan
 </div>
