@@ -2,12 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Attendance;
-use App\Models\AttendanceOut;
-use App\Models\Pegawai;
-use App\Models\Sales;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -20,7 +15,7 @@ class AdminController extends Controller
             $yearNow = Carbon::today()->year;
             $startDate = Carbon::today()->subDays(6);
             $endDate = Carbon::today();
-            $formattedDateRange = $startDate->locale('id')->isoFormat('dddd, D MMM') . ' - ' . $endDate->locale('id')->isoFormat('dddd, D MMM');
+            $formattedDateRange = $startDate->locale('id')->isoFormat('dddd, D MMM').' - '.$endDate->locale('id')->isoFormat('dddd, D MMM');
 
             return view('dashboard.dashboard', compact('formattedDateRange', 'yearNow'));
         }
