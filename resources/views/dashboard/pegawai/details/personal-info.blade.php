@@ -1,203 +1,147 @@
 @extends('dashboard.pegawai.detail')
 @section('menus')
-	<div
-		class="mb-8 grid gap-6 rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-dark-primary xl:grid-cols-2">
-		<div class="w-full">
-			<div class="grid rounded-xl">
-				<div class="relative w-full">
-					<header class="flex flex-row">
-						<h2 class="font-base text-sm text-gray-400">
-							Personal Info
-						</h2>
-					</header>
-					<h2 class="text-xl font-medium text-gray-900 dark:text-white">
-						{{ $pegawai->full_name }}
-					</h2>
+    <div class="grid grid-cols-1 gap-2 lg:grid-cols-3 lg:gap-4">
+        <!-- Left Column: Personal Info -->
+        <div class="space-y-2 lg:col-span-1 lg:space-y-4">
+            <div
+                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-6 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60 lg:p-8">
+                <!-- Decoration -->
+                <div
+                    class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-blue-500/5 blur-3xl transition-colors group-hover:bg-blue-500/10">
+                </div>
 
-					@if (auth()->user()->can('pegawai-edit'))
-						<a class="absolute bottom-0 right-0 p-1 text-sm text-blue-500 hover:underline"
-							href="{{ route('pegawai.edit', $pegawai->id) }}">
-							Edit
-						</a>
-					@endif
-				</div>
+                <div class="mb-6 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="h-10 w-1 rounded-full bg-blue-600"></div>
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-white">Informasi Personal</h3>
+                    </div>
+                    @if (auth()->user()->can('pegawai-edit'))
+                        <a class="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition-all hover:bg-blue-600 hover:text-white dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-600 dark:hover:text-white"
+                            href="{{ route('pegawai.edit', $pegawai->id) }}">
+                            <x-icons.file-pen class="h-4 w-4" />
+                        </a>
+                    @endif
+                </div>
 
-				<div class="w-full">
-					<div class="grid gap-2 md:grid-cols-2">
-						@foreach ($images as $image)
-							@if (!is_null($image))
-								<div class="mt-4 rounded-xl">
-									<img onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}';"
-										class="h-56 w-full rounded-xl border border-gray-500 object-cover blur-sm hover:blur-none"
-										src="{{ asset('storage/' . $pegawai->storage . $image) }}" alt="" loading="lazy">
-								</div>
-							@endif
-						@endforeach
-					</div>
+                <div class="space-y-6">
+                    <!-- Images -->
+                    <div class="grid grid-cols-2 gap-2 lg:gap-3">
+                        @foreach ($images as $image)
+                            @if (!is_null($image))
+                                <div class="overflow-hidden rounded-2xl border border-white/20 shadow-inner">
+                                    <img onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}';"
+                                        class="h-40 w-full object-cover transition-transform duration-500 hover:scale-110"
+                                        src="{{ asset('storage/' . $pegawai->storage . $image) }}" alt=""
+                                        loading="lazy">
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
 
-					<div class="mt-4">
+                    <!-- Info Grid -->
+                    <div class="grid grid-cols-1 gap-2">
+                        @php
+                            $infoData = [
+                                ['label' => 'Kode Pegawai', 'value' => $pegawai->kode_pegawai, 'full' => true],
+                                ['label' => 'Nama Lengkap', 'value' => $pegawai->full_name, 'full' => true],
+                                ['label' => 'Panggilan', 'value' => $pegawai->nick_name],
+                                ['label' => 'No Telepon', 'value' => $pegawai->no_telp],
+                                ['label' => 'Tanggal Lahir', 'value' => $pegawai->tgl_lahir],
+                                ['label' => 'Jabatan', 'value' => $pegawai->jabatanRelasi->nama_jabatan ?? 'N/A'],
+                                ['label' => 'Alamat', 'value' => $pegawai->alamat, 'full' => true],
+                            ];
+                        @endphp
 
-						<div class="grid gap-2 md:grid-cols-2">
+                        @foreach ($infoData as $item)
+                            <div
+                                class="{{ $item['full'] ?? false ? 'col-span-full' : '' }} rounded-2xl border border-white/20 bg-white/40 p-3 shadow-sm transition-all hover:bg-white/60 dark:border-white/5 dark:bg-white/5 dark:hover:bg-white/10">
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                                    {{ $item['label'] }}</p>
+                                <p class="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                                    {{ $item['value'] ?? 'N/A' }}</p>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
 
-							<div
-								class="flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-gray-100 p-3 dark:border-gray-700 dark:bg-gray-700 md:col-span-2">
-								<p class="text-sm text-gray-600 dark:text-gray-300">Kode Pegawai</p>
-								<p class="text-navy-700 text-base font-medium dark:text-white">
-									{{ $pegawai->kode_pegawai ?? 'N/A' }}
-								</p>
-							</div>
+        <!-- Right Column: Calendar & Stats -->
+        <div class="space-y-2 lg:col-span-2 lg:space-y-4">
+            <div
+                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-6 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60 lg:p-8">
+                <div
+                    class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-green-500/5 blur-3xl transition-colors group-hover:bg-green-500/10">
+                </div>
 
-							<div
-								class="flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-gray-100 p-3 dark:border-gray-700 dark:bg-gray-700">
-								<p class="text-sm text-gray-600 dark:text-gray-300">Nama Lengkap</p>
-								<p class="text-navy-700 text-base font-medium dark:text-white">
-									{{ $pegawai->full_name ?? 'N/A' }}
-								</p>
-							</div>
+                <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="h-10 w-1 rounded-full bg-green-600"></div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 dark:text-white">
+                                <span class="text-xs font-normal text-gray-500 dark:text-gray-400">Periode: </span>
+                                {{ Request::query('period') ? \Carbon\Carbon::parse(Request::query('period'))->locale('id')->isoFormat('MMMM YYYY') : \Carbon\Carbon::now()->locale('id')->isoFormat('MMMM YYYY') }}
+                            </h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Ringkasan kehadiran harian pegawai.</p>
+                        </div>
+                    </div>
 
-							<div
-								class="flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-gray-100 p-3 dark:border-gray-700 dark:bg-gray-700">
-								<p class="text-sm text-gray-600 dark:text-gray-300">Panggilan</p>
-								<p class="text-navy-700 text-base font-medium dark:text-white">
-									{{ $pegawai->nick_name ?? 'N/A' }}
-								</p>
-							</div>
+                    <x-button.primary class="group !rounded-2xl !px-6" id="getAttendancePeriod">
+                        <x-slot name="icon">
+                            <x-icons.date class="h-4 w-4 transition-transform group-hover:scale-110" />
+                        </x-slot>
+                        <span>Pilih Periode</span>
+                    </x-button.primary>
+                </div>
 
-							<div
-								class="flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-gray-100 p-3 dark:border-gray-700 dark:bg-gray-700">
-								<p class="text-sm text-gray-600 dark:text-gray-300">No Telepon</p>
-								<p class="text-navy-700 text-base font-medium dark:text-white">
-									{{ $pegawai->no_telp ?? 'N/A' }}
-								</p>
-							</div>
+                <div class="grid grid-cols-7 gap-1 md:gap-2">
+                    @php
+                        $days = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+                    @endphp
+                    @foreach ($days as $day)
+                        <div class="py-2 text-center text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                            {{ $day }}
+                        </div>
+                    @endforeach
 
-							<div
-								class="flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-gray-100 p-3 dark:border-gray-700 dark:bg-gray-700">
-								<p class="text-sm text-gray-600 dark:text-gray-300">Tanggal Lahir</p>
-								<p class="text-navy-700 text-base font-medium dark:text-white">
-									{{ $pegawai->tgl_lahir ?? 'N/A' }}
-								</p>
-							</div>
+                    @foreach ($dd as $date)
+                        @if ($date)
+                            @php
+                                $hasData = $attendanceData->contains(function ($attendance) use ($date) {
+                                    return \Carbon\Carbon::parse($attendance->jam_masuk)->isSameDay($date);
+                                });
+                            @endphp
+                            <div class="aspect-square p-0.5 sm:p-1">
+                                <button type="button" data-date="{{ $date }}"
+                                    data-popover-target="popover-click-{{ $date }}" data-popover-trigger="click"
+                                    class="{{ $hasData
+                                        ? 'bg-gradient-to-br from-green-500 to-emerald-600 text-white border-green-400 shadow-lg shadow-green-500/20 active:scale-95'
+                                        : 'bg-white/50 text-gray-400 border-gray-100 hover:bg-white hover:text-blue-600 hover:border-blue-200 dark:bg-white/5 dark:text-gray-500 dark:border-white/5 dark:hover:bg-white/10' }} flex h-full w-full items-center justify-center rounded-xl border text-xs font-bold transition-all duration-300">
+                                    {{ \Carbon\Carbon::parse($date)->isoFormat('D') }}
+                                </button>
+                            </div>
+                        @else
+                            <div class="aspect-square"></div>
+                        @endif
+                    @endforeach
+                </div>
+            </div>
 
-							<div
-								class="flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-gray-100 p-3 dark:border-gray-700 dark:bg-gray-700 md:col-span-2">
-								<p class="text-sm text-gray-600 dark:text-gray-300">Alamat</p>
-								<p class="text-navy-700 text-base font-medium dark:text-white">
-									{{ $pegawai->alamat ?? 'N/A' }}
-								</p>
-							</div>
-
-							<div
-								class="flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-gray-100 p-3 dark:border-gray-700 dark:bg-gray-700">
-								<p class="text-sm text-gray-600 dark:text-gray-300">Jabatan</p>
-								<p class="text-navy-700 text-base font-medium dark:text-white">
-									{{ $pegawai->jabatanRelasi->nama_jabatan ?? 'N/A' }}
-								</p>
-							</div>
-
-							<div
-								class="flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-gray-100 p-3 dark:border-gray-700 dark:bg-gray-700">
-								<p class="text-sm text-gray-600 dark:text-gray-300">Storage</p>
-								<p class="text-navy-700 text-base font-medium dark:text-white">
-									{{ $pegawai->storage ?? 'N/A' }}
-								</p>
-							</div>
-						</div>
-
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="w-full grow space-y-6">
-			<div class="w-full space-y-6 xl:col-span-2">
-				<div class="rounded-xl py-2.5">
-
-					<div class="mb-4 w-full">
-						<header class="-mt-2.5 flex flex-col">
-							<h2 class="text-xl font-medium text-gray-900 dark:text-white">
-								<span class="!text-md text-gray-700 dark:text-gray-300">Periode: </span>
-
-								<span id="choosenPeriod">
-									{{ Request::query('period') ? \Carbon\Carbon::parse(Request::query('period'))->locale('id')->isoFormat('MMMM YYYY') : \Carbon\Carbon::now()->locale('id')->isoFormat('MMMM YYYY') }}
-								</span>
-
-							</h2>
-							<p class="text-sm text-gray-700 dark:text-gray-300">
-								Informasi absensi pegawai untuk periode yang dipilih. Data ini mencakup waktu masuk dan keluar harian.
-							</p>
-
-						</header>
-					</div>
-
-					<div
-						class="grid grid-cols-7 gap-2 rounded-xl border border-gray-200 p-4 text-center dark:border-gray-700 dark:bg-[#242427]">
-						<!-- Nama-nama hari -->
-						<div class="font-medium text-gray-900 dark:text-white">Min</div>
-						<div class="font-medium text-gray-900 dark:text-white">Sen</div>
-						<div class="font-medium text-gray-900 dark:text-white">Sel</div>
-						<div class="font-medium text-gray-900 dark:text-white">Rab</div>
-						<div class="font-medium text-gray-900 dark:text-white">Kam</div>
-						<div class="font-medium text-gray-900 dark:text-white">Jum</div>
-						<div class="font-medium text-gray-900 dark:text-white">Sab</div>
-
-						<!-- Looping untuk menampilkan tanggal -->
-						@foreach ($dd as $date)
-							@if ($date)
-								@php
-
-									$hasData = $attendanceData->contains(function ($attendance) use ($date) {
-									    return \Carbon\Carbon::parse($attendance->jam_masuk)->isSameDay($date);
-									});
-								@endphp
-								<div>
-									<button
-										class="{{ $hasData
-										    ? 'bg-green-500 hover:bg-green-600 text-white dark:bg-green-800 dark:hover:bg-green-900 dark:text-white'
-										    : 'bg-gray-200 text-gray-400 hover:bg-gray-300 dark:bg-transparent dark:text-gray-300' }} h-full w-full cursor-pointer rounded-lg border border-gray-200 p-2 dark:border-gray-700"
-										data-date="{{ $date }}" data-popover-placement="left"
-										data-popover-target="popover-click-{{ $date }}" data-popover-trigger="click" type="button">
-										{{ \Carbon\Carbon::parse($date)->isoFormat('D') }}
-									</button>
-								</div>
-
-								<div
-									class="invisible absolute z-10 inline-block rounded-lg border border-gray-200 bg-white p-2 text-sm text-gray-500 opacity-0 transition-opacity duration-300 dark:border-gray-500 dark:bg-dark-primary dark:text-gray-400"
-									id="popover-click-{{ $date }}" data-popover role="tooltip">
-
-									<div class="popover-content max-h-[250px] overflow-y-auto">
-										<p>Tunggu sebentar, data sedang dimuat...</p>
-									</div>
-
-									<div data-popper-arrow></div>
-
-								</div>
-							@else
-								<div></div>
-							@endif
-						@endforeach
-					</div>
-
-					<div class="mt-4 w-full">
-
-						<x-button.primary class="max-h-10 !px-4" id="getAttendancePeriod" type="button">
-							<x-slot name="icon">
-								<x-icons.date class="icon h-3.5 w-3.5 text-red-500 dark:text-white" />
-							</x-slot>
-							Pilih periode lain
-						</x-button.primary>
-
-					</div>
-				</div>
-			</div>
-
-		</div>
-	</div>
+            {{-- Popovers (Rendered outside overflow-hidden) --}}
+            @foreach ($dd as $date)
+                @if ($date)
+                    <livewire:component.pegawai.attendance-calendar-popover :date="$date" :pegawaiId="$pegawai->id"
+                        :kodePegawai="$pegawai->kode_pegawai" :key="'popover-' . $date" />
+                @endif
+            @endforeach
+        </div>
+    </div>
 @endsection
 @push('script')
-	<script>
-		const libs = "{{ sha1('libs') }}";
-		const id = "{{ $pegawai->kode_pegawai }}";
-		const ids = "{{ $pegawai->id }}";
-	</script>
-	@vite('resources/js/pages/pegawai/personalInfo.js')
+    <script>
+        const libs = "{{ sha1('libs') }}";
+        const id = "{{ $pegawai->kode_pegawai }}";
+        const ids = "{{ $pegawai->id }}";
+    </script>
+    @vite('resources/js/pages/pegawai/personalInfo.js')
 @endpush

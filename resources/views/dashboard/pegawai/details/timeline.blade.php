@@ -1,123 +1,149 @@
 @extends('dashboard.pegawai.detail')
 @section('menus')
-    <div class="rounded-lg" id="timeline" role="tabpanel" aria-labelledby="timeline-tab">
-        <div class="w-full">
-            <div class="grid gap-6 md:grid-cols-2">
+@section('menus')
+    <div class="space-y-4 lg:space-y-6" id="timeline" role="tabpanel">
+        <div class="grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap-4">
 
-                {{-- search --}}
-                <div class="w-full md:col-span-2">
+            {{-- Filter Section --}}
+            <div class="lg:col-span-2">
+                <div
+                    class="rounded-3xl border border-white/30 bg-white/70 p-4 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60 lg:p-6">
                     <form id="dateForm" action="{{ route('pegawai.timeline', ['pegawai' => $pegawai->kode_pegawai]) }}"
-                        method="GET">
-                        <x-dashboard.date-picker id="datepicker-actions" name="date" form="dateForm" :text="'Filter tanggal'" />
+                        method="GET" class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="h-8 w-1 rounded-full bg-blue-600"></div>
+                            <h3 class="text-sm font-bold uppercase tracking-wider text-gray-800 dark:text-white">Filter
+                                Aktivitas</h3>
+                        </div>
+                        <div class="w-full sm:max-w-xs">
+                            <x-dashboard.date-picker id="datepicker-actions" name="date" form="dateForm"
+                                :text="'Filter tanggal'" />
+                        </div>
                     </form>
                 </div>
-                {{-- endsearch --}}
+            </div>
 
-                <div
-                    class="w-full rounded-xl border border-gray-200 bg-white p-6 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none">
-                    <div class="mb-4">
-                        <p class="text-xl font-bold leading-none text-gray-900 dark:text-white md:text-2xl">
-                            {{ $pegawai->full_name }}</p>
-                        <p class="text-lg font-semibold leading-none text-gray-900 dark:text-white md:text-xl">
-                            @if (Request::query('date'))
-                                Lini masa,
-                                {{ \Carbon\Carbon::parse(Request::query('date'))->locale('id')->isoFormat('D MMMM YYYY') }}
-                            @else
-                                Lini masa,
-                                {{ \Carbon\Carbon::today()->locale('id')->isoFormat('D MMMM YYYY') }}
-                            @endif
-                        </p>
-                    </div>
+            {{-- Activity Timeline --}}
+            <div
+                class="relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-6 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60 lg:p-8">
+                <div class="mb-8 border-b border-white/20 pb-4 dark:border-white/5">
+                    <h2 class="text-2xl font-bold tracking-tight text-gray-800 dark:text-white">
+                        {{ $pegawai->full_name }}
+                    </h2>
+                    <p class="text-sm font-medium text-blue-600 dark:text-blue-400">
+                        @if (Request::query('date'))
+                            Lini masa,
+                            {{ \Carbon\Carbon::parse(Request::query('date'))->locale('id')->isoFormat('D MMMM YYYY') }}
+                        @else
+                            Lini masa,
+                            {{ \Carbon\Carbon::today()->locale('id')->isoFormat('D MMMM YYYY') }}
+                        @endif
+                    </p>
+                </div>
 
-                    <ol class="relative ml-3 border-s border-gray-200 dark:border-gray-700" id="timelineContent">
+                <div class="relative pl-2">
+                    <ol class="relative ml-4 border-l-2 border-dashed border-gray-200 dark:border-gray-700"
+                        id="timelineContent">
                         @if ($attendances->isNotEmpty())
                             @foreach ($attendances as $data)
                                 @php
-                                    $path = asset(sha1('libs') . '/' . $data->photoURL . '.png'); // Gabungkan URL
-
-                                    if (is_null($data->longitude)) {
-                                        $isOnsite = true;
-                                    } else {
-                                        $isOnsite = false;
-                                    }
-                                    for ($i = 0; $i <= $attendances->count(); $i++);
+                                    $path = asset(sha1('libs') . '/' . $data->photoURL . '.png');
+                                    $isOnsite = is_null($data->longitude);
                                 @endphp
 
-                                <li class="relative mb-10 ms-8">
+                                <li class="group relative mb-10 ml-8 transition-all last:mb-0">
+                                    {{-- Status Dot --}}
+                                    @php
+                                        $dotColors = [
+                                            'Check-in' => 'from-green-500 to-emerald-600',
+                                            'Checkpoint' => 'from-amber-400 to-orange-500',
+                                            'Check-out' => 'from-red-500 to-rose-600',
+                                        ];
+                                        $currentColor = $dotColors[$data->type] ?? 'from-gray-500 to-gray-600';
+                                    @endphp
 
-                                    @if ($data->type == 'Check-in')
-                                        <span
-                                            class="absolute -start-11 flex h-6 w-6 items-center justify-center rounded-full bg-green-800 dark:bg-green-900">
-                                            <x-icons.date class="h-2.5 w-2.5 text-green-100 dark:text-green-300" />
-                                        </span>
-                                    @elseif ($data->type == 'Checkpoint')
-                                        <span
-                                            class="absolute -start-11 flex h-6 w-6 items-center justify-center rounded-full bg-yellow-800 dark:bg-yellow-900">
-                                            <x-icons.date class="h-2.5 w-2.5 text-yellow-100 dark:text-yellow-300" />
-                                        </span>
-                                    @else
-                                        <span
-                                            class="absolute -start-11 flex h-6 w-6 items-center justify-center rounded-full bg-red-800 dark:bg-red-900">
-                                            <x-icons.date class="h-2.5 w-2.5 text-red-100 dark:text-red-300" />
-                                        </span>
-                                    @endif
+                                    <div
+                                        class="{{ $currentColor }} absolute -left-[45px] top-1 flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-br text-white shadow-sm ring-4 ring-white transition-all group-hover:brightness-110 dark:ring-zinc-900">
+                                        <x-icons.lock-time class="h-4 w-4" />
+                                    </div>
 
-                                    <h3 class="mb-1 flex items-center text-lg font-semibold text-gray-900 dark:text-white">
-                                        {{ $data->type }}
-                                    </h3>
-                                    <span
-                                        class="text-md mb-2 block font-normal leading-none text-gray-400 dark:text-gray-300">
-                                        {{ $isOnsite ? 'Tidak ada data koordinat' : $data->longitude . ', ' . $data->latitude }}
-                                    </span>
+                                    <div class="flex flex-col gap-1">
+                                        <h3
+                                            class="text-lg font-bold text-gray-900 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
+                                            {{ $data->type }}
+                                        </h3>
 
-                                    <time
-                                        class="mb-2 block text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
-                                        {{ Carbon\Carbon::parse($data->created_at)->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss') }}
-                                    </time>
+                                        <div
+                                            class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-semibold text-gray-500 dark:text-gray-400">
+                                            <div class="flex items-center gap-1">
+                                                <x-icons.map-pin class="h-3 w-3" />
+                                                <span>{{ $isOnsite ? 'On-site Office' : $data->longitude . ', ' . $data->latitude }}</span>
+                                            </div>
+                                            <div class="flex items-center gap-1">
+                                                <x-icons.date class="h-3 w-3" />
+                                                <span>{{ Carbon\Carbon::parse($data->created_at)->locale('id')->isoFormat('HH:mm:ss') }}</span>
+                                            </div>
+                                        </div>
 
-                                    @if (!$loop->first)
-                                        @php
-                                            $prevRecord = $attendances[$loop->index - 1];
-                                            $currentTime = Carbon\Carbon::parse($data->created_at);
-                                            $prevTime = Carbon\Carbon::parse($prevRecord->created_at);
-                                            $diffInMinutes = round($prevTime->diffInMinutes($currentTime, true));
-                                        @endphp
+                                        @if (!$loop->first)
+                                            @php
+                                                $prevRecord = $attendances[$loop->index - 1];
+                                                $currentTime = Carbon\Carbon::parse($data->created_at);
+                                                $prevTime = Carbon\Carbon::parse($prevRecord->created_at);
+                                                $diffInMinutes = round($prevTime->diffInMinutes($currentTime, true));
+                                                $distance = countDistance(
+                                                    $prevRecord->latitude,
+                                                    $prevRecord->longitude,
+                                                    $data->latitude,
+                                                    $data->longitude,
+                                                );
+                                            @endphp
+                                            <div class="mt-2 space-y-1 text-[10px]">
+                                                <span
+                                                    class="inline-flex items-center rounded-lg bg-blue-50 px-2 py-1 font-bold text-blue-600 transition-colors group-hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:group-hover:bg-blue-900/50">
+                                                    +{{ $distance != null ? $distance : '0 m' }} dari titik sebelumnya
+                                                </span>
+                                                <span
+                                                    class="ml-2 inline-flex items-center rounded-lg bg-gray-50 px-2 py-1 font-bold text-gray-600 transition-colors group-hover:bg-gray-100 dark:bg-zinc-800 dark:text-gray-400 dark:group-hover:bg-zinc-700">
+                                                    Ditempuh dlm ~{{ $diffInMinutes }} menit
+                                                </span>
+                                            </div>
+                                        @endif
+                                    </div>
 
-                                        <p
-                                            class="mb-2 block text-sm font-normal leading-none text-gray-400 dark:text-gray-300">
-                                            +{{ countDistance($prevRecord->latitude, $prevRecord->longitude, $data->latitude, $data->longitude) != null ? countDistance($prevRecord->latitude, $prevRecord->longitude, $data->latitude, $data->longitude) : 'Tidak ada perubahan koordinat' }}
-                                            dari titik sebelumnya
-                                        </p>
-
-                                        <p
-                                            class="mb-2 block text-sm font-normal leading-none text-gray-400 dark:text-gray-300">
-                                            Ditempuh dalam waktu ~{{ $diffInMinutes }} menit
-                                        </p>
-                                    @endif
-
-                                    <img class="absolute !-top-2.5 right-0 h-16 w-16 rounded-lg object-cover"
-                                        src="{{ $path }}" alt="" loading="lazy"
-                                        onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}';">
+                                    <div
+                                        class="absolute right-0 top-0 overflow-hidden rounded-xl border border-white/20 shadow-sm transition-all group-hover:border-blue-500/50">
+                                        <img class="h-14 w-14 object-cover" src="{{ $path }}" alt=""
+                                            loading="lazy"
+                                            onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}';">
+                                    </div>
                                 </li>
                             @endforeach
                         @else
-                            <h1 class="text-center text-lg font-semibold text-gray-500">Tidak ada data</h1>
+                            <div class="flex flex-col items-center justify-center py-12 text-center">
+                                <div
+                                    class="mb-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-gray-50 dark:bg-zinc-800/50">
+                                    <x-icons.info class="h-8 w-8 text-gray-300" />
+                                </div>
+                                <h1 class="text-sm font-bold text-gray-500">Tidak ada data aktivitas</h1>
+                            </div>
                         @endif
-
                     </ol>
-
                 </div>
+            </div>
 
-                <div
-                    class="h-max w-full rounded-xl border border-gray-200 bg-white p-6 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none">
-                    <div class="mb-4">
-                        <p class="text-xl font-bold leading-none text-gray-900 dark:text-white md:text-2xl">
-                            Mapping
-                        </p>
+            {{-- Map Section --}}
+            <div
+                class="relative h-max overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-6 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60 lg:p-8">
+                <div class="mb-6 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="h-8 w-1 rounded-full bg-red-600"></div>
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-white">Mapping & Routing</h3>
                     </div>
-
-                    <div class="z-10 h-[500px] rounded-lg" id="map"></div>
                 </div>
+
+                <div class="relative z-10 h-[500px] w-full overflow-hidden rounded-2xl border border-white/20 shadow-inner lg:h-[600px]"
+                    id="map"></div>
             </div>
         </div>
     </div>

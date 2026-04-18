@@ -5,7 +5,7 @@
         <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div class="flex items-center gap-4">
                 <x-button.link id="back-btn" class="group justify-center bg-white/50 hover:bg-red-700 hover:text-white"
-                    wire:navigate href="{{ route('pegawai.index') }}">
+                    wire:navigate href="{{ route('pegawai.detail', $pegawai->id) }}">
                     <x-icons.angle-left class="h-6 w-6" />
                 </x-button.link>
                 <div>

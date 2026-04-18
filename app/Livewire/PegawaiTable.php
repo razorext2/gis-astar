@@ -56,8 +56,8 @@ final class PegawaiTable extends PowerGridComponent
             ->leftJoin('users', 'tb_pegawai.kode_pegawai', '=', 'users.kode_pegawai')
             ->leftJoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
             ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
-            ->select('tb_pegawai.*')
-            ->groupBy('tb_pegawai.id')
+            ->select('tb_pegawai.*', 'users.is_active', 'users.deactivation_reason')
+            ->groupBy('tb_pegawai.id', 'users.is_active', 'users.deactivation_reason')
             ->with(['userRelasi', 'userRelasi.roles', 'jabatanRelasi', 'golonganRelasi'])
             ->orderBy('full_name', 'asc');
     }
@@ -77,6 +77,7 @@ final class PegawaiTable extends PowerGridComponent
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
+            ->add('is_active')
             ->add('user_id', fn ($query) => $query->userRelasi->id ?? '-')
             ->add('jabatan', fn ($query) => $query->jabatanRelasi->nama_jabatan ?? '-')
             ->add('full_name', function ($query) {
@@ -103,6 +104,24 @@ final class PegawaiTable extends PowerGridComponent
             })
             ->add('roles_formatted', function ($query) {
                 return collect($query->userRelasi->roles->pluck('name'))->implode(', ');
+            })
+            ->add('status_formatted', function ($query) {
+                if (! $query->userRelasi) {
+                    return '<span class="inline-flex items-center rounded-lg bg-gray-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gray-800 dark:bg-zinc-800 dark:text-zinc-500">No Account</span>';
+                }
+
+                if ($query->userRelasi->is_active) {
+                    return '<span class="inline-flex items-center rounded-lg bg-green-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-green-800 dark:bg-green-900/30 dark:text-green-400">Aktif</span>';
+                }
+
+                $reason = $query->deactivation_reason ? '<p class="mt-1 text-[10px] text-gray-500 italic dark:text-gray-400">'.ucwords($query->deactivation_reason).'</p>' : '';
+
+                return '
+                    <div class="flex flex-col items-start">
+                        <span class="inline-flex items-center rounded-lg bg-red-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-red-800 dark:bg-red-900/30 dark:text-red-400">Non-aktif</span>
+                        '.$reason.'
+                    </div>
+                ';
             });
     }
 
@@ -113,6 +132,8 @@ final class PegawaiTable extends PowerGridComponent
                 ->visibleInExport(false)
                 ->bodyAttribute('text-center'),
             Column::make('UserID', 'user_id'),
+
+            Column::make('Status', 'status_formatted'),
 
             Column::make('Kode Pegawai', 'kode_pegawai')
                 ->hidden(),
@@ -139,6 +160,8 @@ final class PegawaiTable extends PowerGridComponent
     public function filters(): array
     {
         return [
+            Filter::boolean('is_active')
+                ->label('Aktif', 'Non-aktif'),
 
             Filter::inputText('kode_pegawai', 'kode_pegawai')
                 ->placeholder('Kode Jari'),
