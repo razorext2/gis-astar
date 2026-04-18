@@ -122,9 +122,9 @@ class Create extends Component
     public function render()
     {
         return view('livewire.handler.pegawai.create', [
-            'list_jabatan' => Jabatan::all(),
-            'list_golongan' => Golongan::all(),
-            'list_roles' => Role::all(),
+            'list_jabatan' => Jabatan::orderBy('nama_jabatan', 'asc')->get(),
+            'list_golongan' => Golongan::orderBy('nama_golongan', 'asc')->get(),
+            'list_roles' => Role::orderBy('name', 'asc')->get(),
         ]);
     }
 }

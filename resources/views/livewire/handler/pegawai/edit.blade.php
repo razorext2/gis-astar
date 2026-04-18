@@ -10,7 +10,7 @@
                 </x-button.link>
                 <div>
                     <h2 class="text-2xl font-bold tracking-tight text-gray-800 dark:text-white">Edit Data Pegawai</h2>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Pembaruan informasi data pegawai 
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Pembaruan informasi data pegawai
                         <span class="font-bold text-blue-600 dark:text-blue-400">{{ $full_name }}</span>
                     </p>
                 </div>
@@ -47,7 +47,7 @@
                             </label>
                             <input type="text" value="{{ $kode_pegawai }}" disabled
                                 class="block w-full cursor-not-allowed rounded-xl border-gray-300 bg-gray-100 p-2.5 text-sm dark:border-gray-600 dark:bg-zinc-800 dark:text-gray-400">
-                            <p class="mt-1 text-xs text-gray-500 italic">* Kode pegawai tidak dapat diubah</p>
+                            <p class="mt-1 text-xs italic text-gray-500">* Kode pegawai tidak dapat diubah</p>
                         </div>
                     </div>
 
@@ -155,56 +155,77 @@
             </div>
 
             <!-- Akun Login Section -->
-            @if($has_account)
-            <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60">
+            @if ($has_account)
                 <div
-                    class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-green-500/5 blur-3xl transition-colors group-hover:bg-green-500/10">
-                </div>
-
-                <div class="mb-6 flex items-center gap-3">
-                    <div class="h-10 w-1 rounded-full bg-green-600"></div>
-                    <h3 class="text-xl font-bold text-gray-800 dark:text-white">Pengaturan Akun</h3>
-                </div>
-
-                <div class="space-y-6">
-                    {{-- Info Banner --}}
+                    class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60">
                     <div
-                        class="rounded-2xl border border-green-100 bg-green-50 p-5 dark:border-green-800/30 dark:bg-green-900/20">
-                        <div class="flex gap-4">
-                            <div class="flex-shrink-0">
-                                <div class="rounded-xl bg-green-600 p-2 text-white">
-                                    <x-icons.info class="h-5 w-5" />
+                        class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-green-500/5 blur-3xl transition-colors group-hover:bg-green-500/10">
+                    </div>
+
+                    <div class="mb-6 flex items-center gap-3">
+                        <div class="h-10 w-1 rounded-full bg-green-600"></div>
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-white">Pengaturan Akun</h3>
+                    </div>
+
+                    <div class="space-y-6">
+                        {{-- Info Banner --}}
+                        <div
+                            class="rounded-2xl border border-green-100 bg-green-50 p-5 dark:border-green-800/30 dark:bg-green-900/20">
+                            <div class="flex gap-4">
+                                <div class="flex-shrink-0">
+                                    <div class="rounded-xl bg-green-600 p-2 text-white">
+                                        <x-icons.info class="h-5 w-5" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold text-green-900 dark:text-green-200">Akun Terhubung
+                                    </p>
+                                    <p class="mt-1 text-xs text-green-700 dark:text-green-300">Pegawai ini memiliki
+                                        akun login aktif. Anda dapat mengelola hak akses (Role) di bawah ini.</p>
                                 </div>
                             </div>
-                            <div>
-                                <p class="text-sm font-semibold text-green-900 dark:text-green-200">Akun Terhubung</p>
-                                <p class="mt-1 text-xs text-green-700 dark:text-green-300">Pegawai ini memiliki akun login aktif. Anda dapat mengelola hak akses (Role) di bawah ini.</p>
-                            </div>
                         </div>
-                    </div>
 
-                    {{-- Role Selector --}}
-                    <div class="space-y-3">
-                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Update Role /
-                            Hak Akses</label>
-                        <div class="grid grid-cols-2 gap-3 md:grid-cols-3">
-                            @foreach ($list_roles as $role)
-                                <label
-                                    class="group flex cursor-pointer items-center gap-3 rounded-2xl border border-gray-200 p-4 transition-all hover:border-blue-300 hover:bg-blue-50 dark:border-gray-700 dark:hover:border-blue-700 dark:hover:bg-blue-900/20">
-                                    <input wire:model="selected_roles" type="checkbox" value="{{ $role->name }}"
-                                        class="h-5 w-5 rounded-lg border-gray-300 text-blue-600 focus:ring-blue-500">
-                                    <span
-                                        class="text-sm font-medium text-gray-700 transition-colors group-hover:text-blue-600 dark:text-gray-200">{{ $role->name }}</span>
+                        {{-- Role Selector --}}
+                        <div class="space-y-4" x-data="{ search: '' }">
+                            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Update Role /
+                                    Hak Akses</label>
+                                <div class="relative w-full md:max-w-xs">
+                                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <x-icons.search class="h-4 w-4 text-gray-400" />
+                                    </div>
+                                    <input x-model="search" type="text"
+                                        class="block w-full rounded-xl border-gray-300 bg-white/50 pl-10 text-xs focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-dark-secondary dark:text-white"
+                                        placeholder="Cari role...">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 md:grid-cols-3">
+                                @foreach ($list_roles as $role)
+                                    <label x-show="search === '' || '{{ strtolower($role->name) }}'.includes(search.toLowerCase())"
+                                        class="role-item group/role flex cursor-pointer items-center gap-3 rounded-2xl border border-gray-200 p-4 transition-all hover:border-blue-300 hover:bg-blue-50 dark:border-gray-700 dark:hover:border-blue-700 dark:hover:bg-blue-900/20">
+                                        <input wire:model="selected_roles" type="checkbox"
+                                            value="{{ $role->name }}"
+                                            class="h-5 w-5 rounded-lg border-gray-300 text-blue-600 focus:ring-blue-500">
+                                        <span
+                                            class="text-sm font-medium text-gray-700 transition-colors group-hover/role:text-blue-600 dark:text-gray-200">{{ $role->name }}</span>
                                 </label>
-                            @endforeach
+                                @endforeach
+
+                                {{-- Empty State --}}
+                                <div x-cloak
+                                    x-show="search !== '' && ![...$el.parentElement.querySelectorAll('.role-item')].some(el => el.style.display !== 'none')"
+                                    class="col-span-2 flex flex-col items-center justify-center py-8 text-gray-400 md:col-span-3">
+                                    <x-icons.info class="mb-2 h-8 w-8 opacity-50" />
+                                    <span class="text-xs">Role "<span x-text="search"></span>" tidak ditemukan</span>
+                                </div>
+                            </div>
+                            @error('selected_roles')
+                                <span class="text-xs text-red-500">{{ $message }}</span>
+                            @enderror
                         </div>
-                        @error('selected_roles')
-                            <span class="text-xs text-red-500">{{ $message }}</span>
-                        @enderror
                     </div>
                 </div>
-            </div>
             @endif
         </div>
 
@@ -225,7 +246,8 @@
                 <div class="space-y-8">
                     <!-- Photo 1 -->
                     <div class="space-y-4">
-                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Ganti Foto 1</label>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Ganti Foto
+                            1</label>
                         <div
                             class="group relative flex h-48 w-full flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-gray-300 transition-colors hover:border-blue-500 dark:border-gray-600">
                             @if ($photo1)
@@ -242,7 +264,9 @@
                                     <div class="rounded-2xl bg-gray-100 p-4 dark:bg-dark-secondary">
                                         <x-icons.camera class="h-8 w-8 text-gray-400" />
                                     </div>
-                                    <span class="text-xs font-medium text-gray-500 dark:text-gray-400 text-center px-4">Pilih Foto 1 baru</span>
+                                    <span
+                                        class="px-4 text-center text-xs font-medium text-gray-500 dark:text-gray-400">Pilih
+                                        Foto 1 baru</span>
                                 </div>
                                 <input wire:model="photo1" type="file"
                                     class="absolute inset-0 cursor-pointer opacity-0">
@@ -260,7 +284,8 @@
 
                     <!-- Photo 2 -->
                     <div class="space-y-4">
-                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Ganti Foto 2</label>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Ganti Foto
+                            2</label>
                         <div
                             class="group relative flex h-48 w-full flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-gray-300 transition-colors hover:border-blue-500 dark:border-gray-600">
                             @if ($photo2)
@@ -277,7 +302,9 @@
                                     <div class="rounded-2xl bg-gray-100 p-4 dark:bg-dark-secondary">
                                         <x-icons.camera class="h-8 w-8 text-gray-400" />
                                     </div>
-                                    <span class="text-xs font-medium text-gray-500 dark:text-gray-400 text-center px-4">Pilih Foto 2 baru</span>
+                                    <span
+                                        class="px-4 text-center text-xs font-medium text-gray-500 dark:text-gray-400">Pilih
+                                        Foto 2 baru</span>
                                 </div>
                                 <input wire:model="photo2" type="file"
                                     class="absolute inset-0 cursor-pointer opacity-0">
@@ -305,22 +332,24 @@
 
                 <div class="grid grid-cols-2 gap-4">
                     @forelse($existing_images as $img)
-                        <div class="relative group h-32 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
-                            <img src="{{ asset('storage/' . $pegawai->storage . $img) }}" 
+                        <div
+                            class="group relative h-32 overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-700">
+                            <img src="{{ asset('storage/' . $pegawai->storage . $img) }}"
                                 class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110">
-                            <div class="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/60 to-transparent text-[10px] text-white font-medium text-center">
+                            <div
+                                class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2 text-center text-[10px] font-medium text-white">
                                 {{ $img }}
                             </div>
                         </div>
                     @empty
                         <div class="col-span-2 flex flex-col items-center py-6 text-gray-400">
-                             <x-icons.info class="h-10 w-10 mb-2" />
-                             <span class="text-xs">Belum ada foto terdaftar</span>
+                            <x-icons.info class="mb-2 h-10 w-10" />
+                            <span class="text-xs">Belum ada foto terdaftar</span>
                         </div>
                     @endforelse
                 </div>
-                
-                <p class="mt-4 text-[10px] text-gray-500 text-center italic">
+
+                <p class="mt-4 text-center text-[10px] italic text-gray-500">
                     * Upload foto baru untuk mengganti foto yang sudah ada.
                 </p>
             </div>

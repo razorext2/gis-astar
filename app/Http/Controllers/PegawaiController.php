@@ -7,8 +7,6 @@ use App\Models\Attendance;
 use App\Models\AttendanceOut;
 use App\Models\Collector;
 use App\Models\Deduction;
-use App\Models\Golongan;
-use App\Models\Jabatan;
 use App\Models\Pegawai;
 use App\Models\Sales;
 use Carbon\Carbon;
@@ -17,8 +15,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Number;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -43,7 +39,6 @@ class PegawaiController extends Controller
     {
         return view('dashboard.pegawai.edit', compact('pegawai'));
     }
-
 
     public function autocomplete(Request $request)
     {
@@ -108,8 +103,6 @@ class PegawaiController extends Controller
 
         return response()->json($data);
     }
-
-
 
     public function detail(Request $request, $id)
     {

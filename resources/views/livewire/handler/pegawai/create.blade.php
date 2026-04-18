@@ -205,19 +205,37 @@
                     </div>
 
                     {{-- Role Selector --}}
-                    <div class="space-y-3">
-                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Pilih Role /
-                            Hak Akses</label>
+                    <div class="space-y-4" x-data="{ search: '' }">
+                        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Pilih Role /
+                                Hak Akses</label>
+                            <div class="relative w-full md:max-w-xs">
+                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                    <x-icons.search class="h-4 w-4 text-gray-400" />
+                                </div>
+                                <input x-model="search" type="text"
+                                    class="block w-full rounded-xl border-gray-300 bg-white/50 pl-10 text-xs focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-dark-secondary dark:text-white"
+                                    placeholder="Cari role...">
+                            </div>
+                        </div>
                         <div class="grid grid-cols-2 gap-3 md:grid-cols-3">
                             @foreach ($list_roles as $role)
-                                <label
-                                    class="group flex cursor-pointer items-center gap-3 rounded-2xl border border-gray-200 p-4 transition-all hover:border-blue-300 hover:bg-blue-50 dark:border-gray-700 dark:hover:border-blue-700 dark:hover:bg-blue-900/20">
+                                <label x-show="search === '' || '{{ strtolower($role->name) }}'.includes(search.toLowerCase())"
+                                    class="role-item group/role flex cursor-pointer items-center gap-3 rounded-2xl border border-gray-200 p-4 transition-all hover:border-blue-300 hover:bg-blue-50 dark:border-gray-700 dark:hover:border-blue-700 dark:hover:bg-blue-900/20">
                                     <input wire:model="selected_roles" type="checkbox" value="{{ $role->name }}"
                                         class="h-5 w-5 rounded-lg border-gray-300 text-blue-600 focus:ring-blue-500">
                                     <span
-                                        class="text-sm font-medium text-gray-700 transition-colors group-hover:text-blue-600 dark:text-gray-200">{{ $role->name }}</span>
+                                        class="text-sm font-medium text-gray-700 transition-colors group-hover/role:text-blue-600 dark:text-gray-200">{{ $role->name }}</span>
                                 </label>
                             @endforeach
+
+                            {{-- Empty State --}}
+                            <div x-cloak
+                                x-show="search !== '' && ![...$el.parentElement.querySelectorAll('.role-item')].some(el => el.style.display !== 'none')"
+                                class="col-span-2 flex flex-col items-center justify-center py-8 text-gray-400 md:col-span-3">
+                                <x-icons.info class="mb-2 h-8 w-8 opacity-50" />
+                                <span class="text-xs">Role "<span x-text="search"></span>" tidak ditemukan</span>
+                            </div>
                         </div>
                         @error('selected_roles')
                             <span class="text-xs text-red-500">{{ $message }}</span>
