@@ -25,6 +25,7 @@ class Pegawai extends Model
         'tgl_lahir',
         'gender',
         'bio',
+        'storage',
     ];
 
     public function userRelasi()

@@ -208,7 +208,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('pegawai/{pegawai}/timeline', [\App\Http\Controllers\PegawaiController::class, 'timeline'])->name('pegawai.timeline');
         Route::get('pegawai/{pegawai}/collectors', [\App\Http\Controllers\PegawaiController::class, 'reportCollectors'])->name('pegawai.collectors');
         Route::get('pegawai/{pegawai}/sales', [\App\Http\Controllers\PegawaiController::class, 'reportSales'])->name('pegawai.sales');
-        Route::resource('pegawai', \App\Http\Controllers\PegawaiController::class);
+        Route::resource('pegawai', \App\Http\Controllers\PegawaiController::class)->except('store');
 
         // route pegawai allowance & deductions
         Route::resource('pegawai/allowances', \App\Http\Controllers\AllowanceController::class);

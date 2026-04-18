@@ -73,7 +73,6 @@ export default defineConfig({
 
                 // pegawai
                 "resources/js/pages/pegawai/personalInfo.js",
-                "resources/js/pages/pegawai/add.js",
                 "resources/js/pages/pegawai/edit.js",
 
                 // placement
@@ -88,7 +87,6 @@ export default defineConfig({
 
                 // spk
                 "resources/js/pages/spk/show.js",
-                "resources/js/pages/spk/production-show.js",
             ],
             refresh: true,
         }),

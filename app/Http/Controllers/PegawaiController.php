@@ -2,33 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Allowance;
+use App\Models\Attendance;
+use App\Models\AttendanceOut;
+use App\Models\Collector;
+use App\Models\Deduction;
+use App\Models\Golongan;
+use App\Models\Jabatan;
+use App\Models\Pegawai;
 use App\Models\Sales;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Number;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
-use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
-use App\Models\Attendance;
-use App\Models\AttendanceOut;
-use App\Models\Pegawai;
-use App\Models\Jabatan;
-use App\Models\Golongan;
-use App\Models\User;
-use App\Models\Allowance;
-use App\Models\Deduction;
-use App\Models\Collector;
-
 
 class PegawaiController extends Controller
 {
-    function __construct()
+    public function __construct()
     {
         $this->middleware('permission:pegawai-list|pegawai-create|pegawai-edit|pegawai-delete|pegawai-timeline', ['only' => ['index', 'create', 'edit', 'destroy', 'timeline']]);
     }
@@ -40,62 +36,7 @@ class PegawaiController extends Controller
 
     public function create()
     {
-        $jabatan = Jabatan::all();
-        $golongan = Golongan::all();
-        $roles = Role::pluck('name', 'name')->all();
-        return view('dashboard.pegawai.add', compact('jabatan', 'golongan', 'roles'));
-    }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'kode_pegawai' => 'required',
-            'nik_pegawai' => 'required',
-            'full_name' => 'required',
-            'nick_name' => 'required',
-            'no_telp' => 'required',
-            'alamat' => 'required',
-            'jabatan' => 'required',
-            'golongan' => 'required',
-            'tgl_lahir' => 'required',
-        ]);
-
-        $lastID = Pegawai::latest('id')->first();
-        $newID = $lastID ? $lastID->id + 1 : 1;
-
-        Pegawai::create([
-            'id' => $newID,
-            'kode_pegawai' => $request->input('kode_pegawai'),
-            'nik_pegawai' => $request->input('nik_pegawai'),
-            'full_name' => $request->input('full_name'),
-            'nick_name' => $request->input('nick_name'),
-            'no_telp' => $request->input('no_telp'),
-            'alamat' => $request->input('alamat'),
-            'jabatan' => $request->input('jabatan'),
-            'golongan' => $request->input('golongan'),
-            'tgl_lahir' => $request->input('tgl_lahir')
-        ]);
-
-        $makeUser = $request->input('make_user');
-        if ($makeUser == 'y') {
-            $user = User::create([
-                'kode_pegawai' => $request->input('kode_pegawai'),
-                'name' => $request->input('full_name'),
-                'email' => strtolower($request->input('nick_name')) . $request->input('kode_pegawai') . '@indodacin.com',
-                'password' => Hash::make($request->input('kode_pegawai')),
-            ]);
-
-            // assign ke role Employee
-            // $user->assignRole(7);
-            $user->assignRole($request->input('roles'));
-        }
-
-        $photo = $request->input('photo1');
-        if (!is_null($photo)) {
-            $this->saveImages($request);
-        }
-
-        return redirect()->route('pegawai.index')->with('status', 'Berhasil menambah data Pegawai');
+        return view('dashboard.pegawai.add');
     }
 
     public function edit(Pegawai $pegawai)
@@ -118,11 +59,11 @@ class PegawaiController extends Controller
             'alamat' => $request->input('alamat'),
             'jabatan' => $request->input('jabatan'),
             'golongan' => $request->input('golongan'),
-            'tgl_lahir' => $request->input('tgl_lahir')
+            'tgl_lahir' => $request->input('tgl_lahir'),
         ]);
 
         $photo = $request->input('photo1');
-        if (!is_null($photo)) {
+        if (! is_null($photo)) {
             $request->validate([
                 'kode_pegawai' => 'required|exists:tb_pegawai,kode_pegawai',
                 'photo1' => 'required|string',
@@ -150,11 +91,12 @@ class PegawaiController extends Controller
 
     public function showImages(Pegawai $pegawai)
     {
-        $path = public_path('storage/' . $pegawai->storage);
+        $path = public_path('storage/'.$pegawai->storage);
 
-        if (!is_dir($path)) {
+        if (! is_dir($path)) {
             $images[] = asset('img/noImage.webp');
             $images[] = asset('img/noImage.webp');
+
             return $images;
         }
 
@@ -168,6 +110,7 @@ class PegawaiController extends Controller
                 $images[] = $file->getFilename();
             }
         }
+
         return $images;
     }
 
@@ -175,6 +118,7 @@ class PegawaiController extends Controller
     {
         $pegawai = Pegawai::where('kode_pegawai', $id)->first();
         $pegawai->delete();
+
         return redirect()->back()->with('status', 'Berhasil menghapus data pegawai.');
     }
 
@@ -192,6 +136,7 @@ class PegawaiController extends Controller
     public function getPegawaiByCode()
     {
         $data = Pegawai::where('kode_pegawai', Auth::user()->kode_pegawai)->pluck('kode_pegawai');
+
         return response()->json($data);
     }
 
@@ -204,12 +149,13 @@ class PegawaiController extends Controller
 
             $image = $request->file('image');
 
-            $uploadDir = 'labels/' . $kodePegawai . '/capturedImg';
-            $imageName = $kodePegawai . $timestamp . '.png';
-            $path = $image->move(public_path('storage/' . $uploadDir), $imageName);
+            $uploadDir = 'labels/'.$kodePegawai.'/capturedImg';
+            $imageName = $kodePegawai.$timestamp.'.png';
+            $path = $image->move(public_path('storage/'.$uploadDir), $imageName);
 
             if ($path) {
-                $imageUrl = asset('storage/' . $uploadDir . '/' . $imageName);
+                $imageUrl = asset('storage/'.$uploadDir.'/'.$imageName);
+
                 return response()->json(['imageUrl' => $imageUrl]);
             } else {
                 return response()->json(['error' => 'Failed to save image'], 500);
@@ -226,9 +172,9 @@ class PegawaiController extends Controller
         $folderPath = "public/labels/{$kodePegawai}";
         $folderToDB = "labels/{$kodePegawai}/";
 
-        if (!Storage::exists($folderPath)) {
+        if (! Storage::exists($folderPath)) {
             Storage::makeDirectory($folderPath);
-            chmod(storage_path("app/public/labels"), 0755);
+            chmod(storage_path('app/public/labels'), 0755);
             chmod(storage_path("app/{$folderPath}"), 0755);
         }
 
@@ -266,7 +212,7 @@ class PegawaiController extends Controller
 
         // Create an array of dates with padding for the start day
         $dd = array_fill(0, $startOfMonth->dayOfWeek, null);
-        $dd = array_merge($dd, iterator_to_array(CarbonPeriod::create($startOfMonth, $endOfMonth)->map(fn($date) => $date->isoFormat('Y-MM-DD'))));
+        $dd = array_merge($dd, iterator_to_array(CarbonPeriod::create($startOfMonth, $endOfMonth)->map(fn ($date) => $date->isoFormat('Y-MM-DD'))));
 
         // Get attendance data and images
         $attendanceData = Attendance::where('kode_pegawai', $pegawai->kode_pegawai)->get();
@@ -294,10 +240,10 @@ class PegawaiController extends Controller
             if ($tableType === 'allowance') {
                 return Datatables::eloquent($allowance)
                     ->addColumn('actions', function ($data) {
-                        return '<button class="text-sm text-blue-500 hover:underline mr-3" id="btn-edit-allowance" data-id="' . $data->id . '">
+                        return '<button class="text-sm text-blue-500 hover:underline mr-3" id="btn-edit-allowance" data-id="'.$data->id.'">
                                 <span class="hover:underline"> Edit </span>
                             </button>
-                            <a href="javascript:void(0)" id="btn-delete-allowance" data-id="' . $data->id . '" class="text-sm text-red-500 hover:underline">Hapus</a>
+                            <a href="javascript:void(0)" id="btn-delete-allowance" data-id="'.$data->id.'" class="text-sm text-red-500 hover:underline">Hapus</a>
                             ';
                     })
                     ->editColumn('allowance_fee', function ($data) {
@@ -305,7 +251,7 @@ class PegawaiController extends Controller
                     })
                     ->editColumn('allowance_type', function ($data) {
                         return $data->allowance_type <= 100
-                            ? $data->allowance_type . ' %'
+                            ? $data->allowance_type.' %'
                             : Number::currency($data->allowance_type ?? 0, 'IDR', 'id');
                     })
                     ->editColumn('allowance_period', function ($data) {
@@ -319,17 +265,17 @@ class PegawaiController extends Controller
             if ($tableType === 'deduction') {
                 return Datatables::eloquent($deduction)
                     ->addColumn('actions', function ($data) {
-                        return '<button class="text-sm text-blue-500 hover:underline mr-3" id="btn-edit-deduction" data-id="' . $data->id . '">
+                        return '<button class="text-sm text-blue-500 hover:underline mr-3" id="btn-edit-deduction" data-id="'.$data->id.'">
                                 <span class="hover:underline"> Edit </span>
                             </button>
-                            <a href="javascript:void(0)" id="btn-delete-deduction" data-id="' . $data->id . '" class="text-sm text-red-500 hover:underline">Hapus</a>';
+                            <a href="javascript:void(0)" id="btn-delete-deduction" data-id="'.$data->id.'" class="text-sm text-red-500 hover:underline">Hapus</a>';
                     })
                     ->editColumn('deduction_fee', function ($data) {
                         return Number::currency($data->deduction_fee ?? 0, 'IDR', 'id');
                     })
                     ->editColumn('deduction_type', function ($data) {
                         return $data->deduction_type <= 100
-                            ? $data->deduction_type . ' %'
+                            ? $data->deduction_type.' %'
                             : Number::currency($data->deduction_type ?? 0, 'IDR', 'id');
                     })
                     ->editColumn('deduction_period', function ($data) {
@@ -343,6 +289,7 @@ class PegawaiController extends Controller
 
         $allowances = $allowance->get();
         $deductions = $deduction->get();
+
         return view('dashboard.pegawai.details.payroll-info', compact('pegawai', 'allowances', 'deductions'));
     }
 
@@ -382,7 +329,6 @@ class PegawaiController extends Controller
 
         // Mendapatkan informasi pegawai
         $pegawai = Pegawai::select('id', 'kode_pegawai', 'full_name')->where('kode_pegawai', $id)->firstOrFail();
-
 
         return view('dashboard.pegawai.details.timeline', compact('attendances', 'pegawai'));
     }
