@@ -6,21 +6,9 @@ use Livewire\Component;
 
 class PingChecker extends Component
 {
-    public int $latency = 0;
-
-    public string $pingClass = 'text-gray-500 dark:text-white';
-
-    #[\Livewire\Attributes\On('updateLatency')]
-    public function updateLatency($ms)
-    {
-        $this->latency = (int) $ms - 25;
-
-        $this->pingClass = match (true) {
-            $this->latency < 100 => 'text-green-500 dark:text-green-400',
-            $this->latency < 300 => 'text-yellow-500 dark:text-yellow-400',
-            default => 'text-red-500 dark:text-red-400',
-        };
-    }
+    // Backend properties and updateLatency method removed.
+    // The Ping Checker now operates fully local via AlpineJS on the frontend,
+    // drastically reducing Livewire server-side request loads.
 
     public function render()
     {
