@@ -19,6 +19,7 @@ class LogUserActions
         'push-subscribe',
         'ping',
         'notifications/fetch',
+        'file/*',
     ];
 
     /**
@@ -65,7 +66,7 @@ class LogUserActions
 
         // 2. Abaikan entitas tertentu (seperti rute internal livewire)
         $entity = $this->getEntityName($request);
-        if (in_array($entity, $this->ignoredEntities)) {
+        if (in_array($entity, $this->ignoredEntities) || str_starts_with($entity, 'generated::')) {
             return false;
         }
 
