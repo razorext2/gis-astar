@@ -3,9 +3,8 @@
 namespace App\Livewire;
 
 use App\Models\Backup;
-use Illuminate\Contracts\View\View;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -13,13 +12,15 @@ use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
-use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use PowerComponents\LivewirePowerGrid\PowerGridFields;
 
 final class BackupTable extends PowerGridComponent
 {
     public string $tableName = 'BackupTable';
+
     public bool $deferLoading = true;
+
     public bool $showFilters = true;
 
     public function setUp(): array
@@ -32,7 +33,7 @@ final class BackupTable extends PowerGridComponent
                 ->showPerPage()
                 ->showRecordCount(),
             PowerGrid::responsive()
-                ->fixedColumns('name')
+                ->fixedColumns('name'),
         ];
     }
 
@@ -54,10 +55,10 @@ final class BackupTable extends PowerGridComponent
             ->add('id')
             ->add('name')
             ->add('type')
-            ->add('status', fn($query) => \Illuminate\Support\Facades\Blade::render('components.table-component.state', ['status' => $query->status == 'success' ? 1 : 0]))
-            ->add('user_id', fn($query) => e($query->user->name))
+            ->add('status', fn ($query) => \Illuminate\Support\Facades\Blade::render('components.table-component.state', ['status' => $query->status == 'success' ? 1 : 0]))
+            ->add('user_id', fn ($query) => e($query->user->name))
             ->add('created_at')
-            ->add('created_at_formatted', fn($query) => e(Carbon::parse($query->created_at)->locale('id')->diffForHumans()));
+            ->add('created_at_formatted', fn ($query) => e(Carbon::parse($query->created_at)->locale('id')->diffForHumans()));
     }
 
     public function columns(): array
@@ -103,16 +104,21 @@ final class BackupTable extends PowerGridComponent
 
     public function actions(Backup $row): array
     {
-        return [
-            Button::make('delete')
-                ->slot(Blade::render('<x-icons.trash-bin class="h-5 w-5 text-white" />'))
-                ->class("dark:bg-red-800 dark:hover:bg-red-900 dark:text-white dark:border-gray-700 rounded-lg bg-red-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-red-700 me-0.5")
-                ->dispatch('delete', ['id' => $row->id]),
-            Button::make('download')
+        $actions = [];
+
+        $actions[] = Button::make('delete')
+            ->slot(Blade::render('<x-icons.trash-bin class="h-5 w-5 text-white" />'))
+            ->class('dark:bg-red-800 dark:hover:bg-red-900 dark:text-white dark:border-gray-700 rounded-lg bg-red-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-red-700 me-0.5')
+            ->dispatch('delete', ['id' => $row->id]);
+
+        if ($row->status === 'success') {
+            $actions[] = Button::make('download')
                 ->slot('Download')
-                ->class("dark:bg-blue-800 dark:hover:bg-blue-900 dark:text-white dark:border-gray-700 rounded-lg bg-blue-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-blue-700 me-0.5")
-                ->dispatch('download', ['id' => $row->id]),
-        ];
+                ->class('dark:bg-blue-800 dark:hover:bg-blue-900 dark:text-white dark:border-gray-700 rounded-lg bg-blue-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-blue-700 me-0.5')
+                ->dispatch('download', ['id' => $row->id]);
+        }
+
+        return $actions;
     }
 
     #[\Livewire\Attributes\On('delete')]
@@ -125,13 +131,13 @@ final class BackupTable extends PowerGridComponent
     public function confirmDelete($id)
     {
         // ganti jadi backup-delete
-        if (!auth()->user()->can('backup-list')) {
+        if (! auth()->user()->can('backup-list')) {
             return abort(403);
         }
 
         $data = Backup::find($id);
 
-        if (!$data) {
+        if (! $data) {
             return abort(404);
         }
 
@@ -144,7 +150,8 @@ final class BackupTable extends PowerGridComponent
 
             return $this->dispatch('swal', title: 'Terhapus!', text: 'Data yang dipilih berhasil dihapus.', icon: 'success');
         } catch (\Exception $e) {
-            Log::error(now() . ": Terjadi kegagalan saat menghapus data backup -> " . $e->getMessage());
+            Log::error(now().': Terjadi kegagalan saat menghapus data backup -> '.$e->getMessage());
+
             return $this->dispatch('swal', title: 'Gagal!', text: 'Terjadi kesalahan saat menghapus data.', icon: 'error');
         }
     }
