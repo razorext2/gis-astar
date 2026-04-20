@@ -11,6 +11,27 @@ use Illuminate\Support\Facades\Log;
 class LogUserActions
 {
     /**
+     * Jalur URL yang akan sepenuhnya diabaikan dari pencatatan log.
+     */
+    protected array $ignoredPaths = [
+        'livewire/*',
+        'broadcasting/auth',
+        'push-subscribe',
+        'ping',
+        'notifications/fetch',
+    ];
+
+    /**
+     * Segmen entitas (prefix rute) yang akan diabaikan.
+     */
+    protected array $ignoredEntities = [
+        'livewire',
+        'telescope',
+        'horizon',
+        'laravelpwa',
+    ];
+
+    /**
      * Handle an incoming request.
      */
     public function handle(Request $request, Closure $next)
@@ -18,103 +39,143 @@ class LogUserActions
         // Simpan response untuk digunakan nanti
         $response = $next($request);
 
-        // Cek apakah user sedang login dan metode HTTP yang digunakan melibatkan perubahan data
-        if (Auth::check() && $this->isDatabaseAction($request)) {
-            // Mendapatkan data user
+        // Hanya catat log jika user login dan request layak dicatat
+        if (Auth::check() && $this->shouldLog($request)) {
             $user = Auth::user();
+            $action = $this->getActionName($request);
+            $entity = $this->getEntityName($request);
 
-            // Menentukan aksi yang dilakukan
-            $actionName = $this->getActionName($request);
-
-            // Menentukan nama entitas (contoh: 'pegawai', 'division', dll) dari URL atau nama route
-            $entityName = $this->getEntityName($request);
-
-            // Simpan log ke tb_log dengan format yang diinginkan
-            DB::table('tb_log')->insert([
-                'user_id' => $user->id,
-                'user_action' => "{$entityName} > {$actionName}",
-                'ip_address' => "
-                    [
-                        LaravelIP: {$request->ip()},
-                        X-Forwarded-For: {$request->header('X-Forwarded-For')},
-                        X-Real-IP: {$request->header('X-Real-IP')},
-                        Remote-Addr: {$_SERVER['REMOTE_ADDR']},
-                        Path: {$request->path()},
-                    ]
-                ",
-                'user_agent' => $request->header('User-Agent'),
-                'user_location' => 'Unknown', // Implementasi untuk user location opsional
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-
-            // simpan ke laravel.log
-            Log::info('User accessed:', [
-                'user_id' => $user->id,
-                'user_action' => "{$entityName} > {$actionName}",
-                'ip_address' => [
-                    'LaravelIP' => $request->ip(),
-                    'X-Forwarded-For' => $request->header('X-Forwarded-For'),
-                    'X-Real-IP' => $request->header('X-Real-IP'),
-                    'Remote-Addr' => $_SERVER['REMOTE_ADDR'],
-                    'Path' => $request->path(),
-                ],
-                'user_agent' => $request->header('User-Agent'),
-                'user_location' => 'Unknown', // Implementasi untuk user location opsional
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            $this->saveLog($user, $entity, $action, $request);
         }
 
         return $response;
     }
 
     /**
-     * Menentukan nama aksi berdasarkan metode HTTP request.
-     *
-     * @return string
+     * Menentukan apakah request ini layak dicatat ke dalam log.
      */
-    private function getActionName(Request $request)
+    protected function shouldLog(Request $request): bool
     {
-        if ($request->isMethod('post')) {
-            return 'create';
-        } elseif ($request->isMethod('put') || $request->isMethod('patch')) {
-            return 'update';
-        } elseif ($request->isMethod('delete')) {
-            return 'delete';
+        // 1. Abaikan jalur yang ada di blacklist
+        foreach ($this->ignoredPaths as $path) {
+            if ($request->is($path)) {
+                return false;
+            }
         }
 
-        return 'unknown';
+        // 2. Abaikan entitas tertentu (seperti rute internal livewire)
+        $entity = $this->getEntityName($request);
+        if (in_array($entity, $this->ignoredEntities)) {
+            return false;
+        }
+
+        // 3. Hanya catat metode yang umum
+        return $request->isMethod('get') ||
+               $request->isMethod('post') ||
+               $request->isMethod('put') ||
+               $request->isMethod('patch') ||
+               $request->isMethod('delete');
     }
 
     /**
-     * Menentukan apakah request melibatkan perubahan data di database.
-     *
-     * @return bool
+     * Menentukan nama aksi berdasarkan metode HTTP dan nama rute.
      */
-    private function isDatabaseAction(Request $request)
+    protected function getActionName(Request $request): string
     {
-        return $request->isMethod('post') || $request->isMethod('put') || $request->isMethod('patch') || $request->isMethod('delete');
+        $method = strtolower($request->method());
+        $route = $request->route();
+        $routeName = $route ? $route->getName() : null;
+
+        if ($method === 'get') {
+            if ($routeName && str_contains($routeName, '.')) {
+                $parts = explode('.', $routeName);
+                $subAction = end($parts);
+
+                // Mapping rute resource ke nama yang lebih ramah
+                return match ($subAction) {
+                    'index' => 'list',
+                    'create' => 'form_create',
+                    'edit' => 'form_edit',
+                    'show' => 'details',
+                    default => $subAction,
+                };
+            }
+
+            return 'access';
+        }
+
+        return match ($method) {
+            'post' => 'create',
+            'put', 'patch' => 'update',
+            'delete' => 'delete',
+            default => 'unknown',
+        };
     }
 
     /**
-     * Menentukan nama entitas berdasarkan URL atau nama route.
-     *
-     * @return string
+     * Menentukan nama entitas (modul) berdasarkan nama rute atau segment URL.
      */
-    private function getEntityName(Request $request)
+    protected function getEntityName(Request $request): string
     {
-        // Ambil nama dari route, atau fallback ke segmen URL jika nama route tidak tersedia
-        $routeName = $request->route()->getName();
+        $route = $request->route();
 
-        if ($routeName) {
-            // Asumsikan nama route memiliki format seperti 'pegawai.store', 'division.update'
-            $parts = explode('.', $routeName);
+        if ($route) {
+            $routeName = $route->getName();
+            if ($routeName) {
+                $parts = explode('.', $routeName);
 
-            return $parts[0] ?? 'unknown';
+                // Jika rute seperti 'admin.pegawai.index', ambil 'admin.pegawai'
+                if (count($parts) > 1) {
+                    array_pop($parts); // Hapus bagian terakhir (index, create, dsb)
+
+                    return implode('.', $parts);
+                }
+
+                return $parts[0];
+            }
         }
 
-        // Alternatif, jika nama route tidak ada, ambil segmen pertama dari URI
         return $request->segment(1) ?? 'unknown';
+    }
+
+    /**
+     * Menyimpan log ke database dan file log Laravel.
+     */
+    protected function saveLog($user, string $entity, string $action, Request $request): void
+    {
+        $actionDescription = "{$entity} > {$action}";
+
+        // Format IP yang detail sesuai permintaan
+        $ipInfo = "[
+                        LaravelIP: {$request->ip()},
+                        X-Forwarded-For: {$request->header('X-Forwarded-For')},
+                        X-Real-IP: {$request->header('X-Real-IP')},
+                        Remote-Addr: {$_SERVER['REMOTE_ADDR']},
+                        Path: {$request->path()},
+                    ]";
+
+        $data = [
+            'user_id' => $user->id,
+            'user_action' => $actionDescription,
+            'ip_address' => $ipInfo,
+            'user_agent' => $request->header('User-Agent'),
+            'user_location' => 'Unknown',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+
+        // Simpan ke Database (tb_log)
+        try {
+            DB::table('tb_log')->insert($data);
+        } catch (\Exception $e) {
+            Log::error('Gagal menyimpan log user ke DB: '.$e->getMessage());
+        }
+
+        // Simpan ke laravel.log (untuk debugging/audit sekunder)
+        Log::info("User Activity: {$actionDescription}", [
+            'user_id' => $user->id,
+            'ip' => $request->ip(),
+            'path' => $request->path(),
+        ]);
     }
 }

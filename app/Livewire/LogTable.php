@@ -54,6 +54,10 @@ final class LogTable extends PowerGridComponent
                 ->slot('Bulk delete')
                 ->class($this->btnClass())
                 ->dispatch('bulkDelete.' . $this->tableName, []),
+            Button::add('refresh')
+                ->slot('Refresh')
+                ->class($this->btnClass())
+                ->dispatch('pg:eventRefresh-' . $this->tableName, []),
         ];
     }
 

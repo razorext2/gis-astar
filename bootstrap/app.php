@@ -33,8 +33,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'role_or_permission' => RoleOrPermissionMiddleware::class,
         ]);
 
-        $middleware->append(TrackUserActivity::class);
-        $middleware->append(LogUserActions::class);
+        $middleware->web(append: [
+            TrackUserActivity::class,
+            LogUserActions::class,
+        ]);
+
         $middleware->append(EnsureDatabaseConnection::class);
     })
 

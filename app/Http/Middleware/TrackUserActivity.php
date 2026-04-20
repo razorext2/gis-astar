@@ -17,6 +17,16 @@ class TrackUserActivity
     {
         // Cek apakah pengguna sedang login
         if (Auth::check()) {
+            $user = Auth::user();
+
+            // 1. Cek apakah status akun masih aktif
+            if (! $user->is_active) {
+                Auth::logout(); // Logout pengguna
+
+                return redirect('/login')->with('error', 'Akun Anda tidak aktif. Silakan hubungi admin.');
+            }
+
+            // 2. Cek apakah sudah melewati batas waktu aktivitas (7 hari)
             $lastActivity = Cookie::get('last_activity_time');
             $now = Carbon::now();
 
