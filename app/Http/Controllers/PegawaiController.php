@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Number;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -38,6 +39,47 @@ class PegawaiController extends Controller
     public function edit(Pegawai $pegawai)
     {
         return view('dashboard.pegawai.edit', compact('pegawai'));
+    }
+
+    public function storeImage(Request $request)
+    {
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
+            'image' => ['required', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'], // Maks 5MB
+            'label' => ['required', 'string'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->first()], 400);
+        }
+
+        try {
+            $kodePegawai = $request->input('label');
+            $timestamp = getCurrentDate();
+
+            // Menyimpan state ke session
+            Session::put('current_date', $timestamp);
+
+            $file = $request->file('image');
+            $uploadDir = "labels/{$kodePegawai}/capturedImg";
+            $imageName = "{$kodePegawai}{$timestamp}.png";
+
+            // Menggunakan facade Storage disk public standar Laravel agar path konsisten
+            $path = $file->storeAs($uploadDir, $imageName, 'public');
+
+            if (! $path) {
+                return response()->json(['error' => 'Gagal menyimpan file gambar di sistem penyimpanan.'], 500);
+            }
+
+            return response()->json([
+                'imageUrl' => asset("storage/{$path}"),
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Terjadi kesalahan sistem saat mencoba menyimpan gambar.',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function autocomplete(Request $request)
