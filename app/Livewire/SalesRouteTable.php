@@ -37,37 +37,34 @@ final class SalesRouteTable extends PowerGridComponent
     {
         $this->user = auth()->user();
 
+        // Resolve visible roles using first-match-wins priority.
+        // Admin/full-access is checked first so it can never be overridden.
+        $roles = match (true) {
+            $this->user->hasAnyRole(['Admin', 'Management', 'Management-Special', 'HRD'])
+                || $this->user->can('sales-export-all') => ['Sales', 'Sales-PKU', 'Sales-IDY', 'Sales-JKT', 'Sales-Agrotec', 'Kurir-Bank'],
+
+            $this->user->hasAnyRole(['Marketing-JKT', 'Management-JKT'])
+                || $this->user->can('sales-export-jkt') => ['Sales-JKT'],
+
+            $this->user->hasAnyRole(['Marketing-PKU', 'Management-PKU'])
+                || $this->user->can('sales-export-pku') => ['Sales-PKU'],
+
+            $this->user->hasRole('Service-Agrotec')
+                || $this->user->can('sales-export-agrotec') => ['Sales-Agrotec'],
+
+            $this->user->hasRole('Marketing')
+                || $this->user->can('sales-export-medan') => ['Sales'],
+
+            $this->user->hasAnyRole(['HRD-IDY', 'Marketing-IDY'])
+                || $this->user->can('sales-export-idy') => ['Sales-IDY'],
+
+            $this->user->hasRole('Kasir')
+                || $this->user->can('sales-export-kurir-bank') => ['Kurir-Bank'],
+
+            default => [],
+        };
+
         $query = User::query()->with(['pegawai', 'roles']);
-
-        $roles = [];
-
-        if ($this->user->hasRole('Kasir') || $this->user->can('sales-export-kurir-bank')) {
-            $roles = ['Kurir-Bank'];
-        }
-
-        if ($this->user->hasRole(['HRD-IDY', 'Marketing-IDY']) || $this->user->can('sales-export-idy')) {
-            $roles = ['Sales-IDY'];
-        }
-
-        if ($this->user->hasRole('Marketing') || $this->user->can('sales-export-medan')) {
-            $roles = ['Sales'];
-        }
-
-        if ($this->user->hasRole('Service-Agrotec') || $this->user->can('sales-export-agrotec')) {
-            $roles = ['Sales-Agrotec'];
-        }
-
-        if ($this->user->hasRole(['Marketing-PKU', 'Management-PKU']) || $this->user->can('sales-export-pku')) {
-            $roles = ['Sales-PKU'];
-        }
-
-        if ($this->user->hasRole(['Marketing-JKT', 'Management-JKT']) || $this->user->can('sales-export-jkt')) {
-            $roles = ['Sales-JKT'];
-        }
-
-        if ($this->user->hasRole(['Admin', 'Management', 'Management-Special', 'HRD']) || $this->user->can('sales-export-all')) {
-            $roles = ['Sales', 'Sales-PKU', 'Sales-IDY', 'Sales-JKT', 'Sales-Agrotec', 'Kurir-Bank'];
-        }
 
         if (! empty($roles)) {
             $query->role($roles);
