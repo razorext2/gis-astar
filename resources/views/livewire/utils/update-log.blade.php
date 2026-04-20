@@ -42,8 +42,28 @@
                         </div>
                         <div>
                             <h2 class="text-xl font-black tracking-tight text-zinc-900 dark:text-white">Update Log</h2>
-                            <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Menampilkan 10 perubahan sistem
-                                terakhir</p>
+                            <div class="flex flex-col gap-0.5">
+                                <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                                    Menampilkan 10 perubahan sistem terakhir
+                                </p>
+                                @php
+                                    $stats = $this->repositoryStats();
+                                    $firstCommit = $stats['first_commit_date']
+                                        ? \Carbon\Carbon::parse($stats['first_commit_date'])
+                                            ->locale('id')
+                                            ->isoFormat('D MMMM YYYY')
+                                        : null;
+                                @endphp
+                                @if ($stats['total_commits'] > 0)
+                                    <p
+                                        class="text-[10px] font-bold uppercase tracking-widest text-red-600 dark:text-red-400">
+                                        Total {{ number_format($stats['total_commits'], 0, ',', '.') }} Commit
+                                        @if ($firstCommit)
+                                            • Sejak {{ $firstCommit }}
+                                        @endif
+                                    </p>
+                                @endif
+                            </div>
                         </div>
                     </div>
                     <button @click="show = false"
@@ -86,6 +106,58 @@
                                     <h3 class="font-bold leading-snug text-zinc-900 dark:text-white sm:text-lg">
                                         {{ $message }}
                                     </h3>
+
+                                    {{-- File Changes Section --}}
+                                    @if (!empty($row['detailed_files']))
+                                        <div
+                                            class="scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-800 mt-4 max-h-36 overflow-y-auto pr-2">
+                                            <div class="flex flex-col gap-1">
+                                                @foreach ($row['detailed_files'] as $file)
+                                                    @php
+                                                        $statusData = match ($file['status']) {
+                                                            'added' => [
+                                                                'color' => 'text-emerald-600 dark:text-emerald-400',
+                                                                'bg' => 'bg-emerald-50 dark:bg-emerald-950/20',
+                                                                'icon' => '+',
+                                                            ],
+                                                            'removed' => [
+                                                                'color' => 'text-rose-600 dark:text-rose-400',
+                                                                'bg' => 'bg-rose-50 dark:bg-rose-950/20',
+                                                                'icon' => '-',
+                                                            ],
+                                                            'modified' => [
+                                                                'color' => 'text-amber-600 dark:text-amber-400',
+                                                                'bg' => 'bg-amber-50 dark:bg-amber-950/20',
+                                                                'icon' => 'M',
+                                                            ],
+                                                            'renamed' => [
+                                                                'color' => 'text-sky-600 dark:text-sky-400',
+                                                                'bg' => 'bg-sky-50 dark:bg-sky-950/20',
+                                                                'icon' => 'R',
+                                                            ],
+                                                            default => [
+                                                                'color' => 'text-zinc-600 dark:text-zinc-400',
+                                                                'bg' => 'bg-zinc-50 dark:bg-zinc-950/20',
+                                                                'icon' => '•',
+                                                            ],
+                                                        };
+                                                    @endphp
+                                                    <div title="{{ $file['name'] }}"
+                                                        class="flex items-center gap-2 rounded-lg border border-zinc-100/50 bg-white p-2 transition-all hover:border-zinc-200 dark:border-zinc-800/50 dark:bg-zinc-900/50 dark:hover:border-zinc-700">
+                                                        <div
+                                                            class="{{ $statusData['bg'] }} {{ $statusData['color'] }} flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-[10px] font-black">
+                                                            {{ $statusData['icon'] }}
+                                                        </div>
+                                                        <span
+                                                            class="truncate text-[11px] font-medium text-zinc-600 dark:text-zinc-400">
+                                                            {{ $file['name'] }}
+                                                        </span>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endif
+
                                     <div
                                         class="mt-4 flex flex-wrap items-center gap-3 border-t border-zinc-100 pt-4 dark:border-zinc-800/50">
                                         {{-- Committer Avatar (Placeholder Initials) --}}
