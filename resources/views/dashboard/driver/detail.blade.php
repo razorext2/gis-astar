@@ -67,20 +67,32 @@
 					</div>
 
 					<div
-						class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
+						class="col-span-2 flex flex-col items-start justify-center gap-3 rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
 						<p class="text-sm text-gray-600 dark:text-gray-300">Lokasi checkpoint</p>
 
 						<span class="text-navy-700 text-base font-medium dark:text-white">{{ $data->lokasi ?? 'N/A' }}</span>
 
-						<span class="text-navy-700 text-xs font-medium text-gray-400 dark:text-white">
-							<a class="inline-flex underline"
-								href="https://www.google.com/maps/search/?api=1&query={{ $data->latitude }},{{ $data->longitude }}"
-								target="_blank">
-								{{ $data->latitude }}, {{ $data->longitude }}
-								<x-icons.arrow-up class="h-4 w-4 rotate-45" />
-							</a>
-						</span>
+						@if ($data->latitude && $data->longitude)
+							<div class="w-full overflow-hidden rounded-xl border border-gray-200 dark:border-gray-600">
+								<iframe
+									src="https://maps.google.com/maps?q={{ $data->latitude }},{{ $data->longitude }}&z=18&t=k&output=embed"
+									class="w-full"
+									style="height: 240px; border: none;"
+									loading="lazy"
+									allowfullscreen
+									referrerpolicy="no-referrer-when-downgrade">
+								</iframe>
+							</div>
 
+							<span class="text-navy-700 text-xs font-medium text-gray-400 dark:text-white">
+								<a class="inline-flex items-center gap-1 hover:underline"
+									href="https://www.google.com/maps/search/?api=1&query={{ $data->latitude }},{{ $data->longitude }}"
+									target="_blank">
+									{{ $data->latitude }}, {{ $data->longitude }}
+									<x-icons.arrow-up class="h-3.5 w-3.5 rotate-45" />
+								</a>
+							</span>
+						@endif
 					</div>
 
 					<div
