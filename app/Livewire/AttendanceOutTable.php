@@ -59,18 +59,11 @@ final class AttendanceOutTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        $data = AttendanceOut::query()
-            ->with('pegawaiRelasi');
-
-        if (auth()->user()->kode_pegawai) {
-            $data->where('kode_pegawai', auth()->user()->kode_pegawai);
-        }
-
-        if ($this->kodePegawai) {
-            $data->where('kode_pegawai', $this->kodePegawai);
-        }
-
-        return $data->latest();
+        return AttendanceOut::query()
+            ->with('pegawaiRelasi')
+            ->when(auth()->user()->kode_pegawai, fn ($query, $kode) => $query->where('kode_pegawai', $kode))
+            ->when($this->kodePegawai, fn ($query, $kode) => $query->where('kode_pegawai', $kode))
+            ->latest();
     }
 
     public function relationSearch(): array
