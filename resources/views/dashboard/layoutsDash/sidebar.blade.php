@@ -73,7 +73,18 @@
 
                 @if ($canSee)
 
-                    @if (empty($item['submenu'] ?? []))
+                    @if (($item['type'] ?? '') === 'header')
+                        {{-- ── Header / Spacer ────────────────────────────────── --}}
+                        <li x-show="!menuSearch || '{{ strtolower($item['label']) }}'.includes(menuSearch.toLowerCase())"
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 translate-y-1"
+                            x-transition:enter-end="opacity-100 translate-y-0" class="px-4 py-2">
+                            <span
+                                class="text-[10px] font-bold uppercase tracking-[0.15em] text-zinc-400 dark:text-zinc-500">
+                                {{ $item['label'] }}
+                            </span>
+                        </li>
+                    @elseif (empty($item['submenu'] ?? []))
                         {{-- ── Simple link ────────────────────────────────── --}}
                         @php
                             $isActive = collect($item['check'])->contains(fn($r) => Route::is($r));

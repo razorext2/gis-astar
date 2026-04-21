@@ -28,6 +28,11 @@
  *       'navigate'           => bool
  *       'counter'            => string|null
  *       'counter_permission' => string|null
+ *
+ * Tipe 'header' (label grup/spacer):
+ *   'type'    => 'header'
+ *   'label'   => string
+ *   'guard'   => null | ['can', '...'] | ['any_permission', [...]] | ['role', [...]]
  */
 
 return [
@@ -42,11 +47,17 @@ return [
         'navigate' => true,
     ],
 
+    // ─── Core Features ────────────────────────────────────────────────────────
+    [
+        'type' => 'header',
+        'label' => 'Core Features',
+    ],
+
     // ─── Absensi ──────────────────────────────────────────────────────────────
     [
         'type' => 'group',
-        'label' => 'Absensi',
-        'icon' => 'grid-plus',
+        'label' => 'Data Absensi',
+        'icon' => 'badge-check',
         'guard' => null,
         'submenu' => [
             [
@@ -79,6 +90,43 @@ return [
         ],
     ],
 
+    // --- Rekam Absensi
+    [
+        'type' => 'group',
+        'label' => 'Rekam Absensi',
+        'icon' => 'camera',
+        'guard' => ['any_permission', ['capture', 'capture-route']],
+        'submenu' => [
+            [
+                'label' => 'Rekam Absensi Realtime',
+                'mobile_label' => 'Rekam Absensi Realtime',
+                'route' => 'capture.index',
+                'check' => ['capture.index'],
+                'icon' => 'video-camera',
+                'permission' => 'capture',
+                'navigate' => false,
+            ],
+            [
+                'label' => 'Rekam Absensi Rute',
+                'mobile_label' => 'Rekam Absensi Rute',
+                'route' => 'capture.route',
+                'check' => ['capture.route'],
+                'icon' => 'camera',
+                'permission' => 'capture-route',
+                'navigate' => false,
+            ],
+            [
+                'label' => 'Pengajuan Cuti',
+                'mobile_label' => 'Pengajuan Cuti',
+                'route' => 'dayoff.index',
+                'check' => ['dayoff.*'],
+                'icon' => 'lock-time',
+                'permission' => 'dayoff-list',
+                'navigate' => true,
+            ],
+        ],
+    ],
+
     // ─── Piutang (Kolektor) ───────────────────────────────────────────────────
     [
         'type' => 'group',
@@ -93,7 +141,7 @@ return [
                 'check' => ['collect-task.*'],
                 'icon' => 'cash',
                 'permission' => 'collect-task-list',
-                'navigate' => true,
+                'navigate' => false,
                 'counter' => 'utils.counter.collector-idc-non-ppn-counter',
             ],
             [
@@ -103,7 +151,7 @@ return [
                 'check' => ['collect-task-ppn.*'],
                 'icon' => 'sale-percent',
                 'permission' => 'collect-task-ppn-list',
-                'navigate' => true,
+                'navigate' => false,
                 'counter' => 'utils.counter.collector-idc-ppn-counter',
             ],
             [
@@ -113,8 +161,19 @@ return [
                 'check' => ['collect-idy-ppn.*'],
                 'icon' => 'cash-register',
                 'permission' => 'collect-idy-ppn-list',
-                'navigate' => true,
+                'navigate' => false,
                 'counter' => 'utils.counter.collector-idy-ppn-counter',
+            ],
+            [
+                'label' => 'Laporan Kolektor',
+                'mobile_label' => 'Laporan Kolektor',
+                'route' => 'collect.index',
+                'check' => ['collect.*'],
+                'icon' => 'clipboard',
+                'permission' => 'collect-list',
+                'navigate' => false,
+                'counter' => 'utils.counter.collect-counter',
+                'counter_permission' => 'collect-approve',
             ],
         ],
     ],
@@ -131,7 +190,7 @@ return [
                 'mobile_label' => 'Manajemen SPK',
                 'route' => 'spk.index',
                 'check' => ['spk.*'],
-                'icon' => 'cash',
+                'icon' => 'ordered-list',
                 'permission' => 'spk-list',
                 'navigate' => true,
                 'counter' => 'utils.counter.spk-main-counter',
@@ -151,7 +210,7 @@ return [
                 'mobile_label' => 'Manajemen Produksi SPK',
                 'route' => 'production.index',
                 'check' => ['production.*'],
-                'icon' => 'cash',
+                'icon' => 'hammer',
                 'permission' => 'produksi-list',
                 'navigate' => true,
                 'counter' => 'utils.counter.spk-production-counter',
@@ -161,7 +220,7 @@ return [
                 'mobile_label' => 'Manajemen Pengiriman SPK',
                 'route' => 'delivery.index',
                 'check' => ['delivery.*'],
-                'icon' => 'cash',
+                'icon' => 'truck',
                 'permission' => 'spk-update-informasi-pengiriman',
                 'navigate' => true,
                 'counter' => 'utils.counter.spk-delivery-counter',
@@ -171,7 +230,7 @@ return [
                 'mobile_label' => 'Manajemen Penagihan SPK',
                 'route' => 'billing.index',
                 'check' => ['billing.*'],
-                'icon' => 'cash',
+                'icon' => 'cash-register',
                 'permission' => ['spk-update-no-tagihan-idcppn', 'spk-update-no-tagihan-idcnonppn', 'spk-update-no-tagihan-idyppn', 'billing-index'],
                 'navigate' => true,
             ],
@@ -180,7 +239,7 @@ return [
                 'mobile_label' => 'Laporan Lapangan SPK',
                 'route' => 'daily-report.index',
                 'check' => ['daily-report.*'],
-                'icon' => 'cash',
+                'icon' => 'clipboard-check',
                 'permission' => 'laporan-harian-spk-list',
                 'navigate' => true,
             ],
@@ -190,16 +249,16 @@ return [
     // ─── Laporan Harian (VT) ──────────────────────────────────────────────────
     [
         'type' => 'group',
-        'label' => 'Laporan Harian (VT)',
-        'icon' => 'chalk-board',
-        'guard' => ['can', 'laporan-harian-list'],
+        'label' => 'Manajemen Teknisi',
+        'icon' => 'person-chalkboard',
+        'guard' => ['can', 'laporan-harian-list', 'team-list', 'technician-list', 'assign-laporan-harian'],
         'submenu' => [
             [
-                'label' => 'Assign VT',
+                'label' => 'Assign Laporan Harian (VT)',
                 'mobile_label' => 'Assign Laporan Harian (VT)',
                 'route' => 'report.general.assign',
                 'check' => ['report.general.assign'],
-                'icon' => 'angle-right',
+                'icon' => 'chalkboard-user',
                 'permission' => 'assign-laporan-harian',
                 'navigate' => true,
             ],
@@ -208,11 +267,31 @@ return [
                 'mobile_label' => 'Laporan Harian (VT)',
                 'route' => 'report.general.index',
                 'check' => ['report.general.index', 'report.general.daily', 'report.general.hourly', 'report.general.customer-assignment'],
-                'icon' => 'angle-right',
+                'icon' => 'clipboard',
                 'permission' => 'laporan-harian-list',
                 'navigate' => true,
                 'counter' => 'utils.counter.daily-report-counter',
                 'counter_permission' => 'laporan-harian-validate',
+            ],
+            [
+                'label' => 'Tim Teknisi',
+                'mobile_label' => 'Tim Teknisi',
+                'route' => 'teams.index',
+                'check' => ['teams.*'],
+                'icon' => 'users-group',
+                'permission' => 'team-list',
+                'navigate' => true,
+            ],
+            [
+                'label' => 'Laporan Teknisi',
+                'mobile_label' => 'Laporan Teknisi',
+                'route' => 'technician.index',
+                'check' => ['technician.*'],
+                'icon' => 'clipboard-check',
+                'permission' => 'technician-list',
+                'navigate' => true,
+                'counter' => 'utils.counter.technician-counter',
+                'counter_permission' => 'technician-approve',
             ],
         ],
     ],
@@ -229,7 +308,7 @@ return [
                 'mobile_label' => 'Rute Driver',
                 'route' => 'routes.driver',
                 'check' => ['routes.driver', 'routes.driver.*'],
-                'icon' => 'angle-right',
+                'icon' => 'truck',
                 'permission' => 'driver-approve',
                 'navigate' => true,
             ],
@@ -238,7 +317,7 @@ return [
                 'mobile_label' => 'Rute Kolektor',
                 'route' => 'routes.collector',
                 'check' => ['routes.collector', 'routes.collector.*'],
-                'icon' => 'angle-right',
+                'icon' => 'cash-register',
                 'permission' => 'collect-approve',
                 'navigate' => true,
             ],
@@ -247,7 +326,7 @@ return [
                 'mobile_label' => 'Rute Sales',
                 'route' => 'routes.sales',
                 'check' => ['routes.sales', 'routes.sales.*'],
-                'icon' => 'angle-right',
+                'icon' => 'receipt',
                 'permission' => 'sales-approve',
                 'navigate' => true,
             ],
@@ -262,7 +341,7 @@ return [
         'guard' => ['any_permission', ['driver-list']],
         'submenu' => [
             [
-                'label' => 'Assign Laporan (SR)',
+                'label' => 'Assign Laporan Driver (SR)',
                 'mobile_label' => 'Assign Laporan Driver (SR)',
                 'route' => 'driver.assign.add',
                 'check' => ['driver.assign.add'],
@@ -275,7 +354,7 @@ return [
                 'mobile_label' => 'Laporan Driver',
                 'route' => 'driver.index',
                 'check' => ['driver.index', 'driver.create', 'driver.show', 'driver.edit', 'driver.assign.to', 'driver.assign.update'],
-                'icon' => 'angle-right',
+                'icon' => 'truck',
                 'permission' => 'driver-list',
                 'navigate' => true,
                 'counter' => 'utils.counter.driver-counter',
@@ -342,18 +421,6 @@ return [
     // ─── Simple links (formerly $sidebarLinks) ────────────────────────────────
     [
         'type' => 'link',
-        'label' => 'Laporan Kolektor',
-        'mobile_label' => 'Laporan Kolektor',
-        'route' => 'collect.index',
-        'check' => ['collect.*'],
-        'icon' => 'clipboard',
-        'guard' => ['can', 'collect-list'],
-        'navigate' => false,
-        'counter' => 'utils.counter.collect-counter',
-        'counter_permission' => 'collect-approve',
-    ],
-    [
-        'type' => 'link',
         'label' => 'Laporan Sales',
         'mobile_label' => 'Laporan Sales',
         'route' => 'sales.index',
@@ -364,98 +431,69 @@ return [
         'counter' => 'utils.counter.sales-counter',
         'counter_permission' => 'sales-approve',
     ],
-    [
-        'type' => 'link',
-        'label' => 'Laporan Teknisi',
-        'mobile_label' => 'Laporan Teknisi',
-        'route' => 'technician.index',
-        'check' => ['technician.*'],
-        'icon' => 'hammer',
-        'guard' => ['can', 'technician-list'],
-        'navigate' => true,
-        'counter' => 'utils.counter.technician-counter',
-        'counter_permission' => 'technician-approve',
-    ],
-    [
-        'type' => 'link',
-        'label' => 'Rekam Absensi',
-        'mobile_label' => 'Rekam Absensi',
-        'route' => 'capture.index',
-        'check' => ['capture.index'],
-        'icon' => 'camera',
-        'guard' => ['can', 'capture'],
-        'navigate' => false,
-    ],
-    [
-        'type' => 'link',
-        'label' => 'Absensi Rute',
-        'mobile_label' => 'Absensi Rute',
-        'route' => 'capture.route',
-        'check' => ['capture.route'],
-        'icon' => 'camera',
-        'guard' => ['can', 'capture-route'],
-        'navigate' => false,
-    ],
-    [
-        'type' => 'link',
-        'label' => 'Pengajuan Cuti',
-        'mobile_label' => 'Pengajuan Cuti',
-        'route' => 'dayoff.index',
-        'check' => ['dayoff.*'],
-        'icon' => 'lock-time',
-        'guard' => ['can', 'dayoff-list'],
-        'navigate' => false,
-    ],
-    [
-        'type' => 'link',
-        'label' => 'Pegawai',
-        'mobile_label' => 'Manajemen Pegawai',
-        'route' => 'pegawai.index',
-        'check' => ['pegawai.*'],
-        'icon' => 'address-book',
-        'guard' => ['can', 'pegawai-list'],
-        'navigate' => false,
-    ],
-    [
-        'type' => 'link',
-        'label' => 'Jabatan',
-        'mobile_label' => 'Manajemen Jabatan',
-        'route' => 'jabatan.index',
-        'check' => ['jabatan.*'],
-        'icon' => 'briefcase',
-        'guard' => ['can', 'jabatan-list'],
-        'navigate' => false,
-    ],
-    [
-        'type' => 'link',
-        'label' => 'Golongan',
-        'mobile_label' => 'Manajemen Golongan',
-        'route' => 'golongan.index',
-        'check' => ['golongan.*'],
-        'icon' => 'users-group',
-        'guard' => ['can', 'golongan-list'],
-        'navigate' => false,
-    ],
 
-    // ─── Tim Teknisi ──────────────────────────────────────────────────────────
-    [
-        'type' => 'link',
-        'label' => 'Tim Teknisi',
-        'mobile_label' => 'Tim Teknisi',
-        'route' => 'teams.index',
-        'check' => ['teams.*'],
-        'icon' => 'users',
-        'guard' => ['can', 'team-list'],
-        'navigate' => true,
-    ],
-
-    // ─── Lokasi ───────────────────────────────────────────────────────────────
+    // ─── Transaksi Point ──────────────────────────────────────────────────────
     [
         'type' => 'group',
-        'label' => 'Lokasi',
-        'icon' => 'map-pin',
-        'guard' => ['any_permission', ['divisi-list', 'placement-list']],
+        'label' => 'Poin Teknisi',
+        'icon' => 'wallet',
+        'guard' => ['can', 'technician-list'],
         'submenu' => [
+            [
+                'label' => 'Poin Masuk',
+                'mobile_label' => 'Poin Masuk Teknisi',
+                'route' => 'points.index',
+                'check' => ['points.*'],
+                'icon' => 'arrow-right',
+                'permission' => 'technician-list',
+                'navigate' => true,
+            ],
+            [
+                'label' => 'Poin Keluar',
+                'mobile_label' => 'Poin Keluar Teknisi',
+                'route' => 'technicianpoints.transactions',
+                'check' => ['technicianpoints.*'],
+                'icon' => 'arrow-left',
+                'permission' => 'point-redeem',
+                'navigate' => true,
+            ],
+        ],
+    ],
+
+    // ─── Struktural ───────────────────────────────────────────────────────────────
+    [
+        'type' => 'group',
+        'label' => 'Struktural',
+        'icon' => 'map-pin',
+        'guard' => ['any_permission', ['divisi-list', 'placement-list', 'jabatan-list', 'golongan-list']],
+        'submenu' => [
+            [
+                'label' => 'Pegawai',
+                'mobile_label' => 'Manajemen Pegawai',
+                'route' => 'pegawai.index',
+                'check' => ['pegawai.*'],
+                'icon' => 'address-book',
+                'permission' => 'pegawai-list',
+                'navigate' => true,
+            ],
+            [
+                'label' => 'Jabatan',
+                'mobile_label' => 'Manajemen Jabatan',
+                'route' => 'jabatan.index',
+                'check' => ['jabatan.*'],
+                'icon' => 'briefcase',
+                'permission' => 'jabatan-list',
+                'navigate' => true,
+            ],
+            [
+                'label' => 'Golongan',
+                'mobile_label' => 'Manajemen Golongan',
+                'route' => 'golongan.index',
+                'check' => ['golongan.*'],
+                'icon' => 'users-group',
+                'permission' => 'golongan-list',
+                'navigate' => true,
+            ],
             [
                 'label' => 'Divisi',
                 'mobile_label' => 'Manajemen Divisi',
@@ -475,6 +513,12 @@ return [
                 'navigate' => true,
             ],
         ],
+    ],
+
+    // ─── Settings ─────────────────────────────────────────────────────────────
+    [
+        'type' => 'header',
+        'label' => 'Settings',
     ],
 
     // ─── User Settings ────────────────────────────────────────────────────────
@@ -551,32 +595,10 @@ return [
         ],
     ],
 
-    // ─── Transaksi Point ──────────────────────────────────────────────────────
+    // ─── Other Features ───────────────────────────────────────────────────────
     [
-        'type' => 'group',
-        'label' => 'Transaksi Point',
-        'icon' => 'wallet',
-        'guard' => ['can', 'technician-list'],
-        'submenu' => [
-            [
-                'label' => 'Poin Masuk',
-                'mobile_label' => 'Poin Masuk Teknisi',
-                'route' => 'points.index',
-                'check' => ['points.*'],
-                'icon' => 'arrow-right',
-                'permission' => 'technician-list',
-                'navigate' => true,
-            ],
-            [
-                'label' => 'Poin Keluar',
-                'mobile_label' => 'Poin Keluar Teknisi',
-                'route' => 'technicianpoints.transactions',
-                'check' => ['technicianpoints.*'],
-                'icon' => 'arrow-left',
-                'permission' => 'point-redeem',
-                'navigate' => true,
-            ],
-        ],
+        'type' => 'header',
+        'label' => 'Other Features',
     ],
 
     // ─── Event ────────────────────────────────────────────────────────────────

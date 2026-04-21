@@ -14,7 +14,7 @@
 									<x-button.link class="w-fit ring-1 ring-red-700 dark:bg-red-800 dark:text-white"
 										href="{{ route('placement.index') }}">
 										<x-slot name="icon">
-											<x-icons.angle-right class="h-6 w-6 text-red-500 dark:text-white" />
+											<x-icons.angle-left class="h-6 w-6 text-red-500 dark:text-white" />
 										</x-slot>
 										Kembali
 									</x-button.link>
