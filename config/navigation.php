@@ -95,7 +95,7 @@ return [
         'type' => 'group',
         'label' => 'Rekam Absensi',
         'icon' => 'camera',
-        'guard' => ['any_permission', ['capture', 'capture-route']],
+        'guard' => ['any_permission', ['capture', 'capture-route', 'dayoff-list']],
         'submenu' => [
             [
                 'label' => 'Rekam Absensi Realtime',
@@ -169,7 +169,7 @@ return [
         'type' => 'group',
         'label' => 'Piutang',
         'icon' => 'wallet',
-        'guard' => ['any_permission', ['collect-task-list', 'collect-task-list-ppn', 'collect-idy-ppn-list']],
+        'guard' => ['any_permission', ['collect-task-list', 'collect-task-ppn-list', 'collect-idy-ppn-list', 'collect-list']],
         'submenu' => [
             [
                 'label' => 'IDC Non PPN (SR)',
@@ -343,7 +343,7 @@ return [
         'type' => 'group',
         'label' => 'Manajemen Teknisi',
         'icon' => 'person-chalkboard',
-        'guard' => ['can', 'laporan-harian-list', 'team-list', 'technician-list', 'assign-laporan-harian'],
+        'guard' => ['any_permission', ['laporan-harian-list', 'team-list', 'technician-list', 'assign-laporan-harian']],
         'submenu' => [
             [
                 'label' => 'Assign Laporan Harian (VT)',
@@ -393,7 +393,7 @@ return [
         'type' => 'group',
         'label' => 'Laporan Driver',
         'icon' => 'truck',
-        'guard' => ['any_permission', ['driver-list']],
+        'guard' => ['any_permission', ['driver-list', 'driver-approve']],
         'submenu' => [
             [
                 'label' => 'Assign Laporan Driver (SR)',
@@ -437,7 +437,7 @@ return [
         'type' => 'group',
         'label' => 'Poin Teknisi',
         'icon' => 'wallet',
-        'guard' => ['can', 'technician-list'],
+        'guard' => ['can', 'technician-list', 'point-redeem'],
         'submenu' => [
             [
                 'label' => 'Poin Masuk',
@@ -465,7 +465,7 @@ return [
         'type' => 'group',
         'label' => 'Struktural',
         'icon' => 'map-pin',
-        'guard' => ['any_permission', ['divisi-list', 'placement-list', 'jabatan-list', 'golongan-list']],
+        'guard' => ['any_permission', ['divisi-list', 'placement-list', 'jabatan-list', 'golongan-list', 'pegawai-list']],
         'submenu' => [
             [
                 'label' => 'Pegawai',
