@@ -437,7 +437,7 @@ return [
         'type' => 'group',
         'label' => 'Poin Teknisi',
         'icon' => 'wallet',
-        'guard' => ['can', 'technician-list', 'point-redeem'],
+        'guard' => ['any_permission', ['technician-list', 'point-redeem']],
         'submenu' => [
             [
                 'label' => 'Poin Masuk',
