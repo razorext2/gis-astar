@@ -1,5 +1,56 @@
 @php
-    $menu = config('navigation');
+    $rawMenu = config('navigation');
+    $menu = [];
+    $tempHeader = null;
+
+    foreach ($rawMenu as $item) {
+        // ── Header Handling ──────────────────────────────────
+        if (($item['type'] ?? '') === 'header') {
+            $tempHeader = $item;
+            continue;
+        }
+
+        // ── Permission Check ─────────────────────────────────
+        $guard = $item['guard'] ?? null;
+        $canSee = match (true) {
+            $guard === null => true,
+            ($guard[0] ?? '') === 'any_permission' => auth()->user()->hasAnyPermission($guard[1]),
+            ($guard[0] ?? '') === 'role' => auth()->user()->hasRole($guard[1]),
+            ($guard[0] ?? '') === 'can' => auth()->user()->can($guard[1]),
+            default => true,
+        };
+
+        if ($canSee) {
+            // ── Sub-menu Check (for groups) ──────────────────
+            if (!empty($item['submenu'] ?? [])) {
+                $hasVisibleSub = false;
+                foreach ($item['submenu'] as $sub) {
+                    $perm = $sub['permission'] ?? null;
+                    if (
+                        match (true) {
+                            $perm === null => true,
+                            is_array($perm) => auth()->user()->hasAnyPermission($perm),
+                            default => auth()->user()->can($perm),
+                        }
+                    ) {
+                        $hasVisibleSub = true;
+                        break;
+                    }
+                }
+                if (!$hasVisibleSub) {
+                    continue;
+                }
+            }
+
+            // ── Push Header if pending ───────────────────────
+            if ($tempHeader) {
+                $menu[] = $tempHeader;
+                $tempHeader = null;
+            }
+
+            $menu[] = $item;
+        }
+    }
 @endphp
 
 <!-- Sidebar Navigation -->
@@ -57,108 +108,89 @@
     {{-- Navigation Links --}}
     <div class="overflow-x-hidden overflow-y-scroll p-5" wire:scroll>
         <ul class="space-y-2 font-medium">
-
             @foreach ($menu as $item)
-                @php
-                    // ── Guard check ───────────────────────────────────────────
-                    $guard = $item['guard'] ?? null;
-                    $canSee = match (true) {
-                        $guard === null => true,
-                        $guard[0] === 'any_permission' => auth()->user()->hasAnyPermission($guard[1]),
-                        $guard[0] === 'role' => auth()->user()->hasRole($guard[1]),
-                        $guard[0] === 'can' => auth()->user()->can($guard[1]),
-                        default => true,
-                    };
-                @endphp
+                @if (($item['type'] ?? '') === 'header')
+                    {{-- ── Header / Spacer ────────────────────────────────── --}}
+                    <li x-show="!menuSearch || '{{ strtolower($item['label']) }}'.includes(menuSearch.toLowerCase())"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 translate-y-1"
+                        x-transition:enter-end="opacity-100 translate-y-0" class="px-4 py-2">
+                        <span
+                            class="text-[10px] font-bold uppercase tracking-[0.15em] text-zinc-400 dark:text-zinc-500">
+                            {{ $item['label'] }}
+                        </span>
+                    </li>
+                @elseif (empty($item['submenu'] ?? []))
+                    {{-- ── Simple link ────────────────────────────────── --}}
+                    @php
+                        $isActive = collect($item['check'])->contains(fn($r) => Route::is($r));
+                    @endphp
+                    <li x-show="!menuSearch || '{{ strtolower($item['label']) }}'.includes(menuSearch.toLowerCase())"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 translate-y-1"
+                        x-transition:enter-end="opacity-100 translate-y-0">
+                        <a href="{{ route($item['route']) }}"
+                            class="{{ $isActive ? 'bg-zinc-100/80 dark:bg-white/5 text-red-600 dark:text-red-400 font-bold border-l-4 border-red-600' : 'text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-200' }} group relative flex items-center gap-3.5 rounded-r-2xl px-4 py-3 transition-all duration-200"
+                            {{ $item['navigate'] ?? true ? 'wire:navigate' : '' }}>
 
-                @if ($canSee)
+                            <x-dynamic-component :component="'icons.' . $item['icon']"
+                                class="{{ $isActive ? 'text-red-600' : 'text-zinc-400 group-hover:text-red-600' }} h-5 w-5 flex-shrink-0 transition-colors duration-200" />
 
-                    @if (($item['type'] ?? '') === 'header')
-                        {{-- ── Header / Spacer ────────────────────────────────── --}}
-                        <li x-show="!menuSearch || '{{ strtolower($item['label']) }}'.includes(menuSearch.toLowerCase())"
-                            x-transition:enter="transition ease-out duration-200"
-                            x-transition:enter-start="opacity-0 translate-y-1"
-                            x-transition:enter-end="opacity-100 translate-y-0" class="px-4 py-2">
-                            <span
-                                class="text-[10px] font-bold uppercase tracking-[0.15em] text-zinc-400 dark:text-zinc-500">
-                                {{ $item['label'] }}
-                            </span>
-                        </li>
-                    @elseif (empty($item['submenu'] ?? []))
-                        {{-- ── Simple link ────────────────────────────────── --}}
-                        @php
-                            $isActive = collect($item['check'])->contains(fn($r) => Route::is($r));
-                        @endphp
-                        <li x-show="!menuSearch || '{{ strtolower($item['label']) }}'.includes(menuSearch.toLowerCase())"
-                            x-transition:enter="transition ease-out duration-200"
-                            x-transition:enter-start="opacity-0 translate-y-1"
-                            x-transition:enter-end="opacity-100 translate-y-0">
-                            <a href="{{ route($item['route']) }}"
-                                class="{{ $isActive ? 'bg-zinc-100/80 dark:bg-white/5 text-red-600 dark:text-red-400 font-bold border-l-4 border-red-600' : 'text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-200' }} group relative flex items-center gap-3.5 rounded-r-2xl px-4 py-3 transition-all duration-200"
-                                {{ $item['navigate'] ?? true ? 'wire:navigate' : '' }}>
+                            <div class="flex flex-1 items-center justify-between overflow-hidden">
+                                <span
+                                    class="whitespace-normal break-words text-sm tracking-wide transition-colors duration-200">
+                                    {{ $item['label'] }}
+                                </span>
 
-                                <x-dynamic-component :component="'icons.' . $item['icon']"
-                                    class="{{ $isActive ? 'text-red-600' : 'text-zinc-400 group-hover:text-red-600' }} h-5 w-5 flex-shrink-0 transition-colors duration-200" />
-
-                                <div class="flex flex-1 items-center justify-between overflow-hidden">
-                                    <span
-                                        class="whitespace-normal break-words text-sm tracking-wide transition-colors duration-200">
-                                        {{ $item['label'] }}
-                                    </span>
-
-                                    @if ($item['counter'] ?? null)
-                                        <div class="flex-shrink-0">
-                                            @if (!($item['counter_permission'] ?? null) || auth()->user()->can($item['counter_permission']))
-                                                @livewire($item['counter'])
-                                            @endif
-                                        </div>
-                                    @endif
-                                </div>
-                            </a>
-                        </li>
-                    @else
-                        {{-- ── Group with submenu ──────────────────────────── --}}
-                        @php
-                            // Derive active routes and search terms
-                            $groupRoutes = collect($item['submenu'])->pluck('check')->flatten()->all();
-                            $searchTerms = collect($item['submenu'])
-                                ->pluck('label')
-                                ->push($item['label'])
-                                ->map(fn($l) => strtolower($l))
-                                ->toJson();
-                        @endphp
-
-                        <x-dashboard.sidebar-group :label="$item['label']" :icon="$item['icon']" :routes="$groupRoutes"
-                            :search-terms="$searchTerms">
-
-                            @foreach ($item['submenu'] as $sub)
-                                @php
-                                    $perm = $sub['permission'] ?? null;
-                                    $subCan = match (true) {
-                                        $perm === null => true,
-                                        is_array($perm) => auth()->user()->hasAnyPermission($perm),
-                                        default => auth()->user()->can($perm),
-                                    };
-                                @endphp
-
-                                @if ($subCan)
-                                    <x-dashboard.sidebar-sublink :href="route($sub['route'])" :icon="$sub['icon']" :check="$sub['check']"
-                                        :navigate="$sub['navigate'] ?? true" :counter="($sub['counter'] ?? null) &&
-                                        (!($sub['counter_permission'] ?? null) ||
-                                            auth()->user()->can($sub['counter_permission']))
-                                            ? $sub['counter']
-                                            : null">
-                                        {{ $sub['label'] }}
-                                    </x-dashboard.sidebar-sublink>
+                                @if ($item['counter'] ?? null)
+                                    <div class="flex-shrink-0">
+                                        @if (!($item['counter_permission'] ?? null) || auth()->user()->can($item['counter_permission']))
+                                            @livewire($item['counter'])
+                                        @endif
+                                    </div>
                                 @endif
-                            @endforeach
+                            </div>
+                        </a>
+                    </li>
+                @else
+                    {{-- ── Group with submenu ──────────────────────────── --}}
+                    @php
+                        // Derive active routes and search terms
+                        $groupRoutes = collect($item['submenu'])->pluck('check')->flatten()->all();
+                        $searchTerms = collect($item['submenu'])
+                            ->pluck('label')
+                            ->push($item['label'])
+                            ->map(fn($l) => strtolower($l))
+                            ->toJson();
+                    @endphp
 
-                        </x-dashboard.sidebar-group>
-                    @endif
+                    <x-dashboard.sidebar-group :label="$item['label']" :icon="$item['icon']" :routes="$groupRoutes" :search-terms="$searchTerms">
 
+                        @foreach ($item['submenu'] as $sub)
+                            @php
+                                $perm = $sub['permission'] ?? null;
+                                $subCan = match (true) {
+                                    $perm === null => true,
+                                    is_array($perm) => auth()->user()->hasAnyPermission($perm),
+                                    default => auth()->user()->can($perm),
+                                };
+                            @endphp
+
+                            @if ($subCan)
+                                <x-dashboard.sidebar-sublink :href="route($sub['route'])" :icon="$sub['icon']" :check="$sub['check']"
+                                    :navigate="$sub['navigate'] ?? true" :counter="($sub['counter'] ?? null) &&
+                                    (!($sub['counter_permission'] ?? null) ||
+                                        auth()->user()->can($sub['counter_permission']))
+                                        ? $sub['counter']
+                                        : null">
+                                    {{ $sub['label'] }}
+                                </x-dashboard.sidebar-sublink>
+                            @endif
+                        @endforeach
+
+                    </x-dashboard.sidebar-group>
                 @endif
             @endforeach
-
         </ul>
     </div>
 
