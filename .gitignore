@@ -29,6 +29,8 @@ yarn-error.log
 /python/routes/__pycache__
 /python/services/__pycache__
 /dbexport/*.sql
+/.agents
+/.agents/
 
 **/caddy
 frankenphp
