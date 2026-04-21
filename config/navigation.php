@@ -127,6 +127,43 @@ return [
         ],
     ],
 
+    // ─── Rute ─────────────────────────────────────────────────────────────────
+    [
+        'type' => 'group',
+        'label' => 'Rute',
+        'icon' => 'map-pin-alt',
+        'guard' => ['any_permission', ['driver-approve', 'collect-approve', 'sales-approve']],
+        'submenu' => [
+            [
+                'label' => 'Driver',
+                'mobile_label' => 'Rute Driver',
+                'route' => 'routes.driver',
+                'check' => ['routes.driver', 'routes.driver.*'],
+                'icon' => 'truck',
+                'permission' => 'driver-approve',
+                'navigate' => true,
+            ],
+            [
+                'label' => 'Kolektor',
+                'mobile_label' => 'Rute Kolektor',
+                'route' => 'routes.collector',
+                'check' => ['routes.collector', 'routes.collector.*'],
+                'icon' => 'cash-register',
+                'permission' => 'collect-approve',
+                'navigate' => true,
+            ],
+            [
+                'label' => 'Sales',
+                'mobile_label' => 'Rute Sales',
+                'route' => 'routes.sales',
+                'check' => ['routes.sales', 'routes.sales.*'],
+                'icon' => 'receipt',
+                'permission' => 'sales-approve',
+                'navigate' => true,
+            ],
+        ],
+    ],
+
     // ─── Piutang (Kolektor) ───────────────────────────────────────────────────
     [
         'type' => 'group',
@@ -174,6 +211,61 @@ return [
                 'navigate' => false,
                 'counter' => 'utils.counter.collect-counter',
                 'counter_permission' => 'collect-approve',
+            ],
+        ],
+    ],
+
+    // ─── Data Invoice ─────────────────────────────────────────────────────────
+    [
+        'type' => 'group',
+        'label' => 'Data Invoice',
+        'icon' => 'rectangle-list',
+        'guard' => ['any_permission', ['invoice-list', 'invoice-list-pku', 'invoice-list-jkt']],
+        'submenu' => [
+            [
+                'label' => 'Semua Data',
+                'mobile_label' => 'Semua Invoice',
+                'route' => 'invoice.all.index',
+                'check' => ['invoice.all.*'],
+                'icon' => 'file-invoice',
+                'permission' => 'invoice-list',
+                'navigate' => true,
+            ],
+            [
+                'label' => 'Direct Cust',
+                'mobile_label' => 'Direct Cust Invoice',
+                'route' => 'invoice.cust.index',
+                'check' => ['invoice.cust.*'],
+                'icon' => 'file-invoice',
+                'permission' => 'invoice-list',
+                'navigate' => true,
+            ],
+            [
+                'label' => 'Medan',
+                'mobile_label' => 'Invoice Medan',
+                'route' => 'invoice.medan.index',
+                'check' => ['invoice.medan.*'],
+                'icon' => 'file-invoice',
+                'permission' => 'invoice-list',
+                'navigate' => true,
+            ],
+            [
+                'label' => 'Pekanbaru',
+                'mobile_label' => 'Invoice Pekanbaru',
+                'route' => 'invoice.pku.index',
+                'check' => ['invoice.pku.*'],
+                'icon' => 'file-invoice',
+                'permission' => 'invoice-list-pku',
+                'navigate' => true,
+            ],
+            [
+                'label' => 'Jakarta',
+                'mobile_label' => 'Invoice Jakarta',
+                'route' => 'invoice.jkt.index',
+                'check' => ['invoice.jkt.*'],
+                'icon' => 'file-invoice',
+                'permission' => 'invoice-list-jkt',
+                'navigate' => true,
             ],
         ],
     ],
@@ -296,43 +388,6 @@ return [
         ],
     ],
 
-    // ─── Rute ─────────────────────────────────────────────────────────────────
-    [
-        'type' => 'group',
-        'label' => 'Rute',
-        'icon' => 'map-pin-alt',
-        'guard' => ['any_permission', ['driver-approve', 'collect-approve', 'sales-approve']],
-        'submenu' => [
-            [
-                'label' => 'Driver',
-                'mobile_label' => 'Rute Driver',
-                'route' => 'routes.driver',
-                'check' => ['routes.driver', 'routes.driver.*'],
-                'icon' => 'truck',
-                'permission' => 'driver-approve',
-                'navigate' => true,
-            ],
-            [
-                'label' => 'Kolektor',
-                'mobile_label' => 'Rute Kolektor',
-                'route' => 'routes.collector',
-                'check' => ['routes.collector', 'routes.collector.*'],
-                'icon' => 'cash-register',
-                'permission' => 'collect-approve',
-                'navigate' => true,
-            ],
-            [
-                'label' => 'Sales',
-                'mobile_label' => 'Rute Sales',
-                'route' => 'routes.sales',
-                'check' => ['routes.sales', 'routes.sales.*'],
-                'icon' => 'receipt',
-                'permission' => 'sales-approve',
-                'navigate' => true,
-            ],
-        ],
-    ],
-
     // ─── Laporan Driver ───────────────────────────────────────────────────────
     [
         'type' => 'group',
@@ -359,61 +414,6 @@ return [
                 'navigate' => true,
                 'counter' => 'utils.counter.driver-counter',
                 'counter_permission' => 'driver-approve',
-            ],
-        ],
-    ],
-
-    // ─── Data Invoice ─────────────────────────────────────────────────────────
-    [
-        'type' => 'group',
-        'label' => 'Data Invoice',
-        'icon' => 'rectangle-list',
-        'guard' => ['any_permission', ['invoice-list', 'invoice-list-pku', 'invoice-list-jkt']],
-        'submenu' => [
-            [
-                'label' => 'Semua Data',
-                'mobile_label' => 'Semua Invoice',
-                'route' => 'invoice.all.index',
-                'check' => ['invoice.all.*'],
-                'icon' => 'file-invoice',
-                'permission' => 'invoice-list',
-                'navigate' => true,
-            ],
-            [
-                'label' => 'Direct Cust',
-                'mobile_label' => 'Direct Cust Invoice',
-                'route' => 'invoice.cust.index',
-                'check' => ['invoice.cust.*'],
-                'icon' => 'file-invoice',
-                'permission' => 'invoice-list',
-                'navigate' => true,
-            ],
-            [
-                'label' => 'Medan',
-                'mobile_label' => 'Invoice Medan',
-                'route' => 'invoice.medan.index',
-                'check' => ['invoice.medan.*'],
-                'icon' => 'file-invoice',
-                'permission' => 'invoice-list',
-                'navigate' => true,
-            ],
-            [
-                'label' => 'Pekanbaru',
-                'mobile_label' => 'Invoice Pekanbaru',
-                'route' => 'invoice.pku.index',
-                'check' => ['invoice.pku.*'],
-                'icon' => 'file-invoice',
-                'permission' => 'invoice-list-pku',
-                'navigate' => true,
-            ],
-            [
-                'label' => 'Jakarta',
-                'mobile_label' => 'Invoice Jakarta',
-                'route' => 'invoice.jkt.index',
-                'check' => ['invoice.jkt.*'],
-                'icon' => 'file-invoice',
-                'permission' => 'invoice-list-jkt',
-                'navigate' => true,
             ],
         ],
     ],
