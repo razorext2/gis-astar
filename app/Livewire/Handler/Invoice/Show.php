@@ -11,6 +11,16 @@ class Show extends Component
     public ?string $no_faktur_pajak = null;
     public ?string $id;
     public ?string $sort = 'desc';
+    public ?string $routePrefix = null;
+
+    public function mount($id)
+    {
+        $this->id = $id;
+        
+        // Capture the initial route prefix (e.g., 'invoice.all')
+        $currentRoute = request()->route()->getName();
+        $this->routePrefix = str($currentRoute)->beforeLast('.');
+    }
 
     public function render()
     {

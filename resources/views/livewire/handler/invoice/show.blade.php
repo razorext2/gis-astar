@@ -9,11 +9,6 @@
             </div>
 
             @can('invoice-add')
-                @php
-                    $currentRoute = request()->route()->getName();
-                    $routePrefix = Str::beforeLast($currentRoute, '.');
-                @endphp
-
                 <div class="max-w-xs">
                     <x-button.link wire:navigate class="w-fit ring-1 ring-green-700 dark:bg-green-800 dark:text-white"
                         href="{{ route($routePrefix . '.addDetails', $id) }}">

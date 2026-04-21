@@ -37,5 +37,8 @@ return [
     'github' => [
         'token' => env('GITHUB_TOKEN'),
     ],
+    'binderbyte' => [
+        'api_key' => env('BINDERBYTE_API_KEY'),
+    ],
 
 ];
