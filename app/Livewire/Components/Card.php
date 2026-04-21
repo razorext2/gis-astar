@@ -45,6 +45,7 @@ class Card extends Component
             'attendancetoday' => $this->getAttendanceTodayCards(),
             'attendancein' => $this->getAttendanceCards(Attendance::class),
             'attendanceout' => $this->getAttendanceCards(AttendanceOut::class),
+            'collectorreport' => $this->getCOllectorReportCards(),
             'collectoridcnonppn' => $this->getCollectorCards(CollectTask::class),
             'collectoridcppn' => $this->getCollectorCards(CollectTaskPpn::class),
             'collectoridyppn' => $this->getCollectorCards(CollectIdyPpn::class),
@@ -57,6 +58,11 @@ class Card extends Component
             'dailyreport' => $this->getDailyReportCards(),
             default => [],
         };
+    }
+
+    protected function getCollectorReportCards()
+    {
+        return app(CollectorCardService::class)->getCollectorReportCards();
     }
 
     protected function getDailyReportCards()
