@@ -12,6 +12,7 @@ use App\Models\Sales;
 use App\Services\Attendance\AttendanceCardService;
 use App\Services\Collector\CollectorCardService;
 use App\Services\DailyReport\DailyReportCardService;
+use App\Services\Driver\DriverCardService;
 use App\Services\Spk\SpkCardService;
 use App\Services\Technician\TechnicianCardService;
 use Livewire\Component;
@@ -59,8 +60,14 @@ class Card extends Component
             'dailyreport' => $this->getDailyReportCards(),
             'technicianreport' => $this->getTechnicianReportCards(),
             'technicianteam' => $this->getTechnicianTeamCards(),
+            'driverreport' => $this->getDriverReportCards(),
             default => [],
         };
+    }
+
+    protected function getDriverReportCards()
+    {
+        return app(DriverCardService::class)->getDriverReportCards();
     }
 
     protected function getTechnicianTeamCards()
