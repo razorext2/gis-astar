@@ -2,15 +2,21 @@
 
 namespace App\Livewire\Handler\Roles;
 
+use App\Livewire\Concerns\HandlesErrors;
 use App\Livewire\Forms\Roles\Post;
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
 
 class Create extends Component
 {
+    use HandlesErrors;
+
     public Post $form;
+
     public array $permissions = [];
+
     public bool $selectAll = false;
+
     public string $searchPermission = '';
 
     public function mount()
@@ -33,10 +39,10 @@ class Create extends Component
 
     public function save()
     {
-        try {
-            // Validasi form
-            $this->form->validate();
+        // Validasi form
+        $this->form->validate();
 
+        $this->runSafely(function () {
             // Panggil method store di form Post
             $this->form->store();
 
@@ -45,18 +51,19 @@ class Create extends Component
 
             // Redirect
             $this->redirect(route('roles.index'), navigate: true);
-        } catch (\Exception $e) {
-            return $this->dispatch('swal', title: 'Gagal', text: $e->getMessage(), icon: 'error');
-        }
+        }, 'Gagal menambah data role.', [
+            'action' => 'create role',
+            'user_id' => auth()->id(),
+        ]);
     }
 
     public function render()
     {
         $filteredPermissions = collect($this->permissions)
-            ->filter(fn($name) => empty($this->searchPermission) || str_contains(strtolower($name), strtolower($this->searchPermission)))
-            ->map(fn($name, $id) => (object) ['id' => $id, 'name' => $name]);
+            ->filter(fn ($name) => empty($this->searchPermission) || str_contains(strtolower($name), strtolower($this->searchPermission)))
+            ->map(fn ($name, $id) => (object) ['id' => $id, 'name' => $name]);
 
-        $groupedPermissions = $filteredPermissions->groupBy(fn($permission) => explode('-', $permission->name)[0]);
+        $groupedPermissions = $filteredPermissions->groupBy(fn ($permission) => explode('-', $permission->name)[0]);
 
         return view('livewire.handler.roles.create', compact('groupedPermissions'));
     }

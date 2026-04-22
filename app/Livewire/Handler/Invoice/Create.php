@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Handler\Invoice;
 
+use App\Livewire\Concerns\HandlesErrors;
 use App\Livewire\Forms\Invoice\Add;
 use App\Livewire\Forms\Invoice\Fetch;
 use App\Models\Invoice;
@@ -9,13 +10,12 @@ use App\Models\InvoiceDetail;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class Create extends Component
 {
-    use WithFileUploads;
+    use HandlesErrors, WithFileUploads;
 
     public Fetch $fetchDataForm;
 
@@ -149,101 +149,54 @@ class Create extends Component
 
     public function addAll($userId)
     {
-        try {
-            DB::beginTransaction();
+        $this->runSafely(function () use ($userId) {
+            DB::transaction(function () use ($userId) {
+                Invoice::create([
+                    'nomor_btt' => $this->addForm->btt_number,
+                    'tgl_invoice' => $this->addForm->invoice_date,
+                    'tgl_btt' => $this->addForm->btt_created_at,
+                    'no_piutang' => $this->addForm->receivable_number,
+                    'no_penjualan' => $this->addForm->sale_number,
+                    'no_faktur_pajak' => $this->addForm->tax_number,
+                    'nama_customer' => $this->addForm->company_name,
+                    'tipe_invoice' => $this->addForm->invoice_type,
+                    'tipe_tagihan' => $this->fetchDataForm->tipe_tagihan,
+                    'status_pengiriman' => $this->addForm->delivery_status,
+                    'status_awal' => 'Sudah ready untuk diteruskan ke Piutang.',
+                    'status_terbaru' => $this->addForm->newest_status,
+                    'added_by' => $userId,
+                    'latest_update_by' => $userId,
+                ]);
 
-            Invoice::create([
-                'nomor_btt' => $this->addForm->btt_number,
-                'tgl_invoice' => $this->addForm->invoice_date,
-                'tgl_btt' => $this->addForm->btt_created_at,
-                'no_piutang' => $this->addForm->receivable_number,
-                'no_penjualan' => $this->addForm->sale_number,
-                'no_faktur_pajak' => $this->addForm->tax_number,
-                'nama_customer' => $this->addForm->company_name,
-                'tipe_invoice' => $this->addForm->invoice_type,
-                'tipe_tagihan' => $this->fetchDataForm->tipe_tagihan,
-                'status_pengiriman' => $this->addForm->delivery_status,
-                'status_awal' => 'Sudah ready untuk diteruskan ke Piutang.',
-                'status_terbaru' => $this->addForm->newest_status,
-                'added_by' => $userId,
-                'latest_update_by' => $userId,
-            ]);
+                $this->addHistory($userId);
+            });
 
-            $this->addHistory($userId);
-
-            DB::commit();
-
-            return $this->dispatch('swal', icon: 'success', text: 'Data berhasil disimpan', title: 'Berhasil');
-        } catch (\Throwable $th) {
-            DB::rollBack();
-
-            Log::error('Gagal menyimpan data invoice', [
-                'exception' => $th,
-                'payload' => [
-                    'invoice' => [
-                        $this->addForm->only([
-                            'btt_number',
-                            'invoice_date',
-                            'btt_created_at',
-                            'receivable_number',
-                            'sale_number',
-                            'tax_number',
-                            'company_name',
-                            'invoice_type',
-                            'newest_status',
-                            'invoice_destination',
-                            'resi_number',
-                        ]),
-                        $this->fetchDataForm->all(),
-                    ],
-                ],
-            ]);
-
-            return $this->dispatch('swal', icon: 'error', text: 'Gagal menyimpan data: '.$th, title: 'Gagal');
-        }
+            $this->dispatch('swal', icon: 'success', text: 'Data berhasil disimpan', title: 'Berhasil');
+        }, 'Gagal menyimpan data invoice', [
+            'action' => 'create invoice',
+            'user_id' => $userId,
+        ]);
     }
 
     public function updateHistory($userId)
     {
-        try {
-            DB::beginTransaction();
+        $this->runSafely(function () use ($userId) {
+            DB::transaction(function () use ($userId) {
+                Invoice::where('no_faktur_pajak', $this->addForm->tax_number)->update([
+                    'status_pengiriman' => $this->addForm->delivery_status,
+                    'status_terbaru' => $this->addForm->newest_status,
+                    'tipe_tagihan' => $this->fetchDataForm->tipe_tagihan,
+                    'latest_update_by' => $userId,
+                ]);
 
-            Invoice::where('no_faktur_pajak', $this->addForm->tax_number)->update([
-                'status_pengiriman' => $this->addForm->delivery_status,
-                'status_terbaru' => $this->addForm->newest_status,
-                'tipe_tagihan' => $this->fetchDataForm->tipe_tagihan,
-                'latest_update_by' => $userId,
-            ]);
+                $this->addHistory($userId);
+            });
 
-            $this->addHistory($userId);
-
-            DB::commit();
-
-            return $this->dispatch('swal', icon: 'success', text: 'Data berhasil disimpan', title: 'Berhasil');
-        } catch (\Throwable $th) {
-            DB::rollBack();
-
-            Log::error('Gagal menyimpan data invoice', [
-                'exception' => $th,
-                'payload' => [
-                    'invoice' => [$this->addForm->only([
-                        'btt_number',
-                        'invoice_date',
-                        'btt_created_at',
-                        'receivable_number',
-                        'sale_number',
-                        'tax_number',
-                        'company_name',
-                        'invoice_type',
-                        'newest_status',
-                        'invoice_destination',
-                        'resi_number',
-                    ]), $this->fetchDataForm->all()],
-                ],
-            ]);
-
-            return $this->dispatch('swal', icon: 'error', text: 'Gagal menyimpan data: '.$th, title: 'Gagal');
-        }
+            $this->dispatch('swal', icon: 'success', text: 'Data berhasil disimpan', title: 'Berhasil');
+        }, 'Gagal menyimpan data history invoice', [
+            'action' => 'update invoice history',
+            'user_id' => $userId,
+        ]);
     }
 
     public function addHistory($userId)

@@ -2,12 +2,14 @@
 
 namespace App\Livewire\Handler\Permissions;
 
+use App\Livewire\Concerns\HandlesErrors;
 use App\Livewire\Forms\Permissions\Post;
-use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class Create extends Component
 {
+    use HandlesErrors;
+
     public Post $form;
 
     public function addField()
@@ -25,16 +27,19 @@ class Create extends Component
 
     public function save()
     {
-        try {
-            // validasi form
-            $this->form->validate();
+        // Pindahkan validasi ke luar agar jika invalid, pesan merah form muncul secara native,
+        // bukan ditangkap sebagai pesan error Exception Swal.
+        $this->form->validate();
 
+        $this->runSafely(function () {
             // define $data = array name
             $data = $this->form->name;
 
             // cek jika value tiap array itu berbeda
             if (count(array_unique($data)) !== count($data)) {
-                return $this->dispatch('swal', title: 'Gagal', text: 'Tidak boleh ada nama yang sama', icon: 'error');
+                $this->dispatch('swal', title: 'Gagal', text: 'Tidak boleh ada nama yang sama', icon: 'error');
+
+                return;
             }
 
             // panggil method store di form Post
@@ -45,9 +50,10 @@ class Create extends Component
 
             // redirect
             $this->redirect(route('permissions.index'), navigate: true);
-        } catch (\Exception $e) {
-            return $this->dispatch('swal', title: 'Gagal', text: $e->getMessage(), icon: 'error');
-        }
+        }, 'Gagal menyimpan data hak akses/perizinan.', [
+            'action' => 'create permissions',
+            'user_id' => auth()->id(),
+        ]);
     }
 
     public function render()

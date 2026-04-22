@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Handler\User;
 
+use App\Livewire\Concerns\HandlesErrors;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -10,13 +11,22 @@ use Spatie\Permission\Models\Role;
 
 class Edit extends Component
 {
+    use HandlesErrors;
+
     public User $user;
+
     public $name;
+
     public $email;
+
     public $is_active;
+
     public $deactivation_reason;
+
     public $password;
+
     public $password_confirmation;
+
     public $selected_roles = [];
 
     public function mount(User $user)
@@ -33,7 +43,7 @@ class Edit extends Component
     {
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $this->user->id,
+            'email' => 'required|email|unique:users,email,'.$this->user->id,
             'password' => 'nullable|min:8|same:password_confirmation',
             'selected_roles' => 'required|array|min:1',
             'is_active' => 'required|boolean',
@@ -51,32 +61,40 @@ class Edit extends Component
     {
         $this->validate();
 
-        $data = [
-            'name' => $this->name,
-            'email' => $this->email,
-            'is_active' => $this->is_active,
-        ];
+        return $this->runSafely(function () {
+            DB::transaction(function () {
+                $data = [
+                    'name' => $this->name,
+                    'email' => $this->email,
+                    'is_active' => $this->is_active,
+                ];
 
-        if (!$this->is_active) {
-            $data['deactivation_at'] = now();
-            $data['deactivation_reason'] = $this->deactivation_reason;
-            
-            // Hapus session jika user dinonaktifkan
-            DB::table('sessions')->where('user_id', $this->user->id)->delete();
-        } else {
-            $data['deactivation_reason'] = null;
-            $data['deactivation_at'] = null;
-        }
+                if (! $this->is_active) {
+                    $data['deactivation_at'] = now();
+                    $data['deactivation_reason'] = $this->deactivation_reason;
 
-        if (!empty($this->password)) {
-            $data['password'] = Hash::make($this->password);
-        }
+                    // Hapus session jika user dinonaktifkan
+                    DB::table('sessions')->where('user_id', $this->user->id)->delete();
+                } else {
+                    $data['deactivation_reason'] = null;
+                    $data['deactivation_at'] = null;
+                }
 
-        $this->user->update($data);
-        $this->user->syncRoles($this->selected_roles);
+                if (! empty($this->password)) {
+                    $data['password'] = Hash::make($this->password);
+                }
 
-        return redirect()->route('users.index')
-            ->with('status', 'Berhasil memperbarui data user: ' . $this->user->name);
+                $this->user->update($data);
+                $this->user->syncRoles($this->selected_roles);
+            });
+
+            return redirect()->route('users.index')
+                ->with('status', 'Berhasil memperbarui data user: '.$this->name);
+        }, 'Gagal memperbarui data user', [
+            'action' => 'update user',
+            'updated_user_id' => $this->user->id,
+            'user_id' => auth()->id(),
+        ]);
     }
 
     public function render()

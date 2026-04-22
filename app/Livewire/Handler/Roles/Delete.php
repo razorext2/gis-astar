@@ -2,11 +2,14 @@
 
 namespace App\Livewire\Handler\Roles;
 
+use App\Livewire\Concerns\HandlesErrors;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
 
 class Delete extends Component
 {
+    use HandlesErrors;
+
     public int $id;
 
     public function mount($id)
@@ -24,15 +27,21 @@ class Delete extends Component
     {
         $query = Role::find($this->id);
 
-        if (!$query) {
+        if (! $query) {
             return abort(404);
         }
 
-        $query->delete();
+        return $this->runSafely(function () use ($query) {
+            $query->delete();
 
-        $this->dispatch('swal', title: 'Berhasil', text: 'Berhasil menghapus data role', icon: 'success');
+            $this->dispatch('swal', title: 'Berhasil', text: 'Berhasil menghapus data role', icon: 'success');
 
-        return $this->redirect(route('roles.index'), navigate: true);
+            return $this->redirect(route('roles.index'), navigate: true);
+        }, 'Gagal menghapus data role.', [
+            'action' => 'delete role',
+            'role_id' => $this->id,
+            'user_id' => auth()->id(),
+        ]);
     }
 
     public function render()

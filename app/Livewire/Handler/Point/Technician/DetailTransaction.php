@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Handler\Point\Technician;
 
+use App\Livewire\Concerns\HandlesErrors;
 use App\Models\PointTransactions;
 use App\Models\TechnicianPoints;
 use Illuminate\Support\Facades\DB;
@@ -9,10 +10,16 @@ use Livewire\Component;
 
 class DetailTransaction extends Component
 {
+    use HandlesErrors;
+
     public $results;
+
     public $transactionID;
+
     public $showModal;
+
     public $from_date;
+
     public $to_date;
 
     protected function getTransaction()
@@ -26,7 +33,7 @@ class DetailTransaction extends Component
 
         $data = $this->results->first();
 
-        if (!$data) {
+        if (! $data) {
             abort(404, 'Transaksi tidak ditemukan');
         }
 
@@ -36,57 +43,55 @@ class DetailTransaction extends Component
 
     public function confirm()
     {
-        $point = TechnicianPoints::where('created_at', '>=', $this->from_date)
-            ->where('created_at', '<=', $this->to_date);
+        $this->runSafely(function () {
+            DB::transaction(function () {
+                TechnicianPoints::where('created_at', '>=', $this->from_date)
+                    ->where('created_at', '<=', $this->to_date)
+                    ->update([
+                        'is_redeemed' => 1,
+                        'transaction_id' => $this->transactionID,
+                        'redeemed_status' => 3,
+                    ]);
 
-        try {
-            DB::beginTransaction();
+                $this->getTransaction()->update([
+                    'status' => 3,
+                ]);
+            });
 
-            $point->update([
-                'is_redeemed' => 1,
-                'transaction_id' => $this->transactionID,
-                'redeemed_status' => 3
-            ]);
-
-            $this->getTransaction()->update([
-                'status' => 3
-            ]);
-
-            DB::commit();
             $this->dispatch('swal', title: 'Berhasil', text: 'Transaksi berhasil dikonfirmasi', icon: 'success');
             $this->closeModal();
             $this->results = $this->getTransaction()->get();
-        } catch (\Exception $e) {
-            DB::rollBack();
-            $this->dispatch('swal', title: 'Gagal', text: 'Terjadi kegagalan, <b>' . $e->getMessage() . '</b>', icon: 'error');
-        }
+        }, 'Gagal mengkonfirmasi transaksi point.', [
+            'action' => 'confirm point transaction',
+            'transaction_id' => $this->transactionID,
+            'user_id' => auth()->id(),
+        ]);
     }
 
     public function reject()
     {
-        $point = TechnicianPoints::where('created_at', '>=', $this->from_date)
-            ->where('created_at', '<=', $this->to_date);
+        $this->runSafely(function () {
+            DB::transaction(function () {
+                TechnicianPoints::where('created_at', '>=', $this->from_date)
+                    ->where('created_at', '<=', $this->to_date)
+                    ->update([
+                        'is_redeemed' => 0,
+                        'redeemed_status' => 0,
+                    ]);
 
-        try {
-            DB::beginTransaction();
+                $this->getTransaction()->update([
+                    'status' => 4,
+                ]);
+            });
 
-            $point->update([
-                'is_redeemed' => 0,
-                'redeemed_status' => 0
-            ]);
-
-            $this->getTransaction()->update([
-                'status' => 4
-            ]);
-
-            DB::commit();
             $this->dispatch('swal', title: 'Berhasil', text: 'Transaksi berhasil di batalkan', icon: 'success');
             $this->closeModal();
             $this->results = $this->getTransaction()->get();
-        } catch (\Exception $e) {
-            DB::rollBack();
-            $this->dispatch('swal', title: 'Gagal', text: 'Terjadi kegagalan, <b>' . $e->getMessage() . '</b>', icon: 'error');
-        }
+        }, 'Gagal membatalkan transaksi point.', [
+            'action' => 'reject point transaction',
+            'transaction_id' => $this->transactionID,
+            'user_id' => auth()->id(),
+        ]);
     }
 
     public function openModal()

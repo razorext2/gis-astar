@@ -2,16 +2,18 @@
 
 namespace App\Livewire\Handler\Teams;
 
+use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Team;
 use App\Models\TeamMember;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class Edit extends Component
 {
+    use HandlesErrors;
+
     #[Validate('string|required')]
     public ?string $team_code;
 
@@ -23,7 +25,9 @@ class Edit extends Component
 
     #[Validate('string|required')]
     public ?string $search_user = '';
+
     public $team;
+
     public ?bool $removeTeamModal = false;
 
     public function mount($team_code)
@@ -69,7 +73,7 @@ class Edit extends Component
                 TeamMember::where('team_code', $this->team_code)
                     ->where('kode_pegawai', $this->team_leader)
                     ->update([
-                        'role' => 'Leader'
+                        'role' => 'Leader',
                     ]);
 
                 // assign role leader baru
@@ -85,43 +89,46 @@ class Edit extends Component
 
             DB::commit();
             session()->flash('status', 'Tim berhasil diupdate.');
+
             return $this->redirect(route('teams.index'));
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', $e->getMessage());
+
             return $this->redirect(route('teams.index'));
         }
     }
 
     public function removeTeamProcess()
     {
-        try {
-            DB::beginTransaction();
+        return $this->runSafely(function () {
+            DB::transaction(function () {
+                // hapus member pada team
+                TeamMember::where('team_code', $this->team->team_code)->delete();
 
-            // hapus member pada team
-            TeamMember::where('team_code', $this->team->team_code)->delete();
+                // remove role leader
+                User::where('kode_pegawai', $this->team->team_leader)
+                    ->firstOrFail()
+                    ->removeRole('Kepala-Teknisi');
 
-            // remove role leader
-            User::where('kode_pegawai', $this->team->team_leader)
-                ->firstOrFail()
-                ->removeRole('Kepala-Teknisi');
+                // hapus team
+                $this->team->delete();
+            });
 
-            // hapus team
-            $this->team->delete();
-
-            DB::commit();
             session()->flash('status', 'Tim berhasil dihapus.');
+
             return $this->redirect(route('teams.index'));
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: $e->getMessage());
-        }
+        }, 'Gagal menghapus tim.', [
+            'action' => 'delete team',
+            'team_code' => $this->team->team_code ?? null,
+            'user_id' => auth()->id(),
+        ]);
     }
 
     public function render()
     {
-        $users = User::where('kode_pegawai', 'like', '%' . $this->search_user . '%')
-            ->orWhere('name', 'like', '%' . $this->search_user . '%')
+        $users = User::where('kode_pegawai', 'like', '%'.$this->search_user.'%')
+            ->orWhere('name', 'like', '%'.$this->search_user.'%')
             ->limit(5)
             ->get();
 

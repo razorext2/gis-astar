@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Handler\Driver;
 
+use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Driver;
 use App\Models\User;
 use Livewire\Attributes\Validate;
@@ -9,6 +10,8 @@ use Livewire\Component;
 
 class AssignTo extends Component
 {
+    use HandlesErrors;
+
     public Driver $driver;
 
     #[Validate('required|integer', message: [
@@ -26,18 +29,23 @@ class AssignTo extends Component
     {
         $this->validate();
 
-        try {
+        $this->runSafely(function () {
             $this->driver->update([
                 'status' => 5,
                 'kode_pegawai' => $this->kode_pegawai,
-                'assign_by' => auth()->user()->id,
+                'assign_by' => auth()->id(),
             ]);
 
-            $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Laporan berhasil di assgin ke <b>' . $this->driver->user->name . '</b>');
+            // Reload user relationship agar object $this->driver->user tidak null/lawas memanggil relation
+            $this->driver->load('user');
+
+            $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Laporan berhasil di assign ke <b>'.($this->driver->user->name ?? 'Driver').'</b>');
             $this->dispatch('redirectRoute', route('driver.index'));
-        } catch (\Exception $e) {
-            $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Laporan gagal di assgin ke <b>' . $this->driver->user->name . '</b> ' . $e->getMessage());
-        }
+        }, 'Gagal meng-assign laporan.', [
+            'driver_id' => $this->driver->id,
+            'kode_pegawai' => $this->kode_pegawai,
+            'user_id' => auth()->id(),
+        ]);
     }
 
     public function render()

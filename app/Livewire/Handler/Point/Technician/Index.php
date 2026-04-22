@@ -13,14 +13,19 @@ class Index extends Component
 
     #[Url]
     public $kodepegawai;
+
     #[Url]
     public $name;
+
     #[Url]
     public $is_redeemed;
+
     #[Url]
     public $no_vt;
+
     #[Url]
     public $from_date;
+
     #[Url]
     public $to_date;
 
@@ -37,7 +42,7 @@ class Index extends Component
     public function getData()
     {
         return TechnicianPoints::with('pegawai')
-            ->when(!auth()->user()->can('technician-approve'), function ($query) {
+            ->when(! auth()->user()->can('technician-approve'), function ($query) {
                 $query->where('kode_pegawai', auth()->user()->kode_pegawai);
             })
             ->when($this->kodepegawai, function ($query) {
@@ -67,7 +72,7 @@ class Index extends Component
     public function render()
     {
         return view('livewire.handler.point.technician.index', [
-            'pointData' => $this->getData()
+            'pointData' => $this->getData(),
         ]);
     }
 }

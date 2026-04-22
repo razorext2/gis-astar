@@ -2,17 +2,25 @@
 
 namespace App\Livewire\Handler\User;
 
+use App\Livewire\Concerns\HandlesErrors;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
 
 class Create extends Component
 {
+    use HandlesErrors;
+
     public $name;
+
     public $email;
+
     public $password;
+
     public $password_confirmation;
+
     public $selected_roles = [];
 
     protected function rules()
@@ -41,17 +49,25 @@ class Create extends Component
     {
         $this->validate();
 
-        $user = User::create([
-            'name' => $this->name,
+        return $this->runSafely(function () {
+            DB::transaction(function () {
+                $user = User::create([
+                    'name' => $this->name,
+                    'email' => $this->email,
+                    'password' => Hash::make($this->password),
+                    'is_active' => true,
+                ]);
+
+                $user->assignRole($this->selected_roles);
+            });
+
+            return redirect()->route('users.index')
+                ->with('status', 'Berhasil menambah data user: '.$this->name);
+        }, 'Gagal menambah data user', [
+            'action' => 'create user',
             'email' => $this->email,
-            'password' => Hash::make($this->password),
-            'is_active' => true,
+            'user_id' => auth()->id(),
         ]);
-
-        $user->assignRole($this->selected_roles);
-
-        return redirect()->route('users.index')
-            ->with('status', 'Berhasil menambah data user: ' . $user->name);
     }
 
     public function render()

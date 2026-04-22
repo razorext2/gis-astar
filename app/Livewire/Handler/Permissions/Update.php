@@ -2,23 +2,27 @@
 
 namespace App\Livewire\Handler\Permissions;
 
-use Illuminate\Support\Facades\Log;
+use App\Livewire\Concerns\HandlesErrors;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
 
 class Update extends Component
 {
+    use HandlesErrors;
+
     #[Validate('required|string|min:5|max:30')]
     public string $name;
+
     public string $guard_name;
+
     public ?Permission $permission = null;
 
     public function mount($id)
     {
         $this->permission = Permission::find($id);
 
-        if (!$this->permission) {
+        if (! $this->permission) {
             return abort(404);
         }
 
@@ -30,7 +34,7 @@ class Update extends Component
     {
         $this->validate();
 
-        try {
+        $this->runSafely(function () {
             $this->permission->name = $this->name;
 
             $this->permission->save();
@@ -38,10 +42,11 @@ class Update extends Component
             $this->dispatch('swal', title: 'Berhasil', text: 'Berhasil mengubah data perizinan', icon: 'success');
 
             $this->redirect(route('permissions.index'), navigate: true);
-        } catch (\Exception $e) {
-            Log::error(now() . ': Error saat mengubah data perizinan ->' . $e->getMessage());
-            return $this->dispatch('swal', title: 'Gagal', text: $e->getMessage(), icon: 'error');
-        }
+        }, 'Gagal mengubah data perizinan.', [
+            'action' => 'update permission',
+            'permission_id' => $this->permission->id,
+            'user_id' => auth()->id(),
+        ]);
     }
 
     public function render()

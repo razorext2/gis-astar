@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Handler\Driver;
 
+use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Driver;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
@@ -10,6 +11,8 @@ use Livewire\Component;
 
 class AssignAdd extends Component
 {
+    use HandlesErrors;
+
     #[Validate('required|string|min:11|max:11', message: [
         'no_sr.required' => 'No. SR wajib diisi!',
         'no_sr.min' => 'No. SR minimal 11 karakter!',
@@ -90,7 +93,7 @@ class AssignAdd extends Component
         // tampilkan pesan loading
         $this->dispatch('loadingProgress', message: 'Mengirim data...');
 
-        try {
+        $this->runSafely(function () {
             $driver = Driver::create([
                 'no_sr' => $this->no_sr,
                 'tipe_tagihan' => $this->tipe_tagihan,
@@ -98,18 +101,19 @@ class AssignAdd extends Component
                 'title' => $this->pt_name,
                 'lokasi' => $this->pt_address,
                 'assign_date' => $this->assign_date,
-                'assign_by' => auth()->user()->id,
+                'assign_by' => auth()->id(),
                 'status' => 4,
             ]);
 
             if ($driver) {
                 $this->reset();
 
-                return $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Data berhasil disimpan.');
+                $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Data berhasil disimpan.');
             }
-        } catch (\Exception $e) {
-            return $this->dispatch('swal', icon: 'error', text: $e->getMessage(), title: 'Gagal');
-        }
+        }, 'Gagal menyimpan data penugasan.', [
+            'user_id' => auth()->id(),
+            'no_sr' => $this->no_sr,
+        ]);
     }
 
     public function render()

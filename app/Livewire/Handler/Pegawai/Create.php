@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Handler\Pegawai;
 
+use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Golongan;
 use App\Models\Jabatan;
 use App\Models\Pegawai;
@@ -14,7 +15,7 @@ use Spatie\Permission\Models\Role;
 
 class Create extends Component
 {
-    use WithFileUploads;
+    use HandlesErrors, WithFileUploads;
 
     // Pegawai Fields
     public $kode_pegawai;
@@ -67,56 +68,62 @@ class Create extends Component
     {
         $this->validate();
 
-        $lastID = Pegawai::latest('id')->first();
-        $newID = $lastID ? $lastID->id + 1 : 1;
+        $this->runSafely(function () {
+            $lastID = Pegawai::latest('id')->first();
+            $newID = $lastID ? $lastID->id + 1 : 1;
 
-        $pegawai = Pegawai::create([
-            'id' => $newID,
-            'kode_pegawai' => $this->kode_pegawai,
-            'nik_pegawai' => $this->nik_pegawai,
-            'full_name' => $this->full_name,
-            'nick_name' => $this->nick_name,
-            'no_telp' => $this->no_telp,
-            'alamat' => $this->alamat,
-            'jabatan' => $this->jabatan,
-            'golongan' => $this->golongan,
-            'tgl_lahir' => $this->tgl_lahir,
-        ]);
-
-        if ($this->make_user) {
-            $user = User::create([
+            $pegawai = Pegawai::create([
+                'id' => $newID,
                 'kode_pegawai' => $this->kode_pegawai,
-                'name' => $this->full_name,
-                'email' => strtolower($this->nick_name).$this->kode_pegawai.'@indodacin.com',
-                'password' => Hash::make($this->kode_pegawai),
+                'nik_pegawai' => $this->nik_pegawai,
+                'full_name' => $this->full_name,
+                'nick_name' => $this->nick_name,
+                'no_telp' => $this->no_telp,
+                'alamat' => $this->alamat,
+                'jabatan' => $this->jabatan,
+                'golongan' => $this->golongan,
+                'tgl_lahir' => $this->tgl_lahir,
             ]);
 
-            $user->syncRoles($this->selected_roles);
-        }
+            if ($this->make_user) {
+                $user = User::create([
+                    'kode_pegawai' => $this->kode_pegawai,
+                    'name' => $this->full_name,
+                    'email' => strtolower($this->nick_name).$this->kode_pegawai.'@indodacin.com',
+                    'password' => Hash::make($this->kode_pegawai),
+                ]);
 
-        // Handle File Uploads
-        $folderPath = "public/labels/{$this->kode_pegawai}";
-        $folderToDB = "labels/{$this->kode_pegawai}/";
-
-        if ($this->photo1 || $this->photo2) {
-            if (! Storage::exists($folderPath)) {
-                Storage::makeDirectory($folderPath);
+                $user->syncRoles($this->selected_roles);
             }
 
-            if ($this->photo1) {
-                $this->photo1->storeAs($folderPath, 'photo1.png');
+            // Handle File Uploads
+            $folderPath = "public/labels/{$this->kode_pegawai}";
+            $folderToDB = "labels/{$this->kode_pegawai}/";
+
+            if ($this->photo1 || $this->photo2) {
+                if (! Storage::exists($folderPath)) {
+                    Storage::makeDirectory($folderPath);
+                }
+
+                if ($this->photo1) {
+                    $this->photo1->storeAs($folderPath, 'photo1.png');
+                }
+
+                if ($this->photo2) {
+                    $this->photo2->storeAs($folderPath, 'photo2.png');
+                }
+
+                $pegawai->update([
+                    'storage' => $folderToDB,
+                ]);
             }
 
-            if ($this->photo2) {
-                $this->photo2->storeAs($folderPath, 'photo2.png');
-            }
-
-            $pegawai->update([
-                'storage' => $folderToDB,
-            ]);
-        }
-
-        return redirect()->route('pegawai.index')->with('status', 'Berhasil menambah data Pegawai');
+            session()->flash('status', 'Berhasil menambah data Pegawai');
+            $this->redirect(route('pegawai.index'), navigate: true);
+        }, 'Gagal menambahkan data pegawai.', [
+            'user_id' => auth()->id(),
+            'action' => 'create pegawai',
+        ]);
     }
 
     public function render()

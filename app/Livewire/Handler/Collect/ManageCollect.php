@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Handler\Collect;
 
+use App\Livewire\Concerns\HandlesErrors;
 use App\Models\CollectIdyPpn;
 use App\Models\Collector;
 use App\Models\CollectTask;
@@ -14,6 +15,8 @@ use Livewire\Component;
 
 class ManageCollect extends Component
 {
+    use HandlesErrors;
+
     public $showRescheduleModal = false;
 
     public $showChangeCollectorModal = false;
@@ -112,30 +115,29 @@ class ManageCollect extends Component
             'new_assign_date.date' => 'Format tanggal tidak valid.',
         ]);
 
-        $query = Collector::findOrFail($this->id);
+        $this->runSafely(function () {
+            DB::transaction(function () {
+                $query = Collector::findOrFail($this->id);
 
-        try {
-            DB::beginTransaction();
+                $query->update([
+                    'assign_date' => $this->new_assign_date,
+                ]);
 
-            $query->update([
-                'assign_date' => $this->new_assign_date,
-            ]);
-
-            // Update master task
-            $masterTask = $this->getMasterTaskQuery($query);
-            if ($masterTask) {
-                $masterTask->update(['assign_date' => $this->new_assign_date]);
-            }
-
-            DB::commit();
+                // Update master task
+                $masterTask = $this->getMasterTaskQuery($query);
+                if ($masterTask) {
+                    $masterTask->update(['assign_date' => $this->new_assign_date]);
+                }
+            });
 
             $this->resetModals();
             $this->dispatch('swal', title: 'Berhasil', text: 'Jadwal kolektor berhasil diubah.', icon: 'success');
             $this->dispatch('redirectRoute', route('collect.index'));
-        } catch (\Exception $e) {
-            DB::rollBack();
-            $this->dispatch('swal', title: 'Gagal', text: 'Terjadi kesalahan: '.$e->getMessage(), icon: 'error');
-        }
+        }, 'Gagal mengubah jadwal kolektor.', [
+            'collector_id' => $this->id,
+            'user_id' => Auth::id(),
+            'action' => 'reschedule collector',
+        ]);
     }
 
     public function confirmChangeCollector()
@@ -149,30 +151,29 @@ class ManageCollect extends Component
             'new_kode_pegawai.exists' => 'Kolektor tidak ditemukan di database.',
         ]);
 
-        $query = Collector::findOrFail($this->id);
+        $this->runSafely(function () {
+            DB::transaction(function () {
+                $query = Collector::findOrFail($this->id);
 
-        try {
-            DB::beginTransaction();
+                $query->update([
+                    'kode_pegawai' => $this->new_kode_pegawai,
+                ]);
 
-            $query->update([
-                'kode_pegawai' => $this->new_kode_pegawai,
-            ]);
-
-            // Update master task
-            $masterTask = $this->getMasterTaskQuery($query);
-            if ($masterTask) {
-                $masterTask->update(['assign_to' => $this->new_kode_pegawai]);
-            }
-
-            DB::commit();
+                // Update master task
+                $masterTask = $this->getMasterTaskQuery($query);
+                if ($masterTask) {
+                    $masterTask->update(['assign_to' => $this->new_kode_pegawai]);
+                }
+            });
 
             $this->resetModals();
             $this->dispatch('swal', title: 'Berhasil', text: 'Kolektor berhasil diganti.', icon: 'success');
             $this->dispatch('redirectRoute', route('collect.index'));
-        } catch (\Exception $e) {
-            DB::rollBack();
-            $this->dispatch('swal', title: 'Gagal', text: 'Terjadi kesalahan: '.$e->getMessage(), icon: 'error');
-        }
+        }, 'Gagal mengganti kolektor.', [
+            'collector_id' => $this->id,
+            'user_id' => Auth::id(),
+            'action' => 'change collector',
+        ]);
     }
 
     public function resetModals()

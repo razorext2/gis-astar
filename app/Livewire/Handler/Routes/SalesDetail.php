@@ -51,9 +51,9 @@ class SalesDetail extends Component
         return $this->report
             ->filter(fn ($item) => $item->latitude && $item->longitude)
             ->map(fn ($item) => [
-                'id'   => $item->id,
-                'lat'  => (float) $item->latitude,
-                'lng'  => (float) $item->longitude,
+                'id' => $item->id,
+                'lat' => (float) $item->latitude,
+                'lng' => (float) $item->longitude,
                 'name' => $item->title ?? 'N/A',
             ])
             ->values()

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Handler\Technician;
 
+use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Technician;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -12,9 +13,14 @@ use Livewire\Component;
 
 class Fetch extends Component
 {
+    use HandlesErrors;
+
     public $apiData;
+
     public $dbData;
+
     public $diffResult;
+
     public string $id;
 
     public function mount()
@@ -69,38 +75,37 @@ class Fetch extends Component
             $jsonResult = DiffHelper::calculate($apiValue, $dbValue, 'Json');
             $result = $htmlRenderer->renderArray(json_decode($jsonResult, true));
 
-            if ($result)
-                $combinedDiffResult .= "<span class='font-semibold text-gray-800 dark:text-white text-left'>" . ucfirst(str_replace('_', ' ', $key)) . "</span>" . $result;
+            if ($result) {
+                $combinedDiffResult .= "<span class='font-semibold text-gray-800 dark:text-white text-left'>".ucfirst(str_replace('_', ' ', $key)).'</span>'.$result;
+            }
         }
 
         $this->diffResult = $combinedDiffResult;
     }
 
-
     public function update()
     {
         $query = Technician::where('no_vt', $this->id);
 
-        if (!$query) {
+        if (! $query) {
             return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Data tidak ditemukan.');
         }
 
-        try {
-            DB::beginTransaction();
-
-            $query->update([
-                'job_detail' => $this->apiData['RincianPekerjaan'],
-                'customer_contact' => $this->apiData['CustomerContact'],
-                'customer_address' => $this->apiData['AlamatLengkapKunjungan'],
-            ]);
-
-            DB::commit();
+        return $this->runSafely(function () use ($query) {
+            DB::transaction(function () use ($query) {
+                $query->update([
+                    'job_detail' => $this->apiData['RincianPekerjaan'],
+                    'customer_contact' => $this->apiData['CustomerContact'],
+                    'customer_address' => $this->apiData['AlamatLengkapKunjungan'],
+                ]);
+            });
 
             return redirect()->route('technician.show', $this->id)->with('status', 'Data berhasil diperbarui');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: $e->getMessage());
-        }
+        }, 'Gagal mengupdate data kunjungan teknisi.', [
+            'action' => 'update technician visit fetch',
+            'no_vt' => $this->id,
+            'user_id' => auth()->id(),
+        ]);
     }
 
     public function render()

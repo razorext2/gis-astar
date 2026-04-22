@@ -2,19 +2,26 @@
 
 namespace App\Livewire\Handler\Roles;
 
+use App\Livewire\Concerns\HandlesErrors;
 use App\Livewire\Forms\Roles\Post;
-use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class Update extends Component
 {
+    use HandlesErrors;
+
     public Post $form;
+
     public $permissions;
+
     public ?Role $role = null; // Ubah menjadi nullable untuk keamanan
+
     public array $rolePermissions = [];
+
     public bool $selectAll = false;
+
     public string $searchPermission = '';
 
     public function mount($id)
@@ -22,7 +29,7 @@ class Update extends Component
         $this->role = Role::find($id);
 
         // Jika role tidak ditemukan, redirect atau tampilkan error
-        if (!$this->role) {
+        if (! $this->role) {
             abort(404);
         }
 
@@ -51,10 +58,9 @@ class Update extends Component
 
     public function save()
     {
-        try {
-            // validasi form
-            $this->form->validate();
+        $this->form->validate();
 
+        $this->runSafely(function () {
             // panggil method update
             $this->form->update($this->role);
 
@@ -63,20 +69,22 @@ class Update extends Component
 
             // redirect
             $this->redirect(route('roles.index'), navigate: true);
-        } catch (\Exception $e) {
-            return $this->dispatch('swal', title: 'Gagal', text: $e->getMessage(), icon: 'error');
-        }
+        }, 'Gagal mengubah data role.', [
+            'action' => 'update role',
+            'role_id' => $this->role->id ?? null,
+            'user_id' => auth()->id(),
+        ]);
     }
 
     public function render()
     {
         $permissionsQuery = Permission::select('id', 'name')
-            ->where('name', 'like', '%' . $this->searchPermission . '%')
+            ->where('name', 'like', '%'.$this->searchPermission.'%')
             ->get();
 
         $this->permissions = $permissionsQuery;
 
-        $groupedPermissions = $permissionsQuery->groupBy(fn($permission) => explode('-', $permission->name)[0]);
+        $groupedPermissions = $permissionsQuery->groupBy(fn ($permission) => explode('-', $permission->name)[0]);
 
         return view('livewire.handler.roles.update', compact('groupedPermissions'));
     }

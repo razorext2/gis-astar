@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Handler\Pegawai;
 
+use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Golongan;
 use App\Models\Jabatan;
 use App\Models\Pegawai;
@@ -13,7 +14,7 @@ use Spatie\Permission\Models\Role;
 
 class Edit extends Component
 {
-    use WithFileUploads;
+    use HandlesErrors, WithFileUploads;
 
     public Pegawai $pegawai;
 
@@ -106,49 +107,56 @@ class Edit extends Component
     {
         $this->validate();
 
-        $this->pegawai->update([
-            'nik_pegawai' => $this->nik_pegawai,
-            'full_name' => $this->full_name,
-            'nick_name' => $this->nick_name,
-            'no_telp' => $this->no_telp,
-            'alamat' => $this->alamat,
-            'jabatan' => $this->jabatan,
-            'golongan' => $this->golongan,
-            'tgl_lahir' => $this->tgl_lahir,
-        ]);
-
-        // Sync Roles if account exists
-        if ($this->has_account) {
-            $user = User::where('kode_pegawai', $this->kode_pegawai)->first();
-            if ($user) {
-                $user->syncRoles($this->selected_roles);
-                $user->update(['name' => $this->full_name]);
-            }
-        }
-
-        // Handle File Uploads
-        if ($this->photo1 || $this->photo2) {
-            $folderPath = "public/labels/{$this->kode_pegawai}";
-            $folderToDB = "labels/{$this->kode_pegawai}/";
-
-            if (! Storage::exists($folderPath)) {
-                Storage::makeDirectory($folderPath);
-            }
-
-            if ($this->photo1) {
-                $this->photo1->storeAs($folderPath, 'photo1.png');
-            }
-
-            if ($this->photo2) {
-                $this->photo2->storeAs($folderPath, 'photo2.png');
-            }
-
+        $this->runSafely(function () {
             $this->pegawai->update([
-                'storage' => $folderToDB,
+                'nik_pegawai' => $this->nik_pegawai,
+                'full_name' => $this->full_name,
+                'nick_name' => $this->nick_name,
+                'no_telp' => $this->no_telp,
+                'alamat' => $this->alamat,
+                'jabatan' => $this->jabatan,
+                'golongan' => $this->golongan,
+                'tgl_lahir' => $this->tgl_lahir,
             ]);
-        }
 
-        return redirect()->route('pegawai.index')->with('status', 'Berhasil memperbarui data Pegawai');
+            // Sync Roles if account exists
+            if ($this->has_account) {
+                $user = User::where('kode_pegawai', $this->kode_pegawai)->first();
+                if ($user) {
+                    $user->syncRoles($this->selected_roles);
+                    $user->update(['name' => $this->full_name]);
+                }
+            }
+
+            // Handle File Uploads
+            if ($this->photo1 || $this->photo2) {
+                $folderPath = "public/labels/{$this->kode_pegawai}";
+                $folderToDB = "labels/{$this->kode_pegawai}/";
+
+                if (! Storage::exists($folderPath)) {
+                    Storage::makeDirectory($folderPath);
+                }
+
+                if ($this->photo1) {
+                    $this->photo1->storeAs($folderPath, 'photo1.png');
+                }
+
+                if ($this->photo2) {
+                    $this->photo2->storeAs($folderPath, 'photo2.png');
+                }
+
+                $this->pegawai->update([
+                    'storage' => $folderToDB,
+                ]);
+            }
+
+            session()->flash('status', 'Berhasil memperbarui data Pegawai');
+            $this->redirect(route('pegawai.index'), navigate: true);
+        }, 'Gagal memperbarui data pegawai.', [
+            'pegawai_id' => $this->pegawai->id,
+            'user_id' => auth()->id(),
+            'action' => 'update pegawai',
+        ]);
     }
 
     public function render()

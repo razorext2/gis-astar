@@ -2,12 +2,14 @@
 
 namespace App\Livewire\Handler\Permissions;
 
-use Illuminate\Support\Facades\Log;
+use App\Livewire\Concerns\HandlesErrors;
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
 
 class Delete extends Component
 {
+    use HandlesErrors;
+
     public int $id;
 
     public function mount($id)
@@ -25,20 +27,21 @@ class Delete extends Component
     {
         $query = Permission::find($this->id);
 
-        if (!$query) {
+        if (! $query) {
             return abort(404);
         }
 
-        try {
+        $this->runSafely(function () use ($query) {
             $query->delete();
 
             $this->dispatch('swal', title: 'Berhasil', text: 'Data berhasil dihapus', icon: 'success');
 
-            return $this->redirect(route('permissions.index'), navigate: true);
-        } catch (\Exception $e) {
-            Log::error(now() . ': Error saat menghapus data perizinan ->' . $e->getMessage());
-            return $this->dispatch('swal', title: 'Gagal', text: $e->getMessage(), icon: 'error');
-        }
+            $this->redirect(route('permissions.index'), navigate: true);
+        }, 'Gagal menghapus data perizinan.', [
+            'action' => 'delete permission',
+            'permission_id' => $this->id,
+            'user_id' => auth()->id(),
+        ]);
     }
 
     public function render()
