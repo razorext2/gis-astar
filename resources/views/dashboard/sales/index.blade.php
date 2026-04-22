@@ -1,5 +1,7 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
+    @livewire('components.card', ['type' => 'salesreport'])
+
     <form id="add-form" action="{{ route('sales.create') }}"></form>
     <div class="relative grid grid-cols-1 gap-4">
 

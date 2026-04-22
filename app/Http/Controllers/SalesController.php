@@ -34,38 +34,22 @@ class SalesController extends Controller
                 if (! $user->can('sales-approve')) {
                     $query->where('kode_pegawai', $user->kode_pegawai);
                 } else {
-                    // Logic visibilitas berdasarkan wilayah/role untuk Manager/Staf yang berwenang
-                    $allowedRoles = [];
+                    $regionMap = [
+                        'Sales-IDY'     => fn () => $user->hasAnyRole(['HRD-IDY', 'Marketing-IDY']) || $user->can('sales-export-idy'),
+                        'Kurir-Bank'    => fn () => $user->hasAnyRole(['Kasir', 'Piutang']) || $user->can('sales-export-kurir-bank'),
+                        'Sales'         => fn () => $user->hasRole('Marketing') || $user->can('sales-export-medan'),
+                        'Sales-JKT'     => fn () => $user->hasAnyRole(['Marketing-JKT', 'Management-JKT']) || $user->can('sales-export-jkt'),
+                        'Sales-PKU'     => fn () => $user->hasAnyRole(['Marketing-PKU', 'Management-PKU']) || $user->can('sales-export-pku'),
+                        'Sales-Agrotec' => fn () => $user->can('sales-export-agrotec') || $user->hasRole('Service-Agrotec'),
+                    ];
 
-                    if ($user->hasAnyRole(['HRD-IDY', 'Marketing-IDY']) || $user->can('sales-export-idy')) {
-                        $allowedRoles[] = 'Sales-IDY';
-                    }
+                    $allowedRoles = collect($regionMap)
+                        ->filter(fn ($check) => $check())
+                        ->keys()
+                        ->toArray();
 
-                    if ($user->hasAnyRole(['Kasir', 'Piutang']) || $user->can('sales-export-kurir-bank')) {
-                        $allowedRoles[] = 'Kurir-Bank';
-                    }
-
-                    if ($user->hasRole('Marketing') || $user->can('sales-export-medan')) {
-                        $allowedRoles[] = 'Sales';
-                    }
-
-                    if ($user->hasAnyRole(['Marketing-JKT', 'Management-JKT']) || $user->can('sales-export-jkt')) {
-                        $allowedRoles[] = 'Sales-JKT';
-                    }
-
-                    if ($user->hasAnyRole(['Marketing-PKU', 'Management-PKU']) || $user->can('sales-export-pku')) {
-                        $allowedRoles[] = 'Sales-PKU';
-                    }
-
-                    if ($user->can('sales-export-agrotec') || $user->hasRole('Service-Agrotec')) {
-                        $allowedRoles[] = 'Sales-Agrotec';
-                    }
-
-                    // Terapkan filter region jika user memiliki role/kemampuan spesifik wilayah
                     if (! empty($allowedRoles)) {
-                        $query->whereHas('userRelasi.roles', function ($q) use ($allowedRoles) {
-                            $q->whereIn('name', $allowedRoles);
-                        });
+                        $query->whereHas('userRelasi.roles', fn ($q) => $q->whereIn('name', $allowedRoles));
                     }
                 }
 
