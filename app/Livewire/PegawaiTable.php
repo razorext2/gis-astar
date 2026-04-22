@@ -59,6 +59,7 @@ final class PegawaiTable extends PowerGridComponent
             ->select('tb_pegawai.*', 'users.is_active', 'users.deactivation_reason')
             ->groupBy('tb_pegawai.id', 'users.is_active', 'users.deactivation_reason')
             ->with(['userRelasi', 'userRelasi.roles', 'jabatanRelasi', 'golonganRelasi'])
+            ->orderBy('users.is_active', 'desc')
             ->orderBy('full_name', 'asc');
     }
 
