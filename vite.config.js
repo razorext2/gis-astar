@@ -75,8 +75,7 @@ export default defineConfig({
                 "resources/js/pages/pegawai/personalInfo.js",
 
                 // placement
-                "resources/js/pages/placement/add.js",
-                "resources/js/pages/placement/edit.js",
+                "resources/js/pages/placement/placement-map.js",
 
                 // invoice
                 "resources/js/pages/invoice/detail.js",
