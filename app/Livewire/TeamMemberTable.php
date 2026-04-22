@@ -2,20 +2,22 @@
 
 namespace App\Livewire;
 
-use \App\Models\TeamMember;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
+use App\Models\TeamMember;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\Facades\Rule;
-use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use PowerComponents\LivewirePowerGrid\PowerGridFields;
 
 final class TeamMemberTable extends PowerGridComponent
 {
     public string $tableName = 'TeamMemberTable';
+
     public ?string $teamCode = null;
 
     public function setUp(): array
@@ -42,10 +44,10 @@ final class TeamMemberTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('kode_pegawai')
             ->add('nama_pegawai', function ($query) {
-                return '[' . $query->kode_pegawai . '] ' . $query->userId->name;
+                return '['.$query->kode_pegawai.'] '.$query->userId->name;
             })
-            ->add('role', fn($query) => ucfirst($query->role))
-            ->add('total_poin', fn($query) => $query->userId->technicianPoint->sum('point') . ' Total poin')
+            ->add('role', fn ($query) => ucfirst($query->role))
+            ->add('total_poin', fn ($query) => $query->userId->technicianPoint->sum('point').' Total poin')
             ->add('progress', function ($query) {
                 $progress = [];
                 $progress[$query->kode_pegawai] = $this->getApi($query->kode_pegawai);
@@ -60,21 +62,21 @@ final class TeamMemberTable extends PowerGridComponent
                     $label = "{$filled}/{$total}";
 
                     if ($percentage <= 50) {
-                        $colorClass = "bg-red-600 text-gray-600 dark:text-red-100";
+                        $colorClass = 'bg-red-600 text-gray-600 dark:text-red-100';
                     } elseif ($percentage <= 80) {
-                        $colorClass = "bg-yellow-600 text-gray-600 dark:text-yellow-100";
+                        $colorClass = 'bg-yellow-600 text-gray-600 dark:text-yellow-100';
                     } else {
                         $colorClass = 'bg-green-600 text-green-100';
                     }
 
                     $html .= '
                         <p class="mb-1 text-sm text-gray-800 dark:text-white">'
-                        . \Carbon\Carbon::parse($month)->locale('id')->isoFormat('MMMM Y') .
+                        .\Carbon\Carbon::parse($month)->locale('id')->isoFormat('MMMM Y').
                         '</p>
                         <div class="w-full rounded-full bg-gray-200 dark:bg-gray-600">
-                            <div class="' . $colorClass . ' rounded-full p-0.5 text-center text-xs font-medium leading-none"
-                                style="width: ' . $percentage . '%">
-                                ' . $label . '
+                            <div class="'.$colorClass.' rounded-full p-0.5 text-center text-xs font-medium leading-none"
+                                style="width: '.$percentage.'%">
+                                '.$label.'
                             </div>
                         </div>
                     ';
@@ -108,39 +110,42 @@ final class TeamMemberTable extends PowerGridComponent
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
                     </svg>')
                 ->class('dark:bg-red-800 dark:hover:bg-red-900 dark:text-white dark:border-gray-700 rounded-lg bg-red-400 p-2 font-bold text-white border border-gray-200 hover:bg-red-700')
-                ->dispatch('removeMemberModal', ['kode_pegawai' => $row->kode_pegawai, 'team_code' => $row->team_code])
+                ->dispatch('removeMemberModal', ['kode_pegawai' => $row->kode_pegawai, 'team_code' => $row->team_code]),
         ];
     }
 
     public function getApi($kode_pegawai)
     {
-        $api = Http::get(
-            'https://indodacin.nusa.net.id/web/finger/secureapi.php',
-            [
-                'tipe' => 'fetchCountPoint',
-                'NomorIdentitasTeknisi' => $kode_pegawai
-            ]
-        )->json();
+        return Cache::remember('team_progress_api_'.$kode_pegawai, now()->addHours(2), function () use ($kode_pegawai) {
+            try {
+                $api = Http::timeout(5)->get(
+                    'https://indodacin.nusa.net.id/web/finger/secureapi.php',
+                    [
+                        'tipe' => 'fetchCountPoint',
+                        'NomorIdentitasTeknisi' => $kode_pegawai,
+                    ]
+                )->json();
+            } catch (\Exception $e) {
+                return [];
+            }
 
-        // Ambil 5 bulan terakhir (Y-m)
-        $months = collect(range(0, 2))
-            ->map(fn($i) => now()->subMonths($i)->format('Y-m'));
+            $months = collect(range(0, 2))
+                ->map(fn ($i) => now()->subMonths($i)->format('Y-m'));
 
-        $data = collect($api['data'] ?? []);
+            $data = collect($api['data'] ?? []);
 
-        $result = $months->mapWithKeys(fn($bulan) => [
-            $bulan => $data->filter(fn($item) => ($item['Bulan'] ?? null) === $bulan)->values()
-        ])->toArray();
-
-        return $result;
+            return $months->mapWithKeys(fn ($bulan) => [
+                $bulan => $data->filter(fn ($item) => ($item['Bulan'] ?? null) === $bulan)->values(),
+            ])->toArray();
+        });
     }
 
     public function actionRules()
     {
         return [
             Rule::button('removeMember')
-                ->when(fn() => Auth::user()->cannot('team-member-remove'))
-                ->hide()
+                ->when(fn () => Auth::user()->cannot('team-member-remove'))
+                ->hide(),
         ];
     }
 }

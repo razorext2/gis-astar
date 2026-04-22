@@ -17,8 +17,6 @@ class Index extends Component
 
     public $showMember;
 
-    public $teamMember;
-
     public ?bool $showModal = false;
 
     public ?bool $showRemoveMemberModal = false;
@@ -37,7 +35,6 @@ class Index extends Component
             $this->showMember = null;
         } else {
             $this->showMember = $team_code;
-            $this->teamMember = TeamMember::where('team_code', $team_code)->get();
         }
     }
 

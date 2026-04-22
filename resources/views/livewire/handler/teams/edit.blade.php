@@ -1,97 +1,164 @@
-<div>
-	<form class="mt-4 flex w-full flex-col gap-2 lg:gap-4" wire:submit.prevent="store">
-		<div>
-			<x-input.basic :labels="true" readonly wire:model="team_name" id="team_name" name="team_name" placeholder="Nama Tim"
-				required>
-				Nama Tim :
-			</x-input.basic>
-			<span class="mt-2 text-xs text-red-500">*Anda tidak dapat mengubah nama tim</span>
-		</div>
-		<div>
-			<x-input.basic :labels="true" wire:model.live="team_code" id="team_code" name="team_code" placeholder="Kode Tim"
-				required>
-				Kode Tim Baru:
-			</x-input.basic>
-			<span class="error mt-2 text-sm text-red-500">{{ $errors->first('team_code') }}</span>
-		</div>
-		<div>
-			<x-input.basic :labels="true" wire:model.live="search_user" id="team_leader" name="team_leader"
-				placeholder="Kode Pegawai" required>
-				Kode Jari Ketua Tim:
-			</x-input.basic>
+<div class="mt-4">
+    <form class="flex w-full flex-col gap-4 lg:gap-6" wire:submit.prevent="store">
+        <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+            <!-- Nama Tim (Readonly) -->
+            <div class="group">
+                <x-input.basic :labels="true" readonly class="cursor-not-allowed bg-gray-50/50 text-gray-500"
+                    wire:model="team_name" id="team_name" name="team_name" placeholder="Nama Tim" required>
+                    Nama Tim Tersimpan
+                </x-input.basic>
+                <span class="mt-1 flex items-center text-xs font-medium text-gray-500"><svg class="mr-1 h-3 w-3"
+                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 14v3m-3-6V7a3 3 0 1 1 6 0v4m-8 0h10a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1Z" />
+                    </svg> Anda tidak dapat mengubah nama tim statis</span>
+            </div>
 
-			@if ($search_user != '')
-				<div class="mt-4">
-					@forelse ($users as $user)
-						<div class="my-2 flex items-center">
-							<div class="flex h-5 items-center">
-								<input wire:model="team_leader" checked id="helper-radio-{{ $user->kode_pegawai }}"
-									aria-describedby="helper-radio-text-{{ $user->kode_pegawai }}" type="radio" value="{{ $user->kode_pegawai }}"
-									class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600">
-							</div>
-							<div class="ms-2">
-								<p id="helper-radio-text-{{ $user->kode_pegawai }}"
-									class="text-xs font-normal text-gray-500 dark:text-gray-300">{{ $user->kode_pegawai }}
-								</p>
-								<label for="helper-radio-{{ $user->kode_pegawai }}"
-									class="font-medium text-gray-900 dark:text-gray-300">{{ $user->name }}</label>
-							</div>
-						</div>
-					@empty
-						<span class="mt-2 text-red-500">Tidak ada data</span>
-					@endforelse
+            <!-- Kode Tim Baru -->
+            <div class="group">
+                <x-input.basic :labels="true" wire:model.live="team_code" id="team_code" name="team_code"
+                    placeholder="Misal: ENG-01" required>
+                    Kode Tim
+                </x-input.basic>
+                @error('team_code')
+                    <span class="error text-danger mt-1 flex items-center text-xs font-medium text-red-500"><x-icons.close
+                            class="mr-1 h-3 w-3" /> {{ $message }}</span>
+                @enderror
+            </div>
+        </div>
 
-					@if ($users->count() >= 5)
-						<span class="mt-2">...</span>
-					@endif
-				</div>
-			@endif
+        <!-- Ketua Tim -->
+        <div
+            class="flex flex-col rounded-xl bg-gray-50/50 p-4 ring-1 ring-gray-200 dark:bg-gray-800/30 dark:ring-gray-700/50">
+            <div class="mb-2 flex items-center gap-3">
+                <div class="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg">
+                    <x-icons.user class="text-primary h-6 w-6" />
+                </div>
+                <div>
+                    <h3 class="font-semibold text-gray-800 dark:text-gray-200">Perubahan Ketua Tim</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Pilih dari daftar anggota teknisi menggunakan
+                        kode sidik jari</p>
+                </div>
+            </div>
 
-			<span class="error mt-2 text-sm text-red-500">{{ $errors->first('team_leader') }}</span>
-		</div>
+            <div class="relative mt-3">
+                <x-input.basic :labels="false" wire:model.live.debounce.300ms="search_user" id="team_leader_search"
+                    name="search_user" placeholder="Ketik area pencarian teknisi..."
+                    class="w-full bg-white dark:bg-dark-secondary">
+                    <x-slot name="icon">
+                        <svg class="h-5 w-5 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
+                                d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
+                        </svg>
+                    </x-slot>
+                </x-input.basic>
 
-		<div class="flex w-full flex-row justify-end gap-2">
-			<x-button.primary type="submit">
-				<span wire:loading.remove wire:target="store">Simpan</span>
-				<span wire:loading wire:target="store">Memproses...</span>
-			</x-button.primary>
+                @if ($search_user != '')
+                    <div
+                        class="mt-3 max-h-[220px] overflow-y-auto rounded-xl bg-white p-2 shadow-sm ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700">
+                        @forelse ($users as $user)
+                            <label for="helper-radio-{{ $user->kode_pegawai }}"
+                                class="group flex cursor-pointer items-center rounded-lg p-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                <div class="flex h-5 items-center">
+                                    <input wire:model="team_leader" id="helper-radio-{{ $user->kode_pegawai }}"
+                                        type="radio" value="{{ $user->kode_pegawai }}"
+                                        class="text-primary focus:ring-primary/50 h-4 w-4 border-gray-300 bg-gray-100 focus:ring-2 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800">
+                                </div>
+                                <div class="ms-3 flex flex-col">
+                                    <span
+                                        class="group-hover:text-primary font-semibold text-gray-900 dark:text-gray-200 dark:group-hover:text-white">{{ $user->name }}</span>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">Kode Sidik Jari: <span
+                                            class="border-gray-300 font-bold dark:border-gray-600">{{ $user->kode_pegawai }}</span></span>
+                                </div>
+                            </label>
+                        @empty
+                            <div
+                                class="text-danger flex flex-col items-center gap-2 px-3 py-6 text-center text-sm font-medium">
+                                <x-icons.close class="h-8 w-8 opacity-50" />
+                                Teknisi tidak ditemukan
+                            </div>
+                        @endforelse
 
-			<x-button.danger type="button" wire:click="$set('removeTeamModal', true)">
-				<span>Hapus Tim</span>
-			</x-button.danger>
-		</div>
+                        @if ($users->count() >= 5)
+                            <div
+                                class="mt-2 text-center text-xs font-medium uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                                Scroll ke bawah untuk kelanjutannya...</div>
+                        @endif
+                    </div>
+                @endif
+            </div>
+            @error('team_leader')
+                <span class="error text-danger mt-3 flex items-center text-sm font-medium text-red-500"><x-icons.close
+                        class="mr-1 h-4 w-4" /> {{ $message }}</span>
+            @enderror
+        </div>
 
-	</form>
+        <div
+            class="mt-2 flex w-full flex-col justify-end gap-3 border-t border-gray-100 pt-6 dark:border-gray-800/50 sm:flex-row">
+            <x-button.danger type="button" wire:click="$set('removeTeamModal', true)"
+                class="w-full hover:bg-red-700 sm:w-auto">
+                <span>Hapus Seluruh Tim</span>
+            </x-button.danger>
 
-	{{-- show modal remove team --}}
-	<div wire:show="removeTeamModal" wire:transition.duration.300ms
-		class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
-		<div
-			class="relative mx-2 flex w-full flex-col gap-1 rounded-xl bg-white p-4 shadow-2xl dark:bg-dark-primary sm:mx-0 md:w-2/3 md:gap-2 lg:w-1/2 lg:p-6 xl:w-2/5">
+            <x-button.primary type="submit"
+                class="shadow-primary/20 w-full px-8 transition-all hover:shadow-lg sm:w-auto">
+                <span wire:loading.remove wire:target="store">Simpan Perubahan</span>
+                <span wire:loading wire:target="store">Memproses Data...</span>
+            </x-button.primary>
+        </div>
 
-			<div class="absolute right-0 top-0">
-				<x-button.danger class="rounded-r-xl rounded-bl-xl rounded-br-none rounded-tl-none"
-					wire:click="$set('removeTeamModal', false)">
-					<x-icons.close class="h-5 w-5" />
-				</x-button.danger>
-			</div>
+    </form>
 
-			<h2 class="mb-2 text-center text-xl font-semibold text-gray-900 dark:text-white lg:text-2xl">
-				Hapus tim dengan kode: {{ $team_code }}
-			</h2>
+    {{-- show modal remove team menggunakan Alpine --}}
+    <div x-data="{ show: @entangle('removeTeamModal') }" x-show="show" x-cloak
+        class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/60 p-4 backdrop-blur-sm"
+        x-transition.opacity.duration.300ms>
 
-			<div class="mt-2 flex w-full justify-center gap-2">
-				<x-button.danger wire:click="removeTeamProcess">
-					<x-slot name="icon">
-						<x-icons.trash-bin class="h-5 w-5" />
-					</x-slot>
-					Hapus
-				</x-button.danger>
+        <div x-show="show" @click.outside="show = false" x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-90"
+            class="relative flex w-full max-w-lg flex-col items-center gap-4 rounded-3xl bg-white p-6 text-center shadow-2xl ring-1 ring-white/20 dark:bg-dark-primary dark:ring-white/10">
 
-				<x-button.primary wire:click="$set('removeTeamModal', false)">Batal</x-button.primary>
-			</div>
+            <div class="absolute right-3 top-3">
+                <button type="button" @click="show = false"
+                    class="rounded-full !p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300">
+                    <x-icons.close class="h-5 w-5" />
+                </button>
+            </div>
 
-		</div>
-	</div>
-	{{-- end modal remove team --}}
+            <div
+                class="text-danger mb-2 flex h-16 w-16 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
+                <x-icons.trash-bin class="h-8 w-8" />
+            </div>
+
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white lg:text-2xl">
+                Hapus Keseluruhan Tim
+            </h2>
+
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+                Apakah Anda yakin ingin menghapus permanen tim dengan kode <span
+                    class="font-bold text-gray-800 dark:text-gray-200">{{ $team_code }}</span>? Tindakan penghancuran
+                formasi ini tidak dapat dipulihkan.
+            </p>
+
+            <div class="mt-4 flex w-full flex-col justify-center gap-2 sm:flex-row">
+                <x-button.danger type="button" @click="show = false"
+                    class="w-full justify-center sm:w-1/2">Batal</x-button.danger>
+
+                <x-button.danger wire:click="removeTeamProcess" class="w-full justify-center sm:w-1/2">
+                    <x-slot name="icon">
+                        <x-icons.loading class="mr-2 h-5 w-5 animate-spin" wire:loading
+                            wire:target="removeTeamProcess" />
+                    </x-slot>
+                    <span wire:loading.remove wire:target="removeTeamProcess">Hapus Tim Permanen</span>
+                    <span wire:loading wire:target="removeTeamProcess">Memproses...</span>
+                </x-button.danger>
+            </div>
+        </div>
+    </div>
+    {{-- end modal remove team --}}
 </div>

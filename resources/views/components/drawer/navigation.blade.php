@@ -1,4 +1,4 @@
-<div {{ $attributes }} class="fixed bottom-3 left-1/2 z-[51] w-[92vw] max-w-sm -translate-x-1/2 md:hidden">
+<div {{ $attributes }} class="fixed bottom-3 left-1/2 z-[160] w-[92vw] max-w-sm -translate-x-1/2 md:hidden">
     <!-- iOS Glass Navigation Container -->
     <div
         class="h-[70px] w-full rounded-full border border-white/50 bg-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.1)] backdrop-blur-2xl transition-colors dark:border-white/10 dark:bg-zinc-900/60 dark:shadow-zinc-950/50">

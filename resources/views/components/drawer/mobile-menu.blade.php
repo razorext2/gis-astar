@@ -2,7 +2,7 @@
 
 <!-- drawer component -->
 <div x-data="{ search: '' }"
-    class="fixed bottom-0 left-0 right-0 z-50 mx-auto w-[96vw] max-w-lg translate-y-full overflow-hidden rounded-t-3xl border-x border-t border-zinc-200 bg-white/95 pb-16 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.3)] backdrop-blur-xl transition-transform dark:border-zinc-800 dark:bg-zinc-950/95 md:hidden"
+    class="fixed bottom-0 left-0 right-0 z-[150] mx-auto w-[96vw] max-w-lg translate-y-full overflow-hidden rounded-t-3xl border-x border-t border-zinc-200 bg-white/95 pb-16 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.3)] backdrop-blur-xl transition-transform dark:border-zinc-800 dark:bg-zinc-950/95 md:hidden"
     id="drawer-swipe" aria-labelledby="drawer-swipe-label" tabindex="-1">
 
     <!-- Drag Handle -->
