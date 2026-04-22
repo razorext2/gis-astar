@@ -8,11 +8,31 @@ class DriverCardService
 {
     public function getDriverReportCards()
     {
-        $baseQuery = Driver::query();
         $user = auth()->user();
-        $canValidate = $user->can('driver-approve');
+        $baseQuery = Driver::query();
 
-        if (! $canValidate) {
+        if ($user->can('driver-approve')) {
+            // Kumpulkan role Driver yang boleh dilihat user ini
+            $roles = collect([
+                'Driver-Jkt' => 'driver-list-jkt',
+                'Driver-Medan' => 'driver-list-medan',
+            ])->filter(fn ($permission) => $user->can($permission))->keys()->toArray();
+
+            $baseQuery->where(function ($q) use ($roles, $user) {
+                // 1. Driver dengan kode_pegawai yang sesuai role
+                $q->when(! empty($roles), fn ($q) => $q->where(fn ($q) => $q
+                    ->whereNotNull('kode_pegawai')
+                    ->whereHas('user.roles', fn ($role) => $role->whereIn('name', $roles))
+                ));
+
+                // 2. Driver tanpa kode_pegawai (guest) yang di-assign oleh user ini
+                $q->orWhere(fn ($q) => $q
+                    ->whereNull('kode_pegawai')
+                    ->where('assign_by', $user->id)
+                );
+            });
+        } else {
+            // User biasa — hanya lihat data miliknya sendiri
             $baseQuery->where('kode_pegawai', $user->kode_pegawai);
         }
 
@@ -60,7 +80,7 @@ class DriverCardService
             [
                 'permission' => 'all',
                 'label' => 'Ditolak',
-                'count' => (clone $baseQuery)->where('status', 1)->count(),
+                'count' => (clone $baseQuery)->where('status', 2)->count(),
                 'indicator' => 'Laporan',
                 'icon' => 'icons.close',
                 'color' => 'red',

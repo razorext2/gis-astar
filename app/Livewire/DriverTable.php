@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Tabel manajemen laporan Driver dengan filtering berbasis permission, Caller: routes/web.php (driver.index), Deps: Driver, Auth, PowerGrid */
+
 namespace App\Livewire;
 
 use App\Models\Driver;
@@ -23,19 +25,29 @@ final class DriverTable extends PowerGridComponent
 
     public string $tableName = 'DriverTable';
 
-    public string $status;
+    public string $status = '';
 
     public bool $deferLoading = true;
 
     public bool $showFilters = false;
 
-    public $user;
+    public ?\App\Models\User $user = null;
+
+    // Label status Driver — single source of truth untuk fields() dan filters()
+    private const STATUS_LABELS = [
+        0 => 'Diajukan',
+        1 => 'Disetujui',
+        2 => 'Ditolak',
+        3 => 'Revisi',
+        4 => 'Belum diassign',
+        5 => 'Belum diupdate',
+    ];
 
     public function setUp(): array
     {
+        // Inisialisasi state di setUp() — hook resmi PowerGrid, tidak override mount() parent
         $this->user = Auth::user();
-
-        $this->status = Request::query('status') ?? '';
+        $this->status = Request::query('status', '');
 
         return [
             PowerGrid::header()
@@ -53,67 +65,44 @@ final class DriverTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        $data = Driver::query()->with(['user', 'photoCollect']);
+        return Driver::query()
+            ->with(['user', 'photoCollect'])
+            ->when(
+                $this->user->can('driver-approve'),
+                function (Builder $query) {
+                    $roles = collect([
+                        'Driver-Jkt' => 'driver-list-jkt',
+                        'Driver-Medan' => 'driver-list-medan',
+                    ])->filter(fn ($permission) => $this->user->can($permission))->keys()->toArray();
 
-        if ($this->user->can('driver-approve')) {
-
-            $roles = [];
-
-            if ($this->user->can('driver-list-jkt')) {
-                $roles[] = 'Driver-Jkt';
-            }
-
-            if ($this->user->can('driver-list-medan')) {
-                $roles[] = 'Driver-Medan';
-            }
-
-            $data->where(function ($query) use ($roles) {
-
-                // 1. Jika ada kode_pegawai -> filter berdasarkan role
-                if (! empty($roles)) {
-                    $query->where(function ($q) use ($roles) {
-                        $q->whereNotNull('kode_pegawai')
-                            ->whereHas('user.roles', fn ($role) => $role->whereIn('name', $roles)
-                            );
+                    $query->where(function (Builder $q) use ($roles) {
+                        $q->when(! empty($roles), fn ($q) => $q->where(fn ($q) => $q
+                            ->whereNotNull('kode_pegawai')
+                            ->whereHas('user.roles', fn ($role) => $role->whereIn('name', $roles))
+                        ))->orWhere(fn ($q) => $q
+                            ->whereNull('kode_pegawai')
+                            ->where('assign_by', $this->user->id)
+                        );
                     });
-                }
+                },
+                fn (Builder $query) => $query->where('kode_pegawai', $this->user->kode_pegawai)
+            )
+            ->when($this->status !== '', function (Builder $query) {
+                $statusMap = [
+                    'unapproved' => 0, 'approved' => 1, 'rejected' => 2,
+                    'needrevision' => 3, 'notassigned' => 4, 'notupdated' => 5,
+                ];
 
-                // 2. Jika kode_pegawai NULL -> pakai assign_by
-                $query->orWhere(function ($q) {
-                    $q->whereNull('kode_pegawai')
-                        ->where('assign_by', auth()->id());
-                });
-            });
-
-        } else {
-            // User biasa
-            $data->where('kode_pegawai', auth()->user()->kode_pegawai);
-        }
-
-        if ($this->status != '') {
-            match ($this->status) {
-                'unapproved' => $data->where('status', 0),
-                'approved' => $data->where('status', 1),
-                'rejected' => $data->where('status', 2),
-                'needrevision' => $data->where('status', 3),
-                'notassigned' => $data->where('status', 4),
-                'notupdated' => $data->where('status', 5)
-            };
-        }
-
-        $data->orderBy('created_at', 'desc')
-            ->orderBy('status', 'desc');
-
-        return $data;
+                $query->when(isset($statusMap[$this->status]), fn ($q) => $q->where('status', $statusMap[$this->status]));
+            })
+            ->orderByDesc('created_at')
+            ->orderByDesc('status');
     }
 
     public function relationSearch(): array
     {
         return [
-            'user' => [
-                'name',
-                'kode_pegawai',
-            ],
+            'user' => ['name', 'kode_pegawai'],
         ];
     }
 
@@ -121,47 +110,26 @@ final class DriverTable extends PowerGridComponent
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('kode_pegawai', function ($query) {
-                return view('components.dashboard.name-code-button', [
-                    'user' => $query->user,
-                    'data' => $query,
-                ])->render();
-            })
+            ->add('kode_pegawai', fn ($row) => view('components.dashboard.name-code-button', [
+                'user' => $row->user,
+                'data' => $row,
+            ])->render())
             ->add('title')
-            ->add('lokasi', fn ($query) => view('components.table-component.title-location-coordinate', ['data' => $query])->render())
-            ->add('status', fn ($query) => $query->status ?? '-')
-            ->add('status_formatted', function ($query) {
-                $status = $query->status;
-
-                return view('components.dashboard.title-w-status-two', [
-                    'title' => [
-                        0 => 'Diajukan',
-                        1 => 'Disetujui',
-                        2 => 'Ditolak',
-                        3 => 'Revisi',
-                        4 => 'Belum diassign',
-                        5 => 'Belum diupdate',
-                    ][$status],
-                    'status' => $status,
-                    'id' => $query->id,
-                ])->render();
-            })
+            ->add('lokasi', fn ($row) => view('components.table-component.title-location-coordinate', ['data' => $row])->render())
+            ->add('status', fn ($row) => $row->status ?? '-')
+            ->add('status_formatted', fn ($row) => view('components.dashboard.title-w-status-two', [
+                'title' => self::STATUS_LABELS[$row->status] ?? '-',
+                'status' => $row->status,
+                'id' => $row->id,
+            ])->render())
             ->add('created_at')
-            ->add('created_at_formatted', fn ($query) => Carbon::parse($query->created_at)
+            ->add('created_at_formatted', fn ($row) => Carbon::parse($row->created_at)
                 ->locale('id')
                 ->isoFormat('D MMMM YYYY HH:mm:ss'))
             ->add('assign_date')
-            ->add('assign_date_formatted', function ($query) {
-                $date = $query->assign_date;
-
-                if ($date) {
-                    return Carbon::parse($date)
-                        ->locale('id')
-                        ->isoFormat('D MMMM YYYY');
-                } else {
-                    return '-';
-                }
-            })
+            ->add('assign_date_formatted', fn ($row) => $row->assign_date
+                ? Carbon::parse($row->assign_date)->locale('id')->isoFormat('D MMMM YYYY')
+                : '-')
             ->add('tipe_kunjungan')
             ->add('tipe_tagihan');
     }
@@ -204,18 +172,16 @@ final class DriverTable extends PowerGridComponent
 
     public function filters(): array
     {
-        $filters = [
+        $statusSource = collect(self::STATUS_LABELS)
+            ->map(fn ($label, $value) => ['value' => $value, 'label' => $label])
+            ->values()
+            ->all();
+
+        return [
             Filter::inputText('title', 'title'),
             Filter::inputText('lokasi', 'lokasi'),
             Filter::multiSelect('status', 'status')
-                ->dataSource([
-                    ['value' => 0, 'label' => 'Diajukan'],
-                    ['value' => 1, 'label' => 'Disetujui'],
-                    ['value' => 2, 'label' => 'Ditolak'],
-                    ['value' => 3, 'label' => 'Revisi'],
-                    ['value' => 4, 'label' => 'Belum diassign'],
-                    ['value' => 5, 'label' => 'Belum diupdate'],
-                ])
+                ->dataSource($statusSource)
                 ->optionLabel('label')
                 ->optionValue('value'),
             Filter::datepicker('created_at', 'created_at'),
@@ -237,8 +203,6 @@ final class DriverTable extends PowerGridComponent
                 ->optionLabel('label')
                 ->optionValue('value'),
         ];
-
-        return $filters;
     }
 
     public function actionsFromView(Driver $row): View
@@ -251,7 +215,8 @@ final class DriverTable extends PowerGridComponent
             ],
         ];
 
-        if ($row->status == 3 || auth()->user()->can('driver-approve')) {
+        // Gunakan $this->user (di-cache di mount()) — bukan auth() berulang kali
+        if ($row->status == 3 || $this->user->can('driver-approve')) {
             $actions[] = [
                 'id' => 'edit-btn',
                 'action' => route('driver.edit', $row->id),
@@ -262,8 +227,8 @@ final class DriverTable extends PowerGridComponent
         return view('components.dashboard.action-buttons', [
             'id' => $row->id,
             'datas' => $actions,
-            'detail' => $row->status == 0 && auth()->user()->can('driver-approve'),
-            'delete' => auth()->user()->can('driver-delete'),
+            'detail' => $row->status == 0 && $this->user->can('driver-approve'),
+            'delete' => $this->user->can('driver-delete'),
         ]);
     }
 
@@ -274,7 +239,7 @@ final class DriverTable extends PowerGridComponent
     }
 
     #[\Livewire\Attributes\On('confirmDeleteAction')]
-    public function confirmDelete($id, Request $request): void
+    public function confirmDelete($id): void
     {
         $data = Driver::find($id);
 
@@ -289,20 +254,19 @@ final class DriverTable extends PowerGridComponent
 
             $this->swal('Terhapus!', 'Data yang dipilih berhasil dihapus.', 'success');
 
-            Log::info($request->user()." : Menghapus data {$id}");
+            Log::info($this->user->kode_pegawai." : Menghapus data {$id}");
         } catch (\Exception $e) {
             $this->swal('Gagal!', "Terjadi kesalahan saat menghapus data dengan ID <b>$id</b>", 'error');
 
-            Log::info($request->user()->kode_pegawai." : Gagal menghapus data {$id}. {$e->getMessage()}");
+            Log::info($this->user->kode_pegawai." : Gagal menghapus data {$id}. {$e->getMessage()}");
         }
     }
 
     #[\Livewire\Attributes\On('detail')]
     public function detail($id): void
     {
-        $data = Driver::with(['pegawai', 'photoCollect'])
-            ->where('id', $id)
-            ->first();
+        // Gunakan find() langsung — lebih ringkas dari where()->first()
+        $data = Driver::with(['pegawai', 'photoCollect'])->find($id);
 
         if (! $data) {
             $this->swal('Gagal!', 'Data tidak ditemukan', 'error');
@@ -316,100 +280,56 @@ final class DriverTable extends PowerGridComponent
     #[\Livewire\Attributes\On('confirmAction')]
     public function confirmAction($id): void
     {
-        $user_id = Auth::id();
-        $query = Driver::find($id);
-
-        if (! $query) {
-            $this->swal('Gagal!', 'Data tidak ditemukan.', 'error');
-
-            return;
-        }
-
-        try {
-            $query->update([
-                'status' => 1,
-                'validate_by' => $user_id,
-            ]);
-
-            $this->swal('Dikonfirmasi!', 'Data yang dipilih berhasil dikonfirmasi.', 'success');
-        } catch (\Exception $e) {
-            $this->swal('Terjadi kesalahan saat konfirmasi data', $e->getMessage(), 'error');
-
-            return;
-        }
+        $this->updateDriverStatus($id, ['status' => 1], 'Dikonfirmasi!', 'Data yang dipilih berhasil dikonfirmasi.');
     }
 
     #[\Livewire\Attributes\On('declineAction')]
     public function declineAction($id, $note): void
     {
-        $user_id = Auth::id();
-        $query = Driver::find($id);
-
-        if (! $query) {
-            $this->swal('Gagal!', 'Data tidak ditemukan.', 'error');
-
-            return;
-        }
-
-        try {
-            $query->update([
-                'status' => 2,
-                'notes' => $note,
-                'validate_by' => $user_id,
-            ]);
-
-            $this->swal('Ditolak!', 'Laporan yang dipilih berhasil ditolak', 'success');
-        } catch (\Exception $e) {
-            $this->swal('Terjadi kesalahan saat konfirmasi data', $e->getMessage(), 'error');
-
-            return;
-        }
+        $this->updateDriverStatus($id, ['status' => 2, 'notes' => $note], 'Ditolak!', 'Laporan yang dipilih berhasil ditolak.');
     }
 
     #[\Livewire\Attributes\On('revisionAction')]
     public function revisionAction($id, $note): void
     {
-        $user_id = Auth::id();
-        $query = Driver::find($id);
+        $this->updateDriverStatus($id, ['status' => 3, 'notes' => $note], 'Direvisi!', 'Laporan yang dipilih berhasil direvisi.');
+    }
 
-        if (! $query) {
+    /**
+     * DRY helper: update status Driver + set validate_by.
+     * Dipanggil oleh confirmAction, declineAction, revisionAction.
+     */
+    private function updateDriverStatus(int $id, array $payload, string $successTitle, string $successMsg): void
+    {
+        $driver = Driver::find($id);
+
+        if (! $driver) {
             $this->swal('Gagal!', 'Data tidak ditemukan.', 'error');
 
             return;
         }
 
         try {
-            $query->update([
-                'status' => 3,
-                'notes' => $note,
-                'validate_by' => $user_id,
-            ]);
+            $driver->update(array_merge($payload, ['validate_by' => Auth::id()]));
 
-            $this->swal('Direvisi!', 'Laporan yang dipilih berhasil direvisi', 'success');
+            $this->swal($successTitle, $successMsg, 'success');
         } catch (\Exception $e) {
-            $this->swal('Terjadi kesalahan saat konfirmasi data', $e->getMessage(), 'error');
-
-            return;
+            $this->swal('Terjadi kesalahan', $e->getMessage(), 'error');
         }
     }
 
     #[\Livewire\Attributes\On('assign')]
-    public function assign($id)
+    public function assign(int $id): void
     {
-        return redirect()->route('driver.assign.to', $id);
+        $this->redirect(route('driver.assign.to', $id));
     }
 
-    public function swal($title, $text, $icon)
+    public function swal(string $title, string $text, string $icon): void
     {
-        return $this->dispatch(
-            'swal',
-            title: $title,
-            text: $text,
-            icon: $icon
-        );
+        $this->dispatch('swal', title: $title, text: $text, icon: $icon);
     }
 
-    public function queryString()
+    public function queryString(): array
     {
         return $this->powerGridQueryString();
     }
