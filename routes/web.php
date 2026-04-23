@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Main Web Routing File, Caller: ServiceProvider, Deps: Many Controllers, features/*.php */
+
 use App\Http\Controllers\InvoiceController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -336,6 +338,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('daily-report/general/{id}/customer-assignment', [\App\Http\Controllers\Spk\DailyReportController::class, 'generalCustomerAssignment'])->name('report.general.customer-assignment');
         Route::get('daily-report/general/{id}/{hourly}/detail', [\App\Http\Controllers\Spk\DailyReportController::class, 'generalHourly'])->name('report.general.hourly');
 
+        // route pengajuan cuti
+        require __DIR__.'/features/leave-request.php';
     });
 });
 

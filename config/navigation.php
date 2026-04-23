@@ -115,13 +115,34 @@ return [
                 'permission' => 'capture-route',
                 'navigate' => false,
             ],
+        ],
+    ],
+
+    // --- Pengajuan Cuti
+    [
+        'type' => 'group',
+        'label' => 'Pengajuan Cuti',
+        'icon' => 'envelope',
+        'guard' => null,
+        'submenu' => [
             [
                 'label' => 'Pengajuan Cuti',
                 'mobile_label' => 'Pengajuan Cuti',
-                'route' => 'dayoff.index',
-                'check' => ['dayoff.*'],
-                'icon' => 'lock-time',
-                'permission' => 'dayoff-list',
+                'route' => 'leave-request.my-requests.index',
+                'check' => ['leave-request.my-requests.index'],
+                'icon' => 'envelope',
+                // 'permission' => 'view-own-leaves',
+                'permission' => null,
+                'navigate' => true,
+            ],
+            [
+                'label' => 'Pusat Approval Cuti',
+                'mobile_label' => 'Pusat Approval Cuti',
+                'route' => 'leave-request.approval-center.index',
+                'check' => ['leave-request.approval-center.index'],
+                'icon' => 'envelope',
+                // 'permission' => 'access-approval-center-leaves',
+                'permission' => null,
                 'navigate' => true,
             ],
         ],
