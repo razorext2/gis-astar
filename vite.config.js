@@ -62,12 +62,6 @@ export default defineConfig({
                 "resources/js/pages/technician/add.js",
                 "resources/js/pages/technician/detail.js",
 
-                // dayoff
-                "resources/js/pages/dayoff/index.js",
-                "resources/js/pages/dayoff/add.js",
-                "resources/js/pages/dayoff/edit.js",
-                "resources/js/pages/dayoff/detail.js",
-
                 // announcement
                 "resources/js/pages/announcement/index.js",
 

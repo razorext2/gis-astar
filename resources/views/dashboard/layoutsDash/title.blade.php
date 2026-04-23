@@ -10,7 +10,6 @@
         'collect-task-ppn.*' => 'Tagihan IDC PPN',
         'collect-idy-ppn.*' => 'Tagihan IDY PPN',
         'placement.*' => 'Penempatan',
-        'dayoff.*' => 'Pengajuan Off',
         'attendanceIn.*' => 'Absen Masuk',
         'attendanceOut.*' => 'Absen Keluar',
         'capture.*' => 'Rekam Absensi',

@@ -6,15 +6,14 @@ use App\Http\Controllers\Api\ApiCollectController;
 use App\Http\Controllers\Api\ApiCollectIdyPpnController;
 use App\Http\Controllers\Api\ApiCollectTaskController;
 use App\Http\Controllers\Api\ApiCollectTaskPpnController;
-use App\Http\Controllers\Api\ApiDayoffController;
 use App\Http\Controllers\Api\ApiDriverController;
 use App\Http\Controllers\Api\ApiPegawaiController;
 use App\Http\Controllers\Api\ApiSalesController;
 use App\Http\Controllers\BigEventController;
 use App\Http\Controllers\TechnicianController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Route;
 
 // public API
 Route::post('photo-regist-process', [ApiAttendanceController::class, 'photoRegistProcess'])->name('photo.registProcess');
@@ -86,11 +85,6 @@ Route::middleware(['auth:sanctum', 'throttle:high'])->group(function () {
     Route::patch('driver-api/{id}/deny', [ApiDriverController::class, 'deny'])->name('driver-api.deny');
     Route::patch('driver-api/{id}/revision', [ApiDriverController::class, 'revision'])->name('driver-api.revision');
     Route::apiResource('driver-api', ApiDriverController::class)->only(['store', 'update']);
-
-    // pengajuan off
-    Route::patch('dayoff-api/{id}/approve', [ApiDayoffController::class, 'approve'])->name('dayoff-api.approve');
-    Route::patch('dayoff-api/{id}/deny', [ApiDayoffController::class, 'deny'])->name('dayoff-api.deny');
-    Route::apiResource('dayoff-api', ApiDayoffController::class)->except(['index', 'show']);
 
     // announcement
     Route::patch('announcement-api/{id}/state', [ApiAnnouncementController::class, 'changeState'])->name('announcement-api.change-state');

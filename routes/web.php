@@ -160,10 +160,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('collect-idy-ppn/assign', [\App\Http\Controllers\CollectIdyPpnController::class, 'assign'])->name('collect-idy-ppn.assign');
         Route::resource('collect-idy-ppn', \App\Http\Controllers\CollectIdyPpnController::class)->except(['store', 'update', 'destroy']);
 
-        // route dayoff
-        Route::post('dayoff/upload-image', [\App\Http\Controllers\DayoffController::class, 'uploadImage'])->name('dayoff.uploadimage');
-        Route::resource('dayoff', \App\Http\Controllers\DayoffController::class)->except(['store', 'update', 'destroy']);
-
         // route announcement
         Route::resource('announcement', \App\Http\Controllers\AnnouncementController::class)->only(['index']);
 

@@ -95,7 +95,7 @@ return [
         'type' => 'group',
         'label' => 'Rekam Absensi',
         'icon' => 'camera',
-        'guard' => ['any_permission', ['capture', 'capture-route', 'dayoff-list']],
+        'guard' => ['any_permission', ['capture', 'capture-route']],
         'submenu' => [
             [
                 'label' => 'Rekam Absensi Realtime',
