@@ -129,7 +129,7 @@ return [
                 'label' => 'Pengajuan Cuti',
                 'mobile_label' => 'Pengajuan Cuti',
                 'route' => 'leave-request.my-requests.index',
-                'check' => ['leave-request.my-requests.index'],
+                'check' => ['leave-request.my-requests.index', 'leave-request.my-requests.create', 'leave-request.my-requests.edit', 'leave-request.my-requests.show'],
                 'icon' => 'envelope',
                 // 'permission' => 'view-own-leaves',
                 'permission' => null,

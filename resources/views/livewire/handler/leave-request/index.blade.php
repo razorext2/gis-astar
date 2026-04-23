@@ -1,0 +1,170 @@
+<div
+    class="border-gray-200 dark:border-gray-700 mt-4 flex flex-col gap-6 rounded-2xl border bg-white p-4 shadow-sm backdrop-blur-xl dark:bg-dark-primary md:p-6">
+    {{-- Header Section --}}
+    <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Daftar Pengajuan Cuti</h1>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Pantau status pengajuan cuti dan riwayat ketidakhadiran
+                Anda.</p>
+        </div>
+        <div class="flex shrink-0">
+            <x-button.primary wire:navigate href="{{ route('leave-request.my-requests.create') }}"
+                class="hover:shadow-primary/20 group transition-all hover:shadow-lg">
+                <x-slot name="icon">
+                    <x-icons.plus class="h-5 w-5 transition-transform group-hover:rotate-90" />
+                </x-slot>
+                Buat Pengajuan
+            </x-button.primary>
+        </div>
+    </div>
+
+    {{-- Stats Grid (Dummy) --}}
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div
+            class="border-gray-200 dark:border-gray-700 flex items-center gap-4 rounded-2xl border bg-white/60 p-4 backdrop-blur-xl dark:bg-dark-primary/60">
+            <div class="bg-primary/10 text-primary flex h-12 w-12 items-center justify-center rounded-xl">
+                <x-icons.calendar class="h-6 w-6" />
+            </div>
+            <div>
+                <p class="text-xs font-medium uppercase tracking-wider text-gray-500">Sisa Cuti Tahunan</p>
+                <p class="text-xl font-bold text-gray-900 dark:text-white">12 Hari</p>
+            </div>
+        </div>
+        <div
+            class="border-gray-200 dark:border-gray-700 flex items-center gap-4 rounded-2xl border bg-white/60 p-4 backdrop-blur-xl dark:bg-dark-primary/60">
+            <div
+                class="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-100 text-orange-600 dark:bg-orange-900/30">
+                <x-icons.clock class="h-6 w-6" />
+            </div>
+            <div>
+                <p class="text-xs font-medium uppercase tracking-wider text-gray-500">Menunggu Approval</p>
+                <p class="text-xl font-bold text-gray-900 dark:text-white">1 Pengajuan</p>
+            </div>
+        </div>
+        <div
+            class="border-gray-200 dark:border-gray-700 flex items-center gap-4 rounded-2xl border bg-white/60 p-4 backdrop-blur-xl dark:bg-dark-primary/60">
+            <div
+                class="flex h-12 w-12 items-center justify-center rounded-xl bg-green-100 text-green-600 dark:bg-green-900/30">
+                <x-icons.check class="h-6 w-6" />
+            </div>
+            <div>
+                <p class="text-xs font-medium uppercase tracking-wider text-gray-500">Cuti Terpakai (YTD)</p>
+                <p class="text-xl font-bold text-gray-900 dark:text-white">3 Hari</p>
+            </div>
+        </div>
+    </div>
+
+    {{-- Main List --}}
+    <div class="grid gap-4 lg:gap-6">
+        @forelse ($leaveRequests as $request)
+            <div wire:key="request-{{ $request->id }}"
+                class="hover:shadow-primary/5 hover:border-gray-400 border-gray-200 dark:border-gray-700 group relative overflow-hidden rounded-2xl border bg-white/60 p-4 backdrop-blur-xl transition-all duration-300 hover:shadow-xl dark:bg-dark-primary/60 dark:hover:bg-dark-primary/80 lg:p-6">
+
+                {{-- Decorative Blob --}}
+                <div
+                    class="bg-primary/5 absolute -right-10 -top-10 z-0 h-40 w-40 rounded-full opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100">
+                </div>
+
+                <div class="relative z-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-2xl bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-white">
+                            <span class="text-xs font-bold uppercase">{{ $request->start_date->format('M') }}</span>
+                            <span class="text-xl font-black">{{ $request->start_date->format('d') }}</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <h3 class="text-lg font-bold leading-tight text-gray-900 dark:text-white">
+                                {{ $request->leave_type->name }}</h3>
+                            <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
+                                {{ $request->start_date->format('d M Y') }} - {{ $request->end_date->format('d M Y') }}
+                                <span class="mx-1 text-gray-300">•</span>
+                                <span class="text-primary font-medium">{{ $request->total_days }} Hari</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-start gap-3 sm:items-end sm:gap-2">
+                        @php
+                            $statusConfig = [
+                                'pending_backup' => [
+                                    'label' => 'Menunggu Backup',
+                                    'class' =>
+                                        'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300',
+                                ],
+                                'pending_spv' => [
+                                    'label' => 'Menunggu SPV',
+                                    'class' =>
+                                        'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300',
+                                ],
+                                'pending_hrd' => [
+                                    'label' => 'Menunggu HRD',
+                                    'class' =>
+                                        'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300',
+                                ],
+                                'pending_management' => [
+                                    'label' => 'Menunggu Management',
+                                    'class' =>
+                                        'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
+                                ],
+                                'approved' => [
+                                    'label' => 'Disetujui',
+                                    'class' => 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
+                                ],
+                                'rejected' => [
+                                    'label' => 'Ditolak',
+                                    'class' => 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
+                                ],
+                                'cancelled' => [
+                                    'label' => 'Dibatalkan',
+                                    'class' => 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
+                                ],
+                            ][$request->status] ?? [
+                                'label' => $request->status,
+                                'class' => 'bg-gray-100 text-gray-700',
+                            ];
+                        @endphp
+
+                        <span
+                            class="{{ $statusConfig['class'] }} inline-flex items-center rounded-full px-3 py-1 text-xs font-bold">
+                            <span class="mr-1.5 h-1.5 w-1.5 animate-pulse rounded-full bg-current"></span>
+                            {{ $statusConfig['label'] }}
+                        </span>
+
+                        <div class="flex gap-2">
+                            <x-button.link wire:navigate
+                                href="{{ route('leave-request.my-requests.show', $request->id) }}"
+                                class="!px-3 !py-1 text-sm font-semibold">
+                                Detail
+                            </x-button.link>
+                            @if (in_array($request->status, ['pending_backup', 'pending_spv']))
+                                <x-button.link wire:navigate
+                                    href="{{ route('leave-request.my-requests.edit', $request->id) }}"
+                                    class="!px-3 !py-1 text-sm font-semibold">
+                                    Edit
+                                </x-button.link>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Reason Snippet --}}
+                <div
+                    class="mt-4 rounded-xl bg-gray-50/50 p-3 text-sm italic text-gray-600 dark:bg-white/5 dark:text-gray-400">
+                    "{{ Str::limit($request->reason, 100) }}"
+                </div>
+            </div>
+        @empty
+            <div
+                class="border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center rounded-2xl border bg-white/50 py-16 backdrop-blur-md dark:bg-dark-primary/50">
+                <div class="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
+                    <x-icons.envelope class="h-10 w-10 text-gray-300 dark:text-gray-600" />
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Belum Ada Pengajuan</h3>
+                <p class="mt-1 text-gray-500 dark:text-gray-400">Anda belum pernah membuat pengajuan cuti.</p>
+                <x-button.primary wire:navigate href="{{ route('leave-request.my-requests.create') }}" class="mt-6">
+                    Buat Sekarang
+                </x-button.primary>
+            </div>
+        @endforelse
+    </div>
+</div>
