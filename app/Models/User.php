@@ -125,4 +125,37 @@ class User extends Authenticatable implements CanBeSigned
     {
         return $this->hasMany(LeaveRequestHistory::class, 'acted_by');
     }
+
+    // --- Leave Helpers ---
+
+    /**
+     * Mendapatkan sisa kuota cuti tahunan berjalan.
+     */
+    public function currentLeaveBalance()
+    {
+        return $this->leaveBalances()->where('year', date('Y'))->first();
+    }
+
+    /**
+     * Menghitung total hari yang sudah digunakan untuk tipe cuti tertentu.
+     * @param string $leaveCode (khusus, tahunan, dll)
+     */
+    public function getLeaveUsageCount(string $leaveCode)
+    {
+        return $this->leaveRequests()
+            ->whereHas('leaveType', fn($q) => $q->where('code', $leaveCode))
+            ->whereIn('status', ['approved', 'pending_backup', 'pending_spv', 'pending_hrd', 'pending_management'])
+            ->sum('total_days');
+    }
+
+    /**
+     * Cek apakah sudah pernah mengambil cuti khusus (biasanya sekali seumur hidup/periode tertentu).
+     */
+    public function hasTakenSpecialLeave(string $leaveCode): bool
+    {
+        return $this->leaveRequests()
+            ->whereHas('leaveType', fn($q) => $q->where('code', $leaveCode))
+            ->whereIn('status', ['approved', 'pending_backup', 'pending_spv', 'pending_hrd', 'pending_management'])
+            ->exists();
+    }
 }

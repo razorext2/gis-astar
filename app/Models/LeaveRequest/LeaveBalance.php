@@ -27,4 +27,9 @@ class LeaveBalance extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function getRemainingQuotaAttribute()
+    {
+        return $this->total_quota - $this->used_quota;
+    }
 }
