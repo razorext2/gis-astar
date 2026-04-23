@@ -3,6 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Models\LeaveRequest\LeaveBalance;
+use App\Models\LeaveRequest\LeaveRequest;
+use App\Models\LeaveRequest\LeaveRequestHistory;
 use Creagia\LaravelSignPad\Concerns\RequiresSignature;
 use Creagia\LaravelSignPad\Contracts\CanBeSigned;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -36,6 +40,7 @@ class User extends Authenticatable implements CanBeSigned
         'deactivation_reason',
         'profile_pic',
         'deleted_by',
+        'join_date',
     ];
 
     /**
@@ -58,6 +63,7 @@ class User extends Authenticatable implements CanBeSigned
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'join_date' => 'date',
         ];
     }
 
@@ -71,13 +77,11 @@ class User extends Authenticatable implements CanBeSigned
         return $this->belongsTo(Pegawai::class, 'kode_pegawai', 'kode_pegawai');
     }
 
-    // relasi team member
     public function teamMember(): HasOne
     {
         return $this->hasOne(TeamMember::class, 'kode_pegawai', 'kode_pegawai');
     }
 
-    // relasi poin teknisi
     public function technicianPoint(): HasMany
     {
         return $this->hasMany(TechnicianPoints::class, 'kode_pegawai', 'kode_pegawai');
@@ -86,5 +90,39 @@ class User extends Authenticatable implements CanBeSigned
     public function deletedBy()
     {
         return $this->belongsTo(Pegawai::class, 'deleted_by', 'kode_pegawai');
+    }
+
+    // aksesor routing persetujuan cuti
+    public function getDirectSupervisorAttribute()
+    {
+        return $this->pegawai->jabatanRelasi && $this->pegawai->jabatanRelasi->supervisor_id ?
+        self::find($this->pegawai->jabatanRelasi->supervisor_id) : null;
+    }
+
+    public function getBranchManagerAttribute()
+    {
+        return $this->pegawai->jabatanRelasi->placementRelasi && $this->pegawai->jabatanRelasi->placementRelasi->manager_id ?
+        self::find($this->pegawai->jabatanRelasi->placementRelasi->manager_id) : null;
+    }
+
+    // relasi pengajuan cuti
+    public function leaveBalances()
+    {
+        return $this->hasMany(LeaveBalance::class);
+    }
+
+    public function leaveRequests()
+    {
+        return $this->hasMany(LeaveRequest::class);
+    }
+
+    public function backedUpLeaves()
+    {
+        return $this->hasMany(LeaveRequest::class, 'backup_person_id');
+    }
+
+    public function performedActions()
+    {
+        return $this->hasMany(LeaveRequestHistory::class, 'acted_by');
     }
 }

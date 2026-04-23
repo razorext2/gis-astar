@@ -8,7 +8,22 @@ use Illuminate\Database\Eloquent\Model;
 class Placement extends Model
 {
     use HasFactory;
+
     protected $table = 'tb_placement';
 
-    protected $fillable = ['kode_penempatan', 'penempatan', 'alamat', 'longitude', 'latitude', 'radius', 'restrict_app'];
+    protected $fillable = [
+        'kode_penempatan',
+        'manager_id',
+        'penempatan',
+        'alamat',
+        'longitude',
+        'latitude',
+        'radius',
+        'restrict_app',
+    ];
+
+    public function manager()
+    {
+        return $this->belongsTo(User::class, 'manager_id');
+    }
 }
