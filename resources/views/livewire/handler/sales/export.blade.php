@@ -63,7 +63,7 @@
                         <label class="text-sm font-medium text-gray-700 dark:text-gray-300" for="roles">
                             Wilayah / Divisi
                         </label>
-                        <x-filter.filter-input-select id="roles" wire:model.live="role" name="roles"
+                        <x-filter.filter-input-select id="export-roles" wire:model.live="role" name="export_roles"
                             :options="$roles" default-option="Filter by roles" />
                         @error('role')
                             <span class="text-xs text-red-500">{{ $message }}</span>

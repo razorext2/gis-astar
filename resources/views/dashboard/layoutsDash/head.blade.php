@@ -39,7 +39,8 @@
         Route::is('collect-idy-ppn.*') ||
         Route::is('pegawai.allowances.*') ||
         Route::is('pegawai.deductions.*') ||
-        Route::is('pegawai.payroll'))
+        Route::is('pegawai.payroll') ||
+        Route::is('sales.*'))
     <!-- Datatables Tailwind -->
     <link href="https://cdn.datatables.net/2.1.8/css/dataTables.tailwindcss.css" rel="stylesheet">
     <!-- Datatables Button -->
