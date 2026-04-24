@@ -154,11 +154,9 @@
                             </button>
                         </li>
                         <li class="flex items-center px-4 py-2" id="installAppContainer">
-                            <button
-                                class="w-full rounded-xl bg-red-600 px-4 py-2 text-center text-sm font-semibold text-white shadow-sm shadow-red-600/20 transition-colors hover:bg-red-700 dark:hover:bg-red-700"
-                                id="installApp">
+                            <x-button.danger wire:navigate class="w-full justify-center" id="installApp">
                                 Install App
-                            </button>
+                            </x-button.danger>
                         </li>
                     </ul>
                 </div>
