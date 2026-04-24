@@ -10,13 +10,12 @@
                         <div class="max-w-xl">
                             <header class="flex flex-row gap-x-3">
                                 <div class="max-w-xs">
-                                    <x-button.link class="w-fit ring-1 ring-red-700 dark:bg-red-800 dark:text-white"
-                                        href="{{ route('golongan.index') }}" wire:navigate>
+                                    <x-button.danger href="{{ route('golongan.index') }}" wire:navigate>
                                         <x-slot name="icon">
-                                            <x-icons.angle-left class="h-6 w-6 text-red-500 dark:text-white" />
+                                            <x-icons.angle-left class="h-6 w-6" />
                                         </x-slot>
-                                        Kembali
-                                    </x-button.link>
+                                        {{ __('Kembali') }}
+                                    </x-button.danger>
                                 </div>
                                 <h2 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
                                     {{ __('Tambah Data Golongan') }}
@@ -95,16 +94,12 @@
                             </div>
 
                             <div class="mt-4 flex items-center">
-                                <button
-                                    class="inline-flex items-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-gray-900 ring-1 ring-blue-700 hover:bg-blue-800 hover:text-white focus:text-white focus:ring-4 focus:ring-blue-300 dark:bg-blue-800 dark:text-white dark:ring-zinc-800 dark:hover:bg-blue-900"
-                                    type="submit">
-                                    Submit
-                                    <svg class="ms-2 h-3.5 w-3.5 rtl:rotate-180" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                                    </svg>
-                                </button>
+                                <x-button.success type="submit">
+                                    {{ __('Submit') }}
+                                    <x-slot name="icon">
+                                        <x-icons.checklist-stepper class="h-5 w-5" />
+                                    </x-slot>
+                                </x-button.success>
                             </div>
                         </div>
                     </div>

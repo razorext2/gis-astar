@@ -7,13 +7,12 @@
                 <header class="flex flex-row gap-x-4">
 
                     <div class="max-w-xs">
-                        <x-button.link class="w-fit ring-1 ring-red-700 dark:bg-red-800 dark:text-white"
-                            href="{{ route('driver.index') }}" wire:navigate>
+                        <x-button.danger href="{{ route('driver.index') }}" wire:navigate>
                             <x-slot name="icon">
-                                <x-icons.angle-right class="h-6 w-6 text-red-500 dark:text-white" />
+                                <x-icons.angle-left class="h-6 w-6" />
                             </x-slot>
-                            Kembali
-                        </x-button.link>
+                            {{ __('Kembali') }}
+                        </x-button.danger>
                     </div>
 
                     <h2 class="font-base mt-2 text-lg text-gray-900 dark:text-gray-300">
@@ -189,14 +188,12 @@
                                     </span>
 
                                     @if ($data->total_revision <= 2)
-                                        <x-button.link
-                                            class="w-fit rounded-xl ring-1 ring-red-700 dark:bg-red-800 dark:text-white"
-                                            href="{{ route('driver.edit', $data->id) }}">
+                                        <x-button.danger href="{{ route('driver.edit', $data->id) }}">
                                             <x-slot name="icon">
-                                                <x-icons.angle-right class="h-6 w-6 text-red-500 dark:text-white" />
+                                                <x-icons.checklist-stepper class="h-5 w-5" />
                                             </x-slot>
-                                            Klik untuk revisi
-                                        </x-button.link>
+                                            {{ __('Klik untuk revisi') }}
+                                        </x-button.danger>
                                     @endif
                                 </div>
                             @elseif($status == 4)

@@ -4,13 +4,12 @@
         class="mb-96 flex w-full flex-col gap-4 rounded-xl bg-white px-3 py-2 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 lg:p-6">
         <div class="flex w-full flex-row items-center gap-2 lg:gap-4">
             <div>
-                <x-button.link href="{{ route('spk.index') }}"
-                    class="w-fit ring-1 ring-red-700 dark:bg-red-800 dark:text-white" wire:navigate id="back-button">
+                <x-button.danger href="{{ route('spk.index') }}" wire:navigate id="back-button">
                     <x-slot name="icon">
-                        <x-icons.angle-left class="h-6 w-6 text-red-500 dark:text-white" />
+                        <x-icons.angle-left class="h-6 w-6" />
                     </x-slot>
-                    Kembali
-                </x-button.link>
+                    {{ __('Kembali') }}
+                </x-button.danger>
             </div>
 
             <div>

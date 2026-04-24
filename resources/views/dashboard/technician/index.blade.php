@@ -38,17 +38,11 @@
             {{-- mobile view --}}
             <div class="lg:hidden" id="sub-navbar" x-data="{ open: false }">
                 {{-- button --}}
-                <button
-                    class="flex w-full items-center justify-between gap-3 rounded-lg border border-zinc-200 p-2.5 font-medium text-gray-500 hover:bg-gray-100 dark:border-zinc-800 dark:text-gray-400 dark:hover:bg-gray-800"
-                    type="button" @click="open = ! open">
+                <x-button.secondary class="flex w-full items-center justify-between !p-2.5" @click="open = ! open">
                     <span>Actions...</span>
-                    <svg class="h-3 w-3 shrink-0 transform transition-transform duration-300" aria-hidden="true"
-                        :class="{ 'rotate-180 ': open }" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 10 6">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 5 5 1 1 5" />
-                    </svg>
-                </button>
+                    <x-icons.carred-down class="h-3 w-3 shrink-0 transform transition-transform duration-300" 
+                        ::class="{ 'rotate-180 ': open }" />
+                </x-button.secondary>
 
                 {{-- list --}}
                 <div class="mt-2 grid w-full gap-2 md:mt-4 md:gap-4" x-show="open" x-transition>
@@ -77,13 +71,12 @@
 
         @can('technician-create')
             <div class="max-w-xs">
-                <x-button.link class="w-fit ring-1 ring-green-700 dark:bg-green-800 dark:text-white"
-                    href="{{ route('technician.create') }}">
+                <x-button.success href="{{ route('technician.create') }}">
                     <x-slot name="icon">
-                        <x-icons.angle-right class="h-6 w-6 text-green-500 dark:text-white" />
+                        <x-icons.plus class="h-5 w-5" />
                     </x-slot>
                     Tambah Data
-                </x-button.link>
+                </x-button.success>
             </div>
         @endcan
 

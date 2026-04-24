@@ -8,13 +8,12 @@
                 <header class="flex flex-row gap-x-4">
 
                     <div class="max-w-xs">
-                        <x-button.link class="w-fit ring-1 ring-red-700 dark:bg-red-800 dark:text-white"
-                            href="{{ route('driver.index') }}" wire:navigate>
+                        <x-button.danger href="{{ route('driver.index') }}" wire:navigate>
                             <x-slot name="icon">
-                                <x-icons.angle-right class="h-6 w-6 text-red-500 dark:text-white" />
+                                <x-icons.angle-left class="h-6 w-6" />
                             </x-slot>
-                            Kembali
-                        </x-button.link>
+                            {{ __('Kembali') }}
+                        </x-button.danger>
                     </div>
 
                     <h2 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
@@ -114,12 +113,12 @@
                     <div class="mb-4 hidden text-sm text-red-500" id="alert-coordinate"></div>
 
                     <div class="relative col-span-2 w-full">
-                        <x-button.primary class="float-right" id="store" type="button">
+                        <x-button.success class="float-right" id="store" type="button">
                             <x-slot name="icon">
-                                <x-icons.angle-right class="icon h-5 w-5" />
+                                <x-icons.checklist-stepper class="icon h-5 w-5" />
                             </x-slot>
-                            Update laporan
-                        </x-button.primary>
+                            {{ __('Simpan laporan') }}
+                        </x-button.success>
                     </div>
 
                 </div>

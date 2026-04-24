@@ -283,12 +283,12 @@
                             status
                             <b>Diajukan</b>
                         </p>
-                        <x-button.primary class="float-right" id="store" type="button">
+                        <x-button.success class="float-right" id="store" type="button">
                             <x-slot name="icon">
-                                <x-icons.angle-right class="icon h-5 w-5" />
+                                <x-icons.checklist-stepper class="icon h-5 w-5" />
                             </x-slot>
-                            Update laporan
-                        </x-button.primary>
+                            {{ __('Simpan laporan') }}
+                        </x-button.success>
                     </div>
                 </div>
             </div>

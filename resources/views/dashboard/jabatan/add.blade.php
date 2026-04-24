@@ -5,16 +5,12 @@
             class="rounded-xl bg-white p-4 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 sm:p-6">
             <div class="max-w-xl">
                 <header class="flex flex-row">
-                    <a class="mb-4 mr-3 flex flex-row rounded-lg px-2.5 py-2.5 align-middle ring-1 ring-red-700 hover:bg-red-300 dark:bg-red-800 dark:text-white dark:ring-zinc-800 dark:hover:bg-red-900 md:px-4"
-                        href="{{ route('jabatan.index') }}">
-                        <svg class="h-6 w-6 dark:fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"
-                            fill="#000000" version="1.1">
-                            <path
-                                d="M669.6 849.6c8.8 8 22.4 7.2 30.4-1.6s7.2-22.4-1.6-30.4l-309.6-280c-8-7.2-8-17.6 0-24.8l309.6-270.4c8.8-8 9.6-21.6 2.4-30.4-8-8.8-21.6-9.6-30.4-2.4L360.8 480.8c-27.2 24-28 64-0.8 88.8l309.6 280z"
-                                fill="" />
-                        </svg>
-                        Kembali
-                    </a>
+                    <x-button.danger href="{{ route('jabatan.index') }}" class="mb-4 mr-3">
+                        <x-slot name="icon">
+                            <x-icons.angle-left class="h-6 w-6" />
+                        </x-slot>
+                        {{ __('Kembali') }}
+                    </x-button.danger>
                     <h2 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
                         {{ __('Tambah Data jabatan') }}
                     </h2>
@@ -68,16 +64,12 @@
                         </div>
                     </div>
                     <div class="flex items-center">
-                        <button
-                            class="inline-flex items-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-gray-900 ring-1 ring-blue-700 hover:bg-blue-800 hover:text-white focus:text-white focus:ring-4 focus:ring-blue-300 dark:bg-blue-800 dark:text-white dark:ring-zinc-800 dark:hover:bg-blue-900"
-                            type="submit">
-                            Submit
-                            <svg class="ms-2 h-3.5 w-3.5 rtl:rotate-180" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M1 5h12m0 0L9 1m4 4L9 9" />
-                            </svg>
-                        </button>
+                        <x-button.success type="submit">
+                            {{ __('Submit') }}
+                            <x-slot name="icon">
+                                <x-icons.checklist-stepper class="h-5 w-5" />
+                            </x-slot>
+                        </x-button.success>
                     </div>
                 </form>
             </div>

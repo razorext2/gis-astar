@@ -33,9 +33,9 @@
                 </ul>
 
                 <div class="absolute right-6 float-right">
-                    <x-button.success class="getCollectorExcel max-h-10" id="getCollectorExcel" type="button">
+                    <x-button.success class="getCollectorExcel" id="getCollectorExcel">
                         <x-slot name="icon">
-                            <x-icons.angle-right class="icon h-6 w-6 text-red-500 dark:text-white" />
+                            <x-icons.file-excel class="h-5 w-5" />
                         </x-slot>
                         Tarik Laporan
                     </x-button.success>
@@ -45,17 +45,11 @@
             {{-- mobile view --}}
             <div class="lg:hidden" id="sub-navbar" x-data="{ open: false }">
                 {{-- button --}}
-                <button
-                    class="flex w-full items-center justify-between gap-3 rounded-lg border border-zinc-200 p-2.5 font-medium text-gray-500 hover:bg-gray-100 dark:border-zinc-800 dark:text-gray-400 dark:hover:bg-gray-800"
-                    type="button" @click="open = ! open">
+                <x-button.secondary class="flex w-full items-center justify-between !p-2.5" @click="open = ! open">
                     <span>Actions...</span>
-                    <svg class="h-3 w-3 shrink-0 transform transition-transform duration-300" aria-hidden="true"
-                        :class="{ 'rotate-180 ': open }" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 10 6">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 5 5 1 1 5" />
-                    </svg>
-                </button>
+                    <x-icons.carred-down class="h-3 w-3 shrink-0 transform transition-transform duration-300" 
+                        ::class="{ 'rotate-180 ': open }" />
+                </x-button.secondary>
 
                 {{-- list --}}
                 <div class="mt-2 grid w-full gap-2 md:mt-4 md:gap-4" x-show="open" x-transition>
@@ -82,14 +76,12 @@
                                 href="{{ route('collect.rejected') }}">Ditolak</a>
                         </li>
                     </ul>
-                    <button
-                        class="getCollectorExcel flex w-full items-center rounded-lg bg-gray-50 p-3 text-center text-sm font-medium text-white transition-all duration-300 ease-in-out will-change-transform hover:scale-105 hover:bg-green-100 dark:border-zinc-800 dark:bg-green-700 dark:hover:bg-green-600"
-                        type="button">
+                    <x-button.success class="getCollectorExcel flex w-full items-center !p-3">
                         <x-slot name="icon">
-                            <x-icons.angle-right class="icon h-6 w-6 text-red-500 dark:text-white" />
+                            <x-icons.file-excel class="h-5 w-5" />
                         </x-slot>
                         Tarik Laporan
-                    </button>
+                    </x-button.success>
                 </div>
             </div>
         </div>

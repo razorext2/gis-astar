@@ -8,10 +8,14 @@
 		Allowances
 	</h2>
 
-	<button class="absolute bottom-0 right-0 p-1 text-sm text-blue-500 hover:underline" id="btn-create-allowance"
-		type="button">
-		Add Allowances
-	</button>
+	<x-button.actions class="absolute bottom-0 right-0">
+		<x-button.success id="btn-create-allowance">
+			<x-slot name="icon">
+				<x-icons.plus class="h-4 w-4" />
+			</x-slot>
+			Add Allowances
+		</x-button.success>
+	</x-button.actions>
 </div>
 
 <table id="table-allowance">

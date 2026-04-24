@@ -11,13 +11,12 @@
                     $routePrefix = Str::beforeLast($currentRoute, '.');
                 @endphp
 
-                <x-button.link wire:navigate class="w-fit ring-1 ring-red-700 dark:bg-red-800 dark:text-white"
-                    href="{{ route($routePrefix . '.index') }}">
+                <x-button.danger wire:navigate href="{{ route($routePrefix . '.index') }}">
                     <x-slot name="icon">
-                        <x-icons.angle-right class="h-6 w-6 rotate-180 text-red-500 dark:text-white" />
+                        <x-icons.angle-left class="h-6 w-6" />
                     </x-slot>
-                    Kembali
-                </x-button.link>
+                    {{ __('Kembali') }}
+                </x-button.danger>
             </div>
 
             <div class="flex flex-col gap-1.5">

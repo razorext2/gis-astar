@@ -36,15 +36,12 @@
                         Verified
                     </span>
                 @else
-                    <button form="send-verification"
-                        class="flex shrink-0 items-center gap-1 rounded-lg bg-amber-100 px-2.5 py-1.5 text-xs font-semibold text-amber-700 transition-colors hover:bg-amber-200 dark:bg-amber-900/30 dark:text-amber-400">
-                        <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"
-                                clip-rule="evenodd" />
-                        </svg>
+                    <x-button.secondary form="send-verification" class="!px-2.5 !py-1.5 !text-xs !bg-amber-100 !text-amber-700 hover:!bg-amber-200 dark:!bg-amber-900/30 dark:!text-amber-400 border-none ring-0">
+                        <x-slot name="icon">
+                            <x-icons.info class="h-3.5 w-3.5" />
+                        </x-slot>
                         Verifikasi
-                    </button>
+                    </x-button.secondary>
                 @endif
             </div>
             <x-input-error class="mt-1.5" :messages="$errors->get('email')" />
@@ -121,13 +118,12 @@
 
         {{-- Save Button --}}
         <div class="flex items-center gap-4 pt-2">
-            <button type="submit"
-                class="inline-flex items-center gap-2 rounded-xl bg-red-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-red-700 hover:shadow-md hover:shadow-red-500/20 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-zinc-900">
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
+            <x-button.success type="submit">
+                <x-slot name="icon">
+                    <x-icons.check class="h-4 w-4" />
+                </x-slot>
                 {{ __('Simpan Perubahan') }}
-            </button>
+            </x-button.success>
 
             @if (session('status') === 'profile-updated')
                 <p class="text-sm font-medium text-green-600 dark:text-green-400" x-data="{ show: true }" x-show="show"

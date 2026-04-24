@@ -44,14 +44,12 @@
         </div>
 
         <div class="flex items-center gap-4 pt-2">
-            <button type="submit"
-                class="inline-flex items-center gap-2 rounded-xl bg-red-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-red-700 hover:shadow-md hover:shadow-red-500/20 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-zinc-900">
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-                </svg>
+            <x-button.success type="submit">
+                <x-slot name="icon">
+                    <x-icons.lock class="h-4 w-4" />
+                </x-slot>
                 {{ __('Perbarui Sandi') }}
-            </button>
+            </x-button.success>
 
             @if (session('status') === 'password-updated')
                 <p class="text-sm font-medium text-green-600 dark:text-green-400" x-data="{ show: true }" x-show="show"

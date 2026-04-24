@@ -18,13 +18,12 @@
 
                 @can('roles-create')
                     <div class="max-w-xs">
-                        <x-button.link class="w-fit ring-1 ring-green-700 dark:bg-green-800 dark:text-white"
-                            href="{{ route('roles.create') }}" wire:navigate>
+                        <x-button.success class="w-fit" href="{{ route('roles.create') }}" wire:navigate>
                             <x-slot name="icon">
-                                <x-icons.angle-right class="h-6 w-6 text-green-500 dark:text-white" />
+                                <x-icons.plus class="h-6 w-6" />
                             </x-slot>
-                            Tambah Role
-                        </x-button.link>
+                            {{ __('Tambah Role') }}
+                        </x-button.success>
                     </div>
                 @endcan
 

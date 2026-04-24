@@ -17,9 +17,9 @@
                         id="canvas"></canvas>
                 </div>
                 <div class="mt-3 inline-flex w-full lg:px-0">
-                    <button
-                        class="w-full rounded-lg bg-blue-400 p-2 font-bold text-white ring-1 ring-zinc-200 transition-all duration-300 hover:bg-blue-700 dark:bg-blue-800 dark:text-white dark:ring-zinc-800 dark:hover:bg-blue-900"
-                        id="startButton">Start</button>
+                    <x-button.primary class="w-full" id="startButton">
+                        {{ __('Start') }}
+                    </x-button.primary>
                 </div>
                 <div id="error"
                     class="mt-3 hidden rounded-lg bg-red-500 py-2 font-semibold text-white ring-1 ring-zinc-200 dark:bg-red-700 dark:ring-zinc-800">

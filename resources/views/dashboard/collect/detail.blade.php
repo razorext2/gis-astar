@@ -228,11 +228,12 @@
                                         Perlu direvisi! (divalidasi oleh: {{ $user->name ?? 'N/A' }})
                                     </span>
 
-                                    <x-button.link
-                                        class="max-h-10 max-w-max ring-red-700 hover:bg-red-300 dark:bg-red-800 dark:hover:bg-red-900"
-                                        id="revisi" href="{{ route('collect.edit', $data->id) }}">
-                                        Klik untuk revisi.
-                                    </x-button.link>
+                                    <x-button.danger id="revisi" href="{{ route('collect.edit', $data->id) }}">
+                                        <x-slot name="icon">
+                                            <x-icons.checklist-stepper class="h-5 w-5" />
+                                        </x-slot>
+                                        {{ __('Klik untuk revisi') }}
+                                    </x-button.danger>
                                 </div>
                             @else
                                 <span

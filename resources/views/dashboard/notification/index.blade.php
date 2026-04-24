@@ -10,12 +10,12 @@
                     <form id="mark-all-as-read" action="{{ route('notifications.mark-all-as-read') }}">@csrf</form>
 
                     <div class="max-w-xs">
-                        <x-button.primary id="add-button" form="mark-all-as-read" type="submit">
+                        <x-button.success id="add-button" form="mark-all-as-read" type="submit">
                             <x-slot name="icon">
-                                <x-icons.angle-right class="h-6 w-6 text-green-500 dark:text-white" />
+                                <x-icons.checklist-stepper class="h-6 w-6" />
                             </x-slot>
-                            Mark All as Read
-                        </x-button.primary>
+                            {{ __('Mark All as Read') }}
+                        </x-button.success>
                     </div>
                 </div>
             </div>
@@ -45,20 +45,17 @@
                                     <form id="formNotification-{{ $notification->id }}"
                                         action="{{ $notification->data['button']['url'] }}">
                                     </form>
-                                    <button
-                                        class="me-4 rounded-md bg-blue-200 px-2 py-0.5 font-semibold text-blue-600 hover:bg-blue-400"
-                                        id="btnNotification" form="formNotification-{{ $notification->id }}" type="submit">
+                                    <x-button.primary id="btnNotification" form="formNotification-{{ $notification->id }}" type="submit">
                                         {{ $notification->data['button']['label'] }}
-                                    </button>
+                                    </x-button.primary>
 
                                     {{-- mark as read --}}
                                     @if ($notification->read_at == null)
                                         <form id="markAsRead-{{ $notification->id }}"
                                             action="{{ route('notification.mark-as-read', $notification->id) }}"></form>
-                                        <button class="font-semibold text-blue-600" id="btnMarkAsRead"
-                                            form="markAsRead-{{ $notification->id }}" type="submit">
-                                            Mark as Read
-                                        </button>
+                                        <x-button.success id="btnMarkAsRead" form="markAsRead-{{ $notification->id }}" type="submit">
+                                            {{ __('Mark as Read') }}
+                                        </x-button.success>
                                     @endif
                                 </div>
 

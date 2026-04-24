@@ -21,13 +21,12 @@
 
                 @can('spk-create')
                     <div class="max-w-xs">
-                        <x-button.link href="{{ route('spk.create') }}" id="add-button" wire:navigate
-                            class="w-fit ring-1 ring-green-700 dark:bg-green-800 dark:text-white">
+                        <x-button.success href="{{ route('spk.create') }}" id="add-button">
                             <x-slot name="icon">
-                                <x-icons.plus class="h-6 w-6 text-green-500 dark:text-white" />
+                                <x-icons.plus class="h-5 w-5" />
                             </x-slot>
                             SPK
-                        </x-button.link>
+                        </x-button.success>
                     </div>
                 @endcan
 
