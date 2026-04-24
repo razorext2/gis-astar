@@ -32,10 +32,19 @@
     @vite('resources/js/global/leaflet.js')
 @endif
 
-<!-- Datatables Tailwind -->
-<link href="https://cdn.datatables.net/2.1.8/css/dataTables.tailwindcss.css" rel="stylesheet">
-<!-- Datatables Button -->
-<link href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" rel="stylesheet">
-<link href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.dataTables.css" rel="stylesheet">
+@if (Route::is('pegawai.sales') ||
+        Route::is('collect.*') ||
+        Route::is('collect-task.*') ||
+        Route::is('collect-task-ppn.*') ||
+        Route::is('collect-idy-ppn.*') ||
+        Route::is('pegawai.allowances.*') ||
+        Route::is('pegawai.deductions.*') ||
+        Route::is('pegawai.payroll'))
+    <!-- Datatables Tailwind -->
+    <link href="https://cdn.datatables.net/2.1.8/css/dataTables.tailwindcss.css" rel="stylesheet">
+    <!-- Datatables Button -->
+    <link href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.dataTables.css" rel="stylesheet">
+@endif
 {{-- Tom select --}}
 <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.css" rel="stylesheet">

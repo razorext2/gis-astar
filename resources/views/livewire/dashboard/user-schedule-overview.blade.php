@@ -1,5 +1,5 @@
 <div
-    class="rounded-2xl bg-white/70 p-4 ring-1 ring-zinc-200 backdrop-blur-3xl dark:bg-zinc-900/60 dark:ring-zinc-800 lg:p-6">
+    class="rounded-2xl bg-white/70 p-4 ring-1 ring-zinc-200 backdrop-blur-sm dark:bg-zinc-900/60 dark:ring-zinc-800 lg:p-6">
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div class="flex flex-col gap-1">
             <div class="flex items-center gap-2">

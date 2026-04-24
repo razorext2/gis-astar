@@ -1,5 +1,5 @@
 <div
-    class="relative mt-4 overflow-hidden rounded-2xl bg-white/60 p-6 shadow-sm ring-1 ring-zinc-200/60 backdrop-blur-xl dark:bg-dark-primary/60 dark:ring-white/10 lg:p-8">
+    class="relative mt-4 overflow-hidden rounded-2xl bg-white/60 p-6 shadow-sm ring-1 ring-zinc-200/60 backdrop-blur-sm dark:bg-dark-primary/60 dark:ring-white/10 lg:p-8">
     <!-- Dekorasi Blur Blob -->
     <div
         class="bg-primary/5 dark:bg-primary/10 pointer-events-none absolute -right-20 -top-20 z-0 h-64 w-64 rounded-full opacity-50 blur-3xl">

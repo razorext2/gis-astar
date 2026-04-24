@@ -1,7 +1,7 @@
 <div class="mt-4 grid gap-4 lg:gap-6">
     @forelse ($teams as $row)
         <div wire:key="{{ $row->team_code }}"
-            class="hover:shadow-primary/5 hover:ring-primary/20 group relative overflow-hidden rounded-2xl bg-white/60 p-4 ring-1 ring-zinc-200/60 backdrop-blur-xl transition-all duration-300 hover:shadow-xl dark:bg-dark-primary/60 dark:ring-white/10 dark:hover:bg-dark-primary/80 lg:p-6">
+            class="hover:shadow-primary/5 hover:ring-primary/20 group relative overflow-hidden rounded-2xl bg-white/60 p-4 ring-1 ring-zinc-200/60 backdrop-blur-sm transition-all duration-300 hover:shadow-xl dark:bg-dark-primary/60 dark:ring-white/10 dark:hover:bg-dark-primary/80 lg:p-6">
             <!-- Dekorasi Blur Blob -->
             <div
                 class="bg-primary/10 dark:bg-primary/20 pointer-events-none absolute -right-10 -top-10 z-0 h-40 w-40 rounded-full opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100">
@@ -82,7 +82,7 @@
                     x-transition:leave="transition ease-in duration-200"
                     x-transition:leave-start="opacity-100 translate-y-0 scale-100"
                     x-transition:leave-end="opacity-0 translate-y-8 scale-95"
-                    class="relative flex w-full max-w-lg flex-col gap-4 rounded-xl bg-white/95 p-6 shadow-2xl ring-1 ring-white/20 backdrop-blur-xl dark:bg-dark-primary/95 dark:ring-white/10">
+                    class="relative flex w-full max-w-lg flex-col gap-4 rounded-xl bg-white/95 p-6 shadow-2xl ring-1 ring-white/20 backdrop-blur-sm dark:bg-dark-primary/95 dark:ring-white/10">
 
                     <div class="absolute right-3 top-3">
                         <button type="button" @click="show = false"

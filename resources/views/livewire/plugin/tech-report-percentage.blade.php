@@ -1,5 +1,5 @@
 <div
-    class="flex w-full flex-col gap-6 rounded-3xl border border-white/40 bg-white/70 p-4 shadow-xl backdrop-blur-3xl dark:border-zinc-800/50 dark:bg-zinc-900/60 lg:p-6">
+    class="flex w-full flex-col gap-6 rounded-3xl border border-white/40 bg-white/70 p-4 shadow-xl backdrop-blur-sm dark:border-zinc-800/50 dark:bg-zinc-900/60 lg:p-6">
 
     {{-- Header with Month Selector --}}
     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

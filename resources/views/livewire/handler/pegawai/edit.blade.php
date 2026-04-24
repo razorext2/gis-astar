@@ -1,7 +1,7 @@
 <div class="w-full space-y-6">
     <!-- Top Header Navigation -->
     <div
-        class="rounded-3xl border border-white/30 bg-white/70 p-6 shadow-2xl backdrop-blur-xl transition-all duration-500 ease-in-out dark:border-white/10 dark:bg-zinc-900/60">
+        class="rounded-3xl border border-white/30 bg-white/70 p-6 shadow-2xl backdrop-blur-sm transition-all duration-500 ease-in-out dark:border-white/10 dark:bg-zinc-900/60">
         <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div class="flex items-center gap-4">
                 <x-button.link id="back-btn" class="group justify-center bg-white/50 hover:bg-red-700 hover:text-white"
@@ -29,7 +29,7 @@
         <div class="space-y-2 lg:col-span-2 lg:space-y-4">
             <!-- Data Personal Section -->
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60">
+                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-zinc-900/60">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-blue-500/5 blur-3xl transition-colors group-hover:bg-blue-500/10">
                 </div>
@@ -115,7 +115,7 @@
 
             <!-- Penempatan & Jabatan Section -->
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60">
+                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-zinc-900/60">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-purple-500/5 blur-3xl transition-colors group-hover:bg-purple-500/10">
                 </div>
@@ -157,7 +157,7 @@
             <!-- Akun Login Section -->
             @if ($has_account)
                 <div
-                    class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60">
+                    class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-zinc-900/60">
                     <div
                         class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-green-500/5 blur-3xl transition-colors group-hover:bg-green-500/10">
                     </div>
@@ -235,7 +235,7 @@
         <div class="space-y-2 lg:space-y-4">
             <!-- Upload New Photos -->
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60">
+                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-zinc-900/60">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-orange-500/5 blur-3xl transition-colors group-hover:bg-orange-500/10">
                 </div>
@@ -326,7 +326,7 @@
 
             <!-- Existing Photos Display -->
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60">
+                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-zinc-900/60">
                 <div class="mb-6 flex items-center gap-3">
                     <div class="h-10 w-1 rounded-full bg-zinc-600"></div>
                     <h3 class="text-xl font-bold text-gray-800 dark:text-white">Foto Saat Ini</h3>
