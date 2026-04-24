@@ -43,6 +43,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('sales/{filename}', function (string $filename) {
             return Storage::download("export/$filename");
         })->name('export.sales.download');
+
+        // laporan invoice
+        Route::get('invoice/{filename}', function (string $filename) {
+            return Storage::download("export/invoice/$filename");
+        })->name('export.invoice.download');
     });
 
     Route::prefix('proxy')->as('')->group(function () {
