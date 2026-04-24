@@ -77,12 +77,12 @@ export async function initRecognition() {
             <form id="captureRouteForm" class="grid gap-4 !text-left">
               <div class="col-span-2">
                 <label for="keterangan" class="block mb-2 text-sm font-medium text-gray-900">Keterangan</label>
-                <textarea name="keterangan" id="keterangan" class="swal2-textarea !w-full !m-0 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5" rows="4" placeholder="Tulis deskripsi..."></textarea>
+                <textarea name="keterangan" id="keterangan" class="swal2-textarea !w-full !m-0 bg-gray-50 border border-zinc-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5" rows="4" placeholder="Tulis deskripsi..."></textarea>
               </div>
 
               <div class="col-span-2">
                 <label for="status" class="block mb-2 text-sm font-medium text-gray-900">Status</label>
-                <select name="status" id="status" class="swal2-input !w-full !m-0 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
+                <select name="status" id="status" class="swal2-input !w-full !m-0 bg-gray-50 border border-zinc-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
                   <option value="">Pilih Status</option>
                   <option value="1">Dalam Perjalanan</option>
                   <option value="2">Stand By</option>
@@ -202,9 +202,9 @@ function showError(title, message) {
         "dark:bg-blue-800",
         "bg-blue-400",
         "dark:hover:bg-blue-900",
-        "ring-gray-200",
+        "ring-zinc-200",
         "dark:text-white",
-        "dark:ring-gray-700",
+        "dark:ring-zinc-800",
     );
     showAlert("error", title, message);
 }

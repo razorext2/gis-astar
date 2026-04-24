@@ -1,7 +1,7 @@
 <div class="mt-4 grid gap-4 lg:gap-6">
     @forelse ($teams as $row)
         <div wire:key="{{ $row->team_code }}"
-            class="hover:shadow-primary/5 hover:ring-primary/20 group relative overflow-hidden rounded-2xl bg-white/60 p-4 ring-1 ring-gray-200/60 backdrop-blur-xl transition-all duration-300 hover:shadow-xl dark:bg-dark-primary/60 dark:ring-white/10 dark:hover:bg-dark-primary/80 lg:p-6">
+            class="hover:shadow-primary/5 hover:ring-primary/20 group relative overflow-hidden rounded-2xl bg-white/60 p-4 ring-1 ring-zinc-200/60 backdrop-blur-xl transition-all duration-300 hover:shadow-xl dark:bg-dark-primary/60 dark:ring-white/10 dark:hover:bg-dark-primary/80 lg:p-6">
             <!-- Dekorasi Blur Blob -->
             <div
                 class="bg-primary/10 dark:bg-primary/20 pointer-events-none absolute -right-10 -top-10 z-0 h-40 w-40 rounded-full opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100">
@@ -50,7 +50,7 @@
             {{-- detail member --}}
             @if ($showMember === $row->team_code)
                 <div wire:transition.opacity.duration.400ms
-                    class="mt-4 min-h-[200px] border-t border-gray-100 pt-4 dark:border-gray-700/50">
+                    class="mt-4 min-h-[200px] border-t border-zinc-200 pt-4 dark:border-zinc-800/50">
                     <livewire:team-member-table lazy :teamCode="$row->team_code" :key="$row->team_code" />
                 </div>
             @endif
@@ -58,7 +58,7 @@
         </div>
     @empty
         <div
-            class="flex flex-col items-center justify-center rounded-2xl bg-white/50 py-12 ring-1 ring-gray-200/50 backdrop-blur-md dark:bg-dark-primary/50 dark:ring-white/10">
+            class="flex flex-col items-center justify-center rounded-2xl bg-white/50 py-12 ring-1 ring-zinc-200/50 backdrop-blur-md dark:bg-dark-primary/50 dark:ring-white/10">
             <x-icons.user-group class="mb-4 h-16 w-16 text-gray-300 dark:text-gray-600" />
             <p class="text-lg font-medium text-gray-600 dark:text-gray-300">Belum ada tim yang terbentuk</p>
             <p class="mt-1 text-sm text-gray-400 dark:text-gray-500">Buat tim baru terlebih dahulu untuk mulai
@@ -69,19 +69,14 @@
     @can('team-member-add')
         {{-- modal add member --}}
         @teleport('body')
-            <div x-data="{ show: @entangle('showModal') }" x-show="show" x-cloak
-                x-transition:enter="transition ease-out duration-300"
-                x-transition:enter-start="opacity-0"
-                x-transition:enter-end="opacity-100"
-                x-transition:leave="transition ease-in duration-200"
-                x-transition:leave-start="opacity-100"
+            <div x-data="{ show: @entangle('showModal') }" x-show="show" x-cloak x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
                 x-transition:leave-end="opacity-0"
                 class="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-sm"
-                style="background-color: rgba(17, 24, 39, 0.6);"
-                @click.self="show = false">
+                style="background-color: rgba(17, 24, 39, 0.6);" @click.self="show = false">
 
-                <div x-show="show"
-                    x-transition:enter="transition ease-out duration-300"
+                <div x-show="show" x-transition:enter="transition ease-out duration-300"
                     x-transition:enter-start="opacity-0 translate-y-8 scale-95"
                     x-transition:enter-end="opacity-100 translate-y-0 scale-100"
                     x-transition:leave="transition ease-in duration-200"
@@ -122,17 +117,17 @@
 
                             @if ($kode_pegawai)
                                 <div
-                                    class="mt-2 max-h-[180px] overflow-y-auto rounded-xl bg-gray-50 p-2 ring-1 ring-gray-200 dark:bg-gray-800/50 dark:ring-gray-700">
+                                    class="mt-2 max-h-[180px] overflow-y-auto rounded-xl bg-gray-50 p-2 ring-1 ring-zinc-200 dark:bg-gray-800/50 dark:ring-zinc-800">
                                     @forelse ($technicians as $technician)
                                         <label for="member-{{ $technician->kode_pegawai }}"
                                             class="group flex cursor-pointer items-center rounded-lg p-2 transition-colors hover:bg-white dark:hover:bg-gray-700">
                                             <input id="member-{{ $technician->kode_pegawai }}" wire:model="newMember"
                                                 type="checkbox" value="{{ $technician->kode_pegawai }}"
-                                                class="text-primary focus:ring-primary/50 h-4 w-4 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700">
+                                                class="text-primary focus:ring-primary/50 h-4 w-4 rounded-md border-zinc-200 dark:border-zinc-800 dark:bg-gray-700">
                                             <span
                                                 class="ms-3 text-sm font-medium text-gray-700 group-hover:text-gray-900 dark:text-gray-300 dark:group-hover:text-white">
                                                 <span
-                                                    class="mr-1 border-r border-gray-300 pr-2 font-bold dark:border-gray-600">{{ $technician->kode_pegawai }}</span>
+                                                    class="mr-1 border-r border-zinc-200 pr-2 font-bold dark:border-zinc-800">{{ $technician->kode_pegawai }}</span>
                                                 {{ $technician->name }}
                                             </span>
                                         </label>
@@ -152,7 +147,7 @@
                                 wire:model="role" :textLabel="'Posisi Role'" required />
                         </div>
 
-                        <div class="mt-4 flex w-full justify-end gap-3 border-t border-gray-100 pt-4 dark:border-gray-800">
+                        <div class="mt-4 flex w-full justify-end gap-3 border-t border-zinc-200 pt-4 dark:border-zinc-800">
                             <x-button.danger type="button" @click="show = false">Batal</x-button.danger>
 
                             <x-button.primary type="submit" class="px-6">
@@ -174,23 +169,16 @@
     @can('team-member-remove')
         {{-- modal remove member --}}
         @teleport('body')
-            <div x-data="{ show: @entangle('showRemoveMemberModal') }" x-show="show" x-cloak
-                x-transition:enter="transition ease-out duration-300"
-                x-transition:enter-start="opacity-0"
-                x-transition:enter-end="opacity-100"
-                x-transition:leave="transition ease-in duration-200"
-                x-transition:leave-start="opacity-100"
+            <div x-data="{ show: @entangle('showRemoveMemberModal') }" x-show="show" x-cloak x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
                 x-transition:leave-end="opacity-0"
                 class="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-sm"
-                style="background-color: rgba(17, 24, 39, 0.6);"
-                @click.self="show = false">
+                style="background-color: rgba(17, 24, 39, 0.6);" @click.self="show = false">
 
-                <div x-show="show"
-                    x-transition:enter="transition ease-out duration-300"
-                    x-transition:enter-start="opacity-0 scale-90"
-                    x-transition:enter-end="opacity-100 scale-100"
-                    x-transition:leave="transition ease-in duration-200"
-                    x-transition:leave-start="opacity-100 scale-100"
+                <div x-show="show" x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100"
+                    x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
                     x-transition:leave-end="opacity-0 scale-90"
                     class="relative flex w-full max-w-sm flex-col items-center gap-4 rounded-3xl bg-white p-6 text-center shadow-2xl ring-1 ring-white/20 dark:bg-dark-primary dark:ring-white/10">
 

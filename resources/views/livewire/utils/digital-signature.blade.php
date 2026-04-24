@@ -1,5 +1,5 @@
 <div
-    class="col-span-2 rounded-xl bg-white p-4 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 lg:p-6">
+    class="col-span-2 rounded-xl bg-white p-4 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 lg:p-6">
 
     <header class="mb-4">
         <h2 class="text-lg font-medium text-gray-900 dark:text-white">
@@ -15,7 +15,7 @@
     @if (!$myModel->hasBeenSigned())
         <div id="accordion-ttd-digital" x-data="{ accordionTtdOpen: false }">
             <button type="button"
-                class="flex w-full items-center justify-between gap-3 rounded-lg border border-gray-200 p-5 font-medium text-gray-500 transition-all duration-300 ease-in-out hover:bg-blue-100 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-800"
+                class="flex w-full items-center justify-between gap-3 rounded-lg border border-zinc-200 p-5 font-medium text-gray-500 transition-all duration-300 ease-in-out hover:bg-blue-100 dark:border-zinc-800 dark:text-gray-400 dark:hover:bg-gray-800"
                 @click="accordionTtdOpen = !accordionTtdOpen"
                 :class="accordionTtdOpen ? 'rounded-b-none border-b-0' : ''">
                 <h3 class="text-base font-semibold text-gray-800 dark:text-white">
@@ -28,7 +28,7 @@
             </button>
 
 
-            <div class="flex flex-col gap-2 rounded-b-lg border border-gray-200 p-2 dark:border-gray-700 lg:gap-4 lg:p-4"
+            <div class="flex flex-col gap-2 rounded-b-lg border border-zinc-200 p-2 dark:border-zinc-800 lg:gap-4 lg:p-4"
                 x-show="accordionTtdOpen" x-collapse x-cloak>
                 <p class="text-base text-gray-600 dark:text-gray-400">
                     Silakan corat coret tanda tangan kamu dengan menggambar di canvas yang disediakan dibawah ini.

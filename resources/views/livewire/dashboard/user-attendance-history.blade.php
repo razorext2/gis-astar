@@ -2,7 +2,7 @@
     {{-- Attendance History (Desktop) --}}
     <div
         class="hidden rounded-2xl bg-white/70 p-4 ring-1 ring-zinc-200 backdrop-blur-3xl dark:bg-zinc-900/60 dark:ring-zinc-800 lg:block lg:p-6">
-        <div class="mb-5 flex items-center gap-2 border-b border-zinc-100 pb-4 dark:border-zinc-800">
+        <div class="mb-5 flex items-center gap-2 border-b border-zinc-200 pb-4 dark:border-zinc-800">
             <div class="h-2 w-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,0.5)]"></div>
             <h3 class="text-base font-bold tracking-wide text-zinc-800 dark:text-white">History Absensi</h3>
         </div>
@@ -17,7 +17,7 @@
                             <div class="h-2 w-2 rounded-full bg-emerald-500"></div>
                         </span>
                         <div
-                            class="flex items-center justify-between rounded-xl border border-zinc-100 bg-zinc-50 px-4 py-3 dark:border-zinc-800 dark:bg-dark-secondary sm:flex">
+                            class="flex items-center justify-between rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 dark:border-zinc-800 dark:bg-dark-secondary sm:flex">
                             <div class="text-sm text-zinc-600 dark:text-zinc-300">
                                 Kamu melakukan
                                 <span class="font-bold text-emerald-600 dark:text-emerald-400">Clock-in</span>
@@ -86,7 +86,7 @@
                             <div class="h-2 w-2 rounded-full bg-red-500"></div>
                         </span>
                         <div
-                            class="flex items-center justify-between rounded-xl border border-zinc-100 bg-zinc-50 px-4 py-3 dark:border-zinc-800 dark:bg-dark-secondary sm:flex">
+                            class="flex items-center justify-between rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 dark:border-zinc-800 dark:bg-dark-secondary sm:flex">
                             <div class="text-sm text-zinc-600 dark:text-zinc-300">
                                 Kamu melakukan
                                 <span class="font-bold text-red-600 dark:text-red-400">Clock-out</span>
@@ -132,7 +132,7 @@
     {{-- Attendance History (Mobile only) --}}
     <div
         class="rounded-2xl bg-white p-4 ring-1 ring-zinc-200 backdrop-blur-3xl dark:bg-zinc-900/60 dark:ring-zinc-800 lg:hidden lg:p-6">
-        <div class="mb-5 flex items-center gap-2 border-b border-zinc-100 pb-4 dark:border-zinc-800">
+        <div class="mb-5 flex items-center gap-2 border-b border-zinc-200 pb-4 dark:border-zinc-800">
             <div class="h-2 w-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,0.5)]"></div>
             <h3 class="text-base font-bold tracking-wide text-zinc-800 dark:text-white">History Absensi</h3>
         </div>
@@ -146,7 +146,7 @@
                             <div class="h-2 w-2 rounded-full bg-emerald-500"></div>
                         </span>
                         <div
-                            class="rounded-xl border border-zinc-100 bg-zinc-50 px-4 py-3 dark:border-zinc-800 dark:bg-dark-secondary">
+                            class="rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 dark:border-zinc-800 dark:bg-dark-secondary">
                             <div class="mb-1.5 flex items-center gap-2">
                                 @php
                                     $status = $attendance['status_in'];
@@ -204,7 +204,7 @@
                             <div class="h-2 w-2 rounded-full bg-red-500"></div>
                         </span>
                         <div
-                            class="rounded-xl border border-zinc-100 bg-zinc-50 px-4 py-3 dark:border-zinc-800 dark:bg-dark-secondary">
+                            class="rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 dark:border-zinc-800 dark:bg-dark-secondary">
                             <div class="mb-1.5 flex items-center gap-2">
                                 @php
                                     $status = $attendance['status_out'];

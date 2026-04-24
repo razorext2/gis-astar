@@ -2,7 +2,7 @@
 
     {{-- form info customer --}}
     <div
-        class="grid w-full gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
+        class="grid w-full gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
         <div class="w-full">
             <x-input.basic id="nama_customer" name="nama_customer" wire:model="createForm.nama_customer"
                 placeholder="Nama Bon Customer">
@@ -48,7 +48,7 @@
 
     {{-- form barang --}}
     <div
-        class="flex w-full flex-col items-start gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
+        class="flex w-full flex-col items-start gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
         <div class="col-span-2 flex w-full flex-col items-start gap-4">
             <div class="w-full">
                 <x-input.select id="tipe_timbangan" name="tipe_timbangan" :labels="true" :textLabel="'Tipe Timbangan Yang Dipesan'"
@@ -119,7 +119,7 @@
             <div class="flex flex-col gap-y-1 overflow-y-auto rounded-xl bg-gray-50 p-4 dark:bg-gray-600">
                 <table id="barang-list-table" class="w-full">
                     <thead
-                        class="border-b border-gray-200 text-sm font-semibold text-gray-800 dark:border-gray-400 dark:text-white">
+                        class="border-b border-zinc-200 text-sm font-semibold text-gray-800 dark:border-zinc-800 dark:text-white">
                         <th class="p-2">#</th>
                         <th class="p-2">Nama Barang</th>
                         <th class="p-2">Jumlah</th>
@@ -173,7 +173,7 @@
                                 </td>
                             </tr>
 
-                            <tr class="border-b border-gray-200 dark:border-gray-400">
+                            <tr class="border-b border-zinc-200 dark:border-zinc-800">
                                 <td class="text-sm text-gray-800 dark:text-white">
                                     {!! nl2br(e($row['spesifikasi'] ?? '')) !!}
                                 </td>
@@ -199,14 +199,14 @@
 
     {{-- form spk --}}
     <div
-        class="grid w-full grid-cols-2 gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
+        class="grid w-full grid-cols-2 gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
         <div class="col-span-2 w-full">
             <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="tipe_tagihan">
                 Tipe Tagihan
             </label>
 
             <select
-                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                class="block w-full rounded-lg border border-zinc-200 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                 id="tipe_tagihan" name="tipe_tagihan" wire:model.live="createForm.tipe_tagihan">
                 <option value="">Pilih tipe tagihan...</option>
                 @foreach (config('spk-config.spk_tipe_tagihan') as $key => $row)
@@ -282,7 +282,7 @@
             </label>
 
             <select
-                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                class="block w-full rounded-lg border border-zinc-200 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                 id="assign_to" name="assign_to" wire:model="createForm.assign_to">
                 <option value="">Pilih Produksi</option>
                 @forelse ($users as $row)
@@ -314,10 +314,10 @@
 
     {{-- form info tambahan --}}
     <div id="informasi-tambahan"
-        class="grid w-full grid-cols-2 gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:grow lg:gap-4 lg:p-6">
+        class="grid w-full grid-cols-2 gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:grow lg:gap-4 lg:p-6">
 
         <div
-            class="col-span-2 grid w-full grid-cols-1 gap-2 rounded-lg border border-gray-200 p-2 dark:border-gray-600 lg:gap-4 lg:p-4">
+            class="col-span-2 grid w-full grid-cols-1 gap-2 rounded-lg border border-zinc-200 p-2 dark:border-zinc-800 lg:gap-4 lg:p-4">
 
             <div x-show="$wire.docForm.new_attachments.length > 0">
                 <span class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
@@ -325,7 +325,7 @@
                 </span>
 
                 <ul
-                    class="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white shadow-sm dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-700">
+                    class="divide-y divide-gray-200 rounded-lg border border-zinc-200 bg-white shadow-sm dark:divide-gray-700 dark:border-zinc-800 dark:bg-gray-700">
 
                     @foreach ($docForm->new_attachments as $index => $row)
                         <li class="flex items-center gap-2 p-2 transition hover:bg-gray-50 dark:hover:bg-gray-800">
@@ -365,7 +365,7 @@
                     x-on:livewire-upload-cancel="uploading = false" x-on:livewire-upload-error="uploading = false"
                     x-on:livewire-upload-progress="progress = $event.detail.progress">
                     <label for="attachment"
-                        class="flex h-36 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-800">
+                        class="flex h-36 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-200 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-zinc-800 dark:bg-gray-700 dark:hover:border-zinc-800 dark:hover:bg-gray-800">
                         <div class="flex flex-col items-center justify-center pb-6 pt-5">
                             <x-icons.cloud-upload class="mb-2 h-8 w-8 text-gray-500 dark:text-gray-400" />
 
@@ -484,7 +484,7 @@
             <div class="flex items-center">
                 <input id="is_using_company_driver" type="checkbox"
                     wire:model.live="createForm.is_using_company_driver"
-                    class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800 lg:h-5 lg:w-5">
+                    class="h-4 w-4 rounded-sm border-zinc-200 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800 lg:h-5 lg:w-5">
                 <label for="is_using_company_driver"
                     class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 lg:text-base">
                     Apakah SPK akan dikirim menggunakan supir perusahaan?
@@ -500,7 +500,7 @@
             <div class="flex items-center">
                 <input id="is_picked_up_by_customer" type="checkbox"
                     wire:model.live="createForm.is_picked_up_by_customer"
-                    class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800 lg:h-5 lg:w-5">
+                    class="h-4 w-4 rounded-sm border-zinc-200 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800 lg:h-5 lg:w-5">
                 <label for="is_picked_up_by_customer"
                     class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 lg:text-base">
                     Apakah SPK akan dijemput oleh customer?
@@ -516,7 +516,7 @@
             <div class="col-span-2 w-full">
                 <div class="flex items-center">
                     <input id="is_booked" type="checkbox" wire:model.live="createForm.is_booked"
-                        class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800 lg:h-5 lg:w-5">
+                        class="h-4 w-4 rounded-sm border-zinc-200 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800 lg:h-5 lg:w-5">
                     <label for="is_booked"
                         class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 lg:text-base">
                         Book Nomor SPK
@@ -534,7 +534,7 @@
     @if ($data->status_approval === 1)
         <div class="w-full" id="accordion-packing-form" x-data="{ accordionOpen: $wire.is_changed, isChanged: $wire.is_changed }">
             <button type="button"
-                class="flex w-full items-center justify-between gap-3 rounded-lg border border-gray-200 bg-green-200 p-5 font-medium text-gray-500 shadow-md transition-all duration-300 ease-in-out hover:bg-blue-100 dark:border-gray-600 dark:bg-dark-primary dark:text-gray-400 dark:shadow-none dark:hover:bg-gray-800"
+                class="flex w-full items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-green-200 p-5 font-medium text-gray-500 shadow-md transition-all duration-300 ease-in-out hover:bg-blue-100 dark:border-zinc-800 dark:bg-dark-primary dark:text-gray-400 dark:shadow-none dark:hover:bg-gray-800"
                 @click="accordionOpen = !accordionOpen" :class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
                 <span class="flex flex-col text-left">
                     <h3 class="text-base font-semibold text-green-600 dark:text-green-500">
@@ -550,7 +550,7 @@
                 </span>
             </button>
 
-            <div class="rounded-b-lg border border-gray-200 bg-white p-5 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none"
+            <div class="rounded-b-lg border border-zinc-200 bg-white p-5 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none"
                 x-show="accordionOpen" x-collapse x-cloak>
 
                 <div>
@@ -558,7 +558,7 @@
                         <input type="checkbox" x-on:click="isChanged = !isChanged" wire:model.live="is_changed"
                             value="" class="peer sr-only">
                         <div
-                            class="peer relative h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full">
+                            class="peer relative h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-zinc-200 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-zinc-800 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full">
                         </div>
                         <span x-show="isChanged == true"
                             class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -594,7 +594,7 @@
     {{-- accordion delay SPK --}}
     <div class="w-full" id="accordion-packing-form" x-data="{ accordionOpen: $wire.is_delayed, onDelay: $wire.is_delayed }">
         <button type="button"
-            class="flex w-full items-center justify-between gap-3 rounded-lg border border-gray-200 bg-red-200 p-5 font-medium text-gray-500 shadow-md transition-all duration-300 ease-in-out hover:bg-blue-100 dark:border-gray-600 dark:bg-dark-primary dark:text-gray-400 dark:shadow-none dark:hover:bg-gray-800"
+            class="flex w-full items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-red-200 p-5 font-medium text-gray-500 shadow-md transition-all duration-300 ease-in-out hover:bg-blue-100 dark:border-zinc-800 dark:bg-dark-primary dark:text-gray-400 dark:shadow-none dark:hover:bg-gray-800"
             @click="accordionOpen = !accordionOpen" :class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
             <span class="flex flex-col text-left">
                 <h3 class="text-base font-semibold text-red-600 dark:text-red-500">
@@ -610,7 +610,7 @@
             </span>
         </button>
 
-        <div class="rounded-b-lg border border-gray-200 bg-white p-5 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none"
+        <div class="rounded-b-lg border border-zinc-200 bg-white p-5 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none"
             x-show="accordionOpen" x-collapse x-cloak>
 
             <div>
@@ -618,7 +618,7 @@
                     <input type="checkbox" x-on:click="onDelay = !onDelay" wire:model="is_delayed" value=""
                         class="peer sr-only">
                     <div
-                        class="peer relative h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full">
+                        class="peer relative h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-zinc-200 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-zinc-800 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full">
                     </div>
                     <span x-show="onDelay == true" class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
                         SPK Mengalami Delay
@@ -644,7 +644,7 @@
     {{-- accordion cancel SPK --}}
     <div class="w-full" id="accordion-packing-form" x-data="{ accordionOpen: $wire.is_cancelled, onCancel: $wire.is_cancelled }">
         <button type="button"
-            class="flex w-full items-center justify-between gap-3 rounded-lg border border-gray-200 bg-red-200 p-5 font-medium text-gray-500 shadow-md transition-all duration-300 ease-in-out hover:bg-blue-100 dark:border-gray-600 dark:bg-dark-primary dark:text-gray-400 dark:shadow-none dark:hover:bg-gray-800"
+            class="flex w-full items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-red-200 p-5 font-medium text-gray-500 shadow-md transition-all duration-300 ease-in-out hover:bg-blue-100 dark:border-zinc-800 dark:bg-dark-primary dark:text-gray-400 dark:shadow-none dark:hover:bg-gray-800"
             @click="accordionOpen = !accordionOpen" :class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
             <span class="flex flex-col text-left">
                 <h3 class="text-base font-semibold text-red-600 dark:text-red-500">
@@ -660,7 +660,7 @@
             </span>
         </button>
 
-        <div class="rounded-b-lg border border-gray-200 bg-white p-5 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none"
+        <div class="rounded-b-lg border border-zinc-200 bg-white p-5 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none"
             x-show="accordionOpen" x-collapse x-cloak>
 
             <div>
@@ -668,7 +668,7 @@
                     <input type="checkbox" x-on:click="onCancel = !onCancel" wire:model="is_cancelled"
                         value="" class="peer sr-only">
                     <div
-                        class="peer relative h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full">
+                        class="peer relative h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-zinc-200 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-zinc-800 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full">
                     </div>
                     <span x-show="onCancel == true" class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
                         SPK Dibatalkan

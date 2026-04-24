@@ -1,5 +1,5 @@
 <div
-    class="flex w-full flex-col items-center justify-center gap-2 rounded-lg p-2 ring-1 ring-gray-200 dark:bg-gray-700 dark:ring-gray-600 lg:gap-4 lg:p-4">
+    class="flex w-full flex-col items-center justify-center gap-2 rounded-lg p-2 ring-1 ring-zinc-200 dark:bg-gray-700 dark:ring-zinc-800 lg:gap-4 lg:p-4">
 
     <div class="flex w-full flex-row items-center justify-end gap-2">
         <p class="text-sm text-gray-800 dark:text-white">Filter:</p>
@@ -10,7 +10,7 @@
 
     @forelse ($data as $row)
         <div
-            class="flex w-full flex-col gap-2 border-b border-gray-200 pb-2 text-gray-800 dark:border-gray-600 dark:text-white">
+            class="flex w-full flex-col gap-2 border-b border-zinc-200 pb-2 text-gray-800 dark:border-zinc-800 dark:text-white">
             <div class="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-8">
                 <div class="text-right text-xs lg:text-left">
                     <p>Pukul {{ \Carbon\Carbon::parse($row->created_at)->isoFormat('hh:mm:ss') }}</p>

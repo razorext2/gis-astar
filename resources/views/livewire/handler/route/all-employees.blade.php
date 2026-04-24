@@ -25,7 +25,7 @@
 
             <div class="w-full">
                 <input id="datepicker-route-collector" name="datepicker-route-colelctor" type="date"
-                    class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                    class="block w-full rounded-lg border border-zinc-200 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                     placeholder="Pilih tanggal laporan" wire:model="date">
             </div>
 
@@ -68,7 +68,7 @@
         </div>
     </div>
 
-    <ol class="relative ml-3 border-s border-gray-200 dark:border-gray-700" id="collectContent">
+    <ol class="relative ml-3 border-s border-zinc-200 dark:border-zinc-800" id="collectContent">
 
         @forelse ($datas as $row)
             <li class="relative mb-4 ms-8 flex flex-col gap-1 rounded-lg p-2 transition-all duration-300 ease-in-out hover:bg-gray-50 focus:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white dark:hover:bg-gray-700 dark:focus:bg-gray-700 dark:focus:ring-offset-dark-primary"

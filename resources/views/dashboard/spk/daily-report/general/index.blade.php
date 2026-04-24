@@ -3,7 +3,7 @@
     @livewire('components.card', ['type' => 'dailyreport'])
 
     <div
-        class="grid grid-cols-1 gap-2 rounded-xl bg-white p-2 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 lg:gap-4 lg:p-6">
+        class="grid grid-cols-1 gap-2 rounded-xl bg-white p-2 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 lg:gap-4 lg:p-6">
 
         <div class="flex flex-col md:mb-2">
             <span class="text-xl font-semibold text-gray-900 dark:bg-dark-primary dark:text-white">

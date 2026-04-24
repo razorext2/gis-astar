@@ -2,7 +2,7 @@
 @section('content')
     <div class="w-full space-y-6">
         <div
-            class="grid gap-4 rounded-xl bg-white p-4 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 sm:p-6">
+            class="grid gap-4 rounded-xl bg-white p-4 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 sm:p-6">
 
             <div class="w-full">
                 <header class="flex flex-row gap-x-4">
@@ -105,10 +105,10 @@
 
                         <div class="mt-2 hidden text-sm text-red-500" id="alert-keterangan"></div>
                     </div>
-                    <input class="w-full rounded-lg border border-gray-300 bg-gray-400 p-2.5 text-sm text-gray-900"
+                    <input class="w-full rounded-lg border border-zinc-200 bg-gray-400 p-2.5 text-sm text-gray-900"
                         id="longitude" name="longitude" type="hidden" readonly>
 
-                    <input class="w-full rounded-lg border border-gray-300 bg-gray-400 p-2.5 text-sm text-gray-900"
+                    <input class="w-full rounded-lg border border-zinc-200 bg-gray-400 p-2.5 text-sm text-gray-900"
                         id="latitude" name="latitude" type="hidden" readonly>
 
                     <div class="mb-4 hidden text-sm text-red-500" id="alert-coordinate"></div>

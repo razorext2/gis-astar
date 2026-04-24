@@ -54,7 +54,7 @@
 
                         @foreach ($infoData as $item)
                             <div
-                                class="{{ $item['full'] ?? false ? 'col-span-full' : '' }} rounded-2xl border border-white/20 bg-white/40 p-3 shadow-sm transition-all hover:bg-white/60 dark:border-white/5 dark:bg-white/5 dark:hover:bg-white/10">
+                                class="{{ $item['full'] ?? false ? 'col-span-full' : '' }} rounded-2xl border border-white/20 bg-white/40 p-3 shadow-sm transition-all hover:bg-white/60 dark:border-zinc-800 dark:bg-white/5 dark:hover:bg-white/10">
                                 <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
                                     {{ $item['label'] }}</p>
                                 <p class="text-sm font-semibold text-gray-700 dark:text-gray-200">
@@ -116,7 +116,7 @@
                                     data-popover-target="popover-click-{{ $date }}" data-popover-trigger="click"
                                     class="{{ $hasData
                                         ? 'bg-gradient-to-br from-green-500 to-emerald-600 text-white border-green-400 shadow-lg shadow-green-500/20 active:scale-95'
-                                        : 'bg-white/50 text-gray-400 border-gray-100 hover:bg-white hover:text-blue-600 hover:border-blue-200 dark:bg-white/5 dark:text-gray-500 dark:border-white/5 dark:hover:bg-white/10' }} flex h-full w-full items-center justify-center rounded-xl border text-xs font-bold transition-all duration-300">
+                                        : 'bg-white/50 text-gray-400 border-zinc-200 hover:bg-white hover:text-blue-600 hover:border-blue-200 dark:bg-white/5 dark:text-gray-500 dark:border-zinc-800 dark:hover:bg-white/10' }} flex h-full w-full items-center justify-center rounded-xl border text-xs font-bold transition-all duration-300">
                                     {{ \Carbon\Carbon::parse($date)->isoFormat('D') }}
                                 </button>
                             </div>

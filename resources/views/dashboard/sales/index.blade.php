@@ -26,7 +26,7 @@
 
         <div class="flex h-auto items-center justify-center">
             <div
-                class="grid w-full grid-cols-2 gap-2 rounded-xl bg-white p-2 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 md:gap-4 md:p-6">
+                class="grid w-full grid-cols-2 gap-2 rounded-xl bg-white p-2 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 md:gap-4 md:p-6">
 
                 {{-- filter --}}
                 <div class="col-span-2 mb-4">

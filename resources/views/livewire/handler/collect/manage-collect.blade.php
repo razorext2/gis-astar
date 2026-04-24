@@ -1,7 +1,7 @@
 <div>
     {{-- ==================== RESCHEDULE MODAL ==================== --}}
     <div wire:show="showRescheduleModal" wire:transition.duration.300ms
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70">
         @if ($showRescheduleModal)
             <div
                 class="mx-2 flex w-full flex-col gap-3 rounded-2xl bg-white p-4 shadow-2xl dark:bg-dark-primary sm:mx-0 md:w-1/2 md:gap-4 md:p-6 lg:w-2/5 xl:w-1/3">
@@ -27,7 +27,7 @@
                     </div>
                 </div>
 
-                <hr class="border-gray-200 dark:border-gray-700">
+                <hr class="border-zinc-200 dark:border-zinc-800">
 
                 {{-- Tanggal saat ini --}}
                 <div class="rounded-xl bg-gray-50 p-3 dark:bg-gray-800">
@@ -44,7 +44,7 @@
                         Tanggal Baru <span class="text-red-500">*</span>
                     </label>
                     <input
-                        class="block w-full rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 shadow-sm transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-blue-400"
+                        class="block w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-sm text-gray-900 shadow-sm transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-800 dark:bg-gray-800 dark:text-white dark:focus:border-blue-400"
                         id="new_assign_date" type="date" wire:model="new_assign_date" />
                     @error('new_assign_date')
                         <span class="mt-1 text-xs text-red-500">{{ $message }}</span>
@@ -54,7 +54,7 @@
                 {{-- Actions --}}
                 <div class="flex justify-end gap-2 pt-1">
                     <button
-                        class="rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                        class="rounded-xl border border-zinc-200 px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 dark:border-zinc-800 dark:text-gray-300 dark:hover:bg-gray-700"
                         type="button" wire:click="resetModals" id="cancelRescheduleBtn">
                         Batal
                     </button>
@@ -72,7 +72,7 @@
 
     {{-- ==================== CHANGE COLLECTOR MODAL ==================== --}}
     <div wire:show="showChangeCollectorModal" wire:transition.duration.300ms
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70">
         @if ($showChangeCollectorModal)
             <div
                 class="mx-2 flex w-full flex-col gap-3 rounded-2xl bg-white p-4 shadow-2xl dark:bg-dark-primary sm:mx-0 md:w-1/2 md:gap-4 md:p-6 lg:w-2/5 xl:w-1/3">
@@ -91,7 +91,7 @@
                     </div>
                 </div>
 
-                <hr class="border-gray-200 dark:border-gray-700">
+                <hr class="border-zinc-200 dark:border-zinc-800">
 
                 {{-- Kolektor saat ini --}}
                 <div class="rounded-xl bg-gray-50 p-3 dark:bg-gray-800">
@@ -113,7 +113,7 @@
                             <x-icons.search class="h-4 w-4 text-gray-400" />
                         </div>
                         <input
-                            class="block w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-9 pr-3 text-sm text-gray-900 shadow-sm transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-blue-400"
+                            class="block w-full rounded-xl border border-zinc-200 bg-white py-2.5 pl-9 pr-3 text-sm text-gray-900 shadow-sm transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-800 dark:bg-gray-800 dark:text-white dark:focus:border-blue-400"
                             id="search_collector" placeholder="Cari nama atau kode pegawai..." type="text"
                             wire:model.live.debounce.400ms="search_collector" autocomplete="off" />
                     </div>
@@ -121,7 +121,7 @@
                     {{-- Dropdown hasil pencarian --}}
                     @if (count($collectors) > 0)
                         <div
-                            class="absolute left-0 right-0 top-full z-10 mt-1 max-h-52 overflow-y-auto rounded-xl border border-gray-200 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-800">
+                            class="absolute left-0 right-0 top-full z-10 mt-1 max-h-52 overflow-y-auto rounded-xl border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-gray-800">
                             @foreach ($collectors as $collector)
                                 <button
                                     class="flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm transition-colors hover:bg-blue-50 dark:hover:bg-gray-700"

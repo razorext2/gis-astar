@@ -9,14 +9,14 @@
 
             <div class="flex w-full items-start lg:w-44 xl:w-60">
                 <a href="#informasi-customer"
-                    class="text-wrap rounded-b-xl rounded-tl-xl border-t-2 border-gray-200 bg-white p-4 py-2 text-lg font-semibold text-gray-900 transition-all duration-300 ease-in-out hover:scale-[1.05] hover:text-blue-700 dark:border-gray-700 dark:bg-dark-primary dark:text-white hover:dark:text-blue-600">
+                    class="text-wrap rounded-b-xl rounded-tl-xl border-t-2 border-zinc-200 bg-white p-4 py-2 text-lg font-semibold text-gray-900 transition-all duration-300 ease-in-out hover:scale-[1.05] hover:text-blue-700 dark:border-zinc-800 dark:bg-dark-primary dark:text-white hover:dark:text-blue-600">
                     Customer
                 </a>
-                <hr width="100%" class="border border-t border-gray-200 dark:border-gray-700">
+                <hr width="100%" class="border border-t border-zinc-200 dark:border-zinc-800">
             </div>
 
             <div
-                class="grid w-full grid-cols-2 gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:grow lg:gap-4 lg:rounded-b-xl lg:rounded-tl-none lg:rounded-tr-xl lg:p-6">
+                class="grid w-full grid-cols-2 gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:grow lg:gap-4 lg:rounded-b-xl lg:rounded-tl-none lg:rounded-tr-xl lg:p-6">
 
                 <div class="col-span-2 w-full">
                     <x-input.basic x-ref="namaCustomer" id="nama_customer" name="nama_customer"
@@ -68,14 +68,14 @@
         <div id="informasi-barang" class="flex flex-col items-start gap-2 lg:flex-row lg:gap-0">
             <div class="flex w-full items-start lg:w-44 xl:w-60">
                 <a href="#informasi-barang"
-                    class="text-wrap rounded-b-xl rounded-tl-xl border-t-2 border-gray-200 bg-white p-4 py-2 text-lg font-semibold text-gray-900 transition-all duration-300 ease-in-out hover:scale-[1.05] hover:text-blue-700 dark:border-gray-700 dark:bg-dark-primary dark:text-white hover:dark:text-blue-600">
+                    class="text-wrap rounded-b-xl rounded-tl-xl border-t-2 border-zinc-200 bg-white p-4 py-2 text-lg font-semibold text-gray-900 transition-all duration-300 ease-in-out hover:scale-[1.05] hover:text-blue-700 dark:border-zinc-800 dark:bg-dark-primary dark:text-white hover:dark:text-blue-600">
                     Barang
                 </a>
-                <hr width="100%" class="border border-t border-gray-200 dark:border-gray-700">
+                <hr width="100%" class="border border-t border-zinc-200 dark:border-zinc-800">
             </div>
 
             <div
-                class="grid w-full grid-cols-2 gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:grow lg:gap-4 lg:rounded-b-xl lg:rounded-tl-none lg:rounded-tr-xl lg:p-6">
+                class="grid w-full grid-cols-2 gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:grow lg:gap-4 lg:rounded-b-xl lg:rounded-tl-none lg:rounded-tr-xl lg:p-6">
 
                 <div class="col-span-2 flex w-full flex-col items-start gap-4">
                     <div class="w-full">
@@ -149,7 +149,7 @@
                     <div class="flex flex-col gap-y-1 rounded-xl bg-gray-50 p-4 dark:bg-gray-600">
                         <table id="barang-list-table" class="w-full">
                             <thead
-                                class="border-b border-gray-200 text-sm font-semibold text-gray-800 dark:border-gray-400 dark:text-white">
+                                class="border-b border-zinc-200 text-sm font-semibold text-gray-800 dark:border-zinc-800 dark:text-white">
                                 <th class="px-2 py-2">#</th>
                                 <th class="px-2 py-2">Nama Barang</th>
                                 <th class="px-2 py-2">Jumlah</th>
@@ -190,7 +190,7 @@
                                         </td>
                                     </tr>
 
-                                    <tr class="border-b border-gray-200 dark:border-gray-400">
+                                    <tr class="border-b border-zinc-200 dark:border-zinc-800">
                                         <td class="text-sm text-gray-800 dark:text-white">
                                             {!! nl2br(e($row['spesifikasi'] ?? '')) !!}
                                         </td>
@@ -220,14 +220,14 @@
         <div id="informasi-order" class="flex flex-col items-start gap-2 lg:flex-row lg:gap-0">
             <div class="flex w-full items-start lg:w-44 xl:w-60">
                 <a href="#informasi-order"
-                    class="text-wrap rounded-b-xl rounded-tl-xl border-t-2 border-gray-200 bg-white p-4 py-2 text-lg font-semibold text-gray-900 transition-all duration-300 ease-in-out hover:scale-[1.05] hover:text-blue-700 dark:border-gray-700 dark:bg-dark-primary dark:text-white hover:dark:text-blue-600">
+                    class="text-wrap rounded-b-xl rounded-tl-xl border-t-2 border-zinc-200 bg-white p-4 py-2 text-lg font-semibold text-gray-900 transition-all duration-300 ease-in-out hover:scale-[1.05] hover:text-blue-700 dark:border-zinc-800 dark:bg-dark-primary dark:text-white hover:dark:text-blue-600">
                     Order
                 </a>
-                <hr width="100%" class="border border-t border-gray-200 dark:border-gray-700">
+                <hr width="100%" class="border border-t border-zinc-200 dark:border-zinc-800">
             </div>
 
             <div
-                class="grid w-full grid-cols-2 gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:grow lg:gap-4 lg:rounded-b-xl lg:rounded-tl-none lg:rounded-tr-xl lg:p-6">
+                class="grid w-full grid-cols-2 gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:grow lg:gap-4 lg:rounded-b-xl lg:rounded-tl-none lg:rounded-tr-xl lg:p-6">
 
                 <div class="col-span-2 w-full dark:text-white">
                     <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="tipe_tagihan">
@@ -235,7 +235,7 @@
                     </label>
 
                     <select
-                        class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                        class="block w-full rounded-lg border border-zinc-200 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                         id="tipe_tagihan" name="tipe_tagihan" wire:model.live="createForm.tipe_tagihan">
                         <option value="">Pilih tipe tagihan...</option>
                         @foreach (config('spk-config.spk_tipe_tagihan') as $key => $row)
@@ -318,7 +318,7 @@
                     </label>
 
                     <select
-                        class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                        class="block w-full rounded-lg border border-zinc-200 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                         id="assign_to" name="assign_to" wire:model="createForm.assign_to">
                         <option value="">Pilih Produksi</option>
                         @forelse ($users as $row)
@@ -354,17 +354,17 @@
         <div id="informasi-tambahan" class="flex flex-col items-start gap-2 lg:flex-row lg:gap-0">
             <div class="flex w-full items-start lg:w-44 xl:w-60">
                 <a href="#informasi-tambahan"
-                    class="text-wrap rounded-b-xl rounded-tl-xl border-t-2 border-gray-200 bg-white p-4 py-2 text-lg font-semibold text-gray-900 transition-all duration-300 ease-in-out hover:scale-[1.05] hover:text-blue-700 dark:border-gray-700 dark:bg-dark-primary dark:text-white hover:dark:text-blue-600">
+                    class="text-wrap rounded-b-xl rounded-tl-xl border-t-2 border-zinc-200 bg-white p-4 py-2 text-lg font-semibold text-gray-900 transition-all duration-300 ease-in-out hover:scale-[1.05] hover:text-blue-700 dark:border-zinc-800 dark:bg-dark-primary dark:text-white hover:dark:text-blue-600">
                     Additional
                 </a>
-                <hr width="100%" class="border border-t border-gray-200 dark:border-gray-700">
+                <hr width="100%" class="border border-t border-zinc-200 dark:border-zinc-800">
             </div>
 
             <div
-                class="grid w-full grid-cols-2 gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:grow lg:gap-4 lg:rounded-b-xl lg:rounded-tl-none lg:rounded-tr-xl lg:p-6">
+                class="grid w-full grid-cols-2 gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:grow lg:gap-4 lg:rounded-b-xl lg:rounded-tl-none lg:rounded-tr-xl lg:p-6">
 
                 <div
-                    class="col-span-2 grid w-full grid-cols-1 gap-2 rounded-lg border border-gray-200 p-2 dark:border-gray-600 lg:gap-4 lg:p-4">
+                    class="col-span-2 grid w-full grid-cols-1 gap-2 rounded-lg border border-zinc-200 p-2 dark:border-zinc-800 lg:gap-4 lg:p-4">
 
                     <div x-show="$wire.docForm.new_attachments.length > 0">
                         <span class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
@@ -372,7 +372,7 @@
                         </span>
 
                         <ul
-                            class="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white shadow-sm dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-700">
+                            class="divide-y divide-gray-200 rounded-lg border border-zinc-200 bg-white shadow-sm dark:divide-gray-700 dark:border-zinc-800 dark:bg-gray-700">
 
                             @foreach ($docForm->new_attachments as $index => $row)
                                 <li
@@ -415,7 +415,7 @@
                             x-on:livewire-upload-error="uploading = false"
                             x-on:livewire-upload-progress="progress = $event.detail.progress">
                             <label for="attachment"
-                                class="flex h-36 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-800">
+                                class="flex h-36 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-200 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-zinc-800 dark:bg-gray-700 dark:hover:border-zinc-800 dark:hover:bg-gray-800">
                                 <div class="flex flex-col items-center justify-center pb-6 pt-5">
                                     <x-icons.cloud-upload class="mb-2 h-8 w-8 text-gray-500 dark:text-gray-400" />
 
@@ -536,7 +536,7 @@
                     <div class="flex items-center">
                         <input id="is_using_company_driver" type="checkbox"
                             wire:model.live="createForm.is_using_company_driver"
-                            class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800 lg:h-5 lg:w-5">
+                            class="h-4 w-4 rounded-sm border-zinc-200 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800 lg:h-5 lg:w-5">
                         <label for="is_using_company_driver"
                             class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 lg:text-base">
                             Apakah SPK akan dikirim menggunakan supir perusahaan?
@@ -552,7 +552,7 @@
                     <div class="flex items-center">
                         <input id="is_picked_up_by_customer" type="checkbox"
                             wire:model.live="createForm.is_picked_up_by_customer"
-                            class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800 lg:h-5 lg:w-5">
+                            class="h-4 w-4 rounded-sm border-zinc-200 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800 lg:h-5 lg:w-5">
                         <label for="is_picked_up_by_customer"
                             class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 lg:text-base">
                             Apakah SPK akan dijemput oleh customer?
@@ -567,7 +567,7 @@
                 <div class="col-span-2 w-full">
                     <div class="flex items-center">
                         <input id="is_booked" type="checkbox" wire:model.live="createForm.is_booked"
-                            class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800 lg:h-5 lg:w-5">
+                            class="h-4 w-4 rounded-sm border-zinc-200 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800 lg:h-5 lg:w-5">
                         <label for="is_booked"
                             class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 lg:text-base">
                             Book Nomor SPK

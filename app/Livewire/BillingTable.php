@@ -128,7 +128,7 @@ final class BillingTable extends PowerGridComponent
             Button::make('edit')
                 ->slot($statusColor['label'])
                 ->id($row->id)
-                ->class('text-sm dark:border-gray-700 rounded-lg bg-green-400 px-2 py-1.5 font-semibold  border border-gray-200 '.$statusColor['color'])
+                ->class('text-sm dark:border-zinc-800 rounded-lg bg-green-400 px-2 py-1.5 font-semibold  border border-zinc-200 '.$statusColor['color'])
                 ->route('billing.edit', ['id' => $row->id]),
         ];
     }

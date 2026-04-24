@@ -3,20 +3,21 @@
 namespace App\Livewire;
 
 use App\Models\Announcement;
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\View\View;
-use PowerComponents\LivewirePowerGrid\Button;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
-use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use PowerComponents\LivewirePowerGrid\PowerGridFields;
 
 final class AnnouncementTable extends PowerGridComponent
 {
     public string $tableName = 'AnnouncementTable';
+
     public bool $deferLoading = true;
+
     public bool $showFilters = true;
 
     public function setUp(): array
@@ -36,7 +37,7 @@ final class AnnouncementTable extends PowerGridComponent
 
     public function btnClass()
     {
-        return 'dark:bg-red-800 dark:hover:bg-red-900 dark:text-white dark:border-gray-700 rounded-lg bg-red-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-red-700 me-0.5';
+        return 'dark:bg-red-800 dark:hover:bg-red-900 dark:text-white dark:border-zinc-800 rounded-lg bg-red-400 px-2 py-1.5 font-semibold text-white border border-zinc-200 hover:bg-red-700 me-0.5';
     }
 
     public function header(): array
@@ -111,23 +112,23 @@ final class AnnouncementTable extends PowerGridComponent
             [
                 'id' => 'state-btn',
                 'action' => 'javascript:void(0)',
-                'label' => 'Ubah Status'
+                'label' => 'Ubah Status',
             ],
             [
                 'id' => 'edit-btn',
                 'action' => 'javascript:void(0)',
-                'label' => 'Edit'
+                'label' => 'Edit',
             ],
             [
                 'id' => 'delete-btn',
                 'action' => 'javascript:void(0)',
                 'label' => 'Hapus',
-            ]
+            ],
         ];
 
         return view('components.dashboard.action-buttons', [
             'id' => $row->id,
-            'datas' => $actions
+            'datas' => $actions,
         ]);
     }
 }

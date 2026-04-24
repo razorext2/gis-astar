@@ -26,7 +26,7 @@
             {{-- Activity Timeline --}}
             <div
                 class="relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-6 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60 lg:p-8">
-                <div class="mb-8 border-b border-white/20 pb-4 dark:border-white/5">
+                <div class="mb-8 border-b border-white/20 pb-4 dark:border-zinc-800">
                     <h2 class="text-2xl font-bold tracking-tight text-gray-800 dark:text-white">
                         {{ $pegawai->full_name }}
                     </h2>
@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="relative pl-2">
-                    <ol class="relative ml-4 border-l-2 border-dashed border-gray-200 dark:border-gray-700"
+                    <ol class="relative ml-4 border-l-2 border-dashed border-zinc-200 dark:border-zinc-800"
                         id="timelineContent">
                         @if ($attendances->isNotEmpty())
                             @foreach ($attendances as $data)

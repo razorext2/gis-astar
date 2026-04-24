@@ -39,7 +39,7 @@
                     <div
                         class="mx-4 overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 sm:mx-0">
                         <div
-                            class="flex items-center justify-between border-b border-zinc-100 px-4 py-3 dark:border-zinc-800">
+                            class="flex items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
                             <div class="flex items-center gap-2">
                                 <div class="h-1.5 w-1.5 rounded-full bg-red-600 shadow-[0_0_6px_rgba(220,38,38,0.5)]">
                                 </div>
@@ -49,7 +49,7 @@
 
                         <div class="max-h-72 overflow-y-auto md:max-h-96" id="notificationContainer"></div>
 
-                        <div class="border-t border-zinc-100 px-4 py-3 dark:border-zinc-800">
+                        <div class="border-t border-zinc-200 px-4 py-3 dark:border-zinc-800">
                             <a class="text-sm font-semibold text-red-600 transition-colors hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
                                 href="{{ route('notifications.index') }}">
                                 Lihat semua notifikasi →
@@ -77,7 +77,7 @@
                     id="profile-dropdown">
 
                     {{-- User Info --}}
-                    <div class="flex items-center gap-3 border-b border-zinc-100 px-4 py-3.5 dark:border-zinc-800">
+                    <div class="flex items-center gap-3 border-b border-zinc-200 px-4 py-3.5 dark:border-zinc-800">
                         <img class="h-9 w-9 shrink-0 rounded-full object-cover ring-2 ring-zinc-200 dark:ring-zinc-700"
                             src="{{ auth()->user()->profile_pic ? asset('storage/profile-pictures/' . auth()->user()->profile_pic) : asset('assets/img/profile-picture-5.jpg') }}"
                             alt="user photo" loading="lazy"
@@ -143,7 +143,7 @@
                     </ul>
 
                     {{-- Sign Out & Install --}}
-                    <ul class="border-t border-zinc-100 py-1.5 dark:border-zinc-800" aria-labelledby="dropdown-item">
+                    <ul class="border-t border-zinc-200 py-1.5 dark:border-zinc-800" aria-labelledby="dropdown-item">
                         <li>
                             <form id="logout" method="post" action="{{ route('logout') }}"
                                 onclick="event.preventDefault();">@csrf</form>

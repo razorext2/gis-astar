@@ -81,7 +81,7 @@
                     <div class="space-y-2">
                         <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Status Akun</label>
                         <select wire:model.live="is_active"
-                            class="block w-full rounded-xl border border-gray-200 bg-white/50 p-2.5 text-sm transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500">
+                            class="block w-full rounded-xl border border-zinc-200 bg-white/50 p-2.5 text-sm transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-zinc-800 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500">
                             <option value="1">Aktif</option>
                             <option value="0">Tidak Aktif</option>
                         </select>
@@ -160,9 +160,9 @@
                                 @foreach ($list_roles as $role)
                                     <label
                                         x-show="search === '' || '{{ strtolower($role->name) }}'.includes(search.toLowerCase())"
-                                        class="role-item group/role flex cursor-pointer items-center gap-3 rounded-2xl border border-gray-200 p-4 transition-all hover:border-blue-300 hover:bg-blue-50 dark:border-gray-700 dark:hover:border-blue-700 dark:hover:bg-blue-900/20">
+                                        class="role-item group/role flex cursor-pointer items-center gap-3 rounded-2xl border border-zinc-200 p-4 transition-all hover:border-blue-300 hover:bg-blue-50 dark:border-zinc-800 dark:hover:border-blue-700 dark:hover:bg-blue-900/20">
                                         <input wire:model="selected_roles" type="checkbox" value="{{ $role->name }}"
-                                            class="h-5 w-5 rounded-lg border-gray-300 text-blue-600 focus:ring-blue-500">
+                                            class="h-5 w-5 rounded-lg border-zinc-200 text-blue-600 focus:ring-blue-500">
                                         <span
                                             class="text-sm font-medium text-gray-700 transition-colors group-hover/role:text-blue-600 dark:text-gray-200">{{ $role->name }}</span>
                                     </label>

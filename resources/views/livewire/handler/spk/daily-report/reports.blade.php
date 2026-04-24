@@ -4,7 +4,7 @@
         Daftar staff pada project ini
     </h3>
 
-    <div class="w-full rounded-xl bg-white shadow-sm ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700">
+    <div class="w-full rounded-xl bg-white shadow-sm ring-1 ring-zinc-200 dark:bg-gray-800 dark:ring-zinc-800">
 
         <div class="divide-y divide-gray-200 dark:divide-gray-700">
 
@@ -118,7 +118,7 @@
         </div>
 
         {{-- PAGINATION --}}
-        <div class="border-t border-gray-200 p-2 dark:border-gray-700 lg:p-4">
+        <div class="border-t border-zinc-200 p-2 dark:border-zinc-800 lg:p-4">
             {{ $this->assignments->links() }}
         </div>
     </div>

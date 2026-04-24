@@ -23,7 +23,7 @@
             <!-- Checkbox for "Select All" -->
             <div class="mb-4 flex items-center">
                 <input
-                    class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-green-600 focus:ring-2 focus:ring-green-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-green-600"
+                    class="h-4 w-4 rounded border-zinc-200 bg-gray-100 text-green-600 focus:ring-2 focus:ring-green-500 dark:border-zinc-800 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-green-600"
                     id="select-all" type="checkbox" wire:model="selectAll" wire:click="toggleSelectAll">
                 <label class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="select-all">
                     Select All
@@ -33,7 +33,7 @@
             <div class="mt-4 space-y-4">
                 @forelse ($groupedPermissions as $group => $perms)
                     <div
-                        class="rounded-xl border border-gray-200 bg-white/50 p-4 backdrop-blur-sm dark:border-gray-700 dark:bg-gray-800/50">
+                        class="rounded-xl border border-zinc-200 bg-white/50 p-4 backdrop-blur-sm dark:border-zinc-800 dark:bg-gray-800/50">
                         <h3
                             class="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-red-600 dark:text-red-400">
                             <span class="h-1 w-4 rounded-full bg-red-600 dark:bg-red-400"></span>
@@ -44,7 +44,7 @@
                                 <div
                                     class="group flex items-center space-x-2 transition-all duration-200 hover:translate-x-1">
                                     <input
-                                        class="permission-checkbox h-4 w-4 rounded border-gray-300 bg-gray-100 text-green-600 focus:ring-2 focus:ring-green-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-green-600"
+                                        class="permission-checkbox h-4 w-4 rounded border-zinc-200 bg-gray-100 text-green-600 focus:ring-2 focus:ring-green-500 dark:border-zinc-800 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-green-600"
                                         id="permission[{{ $permission->id }}]" name="permission[{{ $permission->id }}]"
                                         type="checkbox" value="{{ $permission->id }}"
                                         wire:model.blur="form.selectedPermissions">
@@ -59,7 +59,7 @@
                     </div>
                 @empty
                     <div
-                        class="flex flex-col items-center justify-center rounded-xl border border-dashed border-gray-300 p-8 dark:border-gray-600">
+                        class="flex flex-col items-center justify-center rounded-xl border border-dashed border-zinc-200 p-8 dark:border-zinc-800">
                         <x-icons.search class="mb-3 h-10 w-10 text-gray-400" />
                         <p class="text-sm text-gray-500 dark:text-gray-400">Tidak ada perizinan yang ditemukan dengan
                             kata kunci "{{ $searchPermission }}"</p>

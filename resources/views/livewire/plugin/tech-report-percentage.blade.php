@@ -79,7 +79,7 @@
 
                 @foreach ($statusCards as $card)
                     <div
-                        class="flex flex-col gap-2 rounded-2xl border border-zinc-100 bg-zinc-50/50 p-4 transition-all hover:scale-[1.02] hover:bg-white dark:border-zinc-800 dark:bg-zinc-900/40 dark:hover:bg-zinc-800/60">
+                        class="flex flex-col gap-2 rounded-2xl border border-zinc-200 bg-zinc-50/50 p-4 transition-all hover:scale-[1.02] hover:bg-white dark:border-zinc-800 dark:bg-zinc-900/40 dark:hover:bg-zinc-800/60">
                         <div class="flex items-center justify-between">
                             <div
                                 class="{{ str_replace('bg-', 'bg-opacity-10 ', $card['color']) }} {{ $card['text'] }} flex h-8 w-8 items-center justify-center rounded-lg">
@@ -104,7 +104,7 @@
             </div>
 
             <div
-                class="space-y-4 rounded-2xl border border-zinc-100 bg-zinc-50/50 p-5 dark:border-zinc-800 dark:bg-zinc-900/40">
+                class="space-y-4 rounded-2xl border border-zinc-200 bg-zinc-50/50 p-5 dark:border-zinc-800 dark:bg-zinc-900/40">
                 @foreach ($historicalData as $item)
                     <div class="space-y-2">
                         <div class="flex items-center justify-between text-xs font-bold">

@@ -1,9 +1,9 @@
 <div class="w-full">
     {{-- informasi project --}}
     <div
-        class="mb-2 w-full rounded-xl bg-white shadow-sm ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700 lg:mb-4">
+        class="mb-2 w-full rounded-xl bg-white shadow-sm ring-1 ring-zinc-200 dark:bg-gray-800 dark:ring-zinc-800 lg:mb-4">
         {{-- HEADER --}}
-        <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-700">
+        <div class="border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
                 Informasi Project <span
                     class="bg-{{ $assignment->status == 'in_progress' ? 'yellow' : 'green' }}-500 text-{{ $assignment->status == 'in_progress' ? 'yellow' : 'green' }}-100 ms-2 rounded-lg px-2 py-0.5 text-xs">
@@ -17,7 +17,7 @@
             @if ($assignment->status === 'completed')
                 {{-- signature dan ekspor  --}}
                 <x-button.link
-                    class="absolute right-2 top-2 bg-green-100 ring-1 ring-green-700 hover:bg-green-300 focus:scale-105 dark:bg-green-800 dark:text-white dark:ring-gray-700 dark:hover:bg-green-900"
+                    class="absolute right-2 top-2 bg-green-100 ring-1 ring-green-700 hover:bg-green-300 focus:scale-105 dark:bg-green-800 dark:text-white dark:ring-zinc-800 dark:hover:bg-green-900"
                     id="signature-btn" type="button"
                     href="{{ route('report.general.customer-assignment', ['id' => $assignment->id]) }}" wire:navigate>
                     <x-icons.pen-nib class="h-5 w-5" />
@@ -125,7 +125,7 @@
 
             {{-- extend request --}}
             @if ($assignment->project->extend_request)
-                <div class="col-span-2 rounded-lg bg-gray-800 p-2 ring-1 ring-gray-200 dark:ring-gray-700 lg:p-4">
+                <div class="col-span-2 rounded-lg bg-gray-800 p-2 ring-1 ring-zinc-200 dark:ring-zinc-800 lg:p-4">
                     <div class="text-gray-800 dark:text-white">
                         <p>
                             <span class="font-semibold">
@@ -244,7 +244,7 @@
         </div>
 
         {{-- LIST CONTAINER --}}
-        <div class="w-full rounded-xl bg-white shadow-sm ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700">
+        <div class="w-full rounded-xl bg-white shadow-sm ring-1 ring-zinc-200 dark:bg-gray-800 dark:ring-zinc-800">
             <div class="flex flex-col divide-y divide-gray-200 dark:divide-gray-700">
                 @forelse ($this->dailyReports as $index => $row)
                     <div class="relative p-2 transition hover:bg-gray-50 dark:hover:bg-gray-700/40 lg:p-4">
@@ -350,7 +350,7 @@
             </div>
 
             {{-- PAGINATION --}}
-            <div class="border-t border-gray-200 p-2 dark:border-gray-700 lg:p-4">
+            <div class="border-t border-zinc-200 p-2 dark:border-zinc-800 lg:p-4">
                 {{ $this->dailyReports->links() }}
             </div>
         </div>
@@ -359,7 +359,7 @@
     {{-- summary modal --}}
     @can('laporan-harian-validate')
         <div id="summary-modal" wire:show="showSummaryModal" wire:transition.duration.300ms
-            class="fixed inset-0 z-[99] flex items-center justify-center bg-black bg-opacity-70 py-8">
+            class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 py-8">
             @if ($showSummaryModal)
                 <div class="relative mx-4 my-6 flex w-full flex-col gap-1 overflow-y-auto rounded-xl bg-white p-4 shadow-2xl dark:bg-dark-primary md:w-1/2 md:gap-2 lg:p-6"
                     style="max-height: calc(100vh - 6rem);">
@@ -387,7 +387,7 @@
 
                         @forelse($activities as $row)
                             <div
-                                class="mb-2 rounded-lg border border-gray-100 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 sm:space-y-2 lg:mb-4">
+                                class="mb-2 rounded-lg border border-zinc-200 bg-gray-50 p-4 dark:border-zinc-800 dark:bg-gray-800 sm:space-y-2 lg:mb-4">
 
                                 <dl class="items-start justify-between gap-4 sm:flex">
                                     <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">
@@ -417,7 +417,7 @@
                             </div>
                         @empty
                             <div
-                                class="mb-2 rounded-lg border border-gray-100 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 sm:space-y-2 lg:mb-4">
+                                class="mb-2 rounded-lg border border-zinc-200 bg-gray-50 p-4 dark:border-zinc-800 dark:bg-gray-800 sm:space-y-2 lg:mb-4">
                                 <p class="font-semibold text-gray-800 dark:text-white">Belum ada riwayat aktivitas.</p>
                             </div>
                         @endforelse
@@ -443,7 +443,7 @@
     {{-- extend deadline modal --}}
     @can('laporan-harian-extend')
         <div id="extend-modal" wire:show="showExtendModal" wire:transition.duration.300ms
-            class="fixed inset-0 z-[99] flex items-center justify-center bg-black bg-opacity-70 py-8">
+            class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 py-8">
             @if ($showExtendModal)
                 <div class="relative mx-4 my-6 flex w-full flex-col gap-1 overflow-y-auto rounded-xl bg-white p-4 shadow-2xl dark:bg-dark-primary md:w-1/3 md:gap-2 lg:p-6"
                     style="max-height: calc(100vh - 6rem);">

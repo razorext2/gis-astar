@@ -46,7 +46,7 @@
                                 Kode Pegawai
                             </label>
                             <input type="text" value="{{ $kode_pegawai }}" disabled
-                                class="block w-full cursor-not-allowed rounded-xl border-gray-300 bg-gray-100 p-2.5 text-sm dark:border-gray-600 dark:bg-zinc-800 dark:text-gray-400">
+                                class="block w-full cursor-not-allowed rounded-xl border-zinc-200 bg-gray-100 p-2.5 text-sm dark:border-zinc-800 dark:bg-zinc-800 dark:text-gray-400">
                             <p class="mt-1 text-xs italic text-gray-500">* Kode pegawai tidak dapat diubah</p>
                         </div>
                     </div>
@@ -95,7 +95,7 @@
                         <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                             for="tgl_lahir">Tanggal Lahir</label>
                         <input wire:model="tgl_lahir" type="date"
-                            class="block w-full rounded-xl border-gray-300 bg-white/50 p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-dark-secondary dark:text-white">
+                            class="block w-full rounded-xl border-zinc-200 bg-white/50 p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-dark-secondary dark:text-white">
                         @error('tgl_lahir')
                             <span class="text-xs text-red-500">{{ $message }}</span>
                         @enderror
@@ -197,7 +197,7 @@
                                         <x-icons.search class="h-4 w-4 text-gray-400" />
                                     </div>
                                     <input x-model="search" type="text"
-                                        class="block w-full rounded-xl border-gray-300 bg-white/50 pl-10 text-xs focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-dark-secondary dark:text-white"
+                                        class="block w-full rounded-xl border-zinc-200 bg-white/50 pl-10 text-xs focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-dark-secondary dark:text-white"
                                         placeholder="Cari role...">
                                 </div>
                             </div>
@@ -205,10 +205,10 @@
                                 @foreach ($list_roles as $role)
                                     <label
                                         x-show="search === '' || '{{ strtolower($role->name) }}'.includes(search.toLowerCase())"
-                                        class="role-item group/role flex cursor-pointer items-center gap-3 rounded-2xl border border-gray-200 p-4 transition-all hover:border-blue-300 hover:bg-blue-50 dark:border-gray-700 dark:hover:border-blue-700 dark:hover:bg-blue-900/20">
+                                        class="role-item group/role flex cursor-pointer items-center gap-3 rounded-2xl border border-zinc-200 p-4 transition-all hover:border-blue-300 hover:bg-blue-50 dark:border-zinc-800 dark:hover:border-blue-700 dark:hover:bg-blue-900/20">
                                         <input wire:model="selected_roles" type="checkbox"
                                             value="{{ $role->name }}"
-                                            class="h-5 w-5 rounded-lg border-gray-300 text-blue-600 focus:ring-blue-500">
+                                            class="h-5 w-5 rounded-lg border-zinc-200 text-blue-600 focus:ring-blue-500">
                                         <span
                                             class="text-sm font-medium text-gray-700 transition-colors group-hover/role:text-blue-600 dark:text-gray-200">{{ $role->name }}</span>
                                     </label>
@@ -251,7 +251,7 @@
                         <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Ganti Foto
                             1</label>
                         <div
-                            class="group relative flex h-48 w-full flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-gray-300 transition-colors hover:border-blue-500 dark:border-gray-600">
+                            class="group relative flex h-48 w-full flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-zinc-200 transition-colors hover:border-blue-500 dark:border-zinc-800">
                             @if ($photo1)
                                 <img src="{{ $photo1->temporaryUrl() }}"
                                     class="absolute inset-0 h-full w-full object-cover">
@@ -289,7 +289,7 @@
                         <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Ganti Foto
                             2</label>
                         <div
-                            class="group relative flex h-48 w-full flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-gray-300 transition-colors hover:border-blue-500 dark:border-gray-600">
+                            class="group relative flex h-48 w-full flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-zinc-200 transition-colors hover:border-blue-500 dark:border-zinc-800">
                             @if ($photo2)
                                 <img src="{{ $photo2->temporaryUrl() }}"
                                     class="absolute inset-0 h-full w-full object-cover">
@@ -335,7 +335,7 @@
                 <div class="grid grid-cols-2 gap-4">
                     @forelse($existing_images as $img)
                         <div
-                            class="group relative h-32 overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-700">
+                            class="group relative h-32 overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800">
                             <img src="{{ asset('storage/' . $pegawai->storage . $img) }}"
                                 class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110">
                             <div

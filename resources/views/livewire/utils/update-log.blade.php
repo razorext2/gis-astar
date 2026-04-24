@@ -30,7 +30,7 @@
                 style="max-height: 85vh;">
 
                 {{-- Header --}}
-                <div class="flex items-center justify-between border-b border-zinc-100 p-6 dark:border-zinc-800">
+                <div class="flex items-center justify-between border-b border-zinc-200 p-6 dark:border-zinc-800">
                     <div class="flex items-center gap-3">
                         <div
                             class="flex h-10 w-10 items-center justify-center rounded-xl bg-red-600 text-white shadow-lg shadow-red-500/20">
@@ -75,7 +75,7 @@
                 {{-- Timeline Content --}}
                 <div
                     class="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700 flex-1 overflow-y-auto p-6">
-                    <div class="relative border-l-2 border-zinc-100 pl-8 dark:border-zinc-800">
+                    <div class="relative border-l-2 border-zinc-200 pl-8 dark:border-zinc-800">
                         @foreach ($this->logHistories() as $row)
                             @php
                                 $commit = $row['commit'];
@@ -102,7 +102,7 @@
 
                                 {{-- Commit Card --}}
                                 <div
-                                    class="group rounded-2xl border border-zinc-100 bg-zinc-50/50 p-5 transition-all hover:border-red-200 hover:bg-white hover:shadow-xl hover:shadow-red-500/5 dark:border-zinc-800 dark:bg-zinc-800/30 dark:hover:border-red-900/50 dark:hover:bg-zinc-800/60">
+                                    class="group rounded-2xl border border-zinc-200 bg-zinc-50/50 p-5 transition-all hover:border-red-200 hover:bg-white hover:shadow-xl hover:shadow-red-500/5 dark:border-zinc-800 dark:bg-zinc-800/30 dark:hover:border-red-900/50 dark:hover:bg-zinc-800/60">
                                     <h3 class="font-bold leading-snug text-zinc-900 dark:text-white sm:text-lg">
                                         {{ $message }}
                                     </h3>
@@ -143,7 +143,7 @@
                                                         };
                                                     @endphp
                                                     <div title="{{ $file['name'] }}"
-                                                        class="flex items-center gap-2 rounded-lg border border-zinc-100/50 bg-white p-2 transition-all hover:border-zinc-200 dark:border-zinc-800/50 dark:bg-zinc-900/50 dark:hover:border-zinc-700">
+                                                        class="flex items-center gap-2 rounded-lg border border-zinc-200/50 bg-white p-2 transition-all hover:border-zinc-200 dark:border-zinc-800/50 dark:bg-zinc-900/50 dark:hover:border-zinc-700">
                                                         <div
                                                             class="{{ $statusData['bg'] }} {{ $statusData['color'] }} flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-[10px] font-black">
                                                             {{ $statusData['icon'] }}
@@ -159,7 +159,7 @@
                                     @endif
 
                                     <div
-                                        class="mt-4 flex flex-wrap items-center gap-3 border-t border-zinc-100 pt-4 dark:border-zinc-800/50">
+                                        class="mt-4 flex flex-wrap items-center gap-3 border-t border-zinc-200 pt-4 dark:border-zinc-800/50">
                                         {{-- Committer Avatar (Placeholder Initials) --}}
                                         <div
                                             class="flex h-7 w-7 items-center justify-center rounded-lg bg-zinc-200 text-[10px] font-bold text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400">
@@ -179,7 +179,7 @@
                 </div>
 
                 {{-- Footer --}}
-                <div class="border-t border-zinc-100 bg-zinc-50/50 p-5 dark:border-zinc-800 dark:bg-zinc-950/20">
+                <div class="border-t border-zinc-200 bg-zinc-50/50 p-5 dark:border-zinc-800 dark:bg-zinc-950/20">
                     <button @click="show = false"
                         class="w-full rounded-xl bg-zinc-900 px-4 py-3 text-sm font-bold text-white transition-all hover:bg-zinc-800 active:scale-[0.98] dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200">
                         Selesai Membaca

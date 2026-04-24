@@ -20,7 +20,7 @@
 
         <div class="flex items-center gap-x-2">
             <input
-                class="w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:placeholder-gray-400"
+                class="w-full cursor-pointer rounded-lg border border-zinc-200 bg-gray-50 text-sm text-gray-900 focus:outline-none dark:border-zinc-800 dark:bg-gray-700 dark:text-gray-400 dark:placeholder-gray-400"
                 aria-describedby="user_avatar_help" id="user_avatar" wire:model="photo" type="file">
             <x-button.primary type="submit">
 

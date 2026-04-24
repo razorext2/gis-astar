@@ -1,7 +1,7 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
     <div
-        class="flex w-full flex-col gap-2 rounded-xl border-[1px] border-gray-200 bg-white p-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
+        class="flex w-full flex-col gap-2 rounded-xl border-[1px] border-zinc-200 bg-white p-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
 
         <div class="flex flex-row items-center gap-2 lg:gap-4">
 
@@ -53,7 +53,7 @@
                                 <tbody>
                                     @forelse ($rows as $index => $row)
                                         <tr
-                                            class="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
+                                            class="border-b border-zinc-200 bg-white hover:bg-gray-50 dark:border-zinc-800 dark:bg-gray-800 dark:hover:bg-gray-600">
                                             <td class="px-6 py-4 text-center">
                                                 <span>{{ $index + 1 ?? '-' }}</span>
                                             </td>
@@ -75,7 +75,7 @@
                                         </tr>
                                     @empty
                                         <tr
-                                            class="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
+                                            class="border-b border-zinc-200 bg-white hover:bg-gray-50 dark:border-zinc-800 dark:bg-gray-800 dark:hover:bg-gray-600">
                                             <td colspan="6" class="px-6 py-4 text-center">Tidak ada data yang ditemukan.
                                             </td>
                                         </tr>
@@ -84,7 +84,7 @@
                             </table>
                         @empty
                             <p
-                                class="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
+                                class="border-b border-zinc-200 bg-white hover:bg-gray-50 dark:border-zinc-800 dark:bg-gray-800 dark:hover:bg-gray-600">
                                 <span class="px-6 py-4 text-center">Tidak ada data yang ditemukan.</span>
                             </p>
                         @endforelse
@@ -106,7 +106,7 @@
                             <tbody>
                                 @forelse ($data as $index => $row)
                                     <tr
-                                        class="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
+                                        class="border-b border-zinc-200 bg-white hover:bg-gray-50 dark:border-zinc-800 dark:bg-gray-800 dark:hover:bg-gray-600">
                                         <td class="px-6 py-4 text-center">
                                             <span>{{ $index + 1 ?? '-' }}</span>
                                         </td>
@@ -131,7 +131,7 @@
                                     </tr>
                                 @empty
                                     <tr
-                                        class="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
+                                        class="border-b border-zinc-200 bg-white hover:bg-gray-50 dark:border-zinc-800 dark:bg-gray-800 dark:hover:bg-gray-600">
                                         <td colspan="7" class="px-6 py-4 text-center">Tidak ada data yang ditemukan.</td>
                                     </tr>
                                 @endforelse

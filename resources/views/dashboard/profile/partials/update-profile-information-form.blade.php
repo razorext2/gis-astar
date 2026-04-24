@@ -1,5 +1,5 @@
 <section>
-    <header class="mb-6 border-b border-zinc-100 pb-5 dark:border-zinc-800">
+    <header class="mb-6 border-b border-zinc-200 pb-5 dark:border-zinc-800">
         <h2 class="text-base font-bold text-zinc-900 dark:text-white">
             {{ __('Informasi Profil') }}
         </h2>

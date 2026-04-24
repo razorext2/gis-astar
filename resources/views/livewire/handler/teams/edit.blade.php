@@ -30,7 +30,7 @@
 
         <!-- Ketua Tim -->
         <div
-            class="flex flex-col rounded-xl bg-gray-50/50 p-4 ring-1 ring-gray-200 dark:bg-gray-800/30 dark:ring-gray-700/50">
+            class="flex flex-col rounded-xl bg-gray-50/50 p-4 ring-1 ring-zinc-200 dark:bg-gray-800/30 dark:ring-zinc-800/50">
             <div class="mb-2 flex items-center gap-3">
                 <div class="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg">
                     <x-icons.user class="text-primary h-6 w-6" />
@@ -58,20 +58,20 @@
 
                 @if ($search_user != '')
                     <div
-                        class="mt-3 max-h-[220px] overflow-y-auto rounded-xl bg-white p-2 shadow-sm ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700">
+                        class="mt-3 max-h-[220px] overflow-y-auto rounded-xl bg-white p-2 shadow-sm ring-1 ring-zinc-200 dark:bg-gray-800 dark:ring-zinc-800">
                         @forelse ($users as $user)
                             <label for="helper-radio-{{ $user->kode_pegawai }}"
                                 class="group flex cursor-pointer items-center rounded-lg p-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50">
                                 <div class="flex h-5 items-center">
                                     <input wire:model="team_leader" id="helper-radio-{{ $user->kode_pegawai }}"
                                         type="radio" value="{{ $user->kode_pegawai }}"
-                                        class="text-primary focus:ring-primary/50 h-4 w-4 border-gray-300 bg-gray-100 focus:ring-2 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800">
+                                        class="text-primary focus:ring-primary/50 h-4 w-4 border-zinc-200 bg-gray-100 focus:ring-2 dark:border-zinc-800 dark:bg-gray-700 dark:ring-offset-gray-800">
                                 </div>
                                 <div class="ms-3 flex flex-col">
                                     <span
                                         class="group-hover:text-primary font-semibold text-gray-900 dark:text-gray-200 dark:group-hover:text-white">{{ $user->name }}</span>
                                     <span class="text-sm text-gray-500 dark:text-gray-400">Kode Sidik Jari: <span
-                                            class="border-gray-300 font-bold dark:border-gray-600">{{ $user->kode_pegawai }}</span></span>
+                                            class="border-zinc-200 font-bold dark:border-zinc-800">{{ $user->kode_pegawai }}</span></span>
                                 </div>
                             </label>
                         @empty
@@ -97,7 +97,7 @@
         </div>
 
         <div
-            class="mt-2 flex w-full flex-col justify-end gap-3 border-t border-gray-100 pt-6 dark:border-gray-800/50 sm:flex-row">
+            class="mt-2 flex w-full flex-col justify-end gap-3 border-t border-zinc-200 pt-6 dark:border-zinc-800/50 sm:flex-row">
             <x-button.danger type="button" wire:click="$set('removeTeamModal', true)"
                 class="w-full hover:bg-red-700 sm:w-auto">
                 <span>Hapus Seluruh Tim</span>

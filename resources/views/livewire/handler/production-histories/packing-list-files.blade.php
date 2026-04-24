@@ -4,7 +4,7 @@
         <h4 class="mb-2 text-base font-semibold text-gray-800 dark:text-white">Daftar Dokumen</h4>
 
         <div
-            class="flex flex-col rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-700">
+            class="flex flex-col rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-gray-700">
 
             <ul class="divide-y divide-gray-200 dark:divide-gray-600">
                 @forelse ($data['files'] as $index => $row)
@@ -40,7 +40,7 @@
 
     <div id="accordion-packing-form" x-data="{ accordionOpen: false }">
         <button type="button"
-            class="d flex w-full items-center justify-between gap-3 rounded-lg border border-gray-200 bg-green-500 p-5 font-medium text-white transition-all duration-300 ease-in-out hover:bg-green-400 dark:border-gray-600 dark:bg-green-600 dark:hover:bg-green-500"
+            class="d flex w-full items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-green-500 p-5 font-medium text-white transition-all duration-300 ease-in-out hover:bg-green-400 dark:border-zinc-800 dark:bg-green-600 dark:hover:bg-green-500"
             @click="accordionOpen = !accordionOpen" :class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
             <h3 class="text-base font-semibold text-white">
                 Tambah Dokumen?
@@ -51,7 +51,7 @@
             </span>
         </button>
 
-        <form class="flex flex-col gap-2 rounded-b-lg border border-gray-200 p-5 dark:border-gray-700 lg:gap-4"
+        <form class="flex flex-col gap-2 rounded-b-lg border border-zinc-200 p-5 dark:border-zinc-800 lg:gap-4"
             x-show="accordionOpen" x-collapse x-cloak wire:submit.prevent="store" method="post">
 
             <div class="w-full">
@@ -63,7 +63,7 @@
                     x-on:livewire-upload-cancel="uploading = false" x-on:livewire-upload-error="uploading = false"
                     x-on:livewire-upload-progress="progress = $event.detail.progress">
                     <label for="attachment"
-                        class="flex h-36 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-800">
+                        class="flex h-36 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-200 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-zinc-800 dark:bg-gray-700 dark:hover:border-zinc-800 dark:hover:bg-gray-800">
                         <div class="flex flex-col items-center justify-center pb-6 pt-5">
                             <x-icons.cloud-upload class="mb-2 h-8 w-8 text-gray-500 dark:text-gray-400" />
 

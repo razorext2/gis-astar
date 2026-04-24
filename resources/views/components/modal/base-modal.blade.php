@@ -4,7 +4,7 @@
     'title' => 'Base Modal',
 ])
 
-<div id="{{ $id }}" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+<div id="{{ $id }}" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50">
     <!-- Modal -->
     <div
         class="h-[85vh] w-[90vw] overflow-hidden rounded-lg bg-white text-gray-800 shadow-xl dark:bg-dark-secondary dark:text-white">

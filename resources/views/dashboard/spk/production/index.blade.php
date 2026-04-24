@@ -5,7 +5,7 @@
     <div class="relative grid grid-cols-1 gap-6">
 
         <div
-            class="relative grid grid-cols-1 gap-2 rounded-xl bg-white py-2 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 lg:p-6">
+            class="relative grid grid-cols-1 gap-2 rounded-xl bg-white py-2 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 lg:p-6">
 
             <div class="flex flex-col px-3 md:mb-2 lg:p-0">
 
@@ -21,7 +21,7 @@
 
             </div>
 
-            <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+            <div class="mb-4 border-b border-zinc-200 dark:border-zinc-800">
                 <ul class="-mb-px flex flex-wrap text-center text-sm font-medium" id="default-tab"
                     data-tabs-toggle="#default-tab-content" role="tablist">
                     <li class="me-2" role="presentation">
@@ -36,7 +36,7 @@
                     </li>
                     <li class="me-2" role="presentation">
                         <button
-                            class="inline-block rounded-t-lg border-b-2 p-4 hover:border-gray-300 hover:text-gray-600 dark:hover:text-gray-300"
+                            class="inline-block rounded-t-lg border-b-2 p-4 hover:border-zinc-200 hover:text-gray-600 dark:hover:text-gray-300"
                             id="dashboard-tab" data-tabs-target="#non-timbangan-jembatan" type="button" role="tab"
                             aria-controls="non-timbangan-jembatan" aria-selected="false">Non Timbangan Jembatan</button>
                     </li>

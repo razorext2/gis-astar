@@ -2,7 +2,7 @@
 @section('content')
     <div class="w-full space-y-6">
         <div
-            class="grid gap-4 rounded-xl bg-white p-4 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 sm:p-6">
+            class="grid gap-4 rounded-xl bg-white p-4 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 sm:p-6">
             <div class="w-full">
                 <header class="flex flex-row">
 
@@ -37,7 +37,7 @@
 
                 <div class="grid gap-2 md:grid-cols-2">
                     <div
-                        class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
+                        class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-gray-700">
                         <p class="text-sm text-gray-600 dark:text-gray-300">No. Tagihan</p>
                         <p class="text-navy-700 text-base font-medium dark:text-white">
                             {{ $data->no_sr ?? 'N/A' }}
@@ -53,7 +53,7 @@
                     </div>
 
                     <div
-                        class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
+                        class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-gray-700">
                         <p class="text-sm text-gray-600 dark:text-gray-300">Nama Customer</p>
                         <p class="text-navy-700 text-base font-medium dark:text-white">
                             {{ match ($data->bill_type) {
@@ -73,7 +73,7 @@
                     </div>
 
                     <div
-                        class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700 lg:col-span-1">
+                        class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-gray-700 lg:col-span-1">
                         <p class="text-sm text-gray-600 dark:text-gray-300">Kode Pegawai</p>
                         <p class="text-navy-700 text-base font-medium dark:text-white">
                             {{ $data->kode_pegawai ?? 'N/A' }}
@@ -81,7 +81,7 @@
                     </div>
 
                     <div
-                        class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700 lg:col-span-1">
+                        class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-gray-700 lg:col-span-1">
                         <p class="text-sm text-gray-600 dark:text-gray-300">Nama Pegawai</p>
                         <p class="text-navy-700 text-base font-medium dark:text-white">
                             {{ $data->pegawaiRelasi->full_name ?? 'N/A' }}
@@ -89,7 +89,7 @@
                     </div>
 
                     <div
-                        class="flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
+                        class="flex flex-col items-start justify-center rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-gray-700">
                         <p class="text-sm text-gray-600 dark:text-gray-300">Waktu Dibuat</p>
                         <p class="text-navy-700 text-base font-medium dark:text-white">
                             {{ $data->created_at->locale('id')->isoFormat('D MMM YYYY HH:mm:s') ?? 'N/A' }}
@@ -97,7 +97,7 @@
                     </div>
 
                     <div
-                        class="flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
+                        class="flex flex-col items-start justify-center rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-gray-700">
                         <p class="text-sm text-gray-600 dark:text-gray-300">Waktu Diupdate</p>
                         <p class="text-navy-700 text-base font-medium dark:text-white">
                             {{ $data->updated_at->locale('id')->isoFormat('D MMM YYYY HH:mm:s') ?? 'N/A' }}
@@ -105,7 +105,7 @@
                     </div>
 
                     <div
-                        class="flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
+                        class="flex flex-col items-start justify-center rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-gray-700">
                         <p class="text-sm text-gray-600 dark:text-gray-300">Total Tagihan</p>
                         <p class="text-navy-700 text-base font-medium dark:text-white">
                             {{ Number::currency(
@@ -122,7 +122,7 @@
                     </div>
 
                     <div
-                        class="flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
+                        class="flex flex-col items-start justify-center rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-gray-700">
                         <p class="text-sm text-gray-600 dark:text-gray-300">Sisa Tagihan</p>
                         <p class="text-navy-700 text-base font-medium dark:text-white">
                             {{ Number::currency(
@@ -139,7 +139,7 @@
                     </div>
 
                     <div
-                        class="col-span-2 flex flex-col items-start justify-center gap-3 rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
+                        class="col-span-2 flex flex-col items-start justify-center gap-3 rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-gray-700">
                         <p class="text-sm text-gray-600 dark:text-gray-300">Lokasi checkpoint</p>
                         <p class="text-navy-700 text-base font-medium dark:text-white">
                             {{ $data->location ?? 'N/A' }}
@@ -147,13 +147,10 @@
 
                         {{-- Google Maps Satellite Embed --}}
                         @if ($data->latitude && $data->longitude)
-                            <div class="w-full overflow-hidden rounded-xl border border-gray-200 dark:border-gray-600">
+                            <div class="w-full overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800">
                                 <iframe
                                     src="https://maps.google.com/maps?q={{ $data->latitude }},{{ $data->longitude }}&z=18&t=k&output=embed"
-                                    class="w-full"
-                                    style="height: 240px; border: none;"
-                                    loading="lazy"
-                                    allowfullscreen
+                                    class="w-full" style="height: 240px; border: none;" loading="lazy" allowfullscreen
                                     referrerpolicy="no-referrer-when-downgrade">
                                 </iframe>
                             </div>
@@ -170,7 +167,7 @@
                     </div>
 
                     <div
-                        class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
+                        class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-gray-700">
                         <p class="mb-2 text-sm text-gray-600 dark:text-gray-300">Dokumentasi</p>
                         <div class="relative overflow-auto">
                             <div class="flex overflow-x-auto" id="captured-images">
@@ -192,7 +189,7 @@
                     </div>
 
                     <div
-                        class="col-span-2 items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
+                        class="col-span-2 items-start justify-center rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-gray-700">
                         <p class="text-sm text-gray-600 dark:text-gray-300">Keterangan</p>
                         <div class="text-navy-700 quill-content !mt-1 w-full text-wrap !border-none !p-0 !text-base dark:text-white"
                             id="editor">
@@ -201,7 +198,7 @@
                     </div>
 
                     <div
-                        class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700 lg:col-span-1">
+                        class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-gray-700 lg:col-span-1">
                         <p class="text-sm text-gray-600 dark:text-gray-300">Status</p>
                         <p class="text-navy-700 pt-1.5 text-base font-medium dark:text-white">
                             @php
@@ -210,24 +207,24 @@
 
                             @if ($status == 0)
                                 <span
-                                    class="rounded-lg bg-yellow-100 px-4 py-2 text-sm font-medium text-yellow-800 ring-1 ring-gray-300 dark:bg-yellow-900 dark:text-yellow-300 dark:ring-gray-700">
+                                    class="rounded-lg bg-yellow-100 px-4 py-2 text-sm font-medium text-yellow-800 ring-1 ring-zinc-200 dark:bg-yellow-900 dark:text-yellow-300 dark:ring-zinc-800">
                                     Belum dilengkapi.
                                 </span>
                             @elseif ($status == 1)
                                 <span
-                                    class="rounded-lg bg-green-100 px-4 py-2 text-sm font-medium text-green-800 ring-1 ring-gray-300 dark:bg-green-900 dark:text-green-300 dark:ring-gray-700">
+                                    class="rounded-lg bg-green-100 px-4 py-2 text-sm font-medium text-green-800 ring-1 ring-zinc-200 dark:bg-green-900 dark:text-green-300 dark:ring-zinc-800">
                                     Disetujui. (divalidasi oleh: {{ $user->name ?? 'N/A' }})
                                 </span>
                             @elseif ($status == 2)
                                 <span
-                                    class="rounded-lg bg-yellow-100 px-4 py-2 text-sm font-medium text-yellow-800 ring-1 ring-gray-300 dark:bg-yellow-900 dark:text-yellow-300 dark:ring-gray-700">
+                                    class="rounded-lg bg-yellow-100 px-4 py-2 text-sm font-medium text-yellow-800 ring-1 ring-zinc-200 dark:bg-yellow-900 dark:text-yellow-300 dark:ring-zinc-800">
                                     Sedang
                                     diajukan.{{ $data->total_revision > 0 ? ' (direvisi: ' . $data->total_revision . 'x)' : '' }}
                                 </span>
                             @elseif ($status == 4)
                                 <div class="grid gap-y-2">
                                     <span
-                                        class="rounded-lg bg-yellow-100 px-4 py-2 text-sm font-medium text-yellow-800 ring-1 ring-gray-300 dark:bg-yellow-900 dark:text-yellow-300 dark:ring-gray-700">
+                                        class="rounded-lg bg-yellow-100 px-4 py-2 text-sm font-medium text-yellow-800 ring-1 ring-zinc-200 dark:bg-yellow-900 dark:text-yellow-300 dark:ring-zinc-800">
                                         Perlu direvisi! (divalidasi oleh: {{ $user->name ?? 'N/A' }})
                                     </span>
 
@@ -239,7 +236,7 @@
                                 </div>
                             @else
                                 <span
-                                    class="rounded-xl bg-red-100 px-4 py-2 text-sm font-medium text-red-800 ring-1 ring-gray-300 dark:bg-red-900 dark:text-red-300 dark:ring-gray-700">
+                                    class="rounded-xl bg-red-100 px-4 py-2 text-sm font-medium text-red-800 ring-1 ring-zinc-200 dark:bg-red-900 dark:text-red-300 dark:ring-zinc-800">
                                     Laporan di Tolak! (divalidasi oleh: {{ $user->name ?? 'N/A' }})
                                 </span>
                             @endif
@@ -248,7 +245,7 @@
                     </div>
 
                     <div
-                        class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700 lg:col-span-1">
+                        class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-gray-700 lg:col-span-1">
                         <p class="text-sm text-gray-600 dark:text-gray-300">Catatan</p>
                         <p class="text-navy-700 text-base font-medium dark:text-white">
                             {{ $data->notes ? $data->notes : 'Tidak ada catatan' }}
@@ -280,7 +277,7 @@
                     @endphp
 
                     <div
-                        class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700 lg:col-span-1">
+                        class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-gray-700 lg:col-span-1">
                         <p class="text-sm text-gray-600 dark:text-gray-300">Status Pembayaran</p>
                         <p class="text-navy-700 text-base font-medium dark:text-white">
                             {{ $status }}
@@ -306,7 +303,7 @@
                     @endphp
 
                     <div
-                        class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700 lg:col-span-1">
+                        class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-gray-700 lg:col-span-1">
                         <p class="text-sm text-gray-600 dark:text-gray-300">Tipe Pembayaran</p>
                         <p class="text-navy-700 text-base font-medium dark:text-white">
                             {{ $type }}
@@ -314,7 +311,7 @@
                     </div>
 
                     <div
-                        class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-700">
+                        class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-gray-700">
                         <p class="text-sm text-gray-600 dark:text-gray-300">Jumlah Pembayaran</p>
                         <p class="text-navy-700 text-base font-medium dark:text-white">
                             {{ Number::currency($data->payment_amount ?? 0, 'IDR', 'id') }}
