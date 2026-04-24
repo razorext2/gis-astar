@@ -1,8 +1,16 @@
-@props(['form' => null, 'class' => null, 'icon' => null, 'type' => 'button', 'id' => null])
+{{-- Goal: Tombol secondary dengan skema warna netral (Zinc), Smart Tag (a/button), Livewire: -, Alpine: - --}}
+@props(['icon' => null, 'type' => 'button', 'id' => null, 'href' => null])
 
-<button
-    class="{{ $class }} flex flex-row items-center gap-2 rounded-lg px-2.5 py-2 shadow-sm ring-1 ring-zinc-200 transition-all duration-300 ease-in-out will-change-transform hover:scale-105 hover:bg-gray-100 focus:scale-105 dark:bg-zinc-800 dark:text-white dark:ring-zinc-700 dark:hover:bg-zinc-900"
-    id="{{ $id }}" type="{{ $type }}" {{ $form ? 'form=' . $form : '' }} {{ $attributes }}>
-    {{ $icon }}
+@php
+    $tag = $href ? 'a' : 'button';
+    $baseClasses =
+        'inline-flex items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-700 shadow-sm transition-all duration-300 hover:bg-zinc-50 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 active:scale-95 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white dark:focus:ring-offset-zinc-900';
+@endphp
+
+<{{ $tag }} id="{{ $id }}" {{ $href ? "href=$href" : "type=$type" }}
+    {{ $attributes->merge(['class' => $baseClasses]) }}>
+    @if ($icon)
+        {{ $icon }}
+    @endif
     <span>{{ $slot }}</span>
-</button>
+    </{{ $tag }}>

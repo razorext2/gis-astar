@@ -19,21 +19,19 @@
         <div class="flex flex-row items-center justify-between gap-2">
             @can(['invoice-list', 'invoice-add'])
                 <div class="flex flex-row gap-2">
-                    <x-button.link wire:navigate class="w-fit ring-1 ring-green-700 dark:bg-green-800 dark:text-white"
-                        href="{{ route('invoice.pku.create', ['tipe_tagihan' => 'idcppn']) }}">
+                    <x-button.success wire:navigate href="{{ route('invoice.pku.create', ['tipe_tagihan' => 'idcppn']) }}">
                         <x-slot name="icon">
-                            <x-icons.angle-right class="h-6 w-6 text-green-500 dark:text-white" />
+                            <x-icons.angle-right class="h-6 w-6" />
                         </x-slot>
                         Invoice IDC
-                    </x-button.link>
+                    </x-button.success>
 
-                    <x-button.link wire:navigate class="w-fit ring-1 ring-green-700 dark:bg-green-800 dark:text-white"
-                        href="{{ route('invoice.pku.create', ['tipe_tagihan' => 'idyppn']) }}">
+                    <x-button.success wire:navigate href="{{ route('invoice.pku.create', ['tipe_tagihan' => 'idyppn']) }}">
                         <x-slot name="icon">
-                            <x-icons.angle-right class="h-6 w-6 text-green-500 dark:text-white" />
+                            <x-icons.angle-right class="h-6 w-6" />
                         </x-slot>
                         Invoice IDY
-                    </x-button.link>
+                    </x-button.success>
                 </div>
             @endcan
 
