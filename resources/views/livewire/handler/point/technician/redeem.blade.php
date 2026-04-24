@@ -100,9 +100,9 @@
         @if ($results->isNotEmpty())
             <livewire:handler.point.technician.step-two :results="$result" />
             @if ($showModal)
-                <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70">
+                <div class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm">
                     <!-- Modal box -->
-                    <div class="flex max-w-lg flex-col gap-2 rounded-lg bg-white p-6 dark:bg-gray-800">
+                    <div class="flex max-w-lg flex-col gap-2 rounded-xl ring-1 ring-zinc-200 bg-white p-6 shadow-2xl dark:ring-zinc-800 dark:bg-dark-primary">
                         <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Konfirmasi Pengajuan</h2>
                         <p
                             class="overflow-y-auto border-y border-zinc-200 py-1 text-gray-800 dark:border-zinc-800 dark:text-white">

@@ -1,10 +1,10 @@
 <div>
     {{-- ==================== RESCHEDULE MODAL ==================== --}}
     <div wire:show="showRescheduleModal" wire:transition.duration.300ms
-        class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70">
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm">
         @if ($showRescheduleModal)
             <div
-                class="mx-2 flex w-full flex-col gap-3 rounded-2xl bg-white p-4 shadow-2xl dark:bg-dark-primary sm:mx-0 md:w-1/2 md:gap-4 md:p-6 lg:w-2/5 xl:w-1/3">
+                class="flex w-full flex-col gap-3 rounded-xl ring-1 ring-zinc-200 bg-white p-4 shadow-2xl dark:ring-zinc-800 dark:bg-dark-primary md:w-1/2 md:gap-4 md:p-6 lg:w-2/5 xl:w-1/3">
 
                 {{-- Header --}}
                 <div class="flex items-center gap-3">
@@ -72,10 +72,10 @@
 
     {{-- ==================== CHANGE COLLECTOR MODAL ==================== --}}
     <div wire:show="showChangeCollectorModal" wire:transition.duration.300ms
-        class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70">
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 backdrop-blur-sm">
         @if ($showChangeCollectorModal)
             <div
-                class="mx-2 flex w-full flex-col gap-3 rounded-2xl bg-white p-4 shadow-2xl dark:bg-dark-primary sm:mx-0 md:w-1/2 md:gap-4 md:p-6 lg:w-2/5 xl:w-1/3">
+                class="flex w-full flex-col gap-3 rounded-xl ring-1 ring-zinc-200 bg-white p-4 shadow-2xl dark:ring-zinc-800 dark:bg-dark-primary md:w-1/2 md:gap-4 md:p-6 lg:w-2/5 xl:w-1/3">
 
                 {{-- Header --}}
                 <div class="flex items-center gap-3">

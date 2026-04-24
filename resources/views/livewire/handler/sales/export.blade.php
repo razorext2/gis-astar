@@ -8,11 +8,11 @@
 
     <!-- Modal overlay -->
     <div wire:show="showModal" wire:transition
-        class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70">
+        class="fixed inset-0 z-[100] mx-4 flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm">
         @if ($showModal)
             <!-- Modal box -->
             <div
-                class="flex max-w-md flex-col gap-2 rounded-xl bg-white p-6 shadow-2xl dark:bg-gray-800 md:w-1/2 xl:w-1/3">
+                class="flex max-w-md flex-col gap-2 rounded-xl bg-white p-6 shadow-2xl ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 md:w-1/2 xl:w-1/3">
                 <h2 class="mb-4 text-center text-2xl font-semibold text-gray-900 dark:text-white lg:text-3xl">
                     Export Data
                 </h2>
@@ -75,7 +75,7 @@
                                 Pilih nama sales
                             </label>
                             <select
-                                class="block w-full rounded-lg border border-zinc-200 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                                class="block w-full rounded-lg border border-zinc-200 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-dark-secondary dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                                 wire:model="sales">
                                 <option value="">Semua</option>
                                 @foreach ($salesData as $row)

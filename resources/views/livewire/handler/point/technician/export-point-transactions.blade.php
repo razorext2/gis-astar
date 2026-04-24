@@ -9,11 +9,11 @@
     </div>
 
     <div wire:show="showModal" wire:transition
-        class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70">
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm">
         @if ($showModal)
             <!-- Modal box -->
             <div
-                class="flex max-w-lg flex-col gap-2 rounded-xl bg-white p-2 shadow-2xl dark:bg-gray-800 md:w-1/2 lg:p-4 xl:w-1/3">
+                class="flex max-w-lg flex-col gap-2 rounded-xl ring-1 ring-zinc-200 bg-white p-2 shadow-2xl dark:ring-zinc-800 dark:bg-dark-primary md:w-1/2 lg:p-4 xl:w-1/3">
                 <h2 class="mb-4 text-center text-xl font-semibold text-gray-900 dark:text-white lg:text-2xl">Preview Data
                 </h2>
 

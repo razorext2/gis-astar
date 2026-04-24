@@ -2,7 +2,7 @@
     id="deductionedit" aria-hidden="true" tabindex="-1">
     <div class="modal-body relative max-h-full w-full max-w-md p-4" id="modalAddBody">
         <!-- Modal content -->
-        <div class="relative rounded-lg bg-white shadow dark:bg-gray-700">
+        <div class="relative rounded-xl bg-white shadow ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800">
             <!-- Modal header -->
             <div class="flex items-center justify-between rounded-t border-b p-4 dark:border-zinc-800 md:p-5">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">

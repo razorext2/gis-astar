@@ -59,11 +59,11 @@
 
     {{-- modal delete laporan fondasi --}}
     <div id="delete-laporan-fondasi-modal" wire:show="showModalShowSignature" wire:transition.duration.300ms
-        class="fixed inset-0 z-[99] flex items-center justify-center bg-black bg-opacity-70 py-8">
+        class="fixed inset-0 z-[99] flex items-center justify-center bg-zinc-950/65 py-8 backdrop-blur-sm">
 
         @if ($showModalShowSignature)
             <div
-                class="mx-4 my-6 flex w-fit flex-col gap-2 overflow-y-auto rounded-xl bg-white p-4 shadow-2xl dark:bg-dark-primary">
+                class="mx-4 my-6 flex w-fit flex-col gap-2 overflow-y-auto rounded-xl ring-1 ring-zinc-200 bg-white p-4 shadow-2xl dark:ring-zinc-800 dark:bg-dark-primary">
 
                 <h2 class="text-center text-lg font-semibold text-gray-900 dark:text-white lg:text-xl">
                     Tanda tangan digital kamu

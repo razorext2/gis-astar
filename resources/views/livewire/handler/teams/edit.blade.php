@@ -114,14 +114,14 @@
 
     {{-- show modal remove team menggunakan Alpine --}}
     <div x-data="{ show: @entangle('removeTeamModal') }" x-show="show" x-cloak
-        class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/60 p-4 backdrop-blur-sm"
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm"
         x-transition.opacity.duration.300ms>
 
         <div x-show="show" @click.outside="show = false" x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100"
             x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
             x-transition:leave-end="opacity-0 scale-90"
-            class="relative flex w-full max-w-lg flex-col items-center gap-4 rounded-3xl bg-white p-6 text-center shadow-2xl ring-1 ring-white/20 dark:bg-dark-primary dark:ring-white/10">
+            class="relative flex w-full max-w-lg flex-col items-center gap-4 rounded-xl bg-white p-6 text-center shadow-2xl ring-1 ring-white/20 dark:bg-dark-primary dark:ring-white/10">
 
             <div class="absolute right-3 top-3">
                 <button type="button" @click="show = false"

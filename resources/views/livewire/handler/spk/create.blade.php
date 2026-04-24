@@ -596,10 +596,10 @@
 
     @if ($showSummary)
         <!-- Overlay -->
-        <div x-show="open" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+        <div x-show="open" class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm"
             x-transition.opacity>
             <!-- Modal -->
-            <div class="h-[85vh] w-[90vw] overflow-hidden rounded-lg bg-white text-gray-800 shadow-xl dark:bg-dark-secondary dark:text-white"
+            <div class="h-[85vh] w-full max-w-7xl overflow-hidden rounded-xl ring-1 ring-zinc-200 bg-white text-gray-800 shadow-xl dark:ring-zinc-800 dark:bg-dark-primary dark:text-white"
                 @keydown.escape.window="open=false">
                 <div class="flex items-center justify-between border-b px-4 py-2">
                     <h2 class="font-semibold">SPK Summary</h2>

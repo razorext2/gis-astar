@@ -10,7 +10,7 @@
 	][$maxWidth];
 @endphp
 
-<div class="fixed inset-0 z-50 overflow-y-auto px-4 py-6 sm:px-0" style="display: {{ $show ? 'block' : 'none' }};"
+<div class="fixed inset-0 z-[100] overflow-y-auto px-4 py-6 sm:px-0" style="display: {{ $show ? 'block' : 'none' }};"
 	x-data="{
     show: @js($show),
     focusables() {
@@ -41,11 +41,11 @@
 	<div class="fixed inset-0 transform transition-all" x-show="show" x-on:click="show = false"
 		x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
 		x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
-		<div class="bg-white0 absolute inset-0 opacity-75"></div>
+		<div class="absolute inset-0 bg-zinc-950/65 backdrop-blur-sm"></div>
 	</div>
 
 	<div
-		class="{{ $maxWidth }} mb-6 transform overflow-hidden rounded-lg bg-white shadow-xl transition-all sm:mx-auto sm:w-full"
+		class="{{ $maxWidth }} mb-6 transform overflow-hidden rounded-xl bg-white shadow-xl ring-1 ring-zinc-200 transition-all dark:bg-dark-primary dark:ring-zinc-800 sm:mx-auto sm:w-full"
 		x-show="show" x-transition:enter="ease-out duration-300"
 		x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
 		x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200"

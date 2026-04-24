@@ -104,8 +104,8 @@
     {{-- Detail Modal --}}
     <template x-teleport="body">
         <div x-data="{ show: @entangle('showModalOut') }" x-show="show"
-            class="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-md"
-            style="background-color: rgba(9,9,11,0.65);" x-transition:enter="transition ease-out duration-300"
+            class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm"
+            x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
             x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0" @click.self="show = false" x-cloak>
@@ -113,7 +113,7 @@
             <div x-show="show" x-transition:enter="transition ease-out duration-300"
                 x-transition:enter-start="opacity-0 scale-95 translate-y-4"
                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                class="relative flex w-full max-w-xl flex-col rounded-3xl border border-zinc-200 bg-white shadow-2xl dark:border-zinc-800 dark:bg-zinc-950">
+                class="relative flex w-full max-w-xl flex-col rounded-xl ring-1 ring-zinc-200 bg-white shadow-2xl dark:ring-zinc-800 dark:bg-dark-primary">
 
                 @if ($showModalOut && $attendance)
                     {{-- Header --}}

@@ -1,7 +1,7 @@
 <div class="fixed left-0 right-0 top-0 z-[100] hidden h-[calc(100%-1rem)] max-h-full w-full items-center justify-center overflow-y-auto overflow-x-hidden md:inset-0"
     id="camera-modal">
     <div class="relative max-h-full w-full max-w-2xl p-4">
-        <div class="relative rounded-xl bg-white shadow dark:bg-gray-700">
+        <div class="relative rounded-xl bg-white shadow ring-1 ring-zinc-200 dark:bg-dark-secondary dark:ring-zinc-800">
             <div class="space-y-4 p-1">
                 <div class="relative">
                     <!-- Video -->

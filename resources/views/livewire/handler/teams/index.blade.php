@@ -73,8 +73,8 @@
                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                 x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
                 x-transition:leave-end="opacity-0"
-                class="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-sm"
-                style="background-color: rgba(17, 24, 39, 0.6);" @click.self="show = false">
+                class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-zinc-950/65 backdrop-blur-sm"
+                @click.self="show = false">
 
                 <div x-show="show" x-transition:enter="transition ease-out duration-300"
                     x-transition:enter-start="opacity-0 translate-y-8 scale-95"
@@ -82,7 +82,7 @@
                     x-transition:leave="transition ease-in duration-200"
                     x-transition:leave-start="opacity-100 translate-y-0 scale-100"
                     x-transition:leave-end="opacity-0 translate-y-8 scale-95"
-                    class="relative flex w-full max-w-lg flex-col gap-4 rounded-2xl bg-white/95 p-6 shadow-2xl ring-1 ring-white/20 backdrop-blur-xl dark:bg-dark-primary/95 dark:ring-white/10">
+                    class="relative flex w-full max-w-lg flex-col gap-4 rounded-xl bg-white/95 p-6 shadow-2xl ring-1 ring-white/20 backdrop-blur-xl dark:bg-dark-primary/95 dark:ring-white/10">
 
                     <div class="absolute right-3 top-3">
                         <button type="button" @click="show = false"
@@ -173,14 +173,14 @@
                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                 x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
                 x-transition:leave-end="opacity-0"
-                class="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-sm"
-                style="background-color: rgba(17, 24, 39, 0.6);" @click.self="show = false">
+                class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-zinc-950/65 backdrop-blur-sm"
+                @click.self="show = false">
 
                 <div x-show="show" x-transition:enter="transition ease-out duration-300"
                     x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100"
                     x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
                     x-transition:leave-end="opacity-0 scale-90"
-                    class="relative flex w-full max-w-sm flex-col items-center gap-4 rounded-3xl bg-white p-6 text-center shadow-2xl ring-1 ring-white/20 dark:bg-dark-primary dark:ring-white/10">
+                    class="relative flex w-full max-w-sm flex-col items-center gap-4 rounded-xl bg-white p-6 text-center shadow-2xl ring-1 ring-white/20 dark:bg-dark-primary dark:ring-white/10">
 
                     <div
                         class="text-danger mb-2 flex h-16 w-16 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">

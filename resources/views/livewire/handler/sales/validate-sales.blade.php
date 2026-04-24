@@ -7,11 +7,11 @@
     </x-button.success>
 
     <div wire:show="showModal" wire:transition.duration.300ms
-        class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70">
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm">
         @if ($showModal)
             <!-- Modal box -->
             <div
-                class="mx-2 flex w-full flex-col gap-1 rounded-xl bg-white p-2 shadow-2xl dark:bg-dark-primary sm:mx-0 md:w-2/3 md:gap-2 md:p-4 lg:w-1/2 lg:p-6 xl:w-2/5">
+                class="flex w-full flex-col gap-1 rounded-xl ring-1 ring-zinc-200 bg-white p-2 shadow-2xl dark:ring-zinc-800 dark:bg-dark-primary md:w-2/3 md:gap-2 md:p-4 lg:w-1/2 lg:p-6 xl:w-2/5">
                 @if ($step == 1)
                     <h2 class="mb-2 text-center text-2xl font-semibold text-gray-900 dark:text-white lg:text-3xl">
                         Konfirmasi?</h2>

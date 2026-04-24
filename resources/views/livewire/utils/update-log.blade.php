@@ -20,13 +20,13 @@
             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
             x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            class="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-md"
-            style="background-color: rgba(9, 9, 11, 0.6);" @click.self="show = false">
+            class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm"
+            @click.self="show = false">
 
             <div x-show="show" x-transition:enter="transition ease-out duration-300"
                 x-transition:enter-start="opacity-0 scale-95 translate-y-4"
                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                class="relative flex w-full max-w-2xl flex-col rounded-3xl border border-zinc-200 bg-white shadow-2xl dark:border-zinc-800 dark:bg-zinc-900"
+                class="relative flex w-full max-w-2xl flex-col rounded-xl ring-1 ring-zinc-200 bg-white shadow-2xl dark:ring-zinc-800 dark:bg-dark-primary"
                 style="max-height: 85vh;">
 
                 {{-- Header --}}

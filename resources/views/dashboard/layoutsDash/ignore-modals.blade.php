@@ -1,8 +1,8 @@
 <!-- start DeleteModal -->
-<div class="fixed z-[100] hidden h-full w-full overflow-y-auto overflow-x-hidden bg-gray-800/50 p-4 md:inset-0"
+<div class="fixed z-[100] hidden h-full w-full overflow-y-auto overflow-x-hidden bg-zinc-950/65 p-4 backdrop-blur-sm md:inset-0"
     id="ignoreModal" data-modal-placement="center-center" tabindex="-1">
     <div class="relative mx-auto max-h-full w-full max-w-md">
-        <div class="relative rounded-lg bg-white shadow ring-1 ring-zinc-200 dark:bg-gray-700 dark:ring-zinc-800">
+        <div class="relative rounded-xl bg-white shadow ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800">
             <!-- Modal Header -->
             <div class="flex items-start justify-between rounded-t border-b p-4 dark:border-zinc-800">
                 <h3 class="text-xl font-semibold text-gray-900 dark:text-white">

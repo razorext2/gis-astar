@@ -4,11 +4,11 @@
     'title' => 'Base Modal',
 ])
 
-<div id="{{ $id }}" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50">
+<div id="{{ $id }}" class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm">
     <!-- Modal -->
     <div
-        class="h-[85vh] w-[90vw] overflow-hidden rounded-lg bg-white text-gray-800 shadow-xl dark:bg-dark-secondary dark:text-white">
-        <div class="flex items-center justify-between border-b px-4 py-2">
+        class="h-[85vh] w-full max-w-4xl overflow-hidden rounded-xl bg-white text-gray-800 shadow-xl ring-1 ring-zinc-200 dark:bg-dark-primary dark:text-white dark:ring-zinc-800">
+        <div class="flex items-center justify-between border-b px-4 py-2 dark:border-zinc-800">
             <h2 class="font-semibold">{{ $title }}</h2>
 
             <button class="p-2" wire:click="$set('{{ $actionName }}', false)">
