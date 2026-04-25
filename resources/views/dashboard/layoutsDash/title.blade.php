@@ -41,6 +41,7 @@
         'billing.*' => 'Penagihan',
         'daily-report.*' => 'Laporan Kerja Harian',
         'report.*' => 'Laporan Kerja Harian',
+        'server.overview' => 'Manajemen Server',
     ];
 
     // Temukan judul berdasarkan rute dengan wildcard

@@ -36,21 +36,20 @@ Schedule::call(function () {
     ->evenInMaintenanceMode();
 
 // Maintenance window harian (opsional)
-Schedule::command('down')  // tambah opsi --retry/--secret kalau perlu
+Schedule::command('down')
     ->timezone('Asia/Jakarta')
     ->dailyAt('23:00')
     ->name('Maintenance harian')
-    ->onOneServer()
     ->evenInMaintenanceMode();
 
 Schedule::command('up')
     ->timezone('Asia/Jakarta')
     ->name('Aplikasi live lagi')
     ->dailyAt('02:00')
-    ->onOneServer()
     ->evenInMaintenanceMode();
 
 Schedule::command('sync:receivable-data')
+    ->onOneServer()
     ->everyMinute();
 
 Schedule::command('app:auto-submit-daily-report')
@@ -59,3 +58,10 @@ Schedule::command('app:auto-submit-daily-report')
     ->dailyAt('01:15')
     ->onOneServer()
     ->evenInMaintenanceMode();
+
+// Cek status server setiap 5 menit
+Schedule::command('server:check-status')
+    ->everyFiveMinutes()
+    ->name('Server status check')
+    ->withoutOverlapping()
+    ->runInBackground();
