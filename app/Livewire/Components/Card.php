@@ -16,6 +16,7 @@ use App\Services\Driver\DriverCardService;
 use App\Services\Sales\SalesCardService;
 use App\Services\Spk\SpkCardService;
 use App\Services\Technician\TechnicianCardService;
+use App\Services\System\ServerCardService;
 use Livewire\Component;
 
 class Card extends Component
@@ -63,6 +64,7 @@ class Card extends Component
             'technicianteam' => $this->getTechnicianTeamCards(),
             'driverreport' => $this->getDriverReportCards(),
             'salesreport' => $this->getSalesReportCards(),
+            'servermonitor' => $this->getServerMonitorCards(),
             default => [],
         };
     }
@@ -189,5 +191,10 @@ class Card extends Component
     protected function getSpkPurchasingRequestCards(): array
     {
         return app(SpkCardService::class)->getSpkPurchasingRequestCards();
+    }
+
+    protected function getServerMonitorCards(): array
+    {
+        return app(ServerCardService::class)->getServerMonitorCards();
     }
 }
