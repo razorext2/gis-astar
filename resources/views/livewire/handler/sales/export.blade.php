@@ -1,5 +1,6 @@
-<div>
-    <x-button.success id="export-button" wire:click="$set('showModal', true)">
+{{-- Goal: Modal export data sales dengan Alpine.js untuk performa tinggi, Livewire: Handler\Sales\Export, Alpine: show --}}
+<div x-data="{ show: @entangle('showModal') }">
+    <x-button.success id="export-button" @click="show = true">
         <x-slot name="icon">
             <x-icons.bookmark class="h-6 w-6 text-green-500 dark:text-white" />
         </x-slot>
@@ -7,97 +8,99 @@
     </x-button.success>
 
     <!-- Modal overlay -->
+    <div x-show="show" x-cloak
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm"
+        x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
 
-    <div wire:show="showModal" wire:transition
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
-        @if ($showModal)
-            <!-- Modal box -->
-            <div
-                class="flex max-w-md flex-col gap-2 rounded-xl bg-white p-6 shadow-2xl dark:bg-gray-800 md:w-1/2 xl:w-1/3">
-                <h2 class="mb-4 text-center text-2xl font-semibold text-gray-900 dark:text-white lg:text-3xl">
-                    Export Data
+        <!-- Modal box -->
+        <div @click.away="show = false" x-show="show" x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+            class="flex w-full max-w-md flex-col gap-2 rounded-xl bg-white p-6 shadow-2xl ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800">
+
+            <div class="mb-4 flex items-center justify-between border-b border-zinc-200 pb-3 dark:border-zinc-800">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white lg:text-2xl">
+                    Export Data Sales
                 </h2>
-
-                <form wire:submit="export">
-                    <div class="flex w-full flex-col gap-2 md:gap-4">
-                        <div class="flex justify-between gap-2">
-                            <x-button.primary wire:click="showDaily">Harian</x-button.primary>
-                            <x-button.primary wire:click="showWeekly">Mingguan</x-button.primary>
-                            <x-button.primary wire:click="showMonthly">Bulanan</x-button.primary>
-                            <x-button.primary wire:click="showYearly">Tahunan</x-button.primary>
-                        </div>
-                        <div class="grid w-full grid-cols-2 gap-2 md:gap-4">
-                            <div>
-                                <x-input.basic type="date" id="from_date" wire:model="fromDate" name="from_date">
-                                    Dari tanggal
-                                </x-input.basic>
-                            </div>
-                            <div>
-                                <x-input.basic type="date" id="to_date" wire:model="toDate" name="to_date">
-                                    Hingga tanggal
-                                </x-input.basic>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="roles">
-                                Pilih data yg mau diekspor
-                            </label>
-                            @php
-                                $roles = [];
-                                if (auth()->user()->can('sales-export-all')) {
-                                    $roles['All'] = 'Semua';
-                                }
-                                if (auth()->user()->can('sales-export-medan')) {
-                                    $roles['Sales'] = 'Sales Medan';
-                                }
-                                if (auth()->user()->can('sales-export-jkt')) {
-                                    $roles['Sales-JKT'] = 'Sales Jakarta';
-                                }
-                                if (auth()->user()->can('sales-export-pku')) {
-                                    $roles['Sales-PKU'] = 'Sales Pekanbaru';
-                                }
-                                if (auth()->user()->can('sales-export-idy')) {
-                                    $roles['Sales-IDY'] = 'Sales Indodaya';
-                                }
-                                if (auth()->user()->can('sales-export-kurir-bank')) {
-                                    $roles['Kurir-Bank'] = 'Kurir Bank';
-                                }
-                                if (auth()->user()->can('sales-export-agrotec')) {
-                                    $roles['Sales-Agrotec'] = 'Kurir Bank';
-                                }
-                            @endphp
-                            <x-filter.filter-input-select id="roles" wire:model="role" name="roles"
-                                :options="$roles" default-option="Filter by roles" />
-                        </div>
-
-                        <div>
-                            <label for="sales" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-                                Pilih nama sales
-                            </label>
-                            <select
-                                class="block w-full rounded-lg border border-gray-200 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                                wire:model="sales">
-                                <option value="">Semua</option>
-                                @foreach ($salesData as $row)
-                                    <option value="{{ $row->kode_pegawai }}">({{ $row->kode_pegawai }})
-                                        {{ $row->name }}</option>
-                                @endforeach
-                            </select>
-
-                        </div>
-                    </div>
-
-                    <div class="mt-4 flex justify-end space-x-2">
-                        <x-button.success type="submit">
-                            <span wire:loading.remove> Proses </span>
-                            <span wire:loading> Proses... </span>
-                        </x-button.success>
-                        <x-button.primary wire:click="$set('showModal', false)">Batal</x-button.primary>
-                    </div>
-                </form>
-
+                <x-button.secondary @click="show = false" type="button" class="!bg-transparent !p-1 ring-0 hover:!bg-gray-100 dark:hover:!bg-gray-800">
+                    <x-slot name="icon">
+                        <x-icons.close class="h-6 w-6" />
+                    </x-slot>
+                </x-button.secondary>
             </div>
-        @endif
+
+            <form wire:submit="export">
+                <div class="flex w-full flex-col gap-4">
+                    {{-- Quick Date Select --}}
+                    <div class="grid grid-cols-2 gap-2">
+                        <x-button.primary class="!py-1.5 text-xs" wire:click="showDaily"
+                            type="button">Harian</x-button.primary>
+                        <x-button.primary class="!py-1.5 text-xs" wire:click="showWeekly"
+                            type="button">Mingguan</x-button.primary>
+                        <x-button.primary class="!py-1.5 text-xs" wire:click="showMonthly"
+                            type="button">Bulanan</x-button.primary>
+                        <x-button.primary class="!py-1.5 text-xs" wire:click="showYearly"
+                            type="button">Tahunan</x-button.primary>
+                    </div>
+
+                    {{-- Manual Date Range --}}
+                    <div class="grid w-full grid-cols-2 gap-3">
+                        <div>
+                            <x-input.basic type="date" id="from_date" wire:model="fromDate" name="from_date"
+                                required>
+                                Dari tanggal
+                            </x-input.basic>
+                        </div>
+                        <div>
+                            <x-input.basic type="date" id="to_date" wire:model="toDate" name="to_date" required>
+                                Hingga tanggal
+                            </x-input.basic>
+                        </div>
+                    </div>
+
+                    {{-- Role Filter --}}
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm font-medium text-gray-700 dark:text-gray-300" for="roles">
+                            Wilayah / Divisi
+                        </label>
+                        <x-filter.filter-input-select id="export-roles" wire:model.live="role" name="export_roles"
+                            :options="$roles" default-option="Filter by roles" />
+                        @error('role')
+                            <span class="text-xs text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    {{-- Specific Sales Filter --}}
+                    <div class="flex flex-col gap-1">
+                        <label for="sales" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Nama Sales (Opsional)
+                        </label>
+                        <select
+                            class="block w-full rounded-lg border border-zinc-200 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-dark-secondary dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                            wire:model="sales">
+                            <option value="">Semua Sales</option>
+                            @foreach ($salesData as $row)
+                                <option value="{{ $row->kode_pegawai }}">
+                                    [{{ $row->kode_pegawai }}] {{ $row->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex justify-end gap-3 border-t border-zinc-200 pt-4 dark:border-zinc-800">
+                    <x-button.danger @click="show = false" type="button">
+                        Batal
+                    </x-button.danger>
+
+                    <x-button.success type="submit">
+                        <span wire:loading.remove wire:target="export">Proses Export</span>
+                        <span wire:loading wire:target="export">Memproses...</span>
+                    </x-button.success>
+                </div>
+            </form>
+        </div>
     </div>
 </div>

@@ -309,7 +309,7 @@ final class SpkTable extends PowerGridComponent
             $button[] = Button::make('edit')
                 ->slot('Edit')
                 ->id($row->id)
-                ->class('dark:bg-green-800 text-sm dark:hover:bg-green-900 dark:text-white dark:border-gray-700 rounded-lg bg-green-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-green-700')
+                ->class('dark:bg-green-800 text-sm dark:hover:bg-green-900 dark:text-white dark:border-zinc-800 rounded-lg bg-green-400 px-2 py-1.5 font-semibold text-white border border-zinc-200 hover:bg-green-700')
                 ->route('spk.edit', ['spk' => $row->id]);
         }
 
@@ -317,7 +317,7 @@ final class SpkTable extends PowerGridComponent
             $button[] = Button::make('detail')
                 ->slot('Detail')
                 ->id($row->id)
-                ->class('dark:bg-blue-800 text-sm dark:hover:bg-blue-900 dark:text-white dark:border-gray-700 rounded-lg bg-blue-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-blue-700')
+                ->class('dark:bg-blue-800 text-sm dark:hover:bg-blue-900 dark:text-white dark:border-zinc-800 rounded-lg bg-blue-400 px-2 py-1.5 font-semibold text-white border border-zinc-200 hover:bg-blue-700')
                 ->route('spk.show', ['spk' => $row->id]);
         }
 

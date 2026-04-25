@@ -1,5 +1,5 @@
  {{-- riwayat spk --}}
- <section class="rounded-lg text-gray-800 ring-1 ring-gray-200 dark:text-white dark:ring-gray-700 lg:gap-4">
+ <section class="rounded-lg text-gray-800 ring-1 ring-zinc-200 dark:text-white dark:ring-zinc-800 lg:gap-4">
 
      <div
          class="{{ $showRiwayatSpk ? 'rounded-t-lg' : 'rounded-lg' }} flex flex-row items-center justify-between p-2.5 transition-all duration-500 ease-in-out hover:cursor-pointer hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-800">
@@ -18,7 +18,7 @@
      @if ($showRiwayatSpk)
          <div class="flex flex-col gap-2 p-2 lg:gap-4 lg:p-4">
              @forelse ($data as $row)
-                 <div class="border-b border-gray-200 p-1 text-gray-800 dark:border-gray-600 dark:text-white">
+                 <div class="border-b border-zinc-200 p-1 text-gray-800 dark:border-zinc-800 dark:text-white">
                      <div class="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-8">
                          <div class="text-right text-xs lg:text-left">
                              <p>

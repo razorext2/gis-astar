@@ -2,19 +2,18 @@
 @section('content')
     <div class="w-full space-y-6">
         <div
-            class="grid gap-4 rounded-xl bg-white p-4 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 sm:p-6">
+            class="grid gap-4 rounded-xl bg-white p-4 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 sm:p-6">
 
             <div class="w-full">
                 <header class="flex flex-row gap-x-4">
 
                     <div class="max-w-xs">
-                        <x-button.link class="w-fit ring-1 ring-red-700 dark:bg-red-800 dark:text-white"
-                            href="{{ route('driver.index') }}" wire:navigate>
+                        <x-button.danger href="{{ route('driver.index') }}" wire:navigate>
                             <x-slot name="icon">
-                                <x-icons.angle-right class="h-6 w-6 text-red-500 dark:text-white" />
+                                <x-icons.angle-left class="h-6 w-6" />
                             </x-slot>
-                            Kembali
-                        </x-button.link>
+                            {{ __('Kembali') }}
+                        </x-button.danger>
                     </div>
 
                     <h2 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
@@ -105,21 +104,21 @@
 
                         <div class="mt-2 hidden text-sm text-red-500" id="alert-keterangan"></div>
                     </div>
-                    <input class="w-full rounded-lg border border-gray-300 bg-gray-400 p-2.5 text-sm text-gray-900"
+                    <input class="w-full rounded-lg border border-zinc-200 bg-gray-400 p-2.5 text-sm text-gray-900"
                         id="longitude" name="longitude" type="hidden" readonly>
 
-                    <input class="w-full rounded-lg border border-gray-300 bg-gray-400 p-2.5 text-sm text-gray-900"
+                    <input class="w-full rounded-lg border border-zinc-200 bg-gray-400 p-2.5 text-sm text-gray-900"
                         id="latitude" name="latitude" type="hidden" readonly>
 
                     <div class="mb-4 hidden text-sm text-red-500" id="alert-coordinate"></div>
 
                     <div class="relative col-span-2 w-full">
-                        <x-button.primary class="float-right" id="store" type="button">
+                        <x-button.success class="float-right" id="store" type="button">
                             <x-slot name="icon">
-                                <x-icons.angle-right class="icon h-5 w-5" />
+                                <x-icons.checklist-stepper class="icon h-5 w-5" />
                             </x-slot>
-                            Update laporan
-                        </x-button.primary>
+                            {{ __('Simpan laporan') }}
+                        </x-button.success>
                     </div>
 
                 </div>

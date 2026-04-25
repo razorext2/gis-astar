@@ -16,10 +16,11 @@
                         <h3 class="text-xl font-bold text-gray-800 dark:text-white">Informasi Personal</h3>
                     </div>
                     @if (auth()->user()->can('pegawai-edit'))
-                        <a class="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition-all hover:bg-blue-600 hover:text-white dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-600 dark:hover:text-white"
-                            href="{{ route('pegawai.edit', $pegawai->id) }}">
-                            <x-icons.file-pen class="h-4 w-4" />
-                        </a>
+                        <x-button.primary class="!p-2" href="{{ route('pegawai.edit', $pegawai->id) }}">
+                            <x-slot name="icon">
+                                <x-icons.file-pen class="h-4 w-4" />
+                            </x-slot>
+                        </x-button.primary>
                     @endif
                 </div>
 
@@ -54,7 +55,7 @@
 
                         @foreach ($infoData as $item)
                             <div
-                                class="{{ $item['full'] ?? false ? 'col-span-full' : '' }} rounded-2xl border border-white/20 bg-white/40 p-3 shadow-sm transition-all hover:bg-white/60 dark:border-white/5 dark:bg-white/5 dark:hover:bg-white/10">
+                                class="{{ $item['full'] ?? false ? 'col-span-full' : '' }} rounded-2xl border border-white/20 bg-white/40 p-3 shadow-sm transition-all hover:bg-white/60 dark:border-zinc-800 dark:bg-white/5 dark:hover:bg-white/10">
                                 <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
                                     {{ $item['label'] }}</p>
                                 <p class="text-sm font-semibold text-gray-700 dark:text-gray-200">
@@ -112,13 +113,23 @@
                                 });
                             @endphp
                             <div class="aspect-square p-0.5 sm:p-1">
-                                <button type="button" data-date="{{ $date }}"
-                                    data-popover-target="popover-click-{{ $date }}" data-popover-trigger="click"
-                                    class="{{ $hasData
-                                        ? 'bg-gradient-to-br from-green-500 to-emerald-600 text-white border-green-400 shadow-lg shadow-green-500/20 active:scale-95'
-                                        : 'bg-white/50 text-gray-400 border-gray-100 hover:bg-white hover:text-blue-600 hover:border-blue-200 dark:bg-white/5 dark:text-gray-500 dark:border-white/5 dark:hover:bg-white/10' }} flex h-full w-full items-center justify-center rounded-xl border text-xs font-bold transition-all duration-300">
-                                    {{ \Carbon\Carbon::parse($date)->isoFormat('D') }}
-                                </button>
+                                @if ($hasData)
+                                    <x-button.success
+                                        class="!h-full !w-full !border-green-400 !bg-gradient-to-br !from-green-500 !to-emerald-600 !p-0 !text-xs !shadow-lg !shadow-green-500/20"
+                                        type="button" data-date="{{ $date }}"
+                                        data-popover-target="popover-click-{{ $date }}"
+                                        data-popover-trigger="click">
+                                        {{ \Carbon\Carbon::parse($date)->isoFormat('D') }}
+                                    </x-button.success>
+                                @else
+                                    <x-button.secondary
+                                        class="!h-full !w-full !border-zinc-200 !bg-white/50 !p-0 !text-xs !text-gray-400 hover:!border-blue-200 hover:!bg-white hover:!text-blue-600 dark:!border-zinc-800 dark:!bg-white/5 dark:!text-gray-500 dark:hover:!bg-white/10"
+                                        type="button" data-date="{{ $date }}"
+                                        data-popover-target="popover-click-{{ $date }}"
+                                        data-popover-trigger="click">
+                                        {{ \Carbon\Carbon::parse($date)->isoFormat('D') }}
+                                    </x-button.secondary>
+                                @endif
                             </div>
                         @else
                             <div class="aspect-square"></div>

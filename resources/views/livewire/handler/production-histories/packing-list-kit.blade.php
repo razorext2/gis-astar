@@ -1,17 +1,19 @@
 <div id="accordion-box-form" x-data="{ accordionOpen: false }">
-    <button type="button"
-        class="d flex w-full items-center justify-between gap-3 rounded-lg border border-gray-200 bg-green-500 p-5 font-medium text-white transition-all duration-300 ease-in-out hover:bg-green-400 dark:border-gray-600 dark:bg-green-600 dark:hover:bg-green-500"
-        @click="accordionOpen = !accordionOpen" :class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
+    <x-button.success type="button"
+        class="w-full flex-row-reverse justify-between rounded-lg p-5"
+        @click="accordionOpen = !accordionOpen" ::class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
+        <x-slot name="icon">
+            <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
+                <x-icons.carred-down class="h-4 w-4" />
+            </span>
+        </x-slot>
+
         <h3 class="text-base font-semibold text-white">
             Tambah Detail Item di Peti?
         </h3>
+    </x-button.success>
 
-        <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
-            <x-icons.carred-down class="h-4 w-4" />
-        </span>
-    </button>
-
-    <div class="rounded-b-lg border border-gray-200 p-5 dark:border-gray-700" x-show="accordionOpen" x-collapse x-cloak>
+    <div class="rounded-b-lg border border-zinc-200 p-5 dark:border-zinc-800" x-show="accordionOpen" x-collapse x-cloak>
         <form class="flex flex-col gap-2 lg:gap-4" wire:submit.prevent="store" method="post">
             <div class="flex flex-col gap-2 lg:gap-4">
                 {{-- field barang dan ekspedisi --}}
@@ -64,7 +66,7 @@
                 {{-- end field barang dan ekspedisi --}}
 
                 <div
-                    class="relative mt-2 flex flex-col gap-2 rounded-lg p-2 ring-1 ring-gray-400 dark:ring-gray-600 lg:p-4">
+                    class="relative mt-2 flex flex-col gap-2 rounded-lg p-2 ring-1 ring-zinc-200 dark:ring-zinc-800 lg:p-4">
 
 
                     <h4
@@ -87,7 +89,7 @@
 
                             <tbody>
                                 @forelse ($formBox->boxs as $index => $row)
-                                    <tr class="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                                    <tr class="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-gray-800">
                                         <td class="px-3 py-2 text-center">
                                             {{ $index + 1 }}
                                         </td>
@@ -112,7 +114,7 @@
                                         </td>
                                     </tr>
                                 @empty
-                                    <tr class="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                                    <tr class="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-gray-800">
                                         <td colspan="6"
                                             class="px-6 py-4 text-center text-sm font-semibold italic text-red-500">
                                             Belum ada detail peti yang ditambah

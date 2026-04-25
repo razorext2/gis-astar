@@ -195,7 +195,7 @@
             @if (!$addForm->documentations)
                 <div class="flex w-full flex-col gap-y-2">
                     <label for="documentations"
-                        class="flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-800">
+                        class="flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-200 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-zinc-800 dark:bg-gray-700 dark:hover:border-zinc-800 dark:hover:bg-gray-800">
                         <div class="flex flex-col items-center justify-center pb-6 pt-5">
                             <x-icons.cloud-upload class="mb-2 h-8 w-8 text-gray-500 dark:text-gray-400" />
                             <p class="mb-0.5 text-sm text-gray-500 dark:text-gray-400">
@@ -215,7 +215,7 @@
             @else
                 <div class="mt-2 flex flex-col gap-2">
                     <div
-                        class="dark:highlight-white/5 relative min-w-0 overflow-auto rounded-xl border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700">
+                        class="dark:highlight-white/5 relative min-w-0 overflow-auto rounded-xl border border-zinc-200 bg-gray-50 dark:border-zinc-800 dark:bg-gray-700">
 
                         <div class="flex overflow-x-scroll">
 
@@ -223,11 +223,11 @@
                                 <div class="flex-none px-1.5 py-3 first:pl-3 last:pr-3">
                                     <div class="relative flex flex-col items-center justify-center gap-3">
                                         <img class="w-24 rounded-lg" src="{{ $doc->temporaryUrl() }}">
-                                        <button type="button"
-                                            class="absolute end-0 top-0 rounded-lg bg-red-500 p-1 text-white hover:bg-red-600"
+                                        <x-button.danger
+                                            class="absolute end-0 top-0 !rounded-lg !p-1 !shadow-none" type="button"
                                             wire:click="removeDocumentation({{ $index }})">
                                             <x-icons.close class="h-4 w-4" />
-                                        </button>
+                                        </x-button.danger>
                                         <p class="text-xs text-gray-600 dark:text-white">
                                             @php
                                                 $name = $doc->getClientOriginalName();

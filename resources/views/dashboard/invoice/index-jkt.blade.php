@@ -3,7 +3,7 @@
     <div class="relative grid grid-cols-1 gap-4">
 
         <div
-            class="flex flex-col rounded-xl bg-white p-2 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 lg:p-6">
+            class="flex flex-col rounded-xl bg-white p-2 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 lg:p-6">
 
             <span class="text-xl font-semibold text-gray-900 dark:bg-dark-primary dark:text-white">
                 Manajemen Invoice Jakarta
@@ -16,28 +16,34 @@
 
         </div>
 
-        @can(['invoice-list', 'invoice-add'])
-            <div class="flex flex-row gap-2">
-                <x-button.link wire:navigate class="w-fit ring-1 ring-green-700 dark:bg-green-800 dark:text-white"
-                    href="{{ route('invoice.jkt.create', ['tipe_tagihan' => 'idcppn']) }}">
-                    <x-slot name="icon">
-                        <x-icons.angle-right class="h-6 w-6 text-green-500 dark:text-white" />
-                    </x-slot>
-                    Invoice IDC
-                </x-button.link>
+        <div class="flex flex-row items-center justify-between gap-2">
+            @can(['invoice-list', 'invoice-add'])
+                <div class="flex flex-row gap-2">
+                    <x-button.success wire:navigate href="{{ route('invoice.jkt.create', ['tipe_tagihan' => 'idcppn']) }}">
+                        <x-slot name="icon">
+                            <x-icons.angle-right class="h-6 w-6" />
+                        </x-slot>
+                        Invoice IDC
+                    </x-button.success>
 
-                <x-button.link wire:navigate class="w-fit ring-1 ring-green-700 dark:bg-green-800 dark:text-white"
-                    href="{{ route('invoice.jkt.create', ['tipe_tagihan' => 'idyppn']) }}">
-                    <x-slot name="icon">
-                        <x-icons.angle-right class="h-6 w-6 text-green-500 dark:text-white" />
-                    </x-slot>
-                    Invoice IDY
-                </x-button.link>
-            </div>
-        @endcan
+                    <x-button.success wire:navigate href="{{ route('invoice.jkt.create', ['tipe_tagihan' => 'idyppn']) }}">
+                        <x-slot name="icon">
+                            <x-icons.angle-right class="h-6 w-6" />
+                        </x-slot>
+                        Invoice IDY
+                    </x-button.success>
+                </div>
+            @endcan
+
+            @canany(['invoice-export-all', 'invoice-export-jkt'])
+                <div class="max-w-xs">
+                    <livewire:handler.invoice.export />
+                </div>
+            @endcanany
+        </div>
 
         <div
-            class="rounded-xl bg-white p-2 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 lg:p-6">
+            class="rounded-xl bg-white p-2 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 lg:p-6">
             <livewire:table-refresher table-name="InvoiceTable" />
         </div>
     </div>

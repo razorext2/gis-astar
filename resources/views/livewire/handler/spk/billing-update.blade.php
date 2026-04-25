@@ -2,7 +2,7 @@
     {{-- info cust spk --}}
     <div class="grid w-full grid-cols-2">
         <div
-            class="col-span-2 rounded-t-xl border-[1px] border-gray-200 bg-gray-50 p-2.5 text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:text-white lg:col-span-1 lg:rounded-tr-none">
+            class="col-span-2 rounded-t-xl border-[1px] border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1 lg:rounded-tr-none">
             <p class="text-xs italic"> No. SPK </p>
             <p class="font-semibold">
                 {{ $spk_data->nomor_order . ($spk_data->revision_count ? 'R' . str_pad($spk_data->revision_count, 2, '0', STR_PAD_LEFT) : '') }}
@@ -10,7 +10,7 @@
         </div>
 
         <div
-            class="col-span-2 border-[1px] border-gray-200 bg-gray-50 p-2.5 text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:text-white lg:col-span-1 lg:rounded-tr-xl">
+            class="col-span-2 border-[1px] border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1 lg:rounded-tr-xl">
             <p class="text-xs italic">Tanggal SPK Dibuat</p>
             <p class="font-semibold">
                 {{ $spk_data->created_at }}
@@ -18,14 +18,14 @@
         </div>
 
         <div
-            class="col-span-2 border-[1px] border-gray-200 bg-gray-50 p-2.5 text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:text-white lg:col-span-1">
+            class="col-span-2 border-[1px] border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1">
             <p class="text-xs italic">Nama Customer</p>
             <p class="font-semibold">
                 {{ empty($spk_data->customer['nama_perusahaan']) ? '-' : $spk_data->customer['nama_perusahaan'] }}</p>
         </div>
 
         <div
-            class="col-span-2 border-[1px] border-gray-200 bg-gray-50 p-2.5 text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:text-white lg:col-span-1">
+            class="col-span-2 border-[1px] border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1">
             <p class="text-xs italic">Nama Penerima</p>
             <p class="font-semibold">
                 {{ empty($spk_data->customer['contact_person']) ? '-' : $spk_data->customer['contact_person'] }}
@@ -33,7 +33,7 @@
         </div>
 
         <div
-            class="col-span-2 border-[1px] border-gray-200 bg-gray-50 p-2.5 text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:text-white lg:rounded-b-xl">
+            class="col-span-2 border-[1px] border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:rounded-b-xl">
             <p class="text-xs italic">Nomor Tagihan</p>
             <p class="font-semibold"> {{ $spk_data->nomor_tagihan ?? 'Belum di assign.' }}</p>
         </div>
@@ -49,7 +49,7 @@
                     </label>
 
                     <select
-                        class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                        class="block w-full rounded-lg border border-zinc-200 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                         id="tipe_tagihan" name="tipe_tagihan" wire:model.live="form.tipe_tagihan" disabled>
                         <option value="">Pilih tipe tagihan...</option>
                         @foreach (config('spk-config.spk_tipe_tagihan') as $key => $row)
@@ -80,24 +80,24 @@
 
             <div wire:show="form.nomor_tagihan_baru" wire:transition class="relative mt-6 grid w-full grid-cols-2">
                 <span
-                    class="absolute -top-6 block rounded-t-lg border border-b-0 border-gray-200 bg-gray-50 px-2 py-0.5 text-sm font-medium text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                    class="absolute -top-6 block rounded-t-lg border border-b-0 border-zinc-200 bg-gray-50 px-2 py-0.5 text-sm font-medium text-gray-900 dark:border-zinc-800 dark:bg-gray-700 dark:text-white">
                     Rekap Piutang (BSI)
                 </span>
 
                 <div
-                    class="col-span-2 border-[1px] border-gray-200 bg-gray-50 p-2.5 text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:text-white lg:col-span-1">
+                    class="col-span-2 border-[1px] border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1">
                     <p class="text-xs italic"> No. Tagihan (SR/FP) </p>
                     <p class="font-semibold"> {{ $form->nomor_tagihan ?? '-' }}</p>
                 </div>
 
                 <div
-                    class="col-span-2 border-[1px] border-gray-200 bg-gray-50 p-2 text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:text-white lg:col-span-1">
+                    class="col-span-2 border-[1px] border-zinc-200 bg-gray-50 p-2 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1">
                     <p class="text-xs italic">Nama Customer</p>
                     <p class="font-semibold"> {{ $form->nama_customer ?? '-' }}</p>
                 </div>
 
                 <div
-                    class="col-span-2 rounded-b-xl border-[1px] border-gray-200 bg-gray-50 p-2 text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                    class="col-span-2 rounded-b-xl border-[1px] border-zinc-200 bg-gray-50 p-2 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white">
 
                     <dl class="items-center justify-between gap-4 sm:flex">
                         <dt class="mb-1 font-normal text-blue-500 dark:text-blue-400 sm:mb-0">Total Piutang</dt>
@@ -145,11 +145,11 @@
             </h3>
 
             <div
-                class="flex w-full flex-col items-center justify-center gap-2 rounded-lg p-2 ring-1 ring-gray-200 dark:bg-gray-700 dark:ring-gray-600 lg:gap-4 lg:p-4">
+                class="flex w-full flex-col items-center justify-center gap-2 rounded-lg p-2 ring-1 ring-zinc-200 dark:bg-gray-700 dark:ring-zinc-800 lg:gap-4 lg:p-4">
 
                 @foreach ($this->histories as $index => $row)
                     <div
-                        class="flex w-full flex-col gap-2 border-b border-gray-200 pb-2 text-gray-800 dark:border-gray-600 dark:text-white">
+                        class="flex w-full flex-col gap-2 border-b border-zinc-200 pb-2 text-gray-800 dark:border-zinc-800 dark:text-white">
                         <div class="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-8">
                             <div class="text-right text-xs lg:text-left">
                                 <p>

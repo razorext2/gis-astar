@@ -6,7 +6,7 @@
     {{-- ===================== KOLOM FORM ===================== --}}
     <div class="w-full space-y-6">
         <div
-            class="rounded-xl bg-white p-4 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 sm:p-6">
+            class="rounded-xl bg-white p-4 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 sm:p-6">
             <div class="max-w-xl">
 
                 {{-- Header --}}
@@ -33,7 +33,7 @@
                     {{-- Kode Penempatan --}}
                     <div class="w-full">
                         <x-input.basic id="kode_penempatan" name="kode_penempatan" wire:model="kode_penempatan"
-                            class="{{ $errors->has('kode_penempatan') ? 'border-red-500 bg-red-50' : 'border-gray-300 bg-white' }}"
+                            class="{{ $errors->has('kode_penempatan') ? 'border-red-500 bg-red-50' : 'border-zinc-200 bg-white' }}"
                             placeholder="Contoh: PLC-001">
                             Kode Penempatan
                         </x-input.basic>
@@ -46,7 +46,7 @@
                     {{-- Nama Penempatan --}}
                     <div class="w-full">
                         <x-input.basic id="penempatan" name="penempatan" wire:model="penempatan"
-                            class="{{ $errors->has('penempatan') ? 'border-red-500 bg-red-50' : 'border-gray-300 bg-white' }}"
+                            class="{{ $errors->has('penempatan') ? 'border-red-500 bg-red-50' : 'border-zinc-200 bg-white' }}"
                             placeholder="Nama kantor / lokasi">
                             Nama Penempatan
                         </x-input.basic>
@@ -59,7 +59,7 @@
                     {{-- Pembatasan Akses --}}
                     <div class="w-full">
                         <x-input.select id="restrict_app" name="restrict_app" wire:model="restrict_app"
-                            class="{{ $errors->has('restrict_app') ? 'border-red-500 bg-red-50' : 'border-gray-300 bg-white' }}"
+                            class="{{ $errors->has('restrict_app') ? 'border-red-500 bg-red-50' : 'border-zinc-200 bg-white' }}"
                             :defaultOption="'-- Pilih --'" :options="['y' => 'Ya - Dibatasi', 't' => 'Tidak - Bebas']" :labels="true" :textLabel="'Pembatasan Akses Aplikasi'" />
 
                         @error('restrict_app')
@@ -70,7 +70,7 @@
                     {{-- Alamat --}}
                     <div class="w-full">
                         <x-input.textarea id="alamat" name="alamat" wire:model="alamat"
-                            class="{{ $errors->has('alamat') ? 'border-red-500 bg-red-50' : 'border-gray-300 bg-white' }}"
+                            class="{{ $errors->has('alamat') ? 'border-red-500 bg-red-50' : 'border-zinc-200 bg-white' }}"
                             placeholder="Masukkan alamat lengkap penempatan" :labels="true" :textLabel="'Alamat Lengkap'" />
 
                         @error('alamat')
@@ -81,7 +81,7 @@
                     {{-- Radius Slider (Alpine-controlled, entangled with Livewire) --}}
                     <div class="w-full">
                         <x-input.basic type="number" id="radius-number" name="radius-number" wire:model="radius"
-                            class="{{ $errors->has('radius') ? 'border-red-500 bg-red-50' : 'border-gray-300 bg-white' }}"
+                            class="{{ $errors->has('radius') ? 'border-red-500 bg-red-50' : 'border-zinc-200 bg-white' }}"
                             placeholder="Masukkan radius absen" :labels="true" :textLabel="'Radius Absen'" min="10"
                             max="150" x-model.number="radius">
                             Radius Absen
@@ -111,7 +111,7 @@
                     <div class="grid gap-4 md:grid-cols-2">
                         <div>
                             <x-input.basic id="longitude" name="longitude" wire:model="longitude"
-                                class="{{ $errors->has('longitude') ? 'border-red-500 bg-red-50' : 'border-gray-300 bg-white' }}"
+                                class="{{ $errors->has('longitude') ? 'border-red-500 bg-red-50' : 'border-zinc-200 bg-white' }}"
                                 placeholder="Otomatis dari peta">
                                 Longitude
                             </x-input.basic>
@@ -122,7 +122,7 @@
                         </div>
                         <div>
                             <x-input.basic id="latitude" name="latitude" wire:model="latitude"
-                                class="{{ $errors->has('latitude') ? 'border-red-500 bg-red-50' : 'border-gray-300 bg-white' }}"
+                                class="{{ $errors->has('latitude') ? 'border-red-500 bg-red-50' : 'border-zinc-200 bg-white' }}"
                                 placeholder="Otomatis dari peta">
                                 Latitude
                             </x-input.basic>
@@ -143,14 +143,11 @@
 
                 </div>
 
-                {{-- Tombol Submit --}}
                 <div class="mt-6 flex items-center gap-3">
-                    <button wire:click="save" wire:loading.attr="disabled"
-                        wire:loading.class="opacity-60 cursor-not-allowed" type="button"
-                        class="inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium text-gray-900 ring-1 ring-blue-700 transition hover:bg-blue-800 hover:text-white focus:ring-4 focus:ring-blue-300 dark:bg-blue-800 dark:text-white dark:ring-gray-700 dark:hover:bg-blue-900">
+                    <x-button.primary wire:click="save" wire:loading.attr="disabled" type="button" id="save-placement">
                         <span wire:loading.remove wire:target="save">Simpan</span>
                         <span wire:loading wire:target="save">Menyimpan...</span>
-                    </button>
+                    </x-button.primary>
                 </div>
 
             </div>
@@ -160,7 +157,7 @@
     {{-- ===================== KOLOM PETA ===================== --}}
     <div class="w-full">
         <div
-            class="rounded-xl bg-white p-4 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 sm:p-6">
+            class="rounded-xl bg-white p-4 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 sm:p-6">
             <div class="max-w-xl">
                 <header>
                     <h2 class="text-lg font-medium text-gray-900 dark:text-white">
@@ -173,7 +170,7 @@
 
                 {{-- Map div — data attributes sebagai config untuk JS, tanpa global variables --}}
                 <div wire:ignore>
-                    <div id="placement-map" class="relative z-0 my-4 rounded-lg ring-1 ring-gray-200"
+                    <div id="placement-map" class="relative z-0 my-4 rounded-lg ring-1 ring-zinc-200"
                         style="height: 500px;" data-icon="{{ asset('assets/img/marker.png') }}"
                         data-shadow="{{ asset('assets/img/marker-shadow.png') }}" data-lat="{{ $latitude ?: '' }}"
                         data-lng="{{ $longitude ?: '' }}" data-radius="{{ $radius }}">

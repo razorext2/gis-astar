@@ -1,5 +1,5 @@
 <div
-    class="relative mt-4 overflow-hidden rounded-2xl bg-white/60 p-6 shadow-sm ring-1 ring-gray-200/60 backdrop-blur-xl dark:bg-dark-primary/60 dark:ring-white/10 lg:p-8">
+    class="relative mt-4 overflow-hidden rounded-2xl bg-white/60 p-6 shadow-sm ring-1 ring-zinc-200/60 backdrop-blur-sm dark:bg-dark-primary/60 dark:ring-white/10 lg:p-8">
     <!-- Dekorasi Blur Blob -->
     <div
         class="bg-primary/5 dark:bg-primary/10 pointer-events-none absolute -right-20 -top-20 z-0 h-64 w-64 rounded-full opacity-50 blur-3xl">
@@ -43,7 +43,7 @@
 
             <!-- Ketua Tim -->
             <div
-                class="flex flex-col rounded-xl bg-gray-50/50 p-5 ring-1 ring-gray-200 dark:bg-gray-800/30 dark:ring-gray-700/50">
+                class="flex flex-col rounded-xl bg-gray-50/50 p-5 ring-1 ring-zinc-200 dark:bg-gray-800/30 dark:ring-zinc-800/50">
                 <div class="mb-2 flex items-center gap-3">
                     <div class="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg">
                         <x-icons.user class="text-primary h-6 w-6" />
@@ -71,20 +71,20 @@
 
                     @if ($search_user != '')
                         <div
-                            class="mt-3 max-h-[220px] overflow-y-auto rounded-xl bg-white p-2 shadow-sm ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700">
+                            class="mt-3 max-h-[220px] overflow-y-auto rounded-xl bg-white p-2 shadow-sm ring-1 ring-zinc-200 dark:bg-gray-800 dark:ring-zinc-800">
                             @forelse ($users as $user)
                                 <label for="helper-radio-{{ $user->kode_pegawai }}"
                                     class="group flex cursor-pointer items-center rounded-lg p-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50">
                                     <div class="flex h-5 items-center">
                                         <input id="helper-radio-{{ $user->kode_pegawai }}" wire:model="team_leader"
                                             type="radio" value="{{ $user->kode_pegawai }}" required
-                                            class="text-primary focus:ring-primary/50 h-4 w-4 border-gray-300 bg-gray-100 focus:ring-2 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800">
+                                            class="text-primary focus:ring-primary/50 h-4 w-4 border-zinc-200 bg-gray-100 focus:ring-2 dark:border-zinc-800 dark:bg-gray-700 dark:ring-offset-gray-800">
                                     </div>
                                     <div class="ms-3 flex flex-col">
                                         <span
                                             class="group-hover:text-primary font-semibold text-gray-900 dark:text-gray-200 dark:group-hover:text-white">{{ $user->name }}</span>
                                         <span class="text-sm text-gray-500 dark:text-gray-400">Kode Pegawai: <span
-                                                class="border-gray-300 font-bold dark:border-gray-600">{{ $user->kode_pegawai }}</span></span>
+                                                class="border-zinc-200 font-bold dark:border-zinc-800">{{ $user->kode_pegawai }}</span></span>
                                     </div>
                                 </label>
                             @empty
@@ -110,7 +110,7 @@
             </div>
 
             <!-- Tombol Submit -->
-            <div class="mt-2 flex w-full justify-end gap-3 border-t border-gray-100 pt-6 dark:border-gray-800/50">
+            <div class="mt-2 flex w-full justify-end gap-3 border-t border-zinc-200 pt-6 dark:border-zinc-800/50">
                 <x-button.danger href="{{ route('teams.index') }}" wire:navigate as="a">Batal</x-button.danger>
 
                 <x-button.primary type="submit" class="shadow-primary/20 px-8 transition-all hover:shadow-lg">

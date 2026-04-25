@@ -14,9 +14,11 @@
                 <div class="flex items-center justify-between border-b px-4 py-2">
                     <h2 class="font-semibold">Laporan Harian Teknisi/Mekanik</h2>
 
-                    <button class="p-2" @click="open=false; $wire.set('showPreview', false)">
-                        <x-icons.close class="h-5 w-5 text-red-500" />
-                    </button>
+                    <x-button.secondary class="!bg-transparent !p-1 !ring-0 hover:!bg-gray-100 dark:hover:!bg-gray-800" @click="open=false; $wire.set('showPreview', false)">
+                        <x-slot name="icon">
+                            <x-icons.close class="h-5 w-5 text-red-500" />
+                        </x-slot>
+                    </x-button.secondary>
                 </div>
 
                 <!-- Konten PDF: iframe -->

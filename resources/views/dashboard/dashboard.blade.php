@@ -36,7 +36,7 @@
                     <livewire:chart.line />
                 </div>
 
-                <div class="mt-4 border-t border-zinc-100 pt-5 dark:border-zinc-800">
+                <div class="mt-4 border-t border-zinc-200 pt-5 dark:border-zinc-800">
                     <div class="flex flex-wrap items-center justify-between gap-3">
 
                         <x-button.primary form="attend-in" type="submit"

@@ -26,21 +26,23 @@
                 $dailyReport->assignment->status !== 'completed' &&
                 $dailyReport->status !== 'submitted')
             <div wire:show="showAddForm" id="accordion-packing-form" x-data="{ accordionOpen: true }">
-                <button type="button"
-                    class="flex w-full items-center justify-between gap-3 rounded-lg p-5 font-medium text-gray-500 ring-1 ring-gray-200 transition-all duration-300 ease-in-out hover:bg-blue-100 dark:text-gray-400 dark:ring-gray-600 dark:hover:bg-gray-800"
-                    @click="accordionOpen = !accordionOpen" :class="accordionOpen ? 'rounded-b-none ring-b-0' : ''">
-                    <h3 class="text-base font-semibold text-gray-800 dark:text-white">
+                <x-button.success type="button"
+                    class="w-full flex-row-reverse justify-between rounded-lg p-5"
+                    @click="accordionOpen = !accordionOpen" ::class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
+                    <x-slot name="icon">
+                        <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
+                            <x-icons.carred-down class="h-4 w-4" />
+                        </span>
+                    </x-slot>
+
+                    <h3 class="text-base font-semibold text-white">
                         Tambah aktivitas?
                     </h3>
-
-                    <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
-                        <x-icons.carred-down class="h-4 w-4" />
-                    </span>
-                </button>
+                </x-button.success>
 
                 {{-- Form Tambah Aktivitas --}}
                 <div x-show="accordionOpen" x-collapse x-cloak
-                    class="w-full rounded-b-lg bg-white p-2 shadow-sm ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700 lg:p-4">
+                    class="w-full rounded-b-lg bg-white p-2 shadow-sm ring-1 ring-zinc-200 dark:bg-gray-800 dark:ring-zinc-800 lg:p-4">
 
                     <form wire:submit.prevent="store" class="grid grid-cols-1 gap-4 lg:grid-cols-2">
 
@@ -69,7 +71,7 @@
                         </div>
 
                         <div
-                            class="col-span-2 grid w-full grid-cols-1 gap-2 rounded-lg border border-gray-200 p-2 dark:border-gray-600 lg:gap-4 lg:p-4">
+                            class="col-span-2 grid w-full grid-cols-1 gap-2 rounded-lg border border-zinc-200 p-2 dark:border-zinc-800 lg:gap-4 lg:p-4">
 
                             <div x-show="$wire.docForm.new_attachments.length > 0">
                                 <span class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
@@ -77,7 +79,7 @@
                                 </span>
 
                                 <ul
-                                    class="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white shadow-sm dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-700">
+                                    class="divide-y divide-gray-200 rounded-lg border border-zinc-200 bg-white shadow-sm dark:divide-gray-700 dark:border-zinc-800 dark:bg-gray-700">
 
                                     @foreach ($docForm->new_attachments as $index => $row)
                                         <li
@@ -96,10 +98,10 @@
                                                 </p>
                                             </div>
 
-                                            <button type="button" wire:click="removeAttachment({{ $index }})"
-                                                class="text-sm font-medium text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
-                                                Hapus
-                                            </button>
+                                            <x-button.link type="button" wire:click="removeAttachment({{ $index }})"
+                                                 class="!p-0 font-medium text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                                                 Hapus
+                                             </x-button.link>
                                         </li>
                                     @endforeach
 
@@ -121,7 +123,7 @@
                                     x-on:livewire-upload-error="uploading = false"
                                     x-on:livewire-upload-progress="progress = $event.detail.progress">
                                     <label for="attachment"
-                                        class="flex h-36 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-800">
+                                        class="flex h-36 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-200 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-zinc-800 dark:bg-gray-700 dark:hover:border-zinc-800 dark:hover:bg-gray-800">
                                         <div class="flex flex-col items-center justify-center pb-6 pt-5">
                                             <x-icons.cloud-upload class="mb-2 h-8 w-8 text-gray-500 dark:text-gray-400" />
 
@@ -225,7 +227,7 @@
         </div>
 
         {{-- LIST CONTAINER --}}
-        <div class="w-full rounded-xl bg-white shadow-sm ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700">
+        <div class="w-full rounded-xl bg-white shadow-sm ring-1 ring-zinc-200 dark:bg-gray-800 dark:ring-zinc-800">
             <div class="flex flex-col divide-y divide-gray-200 dark:divide-gray-700">
                 @forelse ($this->hourlyReports as $index => $row)
                     <div class="p-2 transition hover:bg-gray-50 dark:hover:bg-gray-700/40 lg:p-4">
@@ -329,7 +331,7 @@
             </div>
 
             {{-- PAGINATION --}}
-            <div class="border-t border-gray-200 p-2 dark:border-gray-700 lg:p-4">
+            <div class="border-t border-zinc-200 p-2 dark:border-zinc-800 lg:p-4">
                 {{ $this->hourlyReports->links() }}
             </div>
         </div>

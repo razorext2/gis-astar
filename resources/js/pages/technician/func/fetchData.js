@@ -1,115 +1,142 @@
-import * as alert from '../../../utils/alert';
-import { clearForm } from './clearForm';
+import * as alert from "../../../utils/alert";
+import { clearForm } from "./clearForm";
 
 export function fetchDataHandler() {
-  // panggil fungsi weightChanged
-  weightChanged();
+    // panggil fungsi weightChanged
+    weightChanged();
 
-  let no_vt = $('#no_vt').val();
+    let no_vt = $("#no_vt").val();
 
-  if (no_vt != '') {
-    fetchDataAsync();
-  }
+    if (no_vt != "") {
+        fetchDataAsync();
+    }
 
-  $('#no_vt_submit').on('click', async function () {
-    $('#captured-images').addClass('hidden');
-    $('#saved_documentation').addClass('hidden');
-    fetchDataAsync();
-  });
+    $("#no_vt_submit").on("click", async function () {
+        $("#captured-images").addClass("hidden");
+        $("#saved_documentation").addClass("hidden");
+        fetchDataAsync();
+    });
 }
 
 async function fetchDataAsync() {
-  $('#partner_parent').addClass('hidden');
-  $('#partner_child').empty();
+    $("#partner_parent").addClass("hidden");
+    $("#partner_child").empty();
 
-  if ($('#no_vt').val() == '') {
-    return alert.showAlert('error', 'Nomor Kunjungan tidak boleh kosong!');
-  }
-
-  alert.loadingAlert("Sedang mencari data...");
-
-  try {
-    const resDB = await axios.get(`/proxy/get/vt-db`, {
-      params: {
-        no_vt: $('#no_vt').val(),
-      },
-    });
-    const resultDB = resDB.data;
-    const arrTimb = {
-      data: [
-        'Single Deck',
-        'Floor Scale',
-        'Hopper',
-        'Tangki',
-        'Conveyer',
-        'Check Weigher',
-        'Timbangan Jembatan',
-      ]
+    if ($("#no_vt").val() == "") {
+        return alert.showAlert("error", "Nomor Kunjungan tidak boleh kosong!");
     }
 
-    if (resultDB.success) { // kalo ada data nya di database
-      // kalo data udah di konfirmasi
-      if (!resultDB.data) {
-        return alert.showAlert('error', resultDB.message, 'Anda tidak dapat mengubah data yang telah dikonfirmasi.');
-      }
+    alert.loadingAlert("Sedang mencari data...");
 
-      const data = resultDB.data;
-      alert.showAlert('success', resultDB.message);
+    try {
+        const resDB = await axios.get(`/proxy/get/vt-db`, {
+            params: {
+                no_vt: $("#no_vt").val(),
+            },
+        });
+        const resultDB = resDB.data;
+        const arrTimb = {
+            data: [
+                "Single Deck",
+                "Floor Scale",
+                "Hopper",
+                "Tangki",
+                "Conveyer",
+                "Check Weigher",
+                "Timbangan Jembatan",
+            ],
+        };
 
-      if (data.status == 0) {
-        const storeBtn = document.getElementById('store');
-        storeBtn.disabled = true;
-        storeBtn.classList.add('bg-gray-200', 'dark:bg-gray-600', 'ring-gray-400', 'dark:ring-gray-500', 'cursor-not-allowed');
-        document.getElementById('warning_status').classList.remove('hidden');
-      } else if (data.status == 3) {
-        alert.showAlert('warning', 'Laporan telah di tolak', 'Anda masih dapat mengajukan kembali laporan yang sudah ditolak.');
-      }
+        if (resultDB.success) {
+            // kalo ada data nya di database
+            // kalo data udah di konfirmasi
+            if (!resultDB.data) {
+                return alert.showAlert(
+                    "error",
+                    resultDB.message,
+                    "Anda tidak dapat mengubah data yang telah dikonfirmasi.",
+                );
+            }
 
-      $('#kode_pegawai').val(data.kode_pegawai);
-      $('#employee_name').val(data.technician_name);
-      $('#id_permintaan').val(data.id_permintaan);
-      $('#visit_date').val(data.visit_date);
-      $('#customer_contact').val(data.customer_contact);
-      $('#customer_address').val(data.customer_address);
-      $('#job_detail').val(data.job_detail);
-      const [length, width] = data.size.split(/[*x]/i).map(val => val.trim());
-      $('#length').val(length || '');
-      $('#width').val(width || '');
-      $('#capacity').val(data.capacity);
-      $('#indicator_type').val(data.indicator_type);
-      $('#indicator_sn').val(data.indicator_sn);
-      $('#loadcell_type').val(data.loadcell_type);
-      $('#loadcell_qty').val(data.loadcell_qty);
-      $('#loadcell_sn').val(data.loadcell_sn);
-      $('#junction_type').val(data.junction_type);
-      $('#job_update').val(data.job_update);
-      $('#point').val(data.point);
-      $('#weight_type option[value="' + data.weight_type + '"]').prop('selected', true).trigger('change');
-      $('#status option[value="' + data.status + '"]').prop('selected', true).trigger('change');
+            const data = resultDB.data;
+            alert.showAlert("success", resultDB.message);
 
-      // jika jenis timbangan tidak ada di array data
-      if (!arrTimb.data.includes(data.weight_type)) {
-        $('#other_weight_type').removeClass('hidden'); // tampilkan other_weight_type
-        $('#other_weight_type').val(data.weight_type); // isi other_weight_type
-        $('#weight_type option[value="Other"]').prop('selected', true).trigger('change'); // pilih weight_type
-      }
+            if (data.status == 0) {
+                const storeBtn = document.getElementById("store");
+                storeBtn.disabled = true;
+                storeBtn.classList.add(
+                    "bg-gray-200",
+                    "dark:bg-gray-600",
+                    "ring-zinc-200",
+                    "dark:ring-zinc-800",
+                    "cursor-not-allowed",
+                );
+                document
+                    .getElementById("warning_status")
+                    .classList.remove("hidden");
+            } else if (data.status == 3) {
+                alert.showAlert(
+                    "warning",
+                    "Laporan telah di tolak",
+                    "Anda masih dapat mengajukan kembali laporan yang sudah ditolak.",
+                );
+            }
 
-      // jika Timbangan Jembatan,
-      if (data.weight_type == 'Timbangan Jembatan') {
-        $('#other_loadcell_type').removeClass('hidden'); // tampilkan other_loadcell_type 
-        $('#other_loadcell_type').val(data.loadcell_type); // isi other_loadcell_type
-        $('#loadcell_type option[value="' + data.loadcell_type + '"]').prop('selected', true).trigger('change'); // pilih loadcell_type
-      }
+            $("#kode_pegawai").val(data.kode_pegawai);
+            $("#employee_name").val(data.technician_name);
+            $("#id_permintaan").val(data.id_permintaan);
+            $("#visit_date").val(data.visit_date);
+            $("#customer_contact").val(data.customer_contact);
+            $("#customer_address").val(data.customer_address);
+            $("#job_detail").val(data.job_detail);
+            const [length, width] = data.size
+                .split(/[*x]/i)
+                .map((val) => val.trim());
+            $("#length").val(length || "");
+            $("#width").val(width || "");
+            $("#capacity").val(data.capacity);
+            $("#indicator_type").val(data.indicator_type);
+            $("#indicator_sn").val(data.indicator_sn);
+            $("#loadcell_type").val(data.loadcell_type);
+            $("#loadcell_qty").val(data.loadcell_qty);
+            $("#loadcell_sn").val(data.loadcell_sn);
+            $("#junction_type").val(data.junction_type);
+            $("#job_update").val(data.job_update);
+            $("#point").val(data.point);
+            $('#weight_type option[value="' + data.weight_type + '"]')
+                .prop("selected", true)
+                .trigger("change");
+            $('#status option[value="' + data.status + '"]')
+                .prop("selected", true)
+                .trigger("change");
 
-      // tampilkan container #partner_parent
-      $('#partner_parent').removeClass('hidden');
+            // jika jenis timbangan tidak ada di array data
+            if (!arrTimb.data.includes(data.weight_type)) {
+                $("#other_weight_type").removeClass("hidden"); // tampilkan other_weight_type
+                $("#other_weight_type").val(data.weight_type); // isi other_weight_type
+                $('#weight_type option[value="Other"]')
+                    .prop("selected", true)
+                    .trigger("change"); // pilih weight_type
+            }
 
-      // foreach data partner
-      data.partner.forEach(items => {
-        // append element ke container
-        $('#partner_child').append(`
+            // jika Timbangan Jembatan,
+            if (data.weight_type == "Timbangan Jembatan") {
+                $("#other_loadcell_type").removeClass("hidden"); // tampilkan other_loadcell_type
+                $("#other_loadcell_type").val(data.loadcell_type); // isi other_loadcell_type
+                $('#loadcell_type option[value="' + data.loadcell_type + '"]')
+                    .prop("selected", true)
+                    .trigger("change"); // pilih loadcell_type
+            }
+
+            // tampilkan container #partner_parent
+            $("#partner_parent").removeClass("hidden");
+
+            // foreach data partner
+            data.partner.forEach((items) => {
+                // append element ke container
+                $("#partner_child").append(`
         <div class="mb-4 flex items-center">
-					<input class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600" id="checkbox-${items.NomorKunjungan}" name="partner[]" type="checkbox" data-kode_pegawai="${items.NomorIdentitasTeknisi}" value="${items.NomorKunjungan}">
+					<input class="h-4 w-4 rounded-sm border-zinc-200 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600" id="checkbox-${items.NomorKunjungan}" name="partner[]" type="checkbox" data-kode_pegawai="${items.NomorIdentitasTeknisi}" value="${items.NomorKunjungan}">
 					<div class="flex flex-col ms-2.5" for="checkbox-${items.NomorKunjungan}">
             <span class="text-xs font-medium text-gray-900 dark:text-gray-300">${items.NomorKunjungan}</span>
             <span class="text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -119,26 +146,32 @@ async function fetchDataAsync() {
 				</div>
         `);
 
-        if (items.NomorKunjungan == data.no_vt) {
-          $('#checkbox-' + items.NomorKunjungan).prop('checked', true);
-          $('#checkbox-' + items.NomorKunjungan).prop('disabled', true);
-        }
-      });
+                if (items.NomorKunjungan == data.no_vt) {
+                    $("#checkbox-" + items.NomorKunjungan).prop(
+                        "checked",
+                        true,
+                    );
+                    $("#checkbox-" + items.NomorKunjungan).prop(
+                        "disabled",
+                        true,
+                    );
+                }
+            });
 
-      const containerImg = document.getElementById('captured-images');
-      const containerDoc = document.getElementById('saved_documentation');
+            const containerImg = document.getElementById("captured-images");
+            const containerDoc = document.getElementById("saved_documentation");
 
-      containerImg.innerHTML = '';
-      containerDoc.innerHTML = '';
+            containerImg.innerHTML = "";
+            containerDoc.innerHTML = "";
 
-      data.photo_collects.forEach((item, index) => {
-        const fileUrl = item.photourl;
-        const ext = fileUrl.split('.').pop().toLowerCase(); // normalisasi ekstensi
+            data.photo_collects.forEach((item, index) => {
+                const fileUrl = item.photourl;
+                const ext = fileUrl.split(".").pop().toLowerCase(); // normalisasi ekstensi
 
-        if (['jpg', 'jpeg', 'png'].includes(ext)) {
-          $('#captured-images').removeClass('hidden');
+                if (["jpg", "jpeg", "png"].includes(ext)) {
+                    $("#captured-images").removeClass("hidden");
 
-          containerImg.innerHTML += `
+                    containerImg.innerHTML += `
       <div class="relative me-2 flex-none items-center gap-4">
         <img
           id="documentations"
@@ -146,105 +179,113 @@ async function fetchDataAsync() {
           src="${fileUrl}"
           class="w-36 transition-transform duration-500 hover:scale-105 h-36 object-cover rounded-xl">
       </div>`;
-        }
+                } else if (ext === "pdf") {
+                    $("#saved_documentation").removeClass("hidden");
 
-        else if (ext === 'pdf') {
-          $('#saved_documentation').removeClass('hidden');
+                    // Buat tombol baru jika perlu
+                    const docId = `show_document_${index}`;
+                    const button = document.createElement("button");
+                    button.textContent = `Lihat Dokumen`;
+                    button.id = docId;
+                    button.className =
+                        "dark:bg-blue-800 dark:hover:bg-blue-900 dark:text-white dark:border-zinc-800 rounded-lg bg-blue-400 p-2 font-bold text-white border border-zinc-200 hover:bg-blue-700";
 
-          // Buat tombol baru jika perlu
-          const docId = `show_document_${index}`;
-          const button = document.createElement('button');
-          button.textContent = `Lihat Dokumen`;
-          button.id = docId;
-          button.className = "dark:bg-blue-800 dark:hover:bg-blue-900 dark:text-white dark:border-gray-700 rounded-lg bg-blue-400 p-2 font-bold text-white border border-gray-200 hover:bg-blue-700";
+                    button.addEventListener("click", () => {
+                        window.open(`/storage/technician/${fileUrl}`, "_blank");
+                    });
 
-          button.addEventListener('click', () => {
-            window.open(`/storage/technician/${fileUrl}`, '_blank');
-          });
+                    containerDoc.appendChild(button);
+                }
+            });
+        } else {
+            // kalo ga ada datanya di database
+            // cek datanya di API
+            const response = await axios.get(`/proxy/get/vt`, {
+                params: {
+                    no_vt: $("#no_vt").val(),
+                },
+            });
+            const result = response.data;
+            const arrTimb = {
+                data: [
+                    "Single Deck",
+                    "Floor Scale",
+                    "Hopper",
+                    "Tangki",
+                    "Conveyer",
+                    "Check Weigher",
+                    "Timbangan Jembatan",
+                ],
+            };
 
-          containerDoc.appendChild(button);
-        }
-      });
-    } else { // kalo ga ada datanya di database
-      // cek datanya di API
-      const response = await axios.get(`/proxy/get/vt`, {
-        params: {
-          no_vt: $('#no_vt').val(),
-        },
-      });
-      const result = response.data;
-      const arrTimb = {
-        data: [
-          'Single Deck',
-          'Floor Scale',
-          'Hopper',
-          'Tangki',
-          'Conveyer',
-          'Check Weigher',
-          'Timbangan Jembatan',
-        ]
-      }
+            if (!result.success) {
+                clearForm();
+                return alert.showAlert("error", result.message, result.data);
+            }
 
-      if (!result.success) {
-        clearForm();
-        return alert.showAlert('error', result.message, result.data);
-      }
+            Swal.close();
+            alert.showAlert("success", result.message);
 
-      Swal.close();
-      alert.showAlert('success', result.message);
+            const data = result.data.data[0];
 
-      const data = result.data.data[0];
+            $("#kode_pegawai").val(data.NomorIdentitasTeknisi);
+            $("#employee_name").val(data.NamaTeknisi);
+            $("#id_permintaan").val(data.IDPermintaanKunjungan);
+            $("#visit_date").val(data.TanggalKunjungan);
+            $("#customer_contact").val(data.CustomerContact);
+            $("#customer_address").val(data.AlamatLengkapKunjungan);
+            $("#job_detail").val(data.RincianPekerjaan);
 
-      $('#kode_pegawai').val(data.NomorIdentitasTeknisi);
-      $('#employee_name').val(data.NamaTeknisi);
-      $('#id_permintaan').val(data.IDPermintaanKunjungan);
-      $('#visit_date').val(data.TanggalKunjungan);
-      $('#customer_contact').val(data.CustomerContact);
-      $('#customer_address').val(data.AlamatLengkapKunjungan);
-      $('#job_detail').val(data.RincianPekerjaan);
+            // $('#size').val(data.Ukuran);
+            if (data.Ukuran) {
+                const [length, width] = data.Ukuran.split(/[*x]/i).map((val) =>
+                    val.trim(),
+                );
+                $("#length").val(length || "");
+                $("#width").val(width || "");
+            }
 
-      // $('#size').val(data.Ukuran);
-      if (data.Ukuran) {
-        const [length, width] = data.Ukuran.split(/[*x]/i).map(val => val.trim());
-        $('#length').val(length || '');
-        $('#width').val(width || '');
-      }
+            $("#capacity").val(data.Kapasitas);
+            $("#indicator_type").val(data.TipeIndikator);
+            $("#indicator_sn").val(data.TipeIndikatorSN);
+            $("#loadcell_type").val(data.TipeLoadcell);
+            $("#loadcell_qty").val(data.TipeJunctionBoxSN);
+            $("#loadcell_sn").val(data.TipeLoadcellSN);
+            $("#junction_type").val(data.TipeJunctionBox);
+            $("#junction_sn").val(data.TipeJunctionBoxSN);
+            $("#job_update").val(data.UpdatePekerjaan);
+            $("#point").val(data.Point);
+            $('#weight_type option[value="' + data.JenisTimbangan + '"]')
+                .prop("selected", true)
+                .trigger("change");
 
-      $('#capacity').val(data.Kapasitas);
-      $('#indicator_type').val(data.TipeIndikator);
-      $('#indicator_sn').val(data.TipeIndikatorSN);
-      $('#loadcell_type').val(data.TipeLoadcell);
-      $('#loadcell_qty').val(data.TipeJunctionBoxSN);
-      $('#loadcell_sn').val(data.TipeLoadcellSN);
-      $('#junction_type').val(data.TipeJunctionBox);
-      $('#junction_sn').val(data.TipeJunctionBoxSN);
-      $('#job_update').val(data.UpdatePekerjaan);
-      $('#point').val(data.Point);
-      $('#weight_type option[value="' + data.JenisTimbangan + '"]').prop('selected', true).trigger('change');
+            // jika jenis timbangan tidak ada di array data
+            if (!arrTimb.data.includes(data.JenisTimbangan)) {
+                $("#other_weight_type").removeClass("hidden"); // tampilkan other_weight_type
+                $("#other_weight_type").val(data.JenisTimbangan); // isi other_weight_type
+                $('#weight_type option[value="Other"]')
+                    .prop("selected", true)
+                    .trigger("change"); // pilih weight_type
+            }
 
-      // jika jenis timbangan tidak ada di array data
-      if (!arrTimb.data.includes(data.JenisTimbangan)) {
-        $('#other_weight_type').removeClass('hidden'); // tampilkan other_weight_type
-        $('#other_weight_type').val(data.JenisTimbangan); // isi other_weight_type
-        $('#weight_type option[value="Other"]').prop('selected', true).trigger('change'); // pilih weight_type
-      }
+            // jika Timbangan Jembatan,
+            if (data.JenisTimbangan == "Timbangan Jembatan") {
+                $("#other_loadcell_type").removeClass("hidden"); // tampilkan other_loadcell_type
+                $("#other_loadcell_type").val(data.TipeLoadcell); // isi other_loadcell_type
+                $('#loadcell_type option[value="' + data.TipeLoadcell + '"]')
+                    .prop("selected", true)
+                    .trigger("change"); // pilih loadcell_type
+            }
 
-      // jika Timbangan Jembatan,
-      if (data.JenisTimbangan == 'Timbangan Jembatan') {
-        $('#other_loadcell_type').removeClass('hidden'); // tampilkan other_loadcell_type 
-        $('#other_loadcell_type').val(data.TipeLoadcell); // isi other_loadcell_type
-        $('#loadcell_type option[value="' + data.TipeLoadcell + '"]').prop('selected', true).trigger('change'); // pilih loadcell_type
-      }
+            // tampilkan container #partner_parent
+            $("#partner_parent").removeClass("hidden");
 
-      // tampilkan container #partner_parent
-      $('#partner_parent').removeClass('hidden');
-
-      // foreach data partner
-      result.data.data[0].partner.forEach(items => {
-        // append element ke container
-        $('#partner_child').append(`
+            // foreach data partner
+            result.data.data[0].partner.forEach((items) => {
+                // append element ke container
+                $("#partner_child").append(`
         <div class="mb-4 flex items-center">
-					<input class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600" id="checkbox-${items.NomorKunjungan}" name="partner[]" type="checkbox" data-kode_pegawai="${items.NomorIdentitasTeknisi}" value="${items.NomorKunjungan}">
+					<input class="h-4 w-4 rounded-sm border-zinc-200 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600" id="checkbox-${items.NomorKunjungan}" name="partner[]" type="checkbox" data-kode_pegawai="${items.NomorIdentitasTeknisi}" value="${items.NomorKunjungan}">
 					<div class="flex flex-col ms-2.5" for="checkbox-${items.NomorKunjungan}">
             <span class="text-xs font-medium text-gray-900 dark:text-gray-300">${items.NomorKunjungan}</span>
             <span class="text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -254,31 +295,33 @@ async function fetchDataAsync() {
 				</div>
         `);
 
-        if (items.NomorKunjungan == data.NomorKunjungan) {
-          $('#checkbox-' + items.NomorKunjungan).prop('checked', true);
+                if (items.NomorKunjungan == data.NomorKunjungan) {
+                    $("#checkbox-" + items.NomorKunjungan).prop(
+                        "checked",
+                        true,
+                    );
+                }
+            });
         }
-      });
+    } catch (error) {
+        clearForm();
+        alert.showAlert("error", "Failed to fetch data", error.message);
     }
-  } catch (error) {
-    clearForm();
-    alert.showAlert('error', 'Failed to fetch data', error.message);
-  }
 }
 
 function weightChanged() {
-  $('#weight_type').on('change', function () {
+    $("#weight_type").on("change", function () {
+        $("#other_weight_type").addClass("hidden");
+        $("#other_loadcell_type").addClass("hidden");
+        $("#loadcell_type").removeClass("hidden");
 
-    $('#other_weight_type').addClass('hidden')
-    $('#other_loadcell_type').addClass('hidden')
-    $('#loadcell_type').removeClass('hidden');
+        if (this.value == "Other") {
+            $("#other_weight_type").removeClass("hidden");
+        }
 
-    if (this.value == 'Other') {
-      $('#other_weight_type').removeClass('hidden');
-    }
-
-    if (this.value == 'Timbangan Jembatan') {
-      $('#other_loadcell_type').removeClass('hidden');
-      $('#loadcell_type').addClass('hidden');
-    }
-  })
+        if (this.value == "Timbangan Jembatan") {
+            $("#other_loadcell_type").removeClass("hidden");
+            $("#loadcell_type").addClass("hidden");
+        }
+    });
 }

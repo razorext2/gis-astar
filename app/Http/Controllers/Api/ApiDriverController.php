@@ -57,20 +57,24 @@ class ApiDriverController extends Controller
                 'tipe_kunjungan' => $data['tipe_kunjungan'],
             ]);
 
-            $folderPath = "driver";
+            $folderPath = 'driver';
 
-            if (!Storage::disk('public')->exists($folderPath)) {
+            if (! Storage::disk('public')->exists($folderPath)) {
                 Storage::disk('public')->makeDirectory($folderPath);
             }
 
             // save images
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
-                    $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
+                    $imageName = \Illuminate\Support\Str::uuid().'.'.$image->getClientOriginalExtension();
 
-                    Storage::disk('public')->putFileAs($folderPath, $image, $imageName);
+                    $uploadSuccess = Storage::disk('public')->putFileAs($folderPath, $image, $imageName);
 
-                    $imageUrl = '/storage/' . $folderPath . '/' . $imageName;
+                    if (! $uploadSuccess) {
+                        throw new \Exception('Gagal mengunggah foto. Pastikan disk storage memiliki izin akses (write permission).');
+                    }
+
+                    $imageUrl = '/storage/'.$folderPath.'/'.$imageName;
 
                     PhotoCollect::create([
                         'id_driver' => $query->id,
@@ -83,9 +87,11 @@ class ApiDriverController extends Controller
             NotifyNewDriverReportJob::dispatch($query->id, $query->created_at)->delay(now()->addSeconds(5));
 
             DB::commit();
+
             return new ApiResource(true, 'Berhasil menambah data laporan', null);
         } catch (\Exception $e) {
             DB::rollBack();
+
             return new ApiResource(false, 'Terjadi kesalahan saat menambah data', $e->getMessage());
         }
     }
@@ -121,20 +127,34 @@ class ApiDriverController extends Controller
                 'status_pengantaran' => $data['status_pengantaran'],
             ]);
 
-            $folderPath = "driver";
+            $folderPath = 'driver';
 
-            if (!Storage::disk('public')->exists($folderPath)) {
+            if (! Storage::disk('public')->exists($folderPath)) {
                 Storage::disk('public')->makeDirectory($folderPath);
             }
 
             // save images
             if ($request->hasFile('images')) {
+                // Proteksi Retries Jaringan: Hapus foto lama agar tidak menumpuk saat assignUpdate (Idempotent)
+                $oldPhotos = PhotoCollect::where('id_driver', $query->id)->get();
+                foreach ($oldPhotos as $oldPhoto) {
+                    $oldFilePath = str_replace('/storage/', '', $oldPhoto->photourl);
+                    if (Storage::disk('public')->exists($oldFilePath)) {
+                        Storage::disk('public')->delete($oldFilePath);
+                    }
+                }
+                PhotoCollect::where('id_driver', $query->id)->delete();
+
                 foreach ($request->file('images') as $image) {
-                    $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
+                    $imageName = \Illuminate\Support\Str::uuid().'.'.$image->getClientOriginalExtension();
 
-                    Storage::disk('public')->putFileAs($folderPath, $image, $imageName);
+                    $uploadSuccess = Storage::disk('public')->putFileAs($folderPath, $image, $imageName);
 
-                    $imageUrl = '/storage/' . $folderPath . '/' . $imageName;
+                    if (! $uploadSuccess) {
+                        throw new \Exception('Gagal mengunggah foto. Pastikan disk storage memiliki izin akses (write permission).');
+                    }
+
+                    $imageUrl = '/storage/'.$folderPath.'/'.$imageName;
 
                     PhotoCollect::create([
                         'id_driver' => $query->id,
@@ -147,9 +167,11 @@ class ApiDriverController extends Controller
             NotifyNewDriverReportJob::dispatch($query->id, $query->created_at)->delay(now()->addSeconds(5));
 
             DB::commit();
+
             return new ApiResource(true, 'Berhasil menambah data laporan', null);
         } catch (\Exception $e) {
             DB::rollBack();
+
             return new ApiResource(false, 'Terjadi kesalahan saat menambah data', $e->getMessage());
         }
     }
@@ -173,7 +195,7 @@ class ApiDriverController extends Controller
 
         $query = Driver::find($id);
 
-        if (!$query) {
+        if (! $query) {
             return new ApiResource(false, 'Data tidak ditemukan', null);
         }
 
@@ -195,7 +217,7 @@ class ApiDriverController extends Controller
     {
         $query = Driver::find($id);
 
-        if (!$query) {
+        if (! $query) {
             return new ApiResource(false, 'Data tidak ditemukan', null);
         }
 
@@ -215,7 +237,7 @@ class ApiDriverController extends Controller
     {
         $query = Driver::find($id);
 
-        if (!$query) {
+        if (! $query) {
             return new ApiResource(false, 'Data tidak ditemukan', null);
         }
 
@@ -223,7 +245,7 @@ class ApiDriverController extends Controller
             $query->update([
                 'status' => 2,
                 'validate_by' => Auth::id(),
-                'notes' => $request->notes
+                'notes' => $request->notes,
             ]);
 
             return new ApiResource(true, 'Data berhasil ditolak', null);
@@ -236,7 +258,7 @@ class ApiDriverController extends Controller
     {
         $query = Driver::find($id); // Cari data berdasarkan ID
 
-        if (!$query) {
+        if (! $query) {
             return new ApiResource(false, 'Data tidak ditemukan', null);
         }
 
@@ -266,9 +288,11 @@ class ApiDriverController extends Controller
             ]);
 
             DB::commit();
+
             return new ApiResource(true, 'Permintaan revisi sudah dikirim.', null); // Kembalikan response JSON
         } catch (\Exception $e) {
             DB::rollBack();
+
             return new ApiResource(false, 'Terjadi kesalahan saat memproses request', $e->getMessage());
         }
     }

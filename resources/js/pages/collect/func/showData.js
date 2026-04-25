@@ -61,7 +61,7 @@ export function showDatatables() {
         createdRow: function (row, data, dataIndex) {
             // Add a custom class to the row
             $(row).addClass(
-                "border-b-[0.5px] h-14 dark:border-gray-800 border-gray-200 hover:bg-gray-50 dark:hover:bg-[#222226]",
+                "border-b-[0.5px] h-14 dark:border-zinc-800 border-zinc-200 hover:bg-gray-50 dark:hover:bg-[#222226]",
             ); // Replace 'custom-class' with your desired class name
         },
     });

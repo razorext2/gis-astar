@@ -3,7 +3,7 @@
     <div
         class="flex h-[340px] flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none">
 
-        <div class="mb-4 flex items-center justify-between border-b border-zinc-100 pb-3 dark:border-zinc-800">
+        <div class="mb-4 flex items-center justify-between border-b border-zinc-200 pb-3 dark:border-zinc-800">
             <div class="flex items-center gap-2">
                 <div class="h-2 w-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
                 <p class="text-sm font-semibold text-zinc-600 dark:text-zinc-300">
@@ -52,7 +52,7 @@
     <div
         class="flex h-[340px] flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none">
 
-        <div class="mb-4 flex items-center justify-between border-b border-zinc-100 pb-3 dark:border-zinc-800">
+        <div class="mb-4 flex items-center justify-between border-b border-zinc-200 pb-3 dark:border-zinc-800">
             <div class="flex items-center gap-2">
                 <div class="h-2 w-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,0.5)] dark:bg-red-700">
                 </div>

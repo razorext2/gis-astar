@@ -108,13 +108,13 @@ final class BackupTable extends PowerGridComponent
 
         $actions[] = Button::make('delete')
             ->slot(Blade::render('<x-icons.trash-bin class="h-5 w-5 text-white" />'))
-            ->class('dark:bg-red-800 dark:hover:bg-red-900 dark:text-white dark:border-gray-700 rounded-lg bg-red-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-red-700 me-0.5')
+            ->class('dark:bg-red-800 dark:hover:bg-red-900 dark:text-white dark:border-zinc-800 rounded-lg bg-red-400 px-2 py-1.5 font-semibold text-white border border-zinc-200 hover:bg-red-700 me-0.5')
             ->dispatch('delete', ['id' => $row->id]);
 
         if ($row->status === 'success') {
             $actions[] = Button::make('download')
                 ->slot('Download')
-                ->class('dark:bg-blue-800 dark:hover:bg-blue-900 dark:text-white dark:border-gray-700 rounded-lg bg-blue-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-blue-700 me-0.5')
+                ->class('dark:bg-blue-800 dark:hover:bg-blue-900 dark:text-white dark:border-zinc-800 rounded-lg bg-blue-400 px-2 py-1.5 font-semibold text-white border border-zinc-200 hover:bg-blue-700 me-0.5')
                 ->dispatch('download', ['id' => $row->id]);
         }
 

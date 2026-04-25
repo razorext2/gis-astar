@@ -16,7 +16,7 @@
                 <tbody>
                     @if (isset($spk_data->production->packing_list))
                         @foreach ($spk_data->production->packing_list as $index => $row)
-                            <tr class="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                            <tr class="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-gray-800">
                                 <td class="px-3 py-2 text-center">
                                     {{ $index + 1 }}
                                 </td>
@@ -32,7 +32,7 @@
                             </tr>
                         @endforeach
                     @else
-                        <tr class="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                        <tr class="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-gray-800">
                             <td colspan="4" class="px-6 py-4 text-center text-sm font-semibold italic text-red-500">
                                 Packing list belum ditambah.
                             </td>
@@ -46,9 +46,9 @@
 
     {{-- form tambah info pengiriman --}}
     <div id="accordion-packing-form" x-data="{ accordionOpen: false }">
-        <button type="button"
-            class="flex w-full items-center justify-between gap-3 rounded-lg border border-gray-200 p-5 font-medium text-gray-500 transition-all duration-300 ease-in-out hover:bg-blue-100 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-800"
-            @click="accordionOpen = !accordionOpen" :class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
+        <x-button.secondary type="button"
+            class="!flex !w-full !items-center !justify-between !gap-3 !rounded-lg !border !border-zinc-200 !p-5 !font-medium !text-gray-500 !shadow-none !ring-0 !transition-all !duration-300 !ease-in-out hover:!bg-blue-100 dark:border-zinc-800 dark:text-gray-400 dark:hover:bg-gray-800"
+            @click="accordionOpen = !accordionOpen" ::class="accordionOpen ? '!rounded-b-none !border-b-0' : ''">
             <h3 class="text-base font-semibold text-gray-800 dark:text-white">
                 Tambah Riwayat Pengiriman?
             </h3>
@@ -56,9 +56,9 @@
             <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
                 <x-icons.carred-down class="h-4 w-4" />
             </span>
-        </button>
+        </x-button.secondary>
 
-        <div class="rounded-b-lg border border-gray-200 p-5 dark:border-gray-700" x-show="accordionOpen" x-collapse
+        <div class="rounded-b-lg border border-zinc-200 p-5 dark:border-zinc-800" x-show="accordionOpen" x-collapse
             x-cloak>
             <div id="delivery-history-add-form" class="w-full">
                 <p class="text-base text-gray-600 dark:text-gray-400">
@@ -158,7 +158,7 @@
                                 </div>
 
                                 <div wire:show="show_customer"
-                                    class="mt-2 rounded-lg border border-gray-300 bg-gray-100 p-2 dark:border-gray-600 dark:bg-gray-600 lg:p-4">
+                                    class="mt-2 rounded-lg border border-zinc-200 bg-gray-100 p-2 dark:border-zinc-800 dark:bg-gray-600 lg:p-4">
                                     <p class="text-base font-semibold text-gray-800 dark:text-white">
                                         {{ $nama_customer }} </p>
                                     <p class="text-sm text-gray-800 dark:text-white"> {{ $alamat_customer }} </p>

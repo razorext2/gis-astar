@@ -1,79 +1,155 @@
-import { capturedImages } from '../../../utils/cameraStream'; // import capturedImages array
-import { showAlert, loadingAlert } from '../../../utils/alert';
+import { capturedImages } from "../../../utils/cameraStream"; // import capturedImages array
+import { showAlert, loadingAlert } from "../../../utils/alert";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 export function editDataHandler() {
-  $('#store').click(async function (e) {
-    e.preventDefault();
+    const storeButton = document.getElementById("store");
 
-    const $button = $(this);
-    $button.prop('disabled', true);
+    if (!storeButton) return;
 
-    loadingAlert("Menyimpan data...");
+    storeButton.addEventListener("click", async (e) => {
+        e.preventDefault();
 
-    // Ambil data form
-    let formData = new FormData();
-    let id = $('#id').val();
+        storeButton.setAttribute("disabled", "disabled");
+        loadingAlert("Menyimpan data...");
 
-    if (parseFloat($('#payment_amount').val()) > parseFloat($('#remain').val())) {
-      return showAlert('error', 'Gagal melakukan update', '<b>Total bayar</b> tidak boleh melebihi <b>sisa tagihan</b>.');
-    }
+        const idElement = document.getElementById("id");
+        const id = idElement ? idElement.value : null;
 
-    formData.append("title", $("#title").val());
-    formData.append("keterangan", $("#keterangan").val());
-    formData.append("location", $("#location").val());
-    formData.append("latitude", $("#latitude").val());
-    formData.append("longitude", $("#longitude").val());
-    formData.append("have_paid", $("#have_paid").val());
-    formData.append("payment_type", $("#payment_type").val());
-    formData.append("payment_amount", $("#payment_amount").val());
-    formData.append("no_giro", $("#no_giro").val());
-    formData.append('_method', 'PATCH');
+        const paymentAmountVal =
+            document.getElementById("payment_amount")?.value || "0";
+        const remainVal = document.getElementById("remain")?.value || "0";
 
-    // Tambahkan gambar ke FormData
-    for (const [index, image] of capturedImages.entries()) {
-      const blob = await dataURItoBlob(image);
-      formData.append("images[]", blob, `image${index}.png`);
-    }
+        if (parseFloat(paymentAmountVal) > parseFloat(remainVal)) {
+            storeButton.removeAttribute("disabled");
+            Swal.close();
+            return showAlert(
+                "error",
+                "Gagal melakukan update",
+                "<b>Total bayar</b> tidak boleh melebihi <b>sisa tagihan</b>.",
+            );
+        }
 
-    try {
-      const response = await axios.post(`/api/collect-api/${id}`, formData);
+        const formData = new FormData();
+        formData.append("title", document.getElementById("title")?.value || "");
+        formData.append(
+            "keterangan",
+            document.getElementById("keterangan")?.value || "",
+        );
+        formData.append(
+            "location",
+            document.getElementById("location")?.value || "",
+        );
+        formData.append(
+            "latitude",
+            document.getElementById("latitude")?.value || "",
+        );
+        formData.append(
+            "longitude",
+            document.getElementById("longitude")?.value || "",
+        );
+        formData.append(
+            "have_paid",
+            document.getElementById("have_paid")?.value || "0",
+        );
+        formData.append(
+            "payment_type",
+            document.getElementById("payment_type")?.value || "",
+        );
+        formData.append("payment_amount", paymentAmountVal);
+        formData.append(
+            "no_giro",
+            document.getElementById("no_giro")?.value || "",
+        );
+        formData.append("_method", "PATCH");
 
-      if (response.data.success) {
-        Swal.close();
-        showAlert('success', response.data.message);
-        setTimeout(() => window.location.href = `/dashboard/collect`, 1500);
-      } else {
-        Swal.close();
-        const firstError = response.data.data[Object.keys(response.data.data)[0]][0];
+        // Convert dataURI to Blob directly using native JS (Fast & Synchronous)
+        for (let i = 0; i < capturedImages.length; i++) {
+            const blob = dataURItoBlob(capturedImages[i]);
+            formData.append("images[]", blob, `image${i}.png`);
+        }
 
-        handleFormErrors(response.data.data);
-        $button.prop('disabled', false);
+        try {
+            const response = await axios.post(
+                `/api/collect-api/${id}`,
+                formData,
+            );
 
-        return showAlert('error', response.data.message, `Validasi data gagal. <br><b>${firstError}</b>`);
-      }
-    } catch (error) {
-      Swal.close();
-      $button.prop('disabled', false);
-      handleFormErrors(error.response.data.errors);
-      return showAlert('error', 'Terjadi kesalahan.', error.message);
-    }
-  });
+            if (response.data.success) {
+                Swal.close();
+                showAlert("success", response.data.message);
+                setTimeout(() => {
+                    window.location.href = `/dashboard/collect`;
+                }, 1500);
+            } else {
+                Swal.close();
+                const responseData = response.data.data;
+                const firstErrorKey = Object.keys(responseData)[0];
+                const firstError = responseData[firstErrorKey][0];
+
+                handleFormErrors(responseData);
+                storeButton.removeAttribute("disabled");
+
+                return showAlert(
+                    "error",
+                    response.data.message,
+                    `Validasi data gagal. <br><b>${firstError}</b>`,
+                );
+            }
+        } catch (error) {
+            Swal.close();
+            storeButton.removeAttribute("disabled");
+
+            if (
+                error.response &&
+                error.response.data &&
+                error.response.data.errors
+            ) {
+                handleFormErrors(error.response.data.errors);
+            }
+
+            return showAlert(
+                "error",
+                "Terjadi kesalahan.",
+                error.message || "Gagal menghubungi server",
+            );
+        }
+    });
 }
 
 function handleFormErrors(errors) {
-  if (typeof errors === 'object') {
-    $.each(errors, function (field, errorMessages) {
-      var $alertElement = $(`#alert-${field}`);
-      if (errorMessages && errorMessages.length) {
-        $alertElement.removeClass('hidden').html(errorMessages[0]);
-      } else {
-        $alertElement.removeClass('block').addClass('hidden');
-      }
-    });
-  }
+    if (typeof errors === "object") {
+        Object.entries(errors).forEach(([field, errorMessages]) => {
+            const alertElement = document.getElementById(`alert-${field}`);
+
+            if (alertElement) {
+                if (errorMessages && errorMessages.length > 0) {
+                    alertElement.classList.remove("hidden");
+                    alertElement.innerHTML = errorMessages[0];
+                } else {
+                    alertElement.classList.remove("block");
+                    alertElement.classList.add("hidden");
+                }
+            }
+        });
+    }
 }
 
-async function dataURItoBlob(dataURI) {
-  const response = await axios.get(dataURI, { responseType: 'blob' });
-  return response.data;
+/**
+ * Fast synchronous Base64 string to Blob converter
+ * Menghilangkan latensi dari axios interceptors
+ */
+function dataURItoBlob(dataURI) {
+    const byteString = atob(dataURI.split(",")[1]);
+    const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const int8Array = new Uint8Array(arrayBuffer);
+
+    for (let i = 0; i < byteString.length; i++) {
+        int8Array[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([arrayBuffer], { type: mimeString });
 }

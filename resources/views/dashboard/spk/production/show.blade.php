@@ -1,7 +1,7 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
     <div
-        class="flex flex-col gap-4 rounded-xl bg-white px-3 py-2 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-600 lg:p-6">
+        class="flex flex-col gap-4 rounded-xl bg-white px-3 py-2 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 lg:p-6">
         {{-- header --}}
         <div class="flex flex-row items-center gap-2 lg:gap-4">
             <div>
@@ -34,7 +34,7 @@
         <div class="relative grid grid-cols-2 rounded-lg bg-gray-50 transition-all duration-500 dark:bg-gray-700">
 
             <div
-                class="col-span-2 rounded-t-lg border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1 lg:rounded-tl-lg lg:rounded-tr-none">
+                class="col-span-2 rounded-t-lg border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1 lg:rounded-tl-lg lg:rounded-tr-none">
                 <p class="text-xs italic">Nomor Order </p>
                 <div class="flex flex-col gap-y-2 font-semibold">
                     <div class="flex items-center gap-x-2">
@@ -68,7 +68,7 @@
             </div>
 
             <div
-                class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1 lg:rounded-tr-lg">
+                class="col-span-2 border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1 lg:rounded-tr-lg">
                 <p class="text-xs italic">Tipe Tagihan</p>
                 <p class="font-semibold"> {{ $data->spk->tipe_tagihan }} </p>
             </div>
@@ -83,7 +83,7 @@
             </div>
 
             <div
-                class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
+                class="col-span-2 border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
                 <p class="text-xs italic">Tanggal Cetak </p>
                 <p class="font-semibold">
                     {{ \Carbon\carbon::parse($data->spk->tgl_cetak)->locale('id')->isoFormat('D MMMM Y') }}
@@ -91,7 +91,7 @@
             </div>
 
             <div
-                class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
+                class="col-span-2 border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
                 <p class="text-xs italic">Waktu Penyerahan</p>
                 <p class="font-semibold">
                     {{ $data->spk->tgl_kirim }} Hari
@@ -100,7 +100,7 @@
             </div>
 
             <div
-                class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
+                class="col-span-2 border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
                 <p class="text-xs italic">Nama Customer </p>
                 <p class="font-semibold"> {{ $data->spk->customer['nama_perusahaan'] ?? 'N/A' }} </p>
                 {{-- <p class="text-sm"> {{ $data->spk->customer['contact_person'] ?? '-' }}
@@ -110,7 +110,7 @@
             </div>
 
             <div
-                class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
+                class="col-span-2 border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
                 <p class="text-xs italic"> Produk Dipesan </p>
                 <p class="text-sm font-semibold capitalize">
                     {{ $data->spk->tipe_timbangan ?? 'Tipe timbangan tidak diatur.' }} </p>
@@ -128,25 +128,25 @@
             </div>
 
             <div
-                class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
+                class="col-span-2 border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
                 <p class="text-xs italic"> Ditambah Oleh </p>
                 <p class="font-semibold capitalize"> {{ $data->spk->addedBy->name }}</p>
             </div>
 
             <div
-                class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1">
+                class="col-span-2 border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
                 <p class="text-xs italic"> Diproduksi Oleh </p>
                 <p class="font-semibold capitalize"> {{ $data->spk->assignTo->name ?? '-' }}</p>
             </div>
 
             <div
-                class="col-span-2 border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1 lg:rounded-bl-lg">
+                class="col-span-2 border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1 lg:rounded-bl-lg">
                 <p class="text-xs italic"> Divalidasi Oleh </p>
                 <p class="font-semibold capitalize"> {{ $data->spk->approvedBy->name ?? '-' }}</p>
             </div>
 
             <div
-                class="col-span-2 rounded-b-lg border-[1px] border-gray-200 p-2.5 text-gray-800 dark:border-gray-600 dark:text-white lg:col-span-1 lg:rounded-bl-none lg:rounded-br-lg">
+                class="col-span-2 rounded-b-lg border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1 lg:rounded-bl-none lg:rounded-br-lg">
                 <p class="text-xs italic"> Divalidasi Pada </p>
                 <p class="font-semibold capitalize">
                     {{ $data->spk->approved_at
@@ -158,7 +158,7 @@
             @hasanyrole(['Admin', 'Produksi'])
                 <div class="absolute right-0 top-0">
                     <x-button.link
-                        class="ring-1 ring-blue-700 hover:bg-blue-300 dark:bg-blue-800 dark:text-white dark:ring-gray-700 dark:hover:bg-blue-900"
+                        class="ring-1 ring-blue-700 hover:bg-blue-300 dark:bg-blue-800 dark:text-white dark:ring-zinc-800 dark:hover:bg-blue-900"
                         href="{{ route('spk.generate.pdf', ['id' => $data->spk->id]) }}" id="spk-pdf-export">
                         Ekspor SPK
                     </x-button.link>
@@ -182,7 +182,7 @@
             @can('produksi-create')
                 <div class="flex flex-row items-center gap-x-4">
                     <x-button.link wire:navigate :href="route('production.history.add', $data->id)" wire:transition.duration.300ms
-                        class="flex w-fit flex-row items-center justify-center gap-x-2 px-2.5 py-2 ring-1 ring-green-700 dark:bg-green-800 dark:text-white dark:ring-gray-700"
+                        class="flex w-fit flex-row items-center justify-center gap-x-2 px-2.5 py-2 ring-1 ring-green-700 dark:bg-green-800 dark:text-white dark:ring-zinc-800"
                         id="produksi-histories-add">
                         <x-slot name="icon">
                             <x-icons.plus class="h-6 w-6 -rotate-90 text-green-500 dark:text-white" />

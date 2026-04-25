@@ -4,7 +4,7 @@
         {{ $count }}
     </span>
 
-    <div class="shadow-xs invisible absolute z-10 inline-block w-64 rounded-lg border border-gray-200 bg-white text-sm text-gray-500 opacity-0 transition-opacity duration-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400"
+    <div class="shadow-xs invisible absolute z-10 inline-block w-64 rounded-lg border border-zinc-200 bg-white text-sm text-gray-500 opacity-0 transition-opacity duration-300 dark:border-zinc-800 dark:bg-gray-800 dark:text-gray-400"
         id="sidebar-badge-{{ $counterKey }}" data-popover role="tooltip">
         <div class="px-3 py-2">
             <p>Kamu memiliki {{ $count }} data absen pegawai yang belum diverifikasi.</p>

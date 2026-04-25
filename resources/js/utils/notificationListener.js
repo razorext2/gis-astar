@@ -26,7 +26,7 @@ export function fetchNotification() {
 
                         $("#notificationContainer").append(
                             `
-						<div class="flex border-t hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700">
+						<div class="flex border-t hover:bg-gray-100 dark:border-zinc-800 dark:hover:bg-gray-700">
 
 								<div class="w-full px-3.5 py-3 md:p-4">
 									<div class="grid gap-1 text-sm text-gray-500 dark:text-gray-400">
@@ -61,7 +61,7 @@ export function fetchNotification() {
 
 								</div>
 							</div>
-						`
+						`,
                         );
                     });
                 } else {

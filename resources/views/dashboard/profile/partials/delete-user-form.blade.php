@@ -17,15 +17,12 @@
         </p>
     </header>
 
-    <button
-        class="inline-flex items-center gap-2 rounded-xl border border-red-300 bg-white px-4 py-2.5 text-sm font-semibold text-red-700 shadow-sm transition-all duration-200 hover:bg-red-600 hover:text-white hover:shadow-md hover:shadow-red-500/20 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:border-red-800 dark:bg-transparent dark:text-red-400 dark:hover:bg-red-700 dark:hover:text-white dark:focus:ring-offset-zinc-900"
-        x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')">
-        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-        </svg>
+    <x-button.danger x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')">
+        <x-slot name="icon">
+            <x-icons.trash class="h-4 w-4" />
+        </x-slot>
         {{ __('Hapus Akun Ini') }}
-    </button>
+    </x-button.danger>
 
     <x-auth.modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
         <form class="p-6 dark:bg-zinc-900" method="post" action="{{ route('profile.destroy') }}">
@@ -65,18 +62,15 @@
             </div>
 
             <div class="flex justify-end gap-3">
-                <button type="button" x-on:click="$dispatch('close')"
-                    class="inline-flex items-center rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-700 shadow-sm transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700">
+                <x-button.danger type="button" x-on:click="$dispatch('close')">
                     {{ __('Batal') }}
-                </button>
-                <button type="submit"
-                    class="inline-flex items-center gap-2 rounded-xl bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-red-700 hover:shadow-md hover:shadow-red-500/20">
-                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                    </svg>
+                </x-button.danger>
+                <x-button.danger type="submit">
+                    <x-slot name="icon">
+                        <x-icons.trash class="h-4 w-4" />
+                    </x-slot>
                     {{ __('Hapus Akun') }}
-                </button>
+                </x-button.danger>
             </div>
         </form>
     </x-auth.modal>

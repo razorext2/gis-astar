@@ -79,7 +79,7 @@ final class CollectorRouteTable extends PowerGridComponent
             Button::add('routeDetail')
                 ->slot('Detail')
                 ->id($row->id)
-                ->class('rounded-lg px-2.5 py-2 ring-1 ring-green-700 transition-transform duration-300 ease-in-out will-change-transform hover:scale-105 hover:bg-green-300 focus:scale-105 dark:bg-green-800 dark:text-white dark:ring-gray-700 dark:hover:bg-green-900')
+                ->class('rounded-lg px-2.5 py-2 ring-1 ring-green-700 transition-transform duration-300 ease-in-out will-change-transform hover:scale-105 hover:bg-green-300 focus:scale-105 dark:bg-green-800 dark:text-white dark:ring-zinc-800 dark:hover:bg-green-900')
                 ->route('routes.collector.detail', ['pegawai' => $row->kode_pegawai ?? '123'])
         ];
     }

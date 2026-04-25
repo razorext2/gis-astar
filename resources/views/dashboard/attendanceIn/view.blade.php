@@ -3,7 +3,7 @@
     @livewire('components.card', ['type' => 'attendancein'])
 
     <div
-        class="relative grid grid-cols-1 rounded-xl bg-white py-2 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 lg:p-6">
+        class="relative grid grid-cols-1 rounded-xl bg-white py-2 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 lg:p-6">
 
         <div class="flex flex-col px-3 lg:p-0">
             <div>

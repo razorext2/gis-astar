@@ -1,8 +1,23 @@
-@props(['form' => null, 'class' => null, 'icon' => null, 'type' => 'button', 'id' => null])
+{{-- Goal: Tombol primary untuk aksi utama (Blue), Smart Tag (a/button), Livewire: -, Alpine: - --}}
+@props(['icon' => null, 'type' => 'button', 'id' => null, 'loading' => null, 'href' => null])
 
-<button
-    class="{{ $class }} flex flex-row items-center gap-2 rounded-lg px-2.5 py-2 ring-1 ring-blue-700 transition-all duration-300 ease-in-out will-change-transform hover:scale-105 hover:bg-blue-300 focus:scale-105 dark:bg-blue-800 dark:text-white dark:ring-blue-700 dark:hover:bg-blue-900"
-    id="{{ $id }}" type="{{ $type }}" {{ $form ? 'form=' . $form : '' }} {{ $attributes }}>
-    {{ $icon }}
-    <span>{{ $slot }}</span>
-</button>
+@php
+    $tag = $href ? 'a' : 'button';
+    $baseClasses =
+        'inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition-all duration-300 hover:bg-blue-700 hover:shadow-blue-600/40 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:scale-95 disabled:pointer-events-none disabled:opacity-50 dark:shadow-none dark:focus:ring-offset-zinc-900';
+@endphp
+
+<{{ $tag }} id="{{ $id }}" {{ $href ? "href=$href" : "type=$type" }}
+    {{ $attributes->merge(['class' => $baseClasses]) }}>
+    @if ($icon)
+        {{ $icon }}
+    @endif
+
+    @if ($loading)
+        <x-icons.loading wire:loading wire:target="{{ $loading }}" class="h-4 w-4 animate-spin" />
+    @endif
+
+    @if ($slot->isNotEmpty())
+        <span>{{ $slot }}</span>
+    @endif
+    </{{ $tag }}>

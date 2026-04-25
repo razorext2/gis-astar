@@ -89,19 +89,19 @@ final class PackingListTable extends PowerGridComponent
         $buttons = [
             Button::add('delete')
                 ->slot('Hapus')
-                ->class('dark:bg-red-800 text-sm dark:hover:bg-red-900 dark:text-white dark:border-gray-700 rounded-lg bg-red-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-red-700')
+                ->class('dark:bg-red-800 text-sm dark:hover:bg-red-900 dark:text-white dark:border-zinc-800 rounded-lg bg-red-400 px-2 py-1.5 font-semibold text-white border border-zinc-200 hover:bg-red-700')
                 ->dispatch('deletePackingList', ['id' => $row->id_barang]),
         ];
 
         $buttons[] = Button::add('addKit')
             ->slot('Detail')
-            ->class('dark:bg-green-800 text-sm dark:hover:bg-green-900 dark:text-white dark:border-gray-700 rounded-lg bg-green-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-green-700')
+            ->class('dark:bg-green-800 text-sm dark:hover:bg-green-900 dark:text-white dark:border-zinc-800 rounded-lg bg-green-400 px-2 py-1.5 font-semibold text-white border border-zinc-200 hover:bg-green-700')
             ->route('production.packing-list.kits.add', ['idbarang' => $row->id_barang, 'production' => $this->production->id]);
 
         if ($row->packing_list_type === 'manual') {
             $buttons[] = Button::add('print')
                 ->slot('Print')
-                ->class('dark:bg-blue-800 text-sm dark:hover:bg-blue-900 dark:text-white dark:border-gray-700 rounded-lg bg-blue-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-blue-700')
+                ->class('dark:bg-blue-800 text-sm dark:hover:bg-blue-900 dark:text-white dark:border-zinc-800 rounded-lg bg-blue-400 px-2 py-1.5 font-semibold text-white border border-zinc-200 hover:bg-blue-700')
                 ->dispatch('printPackingList', [
                     'id' => $row->id_barang,
                     'nama_ekspedisi' => $row->nama_ekspedisi,

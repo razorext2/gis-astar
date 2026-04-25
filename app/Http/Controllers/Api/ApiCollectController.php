@@ -23,15 +23,14 @@ class ApiCollectController extends Controller
 {
     public function update(Request $request, $id)
     {
-        // cari data
+        // Cari data kolektor
         $query = Collector::find($id);
 
-        // Jika data tidak ditemukan
         if (! $query) {
             return new ApiResource(false, 'Laporan tidak ditemukan', null);
         }
 
-        // validasi input
+        // Validasi input
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:128|min:5',
             'keterangan' => 'required|string|min:5',
@@ -46,7 +45,6 @@ class ApiCollectController extends Controller
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // jika validasi gagal, kembalikan response JSON
         if ($validator->fails()) {
             return new ApiResource(false, 'Validasi gagal', $validator->errors());
         }
@@ -58,7 +56,7 @@ class ApiCollectController extends Controller
             default => 0,
         };
 
-        // cek jika total bayar melebihi sisa tagihan
+        // Cek anomali limit tagihan
         if ($request->payment_amount > $remaining_bill) {
             return new ApiResource(false, 'Gagal melakukan update', '<b>Total bayar</b> tidak boleh melebihi <b>sisa tagihan</b>.');
         }
@@ -75,22 +73,20 @@ class ApiCollectController extends Controller
 
         $status = 'Tagihan sudah tiba dialamat tujuan dengan status tagihan ['.$paid_status.', ket: '.strip_tags($request->keterangan).']';
 
-        // cek statusnya = revisi atau bukan
         try {
             DB::beginTransaction();
 
-            // cek revisi bukannya
+            // Cek apabila ini perbaikan untuk status revisi (4)
             if ($query->status === 4) {
                 $query->update([
-                    // 'total_revision' => $query->total_revision + 1,
-                    'revised_by' => $request->user()->id,
+                    'revised_by' => Auth::id(),
                     'revised_at' => now(),
                     'validate_by' => null,
                     'validated_at' => null,
                 ]);
             }
 
-            // update data collector
+            // Update data transaksi lapangan
             $query->update([
                 'keterangan' => $request->keterangan,
                 'latitude' => $request->latitude,
@@ -100,13 +96,13 @@ class ApiCollectController extends Controller
                 'payment_amount' => $request->payment_amount,
                 'no_giro' => $request->no_giro,
                 'status' => 2,
-                'assign_at' => now(), // sama kaya filled_at
+                'assign_at' => now(),
                 'location' => $request->location,
-                'filled_by' => $request->user()->id,
-                'filled_at' => now(), // sama kaya assign_at
+                'filled_by' => Auth::id(),
+                'filled_at' => now(),
             ]);
 
-            // upload dokumentasi
+            // Proses penyimpanan dokumentasi gambar
             $folderPath = 'collectors';
             $documents = [];
 
@@ -115,10 +111,29 @@ class ApiCollectController extends Controller
             }
 
             if ($request->hasFile('images')) {
-                foreach ($request->file('images') as $image) {
-                    $imageName = uniqid().'.'.$image->getClientOriginalExtension();
+                // Proteksi Retries Jaringan: Hapus foto lama agar tidak menumpuk saat update (Idempotent)
+                $oldPhotos = PhotoCollect::where('id_collect', $id)->get();
+                foreach ($oldPhotos as $oldPhoto) {
+                    // Hapus file fisik dengan membuang '/storage/' prefix path
+                    $oldFilePath = str_replace('/storage/', '', $oldPhoto->photourl);
+                    if (Storage::disk('public')->exists($oldFilePath)) {
+                        Storage::disk('public')->delete($oldFilePath);
+                    }
+                }
 
-                    Storage::disk('public')->putFileAs($folderPath, $image, $imageName);
+                // Bersihkan record database histori lampiran lama
+                PhotoCollect::where('id_collect', $id)->delete();
+
+                // Proses file unggahan gambar terbaru
+                foreach ($request->file('images') as $image) {
+                    $imageName = \Illuminate\Support\Str::uuid().'.'.$image->getClientOriginalExtension();
+
+                    // Proteksi transfer file
+                    $uploadSuccess = Storage::disk('public')->putFileAs($folderPath, $image, $imageName);
+
+                    if (! $uploadSuccess) {
+                        throw new \Exception('Gagal mengunggah foto lapangan. Pastikan disk storage memiliki izin akses (write permission).');
+                    }
 
                     $imageUrl = '/storage/'.$folderPath.'/'.$imageName;
 
@@ -134,24 +149,26 @@ class ApiCollectController extends Controller
                 }
             }
 
-            // update invoice dan detail invoice
+            // Update parent invoice
             $this->updateInvoiceStatus(
                 $query->no_sr,
                 $status,
-                $request->have_paid != '4' ? '2' : '3', // kalo have_paid != 4, status pengiriman sudah diterima, kalo 4, status pengiriman belum diterima
+                $request->have_paid != '4' ? '2' : '3',
                 $documents
             );
 
+            // Tembak Notifikasi Latar Belakang Queue
             NotifyCollectorHasUpdatedReportJob::dispatch($query->no_sr, $query->id, now())
                 ->delay(now()->addSeconds(5));
 
             DB::commit();
 
             return new ApiResource(true, 'Laporan berhasil diubah!', null);
+
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return new ApiResource(false, 'Terjadi kesalahan saat memproses request', $e->getMessage());
+            return new ApiResource(false, 'Terjadi kesalahan sistem saat memproses request', $e->getMessage());
         }
     }
 
@@ -320,7 +337,7 @@ class ApiCollectController extends Controller
 
     public function destroy($id, Request $request)
     {
-        $query = Collector::findOrFail($id);
+        $query = Collector::find($id);
 
         if (! $query) {
             return new ApiResource(false, 'Data tidak ditemukan', null);

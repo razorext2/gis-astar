@@ -5,7 +5,7 @@
         {{-- Salary Overview --}}
         <div
             class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-6 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60 lg:p-8">
-            <div class="mb-6 flex items-center justify-between border-b border-white/20 pb-4 dark:border-white/5">
+            <div class="mb-6 flex items-center justify-between border-b border-white/20 pb-4 dark:border-zinc-800">
                 <div class="flex items-center gap-3">
                     <div class="h-10 w-1 rounded-full bg-indigo-600"></div>
                     <div>
@@ -29,12 +29,16 @@
                         ['label' => 'Payroll Type', 'value' => ucfirst($pegawai->salaryRelasi->payroll_type ?? 'N/A')],
                         [
                             'label' => 'Base Salary',
-                            'value' => $pegawai->salaryRelasi ? Number::currency($pegawai->salaryRelasi->salary_fee ?? 0, 'IDR', 'id') : 'N/A',
+                            'value' => $pegawai->salaryRelasi
+                                ? Number::currency($pegawai->salaryRelasi->salary_fee ?? 0, 'IDR', 'id')
+                                : 'N/A',
                         ],
                         [
                             'label' => 'Periode',
                             'value' => $pegawai->salaryRelasi
-                                ? \Carbon\Carbon::parse($pegawai->salaryRelasi->period)->locale('id')->isoFormat('MMMM YYYY')
+                                ? \Carbon\Carbon::parse($pegawai->salaryRelasi->period)
+                                    ->locale('id')
+                                    ->isoFormat('MMMM YYYY')
                                 : 'N/A',
                         ],
                     ];
@@ -42,7 +46,7 @@
 
                 @foreach ($payrollData as $item)
                     <div
-                        class="rounded-2xl border border-white/20 bg-white/40 p-4 shadow-sm transition-all hover:bg-white/60 dark:border-white/5 dark:bg-white/5 dark:hover:bg-white/10">
+                        class="rounded-2xl border border-white/20 bg-white/40 p-4 shadow-sm transition-all hover:bg-white/60 dark:border-zinc-800 dark:bg-white/5 dark:hover:bg-white/10">
                         <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
                             {{ $item['label'] }}</p>
                         <p class="text-base font-semibold text-gray-700 dark:text-gray-200">
@@ -55,7 +59,8 @@
         {{-- Allowances --}}
         <div
             class="rounded-3xl border border-white/30 bg-white/70 p-6 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60 lg:p-8">
-            <div class="overflow-hidden rounded-2xl border border-white/20 bg-white/30 dark:border-white/5 dark:bg-black/10">
+            <div
+                class="overflow-hidden rounded-2xl border border-white/20 bg-white/30 dark:border-zinc-800 dark:bg-black/10">
                 @include('dashboard.pegawai.details.components.allowances-section')
             </div>
         </div>
@@ -63,7 +68,8 @@
         {{-- Deductions --}}
         <div
             class="rounded-3xl border border-white/30 bg-white/70 p-6 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60 lg:p-8">
-            <div class="overflow-hidden rounded-2xl border border-white/20 bg-white/30 dark:border-white/5 dark:bg-black/10">
+            <div
+                class="overflow-hidden rounded-2xl border border-white/20 bg-white/30 dark:border-zinc-800 dark:bg-black/10">
                 @include('dashboard.pegawai.details.components.deductions-section')
             </div>
         </div>
@@ -71,7 +77,8 @@
         {{-- Total --}}
         <div
             class="rounded-3xl border border-white/30 bg-white/70 p-6 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60 lg:p-8">
-            <div class="overflow-hidden rounded-2xl border border-white/20 bg-white/30 dark:border-white/5 dark:bg-black/10">
+            <div
+                class="overflow-hidden rounded-2xl border border-white/20 bg-white/30 dark:border-zinc-800 dark:bg-black/10">
                 @include('dashboard.pegawai.details.components.total-payroll')
             </div>
         </div>

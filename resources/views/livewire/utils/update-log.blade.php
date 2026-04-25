@@ -1,18 +1,22 @@
 <section>
     {{-- Trigger Button --}}
-    <button
-        class="group flex w-full items-center gap-3 rounded-xl border border-amber-200 bg-amber-50/50 px-4 py-2 text-left transition-all duration-300 hover:border-amber-300 hover:bg-amber-100/80 dark:border-amber-900/30 dark:bg-amber-950/20 dark:hover:bg-amber-900/30"
+    <x-button.warning
+        class="group w-full justify-start gap-4 rounded-xl p-4"
         type="button" wire:click="$set('showLogUpdateModal', true)">
-        <div
-            class="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100 text-amber-600 shadow-sm transition-transform group-hover:scale-110 dark:bg-amber-900/50 dark:text-amber-400">
-            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-        </div>
+        <x-slot name="icon">
+            <div
+                class="flex h-8 w-8 items-center justify-center rounded-lg bg-white/20 text-white shadow-sm transition-transform group-hover:scale-110">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+        </x-slot>
+
         <div class="flex flex-col">
-            <span class="text-sm font-medium text-amber-600/80 dark:text-amber-500/80">View Update Log</span>
+            <span class="text-sm font-medium text-white">View Update Log</span>
         </div>
-    </button>
+    </x-button.warning>
 
     @teleport('body')
         {{-- Custom Modal --}}
@@ -20,17 +24,17 @@
             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
             x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            class="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-md"
-            style="background-color: rgba(9, 9, 11, 0.6);" @click.self="show = false">
+            class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm"
+            @click.self="show = false">
 
             <div x-show="show" x-transition:enter="transition ease-out duration-300"
                 x-transition:enter-start="opacity-0 scale-95 translate-y-4"
                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                class="relative flex w-full max-w-2xl flex-col rounded-3xl border border-zinc-200 bg-white shadow-2xl dark:border-zinc-800 dark:bg-zinc-900"
+                class="relative flex w-full max-w-2xl flex-col rounded-xl bg-white shadow-2xl ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800"
                 style="max-height: 85vh;">
 
                 {{-- Header --}}
-                <div class="flex items-center justify-between border-b border-zinc-100 p-6 dark:border-zinc-800">
+                <div class="flex items-center justify-between border-b border-zinc-200 p-6 dark:border-zinc-800">
                     <div class="flex items-center gap-3">
                         <div
                             class="flex h-10 w-10 items-center justify-center rounded-xl bg-red-600 text-white shadow-lg shadow-red-500/20">
@@ -66,16 +70,16 @@
                             </div>
                         </div>
                     </div>
-                    <button @click="show = false"
-                        class="rounded-full p-2 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-white">
+                    <x-button.secondary @click="show = false"
+                        class="!rounded-full !bg-transparent !p-2 text-zinc-400 !shadow-none ring-0 transition-colors hover:!bg-zinc-100 hover:text-zinc-900 dark:hover:!bg-zinc-800 dark:hover:text-white">
                         <x-icons.close class="h-6 w-6" />
-                    </button>
+                    </x-button.secondary>
                 </div>
 
                 {{-- Timeline Content --}}
                 <div
                     class="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700 flex-1 overflow-y-auto p-6">
-                    <div class="relative border-l-2 border-zinc-100 pl-8 dark:border-zinc-800">
+                    <div class="relative border-l-2 border-zinc-200 pl-8 dark:border-zinc-800">
                         @foreach ($this->logHistories() as $row)
                             @php
                                 $commit = $row['commit'];
@@ -102,7 +106,7 @@
 
                                 {{-- Commit Card --}}
                                 <div
-                                    class="group rounded-2xl border border-zinc-100 bg-zinc-50/50 p-5 transition-all hover:border-red-200 hover:bg-white hover:shadow-xl hover:shadow-red-500/5 dark:border-zinc-800 dark:bg-zinc-800/30 dark:hover:border-red-900/50 dark:hover:bg-zinc-800/60">
+                                    class="group rounded-2xl border border-zinc-200 bg-zinc-50/50 p-5 transition-all hover:border-red-200 hover:bg-white hover:shadow-xl hover:shadow-red-500/5 dark:border-zinc-800 dark:bg-zinc-800/30 dark:hover:border-red-900/50 dark:hover:bg-zinc-800/60">
                                     <h3 class="font-bold leading-snug text-zinc-900 dark:text-white sm:text-lg">
                                         {{ $message }}
                                     </h3>
@@ -143,7 +147,7 @@
                                                         };
                                                     @endphp
                                                     <div title="{{ $file['name'] }}"
-                                                        class="flex items-center gap-2 rounded-lg border border-zinc-100/50 bg-white p-2 transition-all hover:border-zinc-200 dark:border-zinc-800/50 dark:bg-zinc-900/50 dark:hover:border-zinc-700">
+                                                        class="flex items-center gap-2 rounded-lg border border-zinc-200/50 bg-white p-2 transition-all hover:border-zinc-200 dark:border-zinc-800/50 dark:bg-zinc-900/50 dark:hover:border-zinc-700">
                                                         <div
                                                             class="{{ $statusData['bg'] }} {{ $statusData['color'] }} flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-[10px] font-black">
                                                             {{ $statusData['icon'] }}
@@ -159,7 +163,7 @@
                                     @endif
 
                                     <div
-                                        class="mt-4 flex flex-wrap items-center gap-3 border-t border-zinc-100 pt-4 dark:border-zinc-800/50">
+                                        class="mt-4 flex flex-wrap items-center gap-3 border-t border-zinc-200 pt-4 dark:border-zinc-800/50">
                                         {{-- Committer Avatar (Placeholder Initials) --}}
                                         <div
                                             class="flex h-7 w-7 items-center justify-center rounded-lg bg-zinc-200 text-[10px] font-bold text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400">
@@ -179,11 +183,11 @@
                 </div>
 
                 {{-- Footer --}}
-                <div class="border-t border-zinc-100 bg-zinc-50/50 p-5 dark:border-zinc-800 dark:bg-zinc-950/20">
-                    <button @click="show = false"
-                        class="w-full rounded-xl bg-zinc-900 px-4 py-3 text-sm font-bold text-white transition-all hover:bg-zinc-800 active:scale-[0.98] dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200">
+                <div class="border-t border-zinc-200 bg-zinc-50/50 p-5 dark:border-zinc-800 dark:bg-zinc-950/20">
+                    <x-button.secondary @click="show = false"
+                        class="!w-full !rounded-xl !bg-zinc-900 !px-4 !py-3 !text-sm !font-bold !text-white !transition-all hover:!bg-zinc-800 active:scale-[0.98] dark:!bg-white dark:!text-zinc-900 dark:hover:!bg-zinc-200">
                         Selesai Membaca
-                    </button>
+                    </x-button.secondary>
                 </div>
             </div>
         </div>

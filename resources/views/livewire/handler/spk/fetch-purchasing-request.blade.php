@@ -19,7 +19,7 @@
     </div>
 
     <div
-        class="relative col-span-2 flex grid-cols-1 flex-col gap-2 rounded-lg border border-gray-200 p-2 dark:border-gray-600 lg:gap-4 lg:p-4">
+        class="relative col-span-2 flex grid-cols-1 flex-col gap-2 rounded-lg border border-zinc-200 p-2 dark:border-zinc-800 lg:gap-4 lg:p-4">
 
         <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
             <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
@@ -36,7 +36,7 @@
             <tbody>
                 @forelse ($data as $index => $row)
                     <tr
-                        class="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
+                        class="border-b border-zinc-200 bg-white hover:bg-gray-50 dark:border-zinc-800 dark:bg-gray-800 dark:hover:bg-gray-600">
                         <td class="px-6 py-4 text-center">
                             <span>{{ $index + 1 ?? '-' }}</span>
                         </td>
@@ -67,7 +67,7 @@
                     </tr>
                 @empty
                     <tr
-                        class="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
+                        class="border-b border-zinc-200 bg-white hover:bg-gray-50 dark:border-zinc-800 dark:bg-gray-800 dark:hover:bg-gray-600">
                         <td colspan="7" class="px-6 py-4 text-center"> Silahkan cari nomor PR terlebih dahulu.</td>
                     </tr>
                 @endforelse
@@ -106,7 +106,7 @@
                         <tbody>
                             @forelse ($row['data'] as $index => $row)
                                 <tr
-                                    class="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
+                                    class="border-b border-zinc-200 bg-white hover:bg-gray-50 dark:border-zinc-800 dark:bg-gray-800 dark:hover:bg-gray-600">
                                     <td class="text-center">
                                         <p>{{ $row['KodeItem'] ?? '-' }}</p>
                                     </td>
@@ -128,7 +128,7 @@
                                 </tr>
                             @empty
                                 <tr
-                                    class="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
+                                    class="border-b border-zinc-200 bg-white hover:bg-gray-50 dark:border-zinc-800 dark:bg-gray-800 dark:hover:bg-gray-600">
                                     <td colspan="6" class="px-6 py-4 text-center"> Silahkan cari nomor PR
                                         terlebih dahulu.</td>
                                 </tr>

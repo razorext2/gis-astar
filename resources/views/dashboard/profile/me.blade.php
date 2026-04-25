@@ -6,7 +6,7 @@
             class="flex flex-col rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 lg:p-7">
             <div class="flex flex-col gap-6">
 
-                <div class="flex items-center gap-2 border-b border-zinc-100 pb-4 dark:border-zinc-800">
+                <div class="flex items-center gap-2 border-b border-zinc-200 pb-4 dark:border-zinc-800">
                     <div class="h-2 w-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,0.5)] dark:bg-red-700"></div>
                     <h3 class="text-base font-bold tracking-wider text-zinc-800 dark:text-white md:text-xl">
                         Informasi Pegawai

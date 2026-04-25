@@ -2,7 +2,7 @@
 @section('content')
     <div class="w-full space-y-6">
         <div
-            class="grid gap-4 rounded-xl bg-white p-4 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary dark:shadow-none dark:ring-gray-700 sm:p-6">
+            class="grid gap-4 rounded-xl bg-white p-4 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 sm:p-6">
 
             <div class="w-full">
                 <header class="flex flex-row">
@@ -99,7 +99,7 @@
                         <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="keterangan">Rincian
                             Pekerjaan</label>
                         <textarea
-                            class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                            class="block w-full rounded-lg border border-zinc-200 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                             id="job_detail" rows="25" placeholder="Rincian pekerjaan..." readonly></textarea>
                     </div>
 
@@ -220,7 +220,7 @@
 
                         <div class="flex w-full flex-col gap-y-2">
                             <label for="bast_document"
-                                class="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-800">
+                                class="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-200 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-zinc-800 dark:bg-gray-700 dark:hover:border-zinc-800 dark:hover:bg-gray-800">
                                 <div class="flex flex-col items-center justify-center pb-6 pt-5">
                                     <x-icons.cloud-upload class="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" />
                                     <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span
@@ -250,7 +250,7 @@
                             for="job_update">Update
                             Pekerjaan</label>
                         <textarea
-                            class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                            class="block w-full rounded-lg border border-zinc-200 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                             id="job_update" rows="25" placeholder="Update pekerjaan..."></textarea>
                     </div>
 
@@ -283,12 +283,12 @@
                             status
                             <b>Diajukan</b>
                         </p>
-                        <x-button.primary class="float-right" id="store" type="button">
+                        <x-button.success class="float-right" id="store" type="button">
                             <x-slot name="icon">
-                                <x-icons.angle-right class="icon h-5 w-5" />
+                                <x-icons.checklist-stepper class="icon h-5 w-5" />
                             </x-slot>
-                            Update laporan
-                        </x-button.primary>
+                            {{ __('Simpan laporan') }}
+                        </x-button.success>
                     </div>
                 </div>
             </div>

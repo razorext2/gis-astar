@@ -2,20 +2,22 @@
     x-on:show-detail-modal.window="pdfUrl = $event.detail.url">
     {{-- accordion form tambah packing list --}}
     <div id="accordion-packing-form" x-data="{ accordionOpen: false }">
-        <button type="button"
-            class="d flex w-full items-center justify-between gap-3 rounded-lg border border-gray-200 bg-green-500 p-5 font-medium text-white transition-all duration-300 ease-in-out hover:bg-green-400 dark:border-gray-600 dark:bg-green-600 dark:hover:bg-green-500"
-            @click="accordionOpen = !accordionOpen" :class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
+        <x-button.success type="button"
+            class="w-full flex-row-reverse justify-between rounded-lg p-5"
+            @click="accordionOpen = !accordionOpen" ::class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
+            <x-slot name="icon">
+                <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
+                    <x-icons.carred-down class="h-4 w-4" />
+                </span>
+            </x-slot>
+
             <h3 class="text-base font-semibold text-white">
                 Tambah Packing List?
             </h3>
-
-            <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
-                <x-icons.carred-down class="h-4 w-4" />
-            </span>
-        </button>
+        </x-button.success>
 
 
-        <div class="rounded-b-lg border border-gray-200 p-5 dark:border-gray-700" x-show="accordionOpen" x-collapse
+        <div class="rounded-b-lg border border-zinc-200 p-5 dark:border-zinc-800" x-show="accordionOpen" x-collapse
             x-cloak>
             <form class="flex flex-col gap-2 lg:gap-4" wire:submit.prevent="store" method="post">
                 <div class="flex flex-col gap-4">
@@ -104,7 +106,7 @@
                                 <tbody>
                                     @forelse ($itemForm->parts as $index => $row)
                                         <tr
-                                            class="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                                            class="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-gray-800">
                                             <td class="px-3 py-2 text-center">
                                                 {{ $index + 1 }}
                                             </td>
@@ -128,7 +130,7 @@
                                         </tr>
                                     @empty
                                         <tr
-                                            class="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                                            class="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-gray-800">
                                             <td colspan="6"
                                                 class="px-6 py-4 text-center text-sm font-semibold italic text-red-500">
                                                 Belum ada
@@ -215,14 +217,14 @@
                     </div>
 
                     <div x-show="$wire.itemForm.cara_input === 'upload'" x-transition x-cloak
-                        class="col-span-2 grid w-full grid-cols-1 gap-2 rounded-lg border border-gray-200 p-2 dark:border-gray-600 lg:gap-4 lg:p-4">
+                        class="col-span-2 grid w-full grid-cols-1 gap-2 rounded-lg border border-zinc-200 p-2 dark:border-zinc-800 lg:gap-4 lg:p-4">
                         <div x-show="$wire.docForm.new_attachments.length > 0">
                             <span class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
                                 Daftar Lampiran
                             </span>
 
                             <ul
-                                class="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white shadow-sm dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-700">
+                                class="divide-y divide-gray-200 rounded-lg border border-zinc-200 bg-white shadow-sm dark:divide-gray-700 dark:border-zinc-800 dark:bg-gray-700">
 
                                 @foreach ($docForm->new_attachments as $index => $row)
                                     <li
@@ -241,10 +243,10 @@
                                             </p>
                                         </div>
 
-                                        <button type="button" wire:click="removeAttachment({{ $index }})"
-                                            class="text-sm font-medium text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                                        <x-button.link wire:click="removeAttachment({{ $index }})"
+                                            class="!text-sm !font-medium !text-red-600 hover:!text-red-800 dark:!text-red-400 dark:hover:!text-red-300">
                                             Hapus
-                                        </button>
+                                        </x-button.link>
                                     </li>
                                 @endforeach
 
@@ -266,7 +268,7 @@
                                 x-on:livewire-upload-error="uploading = false"
                                 x-on:livewire-upload-progress="progress = $event.detail.progress">
                                 <label for="attachment"
-                                    class="flex h-36 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-800">
+                                    class="flex h-36 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-200 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-zinc-800 dark:bg-gray-700 dark:hover:border-zinc-800 dark:hover:bg-gray-800">
                                     <div class="flex flex-col items-center justify-center pb-6 pt-5">
                                         <x-icons.cloud-upload class="mb-2 h-8 w-8 text-gray-500 dark:text-gray-400" />
 

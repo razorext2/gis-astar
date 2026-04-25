@@ -1,21 +1,47 @@
 @extends('dashboard.layoutsDash.app')
+
 @section('content')
-	<div
-		class="flex flex-col gap-2 rounded-xl border border-gray-200 bg-white p-2 shadow-md dark:border-gray-700 dark:bg-dark-primary dark:shadow-none md:p-6">
+    <div class="relative overflow-hidden rounded-2xl bg-white/80 p-4 text-zinc-900 shadow-2xl ring-1 ring-zinc-200 backdrop-blur-xl dark:bg-zinc-900/60 dark:text-white dark:ring-zinc-800 md:p-6"
+        id="Scan" data-aos="fade-up">
 
-		<div class="w-full">
-			<h2 class="w-full text-lg font-semibold text-gray-900 dark:text-white">Absensi baru khusus rute</h2>
-			<p class="text-md text-gray-600 dark:text-gray-300">
-				Timezone: <span class="font-semibold text-gray-600 dark:text-white" id="timezone_js"></span>
-			</p>
-		</div>
+        {{-- Background Decoration --}}
+        <div class="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-red-500/10 blur-3xl"></div>
+        <div class="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl"></div>
 
-		@livewire('handler.attendance.route')
-	</div>
+        <div class="relative grid grid-cols-1 gap-6">
+            {{-- Unified Header --}}
+            <div
+                class="flex flex-col items-start justify-between gap-4 rounded-xl bg-zinc-100 p-4 ring-1 ring-zinc-200 dark:bg-zinc-800/50 dark:ring-zinc-800 md:flex-row md:items-center">
+                <div class="flex items-center gap-3">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-white shadow-sm dark:bg-zinc-800">
+                        <x-icons.map-pin class="h-6 w-6 text-red-500" />
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-black uppercase tracking-tight dark:text-white">Absensi Khusus Rute</h2>
+                        <p class="text-[10px] font-bold tracking-widest text-zinc-400">Absensi untuk staff
+                            lapangan atau yang sedang bertugas di luar kantor</p>
+                    </div>
+                </div>
 
-	<script>
-		const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                <div
+                    class="flex items-center gap-3 rounded-lg bg-white/50 px-3 py-1.5 ring-1 ring-zinc-200 dark:bg-zinc-900/50 dark:ring-zinc-700">
+                    <x-icons.info class="h-4 w-4 text-amber-500" />
+                    <div class="flex flex-col">
+                        <span class="text-[9px] font-bold uppercase tracking-tighter text-zinc-400">Current Timezone</span>
+                        <span class="text-xs font-black text-zinc-700 dark:text-white" id="timezone_js">Detecting...</span>
+                    </div>
+                </div>
+            </div>
 
-		document.getElementById('timezone_js').textContent = timezone;
-	</script>
+            {{-- Livewire Content --}}
+            <div class="relative">
+                @livewire('handler.attendance.route')
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        document.getElementById('timezone_js').textContent = timezone;
+    </script>
 @endsection

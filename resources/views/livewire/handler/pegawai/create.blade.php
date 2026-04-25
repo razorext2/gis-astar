@@ -1,7 +1,7 @@
 <div class="w-full space-y-6">
     <!-- Top Header Navigation -->
     <div
-        class="rounded-3xl border border-white/30 bg-white/70 p-6 shadow-2xl backdrop-blur-xl transition-all duration-500 ease-in-out dark:border-white/10 dark:bg-zinc-900/60">
+        class="rounded-3xl border border-white/30 bg-white/70 p-6 shadow-2xl backdrop-blur-sm transition-all duration-500 ease-in-out dark:border-white/10 dark:bg-zinc-900/60">
         <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div class="flex items-center gap-4">
                 <x-button.link id="back-btn" class="group justify-center bg-white/50 hover:bg-red-700 hover:text-white"
@@ -29,7 +29,7 @@
         <div class="space-y-2 lg:col-span-2 lg:space-y-4">
             <!-- Data Personal Section -->
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60">
+                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-zinc-900/60">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-blue-500/5 blur-3xl transition-colors group-hover:bg-blue-500/10">
                 </div>
@@ -94,7 +94,7 @@
                         <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                             for="tgl_lahir">Tanggal Lahir</label>
                         <input wire:model="tgl_lahir" type="date"
-                            class="block w-full rounded-xl border-gray-300 bg-white/50 p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-dark-secondary dark:text-white">
+                            class="block w-full rounded-xl border-zinc-200 bg-white/50 p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-dark-secondary dark:text-white">
                         @error('tgl_lahir')
                             <span class="text-xs text-red-500">{{ $message }}</span>
                         @enderror
@@ -114,7 +114,7 @@
 
             <!-- Penempatan & Jabatan Section -->
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60">
+                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-zinc-900/60">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-purple-500/5 blur-3xl transition-colors group-hover:bg-purple-500/10">
                 </div>
@@ -155,7 +155,7 @@
 
             <!-- Akun Login Section -->
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60">
+                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-zinc-900/60">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-green-500/5 blur-3xl transition-colors group-hover:bg-green-500/10">
                 </div>
@@ -171,7 +171,7 @@
                         <label class="relative inline-flex cursor-pointer items-center">
                             <input wire:model.live="make_user" type="checkbox" class="peer sr-only">
                             <div
-                                class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-green-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-green-800">
+                                class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-zinc-200 after:bg-white after:transition-all after:content-[''] peer-checked:bg-green-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 dark:border-zinc-800 dark:bg-gray-700 dark:peer-focus:ring-green-800">
                             </div>
                         </label>
                     </div>
@@ -214,7 +214,7 @@
                                     <x-icons.search class="h-4 w-4 text-gray-400" />
                                 </div>
                                 <input x-model="search" type="text"
-                                    class="block w-full rounded-xl border-gray-300 bg-white/50 pl-10 text-xs focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-dark-secondary dark:text-white"
+                                    class="block w-full rounded-xl border-zinc-200 bg-white/50 pl-10 text-xs focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-dark-secondary dark:text-white"
                                     placeholder="Cari role...">
                             </div>
                         </div>
@@ -222,9 +222,9 @@
                             @foreach ($list_roles as $role)
                                 <label
                                     x-show="search === '' || '{{ strtolower($role->name) }}'.includes(search.toLowerCase())"
-                                    class="role-item group/role flex cursor-pointer items-center gap-3 rounded-2xl border border-gray-200 p-4 transition-all hover:border-blue-300 hover:bg-blue-50 dark:border-gray-700 dark:hover:border-blue-700 dark:hover:bg-blue-900/20">
+                                    class="role-item group/role flex cursor-pointer items-center gap-3 rounded-2xl border border-zinc-200 p-4 transition-all hover:border-blue-300 hover:bg-blue-50 dark:border-zinc-800 dark:hover:border-blue-700 dark:hover:bg-blue-900/20">
                                     <input wire:model="selected_roles" type="checkbox" value="{{ $role->name }}"
-                                        class="h-5 w-5 rounded-lg border-gray-300 text-blue-600 focus:ring-blue-500">
+                                        class="h-5 w-5 rounded-lg border-zinc-200 text-blue-600 focus:ring-blue-500">
                                     <span
                                         class="text-sm font-medium text-gray-700 transition-colors group-hover/role:text-blue-600 dark:text-gray-200">{{ $role->name }}</span>
                                 </label>
@@ -249,7 +249,7 @@
         <!-- Right Column: Photo Labels -->
         <div class="space-y-2 lg:space-y-4">
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60">
+                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-zinc-900/60">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-orange-500/5 blur-3xl transition-colors group-hover:bg-orange-500/10">
                 </div>
@@ -265,15 +265,16 @@
                         <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Foto Label
                             1</label>
                         <div
-                            class="group relative flex h-56 w-full flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-gray-300 transition-colors hover:border-blue-500 dark:border-gray-600">
+                            class="group relative flex h-56 w-full flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-zinc-200 transition-colors hover:border-blue-500 dark:border-zinc-800">
                             @if ($photo1)
                                 <img src="{{ $photo1->temporaryUrl() }}"
                                     class="absolute inset-0 h-full w-full object-cover">
                                 <div
                                     class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
-                                    <button wire:click="$set('photo1', null)"
-                                        class="rounded-xl bg-red-600 px-4 py-2 text-xs font-bold text-white">Ganti
-                                        Foto</button>
+                                    <x-button.danger class="!px-4 !py-2 !text-xs"
+                                        wire:click="$set('photo1', null)">
+                                        Ganti Foto
+                                    </x-button.danger>
                                 </div>
                             @else
                                 <div class="flex flex-col items-center gap-3">
@@ -302,15 +303,16 @@
                         <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Foto Label
                             2</label>
                         <div
-                            class="group relative flex h-56 w-full flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-gray-300 transition-colors hover:border-blue-500 dark:border-gray-600">
+                            class="group relative flex h-56 w-full flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-zinc-200 transition-colors hover:border-blue-500 dark:border-zinc-800">
                             @if ($photo2)
                                 <img src="{{ $photo2->temporaryUrl() }}"
                                     class="absolute inset-0 h-full w-full object-cover">
                                 <div
                                     class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
-                                    <button wire:click="$set('photo2', null)"
-                                        class="rounded-xl bg-red-600 px-4 py-2 text-xs font-bold text-white">Ganti
-                                        Foto</button>
+                                    <x-button.danger class="!px-4 !py-2 !text-xs"
+                                        wire:click="$set('photo2', null)">
+                                        Ganti Foto
+                                    </x-button.danger>
                                 </div>
                             @else
                                 <div class="flex flex-col items-center gap-3">

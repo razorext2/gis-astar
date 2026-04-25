@@ -44,7 +44,7 @@
             x-transition:leave="transition ease-out duration-300"
             x-transition:leave-start="transform scale-100 opacity-100"
             x-transition:leave-end="transform scale-90 opacity-0">
-            <div class="mb-4 flex w-full max-w-xs items-center rounded-lg bg-white p-4 text-gray-500 shadow ring-1 ring-gray-200 dark:bg-dark-primary dark:text-white dark:ring-gray-700"
+            <div class="mb-4 flex w-full max-w-xs items-center rounded-lg bg-white p-4 text-gray-500 shadow ring-1 ring-zinc-200 dark:bg-dark-primary dark:text-white dark:ring-zinc-800"
                 id="toast-success" role="alert">
                 <div
                     class="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:text-white">
@@ -58,16 +58,12 @@
                 <div class="ms-3 mt-0.5 text-sm font-normal text-black"><x-auth.auth-session-status class="mb-4"
                         :status="session('status')" />
                 </div>
-                <button
-                    class="-mx-1.5 -my-1.5 ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-900 focus:ring-2 focus:ring-gray-300 dark:bg-gray-500 dark:text-gray-300 dark:ring-gray-700 dark:hover:bg-gray-300"
+                <x-button.secondary
+                    class="!ms-auto !h-8 !w-8 !p-1.5 !bg-transparent !shadow-none ring-0 sm:-mx-1.5 sm:-my-1.5"
                     type="button" aria-label="Close" @click="showToast = false">
                     <span class="sr-only">Close</span>
-                    <svg class="h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                    </svg>
-                </button>
+                    <x-icons.close class="h-3 w-3" />
+                </x-button.secondary>
             </div>
         </div>
     @endif
@@ -95,7 +91,7 @@
                         isDeleting: false,
                         type() {
                             const current = this.words[this.wordIndex];
-
+                    
                             if (this.isDeleting) {
                                 this.currentWord = current.substring(0, this.charIndex - 1);
                                 this.charIndex--;
@@ -103,10 +99,10 @@
                                 this.currentWord = current.substring(0, this.charIndex + 1);
                                 this.charIndex++;
                             }
-
+                    
                             let typeSpeed = 100 - Math.random() * 50;
                             if (this.isDeleting) typeSpeed /= 2.5; // Delete faster
-
+                    
                             if (!this.isDeleting && this.currentWord === current) {
                                 typeSpeed = 2000; // Pause at the end before deleting
                                 this.isDeleting = true;
@@ -115,7 +111,7 @@
                                 this.wordIndex = (this.wordIndex + 1) % this.words.length;
                                 typeSpeed = 500; // Pause before starting new word
                             }
-
+                    
                             setTimeout(() => this.type(), typeSpeed);
                         }
                     }" x-init="setTimeout(() => type(), 800)"

@@ -1,9 +1,8 @@
-import { showAlert, loadingAlert } from '../../utils/alert';
+import { showAlert, loadingAlert } from "../../utils/alert";
 
 let geoWatcher = null; // Simpan ID watcher
 
-export async function initCapture() {
-    let lastLat, lastLng, lat, lng;
+export function initCapture() {
     let selfDetectLoaded = false;
 
     // Hapus watcher lama jika ada
@@ -11,111 +10,161 @@ export async function initCapture() {
         navigator.geolocation.clearWatch(geoWatcher);
     }
 
-    const lokasiSpan = document.getElementById('lokasi'); // Get the span element
-    const specifiedLat = parseFloat(document.getElementById('specifiedLat').value);
-    const specifiedLng = parseFloat(document.getElementById('specifiedLng').value);
-    const radius = parseFloat(document.getElementById('radius').value);
-    // const movementThreshold = parseFloat(document.getElementById('movementThreshold').value);
+    const lokasiSpan = document.getElementById("lokasi");
+    const specifiedLatEl = document.getElementById("specifiedLat");
+    const specifiedLngEl = document.getElementById("specifiedLng");
+    const radiusEl = document.getElementById("radius");
 
-    if (navigator.geolocation) {
-        // tampilkan loading message
-        loadingAlert('Mengambil lokasi...');
+    // Pastikan elemen DOM yang dibutuhkan ada sebelum melanjutkan
+    if (!lokasiSpan || !specifiedLatEl || !specifiedLngEl || !radiusEl) {
+        console.warn(
+            "Elemen untuk geolocation tidak ditemukan di DOM. Inisialisasi capture dibatalkan.",
+        );
+        return;
+    }
 
-        geoWatcher = navigator.geolocation.watchPosition(
-            function (position) {
-                lat = position.coords.latitude;
-                lng = position.coords.longitude;
+    const specifiedLat = parseFloat(specifiedLatEl.value);
+    const specifiedLng = parseFloat(specifiedLngEl.value);
+    const radius = parseFloat(radiusEl.value);
 
-                // Display the latitude and longitude in the span
-                lokasiSpan.innerHTML = `${lat}, ${lng}`;
+    if (!navigator.geolocation) {
+        return disableScannerUI(
+            "Browser anda tidak memiliki support Geolocation.",
+        );
+    }
 
-                // Calculate distance from the specified point
-                const distance = calculateDistance(specifiedLat, specifiedLng, lat, lng);
+    // Tampilkan pesan loading
+    loadingAlert("Mengambil lokasi...");
 
-                // Check if within the specified radius
-                if (distance > radius) {
-                    Swal.close();
-                    showErrorAndRedirect(`Anda berada ${distance.toFixed(2)} meter dari tempat yang ditentukan.`);
-                    showError('Anda harus berada didalam radius area yang ditentukan. Jika sudah, silahkan refresh kembali.');
-                    return
-                }
+    geoWatcher = navigator.geolocation.watchPosition(
+        function (position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
 
-                if (lat !== null || lng !== null) {
-                    Swal.close();
+            // Update UI lokasi
+            lokasiSpan.innerHTML = `${lat}, ${lng}`;
 
-                    console.log('your location:', lat, lng);
+            // Hitung jarak dari titik spesifik
+            const distance = calculateDistance(
+                specifiedLat,
+                specifiedLng,
+                lat,
+                lng,
+            );
 
-                    // Call selfDetect here
-                    if (!selfDetectLoaded) {
-                        selfDetectLoaded = true;
-                        import('./selfDetect.js').then((module) => {
+            // Validasi radius
+            if (distance > radius) {
+                // Asumsi Swal tersedia secara global, gunakan .close() atau bisa buat closeAlert() di utilitas.
+                if (window.Swal) Swal.close();
+
+                showError(
+                    `Anda harus berada didalam radius area yang ditentukan. Jika sudah, silahkan refresh kembali.`,
+                );
+                disableScannerUI(
+                    `Anda berada ${distance.toFixed(2)} meter dari tempat yang ditentukan.`,
+                );
+                return;
+            }
+
+            // Jika lokasi valid dan belum diload
+            if (lat !== null || lng !== null) {
+                if (window.Swal) Swal.close();
+
+                console.log("[System] Location verified:", lat, lng);
+
+                // Call selfDetect (Lazy loading)
+                if (!selfDetectLoaded) {
+                    selfDetectLoaded = true;
+                    import("./selfDetect.js")
+                        .then((module) => {
                             module.initSelfDetect(lat, lng);
-                        });
-                    }
-                };
-
-                // Save current position for the next check
-                lastLat = lat;
-                lastLng = lng;
-            },
-            function (error) {
-                Swal.close();
-
-                let errorMessage = 'Terjadi kesalahan saat mengambil lokasi.';
-                switch (error.code) {
-                    case error.PERMISSION_DENIED:
-                        errorMessage = 'Izin lokasi ditolak. Silakan aktifkan izin lokasi di pengaturan browser atau perangkat Anda.';
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        errorMessage = 'Informasi lokasi tidak tersedia. Pastikan perangkat Anda tidak dalam mode pesawat dan memiliki koneksi GPS.';
-                        break;
-                    case error.TIMEOUT:
-                        errorMessage = 'Pengambilan lokasi terlalu lama. Pastikan sinyal GPS Anda kuat dan coba lagi.';
-                        break;
-                    default:
-                        errorMessage = 'Terjadi kesalahan yang tidak diketahui saat mengambil lokasi.';
-                        break;
+                        })
+                        .catch((err) =>
+                            console.error(
+                                "Gagal memuat modul selfDetect:",
+                                err,
+                            ),
+                        );
                 }
+            }
+        },
+        function (error) {
+            if (window.Swal) Swal.close();
 
-                showErrorAndRedirect(errorMessage);
-                showError(errorMessage);
-            }, {
+            let errorMessage = "Terjadi kesalahan saat mengambil lokasi.";
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    errorMessage =
+                        "Izin lokasi ditolak. Silakan aktifkan izin lokasi di pengaturan browser atau perangkat Anda.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorMessage =
+                        "Informasi lokasi tidak tersedia. Pastikan perangkat Anda tidak dalam mode pesawat dan memiliki koneksi GPS.";
+                    break;
+                case error.TIMEOUT:
+                    errorMessage =
+                        "Pengambilan lokasi terlalu lama. Pastikan sinyal GPS Anda kuat dan coba lagi.";
+                    break;
+            }
+
+            showError(errorMessage);
+            disableScannerUI(errorMessage);
+        },
+        {
             enableHighAccuracy: true,
             timeout: 60000,
             maximumAge: 0,
-        });
-    } else {
-        Swal.close();
-        return showErrorAndRedirect("Browser anda tidak memiliki support Geolocation.");
-    }
+        },
+    );
 
-    // Function to calculate distance between two coordinates using Haversine formula
+    // --- Helper Functions --- //
+
+    /**
+     * Calculate distance between two coordinates using Haversine formula
+     */
     function calculateDistance(lat1, lng1, lat2, lng2) {
         const R = 6371000; // Radius of Earth in meters
         const dLat = (lat2 - lat1) * (Math.PI / 180);
         const dLng = (lng2 - lng1) * (Math.PI / 180);
         const a =
             Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
-            Math.sin(dLng / 2) * Math.sin(dLng / 2);
+            Math.cos(lat1 * (Math.PI / 180)) *
+                Math.cos(lat2 * (Math.PI / 180)) *
+                Math.sin(dLng / 2) *
+                Math.sin(dLng / 2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return R * c; // Distance in meters
     }
 
-    function showErrorAndRedirect(message) {
-        const startBtn = document.getElementById('startButton');
+    /**
+     * Disable UI interactability when verification fails
+     */
+    function disableScannerUI(message) {
+        showAlert("error", "Gagal!", message);
 
-        showAlert("error", "Gagal!", message)
-        pegawaiKosong.style.display = "block";
+        const pegawaiKosong = document.getElementById("pegawaiKosong");
+        if (pegawaiKosong) pegawaiKosong.style.display = "block";
 
-        startBtn.disabled = true;
-        startBtn.classList.add('bg-gray-500');
-        startBtn.classList.remove('bg-blue-400', 'dark:bg-blue-800', 'dark:hover:bg-blue-900', 'hover:bg-blue-700');
+        const startBtn = document.getElementById("startButton");
+        if (startBtn) {
+            startBtn.disabled = true;
+            // Gunakan class turunan dari design system UI yang baru
+            startBtn.classList.add(
+                "opacity-50",
+                "cursor-not-allowed",
+                "grayscale",
+            );
+        }
     }
 
+    /**
+     * Show Error Message in the error box
+     */
     function showError(message) {
-        const container = document.getElementById('error');
-        container.textContent = message;
-        container.classList.remove('hidden');
+        const container = document.getElementById("error");
+        if (container) {
+            container.textContent = message;
+            container.classList.remove("hidden");
+        }
     }
 }

@@ -30,7 +30,7 @@
 
         <!-- Ketua Tim -->
         <div
-            class="flex flex-col rounded-xl bg-gray-50/50 p-4 ring-1 ring-gray-200 dark:bg-gray-800/30 dark:ring-gray-700/50">
+            class="flex flex-col rounded-xl bg-gray-50/50 p-4 ring-1 ring-zinc-200 dark:bg-gray-800/30 dark:ring-zinc-800/50">
             <div class="mb-2 flex items-center gap-3">
                 <div class="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg">
                     <x-icons.user class="text-primary h-6 w-6" />
@@ -58,20 +58,20 @@
 
                 @if ($search_user != '')
                     <div
-                        class="mt-3 max-h-[220px] overflow-y-auto rounded-xl bg-white p-2 shadow-sm ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700">
+                        class="mt-3 max-h-[220px] overflow-y-auto rounded-xl bg-white p-2 shadow-sm ring-1 ring-zinc-200 dark:bg-gray-800 dark:ring-zinc-800">
                         @forelse ($users as $user)
                             <label for="helper-radio-{{ $user->kode_pegawai }}"
                                 class="group flex cursor-pointer items-center rounded-lg p-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50">
                                 <div class="flex h-5 items-center">
                                     <input wire:model="team_leader" id="helper-radio-{{ $user->kode_pegawai }}"
                                         type="radio" value="{{ $user->kode_pegawai }}"
-                                        class="text-primary focus:ring-primary/50 h-4 w-4 border-gray-300 bg-gray-100 focus:ring-2 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800">
+                                        class="text-primary focus:ring-primary/50 h-4 w-4 border-zinc-200 bg-gray-100 focus:ring-2 dark:border-zinc-800 dark:bg-gray-700 dark:ring-offset-gray-800">
                                 </div>
                                 <div class="ms-3 flex flex-col">
                                     <span
                                         class="group-hover:text-primary font-semibold text-gray-900 dark:text-gray-200 dark:group-hover:text-white">{{ $user->name }}</span>
                                     <span class="text-sm text-gray-500 dark:text-gray-400">Kode Sidik Jari: <span
-                                            class="border-gray-300 font-bold dark:border-gray-600">{{ $user->kode_pegawai }}</span></span>
+                                            class="border-zinc-200 font-bold dark:border-zinc-800">{{ $user->kode_pegawai }}</span></span>
                                 </div>
                             </label>
                         @empty
@@ -97,7 +97,7 @@
         </div>
 
         <div
-            class="mt-2 flex w-full flex-col justify-end gap-3 border-t border-gray-100 pt-6 dark:border-gray-800/50 sm:flex-row">
+            class="mt-2 flex w-full flex-col justify-end gap-3 border-t border-zinc-200 pt-6 dark:border-zinc-800/50 sm:flex-row">
             <x-button.danger type="button" wire:click="$set('removeTeamModal', true)"
                 class="w-full hover:bg-red-700 sm:w-auto">
                 <span>Hapus Seluruh Tim</span>
@@ -114,20 +114,22 @@
 
     {{-- show modal remove team menggunakan Alpine --}}
     <div x-data="{ show: @entangle('removeTeamModal') }" x-show="show" x-cloak
-        class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/60 p-4 backdrop-blur-sm"
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm"
         x-transition.opacity.duration.300ms>
 
         <div x-show="show" @click.outside="show = false" x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100"
             x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
             x-transition:leave-end="opacity-0 scale-90"
-            class="relative flex w-full max-w-lg flex-col items-center gap-4 rounded-3xl bg-white p-6 text-center shadow-2xl ring-1 ring-white/20 dark:bg-dark-primary dark:ring-white/10">
+            class="relative flex w-full max-w-lg flex-col items-center gap-4 rounded-xl bg-white p-6 text-center shadow-2xl ring-1 ring-white/20 dark:bg-dark-primary dark:ring-white/10">
 
             <div class="absolute right-3 top-3">
-                <button type="button" @click="show = false"
-                    class="rounded-full !p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300">
-                    <x-icons.close class="h-5 w-5" />
-                </button>
+                <x-button.secondary type="button" @click="show = false"
+                    class="!rounded-full !p-2">
+                    <x-slot name="icon">
+                        <x-icons.close class="h-5 w-5" />
+                    </x-slot>
+                </x-button.secondary>
             </div>
 
             <div

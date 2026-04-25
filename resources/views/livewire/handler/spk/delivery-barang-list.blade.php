@@ -14,7 +14,7 @@
         @forelse ($deliveries as $row)
             <div class="w-full">
                 <div
-                    class="mb-2 rounded-lg border border-gray-100 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 sm:space-y-2 lg:mb-4">
+                    class="mb-2 rounded-lg border border-zinc-200 bg-gray-50 p-4 dark:border-zinc-800 dark:bg-gray-800 sm:space-y-2 lg:mb-4">
 
                     <div class="flex items-center gap-x-2">
                         <span class="rounded bg-gray-400 px-2 py-0.5 text-xs font-semibold text-gray-800">
@@ -180,14 +180,16 @@
 
     {{-- modal detail pengiriman --}}
     <div id="detail-pengiriman-modal" wire:show="showDetailModal" wire:transition.duration.300ms
-        class="fixed inset-0 z-[99] flex items-center justify-center bg-black bg-opacity-70 py-8">
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 py-8">
         @if ($showDetailModal)
             <div class="relative mx-4 my-6 flex w-full flex-col gap-1 overflow-y-auto rounded-xl bg-white p-4 shadow-2xl dark:bg-dark-primary md:w-2/3 md:gap-2 lg:w-1/2 lg:p-6 xl:w-2/5"
                 style="max-height: calc(100vh - 6rem);">
 
-                <button class="absolute right-2 top-2" type="button" wire:click="$set('showDetailModal', false)">
-                    <x-icons.close class="h-6 w-6 text-red-600 hover:text-red-800" />
-                </button>
+                <x-button.secondary class="absolute right-2 top-2 !p-1 !bg-transparent ring-0 hover:!bg-gray-100 dark:hover:!bg-gray-800" type="button" wire:click="$set('showDetailModal', false)">
+                    <x-slot name="icon">
+                        <x-icons.close class="h-6 w-6 text-red-600 hover:text-red-800" />
+                    </x-slot>
+                </x-button.secondary>
 
                 <h2
                     class="mb-2 flex items-center gap-x-2 text-lg font-semibold text-gray-900 dark:text-white lg:text-xl">
@@ -209,7 +211,7 @@
 
                     @forelse($histories as $row)
                         <div
-                            class="mb-2 rounded-lg border border-gray-100 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 sm:space-y-2 lg:mb-4">
+                            class="mb-2 rounded-lg border border-zinc-200 bg-gray-50 p-4 dark:border-zinc-800 dark:bg-gray-800 sm:space-y-2 lg:mb-4">
 
                             <dl class="items-center justify-between gap-4 sm:flex">
                                 <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">ID Riwayat</dt>
@@ -241,7 +243,7 @@
                         </div>
                     @empty
                         <div
-                            class="mb-2 rounded-lg border border-gray-100 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 sm:space-y-2 lg:mb-4">
+                            class="mb-2 rounded-lg border border-zinc-200 bg-gray-50 p-4 dark:border-zinc-800 dark:bg-gray-800 sm:space-y-2 lg:mb-4">
                             <p class="font-semibold text-gray-800 dark:text-white">Belum ada riwayat pengiriman.</p>
                         </div>
                     @endforelse
@@ -273,14 +275,16 @@
 
     {{-- modal delayed --}}
     <div id="pengiriman-delay-modal" wire:show="showDelayedModal" wire:transition.duration.300ms
-        class="fixed inset-0 z-[99] flex items-center justify-center bg-black bg-opacity-70 py-8">
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 py-8">
         @if ($showDelayedModal)
             <div class="relative mx-4 my-6 flex w-full flex-col gap-1 overflow-y-auto rounded-xl bg-white p-4 shadow-2xl dark:bg-dark-primary md:w-2/3 md:gap-2 lg:w-1/2 lg:p-6 xl:w-2/5"
                 style="max-height: calc(100vh - 6rem);">
 
-                <button class="absolute right-2 top-2" type="button" wire:click="$set('showDelayedModal', false)">
-                    <x-icons.close class="h-6 w-6 text-red-600 hover:text-red-800" />
-                </button>
+                <x-button.secondary class="absolute right-2 top-2 !p-1 !bg-transparent ring-0 hover:!bg-gray-100 dark:hover:!bg-gray-800" type="button" wire:click="$set('showDelayedModal', false)">
+                    <x-slot name="icon">
+                        <x-icons.close class="h-6 w-6 text-red-600 hover:text-red-800" />
+                    </x-slot>
+                </x-button.secondary>
 
                 <h2 class="mb-2 gap-x-2 text-lg font-semibold text-gray-900 dark:text-white lg:text-xl">
                     Pengiriman <span class="text-green-500">{{ $modalData->kode_kirim }}</span> Mengalami
@@ -288,7 +292,7 @@
                 </h2>
 
                 <form wire:submit.prevent="delayDelivery({{ $modalData->id }})"
-                    class="grid grid-cols-1 gap-2 rounded-lg border border-gray-100 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 sm:space-y-2">
+                    class="grid grid-cols-1 gap-2 rounded-lg border border-zinc-200 bg-gray-50 p-4 dark:border-zinc-800 dark:bg-gray-800 sm:space-y-2">
 
                     <div class="w-full">
                         <x-input.textarea id="reason" :labels="true" :textLabel="'Alasan Delay'" name="reason"
@@ -310,7 +314,7 @@
                             </div>
 
                             <input id="delayed_eta" name="delayed_eta" wire:model="delayed_eta" type="date"
-                                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 ps-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500">
+                                class="block w-full rounded-lg border border-zinc-200 bg-gray-50 p-2.5 ps-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500">
                         </div>
 
                         @error('delayed_eta')

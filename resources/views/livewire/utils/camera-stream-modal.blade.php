@@ -1,25 +1,44 @@
-<div class="fixed left-0 right-0 top-0 z-[100] hidden h-[calc(100%-1rem)] max-h-full w-full items-center justify-center overflow-y-auto overflow-x-hidden md:inset-0"
-    id="camera-modal">
-    <div class="relative max-h-full w-full max-w-2xl p-4">
-        <div class="relative rounded-xl bg-white shadow dark:bg-gray-700">
-            <div class="space-y-4 p-1">
-                <div class="relative">
-                    <!-- Video -->
-                    <video class="rounded-lg" id="video" width="100%" height="auto" autoplay></video>
+{{-- Goal: Modal Overlay for Camera Streaming, Caller: Edit/Collect Views, Alpine: None --}}
+<div>
+    <!-- Backdrop -->
+    <div class="fixed inset-0 z-[100] hidden bg-zinc-900/60 backdrop-blur-sm transition-opacity"
+        id="camera-modal-backdrop" aria-hidden="true"></div>
 
-                    <!-- Button -->
-                    <button
-                        class="absolute bottom-4 left-1/2 h-14 w-14 -translate-x-1/2 transform rounded-full bg-white/60 shadow-lg ring-2 ring-white hover:bg-white/80 focus:outline-none md:bottom-6 md:h-16 md:w-16"
-                        id="capture-image">
-                        <x-icons.camera class="mx-auto h-8 w-8 text-white md:h-10 md:w-10" />
+    <!-- Modal Container -->
+    <div class="fixed inset-0 z-[100] hidden items-center justify-center overflow-y-auto overflow-x-hidden p-4 sm:p-6"
+        id="camera-modal">
+        <div
+            class="relative w-full max-w-2xl transform overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-2xl transition-all dark:border-zinc-800 dark:bg-zinc-900">
+
+            <!-- Header -->
+            <div class="flex items-center justify-between border-b border-zinc-100 px-4 py-3 dark:border-zinc-800">
+                <h3 class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">
+                    Ambil Foto
+                </h3>
+                <button type="button"
+                    class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-zinc-400 hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-200 dark:hover:bg-zinc-800 dark:hover:text-white dark:focus:ring-zinc-700"
+                    id="close-button">
+                    <x-icons.close class="h-5 w-5" />
+                    <span class="sr-only">Tutup kamera</span>
+                </button>
+            </div>
+
+            <!-- Video Stream Container -->
+            <div class="relative bg-zinc-100 dark:bg-zinc-950">
+                <!-- Video -->
+                <video class="w-full object-cover" id="video" autoplay playsinline></video>
+
+                <!-- Gradient Overlay for Bottom Tools -->
+                <div class="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/60 to-transparent"></div>
+
+                <!-- Capture Button (iOS Camera Style) -->
+                <div class="absolute bottom-6 left-1/2 -translate-x-1/2 transform">
+                    <button type="button" id="capture-image"
+                        class="group relative flex h-16 w-16 items-center justify-center rounded-full bg-white/20 p-1 backdrop-blur-md transition-all hover:bg-white/30 focus:outline-none focus:ring-4 focus:ring-white/50 active:scale-95">
+                        <div
+                            class="h-full w-full rounded-full bg-white shadow-sm transition-transform group-hover:scale-90 group-active:scale-75">
+                        </div>
                     </button>
-
-                    {{-- close button --}}
-                    <button class="absolute right-2 top-2 h-auto w-auto transform focus:outline-none md:top-2"
-                        id="close-button" data-modal-hide="camera-modal" type="button">
-                        <x-icons.close class="h-8 w-8 text-red-600 hover:text-red-800" />
-                    </button>
-
                 </div>
             </div>
         </div>

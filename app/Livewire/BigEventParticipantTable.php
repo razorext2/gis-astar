@@ -106,12 +106,12 @@ final class BigEventParticipantTable extends PowerGridComponent
             Button::make('detail')
                 ->slot('Detail')
                 ->id($row->id)
-                ->class('dark:bg-green-800 text-sm dark:hover:bg-green-900 dark:text-white dark:border-gray-700 rounded-lg bg-green-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-green-700')
+                ->class('dark:bg-green-800 text-sm dark:hover:bg-green-900 dark:text-white dark:border-zinc-800 rounded-lg bg-green-400 px-2 py-1.5 font-semibold text-white border border-zinc-200 hover:bg-green-700')
                 ->route('event.participant.show', ['event' => $row->bigEventId->id, 'participant' => $row->id]),
             Button::make('delete')
                 ->slot('Hapus')
                 ->id($row->id)
-                ->class('dark:bg-red-800 text-sm dark:hover:bg-red-900 dark:text-white dark:border-gray-700 rounded-lg bg-red-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-red-700')
+                ->class('dark:bg-red-800 text-sm dark:hover:bg-red-900 dark:text-white dark:border-zinc-800 rounded-lg bg-red-400 px-2 py-1.5 font-semibold text-white border border-zinc-200 hover:bg-red-700')
                 ->dispatch('participantDelete', ['id' => $row->id])
         ];
     }

@@ -44,7 +44,7 @@ final class LogTable extends PowerGridComponent
 
     public function btnClass()
     {
-        return 'dark:bg-red-800 dark:hover:bg-red-900 dark:text-white dark:border-gray-700 rounded-lg bg-red-400 px-2 py-1.5 font-semibold text-white border border-gray-200 hover:bg-red-700 me-0.5';
+        return 'dark:bg-red-800 dark:hover:bg-red-900 dark:text-white dark:border-zinc-800 rounded-lg bg-red-400 px-2 py-1.5 font-semibold text-white border border-zinc-200 hover:bg-red-700 me-0.5';
     }
 
     public function header(): array

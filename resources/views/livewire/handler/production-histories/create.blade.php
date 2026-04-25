@@ -26,7 +26,7 @@
                 <div class="flex flex-row items-center">
                     <input id="radio-statuses-{{ $row['value'] }}" type="radio" value="{{ $row['value'] }}"
                         name="radio-statuses-{{ $row['value'] }}"
-                        class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-500 dark:bg-gray-600 dark:ring-offset-gray-700 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-700"
+                        class="h-4 w-4 border-zinc-200 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-600 dark:ring-offset-gray-700 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-700"
                         wire:model="status_baru" {{ $lastStatus ? 'disabled' : '' }}>
 
                     <label for="radio-statuses-{{ $row['value'] }}"
@@ -55,7 +55,7 @@
 
         <div class="flex w-full flex-col gap-y-2">
             <label for="documentations"
-                class="flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-800">
+                class="flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-200 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-zinc-800 dark:bg-gray-700 dark:hover:border-zinc-800 dark:hover:bg-gray-800">
                 <div class="flex flex-col items-center justify-center pb-6 pt-5">
                     <x-icons.cloud-upload class="mb-2 h-8 w-8 text-gray-500 dark:text-gray-400" />
                     <p class="mb-0.5 text-sm text-gray-500 dark:text-gray-400">
@@ -79,7 +79,7 @@
         @if ($documentations)
             <div class="mt-2 flex flex-col gap-2">
                 <div
-                    class="dark:highlight-white/5 relative min-w-0 overflow-auto rounded-xl border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700">
+                    class="dark:highlight-white/5 relative min-w-0 overflow-auto rounded-xl border border-zinc-200 bg-gray-50 dark:border-zinc-800 dark:bg-gray-700">
 
                     <div class="flex overflow-x-scroll">
 
@@ -96,11 +96,11 @@
                                                     : '');
                                     @endphp
                                     <img class="w-24 rounded-lg" src="{{ $src }}">
-                                    <button type="button"
-                                        class="absolute end-0 top-0 rounded-lg bg-red-500 p-1 text-white hover:bg-red-600"
+                                    <x-button.danger
+                                        class="absolute end-0 top-0 !rounded-lg !p-1 !shadow-none" type="button"
                                         wire:click="removeDocumentation({{ $index }})">
                                         <x-icons.close class="h-4 w-4" />
-                                    </button>
+                                    </x-button.danger>
 
                                     @php
                                         $name = $isStoredDoc

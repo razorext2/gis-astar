@@ -1,5 +1,5 @@
 <div id="laporan-fondasi-container">
-    <section class="rounded-lg text-gray-800 ring-1 ring-gray-200 dark:text-white dark:ring-gray-700 lg:gap-4">
+    <section class="rounded-lg text-gray-800 ring-1 ring-zinc-200 dark:text-white dark:ring-zinc-800 lg:gap-4">
 
         <div
             class="{{ $showLaporanFondasi ? 'rounded-t-lg' : 'rounded-lg' }} z-0 flex flex-row items-center justify-between gap-2 p-2.5 transition-all duration-500 ease-in-out hover:cursor-pointer hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-800 lg:gap-4">
@@ -41,7 +41,7 @@
             <div class="flex flex-col gap-2 p-2 lg:gap-4 lg:p-4">
                 @forelse ($laporanFondasi as $row)
                     <div
-                        class="flex flex-col gap-2 border-b border-gray-200 pb-2 text-gray-800 dark:border-gray-600 dark:text-white">
+                        class="flex flex-col gap-2 border-b border-zinc-200 pb-2 text-gray-800 dark:border-zinc-800 dark:text-white">
                         <div class="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-8">
                             <div class="text-right text-xs lg:text-left">
                                 <p>Pukul {{ \Carbon\Carbon::parse($row->created_at)->isoFormat('hh:mm:ss') }}</p>
@@ -101,7 +101,7 @@
 
     {{-- modal tambah laporan Fondasi --}}
     <div id="laporan-fondasi-modal" wire:show="showModalAddLaporanFondasi" wire:transition.duration.300ms
-        class="fixed inset-0 z-[99] flex items-center justify-center bg-black bg-opacity-70 py-8">
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 py-8">
 
         @if ($showModalAddLaporanFondasi)
             <div class="mx-4 my-6 flex w-full flex-col gap-1 overflow-y-auto rounded-xl bg-white p-4 shadow-2xl dark:bg-dark-primary md:w-2/3 md:gap-2 lg:w-1/2 xl:w-2/5"
@@ -132,7 +132,7 @@
 
                             <div class="flex w-full flex-col gap-y-2">
                                 <label for="documentation-input"
-                                    class="flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-800">
+                                    class="flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-200 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-zinc-800 dark:bg-gray-700 dark:hover:border-zinc-800 dark:hover:bg-gray-800">
                                     <div class="flex flex-col items-center justify-center pb-6 pt-5">
                                         <x-icons.cloud-upload class="mb-2 h-8 w-8 text-gray-500 dark:text-gray-400" />
                                         <p class="mb-0.5 text-sm text-gray-500 dark:text-gray-400">
@@ -151,7 +151,7 @@
                             @if ($form->documentations)
                                 <div class="mt-2 flex flex-col gap-2">
                                     <div
-                                        class="dark:highlight-white/5 relative min-w-0 overflow-auto rounded-xl border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700">
+                                        class="dark:highlight-white/5 relative min-w-0 overflow-auto rounded-xl border border-zinc-200 bg-gray-50 dark:border-zinc-800 dark:bg-gray-700">
 
                                         <div class="flex overflow-x-scroll">
 
@@ -160,11 +160,13 @@
                                                     <div
                                                         class="relative flex flex-col items-center justify-center gap-3">
                                                         <img class="w-24 rounded-lg" src="{{ $doc->temporaryUrl() }}">
-                                                        <button type="button"
-                                                            class="absolute end-0 top-0 rounded-lg bg-red-500 p-1 text-white hover:bg-red-600"
-                                                            wire:click="removeDocumentation({{ $index }})">
-                                                            <x-icons.close class="h-4 w-4" />
-                                                        </button>
+                                                        <x-button.danger type="button"
+                                                             class="absolute end-0 top-0 !p-1 hover:bg-red-600"
+                                                             wire:click="removeDocumentation({{ $index }})">
+                                                             <x-slot name="icon">
+                                                                 <x-icons.close class="h-4 w-4" />
+                                                             </x-slot>
+                                                         </x-button.danger>
                                                         <p class="text-xs text-gray-600 dark:text-white">
                                                             @php
                                                                 $name = $doc->getClientOriginalName();
@@ -256,7 +258,7 @@
 
     {{-- modal delete laporan fondasi --}}
     <div id="delete-laporan-fondasi-modal" wire:show="showModalDeleteLaporanFondasi" wire:transition.duration.300ms
-        class="fixed inset-0 z-[99] flex items-center justify-center bg-black bg-opacity-70 py-8">
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 py-8">
 
         @if ($showModalDeleteLaporanFondasi)
             <div class="mx-4 my-6 flex w-fit flex-col gap-2 overflow-y-auto rounded-xl bg-white p-4 shadow-2xl dark:bg-dark-primary"

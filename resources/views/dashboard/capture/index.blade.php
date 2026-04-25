@@ -1,104 +1,132 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-	<div
-		class="relative rounded-xl bg-white p-0 shadow-md ring-1 ring-gray-200 dark:bg-dark-primary/70 dark:shadow-none dark:ring-gray-700 lg:max-w-screen-lg lg:p-4"
-		id="Scan" d-aos="zoom-in-up" data-aos-delay="50">
-		<div class="grid h-auto w-full grid-cols-1 lg:grid-cols-3 lg:gap-4">
+    <div class="relative overflow-hidden rounded-2xl bg-white/80 p-4 text-zinc-900 shadow-2xl ring-1 ring-zinc-200 backdrop-blur-xl dark:bg-zinc-900/60 dark:text-white dark:ring-zinc-800 md:p-6"
+        id="Scan" data-aos="fade-up">
 
-			<div class="video-container h-auto p-3 text-center lg:col-span-2 lg:p-0" data-aos="zoom-in" data-aos-delay="100">
-				<div class="relative h-[30rem] w-full">
-					<div class="relative h-full w-full overflow-hidden rounded-lg ring-1 ring-gray-200 dark:ring-gray-700"
-						data-aos="zoom-in" data-aos-delay="100"
-						style="background: url('{{ asset('assets/img/noCamera.webp') }}') center center / cover no-repeat;">
-						<video id="video" class="absolute left-0 top-0 h-full w-full scale-x-[-1] object-cover" autoplay></video>
-					</div>
+        {{-- Background Decoration --}}
+        <div class="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-red-500/10 blur-3xl"></div>
+        <div class="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl"></div>
 
-					<canvas class="absolute left-0 top-0 flex h-full w-full rounded-xl object-cover p-0" id="canvas"></canvas>
-				</div>
-				<div class="mt-3 inline-flex w-full lg:px-0">
-					<button
-						class="w-full rounded-lg bg-blue-400 p-2 font-bold text-white ring-1 ring-gray-200 transition-all duration-300 hover:bg-blue-700 dark:bg-blue-800 dark:text-white dark:ring-gray-700 dark:hover:bg-blue-900"
-						id="startButton">Start</button>
-				</div>
-				<div id="error"
-					class="mt-3 hidden rounded-lg bg-red-500 py-2 font-semibold text-white ring-1 ring-gray-200 dark:bg-red-700 dark:ring-gray-700">
+        <div class="relative grid h-auto w-full grid-cols-1 gap-6 lg:grid-cols-3">
 
-				</div>
-			</div>
+            {{-- Scanner Section (Large) --}}
+            <div class="lg:col-span-2" data-aos="zoom-in" data-aos-delay="100">
+                <div class="relative h-[32rem] w-full overflow-hidden rounded-2xl bg-zinc-100 shadow-inner dark:bg-black">
+                    {{-- Default State Image --}}
+                    <div class="absolute inset-0 flex items-center justify-center bg-cover bg-center bg-no-repeat grayscale"
+                        style="background-image: url('{{ asset('assets/img/noCamera.webp') }}');">
+                        <div class="absolute inset-0 bg-black/40 backdrop-blur-[2px]"></div>
+                    </div>
 
-			<!-- #region -->
-			<div class="col-span-1 px-3 pb-3 md:px-3 md:pb-3 lg:col-span-1 lg:p-0" data-aos="zoom-in" data-aos-delay="100">
-				<div class="mb-4 rounded-lg p-2 text-center ring-1 ring-gray-200 dark:bg-dark-primary dark:ring-gray-700"
-					data-aos="fade-left" data-aos-delay="100">
-					<p class="text-xl font-bold text-black dark:text-white">INFORMASI</p>
-				</div>
+                    {{-- Local Video Feed --}}
+                    <video id="video" class="absolute left-0 top-0 h-full w-full scale-x-[-1] object-cover"
+                        autoplay></video>
 
-				<div class="grid grid-cols-1 gap-6 md:grid-cols-1">
+                    {{-- Face Recognition Canvas Overlay --}}
+                    <canvas class="absolute inset-0 z-10 h-full w-full object-cover" id="canvas"></canvas>
 
-					<div class="relative flex w-full flex-col gap-6 rounded-lg md:flex-row lg:flex-col lg:gap-0" data-aos="fade-right"
-						data-aos-delay="100">
-						<div class="h-full w-full rounded-lg md:rounded-lg lg:w-full lg:object-fill">
-							<img
-								class="h-60 w-full rounded-lg object-cover ring-1 ring-gray-200 dark:ring-gray-700 md:h-auto lg:h-full lg:object-fill"
-								id="canvLogo" src="{{ asset('assets/img/noImage.webp') }}" alt="">
-							<canvas
-								class="absolute left-0 top-0 h-60 w-full rounded-lg object-cover ring-1 ring-gray-200 dark:ring-gray-700 md:h-full lg:h-full"
-								id="canvAttend"></canvas>
-						</div>
-					</div>
+                    {{-- Technical Viewfinder Overlays --}}
+                    <div class="pointer-events-none absolute inset-0 z-20">
+                        {{-- Corners --}}
+                        <div class="absolute left-6 top-6 h-8 w-8 border-l-4 border-t-4 border-red-500/60"></div>
+                        <div class="absolute right-6 top-6 h-8 w-8 border-r-4 border-t-4 border-red-500/60"></div>
+                        <div class="absolute bottom-6 left-6 h-8 w-8 border-b-4 border-l-4 border-red-500/60"></div>
+                        <div class="absolute bottom-6 right-6 h-8 w-8 border-b-4 border-r-4 border-red-500/60"></div>
 
-					<div
-						class="relative flex h-auto w-full flex-col rounded-lg p-4 leading-normal ring-1 ring-gray-200 dark:ring-gray-700 lg:justify-between"
-						data-aos="fade-left" data-aos-delay="100">
-						<div id="pegawaiKosong">
-							<ul class="space-y-4 text-left text-gray-500 dark:text-white">
-								<li class="flex items-center space-x-3 rtl:space-x-reverse">
-									<svg class="h-3.5 w-3.5 flex-shrink-0 text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-										fill="none" viewBox="0 0 16 12">
-										<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-											d="M1 5.917 5.724 10.5 15 1.5" />
-									</svg>
-									<span>Lokasi: <span id="lokasi"></span></span>
-								</li>
-								<li class="flex items-center space-x-3 rtl:space-x-reverse">
-									<svg class="h-3.5 w-3.5 flex-shrink-0 text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-										fill="none" viewBox="0 0 16 12">
-										<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-											d="M1 5.917 5.724 10.5 15 1.5" />
-									</svg>
-									<span>Kode Pegawai: {{ Auth::user()->kode_pegawai }}<input id="kode_pegawai" name="kode_pegawai" type="hidden"
-											value="{{ Auth::user()->kode_pegawai }}"> </span>
-								</li>
-								<li class="flex items-center space-x-3 rtl:space-x-reverse">
-									<svg class="h-3.5 w-3.5 flex-shrink-0 text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-										fill="none" viewBox="0 0 16 12">
-										<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-											d="M1 5.917 5.724 10.5 15 1.5" />
-									</svg>
-									<span>NIK: {{ $data->nik_pegawai ?? 'N/A' }}</span>
-								</li>
-								<li class="flex items-center space-x-3 rtl:space-x-reverse">
-									<svg class="h-3.5 w-3.5 flex-shrink-0 text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-										fill="none" viewBox="0 0 16 12">
-										<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-											d="M1 5.917 5.724 10.5 15 1.5" />
-									</svg>
-									<span>Nama: {{ $data->full_name ?? 'N/A' }}</span>
-								</li>
+                        {{-- Scanning Line Animation --}}
+                        <div
+                            class="absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-30 shadow-[0_0_15px_rgba(239,68,68,0.5)]">
+                        </div>
+                    </div>
+                </div>
 
-								{{-- hidden data --}}
-								<input type="hidden" id="specifiedLat" value="{{ $data->latitude ?? 'N/A' }}">
-								<input type="hidden" id="specifiedLng" value="{{ $data->longitude ?? 'N/A' }}">
-								<input type="hidden" id="radius" value="{{ $data->radius ?? 'N/A' }}">
-								<input type="hidden" id="movementThreshold" value="50">
-								<input type="hidden" id="kodePegawai" value="{{ $data->kode_pegawai }}">
-							</ul>
-						</div>
-					</div>
+                {{-- Action Controls --}}
+                <div class="mt-6 flex flex-col gap-4">
+                    <x-button.primary class="group w-full !py-4 !text-lg" id="startButton">
+                        <x-slot name="icon">
+                            <x-icons.play class="h-5 w-5 transition-transform group-hover:scale-110" />
+                        </x-slot>
+                        MULAI SCAN WAJAH
+                    </x-button.primary>
 
-				</div>
-			</div>
+                    <div id="error"
+                        class="hidden rounded-xl border border-red-200 bg-red-50 p-4 text-center text-sm font-semibold text-red-600 shadow-sm dark:border-red-900/30 dark:bg-red-900/20 dark:text-red-400">
+                    </div>
+                </div>
+            </div>
 
-		</div>
-	</div>
+            {{-- Information Panel --}}
+            <div class="flex flex-col gap-6" data-aos="fade-left" data-aos-delay="200">
+                {{-- Panel Header --}}
+                <div
+                    class="flex items-center justify-between rounded-xl bg-zinc-100 p-4 ring-1 ring-zinc-200 dark:bg-zinc-800/50 dark:ring-zinc-800">
+                    <h2 class="flex items-center gap-2 text-lg font-black tracking-tight dark:text-white">
+                        <x-icons.info class="h-5 w-5 text-red-500" />
+                        IDENTITAS
+                    </h2>
+                </div>
+
+                {{-- Identification Thumbnail --}}
+                <div class="group relative overflow-hidden rounded-xl bg-zinc-100 ring-1 ring-zinc-200 dark:bg-zinc-900">
+                    <img class="h-56 w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        id="canvLogo" src="{{ asset('assets/img/noImage.webp') }}" alt="User">
+                    <canvas class="absolute inset-0 h-full w-full object-cover" id="canvAttend"></canvas>
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 p-4">
+                        <p class="text-xs font-medium text-white/70">CAPTURED PREVIEW</p>
+                    </div>
+                </div>
+
+                {{-- Data List --}}
+                <div class="flex-1 space-y-4 rounded-xl bg-zinc-100 p-5 ring-1 ring-zinc-200 dark:bg-zinc-800/30 dark:ring-zinc-800"
+                    id="pegawaiKosong">
+                    <div class="space-y-4">
+                        {{-- Data Items --}}
+                        <div
+                            class="flex flex-col gap-1 border-b border-zinc-200 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Lokasi</span>
+                            <span id="lokasi" class="text-sm font-bold text-zinc-700 dark:text-zinc-200">-</span>
+                        </div>
+
+                        <div
+                            class="flex flex-col gap-1 border-b border-zinc-200 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Kode Pegawai</span>
+                            <span
+                                class="text-sm font-bold text-zinc-700 dark:text-zinc-200">{{ Auth::user()->kode_pegawai }}</span>
+                            <input id="kode_pegawai" name="kode_pegawai" type="hidden"
+                                value="{{ Auth::user()->kode_pegawai }}">
+                        </div>
+
+                        <div
+                            class="flex flex-col gap-1 border-b border-zinc-200 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-400">NIK Pegawai</span>
+                            <span
+                                class="text-sm font-bold text-zinc-700 dark:text-zinc-200">{{ $data->nik_pegawai ?? 'N/A' }}</span>
+                        </div>
+
+                        <div
+                            class="flex flex-col gap-1 border-b border-zinc-200 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Nama Lengkap</span>
+                            <span
+                                class="text-sm font-bold text-zinc-700 dark:text-zinc-200">{{ $data->full_name ?? 'N/A' }}</span>
+                        </div>
+                    </div>
+
+                    {{-- Hidden Hooks for Backend --}}
+                    <div class="hidden">
+                        <input type="hidden" id="specifiedLat" value="{{ $data->latitude ?? 'N/A' }}">
+                        <input type="hidden" id="specifiedLng" value="{{ $data->longitude ?? 'N/A' }}">
+                        <input type="hidden" id="radius" value="{{ $data->radius ?? 'N/A' }}">
+                        <input type="hidden" id="movementThreshold" value="50">
+                        <input type="hidden" id="kodePegawai" value="{{ $data->kode_pegawai }}">
+                    </div>
+                </div>
+
+                {{-- Footer Info --}}
+                <div class="rounded-lg bg-red-50 p-3 text-[10px] text-red-600 dark:bg-red-900/10 dark:text-red-400">
+                    <strong>PENTING:</strong> Pastikan wajah berada di area frame digital untuk akurasi optimal.
+                </div>
+            </div>
+
+        </div>
+    </div>
 @endsection

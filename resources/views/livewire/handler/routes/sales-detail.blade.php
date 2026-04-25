@@ -4,8 +4,10 @@
     activeIndex: null,
     waypoints: @js($this->waypoints),
     initMap() {
-        if (this.map) { this.map.remove();
-            this.map = null; }
+        if (this.map) {
+            this.map.remove();
+            this.map = null;
+        }
         this.markers = {};
         this.activeIndex = null;
 
@@ -72,7 +74,7 @@
         class="flex w-full flex-col gap-5 rounded-3xl border border-zinc-200 bg-white/70 p-5 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/70 md:p-6">
 
         {{-- Header --}}
-        <div class="flex items-center gap-3 border-b border-zinc-100 pb-5 dark:border-zinc-800/50">
+        <div class="flex items-center gap-3 border-b border-zinc-200 pb-5 dark:border-zinc-800/50">
             <a href="{{ route('routes.sales') }}"
                 class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-500 transition hover:border-red-300 hover:bg-red-50 hover:text-red-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:border-red-800 dark:hover:bg-red-950/20 dark:hover:text-red-400">
                 <x-icons.angle-left class="h-5 w-5" />
@@ -133,7 +135,7 @@
                     <div class="cursor-pointer rounded-2xl border p-3 transition-all duration-200"
                         :class="activeIndex === {{ $data->id }} ?
                             'border-blue-300 bg-blue-50/60 dark:border-blue-800/50 dark:bg-blue-950/20' :
-                            'border-zinc-100 bg-zinc-50/50 hover:border-zinc-200 hover:bg-zinc-100/50 dark:border-zinc-800/50 dark:bg-zinc-900/30 dark:hover:bg-zinc-800/30'">
+                            'border-zinc-200 bg-zinc-50/50 hover:border-zinc-200 hover:bg-zinc-100/50 dark:border-zinc-800/50 dark:bg-zinc-900/30 dark:hover:bg-zinc-800/30'">
                         <div class="mb-1 flex flex-wrap items-start justify-between gap-2">
                             <a href="{{ route('sales.show', $data->id) }}" target="_blank"
                                 class="group flex items-center gap-1 text-sm font-black text-zinc-900 hover:text-emerald-600 dark:text-white dark:hover:text-emerald-400">
@@ -161,7 +163,7 @@
 
                         @if ($hasPrev && ($distance || $diffInMinutes))
                             <div
-                                class="mt-2 flex flex-wrap gap-2 border-t border-zinc-100 pt-2 dark:border-zinc-800/50">
+                                class="mt-2 flex flex-wrap gap-2 border-t border-zinc-200 pt-2 dark:border-zinc-800/50">
                                 @if ($distance)
                                     <span
                                         class="flex items-center gap-1 rounded-xl bg-blue-50 px-2.5 py-1 text-[11px] font-bold text-blue-700 dark:bg-blue-950/20 dark:text-blue-400">
@@ -199,7 +201,7 @@
     {{-- Right column: map --}}
     <div
         class="flex h-max w-full flex-col gap-5 rounded-3xl border border-zinc-200 bg-white/70 p-5 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/70 md:p-6">
-        <div class="flex items-center gap-3 border-b border-zinc-100 pb-4 dark:border-zinc-800/50">
+        <div class="flex items-center gap-3 border-b border-zinc-200 pb-4 dark:border-zinc-800/50">
             <div
                 class="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-500/20">
                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -213,7 +215,7 @@
         </div>
 
         <div id="sales-route-map" wire:ignore
-            class="z-10 h-[520px] w-full overflow-hidden rounded-2xl border border-zinc-100 dark:border-zinc-800">
+            class="z-10 h-[520px] w-full overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800">
         </div>
     </div>
 </div>
