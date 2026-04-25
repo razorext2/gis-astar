@@ -24,9 +24,11 @@
                 <h2 class="text-xl font-bold text-gray-900 dark:text-white lg:text-2xl">
                     Export Data Invoice
                 </h2>
-                <button @click="show = false" type="button" class="text-gray-400 transition-colors hover:text-red-500">
-                    <x-icons.close class="h-6 w-6" />
-                </button>
+                <x-button.secondary @click="show = false" type="button" class="!bg-transparent !p-1 ring-0 hover:!bg-gray-100 dark:hover:!bg-gray-800">
+                    <x-slot name="icon">
+                        <x-icons.close class="h-6 w-6" />
+                    </x-slot>
+                </x-button.secondary>
             </div>
 
             <form wire:submit="export">

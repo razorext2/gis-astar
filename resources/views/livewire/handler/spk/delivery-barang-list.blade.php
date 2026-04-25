@@ -185,9 +185,11 @@
             <div class="relative mx-4 my-6 flex w-full flex-col gap-1 overflow-y-auto rounded-xl bg-white p-4 shadow-2xl dark:bg-dark-primary md:w-2/3 md:gap-2 lg:w-1/2 lg:p-6 xl:w-2/5"
                 style="max-height: calc(100vh - 6rem);">
 
-                <button class="absolute right-2 top-2" type="button" wire:click="$set('showDetailModal', false)">
-                    <x-icons.close class="h-6 w-6 text-red-600 hover:text-red-800" />
-                </button>
+                <x-button.secondary class="absolute right-2 top-2 !p-1 !bg-transparent ring-0 hover:!bg-gray-100 dark:hover:!bg-gray-800" type="button" wire:click="$set('showDetailModal', false)">
+                    <x-slot name="icon">
+                        <x-icons.close class="h-6 w-6 text-red-600 hover:text-red-800" />
+                    </x-slot>
+                </x-button.secondary>
 
                 <h2
                     class="mb-2 flex items-center gap-x-2 text-lg font-semibold text-gray-900 dark:text-white lg:text-xl">
@@ -278,9 +280,11 @@
             <div class="relative mx-4 my-6 flex w-full flex-col gap-1 overflow-y-auto rounded-xl bg-white p-4 shadow-2xl dark:bg-dark-primary md:w-2/3 md:gap-2 lg:w-1/2 lg:p-6 xl:w-2/5"
                 style="max-height: calc(100vh - 6rem);">
 
-                <button class="absolute right-2 top-2" type="button" wire:click="$set('showDelayedModal', false)">
-                    <x-icons.close class="h-6 w-6 text-red-600 hover:text-red-800" />
-                </button>
+                <x-button.secondary class="absolute right-2 top-2 !p-1 !bg-transparent ring-0 hover:!bg-gray-100 dark:hover:!bg-gray-800" type="button" wire:click="$set('showDelayedModal', false)">
+                    <x-slot name="icon">
+                        <x-icons.close class="h-6 w-6 text-red-600 hover:text-red-800" />
+                    </x-slot>
+                </x-button.secondary>
 
                 <h2 class="mb-2 gap-x-2 text-lg font-semibold text-gray-900 dark:text-white lg:text-xl">
                     Pengiriman <span class="text-green-500">{{ $modalData->kode_kirim }}</span> Mengalami

@@ -2,24 +2,19 @@
 
     {{-- Action Bar --}}
     <div class="flex flex-row items-center gap-3">
-        <button id="create-participant"
-            class="flex items-center gap-2 rounded-xl bg-red-600 px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-red-700 hover:shadow-md hover:shadow-red-500/20 active:scale-[0.98]"
-            wire:click="$set('showCreateForm', true)">
-            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-            </svg>
+        <x-button.primary id="create-participant" wire:click="$set('showCreateForm', true)">
+            <x-slot name="icon">
+                <x-icons.plus class="h-4 w-4" />
+            </x-slot>
             Tambah Partisipan
-        </button>
+        </x-button.primary>
 
-        <button id="refresh-table"
-            class="flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-5 py-2.5 text-sm font-bold text-zinc-700 transition-all hover:bg-zinc-50 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
-            wire:click="refreshTable">
-            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-            </svg>
+        <x-button.secondary id="refresh-table" wire:click="refreshTable">
+            <x-slot name="icon">
+                <x-icons.clockwise class="h-4 w-4" />
+            </x-slot>
             Refresh Tabel
-        </button>
+        </x-button.secondary>
     </div>
 
     {{-- Form Section --}}
@@ -31,12 +26,12 @@
                 <h3 class="text-lg font-black tracking-tight text-zinc-900 dark:text-white">Form Partisipan Baru</h3>
                 <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Cari dan daftarkan user ke event ini</p>
             </div>
-            <button wire:click="$set('showCreateForm', false)"
-                class="text-zinc-400 hover:text-zinc-900 dark:hover:text-white">
-                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
+            <x-button.secondary wire:click="$set('showCreateForm', false)"
+                class="!bg-transparent !p-1 !shadow-none !ring-0 !border-none">
+                <x-slot name="icon">
+                    <x-icons.close class="h-6 w-6" />
+                </x-slot>
+            </x-button.secondary>
         </div>
 
         <form wire:submit.prevent="store" class="space-y-6">
@@ -103,14 +98,15 @@
 
             {{-- Form Footer --}}
             <div class="flex items-center justify-end gap-3 border-t border-zinc-200 pt-4 dark:border-zinc-800">
-                <button type="button" wire:click="$set('showCreateForm', false)"
-                    class="rounded-xl border border-zinc-200 bg-white px-6 py-2.5 text-sm font-bold text-zinc-700 transition-all hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-300">
+                <x-button.secondary type="button" wire:click="$set('showCreateForm', false)">
                     Batal
-                </button>
-                <button type="submit"
-                    class="rounded-xl bg-red-600 px-8 py-2.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-red-700 hover:shadow-md hover:shadow-red-500/20 active:scale-[0.98]">
+                </x-button.secondary>
+                <x-button.success type="submit">
+                    <x-slot name="icon">
+                        <x-icons.check class="h-4 w-4" />
+                    </x-slot>
                     Simpan Partisipan
-                </button>
+                </x-button.success>
             </div>
         </form>
     </div>

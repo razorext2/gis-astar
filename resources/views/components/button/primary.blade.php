@@ -17,5 +17,7 @@
         <x-icons.loading wire:loading wire:target="{{ $loading }}" class="h-4 w-4 animate-spin" />
     @endif
 
-    <span>{{ $slot }}</span>
+    @if ($slot->isNotEmpty())
+        <span>{{ $slot }}</span>
+    @endif
     </{{ $tag }}>

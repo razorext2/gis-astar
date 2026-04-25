@@ -160,11 +160,13 @@
                                                     <div
                                                         class="relative flex flex-col items-center justify-center gap-3">
                                                         <img class="w-24 rounded-lg" src="{{ $doc->temporaryUrl() }}">
-                                                        <button type="button"
-                                                            class="absolute end-0 top-0 rounded-lg bg-red-500 p-1 text-white hover:bg-red-600"
-                                                            wire:click="removeDocumentation({{ $index }})">
-                                                            <x-icons.close class="h-4 w-4" />
-                                                        </button>
+                                                        <x-button.danger type="button"
+                                                             class="absolute end-0 top-0 !p-1 hover:bg-red-600"
+                                                             wire:click="removeDocumentation({{ $index }})">
+                                                             <x-slot name="icon">
+                                                                 <x-icons.close class="h-4 w-4" />
+                                                             </x-slot>
+                                                         </x-button.danger>
                                                         <p class="text-xs text-gray-600 dark:text-white">
                                                             @php
                                                                 $name = $doc->getClientOriginalName();

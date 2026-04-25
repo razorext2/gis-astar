@@ -1,18 +1,22 @@
 <section>
     {{-- Trigger Button --}}
-    <button
-        class="group flex w-full items-center gap-3 rounded-xl border border-amber-200 bg-amber-50/50 px-4 py-2 text-left transition-all duration-300 hover:border-amber-300 hover:bg-amber-100/80 dark:border-amber-900/30 dark:bg-amber-950/20 dark:hover:bg-amber-900/30"
+    <x-button.warning
+        class="group w-full justify-start gap-4 rounded-xl p-4"
         type="button" wire:click="$set('showLogUpdateModal', true)">
-        <div
-            class="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100 text-amber-600 shadow-sm transition-transform group-hover:scale-110 dark:bg-amber-900/50 dark:text-amber-400">
-            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-        </div>
+        <x-slot name="icon">
+            <div
+                class="flex h-8 w-8 items-center justify-center rounded-lg bg-white/20 text-white shadow-sm transition-transform group-hover:scale-110">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+        </x-slot>
+
         <div class="flex flex-col">
-            <span class="text-sm font-medium text-amber-600/80 dark:text-amber-500/80">View Update Log</span>
+            <span class="text-sm font-medium text-white">View Update Log</span>
         </div>
-    </button>
+    </x-button.warning>
 
     @teleport('body')
         {{-- Custom Modal --}}
@@ -26,7 +30,7 @@
             <div x-show="show" x-transition:enter="transition ease-out duration-300"
                 x-transition:enter-start="opacity-0 scale-95 translate-y-4"
                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                class="relative flex w-full max-w-2xl flex-col rounded-xl ring-1 ring-zinc-200 bg-white shadow-2xl dark:ring-zinc-800 dark:bg-dark-primary"
+                class="relative flex w-full max-w-2xl flex-col rounded-xl bg-white shadow-2xl ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800"
                 style="max-height: 85vh;">
 
                 {{-- Header --}}
@@ -66,10 +70,10 @@
                             </div>
                         </div>
                     </div>
-                    <button @click="show = false"
-                        class="rounded-full p-2 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-white">
+                    <x-button.secondary @click="show = false"
+                        class="!rounded-full !bg-transparent !p-2 text-zinc-400 !shadow-none ring-0 transition-colors hover:!bg-zinc-100 hover:text-zinc-900 dark:hover:!bg-zinc-800 dark:hover:text-white">
                         <x-icons.close class="h-6 w-6" />
-                    </button>
+                    </x-button.secondary>
                 </div>
 
                 {{-- Timeline Content --}}
@@ -180,10 +184,10 @@
 
                 {{-- Footer --}}
                 <div class="border-t border-zinc-200 bg-zinc-50/50 p-5 dark:border-zinc-800 dark:bg-zinc-950/20">
-                    <button @click="show = false"
-                        class="w-full rounded-xl bg-zinc-900 px-4 py-3 text-sm font-bold text-white transition-all hover:bg-zinc-800 active:scale-[0.98] dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200">
+                    <x-button.secondary @click="show = false"
+                        class="!w-full !rounded-xl !bg-zinc-900 !px-4 !py-3 !text-sm !font-bold !text-white !transition-all hover:!bg-zinc-800 active:scale-[0.98] dark:!bg-white dark:!text-zinc-900 dark:hover:!bg-zinc-200">
                         Selesai Membaca
-                    </button>
+                    </x-button.secondary>
                 </div>
             </div>
         </div>

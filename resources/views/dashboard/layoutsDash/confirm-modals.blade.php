@@ -8,17 +8,11 @@
                 <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
                     Peringatan
                 </h3>
-                <button
-                    class="ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
+                <x-button.secondary class="ml-auto !bg-transparent !p-1.5 !shadow-none ring-0"
                     data-modal-hide="confirmModal" type="button">
-                    <svg class="h-5 w-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                            clip-rule="evenodd"></path>
-                    </svg>
+                    <x-icons.close class="h-5 w-5" />
                     <span class="sr-only">Close modal</span>
-                </button>
+                </x-button.secondary>
             </div>
             <!-- Modal Body -->
             <div class="p-6">
@@ -32,17 +26,13 @@
                 <form id="confirmForm" method="POST" action="">
                     @csrf
                     @method('put')
-                    <button
-                        class="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-800 dark:hover:bg-green-900 dark:focus:ring-green-900"
-                        type="submit">
-                        Konfirmasi Pengajuan
-                    </button>
+                    <x-button.success type="submit">
+                        {{ __('Konfirmasi Pengajuan') }}
+                    </x-button.success>
                 </form>
-                <button
-                    class="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:border-zinc-800 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-zinc-800"
-                    data-modal-hide="confirmModal" type="button">
-                    Cancel
-                </button>
+                <x-button.secondary data-modal-hide="confirmModal" type="button">
+                    {{ __('Cancel') }}
+                </x-button.secondary>
             </div>
         </div>
     </div>

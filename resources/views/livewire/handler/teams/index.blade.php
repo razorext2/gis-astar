@@ -85,10 +85,11 @@
                     class="relative flex w-full max-w-lg flex-col gap-4 rounded-xl bg-white/95 p-6 shadow-2xl ring-1 ring-white/20 backdrop-blur-sm dark:bg-dark-primary/95 dark:ring-white/10">
 
                     <div class="absolute right-3 top-3">
-                        <button type="button" @click="show = false"
-                            class="rounded-full !p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300">
-                            <x-icons.close class="h-5 w-5" />
-                        </button>
+                        <x-button.secondary type="button" @click="show = false" class="!rounded-full !p-2">
+                            <x-slot name="icon">
+                                <x-icons.close class="h-5 w-5" />
+                            </x-slot>
+                        </x-button.secondary>
                     </div>
 
                     <div class="text-center">

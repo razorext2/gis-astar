@@ -36,20 +36,22 @@
                 <ul class="-mb-px flex flex-wrap text-center text-sm font-medium" id="default-tab"
                     data-tabs-toggle="#default-tab-content" role="tablist">
                     <li class="me-2" role="presentation">
-                        <button class="inline-block rounded-t-lg border-b-2 p-4" id="semua-jenis-timbangan-tab"
-                            data-tabs-target="#semua-jenis-timbangan" type="button" role="tab"
-                            aria-controls="semua-jenis-timbangan" aria-selected="false">Semua Jenis Timbangan</button>
+                        <x-nav.tab :active="true" id="semua-jenis-timbangan-tab"
+                            data-tabs-target="#semua-jenis-timbangan" aria-controls="semua-jenis-timbangan">
+                            Semua Jenis Timbangan
+                        </x-nav.tab>
                     </li>
                     <li class="me-2" role="presentation">
-                        <button class="inline-block rounded-t-lg border-b-2 p-4" id="timbangan-jembatan-tab"
-                            data-tabs-target="#timbangan-jembatan" type="button" role="tab"
-                            aria-controls="timbangan-jembatan" aria-selected="false">Timbangan Jembatan</button>
+                        <x-nav.tab id="timbangan-jembatan-tab" data-tabs-target="#timbangan-jembatan"
+                            aria-controls="timbangan-jembatan">
+                            Timbangan Jembatan
+                        </x-nav.tab>
                     </li>
                     <li class="me-2" role="presentation">
-                        <button
-                            class="inline-block rounded-t-lg border-b-2 p-4 hover:border-zinc-200 hover:text-gray-600 dark:hover:text-gray-300"
-                            id="dashboard-tab" data-tabs-target="#non-timbangan-jembatan" type="button" role="tab"
-                            aria-controls="non-timbangan-jembatan" aria-selected="false">Non Timbangan Jembatan</button>
+                        <x-nav.tab id="dashboard-tab" data-tabs-target="#non-timbangan-jembatan"
+                            aria-controls="non-timbangan-jembatan">
+                            Non Timbangan Jembatan
+                        </x-nav.tab>
                     </li>
                 </ul>
             </div>

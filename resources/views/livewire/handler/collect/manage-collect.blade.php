@@ -4,7 +4,7 @@
         class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm">
         @if ($showRescheduleModal)
             <div
-                class="flex w-full flex-col gap-3 rounded-xl ring-1 ring-zinc-200 bg-white p-4 shadow-2xl dark:ring-zinc-800 dark:bg-dark-primary md:w-1/2 md:gap-4 md:p-6 lg:w-2/5 xl:w-1/3">
+                class="flex w-full flex-col gap-3 rounded-xl bg-white p-4 shadow-2xl ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 md:w-1/2 md:gap-4 md:p-6 lg:w-2/5 xl:w-1/3">
 
                 {{-- Header --}}
                 <div class="flex items-center gap-3">
@@ -53,18 +53,17 @@
 
                 {{-- Actions --}}
                 <div class="flex justify-end gap-2 pt-1">
-                    <button
-                        class="rounded-xl border border-zinc-200 px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 dark:border-zinc-800 dark:text-gray-300 dark:hover:bg-gray-700"
-                        type="button" wire:click="resetModals" id="cancelRescheduleBtn">
+                    <x-button.secondary type="button" wire:click="resetModals" id="cancelRescheduleBtn">
                         Batal
-                    </button>
-                    <button
-                        class="flex items-center gap-1.5 rounded-xl bg-amber-500 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
-                        type="button" wire:click="confirmReschedule" id="confirmRescheduleBtn"
+                    </x-button.secondary>
+                    <x-button.success type="button" wire:click="confirmReschedule" id="confirmRescheduleBtn"
                         wire:loading.attr="disabled" wire:target="confirmReschedule">
+                        <x-slot name="icon">
+                            <x-icons.check class="h-4 w-4" />
+                        </x-slot>
                         <span wire:loading.remove wire:target="confirmReschedule">Simpan Reschedule</span>
                         <span wire:loading wire:target="confirmReschedule">Menyimpan...</span>
-                    </button>
+                    </x-button.success>
                 </div>
             </div>
         @endif
@@ -75,7 +74,7 @@
         class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 backdrop-blur-sm">
         @if ($showChangeCollectorModal)
             <div
-                class="flex w-full flex-col gap-3 rounded-xl ring-1 ring-zinc-200 bg-white p-4 shadow-2xl dark:ring-zinc-800 dark:bg-dark-primary md:w-1/2 md:gap-4 md:p-6 lg:w-2/5 xl:w-1/3">
+                class="flex w-full flex-col gap-3 rounded-xl bg-white p-4 shadow-2xl ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 md:w-1/2 md:gap-4 md:p-6 lg:w-2/5 xl:w-1/3">
 
                 {{-- Header --}}
                 <div class="flex items-center gap-3">
@@ -167,13 +166,17 @@
 
                 {{-- Actions --}}
                 <div class="flex justify-end gap-2 pt-1">
-                    <x-button.danger wire:click="resetModals" id="cancelChangeCollectorBtn">
+                    <x-button.secondary wire:click="resetModals" id="cancelChangeCollectorBtn">
                         Batal
-                    </x-button.danger>
+                    </x-button.secondary>
 
                     <x-button.primary wire:click="confirmChangeCollector" id="confirmChangeCollectorBtn"
                         wire:loading.attr="disabled" wire:target="confirmChangeCollector">
+                        <x-slot name="icon">
+                            <x-icons.clock class="h-4 w-4" />
+                        </x-slot>
                         <span wire:loading.remove wire:target="confirmChangeCollector">Ganti Kolektor</span>
+                        <span wire:loading wire:target="confirmChangeCollector">Mengalihkan...</span>
                     </x-button.primary>
                 </div>
             </div>

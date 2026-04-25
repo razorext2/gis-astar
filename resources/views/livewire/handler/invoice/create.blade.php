@@ -223,11 +223,11 @@
                                 <div class="flex-none px-1.5 py-3 first:pl-3 last:pr-3">
                                     <div class="relative flex flex-col items-center justify-center gap-3">
                                         <img class="w-24 rounded-lg" src="{{ $doc->temporaryUrl() }}">
-                                        <button type="button"
-                                            class="absolute end-0 top-0 rounded-lg bg-red-500 p-1 text-white hover:bg-red-600"
+                                        <x-button.danger
+                                            class="absolute end-0 top-0 !rounded-lg !p-1 !shadow-none" type="button"
                                             wire:click="removeDocumentation({{ $index }})">
                                             <x-icons.close class="h-4 w-4" />
-                                        </button>
+                                        </x-button.danger>
                                         <p class="text-xs text-gray-600 dark:text-white">
                                             @php
                                                 $name = $doc->getClientOriginalName();

@@ -271,9 +271,10 @@
                                     class="absolute inset-0 h-full w-full object-cover">
                                 <div
                                     class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
-                                    <button wire:click="$set('photo1', null)"
-                                        class="rounded-xl bg-red-600 px-4 py-2 text-xs font-bold text-white">Ganti
-                                        Foto</button>
+                                    <x-button.danger class="!px-4 !py-2 !text-xs"
+                                        wire:click="$set('photo1', null)">
+                                        Ganti Foto
+                                    </x-button.danger>
                                 </div>
                             @else
                                 <div class="flex flex-col items-center gap-3">
@@ -308,9 +309,10 @@
                                     class="absolute inset-0 h-full w-full object-cover">
                                 <div
                                     class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
-                                    <button wire:click="$set('photo2', null)"
-                                        class="rounded-xl bg-red-600 px-4 py-2 text-xs font-bold text-white">Ganti
-                                        Foto</button>
+                                    <x-button.danger class="!px-4 !py-2 !text-xs"
+                                        wire:click="$set('photo2', null)">
+                                        Ganti Foto
+                                    </x-button.danger>
                                 </div>
                             @else
                                 <div class="flex flex-col items-center gap-3">

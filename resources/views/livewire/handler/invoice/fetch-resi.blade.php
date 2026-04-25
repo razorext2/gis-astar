@@ -33,9 +33,11 @@
             x-data="{ show: true }" x-show="show" x-transition>
             <x-icons.close-sidebar-alt class="h-5 w-5 flex-shrink-0" />
             <p class="font-medium">{{ $error }}</p>
-            <button @click="show = false" class="ml-auto hover:opacity-70">
-                <x-icons.close class="h-4 w-4" />
-            </button>
+            <x-button.secondary class="!bg-transparent !p-1 !ring-0 hover:!bg-red-100 dark:hover:!bg-red-900/20" @click="show = false">
+                <x-slot name="icon">
+                    <x-icons.close class="h-4 w-4" />
+                </x-slot>
+            </x-button.secondary>
         </div>
     @endif
 

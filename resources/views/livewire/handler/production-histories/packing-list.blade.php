@@ -2,17 +2,19 @@
     x-on:show-detail-modal.window="pdfUrl = $event.detail.url">
     {{-- accordion form tambah packing list --}}
     <div id="accordion-packing-form" x-data="{ accordionOpen: false }">
-        <button type="button"
-            class="d flex w-full items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-green-500 p-5 font-medium text-white transition-all duration-300 ease-in-out hover:bg-green-400 dark:border-zinc-800 dark:bg-green-600 dark:hover:bg-green-500"
-            @click="accordionOpen = !accordionOpen" :class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
+        <x-button.success type="button"
+            class="w-full flex-row-reverse justify-between rounded-lg p-5"
+            @click="accordionOpen = !accordionOpen" ::class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
+            <x-slot name="icon">
+                <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
+                    <x-icons.carred-down class="h-4 w-4" />
+                </span>
+            </x-slot>
+
             <h3 class="text-base font-semibold text-white">
                 Tambah Packing List?
             </h3>
-
-            <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
-                <x-icons.carred-down class="h-4 w-4" />
-            </span>
-        </button>
+        </x-button.success>
 
 
         <div class="rounded-b-lg border border-zinc-200 p-5 dark:border-zinc-800" x-show="accordionOpen" x-collapse
@@ -241,10 +243,10 @@
                                             </p>
                                         </div>
 
-                                        <button type="button" wire:click="removeAttachment({{ $index }})"
-                                            class="text-sm font-medium text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                                        <x-button.link wire:click="removeAttachment({{ $index }})"
+                                            class="!text-sm !font-medium !text-red-600 hover:!text-red-800 dark:!text-red-400 dark:hover:!text-red-300">
                                             Hapus
-                                        </button>
+                                        </x-button.link>
                                     </li>
                                 @endforeach
 

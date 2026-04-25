@@ -7,10 +7,12 @@
         </div>
 
         <div class="absolute bottom-4 flex w-full justify-center px-2">
-            <button id="snap"
-                class="z-40 w-fit rounded-lg bg-blue-400 p-2 font-bold text-white ring-1 ring-zinc-200 transition-all duration-300 hover:bg-blue-700 dark:bg-blue-800 dark:text-white dark:ring-zinc-800 dark:hover:bg-blue-900">
+            <x-button.primary id="snap" class="!z-40 !w-fit !rounded-lg !p-2 !ring-0">
+                <x-slot name="icon">
+                    <x-icons.video-camera class="h-5 w-5" />
+                </x-slot>
                 Mulai Kamera
-            </button>
+            </x-button.primary>
         </div>
     </div>
 

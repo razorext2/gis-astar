@@ -143,14 +143,11 @@
 
                 </div>
 
-                {{-- Tombol Submit --}}
                 <div class="mt-6 flex items-center gap-3">
-                    <button wire:click="save" wire:loading.attr="disabled"
-                        wire:loading.class="opacity-60 cursor-not-allowed" type="button"
-                        class="inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium text-gray-900 ring-1 ring-blue-700 transition hover:bg-blue-800 hover:text-white focus:ring-4 focus:ring-blue-300 dark:bg-blue-800 dark:text-white dark:ring-zinc-800 dark:hover:bg-blue-900">
+                    <x-button.primary wire:click="save" wire:loading.attr="disabled" type="button" id="save-placement">
                         <span wire:loading.remove wire:target="save">Simpan</span>
                         <span wire:loading wire:target="save">Menyimpan...</span>
-                    </button>
+                    </x-button.primary>
                 </div>
 
             </div>

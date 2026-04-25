@@ -8,17 +8,18 @@
                     <video class="rounded-lg" id="video" width="100%" height="auto" autoplay></video>
 
                     <!-- Button -->
-                    <button
-                        class="absolute bottom-4 left-1/2 h-14 w-14 -translate-x-1/2 transform rounded-full bg-white/60 shadow-lg ring-2 ring-white hover:bg-white/80 focus:outline-none md:bottom-6 md:h-16 md:w-16"
-                        id="capture-image">
+                    <x-button.secondary
+                        class="absolute bottom-4 left-1/2 !h-14 !w-14 -translate-x-1/2 transform !rounded-full !bg-white/60 !p-0 !shadow-lg ring-2 ring-white hover:!bg-white/80 focus:outline-none md:bottom-6 md:!h-16 md:!w-16"
+                        id="capture-image" type="button">
                         <x-icons.camera class="mx-auto h-8 w-8 text-white md:h-10 md:w-10" />
-                    </button>
+                    </x-button.secondary>
 
                     {{-- close button --}}
-                    <button class="absolute right-2 top-2 h-auto w-auto transform focus:outline-none md:top-2"
+                    <x-button.secondary
+                        class="absolute right-2 top-2 !h-auto !w-auto !bg-transparent !p-0 !shadow-none ring-0 focus:outline-none md:top-2"
                         id="close-button" data-modal-hide="camera-modal" type="button">
                         <x-icons.close class="h-8 w-8 text-red-600 hover:text-red-800" />
-                    </button>
+                    </x-button.secondary>
 
                 </div>
             </div>

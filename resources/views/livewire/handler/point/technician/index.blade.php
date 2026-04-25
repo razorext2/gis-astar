@@ -2,8 +2,8 @@
 
     <div id="filter-bar" x-data="{ open: false }">
         <h2>
-            <button
-                class="flex w-full items-center justify-between gap-3 rounded-lg border border-zinc-200 p-2.5 font-medium text-gray-500 hover:bg-gray-100 dark:border-zinc-800 dark:text-gray-400 dark:hover:bg-gray-800"
+            <x-button.secondary
+                class="flex w-full items-center justify-between gap-3 !rounded-lg !border-zinc-200 p-2.5 font-medium text-gray-500 hover:bg-gray-100 dark:!border-zinc-800 dark:text-gray-400 dark:hover:bg-gray-800"
                 type="button" @click="open = ! open">
                 <span>Filter data...</span>
                 <svg class="h-3 w-3 shrink-0 transform transition-transform duration-300" aria-hidden="true"
@@ -11,7 +11,7 @@
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 5 5 1 1 5" />
                 </svg>
-            </button>
+            </x-button.secondary>
         </h2>
 
         {{-- body --}}

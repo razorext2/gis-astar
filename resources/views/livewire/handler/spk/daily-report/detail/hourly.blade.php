@@ -26,17 +26,19 @@
                 $dailyReport->assignment->status !== 'completed' &&
                 $dailyReport->status !== 'submitted')
             <div wire:show="showAddForm" id="accordion-packing-form" x-data="{ accordionOpen: true }">
-                <button type="button"
-                    class="flex w-full items-center justify-between gap-3 rounded-lg p-5 font-medium text-gray-500 ring-1 ring-zinc-200 transition-all duration-300 ease-in-out hover:bg-blue-100 dark:text-gray-400 dark:ring-zinc-800 dark:hover:bg-gray-800"
-                    @click="accordionOpen = !accordionOpen" :class="accordionOpen ? 'rounded-b-none ring-b-0' : ''">
-                    <h3 class="text-base font-semibold text-gray-800 dark:text-white">
+                <x-button.success type="button"
+                    class="w-full flex-row-reverse justify-between rounded-lg p-5"
+                    @click="accordionOpen = !accordionOpen" ::class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
+                    <x-slot name="icon">
+                        <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
+                            <x-icons.carred-down class="h-4 w-4" />
+                        </span>
+                    </x-slot>
+
+                    <h3 class="text-base font-semibold text-white">
                         Tambah aktivitas?
                     </h3>
-
-                    <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
-                        <x-icons.carred-down class="h-4 w-4" />
-                    </span>
-                </button>
+                </x-button.success>
 
                 {{-- Form Tambah Aktivitas --}}
                 <div x-show="accordionOpen" x-collapse x-cloak
@@ -96,10 +98,10 @@
                                                 </p>
                                             </div>
 
-                                            <button type="button" wire:click="removeAttachment({{ $index }})"
-                                                class="text-sm font-medium text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
-                                                Hapus
-                                            </button>
+                                            <x-button.link type="button" wire:click="removeAttachment({{ $index }})"
+                                                 class="!p-0 font-medium text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                                                 Hapus
+                                             </x-button.link>
                                         </li>
                                     @endforeach
 

@@ -58,16 +58,12 @@
                 <div class="ms-3 mt-0.5 text-sm font-normal text-black"><x-auth.auth-session-status class="mb-4"
                         :status="session('status')" />
                 </div>
-                <button
-                    class="-mx-1.5 -my-1.5 ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-900 focus:ring-2 focus:ring-zinc-200 dark:bg-gray-500 dark:text-gray-300 dark:ring-zinc-800 dark:hover:bg-gray-300"
+                <x-button.secondary
+                    class="!ms-auto !h-8 !w-8 !p-1.5 !bg-transparent !shadow-none ring-0 sm:-mx-1.5 sm:-my-1.5"
                     type="button" aria-label="Close" @click="showToast = false">
                     <span class="sr-only">Close</span>
-                    <svg class="h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                    </svg>
-                </button>
+                    <x-icons.close class="h-3 w-3" />
+                </x-button.secondary>
             </div>
         </div>
     @endif

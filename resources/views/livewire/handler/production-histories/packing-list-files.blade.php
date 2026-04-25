@@ -39,17 +39,19 @@
     </section>
 
     <div id="accordion-packing-form" x-data="{ accordionOpen: false }">
-        <button type="button"
-            class="d flex w-full items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-green-500 p-5 font-medium text-white transition-all duration-300 ease-in-out hover:bg-green-400 dark:border-zinc-800 dark:bg-green-600 dark:hover:bg-green-500"
-            @click="accordionOpen = !accordionOpen" :class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
+        <x-button.success type="button"
+            class="w-full flex-row-reverse justify-between rounded-lg p-5"
+            @click="accordionOpen = !accordionOpen" ::class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
+            <x-slot name="icon">
+                <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
+                    <x-icons.carred-down class="h-4 w-4" />
+                </span>
+            </x-slot>
+
             <h3 class="text-base font-semibold text-white">
                 Tambah Dokumen?
             </h3>
-
-            <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
-                <x-icons.carred-down class="h-4 w-4" />
-            </span>
-        </button>
+        </x-button.success>
 
         <form class="flex flex-col gap-2 rounded-b-lg border border-zinc-200 p-5 dark:border-zinc-800 lg:gap-4"
             x-show="accordionOpen" x-collapse x-cloak wire:submit.prevent="store" method="post">

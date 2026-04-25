@@ -1,15 +1,17 @@
 <div id="accordion-packing-form" x-data="{ accordionOpen: true }">
-    <button type="button"
-        class="flex w-full items-center justify-between gap-3 rounded-lg border border-zinc-200 p-5 font-medium text-gray-500 transition-all duration-300 ease-in-out hover:bg-blue-100 dark:border-zinc-800 dark:text-gray-400 dark:hover:bg-gray-800"
-        @click="accordionOpen = !accordionOpen" :class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
-        <h3 class="text-base font-semibold text-gray-800 dark:text-white">
+    <x-button.success type="button"
+        class="w-full flex-row-reverse justify-between rounded-lg p-5"
+        @click="accordionOpen = !accordionOpen" ::class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
+        <x-slot name="icon">
+            <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
+                <x-icons.carred-down class="h-4 w-4" />
+            </span>
+        </x-slot>
+
+        <h3 class="text-base font-semibold text-white">
             Assign Laporan ke Staf?
         </h3>
-
-        <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
-            <x-icons.carred-down class="h-4 w-4" />
-        </span>
-    </button>
+    </x-button.success>
 
     <div class="rounded-b-lg border border-zinc-200 p-5 dark:border-zinc-800" x-show="accordionOpen" x-collapse x-cloak>
         <div id="delivery-history-add-form" class="w-full">

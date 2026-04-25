@@ -209,8 +209,10 @@
                                     <img src="{{ $proof_pic->temporaryUrl() }}" alt="Proof Picture"
                                         class="mb-2 max-h-44 w-full rounded-lg object-cover">
 
-                                    <button type="button" wire:click="$cancelUpload('proof_pic')">Cancel
-                                        Upload</button>
+                                    <x-button.danger class="!px-2.5 !py-1 !text-xs"
+                                        type="button" wire:click="$cancelUpload('proof_pic')">
+                                        Cancel Upload
+                                    </x-button.danger>
                                 @endif
 
                                 <input

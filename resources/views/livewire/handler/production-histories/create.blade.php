@@ -96,11 +96,11 @@
                                                     : '');
                                     @endphp
                                     <img class="w-24 rounded-lg" src="{{ $src }}">
-                                    <button type="button"
-                                        class="absolute end-0 top-0 rounded-lg bg-red-500 p-1 text-white hover:bg-red-600"
+                                    <x-button.danger
+                                        class="absolute end-0 top-0 !rounded-lg !p-1 !shadow-none" type="button"
                                         wire:click="removeDocumentation({{ $index }})">
                                         <x-icons.close class="h-4 w-4" />
-                                    </button>
+                                    </x-button.danger>
 
                                     @php
                                         $name = $isStoredDoc

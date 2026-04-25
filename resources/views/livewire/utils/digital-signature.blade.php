@@ -14,19 +14,18 @@
     {{-- form tambah ttd digital --}}
     @if (!$myModel->hasBeenSigned())
         <div id="accordion-ttd-digital" x-data="{ accordionTtdOpen: false }">
-            <button type="button"
-                class="flex w-full items-center justify-between gap-3 rounded-lg border border-zinc-200 p-5 font-medium text-gray-500 transition-all duration-300 ease-in-out hover:bg-blue-100 dark:border-zinc-800 dark:text-gray-400 dark:hover:bg-gray-800"
-                @click="accordionTtdOpen = !accordionTtdOpen"
-                :class="accordionTtdOpen ? 'rounded-b-none border-b-0' : ''">
-                <h3 class="text-base font-semibold text-gray-800 dark:text-white">
+            <x-button.success type="button" class="w-full flex-row-reverse justify-between rounded-lg p-5"
+                @click="accordionTtdOpen = !accordionTtdOpen" ::class="accordionTtdOpen ? 'rounded-b-none border-b-0' : ''">
+                <x-slot name="icon">
+                    <span class="transition-all duration-300 ease-in-out" :class="accordionTtdOpen ? 'rotate-180' : ''">
+                        <x-icons.carred-down class="h-4 w-4" />
+                    </span>
+                </x-slot>
+
+                <h3 class="text-base font-semibold text-white">
                     Buat TTD Digital?
                 </h3>
-
-                <span class="transition-all duration-300 ease-in-out" :class="accordionTtdOpen ? 'rotate-180' : ''">
-                    <x-icons.carred-down class="h-4 w-4" />
-                </span>
-            </button>
-
+            </x-button.success>
 
             <div class="flex flex-col gap-2 rounded-b-lg border border-zinc-200 p-2 dark:border-zinc-800 lg:gap-4 lg:p-4"
                 x-show="accordionTtdOpen" x-collapse x-cloak>
@@ -49,11 +48,13 @@
             </div>
         </div>
     @else
-        <button wire:click="$set('showModalShowSignature', true)"
-            class="flex items-center gap-2 text-blue-500 transition-colors duration-300 ease-in-out hover:text-blue-300">
-            <span> Lihat Tanda Tangan Digital </span>
-            <x-icons.eye class="h-3 w-3" />
-        </button>
+        <x-button.secondary wire:click="$set('showModalShowSignature', true)"
+            class="!gap-2 !bg-transparent !px-0 !py-0 !text-blue-500 !shadow-none hover:!bg-transparent hover:!text-blue-300 dark:hover:!text-blue-400">
+            <x-slot name="icon">
+                <x-icons.eye class="h-3 w-3" />
+            </x-slot>
+            Lihat Tanda Tangan Digital
+        </x-button.secondary>
     @endif
     {{-- end form tambah ttd digital --}}
 
@@ -63,7 +64,7 @@
 
         @if ($showModalShowSignature)
             <div
-                class="mx-4 my-6 flex w-fit flex-col gap-2 overflow-y-auto rounded-xl ring-1 ring-zinc-200 bg-white p-4 shadow-2xl dark:ring-zinc-800 dark:bg-dark-primary">
+                class="mx-4 my-6 flex w-fit flex-col gap-2 overflow-y-auto rounded-xl bg-white p-4 shadow-2xl ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800">
 
                 <h2 class="text-center text-lg font-semibold text-gray-900 dark:text-white lg:text-xl">
                     Tanda tangan digital kamu

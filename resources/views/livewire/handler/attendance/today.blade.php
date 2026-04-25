@@ -132,10 +132,12 @@
                                 </p>
                             </div>
                         </div>
-                        <button @click="show = false"
-                            class="rounded-full p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-900 dark:hover:text-white">
-                            <x-icons.close class="h-5 w-5" />
-                        </button>
+                        <x-button.secondary @click="show = false"
+                            class="!rounded-full !p-2 !bg-transparent !shadow-none !ring-0 !border-none">
+                            <x-slot name="icon">
+                                <x-icons.close class="h-5 w-5" />
+                            </x-slot>
+                        </x-button.secondary>
                     </div>
 
                     {{-- Body --}}

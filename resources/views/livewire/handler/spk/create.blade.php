@@ -390,10 +390,10 @@
                                         </p>
                                     </div>
 
-                                    <button type="button" wire:click="removeAttachment({{ $index }})"
-                                        class="text-sm font-medium text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                                    <x-button.danger class="!bg-transparent !p-1 !text-xs !shadow-none ring-0"
+                                        type="button" wire:click="removeAttachment({{ $index }})">
                                         Hapus
-                                    </button>
+                                    </x-button.danger>
                                 </li>
                             @endforeach
 
@@ -604,9 +604,10 @@
                 <div class="flex items-center justify-between border-b px-4 py-2">
                     <h2 class="font-semibold">SPK Summary</h2>
 
-                    <button class="p-2" @click="open=false; $wire.set('showSummary', false)">
+                    <x-button.secondary class="!bg-transparent !p-2 !shadow-none ring-0"
+                        @click="open=false; $wire.set('showSummary', false)">
                         <x-icons.close class="h-5 w-5 text-red-500" />
-                    </button>
+                    </x-button.secondary>
                 </div>
 
                 <!-- Konten PDF: iframe -->

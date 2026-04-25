@@ -342,10 +342,10 @@
                                 </p>
                             </div>
 
-                            <button type="button" wire:click="removeAttachment({{ $index }})"
-                                class="text-sm font-medium text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                            <x-button.link type="button" wire:click="removeAttachment({{ $index }})"
+                                class="!p-0 font-medium text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
                                 Hapus
-                            </button>
+                            </x-button.link>
                         </li>
                     @endforeach
 
@@ -533,22 +533,24 @@
 
     @if ($data->status_approval === 1)
         <div class="w-full" id="accordion-packing-form" x-data="{ accordionOpen: $wire.is_changed, isChanged: $wire.is_changed }">
-            <button type="button"
-                class="flex w-full items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-green-200 p-5 font-medium text-gray-500 shadow-md transition-all duration-300 ease-in-out hover:bg-blue-100 dark:border-zinc-800 dark:bg-dark-primary dark:text-gray-400 dark:shadow-none dark:hover:bg-gray-800"
-                @click="accordionOpen = !accordionOpen" :class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
+            <x-button.success type="button"
+                class="w-full flex-row-reverse justify-between rounded-lg p-5"
+                @click="accordionOpen = !accordionOpen" ::class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
+                <x-slot name="icon">
+                    <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
+                        <x-icons.carred-down class="h-4 w-4" />
+                    </span>
+                </x-slot>
+
                 <span class="flex flex-col text-left">
-                    <h3 class="text-base font-semibold text-green-600 dark:text-green-500">
+                    <h3 class="text-base font-semibold text-white">
                         SPK Mengalami Perubahan?
                     </h3>
-                    <p class="block text-sm font-medium text-gray-600 dark:text-gray-400">
+                    <p class="block text-sm font-medium text-green-50">
                         Klik untuk menambahkan detail jika SPK mengalami perubahan.
                     </p>
                 </span>
-
-                <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
-                    <x-icons.carred-down class="h-4 w-4" />
-                </span>
-            </button>
+            </x-button.success>
 
             <div class="rounded-b-lg border border-zinc-200 bg-white p-5 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none"
                 x-show="accordionOpen" x-collapse x-cloak>
@@ -593,22 +595,24 @@
 
     {{-- accordion delay SPK --}}
     <div class="w-full" id="accordion-packing-form" x-data="{ accordionOpen: $wire.is_delayed, onDelay: $wire.is_delayed }">
-        <button type="button"
-            class="flex w-full items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-red-200 p-5 font-medium text-gray-500 shadow-md transition-all duration-300 ease-in-out hover:bg-blue-100 dark:border-zinc-800 dark:bg-dark-primary dark:text-gray-400 dark:shadow-none dark:hover:bg-gray-800"
-            @click="accordionOpen = !accordionOpen" :class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
+        <x-button.danger type="button"
+            class="w-full flex-row-reverse justify-between rounded-lg p-5"
+            @click="accordionOpen = !accordionOpen" ::class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
+            <x-slot name="icon">
+                <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
+                    <x-icons.carred-down class="h-4 w-4" />
+                </span>
+            </x-slot>
+
             <span class="flex flex-col text-left">
-                <h3 class="text-base font-semibold text-red-600 dark:text-red-500">
+                <h3 class="text-base font-semibold text-white">
                     SPK Mengalami Delay?
                 </h3>
-                <p class="block text-sm font-medium text-gray-600 dark:text-gray-400">
+                <p class="block text-sm font-medium text-red-50">
                     Klik untuk menambahkan detail jika SPK mengalami Delay.
                 </p>
             </span>
-
-            <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
-                <x-icons.carred-down class="h-4 w-4" />
-            </span>
-        </button>
+        </x-button.danger>
 
         <div class="rounded-b-lg border border-zinc-200 bg-white p-5 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none"
             x-show="accordionOpen" x-collapse x-cloak>
@@ -643,22 +647,24 @@
 
     {{-- accordion cancel SPK --}}
     <div class="w-full" id="accordion-packing-form" x-data="{ accordionOpen: $wire.is_cancelled, onCancel: $wire.is_cancelled }">
-        <button type="button"
-            class="flex w-full items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-red-200 p-5 font-medium text-gray-500 shadow-md transition-all duration-300 ease-in-out hover:bg-blue-100 dark:border-zinc-800 dark:bg-dark-primary dark:text-gray-400 dark:shadow-none dark:hover:bg-gray-800"
-            @click="accordionOpen = !accordionOpen" :class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
+        <x-button.danger type="button"
+            class="w-full flex-row-reverse justify-between rounded-lg p-5"
+            @click="accordionOpen = !accordionOpen" ::class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
+            <x-slot name="icon">
+                <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
+                    <x-icons.carred-down class="h-4 w-4" />
+                </span>
+            </x-slot>
+
             <span class="flex flex-col text-left">
-                <h3 class="text-base font-semibold text-red-600 dark:text-red-500">
+                <h3 class="text-base font-semibold text-white">
                     SPK Mengalami Cancel?
                 </h3>
-                <p class="block text-sm font-medium text-gray-600 dark:text-gray-400">
+                <p class="block text-sm font-medium text-red-50">
                     Klik untuk menambahkan detail jika SPK mengalami Cancel.
                 </p>
             </span>
-
-            <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
-                <x-icons.carred-down class="h-4 w-4" />
-            </span>
-        </button>
+        </x-button.danger>
 
         <div class="rounded-b-lg border border-zinc-200 bg-white p-5 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none"
             x-show="accordionOpen" x-collapse x-cloak>

@@ -9,5 +9,7 @@
     @if ($icon)
         {{ $icon }}
     @endif
-    <span>{{ $slot }}</span>
+    @if ($slot->isNotEmpty())
+        <span>{{ $slot }}</span>
+    @endif
 </a>
