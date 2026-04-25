@@ -1,52 +1,95 @@
-<div class="flex flex-col gap-4 lg:gap-6 xl:flex-row">
-    <div class="relative grow">
-        <div class="relative flex w-full flex-col gap-2 rounded-lg ring-1 ring-zinc-200 dark:ring-0">
-            <video id="video" class="min-h-96 rounded-lg bg-dark-primary lg:min-h-[460px]"
-                style="background: url('{{ asset('assets/img/noCamera.webp') }}') center center / cover no-repeat;"></video>
-            <canvas id="canvas" class="absolute left-0 top-0 h-full w-full rounded-lg"></canvas>
+<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+    {{-- Scanner Section (Large) --}}
+    <div class="lg:col-span-2" data-aos="zoom-in" data-aos-delay="100">
+        <div class="relative h-[32rem] w-full overflow-hidden rounded-2xl bg-zinc-100 shadow-inner dark:bg-black">
+            {{-- Default State Image --}}
+            <div class="absolute inset-0 flex items-center justify-center bg-cover bg-center bg-no-repeat grayscale"
+                style="background-image: url('{{ asset('assets/img/noCamera.webp') }}');">
+                <div class="absolute inset-0 bg-black/40 backdrop-blur-[2px]"></div>
+            </div>
+
+            {{-- Local Video Feed --}}
+            <video id="video" class="absolute left-0 top-0 h-full w-full scale-x-[-1] object-cover" autoplay></video>
+
+            {{-- Canvas Overlay --}}
+            <canvas id="canvas" class="absolute inset-0 z-10 h-full w-full object-cover"></canvas>
+
+            {{-- Technical Viewfinder Overlays --}}
+            <div class="pointer-events-none absolute inset-0 z-20">
+                {{-- Corners --}}
+                <div class="absolute left-6 top-6 h-8 w-8 border-l-4 border-t-4 border-red-500/60"></div>
+                <div class="absolute right-6 top-6 h-8 w-8 border-r-4 border-t-4 border-red-500/60"></div>
+                <div class="absolute bottom-6 left-6 h-8 w-8 border-b-4 border-l-4 border-red-500/60"></div>
+                <div class="absolute bottom-6 right-6 h-8 w-8 border-b-4 border-r-4 border-red-500/60"></div>
+
+                {{-- Scanning Line Animation --}}
+                <div
+                    class="absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-30 shadow-[0_0_15px_rgba(239,68,68,0.5)]">
+                </div>
+            </div>
         </div>
 
-        <div class="absolute bottom-4 flex w-full justify-center px-2">
-            <x-button.primary id="snap" class="!z-40 !w-fit !rounded-lg !p-2 !ring-0">
+        {{-- Action Control --}}
+        <div class="mt-6">
+            <x-button.primary id="snap" class="group w-full !py-4 !text-lg !shadow-xl">
                 <x-slot name="icon">
-                    <x-icons.video-camera class="h-5 w-5" />
+                    <x-icons.video-camera class="h-5 w-5 transition-transform group-hover:scale-110" />
                 </x-slot>
-                Mulai Kamera
+                MULAI KAMERA RUTE
             </x-button.primary>
         </div>
     </div>
 
-    <div class="flex flex-col gap-2">
-        <p class="text-xl font-bold text-black dark:text-white">INFORMASI</p>
-        <div
-            class="relative flex h-auto w-full flex-col rounded-lg p-4 leading-normal ring-1 ring-zinc-200 dark:ring-zinc-800">
-
-            <ul class="space-y-4 text-left text-gray-500 dark:text-white">
-                <li class="flex items-center space-x-3 rtl:space-x-reverse">
-                    <x-icons.check class="h-3.5 w-3.5 flex-shrink-0 text-green-500" />
-                    <span>
-                        Lokasi:
+    {{-- Information Panel --}}
+    <div class="flex flex-col gap-6" data-aos="fade-left" data-aos-delay="200">
+        <div class="space-y-4 rounded-xl bg-zinc-100 p-5 ring-1 ring-zinc-200 dark:bg-zinc-800/30 dark:ring-zinc-800">
+            <div class="space-y-4">
+                {{-- Data Items --}}
+                <div
+                    class="flex flex-col gap-1 border-b border-zinc-200 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Lokasi Koordinat</span>
+                    <span class="text-sm font-bold text-zinc-700 dark:text-zinc-200">
                         <span id="longitude"></span>, <span id="latitude"></span>
                     </span>
-                </li>
-                <li class="flex items-center space-x-3 rtl:space-x-reverse">
-                    <x-icons.check class="h-3.5 w-3.5 flex-shrink-0 text-green-500" />
-                    <span>Kode Pegawai: {{ Auth::user()->kode_pegawai ?? 'N/A' }} </span>
-                </li>
-                <li class="flex items-center space-x-3 rtl:space-x-reverse">
-                    <x-icons.check class="h-3.5 w-3.5 flex-shrink-0 text-green-500" />
-                    <span>Nama: {{ Auth::user()->name ?? 'N/A' }}</span>
-                </li>
-                <li class="flex items-center space-x-3 rtl:space-x-reverse">
-                    <x-icons.check class="h-3.5 w-3.5 flex-shrink-0 text-green-500" />
-                    <span>Jabatan: {{ Auth::user()->pegawai->jabatanRelasi->nama_jabatan ?? 'N/A' }}</span>
-                </li>
-                <li class="flex items-center space-x-3 rtl:space-x-reverse">
-                    <x-icons.check class="h-3.5 w-3.5 flex-shrink-0 text-green-500" />
-                    <span>Golongan: {{ Auth::user()->pegawai->golonganRelasi->nama_golongan ?? 'N/A' }}</span>
-                </li>
-            </ul>
+                </div>
 
+                <div
+                    class="flex flex-col gap-1 border-b border-zinc-200 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Kode Pegawai</span>
+                    <span class="text-sm font-bold text-zinc-700 dark:text-zinc-200">
+                        {{ Auth::user()->kode_pegawai ?? 'N/A' }}
+                    </span>
+                </div>
+
+                <div
+                    class="flex flex-col gap-1 border-b border-zinc-200 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Nama Lengkap</span>
+                    <span class="text-sm font-bold text-zinc-700 dark:text-zinc-200">
+                        {{ Auth::user()->name ?? 'N/A' }}
+                    </span>
+                </div>
+
+                <div
+                    class="flex flex-col gap-1 border-b border-zinc-200 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Jabatan</span>
+                    <span class="text-sm font-bold text-zinc-700 dark:text-zinc-200">
+                        {{ Auth::user()->pegawai->jabatanRelasi->nama_jabatan ?? 'N/A' }}
+                    </span>
+                </div>
+
+                <div
+                    class="flex flex-col gap-1 border-b border-zinc-200 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Golongan</span>
+                    <span class="text-sm font-bold text-zinc-700 dark:text-zinc-200">
+                        {{ Auth::user()->pegawai->golonganRelasi->nama_golongan ?? 'N/A' }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        {{-- Footer Insight --}}
+        <div class="rounded-lg bg-red-50 p-3 text-[10px] text-red-600 dark:bg-red-900/10 dark:text-red-400">
+            <strong>SISTEM RUTE:</strong> Posisi Anda akan dipetakan secara *realtime* untuk verifikasi absensi dinamis.
         </div>
     </div>
 </div>

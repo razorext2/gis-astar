@@ -356,7 +356,34 @@ export function initSelfDetect(lat, lng) {
       webcamStarted = true;
       startFaceDetection();
     } catch (error) {
-      return showAlert('error', 'Terjadi kesalahan.', `Terjadi kesalahan saat mengakses kamera: ${error}`);
+      // Kembalikan status tombol agar user bisa menekan ulang (opsional)
+      startButton.removeAttribute("disabled");
+      
+      let errorTitle = 'Akses Ditolak';
+      let errorMsg = 'Gagal mengakses kamera.';
+
+      // Cek spesifik jenis error dari getUserMedia API
+      switch (error.name) {
+        case 'NotAllowedError':
+        case 'PermissionDeniedError':
+          errorMsg = 'Anda menolak izin akses kamera. Harap izinkan akses kamera pada pengaturan browser/URL bar untuk melakukan absensi.';
+          break;
+        case 'NotFoundError':
+        case 'DevicesNotFoundError':
+          errorTitle = 'Kamera Tidak Ditemukan';
+          errorMsg = 'Tidak ada perangkat kamera yang terdeteksi pada sistem Anda.';
+          break;
+        case 'NotReadableError':
+        case 'TrackStartError':
+          errorTitle = 'Kamera Sibuk';
+          errorMsg = 'Kamera sedang digunakan oleh aplikasi/tab lain. Tutup aplikasi tersebut terlebih dahulu.';
+          break;
+        default:
+          errorMsg = `Kesalahan sistem: ${error.message || error}`;
+          break;
+      }
+
+      return showAlert('error', errorTitle, errorMsg);
     }
   });
 
