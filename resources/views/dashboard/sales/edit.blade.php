@@ -88,7 +88,7 @@
                                     @if ($data->photoCollectRelasi)
                                         @foreach ($data->photoCollectRelasi as $photo)
                                             <div class="relative me-2 flex-none items-center gap-4 rounded-xl p-2">
-                                                <img class="h-36 w-36 rounded-xl object-cover blur-sm transition duration-300 ease-in-out hover:scale-105 hover:blur-0"
+                                                <img class="h-36 w-36 rounded-xl object-cover ring-1 ring-zinc-200 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg dark:ring-zinc-800"
                                                     id="documentations"
                                                     onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}';"
                                                     data-url="{{ asset($photo->photourl) }}"

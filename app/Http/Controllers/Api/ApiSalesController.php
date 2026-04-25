@@ -9,7 +9,6 @@ use App\Models\PhotoCollect;
 use App\Models\Sales;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -51,20 +50,24 @@ class ApiSalesController extends Controller
                 'longitude' => $data['longitude'],
             ]);
 
-            $folderPath = "sales";
+            $folderPath = 'sales';
 
-            if (!Storage::disk('public')->exists($folderPath)) {
+            if (! Storage::disk('public')->exists($folderPath)) {
                 Storage::disk('public')->makeDirectory($folderPath);
             }
 
             // save images
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
-                    $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
+                    $imageName = \Illuminate\Support\Str::uuid().'.'.$image->getClientOriginalExtension();
 
-                    Storage::disk('public')->putFileAs($folderPath, $image, $imageName);
+                    $uploadSuccess = Storage::disk('public')->putFileAs($folderPath, $image, $imageName);
 
-                    $imageUrl = '/storage/' . $folderPath . '/' . $imageName;
+                    if (! $uploadSuccess) {
+                        throw new \Exception('Gagal mengunggah foto. Pastikan disk storage memiliki izin akses (write permission).');
+                    }
+
+                    $imageUrl = '/storage/'.$folderPath.'/'.$imageName;
 
                     PhotoCollect::create([
                         'id_sales' => $query->id,
@@ -76,9 +79,11 @@ class ApiSalesController extends Controller
             NotifySalesNewReportJob::dispatch($query->id, $query->created_at)->delay(now()->addSeconds(5));
 
             DB::commit();
+
             return new ApiResource(true, 'Berhasil menambah data laporan', null);
         } catch (\Exception $e) {
             DB::rollBack();
+
             return new ApiResource(false, 'Terjadi kesalahan saat menambah data', $e->getMessage());
         }
     }
@@ -102,7 +107,7 @@ class ApiSalesController extends Controller
 
         $query = Sales::find($id);
 
-        if (!$query) {
+        if (! $query) {
             return new ApiResource(false, 'Data tidak ditemukan', null);
         }
 
@@ -123,7 +128,7 @@ class ApiSalesController extends Controller
 
         $query = Sales::find($id);
 
-        if (!$query) {
+        if (! $query) {
             return new ApiResource(false, 'Data tidak ditemukan', null);
         }
 
@@ -147,7 +152,7 @@ class ApiSalesController extends Controller
 
         $query = Sales::find($id);
 
-        if (!$query) {
+        if (! $query) {
             return new ApiResource(false, 'Data tidak ditemukan', null);
         }
 
@@ -155,7 +160,7 @@ class ApiSalesController extends Controller
             $query->update([
                 'status' => 2,
                 'validate_by' => Auth::id(),
-                'notes' => $request->notes
+                'notes' => $request->notes,
             ]);
 
             return new ApiResource(true, 'Data berhasil ditolak', null);
@@ -172,7 +177,7 @@ class ApiSalesController extends Controller
 
         $query = Sales::find($id);
 
-        if (!$query) { // Jika data tidak ditemukan
+        if (! $query) { // Jika data tidak ditemukan
             return new ApiResource(false, 'Data tidak ditemukan', null);
         }
 
@@ -189,7 +194,7 @@ class ApiSalesController extends Controller
     {
         $query = Sales::with(['photoCollectRelasi:id_sales,photourl', 'pegawaiRelasi:kode_pegawai,full_name'])->find($id);
 
-        if (!$query) {
+        if (! $query) {
             return new ApiResource(false, 'Data tidak ditemukan', null);
         }
 
