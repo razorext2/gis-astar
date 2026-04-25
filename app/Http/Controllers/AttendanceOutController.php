@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use App\Models\AttendanceOut;
 use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AttendanceOutController extends Controller
 {
-
     public function index()
     {
         return view('dashboard.attendanceOut.view');
@@ -18,16 +17,42 @@ class AttendanceOutController extends Controller
     public function storeAttendance(Request $request)
     {
         try {
-            $kodePegawai = $request->input('kode_pegawai');
-            $timestamp = Session::get('current_date');
-            $photoURL = $kodePegawai . $timestamp;
-            if (!is_null($request->input('longitude'))) {
+            // Strictly enforce Auth identity to prevent client-side spoofing
+            if (! Auth::check()) {
+                throw new Exception('Anda belum login atau sesi telah berakhir.');
+            }
+
+            $kodePegawai = Auth::user()->kode_pegawai;
+
+            if ($request->has('longitude') && $request->input('longitude') !== 'null') {
                 $longitude = $request->input('longitude');
                 $latitude = $request->input('latitude');
             } else {
-                $longitude = NULL;
-                $latitude = NULL;
+                $longitude = null;
+                $latitude = null;
             }
+
+            // Validasi file gambar dari request
+            if (! $request->hasFile('image')) {
+                throw new Exception('Gambar tidak ditemukan dalam request.');
+            }
+
+            $file = $request->file('image');
+            $timestamp = now()->timestamp;
+            $photoURL = $kodePegawai.$timestamp;
+
+            $uploadDir = "labels/{$kodePegawai}/capturedImg";
+            $imageName = "{$photoURL}.png";
+
+            // Simpan gambar secara lokal dahulu
+            $path = $file->storeAs($uploadDir, $imageName, 'public');
+
+            if (! $path) {
+                throw new Exception('Gagal menyimpan file gambar di sistem penyimpanan.');
+            }
+
+            // Gunakan Transaction untuk rollback jika gagal database
+            \Illuminate\Support\Facades\DB::beginTransaction();
 
             $absensi = AttendanceOut::create([
                 'kode_pegawai' => $kodePegawai,
@@ -38,7 +63,7 @@ class AttendanceOutController extends Controller
                 'jenis' => 'Wajah',
                 'waktuori' => now(),
                 'status' => 1,
-                'jam_keluar' => now(), // Menggunakan helper now() untuk mendapatkan waktu saat ini
+                'jam_keluar' => now(), // Memastikan penggunaan server time
                 'longitude' => $longitude,
                 'latitude' => $latitude,
                 'photoURL' => $photoURL,
@@ -48,13 +73,22 @@ class AttendanceOutController extends Controller
                 'distance' => 0,
             ]);
 
-            if (!$absensi || !$absensi->exists) {
-                throw new Exception('Gagal menyimpan data absensi. Silahkan lakukan absensi ulang.');
+            if (! $absensi || ! $absensi->exists) {
+                throw new Exception('Gagal menyimpan data absensi.');
             }
 
-            return response()->json(['success' => true, 'message' => 'Clock-out recorded successfully.']);
+            \Illuminate\Support\Facades\DB::commit();
+
+            return response()->json(['success' => true, 'message' => 'Clock-out recorded successfully.', 'imageUrl' => asset("storage/{$path}")]);
         } catch (Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Failed to record attendance.', 'error' => $e->getMessage()]);
+            \Illuminate\Support\Facades\DB::rollBack();
+
+            // Hapus gambar jika database gagal dan gambar terlanjur disave
+            if (isset($path) && \Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($path);
+            }
+
+            return response()->json(['success' => false, 'message' => 'Failed to record attendance. '.$e->getMessage()]);
         }
     }
 }
