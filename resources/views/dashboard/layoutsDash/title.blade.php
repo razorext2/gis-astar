@@ -41,6 +41,7 @@
         'daily-report.*' => 'Laporan Kerja Harian',
         'report.*' => 'Laporan Kerja Harian',
         'leave-request.*' => 'Pengajuan Cuti',
+        'server.overview' => 'Manajemen Server',
     ];
 
     // Temukan judul berdasarkan rute dengan wildcard

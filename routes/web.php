@@ -53,6 +53,9 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('proxy')->as('')->group(function () {
+        // fetchGlances
+        Route::get('glances/{id}', [\App\Http\Controllers\ProxyController::class, 'fetchGlances'])->name('proxy.glances');
+
         // fetchSR IDC NON PPN
         Route::get('idc/tagihan', [\App\Http\Controllers\ProxyController::class, 'fetchIDCNon'])->name('fetch.idc.nonppn');
 
@@ -220,6 +223,9 @@ Route::middleware(['auth'])->group(function () {
         // backup
         Route::resource('backup', \App\Http\Controllers\BackupController::class)->only('index');
         Route::get('backup/download/{id}', [\App\Http\Controllers\BackupController::class, 'download'])->name('backup.download');
+
+        // server overview
+        Route::get('server-overview', [\App\Http\Controllers\ServerOverviewController::class, 'index'])->name('server.overview')->middleware('permission:manage-server');
 
         // routes
         Route::get('routes/driver', [\App\Http\Controllers\RouteController::class, 'driver'])->name('routes.driver');

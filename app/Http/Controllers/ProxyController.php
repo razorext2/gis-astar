@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ApiResource;
+use App\Models\ServerMonitor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -211,6 +212,35 @@ class ProxyController extends Controller
             return new ApiResource(false, 'Terjadi kegagalan saat mengambil data', $result['message']);
         } catch (\Exception $e) {
             return new ApiResource(false, 'Terjadi kesalahan saat memproses data', $e->getMessage());
+        }
+    }
+
+    public function fetchGlances($id)
+    {
+        $server = ServerMonitor::find($id);
+
+        if (! $server || ! $server->is_active) {
+            return response()->json([
+                'error' => 'Server Configuration Not Found or Inactive.',
+            ], 404);
+        }
+
+        try {
+            $response = Http::timeout(5)->get($server->api_url.'/api/4/all');
+
+            if ($response->successful()) {
+                return $response->json();
+            }
+
+            return response()->json([
+                'error' => 'Failed to fetch data from Glances API.',
+                'status' => $response->status(),
+            ], $response->status());
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while proxying to Glances.',
+                'message' => $e->getMessage(),
+            ], 500);
         }
     }
 }
