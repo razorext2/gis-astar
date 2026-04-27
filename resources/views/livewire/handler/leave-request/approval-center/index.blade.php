@@ -3,7 +3,7 @@
 <div class="mt-4 flex flex-col gap-6">
     {{-- Header Section --}}
     <div
-        class="flex flex-col justify-between gap-4 rounded-xl border border-gray-200 bg-white/60 p-4 backdrop-blur-xl dark:border-gray-700 dark:bg-dark-primary/60 sm:flex-row sm:items-center md:p-6">
+        class="flex flex-col justify-between gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60 sm:flex-row sm:items-center md:p-6">
         <div>
             <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white">Pusat Persetujuan Cuti</h1>
             <p class="text-sm text-zinc-500 dark:text-zinc-400">Tinjau dan proses pengajuan cuti dari anggota tim Anda.
@@ -21,7 +21,7 @@
     <div class="grid gap-4 lg:gap-6">
         @forelse ($pendingApprovals as $request)
             <div wire:key="approval-{{ $request->id }}"
-                class="group relative overflow-hidden rounded-xl border border-gray-200 bg-white/60 p-4 backdrop-blur-xl transition-all duration-300 hover:border-red-500/50 hover:shadow-xl dark:border-gray-700 dark:bg-dark-primary/60 dark:hover:bg-dark-primary/80 lg:p-6">
+                class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-xl transition-all duration-300 hover:border-red-500/50 shadow-md hover:shadow-lg dark:border-zinc-800 dark:bg-dark-primary/60 dark:hover:bg-dark-primary/80 lg:p-6">
 
                 {{-- Hover Accent --}}
                 <div
@@ -59,7 +59,7 @@
                             <x-icons.calendar class="h-4 w-4" />
                             {{ $request->start_date->format('d M') }} - {{ $request->end_date->format('d M Y') }}
                             <span
-                                class="ml-2 rounded-lg bg-gray-100 px-2 py-0.5 text-xs text-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                                class="ml-2 rounded-xl bg-gray-100 px-2 py-0.5 text-xs text-gray-600 dark:bg-gray-800 dark:text-gray-400">
                                 {{ $request->total_days }} Hari
                             </span>
                         </div>
@@ -77,13 +77,13 @@
 
                 {{-- Reason Snippet --}}
                 <div
-                    class="mt-4 rounded-lg bg-gray-50/50 p-3 text-sm italic text-gray-600 dark:bg-white/5 dark:text-gray-400">
+                    class="mt-4 rounded-xl bg-gray-50/50 p-3 text-sm italic text-gray-600 dark:bg-white/5 dark:text-gray-400">
                     "{{ Str::limit($request->reason, 120) }}"
                 </div>
             </div>
         @empty
             <div
-                class="flex flex-col items-center justify-center rounded-xl border border-gray-200 bg-white/50 py-16 backdrop-blur-md dark:border-gray-700 dark:bg-dark-primary/50">
+                class="flex flex-col items-center justify-center rounded-xl border border-zinc-200 bg-white/50 py-16 backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/50">
                 <div class="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
                     <x-icons.check class="h-10 w-10 text-zinc-300 dark:text-zinc-600" />
                 </div>

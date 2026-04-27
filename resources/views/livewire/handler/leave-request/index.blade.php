@@ -1,5 +1,5 @@
 <div
-    class="mt-4 flex flex-col gap-6 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm backdrop-blur-xl dark:border-gray-700 dark:bg-dark-primary md:p-6">
+    class="mt-4 flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary md:p-6">
     {{-- Header Section --}}
     <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
@@ -22,7 +22,7 @@
     <div class="grid gap-4 lg:gap-6">
         @forelse ($leaveRequests as $request)
             <div wire:key="request-{{ $request->id }}"
-                class="hover:shadow-primary/5 group relative overflow-hidden rounded-2xl border border-gray-200 bg-white/60 p-4 backdrop-blur-xl transition-all duration-300 hover:border-gray-400 hover:shadow-xl dark:border-gray-700 dark:bg-dark-primary/60 dark:hover:bg-dark-primary/80 lg:p-6">
+                class="hover:shadow-primary/5 group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-xl transition-all duration-300 hover:border-red-500/30 shadow-md hover:shadow-lg dark:border-zinc-800 dark:bg-dark-primary/60 dark:hover:bg-dark-primary/80 lg:p-6">
 
                 {{-- Decorative Blob --}}
                 <div
@@ -32,7 +32,7 @@
                 <div class="relative z-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div class="flex items-center gap-4">
                         <div
-                            class="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-2xl bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-white">
+                            class="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-white">
                             <span class="text-xs font-bold uppercase">{{ $request->start_date->format('M') }}</span>
                             <span class="text-xl font-black">{{ $request->start_date->format('d') }}</span>
                         </div>
@@ -119,7 +119,7 @@
             </div>
         @empty
             <div
-                class="flex flex-col items-center justify-center rounded-2xl border border-gray-200 bg-white/50 py-16 backdrop-blur-md dark:border-gray-700 dark:bg-dark-primary/50">
+                class="flex flex-col items-center justify-center rounded-xl border border-zinc-200 bg-white/50 py-16 backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/50">
                 <div class="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
                     <x-icons.envelope class="h-10 w-10 text-gray-300 dark:text-gray-600" />
                 </div>

@@ -3,9 +3,9 @@
 <div class="mt-4 flex flex-col gap-6">
     {{-- Header Section --}}
     <div
-        class="flex flex-col justify-between gap-4 rounded-2xl border border-gray-200 bg-white/60 p-4 backdrop-blur-xl dark:border-gray-700 dark:bg-dark-primary/60 sm:flex-row sm:items-center md:p-6">
+        class="flex flex-col justify-between gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60 sm:flex-row sm:items-center md:p-6">
         <div class="flex items-center gap-4">
-            <div class="bg-primary/10 text-primary flex h-14 w-14 items-center justify-center rounded-2xl">
+            <div class="bg-primary/10 text-primary flex h-14 w-14 items-center justify-center rounded-xl">
                 <x-icons.user-group class="h-8 w-8" />
             </div>
             <div>
@@ -18,7 +18,7 @@
         <div class="flex items-center gap-3">
             <div class="relative">
                 <select wire:model.live="year"
-                    class="focus:ring-primary/50 rounded-xl border border-gray-200 bg-white/50 py-2 pl-3 pr-10 text-sm font-bold dark:border-gray-700 dark:bg-dark-primary/50 dark:text-white">
+                    class="focus:ring-primary/50 rounded-xl border border-zinc-200 bg-white/50 py-2 pl-3 pr-10 text-sm font-bold dark:border-zinc-800 dark:bg-dark-primary/50 dark:text-white">
                     @for ($i = date('Y') - 2; $i <= date('Y') + 1; $i++)
                         <option value="{{ $i }}">Tahun {{ $i }}</option>
                     @endfor
@@ -33,7 +33,7 @@
 
     {{-- Main Container --}}
     <div
-        class="flex flex-col gap-6 rounded-2xl border border-gray-200 bg-white/60 p-4 backdrop-blur-xl dark:border-gray-700 dark:bg-dark-primary/60 md:p-6">
+        class="flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60 md:p-6">
 
         {{-- Search and Filter --}}
         <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
@@ -42,13 +42,13 @@
                     <x-icons.search class="h-5 w-5 text-gray-400" />
                 </div>
                 <input type="text" wire:model.live="search"
-                    class="focus:ring-primary/50 focus:border-primary block w-full rounded-2xl border-gray-200 bg-gray-50/50 py-3 pl-11 pr-4 text-sm transition-all dark:border-gray-700 dark:bg-dark-primary/50 dark:text-white"
+                    class="focus:ring-primary/50 focus:border-primary block w-full rounded-xl border-zinc-200 bg-gray-50/50 py-3 pl-11 pr-4 text-sm transition-all dark:border-zinc-800 dark:bg-dark-primary/50 dark:text-white"
                     placeholder="Cari nama atau kode pegawai...">
             </div>
         </div>
 
         {{-- Balanced Table --}}
-        <div class="overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-700">
+        <div class="overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800">
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm">
                     <thead>
@@ -88,7 +88,7 @@
                                 <td class="px-6 py-4 text-center font-medium">{{ $year }}</td>
                                 <td class="px-6 py-4 text-center">
                                     <span
-                                        class="inline-flex items-center rounded-lg bg-gray-100 px-2 py-1 font-bold text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                                        class="inline-flex items-center rounded-xl bg-gray-100 px-2 py-1 font-bold text-gray-700 dark:bg-gray-800 dark:text-gray-300">
                                         {{ $total }} Hari
                                     </span>
                                 </td>
@@ -110,11 +110,11 @@
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end gap-2">
                                         <button
-                                            class="bg-primary/10 text-primary hover:bg-primary flex h-8 w-8 items-center justify-center rounded-lg transition-all hover:text-white">
+                                            class="bg-primary/10 text-primary hover:bg-primary flex h-8 w-8 items-center justify-center rounded-xl transition-all hover:text-white">
                                             <x-icons.pen class="h-4 w-4" />
                                         </button>
                                         <button
-                                            class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-500 transition-all hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400">
+                                            class="flex h-8 w-8 items-center justify-center rounded-xl bg-gray-100 text-gray-500 transition-all hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400">
                                             <x-icons.clockwise class="h-4 w-4" />
                                         </button>
                                     </div>
