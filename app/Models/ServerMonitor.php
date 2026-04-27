@@ -13,6 +13,7 @@ class ServerMonitor extends Model
     protected $fillable = [
         'name',
         'api_url',
+        'ip_label',
         'is_active',
     ];
 

@@ -19,6 +19,7 @@ class ServerOverview extends Component
     public $serverId;
     public $name = '';
     public $api_url = '';
+    public $ip_label = '';
     public $is_active = true;
     public $showModal = false;
 
@@ -75,6 +76,7 @@ class ServerOverview extends Component
             $this->serverId = $server->id;
             $this->name = $server->name;
             $this->api_url = $server->api_url;
+            $this->ip_label = $server->ip_label;
             $this->is_active = $server->is_active;
             $this->showModal = true;
         }
@@ -85,6 +87,7 @@ class ServerOverview extends Component
         $this->validate([
             'name' => 'required|string|max:255',
             'api_url' => 'required|url|max:255',
+            'ip_label' => 'nullable|string|max:50',
             'is_active' => 'boolean',
         ]);
 
@@ -93,6 +96,7 @@ class ServerOverview extends Component
             [
                 'name' => $this->name,
                 'api_url' => rtrim($this->api_url, '/'),
+                'ip_label' => $this->ip_label,
                 'is_active' => $this->is_active,
             ]
         );
@@ -113,6 +117,7 @@ class ServerOverview extends Component
         $this->serverId = null;
         $this->name = '';
         $this->api_url = '';
+        $this->ip_label = '';
         $this->is_active = true;
     }
 
