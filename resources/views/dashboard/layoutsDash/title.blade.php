@@ -40,6 +40,7 @@
         'billing.*' => 'Penagihan',
         'daily-report.*' => 'Laporan Kerja Harian',
         'report.*' => 'Laporan Kerja Harian',
+        'leave-request.approval-center.*' => 'Pusat Persetujuan',
         'leave-request.*' => 'Pengajuan Cuti',
         'server.overview' => 'Manajemen Server',
     ];

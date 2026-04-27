@@ -1,5 +1,5 @@
 <div
-    class="border-gray-200 dark:border-gray-700 mt-4 flex flex-col gap-6 rounded-2xl border bg-white p-4 shadow-sm backdrop-blur-xl dark:bg-dark-primary md:p-6">
+    class="mt-4 flex flex-col gap-6 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm backdrop-blur-xl dark:border-gray-700 dark:bg-dark-primary md:p-6">
     {{-- Header Section --}}
     <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
@@ -18,47 +18,11 @@
         </div>
     </div>
 
-    {{-- Stats Grid (Dummy) --}}
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div
-            class="border-gray-200 dark:border-gray-700 flex items-center gap-4 rounded-2xl border bg-white/60 p-4 backdrop-blur-xl dark:bg-dark-primary/60">
-            <div class="bg-primary/10 text-primary flex h-12 w-12 items-center justify-center rounded-xl">
-                <x-icons.calendar class="h-6 w-6" />
-            </div>
-            <div>
-                <p class="text-xs font-medium uppercase tracking-wider text-gray-500">Sisa Cuti Tahunan</p>
-                <p class="text-xl font-bold text-gray-900 dark:text-white">12 Hari</p>
-            </div>
-        </div>
-        <div
-            class="border-gray-200 dark:border-gray-700 flex items-center gap-4 rounded-2xl border bg-white/60 p-4 backdrop-blur-xl dark:bg-dark-primary/60">
-            <div
-                class="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-100 text-orange-600 dark:bg-orange-900/30">
-                <x-icons.clock class="h-6 w-6" />
-            </div>
-            <div>
-                <p class="text-xs font-medium uppercase tracking-wider text-gray-500">Menunggu Approval</p>
-                <p class="text-xl font-bold text-gray-900 dark:text-white">1 Pengajuan</p>
-            </div>
-        </div>
-        <div
-            class="border-gray-200 dark:border-gray-700 flex items-center gap-4 rounded-2xl border bg-white/60 p-4 backdrop-blur-xl dark:bg-dark-primary/60">
-            <div
-                class="flex h-12 w-12 items-center justify-center rounded-xl bg-green-100 text-green-600 dark:bg-green-900/30">
-                <x-icons.check class="h-6 w-6" />
-            </div>
-            <div>
-                <p class="text-xs font-medium uppercase tracking-wider text-gray-500">Cuti Terpakai (YTD)</p>
-                <p class="text-xl font-bold text-gray-900 dark:text-white">3 Hari</p>
-            </div>
-        </div>
-    </div>
-
     {{-- Main List --}}
     <div class="grid gap-4 lg:gap-6">
         @forelse ($leaveRequests as $request)
             <div wire:key="request-{{ $request->id }}"
-                class="hover:shadow-primary/5 hover:border-gray-400 border-gray-200 dark:border-gray-700 group relative overflow-hidden rounded-2xl border bg-white/60 p-4 backdrop-blur-xl transition-all duration-300 hover:shadow-xl dark:bg-dark-primary/60 dark:hover:bg-dark-primary/80 lg:p-6">
+                class="hover:shadow-primary/5 group relative overflow-hidden rounded-2xl border border-gray-200 bg-white/60 p-4 backdrop-blur-xl transition-all duration-300 hover:border-gray-400 hover:shadow-xl dark:border-gray-700 dark:bg-dark-primary/60 dark:hover:bg-dark-primary/80 lg:p-6">
 
                 {{-- Decorative Blob --}}
                 <div
@@ -155,7 +119,7 @@
             </div>
         @empty
             <div
-                class="border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center rounded-2xl border bg-white/50 py-16 backdrop-blur-md dark:bg-dark-primary/50">
+                class="flex flex-col items-center justify-center rounded-2xl border border-gray-200 bg-white/50 py-16 backdrop-blur-md dark:border-gray-700 dark:bg-dark-primary/50">
                 <div class="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
                     <x-icons.envelope class="h-10 w-10 text-gray-300 dark:text-gray-600" />
                 </div>

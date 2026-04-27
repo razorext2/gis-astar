@@ -145,6 +145,16 @@ return [
                 'permission' => null,
                 'navigate' => true,
             ],
+            [
+                'label' => 'Kelola Saldo Cuti',
+                'mobile_label' => 'Kelola Saldo Cuti',
+                'route' => 'leave-request.manage.index',
+                'check' => ['leave-request.manage.index'],
+                'icon' => 'wallet',
+                // 'permission' => 'leave-balance-manage',
+                'permission' => null,
+                'navigate' => true,
+            ],
         ],
     ],
 
