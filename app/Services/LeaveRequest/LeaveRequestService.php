@@ -83,15 +83,30 @@ class LeaveRequestService
     }
 
     /**
-     * Helper to calculate total working days.
+     * Helper to calculate total working days (excludes Sundays and National Holidays).
      */
     public function calculateTotalDays($startDate, $endDate): int
     {
-        $start = \Carbon\Carbon::parse($startDate);
-        $end = \Carbon\Carbon::parse($endDate);
+        $start = \Carbon\Carbon::parse($startDate)->startOfDay();
+        $end = \Carbon\Carbon::parse($endDate)->startOfDay();
         
-        // Simple diff for now, could be improved to exclude weekends/holidays
-        return $start->diffInDays($end) + 1;
+        $holidays = \App\Models\System\Holiday::whereBetween('date', [$start->toDateString(), $end->toDateString()])
+            ->pluck('date')
+            ->map(fn($date) => $date->format('Y-m-d'))
+            ->toArray();
+
+        $totalDays = 0;
+        $current = clone $start;
+
+        while ($current <= $end) {
+            // Cek jika bukan hari Minggu DAN bukan hari libur nasional
+            if (! $current->isSunday() && ! in_array($current->toDateString(), $holidays)) {
+                $totalDays++;
+            }
+            $current->addDay();
+        }
+
+        return $totalDays;
     }
 
     /**

@@ -43,6 +43,7 @@
         'leave-request.approval-center.*' => 'Pusat Persetujuan',
         'leave-request.*' => 'Pengajuan Cuti',
         'server.overview' => 'Manajemen Server',
+        'system.holidays.*' => 'Manajemen Hari Libur',
     ];
 
     // Temukan judul berdasarkan rute dengan wildcard

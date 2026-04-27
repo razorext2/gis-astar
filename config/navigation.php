@@ -594,7 +594,7 @@ return [
         'type' => 'group',
         'label' => 'System Settings',
         'icon' => 'computer',
-        'guard' => ['any_permission', ['announcement-list', 'log-list', 'backup-list']],
+        'guard' => ['any_permission', ['announcement-list', 'log-list', 'backup-list', 'holiday-list']],
         'submenu' => [
             [
                 'label' => 'Pemberitahuan',
@@ -630,6 +630,15 @@ return [
                 'check' => ['server.overview'],
                 'icon' => 'computer',
                 'permission' => 'manage-server',
+                'navigate' => true,
+            ],
+            [
+                'label' => 'Libur Nasional',
+                'mobile_label' => 'Libur Nasional',
+                'route' => 'system.holidays.index',
+                'check' => ['system.holidays.*'],
+                'icon' => 'calendar',
+                'permission' => 'holiday-list',
                 'navigate' => true,
             ],
         ],

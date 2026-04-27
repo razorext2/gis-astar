@@ -194,6 +194,9 @@ Route::middleware(['auth'])->group(function () {
         // route jabatan
         Route::resource('jabatan', \App\Http\Controllers\JabatanController::class);
 
+        // route libur nasional
+        Route::get('system/holidays', [\App\Http\Controllers\System\HolidayController::class, 'index'])->name('system.holidays.index');
+
         // route driver
         Route::resource('driver', \App\Http\Controllers\DriverController::class)
             ->only('index', 'show', 'create', 'edit');
