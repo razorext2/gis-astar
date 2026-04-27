@@ -22,7 +22,7 @@
     <div class="grid gap-4 lg:gap-6">
         @forelse ($leaveRequests as $request)
             <div wire:key="request-{{ $request->id }}"
-                class="hover:shadow-primary/5 group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-xl transition-all duration-300 hover:border-red-500/30 shadow-md hover:shadow-lg dark:border-zinc-800 dark:bg-dark-primary/60 dark:hover:bg-dark-primary/80 lg:p-6">
+                class="hover:shadow-primary/5 group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-xl transition-all duration-300 hover:border-red-500/30 hover:shadow-lg dark:border-zinc-800 dark:bg-dark-primary/60 dark:hover:bg-dark-primary/80 lg:p-6">
 
                 {{-- Decorative Blob --}}
                 <div
@@ -130,5 +130,10 @@
                 </x-button.primary>
             </div>
         @endforelse
+    </div>
+
+    {{-- Pagination --}}
+    <div class="mt-6">
+        {{ $leaveRequests->links() }}
     </div>
 </div>

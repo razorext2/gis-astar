@@ -1,11 +1,11 @@
 <?php
+/** Goal: Handle Leave Request detailed review and processing for approvers, Livewire: Handler.LeaveRequest.ApprovalCenter.Show, Deps: LeaveRequest, LeaveRequestService */
 
 namespace App\Livewire\Handler\LeaveRequest\ApprovalCenter;
 
-/** Goal: Handle Leave Request detailed review and processing for approvers, Livewire: Handler.LeaveRequest.ApprovalCenter.Show, Deps: LeaveRequest, LeaveRequestService */
-
 use App\Livewire\Concerns\HandlesErrors;
 use App\Models\LeaveRequest\LeaveRequest;
+use App\Services\LeaveRequest\LeaveRequestService;
 use Livewire\Component;
 
 class Show extends Component
@@ -20,14 +20,18 @@ class Show extends Component
         $this->requestId = $id;
     }
 
-    public function approve()
+    public function approve(LeaveRequestService $service)
     {
-        // Logic will be integrated with LeaveRequestService later
-        session()->flash('success', 'Pengajuan berhasil disetujui.');
-        return redirect()->route('leave-request.approval-center.index');
+        $this->runSafely(function() use ($service) {
+            $request = LeaveRequest::findOrFail($this->requestId);
+            $service->processAction($request, 'approve', auth()->user(), $this->note);
+            
+            $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Pengajuan telah disetujui.');
+            return redirect()->route('leave-request.approval-center.index');
+        });
     }
 
-    public function reject()
+    public function reject(LeaveRequestService $service)
     {
         $this->validate([
             'note' => 'required|min:5',
@@ -35,51 +39,31 @@ class Show extends Component
             'note.required' => 'Mohon berikan alasan penolakan.',
         ]);
 
-        // Logic will be integrated with LeaveRequestService later
-        session()->flash('info', 'Pengajuan telah ditolak.');
-        return redirect()->route('leave-request.approval-center.index');
+        $this->runSafely(function() use ($service) {
+            $request = LeaveRequest::findOrFail($this->requestId);
+            $service->processAction($request, 'reject', auth()->user(), $this->note);
+            
+            $this->dispatch('swal', icon: 'info', title: 'Ditolak', text: 'Pengajuan telah ditolak.');
+            return redirect()->route('leave-request.approval-center.index');
+        });
     }
 
     public function render()
     {
-        // Dummy data Detail untuk perancangan UI
-        // Nanti diganti dengan query real: LeaveRequest::with(['user', 'leave_type', 'backup_person', 'histories.user'])->find($this->requestId);
-        $request = (object)[
-            'id' => $this->requestId,
-            'user' => (object)[
-                'name' => 'Muhammad Abdi Mayu', 
-                'kode_pegawai' => 'PEG-001', 
-                'profile_pic' => null,
-                'jabatan' => (object)['name' => 'Senior Developer'],
-                'division' => (object)['name' => 'IT Department']
-            ],
-            'leave_type' => (object)['name' => 'Cuti Tahunan'],
-            'backup_person' => (object)['name' => 'Budi Santoso'],
-            'start_date' => \Carbon\Carbon::parse('2026-04-25'),
-            'end_date' => \Carbon\Carbon::parse('2026-04-27'),
-            'total_days' => 3,
-            'status' => 'pending_spv',
-            'approval_role' => 'Atasan Langsung (SPV)',
-            'reason' => 'Urusan keluarga di luar kota untuk menghadiri acara pernikahan kerabat dekat. Saya akan tetap standby via WhatsApp jika ada keadaan darurat.',
-            'created_at' => now()->subDays(1),
-            'histories' => collect([
-                (object)[
-                    'status' => 'pending_backup',
-                    'description' => 'Pengajuan dibuat oleh Pemohon',
-                    'acted_by_user' => (object)['name' => 'Muhammad Abdi Mayu'],
-                    'created_at' => now()->subDays(1)->subHours(2),
-                    'note' => null
-                ],
-                (object)[
-                    'status' => 'pending_spv',
-                    'description' => 'Disetujui oleh Backup Person',
-                    'acted_by_user' => (object)['name' => 'Budi Santoso'],
-                    'created_at' => now()->subDays(1)->subHours(1),
-                    'note' => 'Siap membackup tugas harian.'
-                ],
-            ])
-        ];
+        $request = LeaveRequest::with(['user.pegawai', 'user.pegawai.jabatanRelasi.divisionRelasi', 'leaveType', 'backupPerson', 'histories.actedBy'])
+            ->findOrFail($this->requestId);
 
-        return view('livewire.handler.leave-request.approval-center.show', compact('request'));
+        // Helper untuk label role approval di view
+        $request->approval_role = match($request->status) {
+            'pending_backup' => 'Personel Backup',
+            'pending_spv' => 'Atasan Langsung',
+            'pending_hrd' => 'HRD Department',
+            'pending_management' => 'Management',
+            default => 'Selesai'
+        };
+
+        return view('livewire.handler.leave-request.approval-center.show', [
+            'request' => $request
+        ]);
     }
 }

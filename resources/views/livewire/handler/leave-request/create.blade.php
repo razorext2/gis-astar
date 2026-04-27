@@ -1,5 +1,5 @@
 <div
-    class="border-zinc-200 dark:border-zinc-800 mt-4 flex flex-col gap-6 rounded-xl border bg-white p-4 shadow-sm backdrop-blur-xl dark:bg-dark-primary md:p-6">
+    class="mt-4 flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary md:p-6">
     {{-- Breadcrumbs/Header --}}
     <div class="flex items-center gap-3">
         <x-button.link wire:navigate href="{{ route('leave-request.my-requests.index') }}"
@@ -17,7 +17,7 @@
         {{-- Left Column: Main Form --}}
         <div class="flex flex-col gap-6 lg:col-span-2">
             <div
-                class="border-zinc-200 dark:border-zinc-800 flex flex-col gap-5 rounded-xl border bg-white/60 p-6 shadow-md backdrop-blur-xl dark:bg-dark-primary/60">
+                class="flex flex-col gap-5 rounded-xl border border-zinc-200 bg-white/60 p-6 shadow-md backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60">
 
                 <div class="mb-2 flex items-center gap-2">
                     <div class="bg-primary h-8 w-1 rounded-full"></div>
@@ -30,8 +30,50 @@
                             :options="$leaveTypes->pluck('name', 'id')->toArray()" :defaultOption="'Pilih Tipe Cuti'" :labels="true" :textLabel="'Tipe Cuti'" required />
                     </div>
                     <div class="flex flex-col">
-                        <x-input.select id="backup_person_id" name="backup_person_id" wire:model="backup_person_id"
-                            :options="$employees->pluck('name', 'id')->toArray()" :defaultOption="'Pilih Orang Pengganti (Backup)'" :labels="true" :textLabel="'Personel Backup'" required />
+                        <label class="mb-1 block text-sm font-bold text-gray-700 dark:text-gray-300">Personel
+                            Backup</label>
+                        <div class="relative" x-data="{ open: false, selectedName: '' }" @click.away="open = false">
+                            {{-- Search Input / Trigger --}}
+                            <div class="relative">
+                                <input type="text" wire:model.live.debounce.300ms="search_backup"
+                                    @focus="open = true" placeholder="Cari Nama atau Kode Pegawai..."
+                                    class="w-full rounded-xl border border-zinc-200 bg-white/50 py-3 pl-4 pr-10 text-sm transition-all focus:ring-red-500/50 dark:border-zinc-800 dark:bg-gray-800/50 dark:text-gray-200">
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <x-icons.search class="h-4 w-4 text-gray-400" />
+                                </div>
+                            </div>
+
+                            {{-- Dropdown Results --}}
+                            <div x-show="open && $wire.search_backup.length > 0"
+                                x-transition:enter="transition ease-out duration-100"
+                                x-transition:enter-start="opacity-0 scale-95"
+                                x-transition:enter-end="opacity-100 scale-100"
+                                class="absolute z-50 mt-2 max-h-60 w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white shadow-xl backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary">
+
+                                @forelse ($employees as $emp)
+                                    <button type="button"
+                                        wire:click="$set('backup_person_id', {{ $emp->id }}); search_backup = '{{ $emp->name }}'; open = false"
+                                        class="{{ $backup_person_id == $emp->id ? 'bg-red-50 dark:bg-red-900/20' : '' }} flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-zinc-50 dark:hover:bg-white/5">
+                                        <div class="flex flex-col">
+                                            <span
+                                                class="text-sm font-bold text-zinc-900 dark:text-white">{{ $emp->name }}</span>
+                                            <span
+                                                class="text-[10px] uppercase tracking-wider text-zinc-500">{{ $emp->kode_pegawai }}</span>
+                                        </div>
+                                        @if ($backup_person_id == $emp->id)
+                                            <x-icons.check class="h-4 w-4 text-red-600" />
+                                        @endif
+                                    </button>
+                                @empty
+                                    <div class="px-4 py-6 text-center text-sm text-zinc-500">
+                                        Tidak ada karyawan ditemukan.
+                                    </div>
+                                @endforelse
+                            </div>
+                        </div>
+                        @error('backup_person_id')
+                            <span class="mt-1 text-xs text-red-600">{{ $message }}</span>
+                        @enderror
                     </div>
                 </div>
 
@@ -54,7 +96,7 @@
                     <label class="mb-1 block text-sm font-bold text-gray-700 dark:text-gray-300">Alasan /
                         Keperluan</label>
                     <textarea wire:model="reason" rows="4"
-                        class="focus:ring-primary/50 border-zinc-200 dark:border-zinc-800 w-full rounded-xl border bg-white/50 p-4 text-gray-700 placeholder-gray-400 transition-all dark:bg-gray-800/50 dark:text-gray-200"
+                        class="focus:ring-primary/50 w-full rounded-xl border border-zinc-200 bg-white/50 p-4 text-gray-700 placeholder-gray-400 transition-all dark:border-zinc-800 dark:bg-gray-800/50 dark:text-gray-200"
                         placeholder="Berikan alasan yang jelas untuk pengajuan cuti Anda..."></textarea>
                 </div>
             </div>
@@ -63,7 +105,8 @@
         {{-- Right Column: Summary & Attachments --}}
         <div class="flex flex-col gap-6">
             {{-- Summary Card --}}
-            <div class="bg-primary/5 dark:bg-primary/10 border-primary/20 rounded-xl border p-6 backdrop-blur-xl">
+            <div
+                class="bg-primary/5 dark:bg-primary/10 rounded-xl border border-zinc-200 p-6 backdrop-blur-xl dark:border-zinc-800">
                 <h3 class="text-primary mb-4 flex items-center gap-2 text-lg font-bold">
                     <x-icons.info-circle class="h-5 w-5" />
                     Ringkasan Pengajuan
@@ -87,14 +130,14 @@
 
             {{-- Attachment Card --}}
             <div
-                class="border-zinc-200 dark:border-zinc-800 flex flex-col gap-4 rounded-xl border bg-white/60 p-6 shadow-md backdrop-blur-xl dark:bg-dark-primary/60">
+                class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-6 shadow-md backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60">
                 <h3 class="flex items-center gap-2 text-lg font-bold text-gray-800 dark:text-gray-100">
                     <x-icons.paper-clip class="h-5 w-5" />
                     Lampiran (Opsional)
                 </h3>
                 <div class="flex flex-col gap-3">
                     <div
-                        class="hover:border-primary/50 border-zinc-200 dark:border-zinc-800 relative flex flex-col items-center rounded-xl border-2 border-dashed p-6 text-center transition-all">
+                        class="hover:border-primary/50 relative flex flex-col items-center rounded-xl border-2 border-dashed border-zinc-200 p-6 text-center transition-all dark:border-zinc-800">
                         <x-icons.cloud-upload class="mb-2 h-10 w-10 text-gray-300 dark:text-gray-600" />
                         <p class="text-xs text-gray-500">Drop file atau klik untuk upload surat keterangan/dokumen
                             pendukung.</p>

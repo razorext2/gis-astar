@@ -1,36 +1,53 @@
 <?php
+/** Goal: Handle Leave Request edit form, Caller: resources/views/dashboard/leave-request/edit.blade.php, Deps: User, LeaveRequest, LeaveType, LeaveRequestService */
 
 namespace App\Livewire\Handler\LeaveRequest;
 
-/** Goal: Handle Leave Request edit form, Caller: resources/views/dashboard/leave-request/edit.blade.php, Deps: User, LeaveRequest, LeaveType */
-
 use App\Livewire\Concerns\HandlesErrors;
+use App\Models\LeaveRequest\LeaveRequest;
+use App\Models\LeaveRequest\LeaveType;
+use App\Models\User;
+use App\Services\LeaveRequest\LeaveRequestService;
 use Livewire\Component;
-use Livewire\WithFileUploads;
 
 class Edit extends Component
 {
-    use HandlesErrors, WithFileUploads;
+    use HandlesErrors;
 
     public $requestId;
     public $leave_type_id;
     public $backup_person_id;
     public $start_date;
     public $end_date;
-    public $total_days = 3;
+    public $total_days = 0;
     public $reason;
 
     public function mount($id)
     {
-        $this->requestId = $id;
+        $request = LeaveRequest::where('user_id', auth()->id())->findOrFail($id);
         
-        // Dummy loading data
-        $this->leave_type_id = 1;
-        $this->backup_person_id = 10;
-        $this->start_date = '2026-04-25';
-        $this->end_date = '2026-04-27';
-        $this->reason = 'Urusan keluarga di luar kota';
+        // Cek apakah masih boleh di-edit (hanya jika status pending_backup atau pending_spv)
+        if (!in_array($request->status, ['pending_backup', 'pending_spv'])) {
+            session()->flash('error', 'Pengajuan yang sudah diproses oleh HRD tidak dapat diubah.');
+            return redirect()->route('leave-request.my-requests.index');
+        }
+
+        $this->requestId = $request->id;
+        $this->leave_type_id = $request->leave_type_id;
+        $this->backup_person_id = $request->backup_person_id;
+        $this->start_date = $request->start_date->format('Y-m-d');
+        $this->end_date = $request->end_date->format('Y-m-d');
+        $this->total_days = $request->total_days;
+        $this->reason = $request->reason;
     }
+
+    protected $rules = [
+        'leave_type_id' => 'required|exists:tb_leave_types,id',
+        'backup_person_id' => 'nullable|exists:users,id',
+        'start_date' => 'required|date|after_or_equal:today',
+        'end_date' => 'required|date|after_or_equal:start_date',
+        'reason' => 'required|min:10',
+    ];
 
     public function updated($propertyName)
     {
@@ -42,33 +59,40 @@ class Edit extends Component
     protected function calculateDays()
     {
         if ($this->start_date && $this->end_date) {
-            $start = \Carbon\Carbon::parse($this->start_date);
-            $end = \Carbon\Carbon::parse($this->end_date);
-            $this->total_days = $start->diffInDays($end) + 1;
+            $service = app(LeaveRequestService::class);
+            $this->total_days = $service->calculateTotalDays($this->start_date, $this->end_date);
         }
     }
 
-    public function update()
+    public function update(LeaveRequestService $service)
     {
-        $this->runSafely(function() {
-            sleep(1); 
-            $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Perubahan berhasil disimpan.');
+        $this->validate();
+
+        $this->runSafely(function() use ($service) {
+            $request = LeaveRequest::where('user_id', auth()->id())->findOrFail($this->requestId);
+            
+            $request->update([
+                'leave_type_id' => $this->leave_type_id,
+                'backup_person_id' => $this->backup_person_id,
+                'start_date' => $this->start_date,
+                'end_date' => $this->end_date,
+                'total_days' => $this->total_days,
+                'reason' => $this->reason,
+            ]);
+
+            $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Perubahan pengajuan berhasil disimpan.');
             return redirect()->route('leave-request.my-requests.index');
         });
     }
 
     public function render()
     {
-        $leaveTypes = collect([
-            (object)['id' => 1, 'name' => 'Cuti Tahunan'],
-            (object)['id' => 2, 'name' => 'Cuti Menikah'],
-        ]);
+        $leaveTypes = LeaveType::all();
+        $employees = User::where('id', '!=', auth()->id())->where('is_active', true)->get();
 
-        $employees = collect([
-            (object)['id' => 10, 'name' => 'Budi Santoso'],
-            (object)['id' => 11, 'name' => 'Siti Aminah'],
+        return view('livewire.handler.leave-request.edit', [
+            'leaveTypes' => $leaveTypes,
+            'employees' => $employees,
         ]);
-
-        return view('livewire.handler.leave-request.edit', compact('leaveTypes', 'employees'));
     }
 }

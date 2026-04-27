@@ -1,64 +1,62 @@
 <?php
+/** Goal: Automate history logging and quota deduction for Leave Requests, Caller: AppServiceProvider, Deps: LeaveRequest, LeaveRequestHistory, LeaveBalance */
 
 namespace App\Observers;
 
-/** Goal: Automatically update leave balances when status changes, Caller: LeaveRequest Model, Deps: LeaveRequest, LeaveBalance */
-
 use App\Models\LeaveRequest\LeaveRequest;
-use Illuminate\Support\Facades\DB;
+use App\Models\LeaveRequest\LeaveRequestHistory;
 
 class LeaveRequestObserver
 {
     /**
-     * Handle the LeaveRequest "updated" event.
+     * Handle the LeaveRequest "created" event.
      */
-    public function updated(LeaveRequest $leaveRequest): void
+    public function created(LeaveRequest $request): void
     {
-        // Hanya proses jika status berubah
-        if (!$leaveRequest->wasChanged('status')) {
-            return;
-        }
-
-        $newStatus = $leaveRequest->status;
-        $oldStatus = $leaveRequest->getOriginal('status');
-
-        // 1. Kondisi: Status Berubah Menjadi 'approved' (Potong Saldo)
-        if ($newStatus === 'approved') {
-            $this->handleBalanceDraft($leaveRequest, 'deduct');
-        }
-
-        // 2. Kondisi: Status Berubah DARI 'approved' ke lain (Refund Saldo)
-        // Berguna jika ada revisi atau pembatalan setelah sempat disetujui pimpinan tertinggi
-        if ($oldStatus === 'approved' && in_array($newStatus, ['rejected', 'cancelled'])) {
-            $this->handleBalanceDraft($leaveRequest, 'refund');
-        }
+        LeaveRequestHistory::create([
+            'leave_request_id' => $request->id,
+            'acted_by' => auth()->id() ?? $request->user_id,
+            'action' => 'submit',
+            'status_to' => $request->status,
+            'note' => 'Pengajuan diajukan.',
+        ]);
     }
 
     /**
-     * Logika utama pemotongan atau pengembalian saldo
+     * Handle the LeaveRequest "updated" event.
      */
-    protected function handleBalanceDraft(LeaveRequest $leaveRequest, string $action): void
+    public function updated(LeaveRequest $request): void
     {
-        $leaveType = $leaveRequest->leaveType;
+        if ($request->isDirty('status')) {
+            $newStatus = $request->status;
+            $oldStatus = $request->getOriginal('status');
 
-        // Cek apakah tipe cuti ini memotong kuota tahunan
-        if ($leaveType && $leaveType->is_anual_deduction) {
-            DB::transaction(function () use ($leaveRequest, $action) {
-                // Ambil saldo berdasarkan tahun dimulainya cuti
-                $year = $leaveRequest->start_date->format('Y');
-                $balance = $leaveRequest->user->leaveBalances()
-                    ->where('year', $year)
-                    ->lockForUpdate() // Senior DBA Standard: Lock baris untuk mencegah race condition
-                    ->first();
+            // Log History
+            LeaveRequestHistory::create([
+                'leave_request_id' => $request->id,
+                'acted_by' => $request->acted_by ?? auth()->id(),
+                'action' => $this->resolveActionName($newStatus),
+                'status_to' => $newStatus,
+                'note' => $request->current_note ?? 'Status diperbarui.',
+            ]);
 
+            // Deduction Logic on FINAL APPROVAL
+            if ($newStatus === 'approved' && $request->leaveType->is_anual_deduction) {
+                $balance = $request->user->currentLeaveBalance();
                 if ($balance) {
-                    if ($action === 'deduct') {
-                        $balance->increment('used_quota', $leaveRequest->total_days);
-                    } else {
-                        $balance->decrement('used_quota', $leaveRequest->total_days);
-                    }
+                    $balance->increment('used_quota', $request->total_days);
                 }
-            });
+            }
         }
+    }
+
+    protected function resolveActionName(string $status): string
+    {
+        return match ($status) {
+            'approved' => 'final_approve',
+            'rejected' => 'reject',
+            'cancelled' => 'cancel',
+            default => 'approve',
+        };
     }
 }
