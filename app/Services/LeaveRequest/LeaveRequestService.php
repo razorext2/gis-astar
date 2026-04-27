@@ -33,6 +33,7 @@ class LeaveRequestService
                 'backup_person_id' => $data['backup_person_id'] ?? null,
                 'start_date' => $data['start_date'],
                 'end_date' => $data['end_date'],
+                'return_date' => $this->calculateReturnDate($data['end_date']),
                 'total_days' => $totalDays,
                 'reason' => $data['reason'],
                 'status' => $status,
@@ -83,13 +84,18 @@ class LeaveRequestService
     }
 
     /**
-     * Helper to calculate total working days (excludes Sundays and National Holidays).
+     * Helper to calculate total days.
+     * @param bool $excludeHolidays If true, excludes Sundays and National Holidays (Business Days).
      */
-    public function calculateTotalDays($startDate, $endDate): int
+    public function calculateTotalDays($startDate, $endDate, bool $excludeHolidays = true): int
     {
         $start = \Carbon\Carbon::parse($startDate)->startOfDay();
         $end = \Carbon\Carbon::parse($endDate)->startOfDay();
-        
+
+        if (! $excludeHolidays) {
+            return $start->diffInDays($end) + 1;
+        }
+
         $holidays = \App\Models\System\Holiday::whereBetween('date', [$start->toDateString(), $end->toDateString()])
             ->pluck('date')
             ->map(fn($date) => $date->format('Y-m-d'))
@@ -107,6 +113,16 @@ class LeaveRequestService
         }
 
         return $totalDays;
+    }
+    /**
+     * Get list of national holidays within a date range.
+     */
+    public function getIntersectedHolidays($startDate, $endDate)
+    {
+        return \App\Models\System\Holiday::whereBetween('date', [
+            \Carbon\Carbon::parse($startDate)->toDateString(),
+            \Carbon\Carbon::parse($endDate)->toDateString()
+        ])->orderBy('date')->get();
     }
 
     /**
@@ -146,5 +162,58 @@ class LeaveRequestService
         }
 
         return true;
+    }
+
+    /**
+     * Helper to calculate the next working day (return to work date).
+     */
+    public function calculateReturnDate($endDate): string
+    {
+        $current = \Carbon\Carbon::parse($endDate)->addDay();
+
+        while (true) {
+            $isHoliday = \App\Models\System\Holiday::where('date', $current->toDateString())->exists();
+
+            if (! $current->isSunday() && ! $isHoliday) {
+                return $current->toDateString();
+            }
+
+            $current->addDay();
+        }
+    }
+
+    /**
+     * Calculate adjusted end date based on allowed total days.
+     */
+    public function calculateEndDate($startDate, int $totalDays, bool $excludeHolidays = true): string
+    {
+        if ($totalDays <= 0) return $startDate;
+
+        $current = \Carbon\Carbon::parse($startDate);
+        $daysCount = 0;
+        
+        $holidays = \App\Models\System\Holiday::whereYear('date', $current->year)
+            ->pluck('date')
+            ->map(fn($date) => $date->format('Y-m-d'))
+            ->toArray();
+
+        while (true) {
+            $isWorkDay = true;
+            if ($excludeHolidays) {
+                if ($current->isSunday() || in_array($current->toDateString(), $holidays)) {
+                    $isWorkDay = false;
+                }
+            }
+
+            if ($isWorkDay) {
+                $daysCount++;
+            }
+
+            if ($daysCount >= $totalDays) {
+                return $current->toDateString();
+            }
+
+            $current->addDay();
+        }
     }
 }

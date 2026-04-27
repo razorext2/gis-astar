@@ -4,7 +4,7 @@
     <div class="flex items-center gap-3">
         <x-button.link wire:navigate href="{{ route('leave-request.my-requests.index') }}"
             class="group rounded-full bg-white/50 !p-2 ring-1 ring-zinc-200 dark:bg-white/5 dark:ring-white/10">
-            <x-icons.chevron-left class="group-hover:text-primary h-5 w-5 text-gray-500 transition-colors" />
+            <x-icons.chevron-left class="h-5 w-5 text-gray-500 transition-colors group-hover:text-primary" />
         </x-button.link>
         <div>
             <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Buat Pengajuan Cuti</h1>
@@ -20,13 +20,13 @@
                 class="flex flex-col gap-5 rounded-xl border border-zinc-200 bg-white/60 p-6 shadow-md backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60">
 
                 <div class="mb-2 flex items-center gap-2">
-                    <div class="bg-primary h-8 w-1 rounded-full"></div>
+                    <div class="h-8 w-1 rounded-full bg-primary"></div>
                     <h2 class="text-lg font-bold text-gray-800 dark:text-gray-100">Informasi Cuti</h2>
                 </div>
 
                 <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
                     <div class="flex flex-col">
-                        <x-input.select id="leave_type_id" name="leave_type_id" wire:model="leave_type_id"
+                        <x-input.select id="leave_type_id" name="leave_type_id" wire:model.live="leave_type_id"
                             :options="$leaveTypes->pluck('name', 'id')->toArray()" :defaultOption="'Pilih Tipe Cuti'" :labels="true" :textLabel="'Tipe Cuti'" required />
                     </div>
                     <div class="flex flex-col">
@@ -92,11 +92,62 @@
                     </div>
                 </div>
 
+                @if ($return_date)
+                    <div class="flex flex-col gap-3">
+                        <div
+                            class="flex items-center gap-3 rounded-xl border border-blue-200 bg-blue-50/50 p-4 dark:border-blue-900/30 dark:bg-blue-900/10">
+                            <x-icons.info-circle class="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                            <div class="flex flex-col">
+                                <span
+                                    class="text-xs font-bold uppercase tracking-wider text-blue-700 dark:text-blue-300">Estimasi
+                                    Kembali Bekerja</span>
+                                <span class="text-sm font-bold text-zinc-900 dark:text-white">
+                                    {{ \Carbon\Carbon::parse($return_date)->locale('id')->isoFormat('dddd, DD MMMM YYYY') }}
+                                </span>
+                            </div>
+                        </div>
+
+                        @if (count($intersected_holidays) > 0 || count($intersected_sundays) > 0)
+                            <div
+                                class="flex flex-col gap-2 rounded-xl border border-red-200 bg-red-50/30 p-4 dark:border-red-900/20 dark:bg-red-900/5">
+                                <div
+                                    class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-red-600 dark:text-red-400">
+                                    <x-icons.calendar class="h-4 w-4" />
+                                    Hari Libur & Akhir Pekan
+                                </div>
+                                <div class="flex flex-wrap gap-2 text-[11px]">
+                                    {{-- National Holidays --}}
+                                    @foreach ($intersected_holidays as $holiday)
+                                        <div
+                                            class="flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 text-zinc-700 shadow-sm ring-1 ring-red-200 dark:bg-zinc-800 dark:text-zinc-300 dark:ring-red-900/50">
+                                            <span
+                                                class="font-bold text-red-600">{{ \Carbon\Carbon::parse($holiday->date)->format('d/m') }}</span>
+                                            <span>{{ $holiday->name }}</span>
+                                        </div>
+                                    @endforeach
+
+                                    {{-- Sundays --}}
+                                    @foreach ($intersected_sundays as $sunday)
+                                        <div
+                                            class="flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 text-zinc-700 shadow-sm ring-1 ring-red-200 dark:bg-zinc-800 dark:text-zinc-300 dark:ring-red-900/50">
+                                            <span
+                                                class="font-bold text-red-600">{{ \Carbon\Carbon::parse($sunday)->format('d/m') }}</span>
+                                            <span>Hari Minggu</span>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <p class="mt-1 text-[10px] italic text-zinc-500">Tanggal di atas tidak dihitung dalam
+                                    durasi cuti.</p>
+                            </div>
+                        @endif
+                    </div>
+                @endif
+
                 <div class="flex flex-col">
                     <label class="mb-1 block text-sm font-bold text-gray-700 dark:text-gray-300">Alasan /
                         Keperluan</label>
                     <textarea wire:model="reason" rows="4"
-                        class="focus:ring-primary/50 w-full rounded-xl border border-zinc-200 bg-white/50 p-4 text-gray-700 placeholder-gray-400 transition-all dark:border-zinc-800 dark:bg-gray-800/50 dark:text-gray-200"
+                        class="w-full rounded-xl border border-zinc-200 bg-white/50 p-4 text-gray-700 placeholder-gray-400 transition-all focus:ring-primary/50 dark:border-zinc-800 dark:bg-gray-800/50 dark:text-gray-200"
                         placeholder="Berikan alasan yang jelas untuk pengajuan cuti Anda..."></textarea>
                 </div>
             </div>
@@ -105,52 +156,102 @@
         {{-- Right Column: Summary & Attachments --}}
         <div class="flex flex-col gap-6">
             {{-- Summary Card --}}
-            <div
-                class="bg-primary/5 dark:bg-primary/10 rounded-xl border border-zinc-200 p-6 backdrop-blur-xl dark:border-zinc-800">
-                <h3 class="text-primary mb-4 flex items-center gap-2 text-lg font-bold">
-                    <x-icons.info-circle class="h-5 w-5" />
-                    Ringkasan Pengajuan
-                </h3>
-                <div class="flex flex-col gap-3">
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-gray-500 dark:text-gray-400">Durasi Cuti:</span>
-                        <span class="font-bold text-gray-900 dark:text-white">{{ $total_days }} Hari</span>
-                    </div>
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-gray-500 dark:text-gray-400">Sisa Kuota:</span>
-                        <span class="font-bold text-green-600">12 Hari</span>
-                    </div>
-                    <div class="divider my-1 border-t border-zinc-200 dark:border-white/5"></div>
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-gray-500 dark:text-gray-400">Setelah Cuti:</span>
-                        <span class="font-bold text-gray-900 dark:text-white">{{ 12 - $total_days }} Hari</span>
+            @if ($leave_type_id)
+                <div
+                    class="rounded-xl border border-zinc-200 bg-primary/5 p-6 backdrop-blur-xl dark:border-zinc-800 dark:bg-primary/10">
+                    <h3 class="mb-4 flex items-center gap-2 text-lg font-bold text-primary">
+                        <x-icons.info-circle class="h-5 w-5" />
+                        Ringkasan Pengajuan
+                    </h3>
+                    <div class="flex flex-col gap-3">
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="text-gray-500 dark:text-gray-400">Durasi Cuti:</span>
+                            <span class="font-bold text-gray-900 dark:text-white">{{ $total_days }} Hari</span>
+                        </div>
+                        @if ($return_date)
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-500 dark:text-gray-400">Kembali Bekerja:</span>
+                                <span class="text-right font-bold text-blue-600">
+                                    {{ \Carbon\Carbon::parse($return_date)->locale('id')->isoFormat('DD MMM YYYY') }}
+                                </span>
+                            </div>
+                        @endif
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="text-gray-500 dark:text-gray-400">Sisa Kuota:</span>
+                            <span class="{{ $remaining_quota <= 0 ? 'text-red-600' : 'text-green-600' }} font-bold">
+                                {{ $remaining_quota }} Hari
+                            </span>
+                        </div>
+                        <div class="divider my-1 border-t border-zinc-200 dark:border-white/5"></div>
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="text-gray-500 dark:text-gray-400">Saldo Akhir:</span>
+                            <span class="font-bold text-gray-900 dark:text-white">
+                                {{ max(0, $remaining_quota - $total_days) }} Hari
+                            </span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
 
             {{-- Attachment Card --}}
             <div
                 class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-6 shadow-md backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60">
                 <h3 class="flex items-center gap-2 text-lg font-bold text-gray-800 dark:text-gray-100">
                     <x-icons.paper-clip class="h-5 w-5" />
-                    Lampiran (Opsional)
+                    Lampiran {{ $selected_leave_type?->requires_attachment ? '*' : '(Opsional)' }}
                 </h3>
                 <div class="flex flex-col gap-3">
                     <div
-                        class="hover:border-primary/50 relative flex flex-col items-center rounded-xl border-2 border-dashed border-zinc-200 p-6 text-center transition-all dark:border-zinc-800">
+                        class="relative flex flex-col items-center rounded-xl border-2 border-dashed border-zinc-200 p-6 text-center transition-all hover:border-primary/50 dark:border-zinc-800">
                         <x-icons.cloud-upload class="mb-2 h-10 w-10 text-gray-300 dark:text-gray-600" />
-                        <p class="text-xs text-gray-500">Drop file atau klik untuk upload surat keterangan/dokumen
-                            pendukung.</p>
-                        <input type="file" multiple class="absolute inset-0 cursor-pointer opacity-0" />
+                        <p class="text-xs text-gray-500">
+                            {{ $selected_leave_type?->requires_attachment ? 'Wajib upload dokumen pendukung.' : 'Drop file atau klik untuk upload dokumen pendukung.' }}
+                        </p>
+                        <p class="mt-1 text-[10px] text-zinc-400">PDF, JPG, PNG (Maks 3MB)</p>
+                        <input type="file" wire:model="attachments" multiple accept=".pdf,.jpg,.jpeg,.png"
+                            class="absolute inset-0 cursor-pointer opacity-0" />
                     </div>
+
+                    {{-- Loading State --}}
+                    <div wire:loading wire:target="attachments" class="text-center text-xs font-bold text-primary">
+                        Sedang mengunggah...
+                    </div>
+
+                    {{-- Error Display --}}
+                    @error('attachments')
+                        <span class="text-xs text-red-600">{{ $message }}</span>
+                    @enderror
+                    @error('attachments.*')
+                        <span class="text-xs text-red-600">{{ $message }}</span>
+                    @enderror
+
+                    {{-- Files List --}}
+                    @if ($attachments)
+                        <div class="flex flex-col gap-2">
+                            @foreach ($attachments as $index => $file)
+                                <div
+                                    class="flex items-center justify-between rounded-lg bg-zinc-50 p-2 text-xs dark:bg-white/5">
+                                    <div class="flex items-center gap-2 truncate">
+                                        <x-icons.check-circle class="h-4 w-4 text-green-500" />
+                                        <span
+                                            class="truncate text-zinc-600 dark:text-zinc-300">{{ $file->getClientOriginalName() }}</span>
+                                    </div>
+                                    <button type="button" wire:click="removeAttachment({{ $index }})"
+                                        class="text-red-500 hover:text-red-700">
+                                        <x-icons.close class="h-4 w-4" />
+                                    </button>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
             </div>
 
             {{-- Submit Button --}}
             <x-button.primary type="submit"
-                class="shadow-primary/20 w-full !py-4 text-lg font-bold shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]">
+                class="w-full !py-4 text-lg font-bold shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
                 <x-slot name="icon">
-                    <x-icons.loading wire:loading wire:target="save" class="h-6 w-6" />
+                    <x-icons.loading-circle wire:loading wire:target="save" class="h-6 w-6" />
                 </x-slot>
                 <span wire:loading.remove wire:target="save">Kirim Pengajuan</span>
                 <span wire:loading wire:target="save">Memproses...</span>

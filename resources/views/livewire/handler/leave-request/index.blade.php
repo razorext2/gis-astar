@@ -38,7 +38,7 @@
                         </div>
                         <div class="flex flex-col">
                             <h3 class="text-lg font-bold leading-tight text-gray-900 dark:text-white">
-                                {{ $request->leave_type->name }}</h3>
+                                {{ $request->leaveType->name ?? 'Tipe Cuti Tidak Diketahui' }}</h3>
                             <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
                                 {{ $request->start_date->format('d M Y') }} - {{ $request->end_date->format('d M Y') }}
                                 <span class="mx-1 text-gray-300">•</span>
