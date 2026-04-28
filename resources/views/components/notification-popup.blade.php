@@ -16,8 +16,8 @@
 
         <!-- Status Icon -->
         <div
-            class="relative flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/20">
-            <x-icons.checklist-stepper class="h-5 w-5" />
+            class="relative flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-yellow-500 to-yellow-600 text-white shadow-lg shadow-yellow-500/20">
+            <x-icons.question-circle class="h-5 w-5" />
         </div>
 
         <!-- Content -->

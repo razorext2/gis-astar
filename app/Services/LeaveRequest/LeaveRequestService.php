@@ -220,4 +220,19 @@ class LeaveRequestService
             $current->addDay();
         }
     }
+
+    public function checkStatus(string $status, int $userId)
+    {
+        if ($userId !== auth()->id()) {
+            session()->flash('status', 'Anda tidak memiliki akses untuk mengubah pengajuan ini.');
+
+            return redirect()->route('leave-request.my-requests.index');
+        }
+
+        if ($status !== 'pending_backup') {
+            session()->flash('status', 'Pengajuan hanya dapat diubah jika belum disetujui oleh Personel Backup.');
+
+            return redirect()->route('leave-request.my-requests.index');
+        }
+    }
 }

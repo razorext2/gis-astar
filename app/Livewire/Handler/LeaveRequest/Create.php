@@ -49,6 +49,13 @@ class Create extends Component
         $this->activeRequest = auth()->user()->leaveRequests()
             ->whereIn('status', ['pending_backup', 'pending_spv', 'pending_hrd', 'pending_management'])
             ->first();
+
+        // Cek apakah punya akun pegawai?
+        $user = auth()->user();
+
+        if (! $user->pegawai) {
+            return redirect()->route('leave-request.my-requests.index')->with('status', 'Akses ditolak, anda tidak memiliki akun pegawai. Silahkan buat pengajuan menggunakan akun pegawai.');
+        }
     }
 
     protected $rules = [
@@ -121,7 +128,7 @@ class Create extends Component
                 $this->total_days = $maxAllowed;
 
                 $title = $maxAllowed < $this->remaining_quota ? 'Batas Maksimal' : 'Kuota Terbatas';
-                $text = $maxAllowed < $this->remaining_quota 
+                $text = $maxAllowed < $this->remaining_quota
                     ? 'Pengajuan cuti tahunan maksimal adalah 6 hari kerja. Tanggal berakhir telah disesuaikan.'
                     : 'Durasi cuti melebihi kuota tersedia. Tanggal berakhir telah disesuaikan secara otomatis.';
 
@@ -168,6 +175,7 @@ class Create extends Component
         // Validasi Dinamis: Jika tipe cuti mewajibkan lampiran
         if ($this->selected_leave_type?->requires_attachment && empty($this->attachments)) {
             $this->addError('attachments', 'Tipe cuti ini mewajibkan lampiran (Surat Dokter/Dokumen Pendukung).');
+
             return;
         }
 

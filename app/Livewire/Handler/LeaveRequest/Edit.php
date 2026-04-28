@@ -10,7 +10,6 @@ use App\Models\LeaveRequest\LeaveType;
 use App\Models\User;
 use App\Services\LeaveRequest\LeaveRequestService;
 use Livewire\Component;
-
 use Livewire\WithFileUploads;
 
 class Edit extends Component
@@ -45,11 +44,8 @@ class Edit extends Component
     {
         $request = LeaveRequest::where('user_id', auth()->id())->findOrFail($id);
 
-        if ($request->status !== 'pending_backup') {
-            session()->flash('error', 'Pengajuan hanya dapat diubah jika belum disetujui oleh Personel Backup.');
-
-            return redirect()->route('leave-request.my-requests.index');
-        }
+        // check status
+        app(LeaveRequestService::class)->checkStatus($request->status, $request->user_id);
 
         $this->requestId = $request->id;
         $this->leave_type_id = $request->leave_type_id;
@@ -156,7 +152,7 @@ class Edit extends Component
             $this->total_days = $maxAllowedDays;
 
             $title = $maxAllowedDays < $this->remaining_quota ? 'Batas Maksimal' : 'Kuota Terlampaui';
-            $text = $maxAllowedDays < $this->remaining_quota 
+            $text = $maxAllowedDays < $this->remaining_quota
                 ? 'Cuti tahunan maksimal adalah 6 hari per pengajuan. Durasi telah disesuaikan.'
                 : "Durasi disesuaikan menjadi maksimal {$this->remaining_quota} hari sesuai sisa kuota Anda.";
 

@@ -17,11 +17,74 @@
         </div>
     </div>
 
+    {{-- Tabs Section --}}
+    <div class="flex items-center gap-2 overflow-x-auto border-b border-zinc-100 dark:border-zinc-800">
+        <button wire:click="setTab('pending')"
+            class="{{ $activeTab === 'pending' ? 'text-primary' : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300' }} group relative px-4 py-3 text-sm font-bold transition-all duration-200">
+            <span>Antrean</span>
+            @if ($activeTab === 'pending')
+                <div class="absolute bottom-0 left-0 h-0.5 w-full bg-primary shadow-[0_0_8px_rgba(239,68,68,0.5)]">
+                </div>
+            @endif
+        </button>
+        @if (auth()->user()->can('leave-view-all'))
+            <button wire:click="setTab('all')"
+                class="{{ $activeTab === 'all' ? 'text-primary' : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300' }} group relative px-4 py-3 text-sm font-bold transition-all duration-200">
+                <span>Semua Data</span>
+                @if ($activeTab === 'all')
+                    <div class="absolute bottom-0 left-0 h-0.5 w-full bg-primary shadow-[0_0_8px_rgba(239,68,68,0.5)]">
+                    </div>
+                @endif
+            </button>
+        @endif
+    </div>
+
+    {{-- Search and Filter Bar --}}
+    <div class="flex flex-col gap-4 md:flex-row md:items-center">
+        <div class="relative flex-1">
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                <x-icons.search-alt class="h-5 w-5 text-zinc-400" />
+            </div>
+            <input wire:model.live.debounce.300ms="search" type="text"
+                class="block w-full rounded-xl border-zinc-200 bg-zinc-50 py-2.5 pl-10 text-sm focus:border-primary focus:ring-primary dark:border-zinc-800 dark:bg-white/5 dark:text-white"
+                placeholder="Cari nama, kode pegawai, atau alasan...">
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+            <select wire:model.live="filterStatus"
+                class="rounded-xl border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm focus:border-primary focus:ring-primary dark:border-zinc-800 dark:bg-white/5 dark:text-white">
+                <option value="">Semua Status</option>
+                <option value="pending_backup">Menunggu Backup</option>
+                <option value="pending_spv">Menunggu SPV</option>
+                <option value="pending_hrd">Menunggu HRD</option>
+                <option value="pending_management">Menunggu Management</option>
+                <option value="approved">Disetujui</option>
+                <option value="rejected">Ditolak</option>
+                <option value="canceled">Dibatalkan</option>
+            </select>
+
+            <select wire:model.live="filterLeaveType"
+                class="rounded-xl border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm focus:border-primary focus:ring-primary dark:border-zinc-800 dark:bg-white/5 dark:text-white">
+                <option value="">Semua Tipe Cuti</option>
+                @foreach ($leaveTypes as $type)
+                    <option value="{{ $type->id }}">{{ $type->name }}</option>
+                @endforeach
+            </select>
+
+            @if ($search || $filterStatus || $filterLeaveType)
+                <button wire:click="resetFilters"
+                    class="text-sm font-bold text-red-600 transition-colors hover:text-red-700">
+                    Reset Filter
+                </button>
+            @endif
+        </div>
+    </div>
+
     {{-- Approval List --}}
     <div class="grid gap-4 lg:gap-6">
         @forelse ($pendingApprovals as $request)
             <div wire:key="approval-{{ $request->id }}"
-                class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-xl transition-all duration-300 hover:border-red-500/50 shadow-md hover:shadow-lg dark:border-zinc-800 dark:bg-dark-primary/60 dark:hover:bg-dark-primary/80 lg:p-6">
+                class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-xl transition-all duration-300 hover:border-red-500/50 hover:shadow-lg dark:border-zinc-800 dark:bg-dark-primary/60 dark:hover:bg-dark-primary/80 lg:p-6">
 
                 {{-- Hover Accent --}}
                 <div
@@ -39,16 +102,72 @@
                             <h3 class="text-lg font-bold leading-tight text-zinc-900 dark:text-white">
                                 {{ $request->user->name ?? 'User Unknown' }}
                             </h3>
-                            <div class="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
-                                <span class="font-mono text-xs">{{ $request->user->pegawai->kode_pegawai ?? '-' }}</span>
+                            <div
+                                class="mt-1 flex flex-wrap items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
+                                <span
+                                    class="font-mono text-xs">{{ $request->user->pegawai->kode_pegawai ?? '-' }}</span>
                                 <span>•</span>
                                 <span
                                     class="font-medium text-red-600 dark:text-red-500">{{ $request->leaveType->name ?? 'Tipe Cuti' }}</span>
+
+                                @if ($request->approval_role && $activeTab === 'pending')
+                                    <span>•</span>
+                                    <span
+                                        class="flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary dark:bg-primary/20">
+                                        <x-icons.user-circle class="h-3 w-3" />
+                                        {{ $request->approval_role }}
+                                    </span>
+                                @endif
+
+                                @php
+                                    $statusConfig = [
+                                        'pending_backup' => [
+                                            'label' => 'Menunggu Backup',
+                                            'class' =>
+                                                'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300',
+                                        ],
+                                        'pending_spv' => [
+                                            'label' => 'Menunggu SPV',
+                                            'class' =>
+                                                'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300',
+                                        ],
+                                        'pending_hrd' => [
+                                            'label' => 'Menunggu HRD',
+                                            'class' =>
+                                                'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300',
+                                        ],
+                                        'pending_management' => [
+                                            'label' => 'Menunggu Management',
+                                            'class' =>
+                                                'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
+                                        ],
+                                        'approved' => [
+                                            'label' => 'Selesai',
+                                            'class' =>
+                                                'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
+                                        ],
+                                        'rejected' => [
+                                            'label' => 'Ditolak',
+                                            'class' => 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
+                                        ],
+                                        'canceled' => [
+                                            'label' => 'Dibatalkan',
+                                            'class' => 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
+                                        ],
+                                        'cancelled' => [
+                                            'label' => 'Dibatalkan',
+                                            'class' => 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
+                                        ],
+                                    ][$request->status] ?? [
+                                        'label' => $request->status,
+                                        'class' => 'bg-gray-100 text-gray-700',
+                                    ];
+                                @endphp
+
                                 <span>•</span>
                                 <span
-                                    class="bg-primary/10 text-primary dark:bg-primary/20 flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">
-                                    <x-icons.user-circle class="h-3 w-3" />
-                                    {{ $request->approval_role }}
+                                    class="{{ $statusConfig['class'] }} flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">
+                                    {{ $statusConfig['label'] }}
                                 </span>
                             </div>
                         </div>
@@ -65,10 +184,14 @@
                         </div>
 
                         <div class="flex w-full gap-2 sm:w-auto">
-                            <x-button.primary wire:navigate href="{{ route('leave-request.approval-center.show', $request->id) }}" class="!px-4 !py-1.5 text-sm">
+                            <x-button.primary wire:navigate
+                                href="{{ route('leave-request.approval-center.show', $request->id) }}"
+                                class="!px-4 !py-1.5 text-sm">
                                 Proses
                             </x-button.primary>
-                            <x-button.link wire:navigate href="{{ route('leave-request.approval-center.show', $request->id) }}" class="!px-3 !py-1 text-sm">
+                            <x-button.link wire:navigate
+                                href="{{ route('leave-request.approval-center.show', $request->id) }}"
+                                class="!px-3 !py-1 text-sm">
                                 Detail
                             </x-button.link>
                         </div>
@@ -87,9 +210,14 @@
                 <div class="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
                     <x-icons.check class="h-10 w-10 text-zinc-300 dark:text-zinc-600" />
                 </div>
-                <h3 class="text-xl font-bold text-zinc-900 dark:text-white">Tidak Ada Antrian</h3>
-                <p class="mt-1 text-zinc-500 dark:text-zinc-400">Semua pengajuan telah diproses. Kerja bagus!</p>
+                <h3 class="text-xl font-bold text-zinc-900 dark:text-white">Tidak Ada Data</h3>
+                <p class="mt-1 text-zinc-500 dark:text-zinc-400">Tidak ada pengajuan yang sesuai dengan kriteria filter
+                    Anda.</p>
             </div>
         @endforelse
+    </div>
+
+    <div class="mt-6">
+        {{ $pendingApprovals->links() }}
     </div>
 </div>
