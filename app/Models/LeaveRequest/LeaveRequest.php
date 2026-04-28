@@ -11,6 +11,11 @@ class LeaveRequest extends Model
 
     protected $guarded = ['id'];
 
+    // Transient properties for Observer
+    public $current_note;
+
+    public $acted_by;
+
     protected $fillable = [
         'user_id',
         'leave_type_id',

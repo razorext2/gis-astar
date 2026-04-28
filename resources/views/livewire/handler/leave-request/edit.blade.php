@@ -1,10 +1,10 @@
 <div
-    class="border-zinc-200 dark:border-zinc-800 mt-4 flex flex-col gap-6 rounded-xl border bg-white p-4 shadow-sm backdrop-blur-xl dark:bg-dark-primary md:p-6">
+    class="mt-4 flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary md:p-6">
     {{-- Breadcrumbs/Header --}}
     <div class="flex items-center gap-3">
         <x-button.link wire:navigate href="{{ route('leave-request.my-requests.index') }}"
             class="group rounded-full bg-white/50 !p-2 ring-1 ring-zinc-200 dark:bg-white/5 dark:ring-white/10">
-            <x-icons.chevron-left class="group-hover:text-primary h-5 w-5 text-gray-500 transition-colors" />
+            <x-icons.chevron-left class="h-5 w-5 text-gray-500 transition-colors group-hover:text-primary" />
         </x-button.link>
         <div>
             <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Edit Pengajuan
@@ -18,21 +18,67 @@
         {{-- Left Column: Main Form --}}
         <div class="flex flex-col gap-6 lg:col-span-2">
             <div
-                class="border-zinc-200 dark:border-zinc-800 flex flex-col gap-5 rounded-xl border bg-white/60 p-6 shadow-md backdrop-blur-xl dark:bg-dark-primary/60">
+                class="flex flex-col gap-5 rounded-xl border border-zinc-200 bg-white/60 p-6 shadow-md backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60">
 
                 <div class="mb-2 flex items-center gap-2">
-                    <div class="bg-primary h-8 w-1 rounded-full"></div>
+                    <div class="h-8 w-1 rounded-full bg-primary"></div>
                     <h2 class="text-lg font-bold text-gray-800 dark:text-gray-100">Informasi Cuti</h2>
                 </div>
 
                 <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
                     <div class="flex flex-col">
-                        <x-input.select id="leave_type_id" name="leave_type_id" wire:model="leave_type_id"
+                        <x-input.select id="leave_type_id" name="leave_type_id" wire:model.live="leave_type_id"
                             :options="$leaveTypes->pluck('name', 'id')->toArray()" :defaultOption="'Pilih Tipe Cuti'" :labels="true" :textLabel="'Tipe Cuti'" required />
+                        @error('leave_type_id')
+                            <span class="mt-1 text-xs text-red-600">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="flex flex-col">
-                        <x-input.select id="backup_person_id" name="backup_person_id" wire:model="backup_person_id"
-                            :options="$employees->pluck('name', 'id')->toArray()" :defaultOption="'Pilih Orang Pengganti (Backup)'" :labels="true" :textLabel="'Personel Backup'" required />
+                        <label class="mb-1 block text-sm font-bold text-gray-700 dark:text-gray-300">
+                            Personel Backup
+                        </label>
+                        <div class="relative" x-data="{ open: false }" @click.away="open = false">
+                            {{-- Search Input / Trigger --}}
+                            <div class="relative">
+                                <input type="text" wire:model.live.debounce.300ms="search_backup"
+                                    @focus="open = true" placeholder="Cari Nama atau Kode Pegawai..."
+                                    class="w-full rounded-xl border border-zinc-200 bg-white/50 py-3 pl-4 pr-10 text-sm transition-all focus:ring-red-500/50 dark:border-zinc-800 dark:bg-gray-800/50 dark:text-gray-200">
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <x-icons.search class="h-4 w-4 text-gray-400" />
+                                </div>
+                            </div>
+
+                            {{-- Dropdown Results --}}
+                            <div x-show="open && $wire.search_backup.length > 0"
+                                x-transition:enter="transition ease-out duration-100"
+                                x-transition:enter-start="opacity-0 scale-95"
+                                x-transition:enter-end="opacity-100 scale-100"
+                                class="absolute z-50 mt-2 max-h-60 w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white shadow-xl backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary">
+
+                                @forelse ($employees as $emp)
+                                    <button type="button"
+                                        wire:click="$set('backup_person_id', {{ $emp->id }}); search_backup = '{{ $emp->name }}'; open = false"
+                                        class="{{ $backup_person_id == $emp->id ? 'bg-red-50 dark:bg-red-900/20' : '' }} flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-zinc-50 dark:hover:bg-white/5">
+                                        <div class="flex flex-col">
+                                            <span
+                                                class="text-sm font-bold text-zinc-900 dark:text-white">{{ $emp->name }}</span>
+                                            <span class="text-[10px] text-gray-500">{{ $emp->kode_pegawai }}</span>
+                                        </div>
+                                        @if ($backup_person_id == $emp->id)
+                                            <x-icons.check-circle class="h-4 w-4 text-red-500" />
+                                        @endif
+                                    </button>
+                                @empty
+                                    <div class="px-4 py-3 text-center text-xs text-gray-500">
+                                        Tidak ada data ditemukan
+                                    </div>
+                                @endforelse
+                            </div>
+                        </div>
+
+                        @error('backup_person_id')
+                            <span class="mt-1 text-xs text-red-600">{{ $message }}</span>
+                        @enderror
                     </div>
                 </div>
 
@@ -42,12 +88,18 @@
                             :labels="true" required>
                             Tanggal Mulai
                         </x-input.basic>
+                        @error('start_date')
+                            <span class="mt-1 text-xs text-red-600">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="flex flex-col">
                         <x-input.basic type="date" id="end_date" name="end_date" wire:model.live="end_date"
                             :labels="true" required>
                             Tanggal Berakhir
                         </x-input.basic>
+                        @error('end_date')
+                            <span class="mt-1 text-xs text-red-600">{{ $message }}</span>
+                        @enderror
                     </div>
                 </div>
 
@@ -55,40 +107,158 @@
                     <label class="mb-1 block text-sm font-bold text-gray-700 dark:text-gray-300">Alasan /
                         Keperluan</label>
                     <textarea wire:model="reason" rows="4"
-                        class="focus:ring-primary/50 border-zinc-200 dark:border-zinc-800 w-full rounded-xl border bg-white/50 p-4 text-gray-700 placeholder-gray-400 transition-all dark:bg-gray-800/50 dark:text-gray-200"
+                        class="w-full rounded-xl border border-zinc-200 bg-white/50 p-4 text-gray-700 placeholder-gray-400 transition-all focus:ring-primary/50 dark:border-zinc-800 dark:bg-gray-800/50 dark:text-gray-200"
                         placeholder="Berikan alasan yang jelas untuk pengajuan cuti Anda..."></textarea>
+                    @error('reason')
+                        <span class="mt-1 text-xs text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                {{-- Attachment Section --}}
+                <div class="mt-4 flex flex-col gap-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-bold text-gray-700 dark:text-gray-300">Lampiran Dokumen (Opsional)</h3>
+                        <span class="text-[10px] font-normal text-gray-400">Max: 3MB (PNG, JPG, PDF)</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        {{-- Upload Box --}}
+                        <div class="relative">
+                            <label
+                                class="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-zinc-200 bg-zinc-50/50 py-8 transition-all hover:border-primary/50 hover:bg-primary/5 dark:border-zinc-800 dark:bg-zinc-900/50">
+                                <x-icons.cloud-upload class="mb-2 h-8 w-8 text-gray-400" />
+                                <span class="text-xs font-medium text-gray-500">Klik untuk unggah file baru</span>
+                                <input type="file" wire:model="attachments" multiple class="hidden">
+                            </label>
+                            <div wire:loading wire:target="attachments"
+                                class="absolute inset-0 z-10 flex items-center justify-center rounded-xl bg-white/50 backdrop-blur-sm dark:bg-zinc-900/50">
+                                <x-icons.loading-circle class="h-8 w-8 text-primary" />
+                            </div>
+                        </div>
+
+                        {{-- Existing & New Files List --}}
+                        <div class="flex flex-col gap-3">
+                            {{-- Existing Files --}}
+                            @foreach ($existingAttachments as $index => $path)
+                                <div
+                                    class="flex items-center justify-between rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-zinc-900">
+                                    <div class="flex min-w-0 items-center gap-2">
+                                        <x-icons.paper-clip class="h-4 w-4 shrink-0 text-gray-400" />
+                                        <span class="truncate text-xs text-zinc-600 dark:text-zinc-300">File Lama:
+                                            {{ basename($path) }}</span>
+                                    </div>
+                                    <button type="button" wire:click="removeAttachment({{ $index }}, true)"
+                                        class="text-red-500 hover:text-red-700">
+                                        <x-icons.close class="h-4 w-4" />
+                                    </button>
+                                </div>
+                            @endforeach
+
+                            {{-- New Files --}}
+                            @foreach ($attachments as $index => $file)
+                                <div
+                                    class="flex items-center justify-between rounded-xl border border-blue-200 bg-blue-50 p-3 dark:border-blue-900/20 dark:bg-blue-900/10">
+                                    <div class="flex min-w-0 items-center gap-2">
+                                        <x-icons.check-circle class="h-4 w-4 shrink-0 text-blue-500" />
+                                        <span
+                                            class="truncate text-[10px] text-blue-700 dark:text-blue-300">{{ $file->getClientOriginalName() }}</span>
+                                    </div>
+                                    <button type="button" wire:click="removeAttachment({{ $index }}, false)"
+                                        class="text-red-500 hover:text-red-700">
+                                        <x-icons.close class="h-4 w-4" />
+                                    </button>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    @error('attachments.*')
+                        <span class="text-xs text-red-500">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
         </div>
 
         {{-- Right Column: Summary --}}
         <div class="flex flex-col gap-6">
-            <div class="bg-primary/5 dark:bg-primary/10 border-primary/20 rounded-xl border p-6 backdrop-blur-xl">
-                <h3 class="text-primary mb-4 flex items-center gap-2 text-lg font-bold">
+            <div class="rounded-xl border border-primary/20 bg-primary/5 p-6 backdrop-blur-xl dark:bg-primary/10">
+                <h3 class="mb-4 flex items-center gap-2 text-lg font-bold text-primary">
                     <x-icons.info-circle class="h-5 w-5" />
-                    Ringkasan Perubahan
+                    Detail Kalkulasi
                 </h3>
-                <div class="flex flex-col gap-3">
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-gray-500 dark:text-gray-400">Durasi Baru:</span>
-                        <span class="font-bold text-gray-900 dark:text-white">{{ $total_days }} Hari</span>
+                <div class="flex flex-col gap-4">
+                    {{-- Return Work Estimation --}}
+                    <div class="flex flex-col gap-1 rounded-lg bg-white/50 p-3 dark:bg-black/20">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-gray-500">Estimasi Kembali
+                            Bekerja:</span>
+                        <div class="flex items-center gap-2">
+                            <x-icons.calendar class="h-4 w-4 text-emerald-500" />
+                            <span class="text-sm font-black text-gray-800 dark:text-white">
+                                {{ $end_date ? app(\App\Services\LeaveRequest\LeaveRequestService::class)->calculateReturnDate($end_date) : '-' }}
+                            </span>
+                        </div>
                     </div>
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-gray-500 dark:text-gray-400">Sisa Kuota:</span>
-                        <span class="font-bold text-green-600">12 Hari</span>
-                    </div>
-                    <div class="divider my-1 border-t border-zinc-200 dark:border-white/5"></div>
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-gray-500 dark:text-gray-400">Setelah Update:</span>
-                        <span class="font-bold text-gray-900 dark:text-white">{{ 12 - $total_days }} Hari</span>
+
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="text-gray-500 dark:text-gray-400">Total Durasi:</span>
+                            <span class="font-black text-gray-900 dark:text-white">{{ $total_days }} Hari</span>
+                        </div>
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="text-gray-500 dark:text-gray-400">Sisa Kuota:</span>
+                            <span class="font-bold text-zinc-600 dark:text-zinc-400">{{ $remaining_quota }}
+                                Hari</span>
+                        </div>
+
+                        <div class="divider border-t border-zinc-200 dark:border-white/5"></div>
+
+                        {{-- Holidays Info --}}
+                        <div class="flex flex-col gap-2">
+                            <span class="text-[10px] font-bold uppercase text-gray-400">Informasi Hari Libur:</span>
+                            <div class="flex flex-col gap-1.5">
+                                @php
+                                    $hasSunday = false;
+                                    if ($start_date && $end_date) {
+                                        $curr = \Carbon\Carbon::parse($start_date);
+                                        $end = \Carbon\Carbon::parse($end_date);
+                                        while ($curr <= $end) {
+                                            if ($curr->isSunday()) {
+                                                $hasSunday = true;
+                                                break;
+                                            }
+                                            $curr->addDay();
+                                        }
+                                    }
+                                @endphp
+
+                                @if ($hasSunday)
+                                    <div class="flex items-center gap-2">
+                                        <div class="h-1.5 w-1.5 rounded-full bg-red-500"></div>
+                                        <span class="text-[11px] text-gray-600 dark:text-gray-400">Termasuk hari
+                                            Minggu</span>
+                                    </div>
+                                @endif
+
+                                @forelse($intersectedHolidays as $holiday)
+                                    <div class="flex items-center gap-2">
+                                        <div class="h-1.5 w-1.5 rounded-full bg-amber-500"></div>
+                                        <span class="text-[11px] text-gray-600 dark:text-gray-400">Libur:
+                                            {{ $holiday->name }}</span>
+                                    </div>
+                                @empty
+                                    @if (!$hasSunday)
+                                        <span class="text-[11px] italic text-gray-400">Tidak ada hari libur</span>
+                                    @endif
+                                @endforelse
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <x-button.primary type="submit"
-                class="shadow-primary/20 w-full !py-4 text-lg font-bold shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]">
+                class="w-full !py-4 text-lg font-bold shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
                 <x-slot name="icon">
-                    <x-icons.loading wire:loading wire:target="update" class="h-6 w-6" />
+                    <x-icons.loading-circle wire:loading wire:target="update" class="h-6 w-6" />
                 </x-slot>
                 <span wire:loading.remove wire:target="update">Simpan Perubahan</span>
                 <span wire:loading wire:target="update">Menyimpan...</span>

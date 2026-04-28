@@ -42,6 +42,15 @@ class Create extends Component
 
     public $remaining_quota = 0;
 
+    public $activeRequest = null;
+
+    public function mount()
+    {
+        $this->activeRequest = auth()->user()->leaveRequests()
+            ->whereIn('status', ['pending_backup', 'pending_spv', 'pending_hrd', 'pending_management'])
+            ->first();
+    }
+
     protected $rules = [
         'leave_type_id' => 'required|exists:tb_leave_types,id',
         'backup_person_id' => 'nullable|exists:users,id',
@@ -80,8 +89,9 @@ class Create extends Component
             $balance = auth()->user()->currentLeaveBalance();
             $this->remaining_quota = $balance ? $balance->remaining_quota : 0;
         } else {
-            // Untuk cuti khusus/ijin, gunakan default_days jika ada
-            $this->remaining_quota = $this->selected_leave_type->default_days ?: 999;
+            // Logic for Special Leave: default_quota - usage this year
+            $usage = auth()->user()->getLeaveUsageCount($this->selected_leave_type->code);
+            $this->remaining_quota = max(0, ($this->selected_leave_type->default_days ?? 0) - $usage);
         }
 
         $this->calculateDays();
@@ -98,13 +108,24 @@ class Create extends Component
 
             $calculated = $service->calculateTotalDays($this->start_date, $this->end_date, $exclude);
 
-            // Validasi Kuota
-            if ($calculated > $this->remaining_quota) {
-                // Otomatis geser end_date ke batas kuota maksimal
-                $this->end_date = $service->calculateEndDate($this->start_date, $this->remaining_quota, $exclude);
-                $this->total_days = $this->remaining_quota;
+            // Tentukan batas maksimal: 6 hari untuk cuti tahunan, atau sisa kuota
+            $maxAllowed = $this->remaining_quota;
+            if ($this->selected_leave_type->is_anual_deduction) {
+                $maxAllowed = min($this->remaining_quota, 6);
+            }
 
-                $this->dispatch('swal', icon: 'warning', title: 'Kuota Terbatas', text: 'Durasi cuti melebihi kuota tersedia. Tanggal berakhir telah disesuaikan secara otomatis.');
+            // Validasi Batas (Kuota atau Aturan 6 Hari)
+            if ($calculated > $maxAllowed) {
+                // Otomatis geser end_date ke batas maksimal
+                $this->end_date = $service->calculateEndDate($this->start_date, $maxAllowed, $exclude);
+                $this->total_days = $maxAllowed;
+
+                $title = $maxAllowed < $this->remaining_quota ? 'Batas Maksimal' : 'Kuota Terbatas';
+                $text = $maxAllowed < $this->remaining_quota 
+                    ? 'Pengajuan cuti tahunan maksimal adalah 6 hari kerja. Tanggal berakhir telah disesuaikan.'
+                    : 'Durasi cuti melebihi kuota tersedia. Tanggal berakhir telah disesuaikan secara otomatis.';
+
+                $this->dispatch('swal', icon: 'warning', title: $title, text: $text);
             } else {
                 $this->total_days = $calculated;
             }
@@ -133,6 +154,17 @@ class Create extends Component
 
     public function save(LeaveRequestService $service)
     {
+        // Re-check active request for safety
+        $hasActive = auth()->user()->leaveRequests()
+            ->whereIn('status', ['pending_backup', 'pending_spv', 'pending_hrd', 'pending_management'])
+            ->exists();
+
+        if ($hasActive) {
+            $this->dispatch('swal', icon: 'error', title: 'Akses Ditolak', text: 'Anda masih memiliki pengajuan cuti yang sedang dalam proses.');
+
+            return;
+        }
+
         // Validasi Dinamis: Jika tipe cuti mewajibkan lampiran
         if ($this->selected_leave_type?->requires_attachment && empty($this->attachments)) {
             $this->addError('attachments', 'Tipe cuti ini mewajibkan lampiran (Surat Dokter/Dokumen Pendukung).');

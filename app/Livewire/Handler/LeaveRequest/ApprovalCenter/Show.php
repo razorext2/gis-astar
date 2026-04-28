@@ -50,7 +50,7 @@ class Show extends Component
 
     public function render()
     {
-        $request = LeaveRequest::with(['user.pegawai', 'user.pegawai.jabatanRelasi.divisionRelasi', 'leaveType', 'backupPerson', 'histories.actedBy'])
+        $request = LeaveRequest::with(['user.pegawai.jabatanRelasi.divisionRelasi', 'leaveType', 'backupPerson', 'histories.actedByUser'])
             ->findOrFail($this->requestId);
 
         // Helper untuk label role approval di view

@@ -15,6 +15,7 @@ class LeaveRequestHistory extends Model
         'leave_request_id',
         'acted_by',
         'action',
+        'status_from',
         'status_to',
         'note',
     ];
@@ -24,8 +25,20 @@ class LeaveRequestHistory extends Model
         return $this->belongsTo(LeaveRequest::class, 'leave_request_id');
     }
 
-    public function actedBy()
+    public function actedByUser()
     {
         return $this->belongsTo(User::class, 'acted_by');
+    }
+
+    public function getDescriptionAttribute()
+    {
+        return match ($this->action) {
+            'submit' => 'Pengajuan diajukan',
+            'approve' => 'Disetujui',
+            'final_approve' => 'Cuti Disetujui Sepenuhnya',
+            'reject' => 'Pengajuan Ditolak',
+            'cancel' => 'Pengajuan Dibatalkan',
+            default => 'Status diperbarui'
+        };
     }
 }

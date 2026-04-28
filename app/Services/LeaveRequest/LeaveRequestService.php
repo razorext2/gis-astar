@@ -1,4 +1,5 @@
 <?php
+
 /** Goal: Centralize business logic and validation for Leave Requests, Caller: Livewire Components, Deps: User, LeaveRequest, LeaveType */
 
 namespace App\Services\LeaveRequest;
@@ -18,13 +19,13 @@ class LeaveRequestService
     {
         return DB::transaction(function () use ($data, $user) {
             $totalDays = $this->calculateTotalDays($data['start_date'], $data['end_date']);
-            
+
             // 1. Validasi saldo jika tipe cuti memotong saldo tahunan
             $this->validateRequest($user, $data['leave_type_id'], $totalDays);
 
             // 2. Tentukan status awal
-            $status = isset($data['backup_person_id']) && $data['backup_person_id'] 
-                ? 'pending_backup' 
+            $status = isset($data['backup_person_id']) && $data['backup_person_id']
+                ? 'pending_backup'
                 : 'pending_spv';
 
             return LeaveRequest::create([
@@ -53,18 +54,17 @@ class LeaveRequestService
             } elseif ($action === 'reject') {
                 $request->status = 'rejected';
             } elseif ($action === 'cancel') {
-                $request->status = 'cancelled';
+                $request->status = 'canceled';
             }
+
+            // Attach metadata for the observer
+            $request->acted_by = $actor->id;
+
+            // definisikan current_note
+            $request->current_note = $note;
 
             $request->save();
 
-            // History logging is handled by LeaveRequestObserver
-            // We can attach the note to the request temporarily so the observer picks it up
-            // or pass it via a property if needed. For now, we'll assume observer handles standard log.
-            // If we want custom notes in history, we might need a manual log here or specialized property.
-            $request->current_note = $note;
-            $request->acted_by = $actor->id;
-            
             return $request;
         });
     }
@@ -85,7 +85,8 @@ class LeaveRequestService
 
     /**
      * Helper to calculate total days.
-     * @param bool $excludeHolidays If true, excludes Sundays and National Holidays (Business Days).
+     *
+     * @param  bool  $excludeHolidays  If true, excludes Sundays and National Holidays (Business Days).
      */
     public function calculateTotalDays($startDate, $endDate, bool $excludeHolidays = true): int
     {
@@ -98,7 +99,7 @@ class LeaveRequestService
 
         $holidays = \App\Models\System\Holiday::whereBetween('date', [$start->toDateString(), $end->toDateString()])
             ->pluck('date')
-            ->map(fn($date) => $date->format('Y-m-d'))
+            ->map(fn ($date) => $date->format('Y-m-d'))
             ->toArray();
 
         $totalDays = 0;
@@ -114,6 +115,7 @@ class LeaveRequestService
 
         return $totalDays;
     }
+
     /**
      * Get list of national holidays within a date range.
      */
@@ -121,7 +123,7 @@ class LeaveRequestService
     {
         return \App\Models\System\Holiday::whereBetween('date', [
             \Carbon\Carbon::parse($startDate)->toDateString(),
-            \Carbon\Carbon::parse($endDate)->toDateString()
+            \Carbon\Carbon::parse($endDate)->toDateString(),
         ])->orderBy('date')->get();
     }
 
@@ -187,14 +189,16 @@ class LeaveRequestService
      */
     public function calculateEndDate($startDate, int $totalDays, bool $excludeHolidays = true): string
     {
-        if ($totalDays <= 0) return $startDate;
+        if ($totalDays <= 0) {
+            return $startDate;
+        }
 
         $current = \Carbon\Carbon::parse($startDate);
         $daysCount = 0;
-        
+
         $holidays = \App\Models\System\Holiday::whereYear('date', $current->year)
             ->pluck('date')
-            ->map(fn($date) => $date->format('Y-m-d'))
+            ->map(fn ($date) => $date->format('Y-m-d'))
             ->toArray();
 
         while (true) {

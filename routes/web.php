@@ -407,9 +407,6 @@ Route::get('/offline', function () {
 
 // stream gambar
 Route::get('/file/{path}', function ($path) {
-
     abort_unless(Storage::exists($path), 404);
-
     return Storage::response($path);
-
-})->where('path', '.*');
+})->where('path', '.*')->name('file.show');

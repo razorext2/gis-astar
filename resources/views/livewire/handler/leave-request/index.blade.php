@@ -82,6 +82,10 @@
                                     'label' => 'Dibatalkan',
                                     'class' => 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
                                 ],
+                                'canceled' => [
+                                    'label' => 'Dibatalkan',
+                                    'class' => 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
+                                ],
                             ][$request->status] ?? [
                                 'label' => $request->status,
                                 'class' => 'bg-gray-100 text-gray-700',

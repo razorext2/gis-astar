@@ -14,6 +14,32 @@
     </div>
 
     <form wire:submit.prevent="save" class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        @if ($activeRequest)
+            <div class="col-span-1 lg:col-span-3">
+                <div
+                    class="flex flex-col gap-4 rounded-xl border border-amber-200 bg-amber-50 p-6 shadow-sm dark:border-amber-900/30 dark:bg-amber-900/10">
+                    <div class="flex items-start gap-4">
+                        <div class="rounded-full bg-amber-100 p-2 dark:bg-amber-900/30">
+                            <x-icons.info-circle class="h-6 w-6 text-amber-600 dark:text-amber-400" />
+                        </div>
+                        <div class="flex flex-col">
+                            <h3 class="text-sm font-bold text-amber-900 dark:text-amber-300">Pengajuan Masih Berjalan
+                            </h3>
+                            <p class="mt-1 text-sm text-amber-700 dark:text-amber-400">
+                                Anda memiliki satu pengajuan cuti yang sedang dalam proses persetujuan (#{{ $activeRequest->id }}).
+                                Sesuai kebijakan perusahaan, Anda tidak diperkenankan membuat pengajuan baru hingga pengajuan tersebut disetujui, ditolak, atau dibatalkan.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex justify-end">
+                        <x-button.link wire:navigate href="{{ route('leave-request.my-requests.show', $activeRequest->id) }}"
+                            class="text-sm font-bold text-amber-700 hover:text-amber-900 dark:text-amber-400 dark:hover:text-amber-200">
+                            Lihat Detail Pengajuan &rarr;
+                        </x-button.link>
+                    </div>
+                </div>
+            </div>
+        @endif
         {{-- Left Column: Main Form --}}
         <div class="flex flex-col gap-6 lg:col-span-2">
             <div
@@ -249,7 +275,8 @@
 
             {{-- Submit Button --}}
             <x-button.primary type="submit"
-                class="w-full !py-4 text-lg font-bold shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
+                class="w-full !py-4 text-lg font-bold shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+                :disabled="(bool) $activeRequest">
                 <x-slot name="icon">
                     <x-icons.loading-circle wire:loading wire:target="save" class="h-6 w-6" />
                 </x-slot>

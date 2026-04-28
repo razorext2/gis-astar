@@ -33,17 +33,17 @@
                         {{-- Avatar / Initials --}}
                         <div
                             class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-100 text-lg font-black text-red-600 dark:bg-red-900/40 dark:text-red-400">
-                            {{ collect(explode(' ', $request->user->name))->map(fn($n) => Str::substr($n, 0, 1))->take(2)->implode('') }}
+                            {{ collect(explode(' ', $request->user->name ?? 'User'))->map(fn($n) => Str::substr($n, 0, 1))->take(2)->implode('') }}
                         </div>
                         <div class="flex flex-col">
                             <h3 class="text-lg font-bold leading-tight text-zinc-900 dark:text-white">
-                                {{ $request->user->name }}
+                                {{ $request->user->name ?? 'User Unknown' }}
                             </h3>
                             <div class="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
-                                <span class="font-mono text-xs">{{ $request->user->pegawai->kode_pegawai }}</span>
+                                <span class="font-mono text-xs">{{ $request->user->pegawai->kode_pegawai ?? '-' }}</span>
                                 <span>•</span>
                                 <span
-                                    class="font-medium text-red-600 dark:text-red-500">{{ $request->leave_type->name }}</span>
+                                    class="font-medium text-red-600 dark:text-red-500">{{ $request->leaveType->name ?? 'Tipe Cuti' }}</span>
                                 <span>•</span>
                                 <span
                                     class="bg-primary/10 text-primary dark:bg-primary/20 flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">

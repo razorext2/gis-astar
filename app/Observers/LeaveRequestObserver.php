@@ -1,4 +1,5 @@
 <?php
+
 /** Goal: Automate history logging and quota deduction for Leave Requests, Caller: AppServiceProvider, Deps: LeaveRequest, LeaveRequestHistory, LeaveBalance */
 
 namespace App\Observers;
@@ -36,6 +37,7 @@ class LeaveRequestObserver
                 'leave_request_id' => $request->id,
                 'acted_by' => $request->acted_by ?? auth()->id(),
                 'action' => $this->resolveActionName($newStatus),
+                'status_from' => $oldStatus,
                 'status_to' => $newStatus,
                 'note' => $request->current_note ?? 'Status diperbarui.',
             ]);
