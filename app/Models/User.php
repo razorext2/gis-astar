@@ -126,6 +126,14 @@ class User extends Authenticatable implements CanBeSigned
         return $this->hasMany(LeaveRequestHistory::class, 'acted_by');
     }
 
+    public function currentLeave(): HasOne
+    {
+        return $this->hasOne(LeaveRequest::class)
+            ->where('status', 'approved')
+            ->whereDate('start_date', '<=', now())
+            ->whereDate('end_date', '>=', now());
+    }
+
     // --- Leave Helpers ---
 
     /**
@@ -138,12 +146,13 @@ class User extends Authenticatable implements CanBeSigned
 
     /**
      * Menghitung total hari yang sudah digunakan untuk tipe cuti tertentu.
-     * @param string $leaveCode (khusus, tahunan, dll)
+     *
+     * @param  string  $leaveCode  (khusus, tahunan, dll)
      */
     public function getLeaveUsageCount(string $leaveCode)
     {
         return $this->leaveRequests()
-            ->whereHas('leaveType', fn($q) => $q->where('code', $leaveCode))
+            ->whereHas('leaveType', fn ($q) => $q->where('code', $leaveCode))
             ->whereIn('status', ['approved', 'pending_backup', 'pending_spv', 'pending_hrd', 'pending_management'])
             ->sum('total_days');
     }
@@ -154,7 +163,7 @@ class User extends Authenticatable implements CanBeSigned
     public function hasTakenSpecialLeave(string $leaveCode): bool
     {
         return $this->leaveRequests()
-            ->whereHas('leaveType', fn($q) => $q->where('code', $leaveCode))
+            ->whereHas('leaveType', fn ($q) => $q->where('code', $leaveCode))
             ->whereIn('status', ['approved', 'pending_backup', 'pending_spv', 'pending_hrd', 'pending_management'])
             ->exists();
     }

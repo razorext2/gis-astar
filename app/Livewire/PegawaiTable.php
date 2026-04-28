@@ -58,7 +58,7 @@ final class PegawaiTable extends PowerGridComponent
             ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
             ->select('tb_pegawai.*', 'users.is_active', 'users.deactivation_reason')
             ->groupBy('tb_pegawai.id', 'users.is_active', 'users.deactivation_reason')
-            ->with(['userRelasi', 'userRelasi.roles', 'jabatanRelasi', 'golonganRelasi'])
+            ->with(['userRelasi', 'userRelasi.roles', 'userRelasi.currentLeave', 'jabatanRelasi', 'golonganRelasi'])
             ->orderBy('users.is_active', 'desc')
             ->orderBy('full_name', 'asc');
     }
@@ -111,8 +111,17 @@ final class PegawaiTable extends PowerGridComponent
                     return '<span class="inline-flex items-center rounded-lg bg-gray-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gray-800 dark:bg-zinc-800 dark:text-zinc-500">No Account</span>';
                 }
 
+                $leaveBadge = $query->userRelasi->currentLeave
+                    ? '<p class="mt-1"><span class="inline-flex items-center rounded-lg bg-amber-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-800 dark:bg-amber-900/30 dark:text-amber-400">Sedang Cuti</span></p>'
+                    : '';
+
                 if ($query->userRelasi->is_active) {
-                    return '<span class="inline-flex items-center rounded-lg bg-green-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-green-800 dark:bg-green-900/30 dark:text-green-400">Aktif</span>';
+                    return '
+                        <div class="flex flex-col items-start">
+                            <span class="inline-flex items-center rounded-lg bg-green-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-green-800 dark:bg-green-900/30 dark:text-green-400">Aktif</span>
+                            '.$leaveBadge.'
+                        </div>
+                    ';
                 }
 
                 $reason = $query->deactivation_reason ? '<p class="mt-1 text-[10px] text-gray-500 italic dark:text-gray-400">'.ucwords($query->deactivation_reason).'</p>' : '';
@@ -121,6 +130,7 @@ final class PegawaiTable extends PowerGridComponent
                     <div class="flex flex-col items-start">
                         <span class="inline-flex items-center rounded-lg bg-red-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-red-800 dark:bg-red-900/30 dark:text-red-400">Non-aktif</span>
                         '.$reason.'
+                        '.$leaveBadge.'
                     </div>
                 ';
             });
