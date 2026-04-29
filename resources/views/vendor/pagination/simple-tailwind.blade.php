@@ -1,29 +1,41 @@
 @if ($paginator->hasPages())
-    <nav role="navigation" aria-label="Pagination Navigation" class="flex justify-between">
-        {{-- Previous Page Link --}}
-        @if ($paginator->onFirstPage())
-            <span
-                class="relative inline-flex cursor-default items-center rounded-md border border-zinc-200 bg-white px-4 py-2 text-sm font-medium leading-5 text-gray-500 dark:border-zinc-800 dark:bg-gray-800 dark:text-gray-600">
-                {!! __('pagination.previous') !!}
-            </span>
-        @else
-            <a href="{{ $paginator->previousPageUrl() }}" rel="prev"
-                class="relative inline-flex items-center rounded-md border border-zinc-200 bg-white px-4 py-2 text-sm font-medium leading-5 text-gray-700 ring-zinc-200 transition duration-150 ease-in-out hover:text-gray-500 focus:border-blue-300 focus:outline-none focus:ring active:bg-gray-100 active:text-gray-700 dark:border-zinc-800 dark:bg-gray-800 dark:text-gray-300 dark:focus:border-blue-700 dark:active:bg-gray-700 dark:active:text-gray-300">
-                {!! __('pagination.previous') !!}
-            </a>
-        @endif
+    <nav class="flex items-center justify-between gap-4" role="navigation">
+        {{-- Info teks --}}
+        <p class="text-xs text-zinc-500 dark:text-zinc-400">
+            Menampilkan
+            <span class="font-bold text-zinc-700 dark:text-zinc-300">{{ $paginator->firstItem() }}</span>
+            -
+            <span class="font-bold text-zinc-700 dark:text-zinc-300">{{ $paginator->lastItem() }}</span>
+        </p>
 
-        {{-- Next Page Link --}}
-        @if ($paginator->hasMorePages())
-            <a href="{{ $paginator->nextPageUrl() }}" rel="next"
-                class="relative inline-flex items-center rounded-md border border-zinc-200 bg-white px-4 py-2 text-sm font-medium leading-5 text-gray-700 ring-zinc-200 transition duration-150 ease-in-out hover:text-gray-500 focus:border-blue-300 focus:outline-none focus:ring active:bg-gray-100 active:text-gray-700 dark:border-zinc-800 dark:bg-gray-800 dark:text-gray-300 dark:focus:border-blue-700 dark:active:bg-gray-700 dark:active:text-gray-300">
-                {!! __('pagination.next') !!}
-            </a>
-        @else
-            <span
-                class="relative inline-flex cursor-default items-center rounded-md border border-zinc-200 bg-white px-4 py-2 text-sm font-medium leading-5 text-gray-500 dark:border-zinc-800 dark:bg-gray-800 dark:text-gray-600">
-                {!! __('pagination.next') !!}
-            </span>
-        @endif
+        <div class="flex items-center gap-2">
+            {{-- Prev --}}
+            @if ($paginator->onFirstPage())
+                <span class="flex h-9 items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-4 text-xs font-bold text-zinc-300 dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-700">
+                    <x-icons.chevron-left class="h-4 w-4" />
+                    Sebelumnya
+                </span>
+            @else
+                <button wire:click="previousPage" wire:loading.attr="disabled"
+                    class="flex h-9 items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white px-4 text-xs font-bold text-zinc-600 transition-all hover:border-red-500 hover:text-red-600 dark:border-zinc-800 dark:bg-dark-primary dark:text-zinc-400 dark:hover:border-red-500">
+                    <x-icons.chevron-left class="h-4 w-4" />
+                    Sebelumnya
+                </button>
+            @endif
+
+            {{-- Next --}}
+            @if ($paginator->hasMorePages())
+                <button wire:click="nextPage" wire:loading.attr="disabled"
+                    class="flex h-9 items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white px-4 text-xs font-bold text-zinc-600 transition-all hover:border-red-500 hover:text-red-600 dark:border-zinc-800 dark:bg-dark-primary dark:text-zinc-400 dark:hover:border-red-500">
+                    Selanjutnya
+                    <x-icons.chevron-right class="h-4 w-4" />
+                </button>
+            @else
+                <span class="flex h-9 items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-4 text-xs font-bold text-zinc-300 dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-700">
+                    Selanjutnya
+                    <x-icons.chevron-right class="h-4 w-4" />
+                </span>
+            @endif
+        </div>
     </nav>
 @endif

@@ -1,46 +1,72 @@
 @if ($paginator->hasPages())
-    <nav>
-        <ul class="pagination">
-            {{-- Previous Page Link --}}
+    <nav class="flex flex-col items-center justify-between gap-4 sm:flex-row" role="navigation">
+        <p class="text-xs text-zinc-500 dark:text-zinc-400">
+            @if ($paginator->firstItem())
+                <span class="font-bold text-zinc-700 dark:text-zinc-300">{{ $paginator->firstItem() }}</span>
+                -
+                <span class="font-bold text-zinc-700 dark:text-zinc-300">{{ $paginator->lastItem() }}</span>
+                dari
+                <span class="font-bold text-zinc-700 dark:text-zinc-300">{{ $paginator->total() }}</span>
+            @endif
+        </p>
+
+        <div class="flex flex-nowrap items-center gap-1.5">
+            {{-- Prev --}}
             @if ($paginator->onFirstPage())
-                <li class="disabled" aria-disabled="true" aria-label="@lang('pagination.previous')">
-                    <span aria-hidden="true">&lsaquo;</span>
-                </li>
+                <span class="flex h-8 w-8 cursor-not-allowed items-center justify-center rounded-xl border border-zinc-200 bg-zinc-50 text-zinc-300 dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-700">
+                    <x-icons.chevron-left class="h-4 w-4" />
+                </span>
             @else
-                <li>
-                    <a href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="@lang('pagination.previous')">&lsaquo;</a>
-                </li>
+                <button wire:click="previousPage" wire:loading.attr="disabled"
+                    class="flex h-8 w-8 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-500 transition-all hover:border-red-500 hover:text-red-600 dark:border-zinc-800 dark:bg-dark-primary dark:text-zinc-400 dark:hover:border-red-500">
+                    <x-icons.chevron-left class="h-4 w-4" />
+                </button>
             @endif
 
-            {{-- Pagination Elements --}}
-            @foreach ($elements as $element)
-                {{-- "Three Dots" Separator --}}
-                @if (is_string($element))
-                    <li class="disabled" aria-disabled="true"><span>{{ $element }}</span></li>
+            @php
+                $currentPage = $paginator->currentPage();
+                $lastPage = $paginator->lastPage();
+                $sidePages = 1;
+                $pagesToShow = [];
+                $pagesToShow[] = 1;
+                if ($lastPage >= 2) $pagesToShow[] = 2;
+                for ($i = max(1, $currentPage - $sidePages); $i <= min($lastPage, $currentPage + $sidePages); $i++) {
+                    $pagesToShow[] = $i;
+                }
+                if ($lastPage >= 1) $pagesToShow[] = $lastPage;
+                if ($lastPage >= 2) $pagesToShow[] = $lastPage - 1;
+                $pagesToShow = array_unique($pagesToShow);
+                sort($pagesToShow);
+            @endphp
+
+            @foreach ($pagesToShow as $index => $page)
+                @if ($index > 0 && $page - $pagesToShow[$index - 1] > 1)
+                    <span class="flex h-8 w-5 items-center justify-center text-[10px] font-bold text-zinc-400">...</span>
                 @endif
 
-                {{-- Array Of Links --}}
-                @if (is_array($element))
-                    @foreach ($element as $page => $url)
-                        @if ($page == $paginator->currentPage())
-                            <li class="active" aria-current="page"><span>{{ $page }}</span></li>
-                        @else
-                            <li><a href="{{ $url }}">{{ $page }}</a></li>
-                        @endif
-                    @endforeach
+                @if ($page == $currentPage)
+                    <span class="flex h-8 min-w-[2rem] items-center justify-center rounded-xl bg-red-600 px-2 text-xs font-black text-white shadow-lg shadow-red-500/20">
+                        {{ $page }}
+                    </span>
+                @else
+                    <button wire:click="gotoPage({{ $page }})"
+                        class="flex h-8 min-w-[2rem] items-center justify-center rounded-xl border border-zinc-200 bg-white px-2 text-xs font-bold text-zinc-600 transition-all hover:border-red-500/50 hover:text-red-600 dark:border-zinc-800 dark:bg-dark-primary dark:text-zinc-400 dark:hover:text-red-400">
+                        {{ $page }}
+                    </button>
                 @endif
             @endforeach
 
-            {{-- Next Page Link --}}
+            {{-- Next --}}
             @if ($paginator->hasMorePages())
-                <li>
-                    <a href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
-                </li>
+                <button wire:click="nextPage" wire:loading.attr="disabled"
+                    class="flex h-8 w-8 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-500 transition-all hover:border-red-500 hover:text-red-600 dark:border-zinc-800 dark:bg-dark-primary dark:text-zinc-400 dark:hover:border-red-500">
+                    <x-icons.chevron-right class="h-4 w-4" />
+                </button>
             @else
-                <li class="disabled" aria-disabled="true" aria-label="@lang('pagination.next')">
-                    <span aria-hidden="true">&rsaquo;</span>
-                </li>
+                <span class="flex h-8 w-8 cursor-not-allowed items-center justify-center rounded-xl border border-zinc-200 bg-zinc-50 text-zinc-300 dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-700">
+                    <x-icons.chevron-right class="h-4 w-4" />
+                </span>
             @endif
-        </ul>
+        </div>
     </nav>
 @endif

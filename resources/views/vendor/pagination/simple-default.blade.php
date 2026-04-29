@@ -1,19 +1,40 @@
 @if ($paginator->hasPages())
-    <nav>
-        <ul class="pagination">
-            {{-- Previous Page Link --}}
+    <nav class="flex items-center justify-between gap-4" role="navigation">
+        <p class="text-xs text-zinc-500 dark:text-zinc-400">
+            Menampilkan
+            <span class="font-bold text-zinc-700 dark:text-zinc-300">{{ $paginator->firstItem() }}</span>
+            -
+            <span class="font-bold text-zinc-700 dark:text-zinc-300">{{ $paginator->lastItem() }}</span>
+        </p>
+
+        <div class="flex items-center gap-2">
+            {{-- Prev --}}
             @if ($paginator->onFirstPage())
-                <li class="disabled" aria-disabled="true"><span>@lang('pagination.previous')</span></li>
+                <span class="flex h-9 items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-4 text-xs font-bold text-zinc-300 dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-700">
+                    <x-icons.chevron-left class="h-4 w-4" />
+                    Sebelumnya
+                </span>
             @else
-                <li><a href="{{ $paginator->previousPageUrl() }}" rel="prev">@lang('pagination.previous')</a></li>
+                <button wire:click="previousPage" wire:loading.attr="disabled"
+                    class="flex h-9 items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white px-4 text-xs font-bold text-zinc-600 transition-all hover:border-red-500 hover:text-red-600 dark:border-zinc-800 dark:bg-dark-primary dark:text-zinc-400 dark:hover:border-red-500">
+                    <x-icons.chevron-left class="h-4 w-4" />
+                    Sebelumnya
+                </button>
             @endif
 
-            {{-- Next Page Link --}}
+            {{-- Next --}}
             @if ($paginator->hasMorePages())
-                <li><a href="{{ $paginator->nextPageUrl() }}" rel="next">@lang('pagination.next')</a></li>
+                <button wire:click="nextPage" wire:loading.attr="disabled"
+                    class="flex h-9 items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white px-4 text-xs font-bold text-zinc-600 transition-all hover:border-red-500 hover:text-red-600 dark:border-zinc-800 dark:bg-dark-primary dark:text-zinc-400 dark:hover:border-red-500">
+                    Selanjutnya
+                    <x-icons.chevron-right class="h-4 w-4" />
+                </button>
             @else
-                <li class="disabled" aria-disabled="true"><span>@lang('pagination.next')</span></li>
+                <span class="flex h-9 items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-4 text-xs font-bold text-zinc-300 dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-700">
+                    Selanjutnya
+                    <x-icons.chevron-right class="h-4 w-4" />
+                </span>
             @endif
-        </ul>
+        </div>
     </nav>
 @endif
