@@ -1,12 +1,12 @@
 {{-- Goal: Modal for Creating/Editing Leave Types, Livewire: Handler.LeaveRequest.ManageBalances.Index, Alpine: true --}}
 
-<div x-data="{ open: @entangle('isModalOpen') }" x-show="open" 
+<div x-data="{ open: @entangle('isModalOpen') }" x-show="open"
     class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-zinc-900/60 backdrop-blur-sm"
     x-cloak>
-    
-    <div @click.away="open = false" 
+
+    <div @click.away="open = false"
         class="w-full max-w-xl overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-2xl dark:border-zinc-800 dark:bg-dark-primary">
-        
+
         <div class="flex items-center justify-between border-b border-zinc-100 p-6 dark:border-zinc-800">
             <h3 class="text-xl font-bold text-zinc-900 dark:text-white">
                 {{ $editMode ? 'Edit Tipe Cuti' : 'Tambah Tipe Cuti Baru' }}
@@ -42,7 +42,7 @@
                     <input type="checkbox" wire:model="typeAnualDeduction" class="rounded border-zinc-300 text-red-600 focus:ring-red-500">
                     <span class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Potong Saldo Cuti Tahunan</span>
                 </label>
-                
+
                 <label class="flex items-center gap-3 cursor-pointer">
                     <input type="checkbox" wire:model="typeRequiresAttachment" class="rounded border-zinc-300 text-red-600 focus:ring-red-500">
                     <span class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Wajib Lampiran (Dokumen Pendukung)</span>
