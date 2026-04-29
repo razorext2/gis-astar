@@ -62,9 +62,9 @@ class AppServiceProvider extends ServiceProvider
         LeaveRequest::observe(LeaveRequestObserver::class);
 
         // force https
-        // URL::forceScheme('https');
+        URL::forceScheme('https');
 
         // force root url
-        // $this->app['url']->forceRootUrl($this->app['config']->get('app.url'));
+        $this->app['url']->forceRootUrl($this->app['config']->get('app.url'));
     }
 }
