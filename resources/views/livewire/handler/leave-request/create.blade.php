@@ -1,5 +1,6 @@
 <div
-    class="mt-4 flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary md:p-6">
+    class="mt-4 flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
+
     {{-- Breadcrumbs/Header --}}
     <div class="flex items-center gap-3">
         <x-button.link wire:navigate href="{{ route('leave-request.my-requests.index') }}"
@@ -26,13 +27,16 @@
                             <h3 class="text-sm font-bold text-amber-900 dark:text-amber-300">Pengajuan Masih Berjalan
                             </h3>
                             <p class="mt-1 text-sm text-amber-700 dark:text-amber-400">
-                                Anda memiliki satu pengajuan cuti yang sedang dalam proses persetujuan (#{{ $activeRequest->id }}).
-                                Sesuai kebijakan perusahaan, Anda tidak diperkenankan membuat pengajuan baru hingga pengajuan tersebut disetujui, ditolak, atau dibatalkan.
+                                Anda memiliki satu pengajuan cuti yang sedang dalam proses persetujuan
+                                (#{{ $activeRequest->id }}).
+                                Sesuai kebijakan perusahaan, Anda tidak diperkenankan membuat pengajuan baru hingga
+                                pengajuan tersebut disetujui, ditolak, atau dibatalkan.
                             </p>
                         </div>
                     </div>
                     <div class="flex justify-end">
-                        <x-button.link wire:navigate href="{{ route('leave-request.my-requests.show', $activeRequest->id) }}"
+                        <x-button.link wire:navigate
+                            href="{{ route('leave-request.my-requests.show', $activeRequest->id) }}"
                             class="text-sm font-bold text-amber-700 hover:text-amber-900 dark:text-amber-400 dark:hover:text-amber-200">
                             Lihat Detail Pengajuan &rarr;
                         </x-button.link>
@@ -42,141 +46,140 @@
         @endif
         {{-- Left Column: Main Form --}}
         <div class="flex flex-col gap-6 lg:col-span-2">
-            <div
-                class="flex flex-col gap-5 rounded-xl border border-zinc-200 bg-white/60 p-6 shadow-md backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60">
+            {{-- <div class="flex flex-col gap-5 rounded-xl border border-zinc-200 p-6 dark:border-zinc-800"> --}}
 
-                <div class="mb-2 flex items-center gap-2">
-                    <div class="h-8 w-1 rounded-full bg-primary"></div>
-                    <h2 class="text-lg font-bold text-gray-800 dark:text-gray-100">Informasi Cuti</h2>
-                </div>
+            <div class="mb-2 flex items-center gap-2">
+                <div class="h-8 w-1 rounded-full bg-primary"></div>
+                <h2 class="text-lg font-bold text-gray-800 dark:text-gray-100">Informasi Cuti</h2>
+            </div>
 
-                <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
-                    <div class="flex flex-col">
-                        <x-input.select id="leave_type_id" name="leave_type_id" wire:model.live="leave_type_id"
-                            :options="$leaveTypes->pluck('name', 'id')->toArray()" :defaultOption="'Pilih Tipe Cuti'" :labels="true" :textLabel="'Tipe Cuti'" required />
-                    </div>
-                    <div class="flex flex-col">
-                        <label class="mb-1 block text-sm font-bold text-gray-700 dark:text-gray-300">Personel
-                            Backup</label>
-                        <div class="relative" x-data="{ open: false, selectedName: '' }" @click.away="open = false">
-                            {{-- Search Input / Trigger --}}
-                            <div class="relative">
-                                <input type="text" wire:model.live.debounce.300ms="search_backup"
-                                    @focus="open = true" placeholder="Cari Nama atau Kode Pegawai..."
-                                    class="w-full rounded-xl border border-zinc-200 bg-white/50 py-3 pl-4 pr-10 text-sm transition-all focus:ring-red-500/50 dark:border-zinc-800 dark:bg-gray-800/50 dark:text-gray-200">
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                    <x-icons.search class="h-4 w-4 text-gray-400" />
-                                </div>
-                            </div>
-
-                            {{-- Dropdown Results --}}
-                            <div x-show="open && $wire.search_backup.length > 0"
-                                x-transition:enter="transition ease-out duration-100"
-                                x-transition:enter-start="opacity-0 scale-95"
-                                x-transition:enter-end="opacity-100 scale-100"
-                                class="absolute z-50 mt-2 max-h-60 w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white shadow-xl backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary">
-
-                                @forelse ($employees as $emp)
-                                    <button type="button"
-                                        wire:click="$set('backup_person_id', {{ $emp->id }}); search_backup = '{{ $emp->name }}'; open = false"
-                                        class="{{ $backup_person_id == $emp->id ? 'bg-red-50 dark:bg-red-900/20' : '' }} flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-zinc-50 dark:hover:bg-white/5">
-                                        <div class="flex flex-col">
-                                            <span
-                                                class="text-sm font-bold text-zinc-900 dark:text-white">{{ $emp->name }}</span>
-                                            <span
-                                                class="text-[10px] uppercase tracking-wider text-zinc-500">{{ $emp->kode_pegawai }}</span>
-                                        </div>
-                                        @if ($backup_person_id == $emp->id)
-                                            <x-icons.check class="h-4 w-4 text-red-600" />
-                                        @endif
-                                    </button>
-                                @empty
-                                    <div class="px-4 py-6 text-center text-sm text-zinc-500">
-                                        Tidak ada karyawan ditemukan.
-                                    </div>
-                                @endforelse
-                            </div>
-                        </div>
-                        @error('backup_person_id')
-                            <span class="mt-1 text-xs text-red-600">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
-                    <div class="flex flex-col">
-                        <x-input.basic type="date" id="start_date" name="start_date" wire:model.live="start_date"
-                            :labels="true" required>
-                            Tanggal Mulai
-                        </x-input.basic>
-                    </div>
-                    <div class="flex flex-col">
-                        <x-input.basic type="date" id="end_date" name="end_date" wire:model.live="end_date"
-                            :labels="true" required>
-                            Tanggal Berakhir
-                        </x-input.basic>
-                    </div>
-                </div>
-
-                @if ($return_date)
-                    <div class="flex flex-col gap-3">
-                        <div
-                            class="flex items-center gap-3 rounded-xl border border-blue-200 bg-blue-50/50 p-4 dark:border-blue-900/30 dark:bg-blue-900/10">
-                            <x-icons.info-circle class="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                            <div class="flex flex-col">
-                                <span
-                                    class="text-xs font-bold uppercase tracking-wider text-blue-700 dark:text-blue-300">Estimasi
-                                    Kembali Bekerja</span>
-                                <span class="text-sm font-bold text-zinc-900 dark:text-white">
-                                    {{ \Carbon\Carbon::parse($return_date)->locale('id')->isoFormat('dddd, DD MMMM YYYY') }}
-                                </span>
-                            </div>
-                        </div>
-
-                        @if (count($intersected_holidays) > 0 || count($intersected_sundays) > 0)
-                            <div
-                                class="flex flex-col gap-2 rounded-xl border border-red-200 bg-red-50/30 p-4 dark:border-red-900/20 dark:bg-red-900/5">
-                                <div
-                                    class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-red-600 dark:text-red-400">
-                                    <x-icons.calendar class="h-4 w-4" />
-                                    Hari Libur & Akhir Pekan
-                                </div>
-                                <div class="flex flex-wrap gap-2 text-[11px]">
-                                    {{-- National Holidays --}}
-                                    @foreach ($intersected_holidays as $holiday)
-                                        <div
-                                            class="flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 text-zinc-700 shadow-sm ring-1 ring-red-200 dark:bg-zinc-800 dark:text-zinc-300 dark:ring-red-900/50">
-                                            <span
-                                                class="font-bold text-red-600">{{ \Carbon\Carbon::parse($holiday->date)->format('d/m') }}</span>
-                                            <span>{{ $holiday->name }}</span>
-                                        </div>
-                                    @endforeach
-
-                                    {{-- Sundays --}}
-                                    @foreach ($intersected_sundays as $sunday)
-                                        <div
-                                            class="flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 text-zinc-700 shadow-sm ring-1 ring-red-200 dark:bg-zinc-800 dark:text-zinc-300 dark:ring-red-900/50">
-                                            <span
-                                                class="font-bold text-red-600">{{ \Carbon\Carbon::parse($sunday)->format('d/m') }}</span>
-                                            <span>Hari Minggu</span>
-                                        </div>
-                                    @endforeach
-                                </div>
-                                <p class="mt-1 text-[10px] italic text-zinc-500">Tanggal di atas tidak dihitung dalam
-                                    durasi cuti.</p>
-                            </div>
-                        @endif
-                    </div>
-                @endif
-
+            <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
                 <div class="flex flex-col">
-                    <label class="mb-1 block text-sm font-bold text-gray-700 dark:text-gray-300">Alasan /
-                        Keperluan</label>
-                    <textarea wire:model="reason" rows="4"
-                        class="w-full rounded-xl border border-zinc-200 bg-white/50 p-4 text-gray-700 placeholder-gray-400 transition-all focus:ring-primary/50 dark:border-zinc-800 dark:bg-gray-800/50 dark:text-gray-200"
-                        placeholder="Berikan alasan yang jelas untuk pengajuan cuti Anda..."></textarea>
+                    <x-input.select id="leave_type_id" name="leave_type_id" wire:model.live="leave_type_id"
+                        :options="$leaveTypes->pluck('name', 'id')->toArray()" :defaultOption="'Pilih Tipe Cuti'" :labels="true" :textLabel="'Tipe Cuti'" required />
+                </div>
+                <div class="flex flex-col">
+                    <label class="mb-1 block text-sm font-bold text-gray-700 dark:text-gray-300">Personel
+                        Backup</label>
+                    <div class="relative" x-data="{ open: false, selectedName: '' }" @click.away="open = false">
+                        {{-- Search Input / Trigger --}}
+                        <div class="relative">
+                            <input type="text" wire:model.live.debounce.300ms="search_backup" @focus="open = true"
+                                placeholder="Cari Nama atau Kode Pegawai..."
+                                class="w-full rounded-xl border border-zinc-200 bg-white/50 py-3 pl-4 pr-10 text-sm transition-all focus:ring-red-500/50 dark:border-zinc-800 dark:bg-gray-800/50 dark:text-gray-200">
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                <x-icons.search class="h-4 w-4 text-gray-400" />
+                            </div>
+                        </div>
+
+                        {{-- Dropdown Results --}}
+                        <div x-show="open && $wire.search_backup.length > 0"
+                            x-transition:enter="transition ease-out duration-100"
+                            x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                            class="absolute z-50 mt-2 max-h-60 w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white shadow-xl backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary">
+
+                            @forelse ($employees as $emp)
+                                <button type="button"
+                                    wire:click="$set('backup_person_id', {{ $emp->id }}); search_backup = '{{ $emp->name }}'; open = false"
+                                    class="{{ $backup_person_id == $emp->id ? 'bg-red-50 dark:bg-red-900/20' : '' }} flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-zinc-50 dark:hover:bg-white/5">
+                                    <div class="flex flex-col">
+                                        <span
+                                            class="text-sm font-bold text-zinc-900 dark:text-white">{{ $emp->name }}</span>
+                                        <span
+                                            class="text-[10px] uppercase tracking-wider text-zinc-500">{{ $emp->kode_pegawai }}</span>
+                                    </div>
+                                    @if ($backup_person_id == $emp->id)
+                                        <x-icons.check class="h-4 w-4 text-red-600" />
+                                    @endif
+                                </button>
+                            @empty
+                                <div class="px-4 py-6 text-center text-sm text-zinc-500">
+                                    Tidak ada karyawan ditemukan.
+                                </div>
+                            @endforelse
+                        </div>
+                    </div>
+                    @error('backup_person_id')
+                        <span class="mt-1 text-xs text-red-600">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
+
+            <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+                <div class="flex flex-col">
+                    <x-input.basic type="date" id="start_date" name="start_date" wire:model.live="start_date"
+                        :labels="true" required>
+                        Tanggal Mulai
+                    </x-input.basic>
+                </div>
+                <div class="flex flex-col">
+                    <x-input.basic type="date" id="end_date" name="end_date" wire:model.live="end_date"
+                        :labels="true" required>
+                        Tanggal Berakhir
+                    </x-input.basic>
+                </div>
+            </div>
+
+            @if ($return_date)
+                <div class="flex flex-col gap-3">
+                    <div
+                        class="flex items-center gap-3 rounded-xl border border-blue-200 bg-blue-50/50 p-4 dark:border-blue-900/30 dark:bg-blue-900/10">
+                        <x-icons.info-circle class="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                        <div class="flex flex-col">
+                            <span
+                                class="text-xs font-bold uppercase tracking-wider text-blue-700 dark:text-blue-300">Estimasi
+                                Kembali Bekerja</span>
+                            <span class="text-sm font-bold text-zinc-900 dark:text-white">
+                                {{ \Carbon\Carbon::parse($return_date)->locale('id')->isoFormat('dddd, DD MMMM YYYY') }}
+                            </span>
+                        </div>
+                    </div>
+
+                    @if (count($intersected_holidays) > 0 || count($intersected_sundays) > 0)
+                        <div
+                            class="flex flex-col gap-2 rounded-xl border border-red-200 bg-red-50/30 p-4 dark:border-red-900/20 dark:bg-red-900/5">
+                            <div
+                                class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-red-600 dark:text-red-400">
+                                <x-icons.calendar class="h-4 w-4" />
+                                Hari Libur & Akhir Pekan
+                            </div>
+                            <div class="flex flex-wrap gap-2 text-[11px]">
+                                {{-- National Holidays --}}
+                                @foreach ($intersected_holidays as $holiday)
+                                    <div
+                                        class="flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 text-zinc-700 shadow-sm ring-1 ring-red-200 dark:bg-zinc-800 dark:text-zinc-300 dark:ring-red-900/50">
+                                        <span
+                                            class="font-bold text-red-600">{{ \Carbon\Carbon::parse($holiday->date)->format('d/m') }}</span>
+                                        <span>{{ $holiday->name }}</span>
+                                    </div>
+                                @endforeach
+
+                                {{-- Sundays --}}
+                                @foreach ($intersected_sundays as $sunday)
+                                    <div
+                                        class="flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 text-zinc-700 shadow-sm ring-1 ring-red-200 dark:bg-zinc-800 dark:text-zinc-300 dark:ring-red-900/50">
+                                        <span
+                                            class="font-bold text-red-600">{{ \Carbon\Carbon::parse($sunday)->format('d/m') }}</span>
+                                        <span>Hari Minggu</span>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <p class="mt-1 text-[10px] italic text-zinc-500">Tanggal di atas tidak dihitung dalam
+                                durasi cuti.</p>
+                        </div>
+                    @endif
+                </div>
+            @endif
+
+            <div class="flex flex-col">
+                <label class="mb-1 block text-sm font-bold text-gray-700 dark:text-gray-300">Alasan /
+                    Keperluan</label>
+                <textarea wire:model="reason" rows="4"
+                    class="w-full rounded-xl border border-zinc-200 bg-white/50 p-4 text-gray-700 placeholder-gray-400 transition-all focus:ring-primary/50 dark:border-zinc-800 dark:bg-gray-800/50 dark:text-gray-200"
+                    placeholder="Berikan alasan yang jelas untuk pengajuan cuti Anda..."></textarea>
+            </div>
+
+            {{-- </div> --}}
         </div>
 
         {{-- Right Column: Summary & Attachments --}}

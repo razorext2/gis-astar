@@ -18,9 +18,9 @@
         {{-- Year + Reset --}}
         <div class="flex shrink-0 items-center gap-3">
             <select wire:model.live="year"
-                class="rounded-xl border border-zinc-200 bg-white/50 py-2.5 pl-3 pr-10 text-sm font-bold focus:ring-red-500/50 dark:border-zinc-800 dark:bg-dark-primary/50 dark:text-white">
+                class="rounded-xl border border-zinc-200 bg-white/50 py-2.5 pl-3 pr-10 text-sm font-bold text-zinc-700 focus:ring-red-500/50 dark:border-zinc-800 dark:bg-dark-primary/50 dark:text-white">
                 @for ($i = date('Y') - 2; $i <= date('Y') + 1; $i++)
-                    <option value="{{ $i }}">Tahun {{ $i }}</option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="{{ $i }}">Tahun {{ $i }}</option>
                 @endfor
             </select>
             <x-button.primary wire:click="resetAll"

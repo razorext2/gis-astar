@@ -2,70 +2,74 @@
 
 <div class="flex flex-col gap-6">
 
-    {{-- Action Bar --}}
-    <div class="flex items-center justify-end">
-        <x-button.primary wire:click="openModal" class="shadow-lg shadow-red-500/20">
-            <x-slot name="icon"><x-icons.plus class="h-4 w-4" /></x-slot>
-            Tambah Tipe Cuti
-        </x-button.primary>
-    </div>
+    <div
+        class="flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white/60 p-4 text-center backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
+        {{-- Action Bar --}}
+        <div class="flex items-center justify-between border-b border-zinc-100 pb-4 dark:border-zinc-800">
+            <h3 class="text-lg font-bold text-zinc-900 dark:text-white">Daftar Tipe Cuti</h3>
 
-    {{-- Leave Types Grid --}}
-    @if ($leaveTypes->isEmpty())
-        <div
-            class="flex flex-col items-center justify-center rounded-xl border border-zinc-200 bg-white/60 p-16 text-center backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60">
-            <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-zinc-100 dark:bg-zinc-800">
-                <x-icons.file-excel class="h-8 w-8 text-zinc-400" />
-            </div>
-            <p class="font-bold text-zinc-900 dark:text-white">Belum ada tipe cuti</p>
-            <p class="mt-1 text-sm text-zinc-500">Tambahkan tipe cuti baru untuk memulai.</p>
+            <x-button.primary wire:click="openModal" class="shadow-lg shadow-red-500/20">
+                <x-slot name="icon"><x-icons.plus class="h-4 w-4" /></x-slot>
+                Tambah Tipe Cuti
+            </x-button.primary>
         </div>
-    @else
-        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            @foreach ($leaveTypes as $type)
-                <div
-                    class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-6 backdrop-blur-xl transition-all hover:border-red-500/50 hover:shadow-lg dark:border-zinc-800 dark:bg-dark-primary/60">
-                    <div class="flex items-start justify-between">
-                        <div>
-                            <span
-                                class="text-[10px] font-black uppercase tracking-widest text-zinc-400">{{ $type->code }}</span>
-                            <h3 class="text-lg font-bold text-zinc-900 dark:text-white">{{ $type->name }}</h3>
-                        </div>
-                        <div class="flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-                            <button wire:click="openModal({{ $type->id }})"
-                                class="rounded-lg bg-zinc-100 p-1.5 text-zinc-600 hover:bg-red-500 hover:text-white dark:bg-zinc-800 dark:text-zinc-400">
-                                <x-icons.pen class="h-4 w-4" />
-                            </button>
-                            <button wire:confirm="Apakah Anda yakin ingin menghapus tipe cuti ini?"
-                                wire:click="deleteType({{ $type->id }})"
-                                class="rounded-lg bg-zinc-100 p-1.5 text-zinc-600 hover:bg-red-600 hover:text-white dark:bg-zinc-800 dark:text-zinc-400">
-                                <x-icons.close class="h-4 w-4" />
-                            </button>
-                        </div>
-                    </div>
 
-                    <div class="mt-4 flex flex-wrap gap-2">
-                        <span
-                            class="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-[10px] font-bold text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
-                            {{ $type->default_days ? $type->default_days . ' Hari' : 'Tanpa Batas' }}
-                        </span>
-                        @if ($type->is_anual_deduction)
-                            <span
-                                class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-[10px] font-bold text-red-700 dark:bg-red-900/30 dark:text-red-400">
-                                Potong Saldo
-                            </span>
-                        @endif
-                        @if ($type->requires_attachment)
-                            <span
-                                class="inline-flex items-center rounded-full bg-amber-100 px-2.5 py-0.5 text-[10px] font-bold text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
-                                Wajib Lampiran
-                            </span>
-                        @endif
-                    </div>
+        {{-- Leave Types Grid --}}
+        @if ($leaveTypes->isEmpty())
+            <div class="flex flex-col items-center justify-center p-16">
+                <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-zinc-100 dark:bg-zinc-800">
+                    <x-icons.file-excel class="h-8 w-8 text-zinc-400" />
                 </div>
-            @endforeach
-        </div>
-    @endif
+                <p class="font-bold text-zinc-900 dark:text-white">Belum ada tipe cuti</p>
+                <p class="mt-1 text-sm text-zinc-500">Tambahkan tipe cuti baru untuk memulai.</p>
+            </div>
+        @else
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                @foreach ($leaveTypes as $type)
+                    <div
+                        class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-6 backdrop-blur-xl transition-all hover:border-red-500/50 hover:shadow-lg dark:border-zinc-800 dark:bg-dark-primary/60">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <span
+                                    class="text-[10px] font-black uppercase tracking-widest text-zinc-400">{{ $type->code }}</span>
+                                <h3 class="text-lg font-bold text-zinc-900 dark:text-white">{{ $type->name }}</h3>
+                            </div>
+                            <div class="flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+                                <button wire:click="openModal({{ $type->id }})"
+                                    class="rounded-lg bg-zinc-100 p-1.5 text-zinc-600 hover:bg-red-500 hover:text-white dark:bg-zinc-800 dark:text-zinc-400">
+                                    <x-icons.pen class="h-4 w-4" />
+                                </button>
+                                <button wire:confirm="Apakah Anda yakin ingin menghapus tipe cuti ini?"
+                                    wire:click="deleteType({{ $type->id }})"
+                                    class="rounded-lg bg-zinc-100 p-1.5 text-zinc-600 hover:bg-red-600 hover:text-white dark:bg-zinc-800 dark:text-zinc-400">
+                                    <x-icons.close class="h-4 w-4" />
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            <span
+                                class="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-[10px] font-bold text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+                                {{ $type->default_days ? $type->default_days . ' Hari' : 'Tanpa Batas' }}
+                            </span>
+                            @if ($type->is_anual_deduction)
+                                <span
+                                    class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-[10px] font-bold text-red-700 dark:bg-red-900/30 dark:text-red-400">
+                                    Potong Saldo
+                                </span>
+                            @endif
+                            @if ($type->requires_attachment)
+                                <span
+                                    class="inline-flex items-center rounded-full bg-amber-100 px-2.5 py-0.5 text-[10px] font-bold text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+                                    Wajib Lampiran
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+    </div>
 
     {{-- Modal --}}
     <div x-data="{ open: @entangle('isModalOpen') }" x-show="open"

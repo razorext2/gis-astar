@@ -17,66 +17,70 @@
         </div>
     </div>
 
-    {{-- Tabs Section --}}
-    <div class="flex items-center gap-2 overflow-x-auto border-b border-zinc-100 dark:border-zinc-800">
-        <button wire:click="setTab('pending')"
-            class="{{ $activeTab === 'pending' ? 'text-primary' : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300' }} group relative px-4 py-3 text-sm font-bold transition-all duration-200">
-            <span>Antrean</span>
-            @if ($activeTab === 'pending')
-                <div class="absolute bottom-0 left-0 h-0.5 w-full bg-primary shadow-[0_0_8px_rgba(239,68,68,0.5)]">
-                </div>
-            @endif
-        </button>
-        @if (auth()->user()->can('leave-view-all'))
-            <button wire:click="setTab('all')"
-                class="{{ $activeTab === 'all' ? 'text-primary' : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300' }} group relative px-4 py-3 text-sm font-bold transition-all duration-200">
-                <span>Semua Data</span>
-                @if ($activeTab === 'all')
+    <div
+        class="flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
+        {{-- Tabs Section --}}
+        <div class="flex items-center gap-2 overflow-x-auto border-b border-zinc-100 dark:border-zinc-800">
+            <button wire:click="setTab('pending')"
+                class="{{ $activeTab === 'pending' ? 'text-primary' : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300' }} group relative px-4 py-3 text-sm font-bold transition-all duration-200">
+                <span>Antrean</span>
+                @if ($activeTab === 'pending')
                     <div class="absolute bottom-0 left-0 h-0.5 w-full bg-primary shadow-[0_0_8px_rgba(239,68,68,0.5)]">
                     </div>
                 @endif
             </button>
-        @endif
-    </div>
-
-    {{-- Search and Filter Bar --}}
-    <div class="flex flex-col gap-4 md:flex-row md:items-center">
-        <div class="relative flex-1">
-            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                <x-icons.search-alt class="h-5 w-5 text-zinc-400" />
-            </div>
-            <input wire:model.live.debounce.300ms="search" type="text"
-                class="block w-full rounded-xl border-zinc-200 bg-zinc-50 py-2.5 pl-10 text-sm focus:border-primary focus:ring-primary dark:border-zinc-800 dark:bg-white/5 dark:text-white"
-                placeholder="Cari nama, kode pegawai, atau alasan...">
-        </div>
-
-        <div class="flex flex-wrap items-center gap-3">
-            <select wire:model.live="filterStatus"
-                class="rounded-xl border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm focus:border-primary focus:ring-primary dark:border-zinc-800 dark:bg-white/5 dark:text-white">
-                <option value="">Semua Status</option>
-                <option value="pending_backup">Menunggu Backup</option>
-                <option value="pending_spv">Menunggu SPV</option>
-                <option value="pending_hrd">Menunggu HRD</option>
-                <option value="pending_management">Menunggu Management</option>
-                <option value="approved">Disetujui</option>
-                <option value="rejected">Ditolak</option>
-                <option value="canceled">Dibatalkan</option>
-            </select>
-
-            <select wire:model.live="filterLeaveType"
-                class="rounded-xl border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm focus:border-primary focus:ring-primary dark:border-zinc-800 dark:bg-white/5 dark:text-white">
-                <option value="">Semua Tipe Cuti</option>
-                @foreach ($leaveTypes as $type)
-                    <option value="{{ $type->id }}">{{ $type->name }}</option>
-                @endforeach
-            </select>
-
-            @if ($search || $filterStatus || $filterLeaveType)
-                <button wire:click="resetFilters"
-                    class="text-sm font-bold text-red-600 transition-colors hover:text-red-700">
-                    Reset Filter
+            @if (auth()->user()->can('leave-view-all'))
+                <button wire:click="setTab('all')"
+                    class="{{ $activeTab === 'all' ? 'text-primary' : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300' }} group relative px-4 py-3 text-sm font-bold transition-all duration-200">
+                    <span>Semua Data</span>
+                    @if ($activeTab === 'all')
+                        <div
+                            class="absolute bottom-0 left-0 h-0.5 w-full bg-primary shadow-[0_0_8px_rgba(239,68,68,0.5)]">
+                        </div>
+                    @endif
                 </button>
             @endif
+        </div>
+
+        {{-- Search and Filter Bar --}}
+        <div class="flex flex-col gap-4 md:flex-row md:items-center">
+            <div class="relative flex-1">
+                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <x-icons.search-alt class="h-5 w-5 text-zinc-400" />
+                </div>
+                <input wire:model.live.debounce.300ms="search" type="text"
+                    class="block w-full rounded-xl border-zinc-200 bg-zinc-50 py-2.5 pl-10 text-sm focus:border-primary focus:ring-primary dark:border-zinc-800 dark:bg-white/5 dark:text-white"
+                    placeholder="Cari nama, kode pegawai, atau alasan...">
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3">
+                <select wire:model.live="filterStatus"
+                    class="rounded-xl border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-700 focus:border-primary focus:ring-primary dark:border-zinc-800 dark:bg-white/5 dark:text-white">
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="">Semua Status</option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="pending_backup">Menunggu Backup</option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="pending_spv">Menunggu SPV</option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="pending_hrd">Menunggu HRD</option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="pending_management">Menunggu Management</option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="approved">Disetujui</option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="rejected">Ditolak</option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="canceled">Dibatalkan</option>
+                </select>
+
+                <select wire:model.live="filterLeaveType"
+                    class="rounded-xl border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-700 focus:border-primary focus:ring-primary dark:border-zinc-800 dark:bg-white/5 dark:text-white">
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="">Semua Tipe Cuti</option>
+                    @foreach ($leaveTypes as $type)
+                        <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="{{ $type->id }}">{{ $type->name }}</option>
+                    @endforeach
+                </select>
+
+                @if ($search || $filterStatus || $filterLeaveType)
+                    <button wire:click="resetFilters"
+                        class="text-sm font-bold text-red-600 transition-colors hover:text-red-700">
+                        Reset Filter
+                    </button>
+                @endif
+            </div>
         </div>
     </div>
 
