@@ -20,12 +20,12 @@
             <select wire:model.live="year"
                 class="rounded-xl border border-zinc-200 bg-white/50 py-2.5 pl-3 pr-10 text-sm font-bold text-zinc-700 focus:ring-red-500/50 dark:border-zinc-800 dark:bg-dark-primary/50 dark:text-white">
                 @for ($i = date('Y') - 2; $i <= date('Y') + 1; $i++)
-                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="{{ $i }}">Tahun {{ $i }}</option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="{{ $i }}">
+                        Tahun {{ $i }}</option>
                 @endfor
             </select>
             <x-button.primary wire:click="resetAll"
-                wire:confirm="Reset semua saldo ke default (12 hari) untuk tahun {{ $year }}?"
-                class="shadow-lg shadow-red-500/20">
+                wire:confirm="Reset semua saldo ke default (12 hari) untuk tahun {{ $year }}?">
                 <x-slot name="icon"><x-icons.clockwise class="h-4 w-4" /></x-slot>
                 Reset Massal
             </x-button.primary>
@@ -130,21 +130,14 @@
 
     {{-- Edit Balance Modal --}}
     <div x-data="{ open: @entangle('isEditOpen') }" x-show="open"
-        class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-900/60 p-4 backdrop-blur-sm" 
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
-        x-cloak>
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-900/60 p-4 backdrop-blur-sm"
+        x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" x-cloak>
 
-        <div @click.away="open = false"
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 scale-95"
-            x-transition:enter-end="opacity-100 scale-100"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 scale-100"
+        <div @click.away="open = false" x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
             x-transition:leave-end="opacity-0 scale-95"
             class="w-full max-w-md overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-2xl dark:border-zinc-800 dark:bg-dark-primary">
 
@@ -170,8 +163,8 @@
                         @enderror
                     </div>
                     <div class="flex flex-col gap-1">
-                        <x-input.basic type="number" id="editUsedQuota" name="editUsedQuota" wire:model="editUsedQuota"
-                            :labels="true" min="0">
+                        <x-input.basic type="number" id="editUsedQuota" name="editUsedQuota"
+                            wire:model="editUsedQuota" :labels="true" min="0">
                             Terpakai (Hari)
                         </x-input.basic>
                         @error('editUsedQuota')
@@ -213,21 +206,14 @@
 
     {{-- History Modal --}}
     <div x-data="{ open: @entangle('isHistoryOpen') }" x-show="open"
-        class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-900/60 p-4 backdrop-blur-sm" 
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
-        x-cloak>
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-900/60 p-4 backdrop-blur-sm"
+        x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" x-cloak>
 
-        <div @click.away="open = false"
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 scale-95"
-            x-transition:enter-end="opacity-100 scale-100"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 scale-100"
+        <div @click.away="open = false" x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
             x-transition:leave-end="opacity-0 scale-95"
             class="flex max-h-[85vh] w-full max-w-2xl flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-2xl dark:border-zinc-800 dark:bg-dark-primary">
 

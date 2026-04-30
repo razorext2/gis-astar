@@ -29,7 +29,7 @@
                     <h3 class="mb-4 text-lg font-extrabold text-zinc-800 dark:text-white">Butuh Keputusan Anda</h3>
 
                     <div class="mb-6 space-y-4">
-                        <x-button.primary wire:click="approve" class="w-full !py-4 text-lg shadow-lg shadow-red-500/20">
+                        <x-button.primary wire:click="approve" class="w-full !py-4 text-lg">
                             <x-slot name="icon"><x-icons.check class="h-6 w-6" /></x-slot>
                             Setujui Sekarang
                         </x-button.primary>
@@ -76,14 +76,12 @@
                 </div>
 
                 <div class="mt-8 grid grid-cols-2 gap-3">
-                    <button @click="showRejectModal = false"
-                        class="rounded-xl border border-zinc-200 py-3 text-sm font-bold text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-400">
+                    <x-button.danger type="button" @click="showRejectModal = false" class="justify-center !py-3">
                         Batal
-                    </button>
-                    <button wire:click="reject"
-                        class="rounded-xl bg-red-600 py-3 text-sm font-bold text-white shadow-lg shadow-red-500/20 transition-all hover:bg-red-700">
+                    </x-button.danger>
+                    <x-button.primary type="button" wire:click="reject" class="justify-center !py-3">
                         Tolak Sekarang
-                    </button>
+                    </x-button.primary>
                 </div>
             </div>
         </div>

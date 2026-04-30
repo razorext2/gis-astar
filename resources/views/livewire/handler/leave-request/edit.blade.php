@@ -255,8 +255,7 @@
                 </div>
             </div>
 
-            <x-button.primary type="submit"
-                class="w-full !py-4 text-lg font-bold shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
+            <x-button.primary type="submit" class="w-full !py-4">
                 <x-slot name="icon">
                     <x-icons.loading-circle wire:loading wire:target="update" class="h-6 w-6" />
                 </x-slot>

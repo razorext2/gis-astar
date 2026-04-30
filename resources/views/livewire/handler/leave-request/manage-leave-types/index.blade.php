@@ -8,7 +8,7 @@
         <div class="flex items-center justify-between border-b border-zinc-100 pb-4 dark:border-zinc-800">
             <h3 class="text-lg font-bold text-zinc-900 dark:text-white">Daftar Tipe Cuti</h3>
 
-            <x-button.primary wire:click="openModal" class="shadow-lg shadow-red-500/20">
+            <x-button.primary wire:click="openModal">
                 <x-slot name="icon"><x-icons.plus class="h-4 w-4" /></x-slot>
                 Tambah Tipe Cuti
             </x-button.primary>

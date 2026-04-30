@@ -20,8 +20,7 @@
         <div class="flex items-center gap-3">
             @if ($request->status === 'pending_backup')
                 <x-button.danger wire:click="cancelRequest"
-                    wire:confirm="Apakah Anda yakin ingin membatalkan pengajuan cuti ini?"
-                    class="shadow-lg shadow-red-500/10 hover:shadow-red-500/20">
+                    wire:confirm="Apakah Anda yakin ingin membatalkan pengajuan cuti ini?">
                     Batalkan Pengajuan
                 </x-button.danger>
 

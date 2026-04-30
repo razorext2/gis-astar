@@ -277,8 +277,7 @@
             </div>
 
             {{-- Submit Button --}}
-            <x-button.primary type="submit"
-                class="w-full !py-4 text-lg font-bold shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+            <x-button.primary type="submit" class="w-full !py-4 disabled:cursor-not-allowed disabled:opacity-50"
                 :disabled="(bool) $activeRequest">
                 <x-slot name="icon">
                     <x-icons.loading-circle wire:loading wire:target="save" class="h-6 w-6" />

@@ -9,8 +9,7 @@
                 Anda.</p>
         </div>
         <div class="flex shrink-0">
-            <x-button.primary wire:navigate href="{{ route('leave-request.my-requests.create') }}"
-                class="group transition-all hover:shadow-lg hover:shadow-primary/20">
+            <x-button.primary wire:navigate href="{{ route('leave-request.my-requests.create') }}">
                 <x-slot name="icon">
                     <x-icons.plus class="h-5 w-5 transition-transform group-hover:rotate-90" />
                 </x-slot>
@@ -61,21 +60,31 @@
             <div class="flex flex-wrap items-center gap-3">
                 <select wire:model.live="filterStatus"
                     class="rounded-xl border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-700 focus:border-primary focus:ring-primary dark:border-zinc-800 dark:bg-white/5 dark:text-white">
-                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="">Semua Status</option>
-                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="pending_backup">Menunggu Backup</option>
-                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="pending_spv">Menunggu SPV</option>
-                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="pending_hrd">Menunggu HRD</option>
-                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="pending_management">Menunggu Management</option>
-                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="approved">Disetujui</option>
-                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="rejected">Ditolak</option>
-                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="canceled">Dibatalkan</option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="">Semua Status
+                    </option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="pending_backup">
+                        Menunggu Backup</option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="pending_spv">Menunggu
+                        SPV</option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="pending_hrd">Menunggu
+                        HRD</option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="pending_management">
+                        Menunggu Management</option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="approved">Disetujui
+                    </option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="rejected">Ditolak
+                    </option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="canceled">Dibatalkan
+                    </option>
                 </select>
 
                 <select wire:model.live="filterLeaveType"
                     class="rounded-xl border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-700 focus:border-primary focus:ring-primary dark:border-zinc-800 dark:bg-white/5 dark:text-white">
-                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="">Semua Tipe Cuti</option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="">Semua Tipe
+                        Cuti</option>
                     @foreach ($leaveTypes as $type)
-                        <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="{{ $type->id }}">{{ $type->name }}</option>
+                        <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white"
+                            value="{{ $type->id }}">{{ $type->name }}</option>
                     @endforeach
                 </select>
 

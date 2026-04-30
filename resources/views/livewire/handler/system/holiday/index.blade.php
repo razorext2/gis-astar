@@ -9,8 +9,7 @@
             </p>
         </div>
         <div class="flex items-center gap-3">
-            <x-button.primary wire:click="$set('showCreateModal', true)"
-                class="group !py-3 px-6 shadow-lg shadow-red-500/20 transition-all hover:scale-[1.02]">
+            <x-button.primary wire:click="$set('showCreateModal', true)" class="group !py-3 px-6">
                 <x-slot name="icon">
                     <x-icons.plus class="h-5 w-5" />
                 </x-slot>
@@ -53,42 +52,45 @@
                                 Ditemukan {{ count($holidayOptions) }} hari libur. Pilih yang ingin disimpan:
                             </p>
                             <div class="flex gap-2">
-                            <button type="button" 
-                                @click="$wire.set('selectedHolidays', $wire.holidayOptions.filter(h => !$wire.existingHolidays.includes(h.date)).map(h => h.date))" 
-                                class="text-xs font-bold text-red-600 hover:underline">Pilih Yang Belum Ada</button>
-                            <span class="text-zinc-300">|</span>
-                            <button type="button" @click="$wire.set('selectedHolidays', [])"
-                                class="text-xs font-bold text-zinc-500 hover:underline">Hapus Semua</button>
+                                <button type="button"
+                                    @click="$wire.set('selectedHolidays', $wire.holidayOptions.filter(h => !$wire.existingHolidays.includes(h.date)).map(h => h.date))"
+                                    class="text-xs font-bold text-red-600 hover:underline">Pilih Yang Belum Ada</button>
+                                <span class="text-zinc-300">|</span>
+                                <button type="button" @click="$wire.set('selectedHolidays', [])"
+                                    class="text-xs font-bold text-zinc-500 hover:underline">Hapus Semua</button>
+                            </div>
                         </div>
-                    </div>
 
-                    <div
-                        class="grid max-h-[300px] grid-cols-1 overflow-y-auto rounded-xl border border-zinc-200 dark:border-zinc-800">
-                        @foreach ($holidayOptions as $holiday)
-                            @php $isExists = in_array($holiday['date'], $existingHolidays); @endphp
-                            <label
-                                class="flex cursor-pointer items-center justify-between border-b border-zinc-100 px-4 py-3 last:border-0 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-white/5 {{ $isExists ? 'bg-zinc-50/50 dark:bg-white/5' : '' }}">
-                                <div class="flex items-center gap-3">
-                                    <input type="checkbox" wire:model="selectedHolidays"
-                                        value="{{ $holiday['date'] }}"
-                                        class="h-5 w-5 rounded border-zinc-300 text-red-600 focus:ring-red-500/50 dark:border-zinc-700 dark:bg-zinc-800">
-                                    <div class="flex flex-col">
-                                        <div class="flex items-center gap-2">
-                                            <span class="text-sm font-bold {{ $isExists ? 'text-zinc-500' : 'text-zinc-900 dark:text-white' }}">{{ $holiday['name'] }}</span>
-                                            @if($isExists)
-                                                <span class="rounded bg-green-100 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-tighter text-green-700 dark:bg-green-900/30 dark:text-green-400">Tersimpan</span>
-                                            @endif
+                        <div
+                            class="grid max-h-[300px] grid-cols-1 overflow-y-auto rounded-xl border border-zinc-200 dark:border-zinc-800">
+                            @foreach ($holidayOptions as $holiday)
+                                @php $isExists = in_array($holiday['date'], $existingHolidays); @endphp
+                                <label
+                                    class="{{ $isExists ? 'bg-zinc-50/50 dark:bg-white/5' : '' }} flex cursor-pointer items-center justify-between border-b border-zinc-100 px-4 py-3 last:border-0 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-white/5">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" wire:model="selectedHolidays"
+                                            value="{{ $holiday['date'] }}"
+                                            class="h-5 w-5 rounded border-zinc-300 text-red-600 focus:ring-red-500/50 dark:border-zinc-700 dark:bg-zinc-800">
+                                        <div class="flex flex-col">
+                                            <div class="flex items-center gap-2">
+                                                <span
+                                                    class="{{ $isExists ? 'text-zinc-500' : 'text-zinc-900 dark:text-white' }} text-sm font-bold">{{ $holiday['name'] }}</span>
+                                                @if ($isExists)
+                                                    <span
+                                                        class="rounded bg-green-100 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-tighter text-green-700 dark:bg-green-900/30 dark:text-green-400">Tersimpan</span>
+                                                @endif
+                                            </div>
+                                            <span
+                                                class="text-[10px] uppercase tracking-wider text-zinc-500">{{ \Carbon\Carbon::parse($holiday['date'])->locale('id')->isoFormat('DD MMMM YYYY') }}</span>
                                         </div>
-                                        <span class="text-[10px] uppercase tracking-wider text-zinc-500">{{ \Carbon\Carbon::parse($holiday['date'])->locale('id')->isoFormat('DD MMMM YYYY') }}</span>
                                     </div>
-                                </div>
-                            </label>
-                        @endforeach
-                    </div>
+                                </label>
+                            @endforeach
+                        </div>
 
                         <div class="mt-4 flex justify-end gap-3 border-t border-zinc-200 pt-4 dark:border-zinc-800">
                             <x-button.secondary @click="$wire.set('showCreateModal', false)">Batal</x-button.secondary>
-                            <x-button.primary wire:click="saveHolidays" class="shadow-lg shadow-red-500/20">
+                            <x-button.primary wire:click="saveHolidays">
                                 <x-slot name="icon">
                                     <x-icons.check-circle class="h-4 w-4" />
                                 </x-slot>
