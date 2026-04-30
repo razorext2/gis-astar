@@ -103,9 +103,9 @@
             </div>
         @empty
             <div
-                class="flex flex-col items-center justify-center rounded-xl border border-dashed border-zinc-300 py-20 text-center dark:border-zinc-700">
+                class="flex flex-col items-center justify-center rounded-xl border border-dashed border-zinc-200 bg-white/60 py-20 text-center backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60">
                 <div
-                    class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-zinc-100 text-zinc-400 dark:bg-zinc-800">
+                    class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-zinc-50 text-zinc-400 dark:bg-white/5">
                     <x-icons.command class="h-8 w-8" />
                 </div>
                 <h3 class="text-lg font-bold text-zinc-800 dark:text-zinc-200">Semua Pegawai Sedang Bertugas</h3>
