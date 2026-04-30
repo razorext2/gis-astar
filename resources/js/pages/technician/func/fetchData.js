@@ -26,6 +26,24 @@ async function fetchDataAsync() {
         return alert.showAlert("error", "Nomor Kunjungan tidak boleh kosong!");
     }
 
+    // Reset status UI state before fetching new data
+    const storeBtn = document.getElementById("store");
+    if (storeBtn) {
+        storeBtn.disabled = false;
+        storeBtn.classList.remove(
+            "bg-gray-200",
+            "dark:bg-gray-600",
+            "ring-zinc-200",
+            "dark:ring-zinc-800",
+            "cursor-not-allowed",
+        );
+    }
+    const warningStatus = document.getElementById("warning_status");
+    if (warningStatus) {
+        warningStatus.classList.add("hidden");
+    }
+    $('#status').val('').trigger('change');
+
     alert.loadingAlert("Sedang mencari data...");
 
     try {
