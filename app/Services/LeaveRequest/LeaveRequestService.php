@@ -30,7 +30,7 @@ class LeaveRequestService
                 ? 'pending_backup'
                 : 'pending_spv';
 
-            return LeaveRequest::create([
+            $request = LeaveRequest::create([
                 'user_id' => $user->id,
                 'leave_type_id' => $data['leave_type_id'],
                 'backup_person_id' => $data['backup_person_id'] ?? null,
@@ -43,6 +43,11 @@ class LeaveRequestService
                 'attachments' => $data['attachments'] ?? [],
                 'is_borrowed' => $isBorrowed,
             ]);
+
+            // Notify first actor
+            $this->notifyNextApprover($request);
+
+            return $request;
         });
     }
 
@@ -68,6 +73,11 @@ class LeaveRequestService
 
             $request->save();
 
+            // Notify next actor if approved
+            if ($action === 'approve' && $request->status !== 'approved') {
+                $this->notifyNextApprover($request);
+            }
+
             return $request;
         });
     }
@@ -75,15 +85,82 @@ class LeaveRequestService
     /**
      * Determine where the request goes next.
      */
-    protected function calculateNextStatus(LeaveRequest $request): string
+    protected function calculateNextStatus(LeaveRequest $request, ?string $currentStatus = null): string
     {
-        return match ($request->status) {
+        $current = $currentStatus ?? $request->status;
+
+        $next = match ($current) {
             'pending_backup' => 'pending_spv',
             'pending_spv' => 'pending_hrd',
             'pending_hrd' => 'pending_management',
             'pending_management' => 'approved',
-            default => $request->status
+            default => 'approved'
         };
+
+        if ($next === 'approved') {
+            return 'approved';
+        }
+
+        // Check if next status has any actors
+        $actors = $this->getApproversForStatus($request, $next);
+        if ($actors->isEmpty()) {
+            // Skip this stage and find the next one
+            return $this->calculateNextStatus($request, $next);
+        }
+
+        return $next;
+    }
+
+    /**
+     * Get approvers for a specific status.
+     */
+    public function getApproversForStatus(LeaveRequest $request, string $status): \Illuminate\Support\Collection
+    {
+        $requester = $request->user;
+        $pegawai = $requester->pegawai;
+        if (! $pegawai) {
+            return collect();
+        }
+
+        $jabatan = $pegawai->jabatanRelasi;
+        if (! $jabatan) {
+            return collect();
+        }
+
+        $placement = $jabatan->placementRelasi;
+
+        switch ($status) {
+            case 'pending_backup':
+                return $request->backupPerson ? collect([$request->backupPerson]) : collect();
+
+            case 'pending_spv':
+                $spvUser = $jabatan->supervisor;
+
+                return $spvUser ? collect([$spvUser]) : collect();
+
+            case 'pending_hrd':
+                return $placement ? $placement->hrds : collect();
+
+            case 'pending_management':
+                return $placement ? $placement->managements : collect();
+        }
+
+        return collect();
+    }
+
+    /**
+     * Notify next approvers for a request.
+     */
+    protected function notifyNextApprover(LeaveRequest $request): void
+    {
+        $approvers = $this->getApproversForStatus($request, $request->status);
+
+        if ($approvers->isNotEmpty()) {
+            \Illuminate\Support\Facades\Notification::send(
+                $approvers,
+                new \App\Notifications\LeaveRequestApprovalNotification($request, $request->status)
+            );
+        }
     }
 
     /**
