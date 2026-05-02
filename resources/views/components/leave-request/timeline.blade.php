@@ -38,6 +38,9 @@
                         <span>•</span>
                         <span>{{ $history->created_at->diffForHumans() }}</span>
                     </div>
+
+
+
                     @if ($history->note)
                         <p
                             class="mt-1 rounded-xl bg-zinc-50 px-3 py-1.5 text-xs italic text-zinc-600 dark:bg-white/5 dark:text-zinc-400">
@@ -56,6 +59,8 @@
                         'title' => 'Tahap Saat Ini: Validasi Personel Backup',
                         'description' => 'Menunggu konfirmasi dari rekan kerja yang ditunjuk sebagai backup.',
                         'person' => $request->backupPerson->name ?? 'Personel Backup',
+                        'phone' => $request->backupPerson->pegawai->no_telp ?? null,
+                        'wa_text' => 'Halo, saya memilih anda sebagai personil pengganti saya. Mohon berikan approval di https://attendance.indodacin.com ya!',
                     ],
                     'pending_spv' => [
                         'title' => 'Tahap Saat Ini: Validasi Atasan Langsung',
@@ -64,16 +69,22 @@
                             : 'PERINGATAN: Konfigurasi atasan untuk jabatan ini belum diset.',
                         'person' =>
                             $request->user->pegawai->jabatanRelasi->supervisor->name ?? 'Atasan (Belum Terkonfigurasi)',
+                        'phone' => $request->user->pegawai->jabatanRelasi->supervisor->pegawai->no_telp ?? null,
+                        'wa_text' => 'Halo Bapak/Ibu, ada pengajuan cuti dari saya yang menunggu approval Bapak/Ibu di https://attendance.indodacin.com. Mohon dicek ya!',
                     ],
                     'pending_hrd' => [
                         'title' => 'Tahap Saat Ini: Validasi HRD',
                         'description' => 'Sedang dalam proses peninjauan oleh departemen HRD.',
                         'person' => 'HRD Department',
+                        'phone' => null,
+                        'wa_text' => null,
                     ],
                     'pending_management' => [
                         'title' => 'Tahap Saat Ini: Validasi Management',
                         'description' => 'Menunggu keputusan akhir dari pihak Direksi/Management.',
                         'person' => 'Management / Direksi',
+                        'phone' => null,
+                        'wa_text' => null,
                     ],
                     default => null,
                 };
@@ -94,6 +105,23 @@
                                     class="text-zinc-600 dark:text-zinc-300">{{ $nextStep['person'] }}</span></span>
                             <span>{{ $nextStep['description'] }}</span>
                         </div>
+
+                        @if(in_array($request->status, ['pending_backup', 'pending_spv']))
+                            @if ($nextStep['phone'])
+                                <div class="mt-1">
+                                    <a href="https://web.whatsapp.com/send/?phone={{ $nextStep['phone'] }}&text={{ urlencode($nextStep['wa_text']) }}&type=phone_number&app_absent=0"
+                                        target="_blank" rel="noopener noreferrer"
+                                        class="flex w-fit items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 text-[10px] font-bold text-green-600 transition-colors hover:bg-green-100 dark:bg-green-500/10 dark:text-green-400 dark:hover:bg-green-500/20">
+                                        <x-icons.phone class="h-3 w-3" />
+                                        Hubungi via WhatsApp
+                                    </a>
+                                </div>
+                            @else
+                                <div class="mt-1 text-[10px] italic text-zinc-400 dark:text-zinc-500">
+                                    Nomor telepon belum diatur
+                                </div>
+                            @endif
+                        @endif
                     </div>
                 </div>
             @endif

@@ -188,7 +188,7 @@ class Create extends Component
                 $storedFiles[] = $file->store('cuti-attachments');
             }
 
-            $service->createRequest([
+            $request = $service->createRequest([
                 'leave_type_id' => $this->leave_type_id,
                 'backup_person_id' => $this->backup_person_id,
                 'start_date' => $this->start_date,
@@ -199,7 +199,7 @@ class Create extends Component
 
             $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Pengajuan cuti berhasil dikirim.');
 
-            return redirect()->route('leave-request.my-requests.index');
+            return redirect()->route('leave-request.my-requests.show', $request->id);
         });
     }
 
