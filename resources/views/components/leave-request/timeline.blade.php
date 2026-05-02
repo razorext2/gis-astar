@@ -2,7 +2,7 @@
 @props(['request'])
 
 <div
-    class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary">
+    class="rounded-xl border border-zinc-200 bg-white/60 p-6 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60">
     <h3 class="mb-6 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-zinc-400">
         <x-icons.clockwise class="h-4 w-4" />
         Alur Pengajuan
@@ -80,7 +80,11 @@
                         'title' => 'Tahap Saat Ini: Validasi HRD',
                         'description' => 'Sedang dalam proses peninjauan oleh departemen HRD.',
                         'user_id' => null,
-                        'person' => $request->user->pegawai->jabatanRelasi->placementRelasi->hrds->pluck('name')->implode(', ') ?: 'HRD Department',
+                        'person' =>
+                            $request->user->pegawai->jabatanRelasi->placementRelasi->hrds
+                                ->pluck('name')
+                                ->implode(', ') ?:
+                            'HRD Department',
                         'phone' => null,
                         'wa_text' => null,
                     ],
@@ -88,7 +92,11 @@
                         'title' => 'Tahap Saat Ini: Validasi Management',
                         'description' => 'Menunggu keputusan akhir dari pihak Direksi/Management.',
                         'user_id' => null,
-                        'person' => $request->user->pegawai->jabatanRelasi->placementRelasi->managements->pluck('name')->implode(', ') ?: 'Management / Direksi',
+                        'person' =>
+                            $request->user->pegawai->jabatanRelasi->placementRelasi->managements
+                                ->pluck('name')
+                                ->implode(', ') ?:
+                            'Management / Direksi',
                         'phone' => null,
                         'wa_text' => null,
                     ],

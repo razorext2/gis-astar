@@ -4,7 +4,7 @@
 <div class="flex flex-col gap-6">
     {{-- Applicant Info Card --}}
     <div
-        class="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary">
+        class="overflow-hidden rounded-xl border border-zinc-200 bg-white/60 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60">
         <div class="bg-zinc-50/50 p-4 dark:bg-white/5">
             <h2 class="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-zinc-500">
                 <x-icons.user-circle class="h-4 w-4" />
@@ -44,7 +44,7 @@
 
     {{-- Leave Info Card --}}
     <div
-        class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary">
+        class="rounded-xl border border-zinc-200 bg-white/60 p-6 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60">
         <div class="mb-6 flex items-center justify-between border-b border-zinc-100 pb-4 dark:border-white/5">
             <div class="flex items-center gap-3">
                 <div class="h-10 w-1 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,0.5)]"></div>
