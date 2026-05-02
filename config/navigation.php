@@ -136,6 +136,15 @@ return [
                 'navigate' => true,
             ],
             [
+                'label' => 'Pengajuan Pinjam Cuti',
+                'mobile_label' => 'Pengajuan Pinjam Cuti',
+                'route' => 'leave-request.borrow.index',
+                'check' => ['leave-request.borrow.*'],
+                'icon' => 'calendar',
+                'permission' => null,
+                'navigate' => true,
+            ],
+            [
                 'label' => 'Pusat Approval Cuti',
                 'mobile_label' => 'Pusat Approval Cuti',
                 'route' => 'leave-request.approval-center.index',

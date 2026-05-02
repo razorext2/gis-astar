@@ -25,4 +25,9 @@ class LeaveRequestController extends Controller
     {
         return view('dashboard.leave-request.show');
     }
+
+    public function borrow()
+    {
+        return view('dashboard.leave-request.borrow');
+    }
 }

@@ -27,6 +27,7 @@ class LeaveRequest extends Model
         'reason',
         'attachments',
         'status',
+        'is_borrowed',
     ];
 
     protected $casts = [
@@ -35,6 +36,7 @@ class LeaveRequest extends Model
         'return_date' => 'date',
         'total_days' => 'integer',
         'attachments' => 'array',
+        'is_borrowed' => 'boolean',
     ];
 
     public function user()
