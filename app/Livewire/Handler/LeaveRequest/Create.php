@@ -203,12 +203,32 @@ class Create extends Component
         });
     }
 
+    public function selectBackupPerson($id, $name)
+    {
+        $this->backup_person_id = $id;
+        $this->search_backup = $name;
+    }
+
+    public function showOnLeaveError($name)
+    {
+        $this->dispatch('swal', icon: 'error', title: 'Tidak Dapat Dipilih', text: "{$name} saat ini sedang dalam masa cuti dan tidak dapat dijadikan personel backup.");
+    }
+
+    public function removeAttachment($index)
+    {
+        if (isset($this->attachments[$index])) {
+            unset($this->attachments[$index]);
+            $this->attachments = array_values($this->attachments);
+        }
+    }
+
     public function render()
     {
         $leaveTypes = LeaveType::all();
 
         // Ambil semua user kecuali diri sendiri untuk backup
         $employees = User::query()
+            ->with('currentLeave')
             ->has('pegawai') // Pastikan memiliki relasi pegawai
             ->where('id', '!=', auth()->id())
             ->where('is_active', true)
@@ -226,13 +246,5 @@ class Create extends Component
             'leaveTypes' => $leaveTypes,
             'employees' => $employees,
         ]);
-    }
-
-    public function removeAttachment($index)
-    {
-        if (isset($this->attachments[$index])) {
-            unset($this->attachments[$index]);
-            $this->attachments = array_values($this->attachments);
-        }
     }
 }

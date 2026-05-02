@@ -79,14 +79,25 @@
                             class="absolute z-50 mt-2 max-h-60 w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white shadow-xl backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary">
 
                             @forelse ($employees as $emp)
+                                @php
+                                    $isOnLeave = $emp->currentLeave !== null;
+                                @endphp
                                 <button type="button"
-                                    wire:click="$set('backup_person_id', {{ $emp->id }}); search_backup = '{{ $emp->name }}'; open = false"
-                                    class="{{ $backup_person_id == $emp->id ? 'bg-red-50 dark:bg-red-900/20' : '' }} flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-zinc-50 dark:hover:bg-white/5">
-                                    <div class="flex flex-col">
-                                        <span
-                                            class="text-sm font-bold text-zinc-900 dark:text-white">{{ $emp->name }}</span>
-                                        <span
-                                            class="text-[10px] uppercase tracking-wider text-zinc-500">{{ $emp->kode_pegawai }}</span>
+                                    @if($isOnLeave)
+                                        wire:click="showOnLeaveError('{{ addslashes($emp->name) }}')"
+                                    @else
+                                        wire:click="selectBackupPerson({{ $emp->id }}, '{{ addslashes($emp->name) }}')"
+                                        @click="open = false"
+                                    @endif
+                                    class="{{ $backup_person_id == $emp->id ? 'bg-red-50 dark:bg-red-900/20' : '' }} flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-zinc-50 dark:hover:bg-white/5 {{ $isOnLeave ? 'opacity-70' : '' }}">
+                                    <div class="flex flex-col gap-0.5">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-sm font-bold text-zinc-900 dark:text-white">{{ $emp->name }}</span>
+                                            @if($isOnLeave)
+                                                <span class="rounded-md bg-red-100 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-red-600 dark:bg-red-900/30 dark:text-red-400">Sedang Cuti</span>
+                                            @endif
+                                        </div>
+                                        <span class="text-[10px] uppercase tracking-wider text-zinc-500">{{ $emp->kode_pegawai }}</span>
                                     </div>
                                     @if ($backup_person_id == $emp->id)
                                         <x-icons.check class="h-4 w-4 text-red-600" />
