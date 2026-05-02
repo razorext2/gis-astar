@@ -58,23 +58,28 @@
                     'pending_backup' => [
                         'title' => 'Tahap Saat Ini: Validasi Personel Backup',
                         'description' => 'Menunggu konfirmasi dari rekan kerja yang ditunjuk sebagai backup.',
+                        'user_id' => $request->backup_person_id,
                         'person' => $request->backupPerson->name ?? 'Personel Backup',
                         'phone' => $request->backupPerson->pegawai->no_telp ?? null,
-                        'wa_text' => 'Halo, saya memilih anda sebagai personil pengganti saya. Mohon berikan approval di https://attendance.indodacin.com ya!',
+                        'wa_text' =>
+                            'Halo, saya memilih anda sebagai personil pengganti saya. Mohon berikan approval di https://attendance.indodacin.com ya!',
                     ],
                     'pending_spv' => [
                         'title' => 'Tahap Saat Ini: Validasi Atasan Langsung',
                         'description' => $request->user->pegawai->jabatanRelasi->supervisor_id
                             ? 'Menunggu persetujuan dari Atasan Langsung.'
                             : 'PERINGATAN: Konfigurasi atasan untuk jabatan ini belum diset.',
+                        'user_id' => $request->user->pegawai->jabatanRelasi->supervisor_id,
                         'person' =>
                             $request->user->pegawai->jabatanRelasi->supervisor->name ?? 'Atasan (Belum Terkonfigurasi)',
                         'phone' => $request->user->pegawai->jabatanRelasi->supervisor->pegawai->no_telp ?? null,
-                        'wa_text' => 'Halo Bapak/Ibu, ada pengajuan cuti dari saya yang menunggu approval Bapak/Ibu di https://attendance.indodacin.com. Mohon dicek ya!',
+                        'wa_text' =>
+                            'Halo Bapak/Ibu, ada pengajuan cuti dari saya yang menunggu approval Bapak/Ibu di https://attendance.indodacin.com. Mohon dicek ya!',
                     ],
                     'pending_hrd' => [
                         'title' => 'Tahap Saat Ini: Validasi HRD',
                         'description' => 'Sedang dalam proses peninjauan oleh departemen HRD.',
+                        'user_id' => null,
                         'person' => 'HRD Department',
                         'phone' => null,
                         'wa_text' => null,
@@ -82,6 +87,7 @@
                     'pending_management' => [
                         'title' => 'Tahap Saat Ini: Validasi Management',
                         'description' => 'Menunggu keputusan akhir dari pihak Direksi/Management.',
+                        'user_id' => null,
                         'person' => 'Management / Direksi',
                         'phone' => null,
                         'wa_text' => null,
@@ -106,8 +112,8 @@
                             <span>{{ $nextStep['description'] }}</span>
                         </div>
 
-                        @if(in_array($request->status, ['pending_backup', 'pending_spv']))
-                            @if ($nextStep['phone'])
+                        @if (in_array($request->status, ['pending_backup', 'pending_spv']))
+                            @if ($nextStep['phone'] && $request->user->id == auth()->id())
                                 <div class="mt-1">
                                     <a href="https://web.whatsapp.com/send/?phone={{ $nextStep['phone'] }}&text={{ urlencode($nextStep['wa_text']) }}&type=phone_number&app_absent=0"
                                         target="_blank" rel="noopener noreferrer"
