@@ -96,6 +96,12 @@ final class PegawaiTable extends PowerGridComponent
                     'name' => $query->no_telp ?? '',
                 ])->render();
             })
+            ->add('join_date_formatted', function ($query) {
+                if ($query->userRelasi && $query->userRelasi->join_date) {
+                    return Carbon::parse($query->userRelasi->join_date)->locale('id')->isoFormat('DD MMM YYYY');
+                }
+                return '-';
+            })
             ->add('created_at_formatted', fn ($query) => Carbon::parse($query->created_at)->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss'))
             ->add('golongan_formatted', function ($query) {
                 return view('components.dashboard.name-w-code', [
@@ -162,6 +168,8 @@ final class PegawaiTable extends PowerGridComponent
 
             Column::make('No Telepon', 'no_telp')
                 ->hidden(),
+
+            Column::make('Join Date', 'join_date_formatted'),
 
             Column::make('Created at', 'created_at_formatted', 'created_at'),
 

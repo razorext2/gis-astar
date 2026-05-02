@@ -98,15 +98,37 @@ class Table extends Component
 
     // --- Reset single user ---
 
+    private function calculateDefaultQuota(User $user): int
+    {
+        if (!$user->join_date) {
+            return 12; // Jika join_date kosong, berikan default 12
+        }
+
+        $joinDate = \Carbon\Carbon::parse($user->join_date);
+        $joinYear = $joinDate->year;
+        $joinMonth = $joinDate->month;
+
+        $yearsWorked = $this->year - $joinYear;
+
+        if ($yearsWorked < 1) {
+            return 0;
+        } elseif ($yearsWorked == 1) {
+            return max(0, 12 - $joinMonth);
+        } else {
+            return 12;
+        }
+    }
+
     public function resetBalance(int $userId): void
     {
         $this->runSafely(function () use ($userId) {
             $user = User::findOrFail($userId);
+            $quota = $this->calculateDefaultQuota($user);
             LeaveBalance::updateOrCreate(
                 ['user_id' => $userId, 'year' => $this->year],
-                ['total_quota' => 12, 'used_quota' => 0]
+                ['total_quota' => $quota, 'used_quota' => 0]
             );
-            $this->dispatch('swal', icon: 'success', title: 'Reset', text: "Saldo {$user->name} berhasil direset.");
+            $this->dispatch('swal', icon: 'success', title: 'Reset', text: "Saldo {$user->name} berhasil direset menjadi {$quota} hari.");
         });
     }
 
@@ -123,9 +145,7 @@ class Table extends Component
                 ->toArray();
 
             // Ambil semua User yang memiliki relasi Pegawai
-            $users = User::select('id')
-                ->whereHas('pegawai')
-                ->get();
+            $users = User::whereHas('pegawai')->get();
 
             $reset = 0;
             $skipped = 0;
@@ -138,9 +158,11 @@ class Table extends Component
                     continue;
                 }
 
+                $quota = $this->calculateDefaultQuota($user);
+
                 LeaveBalance::updateOrCreate(
                     ['user_id' => $user->id, 'year' => $this->year],
-                    ['total_quota' => 12, 'used_quota' => 0]
+                    ['total_quota' => $quota, 'used_quota' => 0]
                 );
 
                 $reset++;

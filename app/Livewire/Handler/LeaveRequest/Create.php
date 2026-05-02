@@ -179,6 +179,21 @@ class Create extends Component
             return;
         }
 
+        // Validasi Cuti Tahunan: Masa kerja minimal 1 tahun
+        if ($this->selected_leave_type?->is_anual_deduction) {
+            $user = auth()->user();
+            if ($user->join_date) {
+                $anniversary = \Carbon\Carbon::parse($user->join_date)->addYear();
+                $startDate = \Carbon\Carbon::parse($this->start_date);
+                if ($startDate->lessThan($anniversary)) {
+                    $formattedAnniversary = $anniversary->locale('id')->isoFormat('DD MMMM YYYY');
+                    $this->dispatch('swal', icon: 'error', title: 'Belum Memenuhi Syarat', text: "Cuti tahunan baru dapat digunakan setelah masa kerja 1 tahun (Mulai {$formattedAnniversary}).");
+
+                    return;
+                }
+            }
+        }
+
         $this->validate();
 
         $this->runSafely(function () use ($service) {

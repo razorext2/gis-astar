@@ -42,6 +42,8 @@ class Edit extends Component
 
     public $selected_roles = [];
 
+    public $join_date;
+
     // Photo Uploads
     public $photo1;
 
@@ -67,6 +69,7 @@ class Edit extends Component
         if ($user) {
             $this->has_account = true;
             $this->selected_roles = $user->roles->pluck('name')->toArray();
+            $this->join_date = $user->join_date ? $user->join_date->format('Y-m-d') : null;
         }
 
         // Get existing images
@@ -100,6 +103,7 @@ class Edit extends Component
             'photo1' => 'nullable|image|max:2048',
             'photo2' => 'nullable|image|max:2048',
             'selected_roles' => 'nullable|array',
+            'join_date' => 'nullable|date',
         ];
     }
 
@@ -124,7 +128,10 @@ class Edit extends Component
                 $user = User::where('kode_pegawai', $this->kode_pegawai)->first();
                 if ($user) {
                     $user->syncRoles($this->selected_roles);
-                    $user->update(['name' => $this->full_name]);
+                    $user->update([
+                        'name' => $this->full_name,
+                        'join_date' => $this->join_date,
+                    ]);
                 }
             }
 

@@ -25,7 +25,7 @@
                 @endfor
             </select>
             <x-button.primary wire:click="resetAll"
-                wire:confirm="Reset semua saldo ke default (12 hari) untuk tahun {{ $year }}?">
+                wire:confirm="Hitung ulang semua saldo pegawai untuk tahun {{ $year }} sesuai masa kerja masing-masing?">
                 <x-slot name="icon"><x-icons.clockwise class="h-4 w-4" /></x-slot>
                 Reset Massal
             </x-button.primary>
@@ -41,6 +41,7 @@
                     <tr
                         class="bg-zinc-50/50 text-xs font-bold uppercase tracking-wider text-zinc-500 dark:bg-white/5 dark:text-zinc-400">
                         <th class="px-6 py-4">Karyawan</th>
+                        <th class="px-6 py-4 text-center">Join Date</th>
                         <th class="px-6 py-4 text-center">Tahun</th>
                         <th class="px-6 py-4 text-center">Total Kuota</th>
                         <th class="px-6 py-4 text-center">Terpakai</th>
@@ -69,6 +70,9 @@
                                         <span class="text-xs text-zinc-500">{{ $user->kode_pegawai }}</span>
                                     </div>
                                 </div>
+                            </td>
+                            <td class="px-6 py-4 text-center text-xs text-zinc-500">
+                                {{ $user->join_date ? \Carbon\Carbon::parse($user->join_date)->locale('id')->isoFormat('DD MMM YYYY') : '-' }}
                             </td>
                             <td class="px-6 py-4 text-center font-medium">{{ $year }}</td>
                             <td class="px-6 py-4 text-center">
@@ -103,7 +107,7 @@
                                         <x-icons.pen class="h-4 w-4" />
                                     </button>
                                     <button wire:click="resetBalance({{ $user->id }})"
-                                        wire:confirm="Reset saldo {{ $user->name }} ke default (12 hari)?"
+                                        wire:confirm="Hitung ulang saldo cuti {{ $user->name }} sesuai masa kerjanya?"
                                         class="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-100 text-zinc-500 transition-all hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400"
                                         title="Reset Saldo">
                                         <x-icons.clockwise class="h-4 w-4" />
@@ -113,7 +117,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-12 text-center text-zinc-500">
+                            <td colspan="7" class="px-6 py-12 text-center text-zinc-500">
                                 Tidak ada data karyawan ditemukan.
                             </td>
                         </tr>
