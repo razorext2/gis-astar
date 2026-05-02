@@ -28,6 +28,10 @@ class Edit extends Component
 
     public string $restrict_app = '';
 
+    public array $hrd_ids = [];
+
+    public array $management_ids = [];
+
     public function mount(Placement $placement): void
     {
         $this->placement = $placement;
@@ -38,6 +42,9 @@ class Edit extends Component
         $this->latitude = (string) $placement->latitude;
         $this->radius = (int) $placement->radius;
         $this->restrict_app = $placement->restrict_app ?? '';
+        
+        $this->hrd_ids = $placement->hrds()->pluck('users.id')->toArray();
+        $this->management_ids = $placement->managements()->pluck('users.id')->toArray();
     }
 
     protected function rules(): array
@@ -50,6 +57,10 @@ class Edit extends Component
             'latitude' => 'required|numeric',
             'radius' => 'required|integer|min:10|max:150',
             'restrict_app' => 'required|in:y,t',
+            'hrd_ids' => 'nullable|array',
+            'hrd_ids.*' => 'exists:users,id',
+            'management_ids' => 'nullable|array',
+            'management_ids.*' => 'exists:users,id',
         ];
     }
 
@@ -83,6 +94,9 @@ class Edit extends Component
                 'restrict_app' => $this->restrict_app,
             ]);
 
+            $this->placement->hrds()->sync($this->hrd_ids);
+            $this->placement->managements()->sync($this->management_ids);
+
             $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Lokasi Berhasil Diperbarui');
 
             $this->redirect(route('placement.index'), navigate: true);
@@ -94,6 +108,10 @@ class Edit extends Component
 
     public function render(): \Illuminate\View\View
     {
-        return view('livewire.handler.placement.form');
+        $users = \App\Models\User::has('pegawai')->orderBy('name')->get();
+
+        return view('livewire.handler.placement.form', [
+            'users' => $users
+        ]);
     }
 }

@@ -26,6 +26,10 @@ class Create extends Component
 
     public string $restrict_app = '';
 
+    public array $hrd_ids = [];
+
+    public array $management_ids = [];
+
     protected function rules(): array
     {
         return [
@@ -36,6 +40,10 @@ class Create extends Component
             'latitude' => 'required|numeric',
             'radius' => 'required|integer|min:10|max:150',
             'restrict_app' => 'required|in:y,t',
+            'hrd_ids' => 'nullable|array',
+            'hrd_ids.*' => 'exists:users,id',
+            'management_ids' => 'nullable|array',
+            'management_ids.*' => 'exists:users,id',
         ];
     }
 
@@ -59,7 +67,7 @@ class Create extends Component
         $this->validate();
 
         $this->runSafely(function () {
-            Placement::create([
+            $placement = Placement::create([
                 'kode_penempatan' => $this->kode_penempatan,
                 'penempatan' => $this->penempatan,
                 'alamat' => $this->alamat,
@@ -68,6 +76,9 @@ class Create extends Component
                 'radius' => $this->radius,
                 'restrict_app' => $this->restrict_app,
             ]);
+
+            $placement->hrds()->sync($this->hrd_ids);
+            $placement->managements()->sync($this->management_ids);
 
             $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Lokasi Baru Berhasil Ditambahkan');
 
@@ -80,6 +91,10 @@ class Create extends Component
 
     public function render(): \Illuminate\View\View
     {
-        return view('livewire.handler.placement.form');
+        $users = \App\Models\User::has('pegawai')->orderBy('name')->get();
+
+        return view('livewire.handler.placement.form', [
+            'users' => $users
+        ]);
     }
 }

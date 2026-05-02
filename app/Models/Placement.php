@@ -26,4 +26,14 @@ class Placement extends Model
     {
         return $this->belongsTo(User::class, 'manager_id');
     }
+
+    public function hrds()
+    {
+        return $this->belongsToMany(User::class, 'placement_hrds', 'placement_id', 'user_id')->withTimestamps();
+    }
+
+    public function managements()
+    {
+        return $this->belongsToMany(User::class, 'placement_managements', 'placement_id', 'user_id')->withTimestamps();
+    }
 }
