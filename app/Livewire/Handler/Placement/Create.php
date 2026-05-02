@@ -91,7 +91,7 @@ class Create extends Component
 
     public function render(): \Illuminate\View\View
     {
-        $users = \App\Models\User::has('pegawai')->orderBy('name')->get();
+        $users = \App\Models\User::orderBy('name', 'asc')->get();
 
         return view('livewire.handler.placement.form', [
             'users' => $users
