@@ -221,11 +221,29 @@
                             </span>
                         </div>
                         <div class="divider my-1 border-t border-zinc-200 dark:border-white/5"></div>
-                        <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-500 dark:text-gray-400">Saldo Pinjam Tersisa:</span>
-                            <span class="font-bold text-gray-900 dark:text-white">
-                                {{ max(0, $remaining_quota - $total_days) }} Hari
-                            </span>
+                        <div class="flex flex-col gap-1">
+                            <span class="text-[10px] uppercase tracking-wider text-gray-500 dark:text-gray-400">Alur Persetujuan:</span>
+                            <div class="mt-1 flex flex-col gap-2">
+                                <div class="flex items-center gap-2 text-[11px]">
+                                    <div class="h-1.5 w-1.5 rounded-full bg-zinc-300 dark:bg-zinc-600"></div>
+                                    <span class="text-gray-600 dark:text-gray-400 italic">Atasan:</span>
+                                    <span class="font-bold text-gray-700 dark:text-gray-200">{{ auth()->user()->pegawai->jabatanRelasi->supervisor->name ?? 'Belum Diatur' }}</span>
+                                </div>
+                                <div class="flex items-start gap-2 text-[11px]">
+                                    <div class="mt-1 h-1.5 w-1.5 rounded-full bg-zinc-300 dark:bg-zinc-600"></div>
+                                    <span class="text-gray-600 dark:text-gray-400 italic">HRD:</span>
+                                    <span class="flex-1 font-bold text-gray-700 dark:text-gray-200 leading-relaxed">
+                                        {{ implode(', ', $hrd_approvers) ?: 'HRD Department' }}
+                                    </span>
+                                </div>
+                                <div class="flex items-start gap-2 text-[11px]">
+                                    <div class="mt-1 h-1.5 w-1.5 rounded-full bg-zinc-300 dark:bg-zinc-600"></div>
+                                    <span class="text-gray-600 dark:text-gray-400 italic">Management:</span>
+                                    <span class="flex-1 font-bold text-gray-700 dark:text-gray-200 leading-relaxed">
+                                        {{ implode(', ', $management_approvers) ?: 'Direksi/Management' }}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

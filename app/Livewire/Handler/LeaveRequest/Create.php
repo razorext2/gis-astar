@@ -44,6 +44,10 @@ class Create extends Component
 
     public $activeRequest = null;
 
+    public $hrd_approvers = [];
+
+    public $management_approvers = [];
+
     public function mount()
     {
         $this->activeRequest = auth()->user()->leaveRequests()
@@ -55,6 +59,13 @@ class Create extends Component
 
         if (! $user->pegawai) {
             return redirect()->route('leave-request.my-requests.index')->with('status', 'Akses ditolak, anda tidak memiliki akun pegawai. Silahkan buat pengajuan menggunakan akun pegawai.');
+        }
+
+        // Load Approvers
+        $placement = $user->pegawai->jabatanRelasi->placementRelasi ?? null;
+        if ($placement) {
+            $this->hrd_approvers = $placement->hrds->pluck('name')->toArray();
+            $this->management_approvers = $placement->managements->pluck('name')->toArray();
         }
     }
 

@@ -20,8 +20,10 @@ class LeaveRequestService
         return DB::transaction(function () use ($data, $user) {
             $totalDays = $this->calculateTotalDays($data['start_date'], $data['end_date']);
 
-            // 1. Validasi saldo jika tipe cuti memotong saldo tahunan
-            $this->validateRequest($user, $data['leave_type_id'], $totalDays);
+            $isBorrowed = $data['is_borrowed'] ?? false;
+
+            // 1. Validasi saldo jika tipe cuti memotong saldo tahunan (Lewati jika pinjam)
+            $this->validateRequest($user, $data['leave_type_id'], $totalDays, $isBorrowed);
 
             // 2. Tentukan status awal
             $status = isset($data['backup_person_id']) && $data['backup_person_id']
@@ -39,6 +41,7 @@ class LeaveRequestService
                 'reason' => $data['reason'],
                 'status' => $status,
                 'attachments' => $data['attachments'] ?? [],
+                'is_borrowed' => $isBorrowed,
             ]);
         });
     }
@@ -132,12 +135,12 @@ class LeaveRequestService
      *
      * @throws Exception
      */
-    public function validateRequest(User $user, int $leaveTypeId, int $totalDays): bool
+    public function validateRequest(User $user, int $leaveTypeId, int $totalDays, bool $isBorrowed = false): bool
     {
         $leaveType = LeaveType::findOrFail($leaveTypeId);
 
         // 1. Validasi Cuti Tahunan (Potong Saldo)
-        if ($leaveType->is_anual_deduction) {
+        if ($leaveType->is_anual_deduction && ! $isBorrowed) {
             $balance = $user->currentLeaveBalance();
 
             if (! $balance) {

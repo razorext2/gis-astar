@@ -64,8 +64,8 @@ class Show extends Component
             $canApprove = match ($request->status) {
                 'pending_backup' => $request->backup_person_id === $user->id,
                 'pending_spv' => ($request->user->pegawai->jabatanRelasi->supervisor_id ?? null) === $user->id,
-                'pending_hrd' => $user->hasRole('HRD'),
-                'pending_management' => $user->hasRole('Management'),
+                'pending_hrd' => $request->user->pegawai->jabatanRelasi->placementRelasi->hrds->contains('id', $user->id),
+                'pending_management' => $request->user->pegawai->jabatanRelasi->placementRelasi->managements->contains('id', $user->id),
                 default => false
             };
         }

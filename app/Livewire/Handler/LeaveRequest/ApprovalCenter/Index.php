@@ -68,15 +68,17 @@ class Index extends Component
                        ->whereHas('user.pegawai.jabatanRelasi', fn($jq) => $jq->where('supervisor_id', $user->id));
                 });
 
-                // 3. As HRD
-                if ($user->hasRole('HRD')) {
-                    $q->orWhere('status', 'pending_hrd');
-                }
+                // 3. As HRD (User is assigned as HRD in applicant's placement)
+                $q->orWhere(function($sq) use ($user) {
+                    $sq->where('status', 'pending_hrd')
+                       ->whereHas('user.pegawai.jabatanRelasi.placementRelasi.hrds', fn($jq) => $jq->where('users.id', $user->id));
+                });
 
-                // 4. As Management
-                if ($user->hasRole('Management')) {
-                    $q->orWhere('status', 'pending_management');
-                }
+                // 4. As Management (User is assigned as Management in applicant's placement)
+                $q->orWhere(function($sq) use ($user) {
+                    $sq->where('status', 'pending_management')
+                       ->whereHas('user.pegawai.jabatanRelasi.placementRelasi.managements', fn($jq) => $jq->where('users.id', $user->id));
+                });
             });
         } else {
             // Tab ALL - No default role-based status filter if they have leave-view-all
