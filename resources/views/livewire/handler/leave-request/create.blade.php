@@ -14,6 +14,44 @@
         </div>
     </div>
 
+    @php
+        $user = auth()->user();
+        $isUnderOneYear = false;
+        if ($user->join_date) {
+            $anniversary = \Carbon\Carbon::parse($user->join_date)->addYear();
+            if (now()->lessThan($anniversary)) {
+                $isUnderOneYear = true;
+            }
+        }
+    @endphp
+
+    @if ($isUnderOneYear)
+        <div class="rounded-xl border border-blue-200 bg-blue-50 p-4 shadow-sm dark:border-blue-900/30 dark:bg-blue-900/10">
+            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div class="flex items-start gap-4">
+                    <div class="rounded-full bg-blue-100 p-2 dark:bg-blue-900/30">
+                        <x-icons.info-circle class="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                    </div>
+                    <div class="flex flex-col">
+                        <h3 class="text-sm font-bold text-blue-900 dark:text-blue-300">Informasi Cuti Tahunan</h3>
+                        <p class="mt-1 text-sm text-blue-700 dark:text-blue-400">
+                            Masa kerja Anda belum mencapai 1 tahun, sehingga Anda belum memiliki saldo Cuti Tahunan. 
+                            Untuk keperluan cuti di luar tipe khusus, silakan gunakan fitur Pinjam Cuti.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex-shrink-0 self-end md:self-auto">
+                    <x-button.primary wire:navigate href="{{ route('leave-request.borrow.index') }}">
+                        <x-slot name="icon">
+                            <x-icons.arrow-right class="h-4 w-4" />
+                        </x-slot>
+                        Pergi ke Pinjam Cuti
+                    </x-button.primary>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <form wire:submit.prevent="save" class="grid grid-cols-1 gap-6 lg:grid-cols-3">
         @if ($activeRequest)
             <div class="col-span-1 lg:col-span-3">
