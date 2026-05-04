@@ -58,7 +58,7 @@
         </div>
     @empty
         <div
-            class="flex flex-col items-center justify-center rounded-2xl bg-white/50 py-12 ring-1 ring-zinc-200/50 backdrop-blur-md dark:bg-dark-primary/50 dark:ring-white/10">
+            class="flex flex-col items-center justify-center rounded-2xl bg-white/50 py-12 border border-zinc-200/50 backdrop-blur-md dark:bg-dark-primary/50 dark:border-white/10">
             <x-icons.user-group class="mb-4 h-16 w-16 text-gray-300 dark:text-gray-600" />
             <p class="text-lg font-medium text-gray-600 dark:text-gray-300">Belum ada tim yang terbentuk</p>
             <p class="mt-1 text-sm text-gray-400 dark:text-gray-500">Buat tim baru terlebih dahulu untuk mulai
@@ -118,7 +118,7 @@
 
                             @if ($kode_pegawai)
                                 <div
-                                    class="mt-2 max-h-[180px] overflow-y-auto rounded-xl bg-gray-50 p-2 ring-1 ring-zinc-200 dark:bg-gray-800/50 dark:ring-zinc-800">
+                                    class="mt-2 max-h-[180px] overflow-y-auto rounded-xl bg-gray-50 p-2 border border-zinc-200 dark:bg-gray-800/50 dark:border-zinc-800">
                                     @forelse ($technicians as $technician)
                                         <label for="member-{{ $technician->kode_pegawai }}"
                                             class="group flex cursor-pointer items-center rounded-lg p-2 transition-colors hover:bg-white dark:hover:bg-gray-700">

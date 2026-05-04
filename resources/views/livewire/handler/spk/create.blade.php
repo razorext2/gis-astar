@@ -16,7 +16,7 @@
             </div>
 
             <div
-                class="grid w-full grid-cols-2 gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:grow lg:gap-4 lg:rounded-b-xl lg:rounded-tl-none lg:rounded-tr-xl lg:p-6">
+                class="grid w-full grid-cols-2 gap-2 rounded-lg border border-zinc-200 bg-white/60 px-3 py-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:grow lg:gap-4 lg:rounded-b-xl lg:rounded-tl-none lg:rounded-tr-xl lg:p-6">
 
                 <div class="col-span-2 w-full">
                     <x-input.basic x-ref="namaCustomer" id="nama_customer" name="nama_customer"
@@ -75,7 +75,7 @@
             </div>
 
             <div
-                class="grid w-full grid-cols-2 gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:grow lg:gap-4 lg:rounded-b-xl lg:rounded-tl-none lg:rounded-tr-xl lg:p-6">
+                class="grid w-full grid-cols-2 gap-2 rounded-lg border border-zinc-200 bg-white/60 px-3 py-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:grow lg:gap-4 lg:rounded-b-xl lg:rounded-tl-none lg:rounded-tr-xl lg:p-6">
 
                 <div class="col-span-2 flex w-full flex-col items-start gap-4">
                     <div class="w-full">
@@ -227,7 +227,7 @@
             </div>
 
             <div
-                class="grid w-full grid-cols-2 gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:grow lg:gap-4 lg:rounded-b-xl lg:rounded-tl-none lg:rounded-tr-xl lg:p-6">
+                class="grid w-full grid-cols-2 gap-2 rounded-lg border border-zinc-200 bg-white/60 px-3 py-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:grow lg:gap-4 lg:rounded-b-xl lg:rounded-tl-none lg:rounded-tr-xl lg:p-6">
 
                 <div class="col-span-2 w-full dark:text-white">
                     <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="tipe_tagihan">
@@ -361,7 +361,7 @@
             </div>
 
             <div
-                class="grid w-full grid-cols-2 gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:grow lg:gap-4 lg:rounded-b-xl lg:rounded-tl-none lg:rounded-tr-xl lg:p-6">
+                class="grid w-full grid-cols-2 gap-2 rounded-lg border border-zinc-200 bg-white/60 px-3 py-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:grow lg:gap-4 lg:rounded-b-xl lg:rounded-tl-none lg:rounded-tr-xl lg:p-6">
 
                 <div
                     class="col-span-2 grid w-full grid-cols-1 gap-2 rounded-lg border border-zinc-200 p-2 dark:border-zinc-800 lg:gap-4 lg:p-4">
@@ -599,7 +599,7 @@
         <div x-show="open" class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm"
             x-transition.opacity>
             <!-- Modal -->
-            <div class="h-[85vh] w-full max-w-7xl overflow-hidden rounded-xl ring-1 ring-zinc-200 bg-white text-gray-800 shadow-xl dark:ring-zinc-800 dark:bg-dark-primary dark:text-white"
+            <div class="h-[85vh] w-full max-w-7xl overflow-hidden rounded-xl border border-zinc-200 bg-white/60 text-gray-800 shadow-xl backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:text-white"
                 @keydown.escape.window="open=false">
                 <div class="flex items-center justify-between border-b px-4 py-2">
                     <h2 class="font-semibold">SPK Summary</h2>

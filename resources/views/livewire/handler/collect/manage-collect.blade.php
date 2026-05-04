@@ -4,7 +4,7 @@
         class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm">
         @if ($showRescheduleModal)
             <div
-                class="flex w-full flex-col gap-3 rounded-xl bg-white p-4 shadow-2xl ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 md:w-1/2 md:gap-4 md:p-6 lg:w-2/5 xl:w-1/3">
+                class="flex w-full flex-col gap-3 rounded-xl bg-white/60 p-4 shadow-2xl border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:border-zinc-800 md:w-1/2 md:gap-4 md:p-6 lg:w-2/5 xl:w-1/3">
 
                 {{-- Header --}}
                 <div class="flex items-center gap-3">
@@ -74,7 +74,7 @@
         class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 backdrop-blur-sm">
         @if ($showChangeCollectorModal)
             <div
-                class="flex w-full flex-col gap-3 rounded-xl bg-white p-4 shadow-2xl ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 md:w-1/2 md:gap-4 md:p-6 lg:w-2/5 xl:w-1/3">
+                class="flex w-full flex-col gap-3 rounded-xl bg-white/60 p-4 shadow-2xl border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:border-zinc-800 md:w-1/2 md:gap-4 md:p-6 lg:w-2/5 xl:w-1/3">
 
                 {{-- Header --}}
                 <div class="flex items-center gap-3">

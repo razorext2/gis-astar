@@ -66,7 +66,7 @@
                 {{-- end field barang dan ekspedisi --}}
 
                 <div
-                    class="relative mt-2 flex flex-col gap-2 rounded-lg p-2 ring-1 ring-zinc-200 dark:ring-zinc-800 lg:p-4">
+                    class="relative mt-2 flex flex-col gap-2 rounded-lg p-2 border border-zinc-200 dark:border-zinc-800 lg:p-4">
 
 
                     <h4

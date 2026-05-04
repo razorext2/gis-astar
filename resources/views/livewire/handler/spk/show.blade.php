@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-4">
-    <div class="relative flex flex-col rounded-lg text-gray-800 ring-1 ring-zinc-200 dark:text-white dark:ring-zinc-800">
+    <div class="relative flex flex-col rounded-lg border border-zinc-200 text-gray-800 dark:border-zinc-800 dark:text-white">
 
         {{-- informasi spk --}}
         <div class="grid grid-cols-2 rounded-t-lg bg-gray-50 transition-all duration-500 dark:bg-gray-700">

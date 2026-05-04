@@ -30,7 +30,7 @@
             <div x-show="show" x-transition:enter="transition ease-out duration-300"
                 x-transition:enter-start="opacity-0 scale-95 translate-y-4"
                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                class="relative flex w-full max-w-2xl flex-col rounded-xl bg-white shadow-2xl ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800"
+                class="relative flex w-full max-w-2xl flex-col rounded-xl bg-white/60 shadow-2xl border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:border-zinc-800"
                 style="max-height: 85vh;">
 
                 {{-- Header --}}

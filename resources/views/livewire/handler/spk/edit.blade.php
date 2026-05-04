@@ -2,7 +2,7 @@
 
     {{-- form info customer --}}
     <div
-        class="grid w-full gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
+        class="grid w-full gap-2 rounded-lg border border-zinc-200 bg-white/60 px-3 py-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:gap-4 lg:p-6">
         <div class="w-full">
             <x-input.basic id="nama_customer" name="nama_customer" wire:model="createForm.nama_customer"
                 placeholder="Nama Bon Customer">
@@ -48,7 +48,7 @@
 
     {{-- form barang --}}
     <div
-        class="flex w-full flex-col items-start gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
+        class="flex w-full flex-col items-start gap-2 rounded-lg border border-zinc-200 bg-white/60 px-3 py-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:gap-4 lg:p-6">
         <div class="col-span-2 flex w-full flex-col items-start gap-4">
             <div class="w-full">
                 <x-input.select id="tipe_timbangan" name="tipe_timbangan" :labels="true" :textLabel="'Tipe Timbangan Yang Dipesan'"
@@ -199,7 +199,7 @@
 
     {{-- form spk --}}
     <div
-        class="grid w-full grid-cols-2 gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
+        class="grid w-full grid-cols-2 gap-2 rounded-lg border border-zinc-200 bg-white/60 px-3 py-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:gap-4 lg:p-6">
         <div class="col-span-2 w-full">
             <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="tipe_tagihan">
                 Tipe Tagihan
@@ -314,7 +314,7 @@
 
     {{-- form info tambahan --}}
     <div id="informasi-tambahan"
-        class="grid w-full grid-cols-2 gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:grow lg:gap-4 lg:p-6">
+        class="grid w-full grid-cols-2 gap-2 rounded-lg border border-zinc-200 bg-white/60 px-3 py-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:grow lg:gap-4 lg:p-6">
 
         <div
             class="col-span-2 grid w-full grid-cols-1 gap-2 rounded-lg border border-zinc-200 p-2 dark:border-zinc-800 lg:gap-4 lg:p-4">
@@ -552,7 +552,7 @@
                 </span>
             </x-button.success>
 
-            <div class="rounded-b-lg border border-zinc-200 bg-white p-5 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none"
+            <div class="rounded-b-lg border border-zinc-200 bg-white/60 p-5 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none"
                 x-show="accordionOpen" x-collapse x-cloak>
 
                 <div>
@@ -614,7 +614,7 @@
             </span>
         </x-button.danger>
 
-        <div class="rounded-b-lg border border-zinc-200 bg-white p-5 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none"
+        <div class="rounded-b-lg border border-zinc-200 bg-white/60 p-5 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none"
             x-show="accordionOpen" x-collapse x-cloak>
 
             <div>
@@ -666,7 +666,7 @@
             </span>
         </x-button.danger>
 
-        <div class="rounded-b-lg border border-zinc-200 bg-white p-5 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none"
+        <div class="rounded-b-lg border border-zinc-200 bg-white/60 p-5 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none"
             x-show="accordionOpen" x-collapse x-cloak>
 
             <div>

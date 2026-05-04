@@ -42,7 +42,7 @@
 
     {{-- Information Panel --}}
     <div class="flex flex-col gap-6" data-aos="fade-left" data-aos-delay="200">
-        <div class="space-y-4 rounded-xl bg-zinc-100 p-5 ring-1 ring-zinc-200 dark:bg-zinc-800/30 dark:ring-zinc-800">
+        <div class="space-y-4 rounded-xl bg-zinc-100 p-5 border border-zinc-200 dark:bg-zinc-800/30 dark:border-zinc-800">
             <div class="space-y-4">
                 {{-- Data Items --}}
                 <div

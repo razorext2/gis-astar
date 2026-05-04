@@ -1,7 +1,7 @@
 <div class="grid grid-cols-1 gap-y-4">
     {{-- Notification In --}}
     <div
-        class="flex h-[340px] flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none">
+        class="flex h-[340px] flex-col rounded-2xl border border-zinc-200 bg-white/60 p-5 shadow-sm transition-shadow hover:shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none">
 
         <div class="mb-4 flex items-center justify-between border-b border-zinc-200 pb-3 dark:border-zinc-800">
             <div class="flex items-center gap-2">
@@ -50,7 +50,7 @@
 
     {{-- Notification Out --}}
     <div
-        class="flex h-[340px] flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none">
+        class="flex h-[340px] flex-col rounded-2xl border border-zinc-200 bg-white/60 p-5 shadow-sm transition-shadow hover:shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none">
 
         <div class="mb-4 flex items-center justify-between border-b border-zinc-200 pb-3 dark:border-zinc-800">
             <div class="flex items-center gap-2">

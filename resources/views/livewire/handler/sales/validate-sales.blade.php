@@ -11,7 +11,7 @@
         @if ($showModal)
             <!-- Modal box -->
             <div
-                class="flex w-full flex-col gap-1 rounded-xl ring-1 ring-zinc-200 bg-white p-2 shadow-2xl dark:ring-zinc-800 dark:bg-dark-primary md:w-2/3 md:gap-2 md:p-4 lg:w-1/2 lg:p-6 xl:w-2/5">
+                class="flex w-full flex-col gap-1 rounded-xl border border-zinc-200 bg-white/60 p-2 shadow-2xl backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 md:w-2/3 md:gap-2 md:p-4 lg:w-1/2 lg:p-6 xl:w-2/5">
                 @if ($step == 1)
                     <h2 class="mb-2 text-center text-2xl font-semibold text-gray-900 dark:text-white lg:text-3xl">
                         Konfirmasi?</h2>

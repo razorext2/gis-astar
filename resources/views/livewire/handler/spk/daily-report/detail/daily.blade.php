@@ -1,7 +1,7 @@
 <div class="w-full">
     {{-- informasi project --}}
     <div
-        class="mb-2 w-full rounded-xl bg-white shadow-sm ring-1 ring-zinc-200 dark:bg-gray-800 dark:ring-zinc-800 lg:mb-4">
+        class="mb-2 w-full rounded-xl bg-white/60 shadow-sm border border-zinc-200 backdrop-blur-md dark:bg-gray-800 dark:border-zinc-800 lg:mb-4">
         {{-- HEADER --}}
         <div class="border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
@@ -125,7 +125,7 @@
 
             {{-- extend request --}}
             @if ($assignment->project->extend_request)
-                <div class="col-span-2 rounded-lg bg-gray-800 p-2 ring-1 ring-zinc-200 dark:ring-zinc-800 lg:p-4">
+                <div class="col-span-2 rounded-lg bg-gray-800 p-2 border border-zinc-200 dark:border-zinc-800 lg:p-4">
                     <div class="text-gray-800 dark:text-white">
                         <p>
                             <span class="font-semibold">
@@ -244,7 +244,7 @@
         </div>
 
         {{-- LIST CONTAINER --}}
-        <div class="w-full rounded-xl bg-white shadow-sm ring-1 ring-zinc-200 dark:bg-gray-800 dark:ring-zinc-800">
+        <div class="w-full rounded-xl bg-white/60 shadow-sm border border-zinc-200 backdrop-blur-md dark:bg-gray-800 dark:border-zinc-800">
             <div class="flex flex-col divide-y divide-gray-200 dark:divide-gray-700">
                 @forelse ($this->dailyReports as $index => $row)
                     <div class="relative p-2 transition hover:bg-gray-50 dark:hover:bg-gray-700/40 lg:p-4">

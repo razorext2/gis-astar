@@ -113,7 +113,7 @@
             <div x-show="show" x-transition:enter="transition ease-out duration-300"
                 x-transition:enter-start="opacity-0 scale-95 translate-y-4"
                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                class="relative flex w-full max-w-xl flex-col rounded-xl ring-1 ring-zinc-200 bg-white shadow-2xl dark:ring-zinc-800 dark:bg-dark-primary">
+                class="relative flex w-full max-w-xl flex-col rounded-xl border border-zinc-200 bg-white/60 shadow-2xl backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
 
                 @if ($showModalOut && $attendance)
                     {{-- Header --}}

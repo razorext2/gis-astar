@@ -30,7 +30,7 @@
 
         <!-- Ketua Tim -->
         <div
-            class="flex flex-col rounded-xl bg-gray-50/50 p-4 ring-1 ring-zinc-200 dark:bg-gray-800/30 dark:ring-zinc-800/50">
+            class="flex flex-col rounded-xl bg-gray-50/50 p-4 border border-zinc-200 dark:bg-gray-800/30 dark:border-zinc-800/50">
             <div class="mb-2 flex items-center gap-3">
                 <div class="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg">
                     <x-icons.user class="text-primary h-6 w-6" />
@@ -58,7 +58,7 @@
 
                 @if ($search_user != '')
                     <div
-                        class="mt-3 max-h-[220px] overflow-y-auto rounded-xl bg-white p-2 shadow-sm ring-1 ring-zinc-200 dark:bg-gray-800 dark:ring-zinc-800">
+                        class="mt-3 max-h-[220px] overflow-y-auto rounded-xl bg-white/60 p-2 shadow-sm border border-zinc-200 backdrop-blur-md dark:bg-gray-800 dark:border-zinc-800">
                         @forelse ($users as $user)
                             <label for="helper-radio-{{ $user->kode_pegawai }}"
                                 class="group flex cursor-pointer items-center rounded-lg p-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50">

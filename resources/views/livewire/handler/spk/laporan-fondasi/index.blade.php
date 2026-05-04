@@ -1,5 +1,5 @@
 <div id="laporan-fondasi-container">
-    <section class="rounded-lg text-gray-800 ring-1 ring-zinc-200 dark:text-white dark:ring-zinc-800 lg:gap-4">
+    <section class="rounded-lg border border-zinc-200 text-gray-800 dark:border-zinc-800 dark:text-white lg:gap-4">
 
         <div
             class="{{ $showLaporanFondasi ? 'rounded-t-lg' : 'rounded-lg' }} z-0 flex flex-row items-center justify-between gap-2 p-2.5 transition-all duration-500 ease-in-out hover:cursor-pointer hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-800 lg:gap-4">

@@ -1,7 +1,7 @@
 <div class="mb-16 flex flex-col text-gray-800 dark:text-white">
 
     <div
-        class="relative grid grid-cols-2 rounded-t-xl bg-white p-2 ring-1 ring-zinc-200 transition-all duration-500 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 md:p-4 lg:p-6">
+        class="relative grid grid-cols-2 rounded-t-xl bg-white/60 p-2 border border-zinc-200 backdrop-blur-md transition-all duration-500 dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 md:p-4 lg:p-6">
 
         <div class="col-span-2 mb-4 flex w-full flex-row items-center justify-between">
             <div class="w-full">
@@ -112,7 +112,7 @@
     </div>
 
     <div
-        class="flex flex-col gap-4 rounded-b-xl bg-white p-2 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:text-white dark:shadow-none dark:ring-zinc-800 lg:p-6">
+        class="flex flex-col gap-4 rounded-b-xl bg-white/60 p-2 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:text-white dark:shadow-none dark:border-zinc-800 lg:p-6">
 
         <div class="w-fit items-center justify-between self-end">
             <x-input.select id="sort" name="sort" wire:model.live="sort" :defaultOption="'Urutkan'" :options="[

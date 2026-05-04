@@ -1,5 +1,5 @@
 <div
-    class="col-span-2 rounded-xl bg-white p-4 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 lg:p-6">
+    class="col-span-2 rounded-xl bg-white/60 p-4 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 lg:p-6">
 
     <header class="mb-4">
         <h2 class="text-lg font-medium text-gray-900 dark:text-white">
@@ -64,7 +64,7 @@
 
         @if ($showModalShowSignature)
             <div
-                class="mx-4 my-6 flex w-fit flex-col gap-2 overflow-y-auto rounded-xl bg-white p-4 shadow-2xl ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800">
+                class="mx-4 my-6 flex w-fit flex-col gap-2 overflow-y-auto rounded-xl bg-white/60 p-4 shadow-2xl border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:border-zinc-800">
 
                 <h2 class="text-center text-lg font-semibold text-gray-900 dark:text-white lg:text-xl">
                     Tanda tangan digital kamu

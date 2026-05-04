@@ -92,7 +92,7 @@
             {{-- Shipper & Receiver Grid --}}
             <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
                 <div
-                    class="group h-full rounded-2xl bg-zinc-50/50 p-4 ring-1 ring-zinc-200 transition-all hover:bg-white hover:ring-red-500/30 dark:bg-white/5 dark:ring-white/5 dark:hover:bg-white/10 dark:hover:ring-red-500/20">
+                    class="group h-full rounded-2xl bg-zinc-50/50 p-4 border border-zinc-200 transition-all hover:bg-white hover:border-red-500/30 dark:bg-white/5 dark:border-white/5 dark:hover:bg-white/10 dark:hover:border-red-500/20">
                     <div class="mb-3 flex items-center gap-2 text-zinc-400 group-hover:text-red-500">
                         <x-icons.profile-card class="h-4 w-4" />
                         <span class="text-xs font-bold uppercase tracking-widest">Pengirim</span>
@@ -104,7 +104,7 @@
                 </div>
 
                 <div
-                    class="group h-full rounded-2xl bg-zinc-50/50 p-4 ring-1 ring-zinc-200 transition-all hover:bg-white hover:ring-red-500/30 dark:bg-white/5 dark:ring-white/5 dark:hover:bg-white/10 dark:hover:ring-red-500/20">
+                    class="group h-full rounded-2xl bg-zinc-50/50 p-4 border border-zinc-200 transition-all hover:bg-white hover:border-red-500/30 dark:bg-white/5 dark:border-white/5 dark:hover:bg-white/10 dark:hover:border-red-500/20">
                     <div class="mb-3 flex items-center gap-2 text-zinc-400 group-hover:text-red-500">
                         <x-icons.map-pin class="h-4 w-4" />
                         <span class="text-xs font-bold uppercase tracking-widest">Penerima</span>

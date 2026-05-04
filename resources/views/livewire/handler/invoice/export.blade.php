@@ -18,7 +18,7 @@
         <div @click.away="show = false" x-show="show" x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0 scale-95 translate-y-4"
             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-            class="flex w-full max-w-md flex-col gap-2 rounded-xl bg-white p-6 shadow-2xl ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800">
+            class="flex w-full max-w-md flex-col gap-2 rounded-xl bg-white/60 p-6 shadow-2xl border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:border-zinc-800">
 
             <div class="mb-4 flex items-center justify-between border-b border-zinc-200 pb-3 dark:border-zinc-800">
                 <h2 class="text-xl font-bold text-gray-900 dark:text-white lg:text-2xl">

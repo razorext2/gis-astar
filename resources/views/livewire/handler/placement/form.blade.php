@@ -6,7 +6,7 @@
     {{-- ===================== KOLOM FORM ===================== --}}
     <div class="w-full space-y-6">
         <div
-            class="rounded-xl bg-white p-4 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 sm:p-6">
+            class="rounded-xl bg-white/60 p-4 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 sm:p-6">
             <div class="max-w-xl">
 
                 {{-- Header --}}
@@ -157,7 +157,7 @@
     {{-- ===================== KOLOM PETA ===================== --}}
     <div class="w-full">
         <div
-            class="rounded-xl bg-white p-4 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 sm:p-6">
+            class="rounded-xl bg-white/60 p-4 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 sm:p-6">
             <div class="max-w-xl">
                 <header>
                     <h2 class="text-lg font-medium text-gray-900 dark:text-white">
@@ -170,7 +170,7 @@
 
                 {{-- Map div — data attributes sebagai config untuk JS, tanpa global variables --}}
                 <div wire:ignore>
-                    <div id="placement-map" class="relative z-0 my-4 rounded-lg ring-1 ring-zinc-200"
+                    <div id="placement-map" class="relative z-0 my-4 rounded-lg border border-zinc-200"
                         style="height: 500px;" data-icon="{{ asset('assets/img/marker.png') }}"
                         data-shadow="{{ asset('assets/img/marker-shadow.png') }}" data-lat="{{ $latitude ?: '' }}"
                         data-lng="{{ $longitude ?: '' }}" data-radius="{{ $radius }}">

@@ -1,5 +1,5 @@
 <div
-    class="flex w-full flex-col items-center justify-center gap-2 rounded-lg p-2 ring-1 ring-zinc-200 dark:bg-gray-700 dark:ring-zinc-800 lg:gap-4 lg:p-4">
+    class="flex w-full flex-col items-center justify-center gap-2 rounded-lg p-2 border border-zinc-200 dark:bg-gray-700 dark:border-zinc-800 lg:gap-4 lg:p-4">
 
     <div class="flex w-full flex-row items-center justify-end gap-2">
         <p class="text-sm text-gray-800 dark:text-white">Filter:</p>

@@ -1,11 +1,11 @@
 <div class="w-full">
     <div
-        class="mb-2 w-full rounded-xl bg-white p-2 shadow-lg ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 lg:mb-4 lg:p-4">
+        class="mb-2 w-full rounded-xl bg-white/60 p-2 shadow-lg border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:border-zinc-800 lg:mb-4 lg:p-4">
 
         <h2 class="mb-2 font-medium text-gray-700 dark:text-white">Info Customer</h2>
 
         <form wire:submit.prevent="store"
-            class="rounded-lg p-2 ring-1 ring-zinc-200 dark:bg-gray-800 dark:ring-zinc-800 lg:p-4">
+            class="rounded-lg p-2 border border-zinc-200 dark:bg-gray-800 dark:border-zinc-800 lg:p-4">
             <div class="mb-2 lg:mb-4">
                 <x-input.basic id="name" wire:model="name" type="text" name="name"
                     placeholder="Isi dengan nama customer..." required>
@@ -38,14 +38,14 @@
     </div>
 
     <div
-        class="relative max-h-[575px] w-full overflow-y-auto rounded-xl bg-white p-2 shadow-lg ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 lg:p-4">
+        class="relative max-h-[575px] w-full overflow-y-auto rounded-xl bg-white/60 p-2 shadow-lg border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:border-zinc-800 lg:p-4">
 
         <h2 class="mb-2 font-medium text-gray-700 dark:text-white lg:mb-4">Rekap Laporan</h2>
 
         <div class="flex flex-col gap-6">
             @foreach ($this->assigments() as $assignment)
                 {{-- ASSIGNMENT CARD --}}
-                <div class="rounded-xl bg-white shadow-sm ring-1 ring-zinc-200 dark:bg-gray-800 dark:ring-zinc-800">
+                <div class="rounded-xl bg-white/60 shadow-sm border border-zinc-200 backdrop-blur-md dark:bg-gray-800 dark:border-zinc-800">
 
                     {{-- HEADER --}}
                     <div class="border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">
