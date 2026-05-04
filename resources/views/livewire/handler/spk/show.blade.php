@@ -5,7 +5,7 @@
         <div class="grid grid-cols-2 rounded-t-lg bg-gray-50 transition-all duration-500 dark:bg-gray-700">
 
             <div
-                class="{{ auth()->user()->cannot('spk-create') ? '' : 'lg:col-span-1 ' }} col-span-2 rounded-t-lg border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:rounded-tl-lg lg:rounded-tr-none">
+                class="{{ auth()->user()->cannot('spk-create') ? '' : 'lg:col-span-1 ' }} col-span-2 rounded-t-lg border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:rounded-tl-lg lg:rounded-tr-none">
                 <p class="text-xs italic">Nomor Order </p>
                 <div class="flex flex-col gap-y-2 font-semibold">
                     <div class="flex items-center gap-x-2">
@@ -83,7 +83,7 @@
 
             @if (auth()->user()->can('spk-create') || auth()->user()->can('spk-validate'))
                 <div
-                    class="col-span-2 flex flex-col gap-2 border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1 lg:rounded-tr-lg">
+                    class="col-span-2 flex flex-col gap-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1 lg:rounded-tr-lg">
                     <div>
                         <p class="text-xs italic">Tipe Tagihan</p>
                         <p class="font-semibold"> {{ $data->tipe_tagihan }} </p>
@@ -96,7 +96,7 @@
                 </div>
 
                 <div
-                    class="col-span-2 border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
+                    class="col-span-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
                     <p class="text-xs italic"> Nomor Tagihan </p>
                     <p class="font-semibold">
                         {{ $data->status_nomor_tagihan ? $data->nomor_tagihan : $data->status_nomor_tagihan_description }}
@@ -104,7 +104,7 @@
                 </div>
 
                 <div
-                    class="col-span-2 border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
+                    class="col-span-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
                     <p class="text-xs italic">Tipe Bayar </p>
                     <p class="font-semibold"> {{ $data->tipe_bayar }}</p>
                 </div>
@@ -127,7 +127,7 @@
             @endcan
 
             <div
-                class="col-span-2 border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
+                class="col-span-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
                 <p class="text-xs italic">Tanggal Cetak </p>
                 <p class="font-semibold">
                     {{ $data->tgl_cetak ? \Carbon\Carbon::parse($data->tgl_cetak)->locale('id')->isoFormat('D MMMM Y') : '-' }}
@@ -135,7 +135,7 @@
             </div>
 
             <div
-                class="col-span-2 border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
+                class="col-span-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
                 <p class="text-xs italic">Waktu Penyerahan</p>
                 <p class="font-semibold">
                     {{ $data->tgl_kirim }} Hari
@@ -144,7 +144,7 @@
             </div>
 
             <div
-                class="col-span-2 border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
+                class="col-span-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
                 <p class="text-xs italic">Nama Customer </p>
                 <p class="font-semibold"> {{ $data->customer['nama_perusahaan'] ?? 'N/A' }} </p>
 
@@ -158,7 +158,7 @@
             </div>
 
             <div
-                class="col-span-2 border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
+                class="col-span-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
                 <p class="text-xs italic"> Produk Dipesan </p>
                 <p class="text-sm font-semibold capitalize">
                     {{ $data->tipe_timbangan ?? 'Tipe timbangan tidak diatur.' }} </p>
@@ -176,13 +176,13 @@
             </div>
 
             <div
-                class="col-span-2 border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
+                class="col-span-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
                 <p class="text-xs italic"> Dibuat Oleh </p>
                 <p class="font-semibold capitalize"> {{ $data->addedBy->name }}</p>
             </div>
 
             <div
-                class="col-span-2 border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
+                class="col-span-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
                 <p class="text-xs italic"> Diproduksi Oleh </p>
                 <p class="font-semibold capitalize"> {{ $data->assignTo?->name ?? 'Belum di assign.' }}
                     {{ $data->assignTo?->pegawai?->jabatanRelasi?->nama_jabatan ?? '' }}
@@ -190,7 +190,7 @@
             </div>
 
             <div
-                class="col-span-2 flex flex-col gap-y-2 border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
+                class="col-span-2 flex flex-col gap-y-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
                 @if ($data->is_booked)
                     <div>
                         <p class="text-xs italic"> Dibooking Oleh </p>
@@ -221,7 +221,7 @@
             </div>
 
             <div
-                class="col-span-2 border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
+                class="col-span-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
                 <p class="text-xs italic"> Divalidasi Pada </p>
                 <p class="font-semibold capitalize">
                     {{ $data->approved_at
@@ -230,8 +230,7 @@
                 </p>
             </div>
 
-            <div
-                class="col-span-2 border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white">
+            <div class="col-span-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white">
                 <p class="text-xs italic"> Request Fondasi </p>
                 <div
                     class="mt-2 flex flex-col divide-y divide-gray-200 rounded-lg border border-zinc-200 bg-white shadow-sm dark:divide-gray-700 dark:border-zinc-800 dark:bg-gray-700">
@@ -254,8 +253,7 @@
             </div>
 
             @if (auth()->user()->can('spk-validate') || auth()->user()->can('spk-create') || auth()->user()->can('spk-lampiran'))
-                <div
-                    class="col-span-2 border-[1px] border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white">
+                <div class="col-span-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white">
                     <p class="text-xs italic"> Lampiran </p>
 
                     <div

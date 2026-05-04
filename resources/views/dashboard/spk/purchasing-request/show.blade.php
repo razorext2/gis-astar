@@ -1,7 +1,7 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
     <div
-        class="flex w-full flex-col gap-2 rounded-xl border-[1px] border-zinc-200 bg-white p-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
+        class="flex w-full flex-col gap-2 rounded-xl border border-zinc-200 bg-white p-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
 
         <div class="flex flex-row items-center gap-2 lg:gap-4">
 

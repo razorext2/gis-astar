@@ -2,7 +2,7 @@
     {{-- info cust spk --}}
     <div class="grid w-full grid-cols-2">
         <div
-            class="col-span-2 rounded-t-xl border-[1px] border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1 lg:rounded-tr-none">
+            class="col-span-2 rounded-t-xl border border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1 lg:rounded-tr-none">
             <p class="text-xs italic"> No. SPK </p>
             <p class="font-semibold">
                 {{ $spk_data->nomor_order . ($spk_data->revision_count ? 'R' . str_pad($spk_data->revision_count, 2, '0', STR_PAD_LEFT) : '') }}
@@ -10,7 +10,7 @@
         </div>
 
         <div
-            class="col-span-2 border-[1px] border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1 lg:rounded-tr-xl">
+            class="col-span-2 border border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1 lg:rounded-tr-xl">
             <p class="text-xs italic">Tanggal SPK Dibuat</p>
             <p class="font-semibold">
                 {{ $spk_data->created_at }}
@@ -18,14 +18,14 @@
         </div>
 
         <div
-            class="col-span-2 border-[1px] border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1">
+            class="col-span-2 border border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1">
             <p class="text-xs italic">Nama Customer</p>
             <p class="font-semibold">
                 {{ empty($spk_data->customer['nama_perusahaan']) ? '-' : $spk_data->customer['nama_perusahaan'] }}</p>
         </div>
 
         <div
-            class="col-span-2 border-[1px] border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1">
+            class="col-span-2 border border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1">
             <p class="text-xs italic">Nama Penerima</p>
             <p class="font-semibold">
                 {{ empty($spk_data->customer['contact_person']) ? '-' : $spk_data->customer['contact_person'] }}
@@ -33,7 +33,7 @@
         </div>
 
         <div
-            class="col-span-2 border-[1px] border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:rounded-b-xl">
+            class="col-span-2 border border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:rounded-b-xl">
             <p class="text-xs italic">Nomor Tagihan</p>
             <p class="font-semibold"> {{ $spk_data->nomor_tagihan ?? 'Belum di assign.' }}</p>
         </div>
@@ -85,19 +85,19 @@
                 </span>
 
                 <div
-                    class="col-span-2 border-[1px] border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1">
+                    class="col-span-2 border border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1">
                     <p class="text-xs italic"> No. Tagihan (SR/FP) </p>
                     <p class="font-semibold"> {{ $form->nomor_tagihan ?? '-' }}</p>
                 </div>
 
                 <div
-                    class="col-span-2 border-[1px] border-zinc-200 bg-gray-50 p-2 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1">
+                    class="col-span-2 border border-zinc-200 bg-gray-50 p-2 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1">
                     <p class="text-xs italic">Nama Customer</p>
                     <p class="font-semibold"> {{ $form->nama_customer ?? '-' }}</p>
                 </div>
 
                 <div
-                    class="col-span-2 rounded-b-xl border-[1px] border-zinc-200 bg-gray-50 p-2 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white">
+                    class="col-span-2 rounded-b-xl border border-zinc-200 bg-gray-50 p-2 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white">
 
                     <dl class="items-center justify-between gap-4 sm:flex">
                         <dt class="mb-1 font-normal text-blue-500 dark:text-blue-400 sm:mb-0">Total Piutang</dt>
