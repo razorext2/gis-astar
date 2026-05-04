@@ -4,6 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="description" content="Is a web-based attendance application for Indodacin using face recognition" />
 <meta name="keywords" content="face, attendance, face-attendance, face attendance, indodacin" />
+<meta name="robots" content="noindex, nofollow" />
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 <title>{{ $title }}: Attendance System</title>
 
