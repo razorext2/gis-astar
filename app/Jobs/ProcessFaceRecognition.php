@@ -71,7 +71,8 @@ class ProcessFaceRecognition implements ShouldQueue
             $file = fopen($fullPath, 'r');
 
             // kirim file ke api untuk direcognize
-            $response = Http::attach('file', $file)
+            $response = Http::withoutVerifying()
+                ->attach('file', $file)
                 ->post('https://verify.indodacin.com/recognize', [
                     'kode_pegawai' => $this->kode_pegawai,
                     'no_vt' => $this->no_vt,
@@ -121,7 +122,7 @@ class ProcessFaceRecognition implements ShouldQueue
                 ]);
 
                 // langsung kirim ke API
-                $api = Http::post('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendance', [
+                $api = Http::withoutVerifying()->post('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendance', [
                     'kode_jari' => $this->kode_pegawai,
                     'waktu' => $data->waktuori,
                     'kodebarcode' => $this->no_vt,
