@@ -43,3 +43,5 @@ rr
 .rr.yaml
 python/pegawai
 SYSTEM_MAP.MD
+AGENTS.MD
+/.cursor
