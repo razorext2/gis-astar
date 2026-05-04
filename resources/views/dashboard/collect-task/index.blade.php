@@ -5,7 +5,7 @@
     <div class="relative grid grid-cols-1 gap-6">
 
         <div
-            class="rounded-xl border border-zinc-200 bg-white p-4 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none">
+            class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none">
             <ul class="flex flex-wrap text-center text-sm font-medium">
                 <li>
                     <a class="{{ Route::is('collect-task.index') ? 'text-red-600 border-b border-zinc-200' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-red-600 dark:hover:text-red-600"

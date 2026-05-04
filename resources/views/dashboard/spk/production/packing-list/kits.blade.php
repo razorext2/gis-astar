@@ -1,7 +1,7 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
     <div
-        class="flex w-full flex-col gap-4 rounded-xl bg-white px-3 py-2 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 lg:p-6">
+        class="flex w-full flex-col gap-4 rounded-xl bg-white/60 px-3 py-2 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 lg:p-6">
         <div class="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-4">
 
             <x-button.link href="{{ route('production.packing-list.add', ['production' => $data->id]) }}"
@@ -28,13 +28,13 @@
 
         <div class="grid w-full grid-cols-2 gap-2 rounded-lg">
             <div
-                class="col-span-2 flex w-full flex-col rounded-lg bg-gray-100 p-2 ring-1 ring-zinc-200 dark:bg-gray-700 dark:ring-zinc-800 lg:col-span-1 lg:p-4">
+                class="col-span-2 flex w-full flex-col rounded-lg bg-gray-100/80 p-2 border border-zinc-200 backdrop-blur-sm dark:bg-gray-700/80 dark:border-zinc-800 lg:col-span-1 lg:p-4">
                 <span class="text-xs text-gray-600 dark:text-gray-400"> Ekspedisi </span>
                 <span class="text-gray-800 dark:text-white"> {{ $barang['nama_ekspedisi'] }} </span>
             </div>
 
             <div
-                class="col-span-2 flex w-full flex-col rounded-lg bg-gray-100 p-2 ring-1 ring-zinc-200 dark:bg-gray-700 dark:ring-zinc-800 lg:col-span-1 lg:p-4">
+                class="col-span-2 flex w-full flex-col rounded-lg bg-gray-100/80 p-2 border border-zinc-200 backdrop-blur-sm dark:bg-gray-700/80 dark:border-zinc-800 lg:col-span-1 lg:p-4">
                 <span class="text-xs text-gray-600 dark:text-gray-400"> Nama Barang </span>
                 <span class="capitalize text-gray-800 dark:text-white">
                     {{ $barang['qty_barang'] . ' ' . $barang['satuan_barang'] . ' (' . Terbilang::make($barang['qty_barang']) . ') ' . $barang['nama_barang'] }}

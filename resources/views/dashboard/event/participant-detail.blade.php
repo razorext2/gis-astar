@@ -2,7 +2,7 @@
 @section('content')
     <div class="mb-16 flex flex-col text-gray-800 dark:text-white">
         <div
-            class="flex flex-col gap-4 rounded-xl bg-white p-2 shadow-md ring-1 ring-zinc-200 transition-all duration-500 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 md:p-4 lg:p-6">
+            class="flex flex-col gap-4 rounded-xl bg-white/60 p-2 shadow-md border border-zinc-200 backdrop-blur-md transition-all duration-500 dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 md:p-4 lg:p-6">
 
             <div class="col-span-2 mb-4 flex w-full flex-row items-center gap-4">
                 <div class="max-w-xs">

@@ -15,7 +15,7 @@
 
             <!-- Chart Section -->
             <div
-                class="col-span-2 mb-4 flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none md:p-6 lg:mb-0">
+                class="col-span-2 mb-4 flex h-full flex-col rounded-2xl border border-zinc-200 bg-white/60 p-5 shadow-sm transition-shadow hover:shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none md:p-6 lg:mb-0">
                 <div class="mb-5 flex items-start justify-between">
                     <div>
                         <p class="mb-1 text-3xl font-black tracking-tight text-zinc-900 dark:text-white">
