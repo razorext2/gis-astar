@@ -141,7 +141,7 @@
             {{-- Popovers (Rendered outside overflow-hidden) --}}
             @foreach ($dd as $date)
                 @if ($date)
-                    <livewire:component.pegawai.attendance-calendar-popover :date="$date" :pegawaiId="$pegawai->id"
+                    <livewire:components.pegawai.attendance-calendar-popover :date="$date" :pegawaiId="$pegawai->id"
                         :kodePegawai="$pegawai->kode_pegawai" :key="'popover-' . $date" />
                 @endif
             @endforeach
