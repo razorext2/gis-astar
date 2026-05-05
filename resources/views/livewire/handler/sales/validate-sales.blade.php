@@ -1,9 +1,6 @@
 <div>
     <x-button.success class="float-right" wire:click="$set('showModal', true)">
-        <x-slot name="icon">
-            <x-icons.angle-right class="h-5 w-5" />
-        </x-slot>
-        {{ $label }}
+        <x-icons.angle-right class="h-4 w-4" />
     </x-button.success>
 
     <x-modal.base-modal show="showModal" maxWidth="3xl" :title="$step == 1 ? 'Konfirmasi Laporan' : ($step == 2 ? 'Konfirmasi Detail' : 'Alasan Penolakan')" :subtitle="$step == 1
