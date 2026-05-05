@@ -11,23 +11,24 @@ class Sales extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = "tb_sales";
+    protected $table = 'tb_sales';
+
     protected $fillable = [
-        "kode_pegawai",
-        "title",
-        "customer_name",
-        "customer_telp",
-        "lokasi",
-        "keterangan",
-        "longitude",
-        "latitude",
-        "status",
-        "notes",
-        "validate_by",
-        "id_session",
-        "customer_make_order",
-        "order_notes",
-        "proof_picture",
+        'kode_pegawai',
+        'title',
+        'customer_name',
+        'customer_telp',
+        'lokasi',
+        'keterangan',
+        'longitude',
+        'latitude',
+        'status',
+        'notes',
+        'validate_by',
+        'id_session',
+        'customer_make_order',
+        'order_notes',
+        'proof_picture',
     ];
 
     /**
@@ -56,8 +57,9 @@ class Sales extends Model
     {
         $words = explode(' ', $this->title);
         if (count($words) > 3) {
-            return implode(' ', array_slice($words, 0, 3)) . '';
+            return implode(' ', array_slice($words, 0, 3)).'';
         }
+
         return $this->title;
     }
 
@@ -84,10 +86,5 @@ class Sales extends Model
     public function scopeNeedApprove($query)
     {
         return $query->where('status', 0);
-    }
-
-    public function questionnaire()
-    {
-        return $this->hasMany(QuestionAnswer::class, 'id_session', 'id_session');
     }
 }

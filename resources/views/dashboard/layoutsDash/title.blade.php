@@ -27,7 +27,7 @@
         'golongan.*' => 'Manajemen Golongan',
         'points.*' => 'Poin Teknisi',
         'map.*' => 'Peta Sebaran',
-        'kuesioner.*' => 'Kuesioner (Unused)',
+
         'today.attendance' => 'Absensi Hari Ini',
         'technicianpoints.*' => 'Transaksi Point',
         'routes.*' => 'Rute',

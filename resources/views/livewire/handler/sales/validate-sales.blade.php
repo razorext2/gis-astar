@@ -6,10 +6,10 @@
         {{ $label }}
     </x-button.success>
 
-    <x-modal.base-modal show="showModal" maxWidth="3xl" :title="$step == 1 ? 'Konfirmasi Laporan' : ($step == 2 ? 'Kuisioner Konfirmasi' : 'Alasan Penolakan')" :subtitle="$step == 1
+    <x-modal.base-modal show="showModal" maxWidth="3xl" :title="$step == 1 ? 'Konfirmasi Laporan' : ($step == 2 ? 'Konfirmasi Detail' : 'Alasan Penolakan')" :subtitle="$step == 1
         ? 'Review detail laporan di bawah ini'
         : ($step == 2
-            ? 'Jawab pertanyaan berikut sebelum konfirmasi laporan'
+            ? 'Lengkapi detail berikut sebelum konfirmasi laporan'
             : 'Berikan alasan kenapa laporan ini harus ditolak')" :iconContainerClass="$step == 1
         ? 'bg-blue-600 shadow-blue-500/20'
         : ($step == 2
@@ -79,7 +79,10 @@
                                 $hasPhotos = $data->photoCollectRelasi && $data->photoCollectRelasi->count() > 0;
                                 if ($hasPhotos) {
                                     foreach ($data->photoCollectRelasi as $photo) {
-                                        if ($photo->photourl && file_exists(public_path(ltrim($photo->photourl, '/')))) {
+                                        if (
+                                            $photo->photourl &&
+                                            file_exists(public_path(ltrim($photo->photourl, '/')))
+                                        ) {
                                             $validPhotos->push($photo);
                                         }
                                     }
@@ -98,8 +101,8 @@
                             @elseif ($hasPhotos)
                                 <div class="relative flex-none">
                                     <img class="h-40 w-40 rounded-xl border border-zinc-200 object-cover transition duration-300 hover:scale-110 dark:border-zinc-700"
-                                        id="documentations"
-                                        src="{{ asset('assets/img/noImage.webp') }}" alt="No Image" loading="lazy">
+                                        id="documentations" src="{{ asset('assets/img/noImage.webp') }}" alt="No Image"
+                                        loading="lazy">
                                 </div>
                             @else
                                 <p class="font-medium text-zinc-800 dark:text-zinc-200"> Tidak ada dokumentasi
@@ -128,7 +131,7 @@
                     laporan ini?</p>
             @endif
         @elseif($step == 2)
-            <form id="form-questionnaire" wire:submit="confirmQuestionnaire" enctype="multipart/form-data">
+            <form id="form-validation" wire:submit="confirmValidation" enctype="multipart/form-data">
                 <div class="flex w-full flex-col gap-4 text-zinc-800 dark:text-zinc-200">
                     <div>
                         <x-input.basic placeholder="Cth: Bp. Bintan" id="customer_name" name="customer_name"
@@ -195,12 +198,13 @@
                     </div>
 
                     <div x-data="{ uploading: false, progress: 0 }" x-on:livewire-upload-start="uploading = true"
-                        x-on:livewire-upload-finish="uploading = false" x-on:livewire-upload-cancel="uploading = false"
-                        x-on:livewire-upload-error="uploading = false"
+                        x-on:livewire-upload-finish="uploading = false"
+                        x-on:livewire-upload-cancel="uploading = false" x-on:livewire-upload-error="uploading = false"
                         x-on:livewire-upload-progress="progress = $event.detail.progress">
                         <label class="mb-2 block text-sm font-medium text-zinc-900 dark:text-zinc-100"
-                            for="user_avatar">Bukti Followup
-                            Customer</label>
+                            for="user_avatar">
+                            Bukti Followup Customer
+                        </label>
 
                         <div x-show="uploading"
                             class="mb-2 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
@@ -245,18 +249,17 @@
                     <x-button.danger class="w-full justify-center sm:w-auto" wire:click="toRejection">
                         Tolak
                     </x-button.danger>
-                    <x-button.success class="w-full justify-center sm:w-auto" wire:click="toQuestionnaire">
+                    <x-button.success class="w-full justify-center sm:w-auto" wire:click="toValidation">
                         Konfirmasi
                     </x-button.success>
                 @elseif($step == 2)
                     <x-button.secondary class="w-full justify-center sm:w-auto" wire:click="resetModal">
                         Batal
                     </x-button.secondary>
-                    <x-button.success class="w-full justify-center sm:w-auto" type="submit"
-                        form="form-questionnaire">
+                    <x-button.success class="w-full justify-center sm:w-auto" type="submit" form="form-validation">
                         <span wire:loading wire:target="proof_pic">Uploading...</span>
-                        <span wire:loading wire:target="confirmQuestionnaire">Menyimpan...</span>
-                        <span wire:loading.remove wire:target="proof_pic, confirmQuestionnaire">Proses
+                        <span wire:loading wire:target="confirmValidation">Menyimpan...</span>
+                        <span wire:loading.remove wire:target="proof_pic, confirmValidation">Proses
                             Konfirmasi</span>
                     </x-button.success>
                 @elseif($step == 3)

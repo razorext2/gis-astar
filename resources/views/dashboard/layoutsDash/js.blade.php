@@ -6,9 +6,6 @@
         Route::is('collect-task.*') ||
         Route::is('collect-task-ppn.*') ||
         Route::is('collect-idy-ppn.*') ||
-        Route::is('pegawai.allowances.*') ||
-        Route::is('pegawai.deductions.*') ||
-        Route::is('pegawai.payroll') ||
         Route::is('sales.*'))
     <script type="module" src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
     <script type="module" src="https://cdn.datatables.net/2.1.8/js/dataTables.tailwindcss.min.js"></script>
