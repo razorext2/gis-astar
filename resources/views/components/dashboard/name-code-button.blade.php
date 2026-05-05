@@ -1,8 +1,8 @@
 @props(['capitalize' => true])
 
 <div class="flex w-fit min-w-32 flex-col items-start gap-1 text-wrap">
-    <span class="{{ $capitalize ? 'capitalize' : '' }} text-xs text-gray-400">{{ $user->kode_pegawai ?? 'N/A' }}</span>
-    <span class="font-medium capitalize dark:text-gray-200">{{ $user->name ?? 'N/A' }}</span>
+    <span class="{{ $capitalize ? 'capitalize' : '' }} text-xs text-zinc-400">{{ $user->kode_pegawai ?? 'N/A' }}</span>
+    <span class="font-medium capitalize dark:text-zinc-200">{{ $user->name ?? 'N/A' }}</span>
 
     @if ($data->status == 5)
         @if (auth()->user()->can('driver-approve') || $data->assign_date <= now())

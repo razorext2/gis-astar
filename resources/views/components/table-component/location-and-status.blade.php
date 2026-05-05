@@ -24,14 +24,14 @@
             </span>
         @else
             <span
-                class="flex w-fit flex-row items-center gap-x-1 rounded-lg bg-gray-600 px-1 py-0.5 text-gray-200 dark:bg-gray-600">
-                <x-icons.question-circle class="h-4 w-4 text-gray-300" />
+                class="flex w-fit flex-row items-center gap-x-1 rounded-lg bg-zinc-600 px-1 py-0.5 text-zinc-200 dark:bg-zinc-600">
+                <x-icons.question-circle class="h-4 w-4 text-zinc-300" />
                 <p class="text-xs"> Unknown </p>
             </span>
         @endif
     @endif
 
-    <p class="w-full max-w-36 text-wrap text-xs text-gray-400 lg:max-w-52">
+    <p class="w-full max-w-36 text-wrap text-xs text-zinc-400 lg:max-w-52">
         {{ $data->keterangan }}
     </p>
 

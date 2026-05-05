@@ -1,11 +1,11 @@
 <div class="flex w-48 flex-col text-wrap">
-	<span class="text-xs text-gray-400">
+	<span class="text-xs text-zinc-400">
 		{{ $name ?? '' }}
 	</span>
 	<span class="font-medium">
 		{{ $recipient ?? '' }}
 	</span>
-	<span class="text-xs text-gray-400">
+	<span class="text-xs text-zinc-400">
 		{{ $address ?? '' }}
 	</span>
 </div>

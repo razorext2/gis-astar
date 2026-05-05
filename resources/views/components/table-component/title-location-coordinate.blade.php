@@ -39,7 +39,7 @@
     <span class="w-full text-wrap">{{ $data->title }} </span>
     <span class="w-full text-wrap text-xs">{{ $data->lokasi }}</span>
     @if ($data->latitude && $data->longitude)
-        <span class="w-full text-xs text-gray-400">
+        <span class="w-full text-xs text-zinc-400">
             <a class="inline-flex underline"
                 href="https://www.google.com/maps/search/?api=1&query={{ $data->latitude }},{{ $data->longitude }}"
                 target="_blank">

@@ -19,7 +19,7 @@
 		<x-landing.footer />
 		<x-landing.mobile-drawer />
 
-		<div class="fixed inset-0 z-50 bg-white dark:bg-gray-800 md:z-[100]" id="preloader">
+		<div class="fixed inset-0 z-50 bg-white dark:bg-zinc-800 md:z-[100]" id="preloader">
 		</div>
 
 		@include('components.landing.partials.script')

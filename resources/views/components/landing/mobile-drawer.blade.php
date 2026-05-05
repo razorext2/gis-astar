@@ -18,7 +18,7 @@
                 <a class="group absolute bottom-7 inline-flex h-14 w-14 items-center justify-center rounded-full bg-red-600 font-medium outline outline-8 outline-red-300 hover:bottom-6 hover:size-16 hover:bg-red-700 hover:outline-red-200"
                     href="">
 
-                    <svg class="h-8 w-8 stroke-white group-hover:size-9 group-hover:stroke-gray-100" viewBox="0 0 24 24"
+                    <svg class="h-8 w-8 stroke-white group-hover:size-9 group-hover:stroke-zinc-100" viewBox="0 0 24 24"
                         fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
