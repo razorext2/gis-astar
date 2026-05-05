@@ -1,7 +1,7 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
     <div
-        class="flex flex-col gap-4 rounded-xl bg-white/60 px-3 py-2 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 lg:p-6">
+        class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 px-3 py-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
         {{-- header --}}
         <div class="flex flex-row items-center gap-2 lg:gap-4">
             <div>
@@ -15,7 +15,7 @@
             </div>
 
             <div>
-                <p class="text-xl font-semibold text-gray-900 dark:bg-dark-primary dark:text-white">
+                <p class="text-xl font-semibold text-gray-900 dark:text-white">
                     Laporan Progres Produksi
                     {{ $data->spk->nomor_order . ($data->spk->revision_count ? 'R' . str_pad($data->spk->revision_count, 2, '0', STR_PAD_LEFT) : '') }}
                     <span class="text-sm uppercase italic">(

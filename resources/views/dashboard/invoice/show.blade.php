@@ -3,7 +3,7 @@
     <div class="relative grid w-full grid-cols-1 gap-4">
 
         <div
-            class="flex flex-row items-center gap-4 rounded-xl bg-white/60 p-2 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 lg:p-6">
+            class="flex flex-row items-center gap-4 rounded-xl border border-zinc-200 bg-white/60 p-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
 
             <div class="max-w-xs">
                 @php
@@ -20,7 +20,7 @@
             </div>
 
             <div class="flex flex-col gap-1.5">
-                <span class="text-xl font-semibold text-gray-900 dark:bg-dark-primary dark:text-white">
+                <span class="text-xl font-semibold text-gray-900 dark:text-white">
                     Riwayat Status Invoice
                 </span>
 

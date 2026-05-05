@@ -2,7 +2,7 @@
 @section('content')
     <div class="flex flex-col gap-4">
         <div
-            class="flex flex-row items-center gap-2 rounded-xl bg-white/60 px-3 py-2 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 lg:gap-4 lg:p-6">
+            class="flex flex-row items-center gap-2 rounded-xl border border-zinc-200 bg-white/60 px-3 py-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:gap-4 lg:p-6">
 
             <div>
                 <x-button.danger href="{{ route('spk.index') }}" wire:navigate id="back-button">
@@ -14,7 +14,7 @@
             </div>
 
             <div>
-                <span class="text-xl font-semibold text-gray-900 dark:bg-dark-primary dark:text-white">
+                <span class="text-xl font-semibold text-gray-900 dark:text-white">
                     Tambah SPK
                 </span>
 

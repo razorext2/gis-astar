@@ -1,11 +1,12 @@
 <div class="flex flex-col gap-4">
-    <div class="relative flex flex-col rounded-lg border border-zinc-200 text-gray-800 dark:border-zinc-800 dark:text-white">
+    <div
+        class="relative flex flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white text-zinc-800 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 dark:text-white">
 
         {{-- informasi spk --}}
-        <div class="grid grid-cols-2 rounded-t-lg bg-gray-50 transition-all duration-500 dark:bg-gray-700">
+        <div class="grid grid-cols-2 divide-y divide-zinc-200 transition-all duration-500 dark:divide-zinc-800">
 
             <div
-                class="{{ auth()->user()->cannot('spk-create') ? '' : 'lg:col-span-1 ' }} col-span-2 rounded-t-lg border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:rounded-tl-lg lg:rounded-tr-none">
+                class="{{ auth()->user()->cannot('spk-create') ? 'col-span-2' : 'col-span-2 lg:col-span-1 lg:border-r border-zinc-200 dark:border-zinc-800' }} p-4">
                 <p class="text-xs italic">Nomor Order </p>
                 <div class="flex flex-col gap-y-2 font-semibold">
                     <div class="flex items-center gap-x-2">
@@ -20,7 +21,7 @@
                                 2 => 'red',
                                 3 => 'yellow',
                                 4 => 'red',
-                                default => 'gray',
+                                default => 'zinc',
                             };
                         @endphp
 
@@ -63,7 +64,7 @@
 
                     @if ($data->latest_revision_request_detail)
                         <p class="text-sm font-light text-red-500">
-                            <span class="font-semibold tracking-wide text-gray-600 dark:text-gray-100">
+                            <span class="font-semibold tracking-wide text-zinc-600 dark:text-zinc-400">
                                 Revisi Terakhir:
                             </span>
                             {{ $data->latest_revision_request_detail }}
@@ -72,7 +73,7 @@
 
                     @if ($data->is_cancelled && $data->cancel_request_reason)
                         <p class="text-sm font-light text-red-500">
-                            <span class="font-semibold tracking-wide text-gray-600 dark:text-gray-100">
+                            <span class="font-semibold tracking-wide text-zinc-600 dark:text-zinc-400">
                                 Alasan Pembatalan:
                             </span>
                             {{ $data->cancel_request_reason }}
@@ -82,8 +83,7 @@
             </div>
 
             @if (auth()->user()->can('spk-create') || auth()->user()->can('spk-validate'))
-                <div
-                    class="col-span-2 flex flex-col gap-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1 lg:rounded-tr-lg">
+                <div class="col-span-2 flex flex-col gap-2 p-4 lg:col-span-1">
                     <div>
                         <p class="text-xs italic">Tipe Tagihan</p>
                         <p class="font-semibold"> {{ $data->tipe_tagihan }} </p>
@@ -95,16 +95,14 @@
                     </div>
                 </div>
 
-                <div
-                    class="col-span-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
+                <div class="col-span-2 p-4 lg:col-span-1 lg:border-r border-zinc-200 dark:border-zinc-800">
                     <p class="text-xs italic"> Nomor Tagihan </p>
                     <p class="font-semibold">
                         {{ $data->status_nomor_tagihan ? $data->nomor_tagihan : $data->status_nomor_tagihan_description }}
                     </p>
                 </div>
 
-                <div
-                    class="col-span-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
+                <div class="col-span-2 p-4 lg:col-span-1">
                     <p class="text-xs italic">Tipe Bayar </p>
                     <p class="font-semibold"> {{ $data->tipe_bayar }}</p>
                 </div>
@@ -112,7 +110,7 @@
 
             @can('produksi-create')
                 <div
-                    class="col-span-2 border-2 border-green-200 bg-green-200 p-2.5 text-green-800 dark:border-green-600 dark:bg-green-600 dark:text-white">
+                    class="col-span-2 bg-green-50/50 p-4 text-green-800 dark:bg-green-900/20 dark:text-green-400">
                     <p class="font-semibold"> Produksi menggunakan bahan stok lama? </p>
 
                     @if ($data->is_using_old_stock == false)
@@ -126,16 +124,14 @@
                 </div>
             @endcan
 
-            <div
-                class="col-span-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
+            <div class="col-span-2 p-4 lg:col-span-1 lg:border-r border-zinc-200 dark:border-zinc-800">
                 <p class="text-xs italic">Tanggal Cetak </p>
                 <p class="font-semibold">
                     {{ $data->tgl_cetak ? \Carbon\Carbon::parse($data->tgl_cetak)->locale('id')->isoFormat('D MMMM Y') : '-' }}
                 </p>
             </div>
 
-            <div
-                class="col-span-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
+            <div class="col-span-2 p-4 lg:col-span-1">
                 <p class="text-xs italic">Waktu Penyerahan</p>
                 <p class="font-semibold">
                     {{ $data->tgl_kirim }} Hari
@@ -143,22 +139,22 @@
                 </p>
             </div>
 
-            <div
-                class="col-span-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
+            <div class="col-span-2 p-4 lg:col-span-1 lg:border-r border-zinc-200 dark:border-zinc-800">
                 <p class="text-xs italic">Nama Customer </p>
                 <p class="font-semibold"> {{ $data->customer['nama_perusahaan'] ?? 'N/A' }} </p>
 
 
                 @hasanyrole(['Admin', 'Marketing', 'Management', 'Management-Special'])
-                    <p class="text-sm"> {{ $data->customer['contact_person'] ?? '-' }}
-                        (telp: {{ $data->customer['no_hp'] ?? '-' }})
-                    </p>
-                    <p class="text-sm"> {{ $data->customer['alamat'] ?? '-' }} </p>'
+                    <div class="mt-1 flex flex-col text-sm text-zinc-500 dark:text-zinc-400">
+                        <p> {{ $data->customer['contact_person'] ?? '-' }}
+                            (telp: {{ $data->customer['no_hp'] ?? '-' }})
+                        </p>
+                        <p> {{ $data->customer['alamat'] ?? '-' }} </p>
+                    </div>
                 @endhasanyrole
             </div>
 
-            <div
-                class="col-span-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
+            <div class="col-span-2 p-4 lg:col-span-1">
                 <p class="text-xs italic"> Produk Dipesan </p>
                 <p class="text-sm font-semibold capitalize">
                     {{ $data->tipe_timbangan ?? 'Tipe timbangan tidak diatur.' }} </p>
@@ -175,22 +171,23 @@
                 </ul>
             </div>
 
-            <div
-                class="col-span-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
+            <div class="col-span-2 p-4 lg:col-span-1 lg:border-r border-zinc-200 dark:border-zinc-800">
                 <p class="text-xs italic"> Dibuat Oleh </p>
                 <p class="font-semibold capitalize"> {{ $data->addedBy->name }}</p>
             </div>
 
-            <div
-                class="col-span-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
+            <div class="col-span-2 p-4 lg:col-span-1">
                 <p class="text-xs italic"> Diproduksi Oleh </p>
-                <p class="font-semibold capitalize"> {{ $data->assignTo?->name ?? 'Belum di assign.' }}
-                    {{ $data->assignTo?->pegawai?->jabatanRelasi?->nama_jabatan ?? '' }}
-                    ({{ $data->assignTo?->pegawai?->jabatanRelasi?->placementRelasi?->penempatan ?? '' }})</p>
+                <p class="text-sm font-semibold capitalize lg:text-base">
+                    {{ $data->assignTo?->name ?? 'Belum di assign.' }}
+                    <span class="block text-xs font-normal text-zinc-500 dark:text-zinc-400">
+                        {{ $data->assignTo?->pegawai?->jabatanRelasi?->nama_jabatan ?? '' }}
+                        ({{ $data->assignTo?->pegawai?->jabatanRelasi?->placementRelasi?->penempatan ?? '' }})
+                    </span>
+                </p>
             </div>
 
-            <div
-                class="col-span-2 flex flex-col gap-y-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
+            <div class="col-span-2 flex flex-col gap-y-2 p-4 lg:col-span-1 lg:border-r border-zinc-200 dark:border-zinc-800">
                 @if ($data->is_booked)
                     <div>
                         <p class="text-xs italic"> Dibooking Oleh </p>
@@ -205,23 +202,22 @@
 
                 @if ($data->is_cancelled)
                     <div
-                        class="flex flex-col rounded-lg border border-red-500 bg-red-200 p-2 dark:bg-transparent lg:p-4">
-                        <div class="text-red-500">
+                        class="flex flex-col rounded-lg border border-red-200 bg-red-50 p-3 dark:border-red-900/50 dark:bg-red-900/20">
+                        <div class="text-red-600 dark:text-red-400">
                             <p class="text-xs italic"> Dibatalkan Oleh </p>
                             <p class="font-semibold capitalize"> {{ $data->cancelRequestBy->name ?? '-' }}</p>
                         </div>
 
-                        <div>
+                        <div class="mt-2">
                             <p class="text-xs italic"> Pembatalan Divalidasi Oleh </p>
-                            <p class="font-semibold capitalize text-gray-800 dark:text-white">
+                            <p class="font-semibold capitalize">
                                 {{ $data->cancelRequestValidatedBy->name ?? '-' }}</p>
                         </div>
                     </div>
                 @endif
             </div>
 
-            <div
-                class="col-span-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white lg:col-span-1">
+            <div class="col-span-2 p-4 lg:col-span-1">
                 <p class="text-xs italic"> Divalidasi Pada </p>
                 <p class="font-semibold capitalize">
                     {{ $data->approved_at
@@ -230,22 +226,22 @@
                 </p>
             </div>
 
-            <div class="col-span-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white">
+            <div class="col-span-2 p-4">
                 <p class="text-xs italic"> Request Fondasi </p>
                 <div
-                    class="mt-2 flex flex-col divide-y divide-gray-200 rounded-lg border border-zinc-200 bg-white shadow-sm dark:divide-gray-700 dark:border-zinc-800 dark:bg-gray-700">
+                    class="mt-2 flex flex-col divide-y divide-zinc-200 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:divide-zinc-800 dark:border-zinc-800 dark:bg-zinc-900/50">
                     @forelse ($this->filteredAttachmentsOnlyRequestFondasi as $index => $row)
                         <a href="{{ route('spk.attachment.download', $row['url']) }}"
-                            class="p-2 transition hover:bg-gray-50 dark:hover:bg-gray-800 lg:p-4">
-                            <p class="text-base font-medium text-gray-900 dark:text-gray-100">
+                            class="p-3 transition hover:bg-zinc-50 dark:hover:bg-zinc-800">
+                            <p class="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                                 {{ $row['nama_file'] }}
                             </p>
-                            <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
+                            <p class="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
                                 {{ $row['tipe_dokumen'] }}
                             </p>
                         </a>
                     @empty
-                        <p class="p-2 text-xs font-semibold capitalize italic lg:p-4">
+                        <p class="p-4 text-xs font-semibold capitalize italic">
                             Tidak ada request fondasi dari Customer.
                         </p>
                     @endforelse
@@ -253,23 +249,23 @@
             </div>
 
             @if (auth()->user()->can('spk-validate') || auth()->user()->can('spk-create') || auth()->user()->can('spk-lampiran'))
-                <div class="col-span-2 border border-zinc-200 p-2.5 text-gray-800 dark:border-zinc-800 dark:text-white">
+                <div class="col-span-2 p-4">
                     <p class="text-xs italic"> Lampiran </p>
 
                     <div
-                        class="mt-2 flex flex-col divide-y divide-gray-200 rounded-lg border border-zinc-200 bg-white shadow-sm dark:divide-gray-700 dark:border-zinc-800 dark:bg-gray-700">
+                        class="mt-2 flex flex-col divide-y divide-zinc-200 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:divide-zinc-800 dark:border-zinc-800 dark:bg-zinc-900/50">
                         @forelse ($this->filteredAttachmentsExcludeRequestFondasi as $index => $row)
                             <a href="{{ route('spk.attachment.download', $row['url']) }}"
-                                class="p-2 transition hover:bg-gray-50 dark:hover:bg-gray-800 lg:p-4">
-                                <p class="text-base font-medium text-gray-900 dark:text-gray-100">
+                                class="p-3 transition hover:bg-zinc-50 dark:hover:bg-zinc-800">
+                                <p class="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                                     {{ $row['nama_file'] }}
                                 </p>
-                                <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
+                                <p class="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
                                     {{ $row['tipe_dokumen'] }}
                                 </p>
                             </a>
                         @empty
-                            <p class="p-2 text-xs font-semibold capitalize italic lg:p-4">
+                            <p class="p-4 text-xs font-semibold capitalize italic">
                                 Tidak ada lampiran.
                             </p>
                         @endforelse
@@ -288,7 +284,7 @@
         {{-- download button --}}
         @if ($data->status_approval === 1 || auth()->user()->can('spk-validate'))
             <div
-                class="flex justify-center gap-x-1 rounded-b-lg bg-gray-50 p-2 text-center dark:bg-gray-700 lg:absolute lg:right-0 lg:top-0 lg:rounded-none lg:bg-transparent lg:p-0">
+                class="flex justify-center gap-x-1 border-t border-zinc-200 bg-zinc-50/50 p-4 text-center dark:border-zinc-800 dark:bg-zinc-800/50 lg:absolute lg:right-0 lg:top-0 lg:border-none lg:bg-transparent lg:p-4 lg:dark:bg-transparent">
                 @can('spk-create')
                     <x-button.primary id="spk-pdf-export" wire:click="export">
                         Ekspor SPK
@@ -296,11 +292,10 @@
                 @endcan
 
                 @hasanyrole(['Produksi', 'Admin', 'Management'])
-                    <x-button.link
-                        class="ring-1 ring-blue-700 hover:bg-blue-300 dark:bg-blue-800 dark:text-white dark:ring-zinc-800 dark:hover:bg-blue-900"
+                    <x-button.secondary
                         href="{{ route('spk.generate.pdf', ['id' => $data->id]) }}" id="spk-pdf-export">
                         Ekspor SPK (Produksi)
-                    </x-button.link>
+                    </x-button.secondary>
                 @endhasanyrole
             </div>
         @endif

@@ -1,10 +1,10 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
     <div
-        class="grid grid-cols-1 gap-2 rounded-xl bg-white/60 p-2 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 lg:gap-4 lg:p-6">
+        class="grid grid-cols-1 gap-2 rounded-xl border border-zinc-200 bg-white/60 p-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:gap-4 lg:p-6">
 
         <div class="flex flex-col">
-            <span class="text-xl font-semibold text-gray-900 dark:bg-dark-primary dark:text-white">
+            <span class="text-xl font-semibold text-gray-900 dark:text-white">
                 Preview Laporan
             </span>
 

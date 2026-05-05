@@ -1,10 +1,10 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
     <div
-        class="flex w-full flex-col gap-4 rounded-xl bg-white/60 p-4 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 sm:p-6">
+        class="flex w-full flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none sm:p-6">
 
         <div>
-            <span class="text-xl font-semibold text-gray-900 dark:bg-dark-primary dark:text-white">
+            <span class="text-xl font-semibold text-gray-900 dark:text-white">
                 Tambah Invoice
             </span>
 
