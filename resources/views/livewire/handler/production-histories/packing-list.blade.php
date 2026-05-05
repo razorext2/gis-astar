@@ -372,12 +372,23 @@
     </div>
     {{-- end table packing list --}}
 
-    {{-- modal print packing list --}}
-    @if ($showDetailModal)
-        <x-modal.base-modal id="detailModal" :title="'Packing List'" :actionName="'showDetailModal'">
+    {{-- Modal Print Packing List --}}
+    {{-- Modal Print Packing List --}}
+    <x-modal.base-modal show="showDetailModal" title="Pratinjau Packing List" subtitle="Dokumen Produksi & Distribusi"
+        maxWidth="5xl">
+        <x-slot name="icon">
+            <x-icons.file-invoice class="h-5 w-5" />
+        </x-slot>
+
+        <div class="h-[75vh] w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800/50">
             <iframe x-bind:src="pdfUrl" class="h-full w-full" title="Packing List" frameborder="0">
             </iframe>
-        </x-modal.base-modal>
-    @endif
-    {{-- end modal print packing list --}}
+        </div>
+
+        <x-slot name="footer">
+            <x-button.secondary @click="open = false">
+                Tutup
+            </x-button.secondary>
+        </x-slot>
+    </x-modal.base-modal>
 </div>

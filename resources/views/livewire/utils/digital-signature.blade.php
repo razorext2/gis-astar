@@ -1,5 +1,5 @@
 <div
-    class="col-span-2 rounded-xl bg-white/60 p-4 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 lg:p-6">
+    class="col-span-2 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
 
     <header class="mb-4">
         <h2 class="text-lg font-medium text-gray-900 dark:text-white">
@@ -58,39 +58,42 @@
     @endif
     {{-- end form tambah ttd digital --}}
 
-    {{-- modal delete laporan fondasi --}}
-    <div id="delete-laporan-fondasi-modal" wire:show="showModalShowSignature" wire:transition.duration.300ms
-        class="fixed inset-0 z-[99] flex items-center justify-center bg-zinc-950/65 py-8 backdrop-blur-sm">
+    {{-- Modal Preview Signature --}}
+    <x-modal.base-modal show="showModalShowSignature" maxWidth="md" title="Tanda Tangan Digital"
+        iconContainerClass="bg-blue-600 shadow-blue-500/20">
 
-        @if ($showModalShowSignature)
+        <x-slot name="icon">
+            <x-icons.pen-nib class="h-5 w-5" />
+        </x-slot>
+
+        <div class="space-y-4">
+            <p class="text-sm text-zinc-500 dark:text-zinc-400">
+                Berikut adalah pratinjau tanda tangan digital yang tersimpan di sistem.
+            </p>
+
             <div
-                class="mx-4 my-6 flex w-fit flex-col gap-2 overflow-y-auto rounded-xl bg-white/60 p-4 shadow-2xl border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:border-zinc-800">
-
-                <h2 class="text-center text-lg font-semibold text-gray-900 dark:text-white lg:text-xl">
-                    Tanda tangan digital kamu
-                </h2>
-
-                <div class="items-center">
-                    <img class="w-full rounded-lg bg-gray-200 dark:bg-gray-400"
-                        src="{{ asset('storage/' . $myModel->signature->getSignatureImagePath()) }}" />
-                </div>
-
-                <div class="flex flex-row justify-end gap-2">
-                    <x-button.danger id="delete-laporan-fondasi" type="button" wire:click="removeSignature">
-                        <span wire:loading.remove wire:target="removeSignature">Hapus</span>
-                        <span wire:loading wire:target="removeSignature">Loading</span>
-                    </x-button.danger>
-
-                    <x-button.primary id="cancel-delete-laporan-fondasi" type="button"
-                        wire:click="$set('showModalShowSignature', false)">
-                        Batal
-                    </x-button.primary>
-                </div>
-
+                class="overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100 p-6 dark:border-zinc-800 dark:bg-zinc-950">
+                @if ($myModel->signature)
+                    <img class="mx-auto max-h-48 w-auto object-contain transition-transform duration-300 hover:scale-105"
+                        src="{{ asset('storage/' . $myModel->signature->getSignatureImagePath()) }}"
+                        alt="Tanda Tangan Digital" />
+                @endif
             </div>
-        @endif
+        </div>
 
-    </div>
+        <x-slot name="footer">
+            <x-button.secondary type="button" wire:click="$set('showModalShowSignature', false)">
+                Batal
+            </x-button.secondary>
 
+            <x-button.danger wire:click="removeSignature" class="justify-center">
+                <x-slot name="icon">
+                    <x-icons.loading class="mr-2 h-4 w-4 animate-spin" wire:loading wire:target="removeSignature" />
+                </x-slot>
+                <span wire:loading.remove wire:target="removeSignature">Hapus</span>
+                <span wire:loading wire:target="removeSignature">Menghapus...</span>
+            </x-button.danger>
+        </x-slot>
+    </x-modal.base-modal>
 
 </div>

@@ -594,30 +594,19 @@
         </div>
     </form>
 
-    @if ($showSummary)
-        <!-- Overlay -->
-        <div x-show="open" class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm"
-            x-transition.opacity>
-            <!-- Modal -->
-            <div class="h-[85vh] w-full max-w-7xl overflow-hidden rounded-xl border border-zinc-200 bg-white/60 text-gray-800 shadow-xl backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:text-white"
-                @keydown.escape.window="open=false">
-                <div class="flex items-center justify-between border-b px-4 py-2">
-                    <h2 class="font-semibold">SPK Summary</h2>
+    {{-- SPK Summary Modal --}}
+    <x-modal.base-modal show="showSummary" title="SPK Summary" subtitle="Preview Dokumen"
+        iconContainerClass="bg-blue-600 shadow-blue-500/20" maxWidth="7xl">
+        <x-slot name="icon">
+            <x-icons.file-invoice class="h-5 w-5" />
+        </x-slot>
 
-                    <x-button.secondary class="!bg-transparent !p-2 !shadow-none ring-0"
-                        @click="open=false; $wire.set('showSummary', false)">
-                        <x-icons.close class="h-5 w-5 text-red-500" />
-                    </x-button.secondary>
-                </div>
-
-                <!-- Konten PDF: iframe -->
-                <div class="h-[calc(85vh-48px)] w-full">
-                    <iframe x-bind:src="pdfUrl" class="h-full w-full" title="SPK Summary PDF"
-                        frameborder="0">
-                    </iframe>
-                </div>
+        @if ($showSummary)
+            <div class="-m-6 h-[70vh]" x-data="{ pdfUrl: '' }"
+                x-on:show-pdf-modal.window="pdfUrl = $event.detail.url">
+                <iframe x-bind:src="pdfUrl" class="h-full w-full" title="SPK Summary PDF" frameborder="0"></iframe>
             </div>
-        </div>
-    @endif
+        @endif
+    </x-modal.base-modal>
 
 </div>

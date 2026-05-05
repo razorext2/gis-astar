@@ -1,106 +1,91 @@
 {{-- Goal: Modal export data sales dengan Alpine.js untuk performa tinggi, Livewire: Handler\Sales\Export, Alpine: show --}}
-<div x-data="{ show: @entangle('showModal') }">
-    <x-button.success id="export-button" @click="show = true">
+<div>
+    <x-button.success id="export-button" wire:click="$set('showModal', true)">
         <x-slot name="icon">
             <x-icons.bookmark class="h-6 w-6 text-green-500 dark:text-white" />
         </x-slot>
         Export Data
     </x-button.success>
 
-    <!-- Modal overlay -->
-    <div x-show="show" x-cloak
-        class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm"
-        x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+    <x-modal.base-modal show="showModal" title="Export Data Sales"
+        subtitle="Download data laporan sales dalam format excel"
+        iconContainerClass="bg-emerald-600 shadow-emerald-500/20" maxWidth="md">
+        <x-slot name="icon">
+            <x-icons.bookmark class="h-5 w-5" />
+        </x-slot>
 
-        <!-- Modal box -->
-        <div @click.away="show = false" x-show="show" x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 scale-95 translate-y-4"
-            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-            class="flex w-full max-w-md flex-col gap-2 rounded-xl bg-white/60 p-6 shadow-2xl border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:border-zinc-800">
+        <form id="form-export-sales" wire:submit="export">
+            <div class="flex w-full flex-col gap-5">
+                {{-- Quick Date Select --}}
+                <div class="grid grid-cols-2 gap-2">
+                    <x-button.primary class="!py-1.5 text-xs" wire:click="showDaily" type="button">
+                        Harian
+                    </x-button.primary>
+                    <x-button.primary class="!py-1.5 text-xs" wire:click="showWeekly" type="button">
+                        Mingguan
+                    </x-button.primary>
+                    <x-button.primary class="!py-1.5 text-xs" wire:click="showMonthly" type="button">
+                        Bulanan
+                    </x-button.primary>
+                    <x-button.primary class="!py-1.5 text-xs" wire:click="showYearly" type="button">
+                        Tahunan
+                    </x-button.primary>
+                </div>
 
-            <div class="mb-4 flex items-center justify-between border-b border-zinc-200 pb-3 dark:border-zinc-800">
-                <h2 class="text-xl font-bold text-gray-900 dark:text-white lg:text-2xl">
-                    Export Data Sales
-                </h2>
-                <x-button.secondary @click="show = false" type="button" class="!bg-transparent !p-1 ring-0 hover:!bg-gray-100 dark:hover:!bg-gray-800">
-                    <x-slot name="icon">
-                        <x-icons.close class="h-6 w-6" />
-                    </x-slot>
-                </x-button.secondary>
+                {{-- Manual Date Range --}}
+                <div class="grid w-full grid-cols-2 gap-3">
+                    <div>
+                        <x-input.basic type="date" id="from_date" wire:model="fromDate" name="from_date" required>
+                            Dari tanggal
+                        </x-input.basic>
+                    </div>
+                    <div>
+                        <x-input.basic type="date" id="to_date" wire:model="toDate" name="to_date" required>
+                            Hingga tanggal
+                        </x-input.basic>
+                    </div>
+                </div>
+
+                {{-- Role Filter --}}
+                <div class="flex flex-col gap-1">
+                    <label class="text-sm font-medium text-zinc-700 dark:text-zinc-300" for="roles">
+                        Wilayah / Divisi
+                    </label>
+                    <x-filter.filter-input-select id="export-roles" wire:model.live="role" name="export_roles"
+                        :options="$roles" default-option="Filter by roles" />
+                    @error('role')
+                        <span class="mt-1 block text-xs text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                {{-- Specific Sales Filter --}}
+                <div class="flex flex-col gap-1">
+                    <label for="sales" class="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                        Nama Sales (Opsional)
+                    </label>
+                    <select id="sales"
+                        class="block w-full rounded-lg border border-zinc-200 bg-zinc-50 p-2.5 text-sm text-zinc-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-white dark:placeholder-zinc-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                        wire:model="sales">
+                        <option value="">Semua Sales</option>
+                        @foreach ($salesData as $row)
+                            <option value="{{ $row->kode_pegawai }}">
+                                [{{ $row->kode_pegawai }}] {{ $row->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
+        </form>
 
-            <form wire:submit="export">
-                <div class="flex w-full flex-col gap-4">
-                    {{-- Quick Date Select --}}
-                    <div class="grid grid-cols-2 gap-2">
-                        <x-button.primary class="!py-1.5 text-xs" wire:click="showDaily"
-                            type="button">Harian</x-button.primary>
-                        <x-button.primary class="!py-1.5 text-xs" wire:click="showWeekly"
-                            type="button">Mingguan</x-button.primary>
-                        <x-button.primary class="!py-1.5 text-xs" wire:click="showMonthly"
-                            type="button">Bulanan</x-button.primary>
-                        <x-button.primary class="!py-1.5 text-xs" wire:click="showYearly"
-                            type="button">Tahunan</x-button.primary>
-                    </div>
+        <x-slot name="footer">
+            <x-button.secondary @click="open = false" type="button">
+                Batal
+            </x-button.secondary>
 
-                    {{-- Manual Date Range --}}
-                    <div class="grid w-full grid-cols-2 gap-3">
-                        <div>
-                            <x-input.basic type="date" id="from_date" wire:model="fromDate" name="from_date"
-                                required>
-                                Dari tanggal
-                            </x-input.basic>
-                        </div>
-                        <div>
-                            <x-input.basic type="date" id="to_date" wire:model="toDate" name="to_date" required>
-                                Hingga tanggal
-                            </x-input.basic>
-                        </div>
-                    </div>
-
-                    {{-- Role Filter --}}
-                    <div class="flex flex-col gap-1">
-                        <label class="text-sm font-medium text-gray-700 dark:text-gray-300" for="roles">
-                            Wilayah / Divisi
-                        </label>
-                        <x-filter.filter-input-select id="export-roles" wire:model.live="role" name="export_roles"
-                            :options="$roles" default-option="Filter by roles" />
-                        @error('role')
-                            <span class="text-xs text-red-500">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    {{-- Specific Sales Filter --}}
-                    <div class="flex flex-col gap-1">
-                        <label for="sales" class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Nama Sales (Opsional)
-                        </label>
-                        <select
-                            class="block w-full rounded-lg border border-zinc-200 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-dark-secondary dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                            wire:model="sales">
-                            <option value="">Semua Sales</option>
-                            @foreach ($salesData as $row)
-                                <option value="{{ $row->kode_pegawai }}">
-                                    [{{ $row->kode_pegawai }}] {{ $row->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <div class="mt-6 flex justify-end gap-3 border-t border-zinc-200 pt-4 dark:border-zinc-800">
-                    <x-button.danger @click="show = false" type="button">
-                        Batal
-                    </x-button.danger>
-
-                    <x-button.success type="submit">
-                        <span wire:loading.remove wire:target="export">Proses Export</span>
-                        <span wire:loading wire:target="export">Memproses...</span>
-                    </x-button.success>
-                </div>
-            </form>
-        </div>
-    </div>
+            <x-button.success type="submit" form="form-export-sales">
+                <span wire:loading.remove wire:target="export">Proses Export</span>
+                <span wire:loading wire:target="export">Memproses...</span>
+            </x-button.success>
+        </x-slot>
+    </x-modal.base-modal>
 </div>

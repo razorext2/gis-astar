@@ -30,7 +30,7 @@
 
         <!-- Ketua Tim -->
         <div
-            class="flex flex-col rounded-xl bg-gray-50/50 p-4 border border-zinc-200 dark:bg-gray-800/30 dark:border-zinc-800/50">
+            class="flex flex-col rounded-xl border border-zinc-200 bg-gray-50/50 p-4 dark:border-zinc-800/50 dark:bg-gray-800/30">
             <div class="mb-2 flex items-center gap-3">
                 <div class="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg">
                     <x-icons.user class="text-primary h-6 w-6" />
@@ -58,7 +58,7 @@
 
                 @if ($search_user != '')
                     <div
-                        class="mt-3 max-h-[220px] overflow-y-auto rounded-xl bg-white/60 p-2 shadow-sm border border-zinc-200 backdrop-blur-md dark:bg-gray-800 dark:border-zinc-800">
+                        class="mt-3 max-h-[220px] overflow-y-auto rounded-xl border border-zinc-200 bg-white/60 p-2 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800">
                         @forelse ($users as $user)
                             <label for="helper-radio-{{ $user->kode_pegawai }}"
                                 class="group flex cursor-pointer items-center rounded-lg p-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50">
@@ -112,55 +112,37 @@
 
     </form>
 
-    {{-- show modal remove team menggunakan Alpine --}}
-    <div x-data="{ show: @entangle('removeTeamModal') }" x-show="show" x-cloak
-        class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm"
-        x-transition.opacity.duration.300ms>
+    {{-- Modal Remove Team --}}
+    <x-modal.base-modal show="removeTeamModal" maxWidth="lg" title="Hapus Keseluruhan Tim"
+        iconContainerClass="bg-red-600 shadow-red-500/20">
 
-        <div x-show="show" @click.outside="show = false" x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100"
-            x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
-            x-transition:leave-end="opacity-0 scale-90"
-            class="relative flex w-full max-w-lg flex-col items-center gap-4 rounded-xl bg-white p-6 text-center shadow-2xl ring-1 ring-white/20 dark:bg-dark-primary dark:ring-white/10">
+        <x-slot name="icon">
+            <x-icons.trash-bin class="h-5 w-5" />
+        </x-slot>
 
-            <div class="absolute right-3 top-3">
-                <x-button.secondary type="button" @click="show = false"
-                    class="!rounded-full !p-2">
-                    <x-slot name="icon">
-                        <x-icons.close class="h-5 w-5" />
-                    </x-slot>
-                </x-button.secondary>
-            </div>
-
-            <div
-                class="text-danger mb-2 flex h-16 w-16 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
-                <x-icons.trash-bin class="h-8 w-8" />
-            </div>
-
-            <h2 class="text-xl font-bold text-gray-900 dark:text-white lg:text-2xl">
-                Hapus Keseluruhan Tim
-            </h2>
-
-            <p class="text-sm text-gray-500 dark:text-gray-400">
+        <div class="space-y-3">
+            <p class="text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
                 Apakah Anda yakin ingin menghapus permanen tim dengan kode <span
-                    class="font-bold text-gray-800 dark:text-gray-200">{{ $team_code }}</span>? Tindakan penghancuran
-                formasi ini tidak dapat dipulihkan.
+                    class="font-bold text-zinc-800 dark:text-zinc-200">{{ $team_code }}</span>?
             </p>
-
-            <div class="mt-4 flex w-full flex-col justify-center gap-2 sm:flex-row">
-                <x-button.danger type="button" @click="show = false"
-                    class="w-full justify-center sm:w-1/2">Batal</x-button.danger>
-
-                <x-button.danger wire:click="removeTeamProcess" class="w-full justify-center sm:w-1/2">
-                    <x-slot name="icon">
-                        <x-icons.loading class="mr-2 h-5 w-5 animate-spin" wire:loading
-                            wire:target="removeTeamProcess" />
-                    </x-slot>
-                    <span wire:loading.remove wire:target="removeTeamProcess">Hapus Tim Permanen</span>
-                    <span wire:loading wire:target="removeTeamProcess">Memproses...</span>
-                </x-button.danger>
+            <div class="rounded-lg bg-red-50 p-3 text-xs font-medium text-red-600 dark:bg-red-900/20 dark:text-red-400">
+                <p>Tindakan penghancuran formasi ini tidak dapat dipulihkan. Semua data terkait tim ini akan dihapus
+                    secara permanen dari sistem.</p>
             </div>
         </div>
-    </div>
-    {{-- end modal remove team --}}
+
+        <x-slot name="footer">
+            <x-button.secondary type="button" wire:click="$set('removeTeamModal', false)">
+                Batal
+            </x-button.secondary>
+
+            <x-button.danger wire:click="removeTeamProcess" class="justify-center">
+                <x-slot name="icon">
+                    <x-icons.loading class="mr-2 h-4 w-4 animate-spin" wire:loading wire:target="removeTeamProcess" />
+                </x-slot>
+                <span wire:loading.remove wire:target="removeTeamProcess">Hapus Tim Permanen</span>
+                <span wire:loading wire:target="removeTeamProcess">Memproses...</span>
+            </x-button.danger>
+        </x-slot>
+    </x-modal.base-modal>
 </div>
