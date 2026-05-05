@@ -23,7 +23,7 @@
 
         {{-- All Menu (Mobile only) --}}
         <div
-            class="rounded-2xl bg-white p-5 shadow-sm border border-zinc-200 dark:bg-dark-primary dark:border-zinc-800 md:hidden lg:p-6">
+            class="rounded-xl bg-white/60 backdrop-blur-md p-5 shadow-sm border border-zinc-200 dark:bg-dark-primary/60 dark:backdrop-blur-md dark:border-zinc-800 md:hidden lg:p-6">
             <div class="mb-4 flex items-center gap-2 border-b border-zinc-200 pb-4 dark:border-zinc-800">
                 <div class="h-2 w-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,0.5)]"></div>
                 <h3 class="text-base font-bold tracking-wide text-zinc-800 dark:text-white">Menu</h3>
