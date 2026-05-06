@@ -532,53 +532,32 @@
     {{-- end form info tambahan --}}
 
     @if ($data->status_approval === 1)
-        <div class="w-full" id="accordion-packing-form" x-data="{ accordionOpen: $wire.is_changed, isChanged: $wire.is_changed }">
-            <x-button.success type="button"
-                class="w-full flex-row-reverse justify-between rounded-lg p-5"
-                @click="accordionOpen = !accordionOpen" ::class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
-                <x-slot name="icon">
-                    <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
-                        <x-icons.carred-down class="h-4 w-4" />
+        <x-utils.accordion-item id="accordion-spk-change" title="SPK Mengalami Perubahan?"
+            description="Klik untuk menambahkan detail jika SPK mengalami perubahan." iconColor="green"
+            :expanded="$is_changed" class="w-full">
+            <x-slot:icon>
+                <x-icons.file-pen class="h-4 w-4" />
+            </x-slot:icon>
+
+            <div x-data="{ isChanged: $wire.entangle('is_changed') }" class="space-y-4">
+                <label class="inline-flex cursor-pointer items-center">
+                    <input type="checkbox" wire:model.live="is_changed" value="" class="peer sr-only">
+                    <div
+                        class="peer relative h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-zinc-200 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-zinc-800 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full">
+                    </div>
+                    <span x-show="isChanged" class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                        SPK Mengalami Perubahan
                     </span>
-                </x-slot>
+                    <span x-show="!isChanged" class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                        SPK Tidak Mengalami Perubahan</span>
+                </label>
 
-                <span class="flex flex-col text-left">
-                    <h3 class="text-base font-semibold text-white">
-                        SPK Mengalami Perubahan?
-                    </h3>
-                    <p class="block text-sm font-medium text-green-50">
-                        Klik untuk menambahkan detail jika SPK mengalami perubahan.
-                    </p>
-                </span>
-            </x-button.success>
+                <p class="text-xs italic text-zinc-500 dark:text-zinc-400">
+                    *Perubahan meliputi berubahnya spesifikasi produk yang dipesan, penambahan item/produk,
+                    perubahan informasi customer, dan lain - lain yang dapat dikonfirmasi terlebih dahulu ke Manajemen.
+                </p>
 
-            <div class="rounded-b-lg border border-zinc-200 bg-white/60 p-5 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none"
-                x-show="accordionOpen" x-collapse x-cloak>
-
-                <div>
-                    <label class="mb-5 inline-flex cursor-pointer items-center">
-                        <input type="checkbox" x-on:click="isChanged = !isChanged" wire:model.live="is_changed"
-                            value="" class="peer sr-only">
-                        <div
-                            class="peer relative h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-zinc-200 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-zinc-800 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full">
-                        </div>
-                        <span x-show="isChanged == true"
-                            class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                            SPK Mengalami Perubahan
-                        </span>
-                        <span x-show="isChanged == false"
-                            class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                            SPK Tidak Mengalami Perubahan</span>
-                    </label>
-
-                    <p class="mb-2 text-xs italic text-gray-600 dark:text-gray-400">
-                        *Perubahan meliputi berubahnya spesifikasi produk yang dipesan, penambahan item/produk,
-                        perubahan
-                        informasi customer, dan lain - lain yang dapat dikonfirmasi terlebih dahulu ke Manajemen.
-                    </p>
-                </div>
-
-                <div x-show="isChanged">
+                <div x-show="isChanged" x-collapse>
                     <x-input.textarea placeholder="Silahkan deskripsikan perubahan data..."
                         id="revision_request_detail" name="revision_request_detail"
                         wire:model="createForm.revision_request_detail" :labels="true" :textLabel="'Catatan Perubahan'"
@@ -588,51 +567,32 @@
                         <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
                     @enderror
                 </div>
-
             </div>
-        </div>
+        </x-utils.accordion-item>
     @endif
 
     {{-- accordion delay SPK --}}
-    <div class="w-full" id="accordion-packing-form" x-data="{ accordionOpen: $wire.is_delayed, onDelay: $wire.is_delayed }">
-        <x-button.danger type="button"
-            class="w-full flex-row-reverse justify-between rounded-lg p-5"
-            @click="accordionOpen = !accordionOpen" ::class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
-            <x-slot name="icon">
-                <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
-                    <x-icons.carred-down class="h-4 w-4" />
+    <x-utils.accordion-item id="accordion-spk-delay" title="SPK Mengalami Delay?"
+        description="Klik untuk menambahkan detail jika SPK mengalami Delay." iconColor="red" :expanded="$is_delayed"
+        class="w-full">
+        <x-slot:icon>
+            <x-icons.clock class="h-4 w-4" />
+        </x-slot:icon>
+
+        <div x-data="{ onDelay: $wire.entangle('is_delayed') }" class="space-y-4">
+            <label class="inline-flex cursor-pointer items-center">
+                <input type="checkbox" wire:model.live="is_delayed" value="" class="peer sr-only">
+                <div
+                    class="peer relative h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-zinc-200 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-zinc-800 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full">
+                </div>
+                <span x-show="onDelay" class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                    SPK Mengalami Delay
                 </span>
-            </x-slot>
+                <span x-show="!onDelay" class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                    SPK Tidak Mengalami Delay</span>
+            </label>
 
-            <span class="flex flex-col text-left">
-                <h3 class="text-base font-semibold text-white">
-                    SPK Mengalami Delay?
-                </h3>
-                <p class="block text-sm font-medium text-red-50">
-                    Klik untuk menambahkan detail jika SPK mengalami Delay.
-                </p>
-            </span>
-        </x-button.danger>
-
-        <div class="rounded-b-lg border border-zinc-200 bg-white/60 p-5 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none"
-            x-show="accordionOpen" x-collapse x-cloak>
-
-            <div>
-                <label class="mb-5 inline-flex cursor-pointer items-center">
-                    <input type="checkbox" x-on:click="onDelay = !onDelay" wire:model="is_delayed" value=""
-                        class="peer sr-only">
-                    <div
-                        class="peer relative h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-zinc-200 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-zinc-800 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full">
-                    </div>
-                    <span x-show="onDelay == true" class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                        SPK Mengalami Delay
-                    </span>
-                    <span x-show="onDelay == false" class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                        SPK Tidak Mengalami Delay</span>
-                </label>
-            </div>
-
-            <div x-show="onDelay">
+            <div x-show="onDelay" x-collapse>
                 <x-input.textarea id="delay_note" name="delay_note" wire:model="delay_note" :labels="true"
                     :textLabel="'Catatan'" placeholder="Jelaskan alasan delay..." rows="6" />
 
@@ -640,52 +600,32 @@
                     <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
                 @enderror
             </div>
-
         </div>
-    </div>
+    </x-utils.accordion-item>
     {{-- end accordion delay SPK --}}
 
     {{-- accordion cancel SPK --}}
-    <div class="w-full" id="accordion-packing-form" x-data="{ accordionOpen: $wire.is_cancelled, onCancel: $wire.is_cancelled }">
-        <x-button.danger type="button"
-            class="w-full flex-row-reverse justify-between rounded-lg p-5"
-            @click="accordionOpen = !accordionOpen" ::class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
-            <x-slot name="icon">
-                <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
-                    <x-icons.carred-down class="h-4 w-4" />
+    <x-utils.accordion-item id="accordion-spk-cancel" title="SPK Mengalami Cancel?"
+        description="Klik untuk menambahkan detail jika SPK mengalami Cancel." iconColor="red" :expanded="$is_cancelled"
+        class="w-full">
+        <x-slot:icon>
+            <x-icons.exclamation-circle class="h-4 w-4" />
+        </x-slot:icon>
+
+        <div x-data="{ onCancel: $wire.entangle('is_cancelled') }" class="space-y-4">
+            <label class="inline-flex cursor-pointer items-center">
+                <input type="checkbox" wire:model.live="is_cancelled" value="" class="peer sr-only">
+                <div
+                    class="peer relative h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-zinc-200 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-zinc-800 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full">
+                </div>
+                <span x-show="onCancel" class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                    SPK Dibatalkan
                 </span>
-            </x-slot>
+                <span x-show="!onCancel" class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                    SPK Tidak Dibatalkan</span>
+            </label>
 
-            <span class="flex flex-col text-left">
-                <h3 class="text-base font-semibold text-white">
-                    SPK Mengalami Cancel?
-                </h3>
-                <p class="block text-sm font-medium text-red-50">
-                    Klik untuk menambahkan detail jika SPK mengalami Cancel.
-                </p>
-            </span>
-        </x-button.danger>
-
-        <div class="rounded-b-lg border border-zinc-200 bg-white/60 p-5 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none"
-            x-show="accordionOpen" x-collapse x-cloak>
-
-            <div>
-                <label class="mb-5 inline-flex cursor-pointer items-center">
-                    <input type="checkbox" x-on:click="onCancel = !onCancel" wire:model="is_cancelled"
-                        value="" class="peer sr-only">
-                    <div
-                        class="peer relative h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-zinc-200 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-zinc-800 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full">
-                    </div>
-                    <span x-show="onCancel == true" class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                        SPK Dibatalkan
-                    </span>
-                    <span x-show="onCancel == false"
-                        class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                        SPK Tidak Dibatalkan</span>
-                </label>
-            </div>
-
-            <div x-show="onCancel">
+            <div x-show="onCancel" x-collapse>
                 <x-input.textarea id="cancel_note" name="cancel_note" wire:model="cancel_note" :labels="true"
                     :textLabel="'Catatan'" placeholder="Jelaskan alasan cancel..." rows="6" />
 
@@ -693,9 +633,8 @@
                     <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
                 @enderror
             </div>
-
         </div>
-    </div>
+    </x-utils.accordion-item>
     {{-- end accordion cancel SPK --}}
 
     <div class="flex w-full flex-row justify-end gap-2">

@@ -38,23 +38,13 @@
         </div>
     </section>
 
-    <div id="accordion-packing-form" x-data="{ accordionOpen: false }">
-        <x-button.success type="button"
-            class="w-full flex-row-reverse justify-between rounded-lg p-5"
-            @click="accordionOpen = !accordionOpen" ::class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
-            <x-slot name="icon">
-                <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
-                    <x-icons.carred-down class="h-4 w-4" />
-                </span>
-            </x-slot>
+    <x-utils.accordion-item id="accordion-packing-form" title="Tambah Dokumen?"
+        description="Klik untuk mengupload lampiran baru" iconColor="green" :expanded="false">
+        <x-slot:icon>
+            <x-icons.cloud-upload class="h-4 w-4" />
+        </x-slot:icon>
 
-            <h3 class="text-base font-semibold text-white">
-                Tambah Dokumen?
-            </h3>
-        </x-button.success>
-
-        <form class="flex flex-col gap-2 rounded-b-lg border border-zinc-200 p-5 dark:border-zinc-800 lg:gap-4"
-            x-show="accordionOpen" x-collapse x-cloak wire:submit.prevent="store" method="post">
+        <form wire:submit.prevent="store" class="flex flex-col gap-4">
 
             <div class="w-full">
                 <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
@@ -132,5 +122,6 @@
                 </x-button.primary>
             </div>
         </form>
-    </div>
+    </x-utils.accordion-item>
+
 </div>

@@ -20,23 +20,18 @@
                 now()->lt(\Carbon\Carbon::parse($dailyReport->assignment->project->end_date)->endOfDay()) &&
                 $dailyReport->assignment->status !== 'completed' &&
                 $dailyReport->status !== 'submitted')
-            <div wire:show="showAddForm" id="accordion-packing-form" x-data="{ accordionOpen: true }">
-                <x-button.success type="button" class="w-full flex-row-reverse justify-between rounded-lg p-5"
-                    @click="accordionOpen = !accordionOpen" ::class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
-                    <x-slot name="icon">
-                        <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
-                            <x-icons.carred-down class="h-4 w-4" />
-                        </span>
-                    </x-slot>
-
-                    <h3 class="text-base font-semibold text-white">
-                        Tambah aktivitas?
-                    </h3>
-                </x-button.success>
-
-                {{-- Form Tambah Aktivitas --}}
-                <div x-show="accordionOpen" x-collapse x-cloak
-                    class="w-full rounded-b-lg border border-zinc-200 bg-white/60 p-2 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800 lg:p-4">
+            <div wire:show="showAddForm">
+                <x-utils.accordion-item
+                    id="accordion-add-activity"
+                    title="Tambah aktivitas?"
+                    description="Silakan isi detail aktivitas harian pada form di bawah ini."
+                    iconColor="green"
+                    :expanded="true"
+                    class="w-full"
+                >
+                    <x-slot:icon>
+                        <x-icons.plus class="h-4 w-4" />
+                    </x-slot:icon>
 
                     <form wire:submit.prevent="store" class="grid grid-cols-1 gap-4 lg:grid-cols-2">
 
@@ -77,7 +72,8 @@
 
                                     @foreach ($docForm->new_attachments as $index => $row)
                                         <li
-                                            class="flex items-center gap-2 p-2 transition hover:bg-gray-50 dark:hover:bg-gray-800">
+                                            class="flex items-center gap-2 p-2 transition hover:bg-gray-50 dark:hover:bg-gray-800"
+                                            wire:key="attachment-{{ $index }}">
                                             <div
                                                 class="w-8 text-center text-sm font-medium text-gray-600 dark:text-gray-400">
                                                 {{ $index + 1 }}.
@@ -190,8 +186,7 @@
                         </div>
 
                     </form>
-
-                </div>
+                </x-utils.accordion-item>
             </div>
         @else
             <p class="w-full text-center text-sm text-red-500">
