@@ -1,9 +1,14 @@
-{{-- Pattern Background: Subtle Dots --}}
-<div class="pointer-events-none fixed inset-0 z-0"
-    style="background-image: radial-gradient(rgba(161, 161, 170, 0.15) 1.5px, transparent 1.5px); background-size: 24px 24px; -webkit-mask-image: radial-gradient(circle at var(--mouse-x, -100vw) var(--mouse-y, -100vh), transparent 0px, transparent 160px, black 200px); mask-image: radial-gradient(circle at var(--mouse-x, -100vw) var(--mouse-y, -100vh), transparent 0px, transparent 160px, black 200px);">
+{{-- Pattern Background: Subtle Grid Lines (static, masked near cursor) --}}
+{{-- Static grid: light mode (higher opacity) --}}
+<div class="pointer-events-none fixed inset-0 z-0 dark:hidden"
+    style="background-image: linear-gradient(rgba(161,161,170,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(161,161,170,0.07) 1px, transparent 1px); background-size: 24px 24px; -webkit-mask-image: radial-gradient(circle at var(--mouse-x, -100vw) var(--mouse-y, -100vh), transparent 0px, transparent 140px, black 190px); mask-image: radial-gradient(circle at var(--mouse-x, -100vw) var(--mouse-y, -100vh), transparent 0px, transparent 140px, black 190px);">
+</div>
+{{-- Static grid: dark mode (subtle opacity) --}}
+<div class="pointer-events-none fixed inset-0 z-0 hidden dark:block"
+    style="background-image: linear-gradient(rgba(161,161,170,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(161,161,170,0.03) 1px, transparent 1px); background-size: 24px 24px; -webkit-mask-image: radial-gradient(circle at var(--mouse-x, -100vw) var(--mouse-y, -100vh), transparent 0px, transparent 140px, black 190px); mask-image: radial-gradient(circle at var(--mouse-x, -100vw) var(--mouse-y, -100vh), transparent 0px, transparent 140px, black 190px);">
 </div>
 
-{{-- Pattern Background: Interactive Convex Camera Lens (Fish-eye) & Chart --}}
+{{-- Pattern Background: Interactive Lens-Distorted Grid Lines & Chart --}}
 <div class="pointer-events-none fixed inset-0 z-0" x-data="{
     canvas: null,
     ctx: null,
@@ -12,12 +17,11 @@
     mouseX: -1000,
     mouseY: -1000,
     gridSize: 24,
-    baseDotSize: 1.5,
-    lensRadius: 100,
-    glowRadius: 150,
-    maxMagnification: 2,
+    segStep: 5,
+    lensRadius: 110,
+    glowRadius: 170,
+    maxMagnification: 2.5,
     pendingFrame: false,
-    chartPoints: [],
 
     init() {
         this.canvas = this.$refs.canvas;
@@ -45,115 +49,126 @@
         this.canvas.width = this.width * dpr;
         this.canvas.height = this.height * dpr;
         this.ctx.scale(dpr, dpr);
-        this.chartPoints = [];
         this.draw();
     },
 
-    getChartPoints() {
-        let points = [];
-        points.push({ x: 100, y: 0 });
-        points.push({ x: 100, y: 100 });
-        points.push({ x: 0, y: 100 });
-
-        const addCurve = (p0, p1, p2, p3) => {
-            const steps = 50;
-            for (let i = 1; i <= steps; i++) {
-                let t = i / steps;
-                let mt = 1 - t;
-                let mt2 = mt * mt;
-                let mt3 = mt2 * mt;
-                let t2 = t * t;
-                let t3 = t2 * t;
-
-                let x = mt3 * p0.x + 3 * mt2 * t * p1.x + 3 * mt * t2 * p2.x + t3 * p3.x;
-                let y = mt3 * p0.y + 3 * mt2 * t * p1.y + 3 * mt * t2 * p2.y + t3 * p3.y;
-                points.push({ x: x, y: y });
-            }
-        };
-
-        addCurve({ x: 0, y: 100 }, { x: 20, y: 100 }, { x: 45, y: 99 }, { x: 58, y: 92 });
-        addCurve({ x: 58, y: 92 }, { x: 68, y: 86 }, { x: 75, y: 72 }, { x: 82, y: 55 });
-        addCurve({ x: 82, y: 55 }, { x: 88, y: 40 }, { x: 92, y: 20 }, { x: 100, y: 0 });
-
-        return points.map(p => ({
-            origX: (p.x / 100) * this.width,
-            origY: (p.y / 100) * this.height
-        }));
-    },
 
     draw() {
         this.ctx.clearRect(0, 0, this.width, this.height);
 
-        if (this.chartPoints.length === 0) {
-            this.chartPoints = this.getChartPoints();
-        }
-
-        this.ctx.beginPath();
-        for (let i = 0; i < this.chartPoints.length; i++) {
-            let p = this.chartPoints[i];
-            let px = p.origX;
-            let py = p.origY;
-
-            let dx = px - this.mouseX;
-            let dy = py - this.mouseY;
+        // --- Lens displacement helper ---
+        const displace = (ox, oy) => {
+            let dx = ox - this.mouseX;
+            let dy = oy - this.mouseY;
             let dist = Math.sqrt(dx * dx + dy * dy);
-
             if (dist < this.lensRadius && dist > 0) {
-                let nd = dist / this.lensRadius;
-                let A = this.maxMagnification - 1;
-                let bulgeFactor = 1 + A * Math.pow(1 - nd, 2);
-
-                let newDist = dist * bulgeFactor;
-                let angle = Math.atan2(dy, dx);
-
-                px = this.mouseX + Math.cos(angle) * newDist;
-                py = this.mouseY + Math.sin(angle) * newDist;
+                let bf = 1 + (this.maxMagnification - 1) * Math.pow(1 - dist / this.lensRadius, 2);
+                let ang = Math.atan2(dy, dx);
+                return [this.mouseX + Math.cos(ang) * dist * bf, this.mouseY + Math.sin(ang) * dist * bf];
             }
+            return [ox, oy];
+        };
 
-            if (i === 0) this.ctx.moveTo(px, py);
-            else this.ctx.lineTo(px, py);
-        }
-        this.ctx.closePath();
+        // --- Sample a cubic bezier with lens displacement ---
+        const sampledBezier = (p0, p1, p2, p3, n = 60) => {
+            let pts = [];
+            for (let i = 0; i <= n; i++) {
+                let t = i / n,
+                    mt = 1 - t;
+                let x = mt * mt * mt * p0[0] + 3 * mt * mt * t * p1[0] + 3 * mt * t * t * p2[0] + t * t * t * p3[0];
+                let y = mt * mt * mt * p0[1] + 3 * mt * mt * t * p1[1] + 3 * mt * t * t * p2[1] + t * t * t * p3[1];
+                pts.push(displace(x, y));
+            }
+            return pts;
+        };
+
+        const fillShape = (pts, gradient) => {
+            this.ctx.beginPath();
+            pts.forEach(([x, y], i) => i === 0 ? this.ctx.moveTo(x, y) : this.ctx.lineTo(x, y));
+            this.ctx.closePath();
+            this.ctx.fillStyle = gradient;
+            this.ctx.fill();
+        };
 
         let isDark = document.documentElement.classList.contains('dark');
-        let grad = this.ctx.createLinearGradient(0, 0, 0, this.height);
-        if (isDark) {
-            grad.addColorStop(0, 'rgba(127, 29, 29, 0.4)');
-            grad.addColorStop(1, 'rgba(153, 27, 27, 0.12)');
-        } else {
-            grad.addColorStop(0, 'rgba(239, 68, 68, 0.3)');
-            grad.addColorStop(1, 'rgba(252, 165, 165, 0.1)');
-        }
-        this.ctx.fillStyle = grad;
-        this.ctx.fill();
+        const W = this.width,
+            H = this.height;
 
-        for (let c = Math.floor((this.mouseX - this.glowRadius) / this.gridSize); c <= Math.ceil((this.mouseX + this.glowRadius) / this.gridSize); c++) {
-            for (let r = Math.floor((this.mouseY - this.glowRadius) / this.gridSize); r <= Math.ceil((this.mouseY + this.glowRadius) / this.gridSize); r++) {
-                let ox = c * this.gridSize + (this.gridSize / 2);
-                let oy = r * this.gridSize + (this.gridSize / 2);
-                let dx = ox - this.mouseX;
-                let dy = oy - this.mouseY;
-                let dist = Math.sqrt(dx * dx + dy * dy);
+        // --- Distorted grid lines (Circular Glow Effect) ---
+        let baseOpacity = isDark ? 0.22 : 0.35;
+        let colorRgb = isDark ? '185, 28, 28' : '239, 68, 68';
 
-                if (dist < this.glowRadius) {
-                    let finalX = ox,
-                        finalY = oy,
-                        dotSize = this.baseDotSize;
-                    if (dist < this.lensRadius && dist > 0) {
-                        let nd = dist / this.lensRadius;
-                        let bulgeFactor = 1 + (this.maxMagnification - 1) * Math.pow(1 - nd, 2);
-                        finalX = this.mouseX + Math.cos(Math.atan2(dy, dx)) * (dist * bulgeFactor);
-                        finalY = this.mouseY + Math.sin(Math.atan2(dy, dx)) * (dist * bulgeFactor);
-                        dotSize = this.baseDotSize * bulgeFactor;
-                    }
-                    let opacity = 0.8 * Math.pow(Math.max(0, 1 - (dist / this.glowRadius)), 1.2);
-                    this.ctx.fillStyle = `rgba(239, 68, 68, ${opacity})`;
-                    this.ctx.beginPath();
-                    this.ctx.arc(finalX, finalY, dotSize, 0, Math.PI * 2);
-                    this.ctx.fill();
-                }
+        // Create a single radial gradient for all lines
+        let gridGrad = this.ctx.createRadialGradient(this.mouseX, this.mouseY, 0, this.mouseX, this.mouseY, this.glowRadius);
+        gridGrad.addColorStop(0, `rgba(${colorRgb}, ${baseOpacity})`);
+        gridGrad.addColorStop(0.6, `rgba(${colorRgb}, ${baseOpacity * 0.4})`);
+        gridGrad.addColorStop(1, `rgba(${colorRgb}, 0)`);
+
+        this.ctx.lineWidth = 1;
+        this.ctx.lineCap = 'round';
+        this.ctx.strokeStyle = gridGrad;
+
+        // Draw horizontal and vertical lines in a circular-aware range
+        const drawRange = this.glowRadius;
+
+        // Horizontal lines
+        let rowMin = Math.floor((this.mouseY - drawRange) / this.gridSize);
+        let rowMax = Math.ceil((this.mouseY + drawRange) / this.gridSize);
+        for (let row = rowMin; row <= rowMax; row++) {
+            let oy = row * this.gridSize;
+            this.ctx.beginPath();
+            let first = true;
+            for (let x = this.mouseX - drawRange; x <= this.mouseX + drawRange; x += this.segStep) {
+                let [fx, fy] = displace(x, oy);
+                if (first) { this.ctx.moveTo(fx, fy);
+                    first = false; } else { this.ctx.lineTo(fx, fy); }
             }
+            this.ctx.stroke();
         }
+
+        // Vertical lines
+        let colMin = Math.floor((this.mouseX - drawRange) / this.gridSize);
+        let colMax = Math.ceil((this.mouseX + drawRange) / this.gridSize);
+        for (let col = colMin; col <= colMax; col++) {
+            let ox = col * this.gridSize;
+            this.ctx.beginPath();
+            let first = true;
+            for (let y = this.mouseY - drawRange; y <= this.mouseY + drawRange; y += this.segStep) {
+                let [fx, fy] = displace(ox, y);
+                if (first) { this.ctx.moveTo(fx, fy);
+                    first = false; } else { this.ctx.lineTo(fx, fy); }
+            }
+            this.ctx.stroke();
+        }
+
+        // --- Accent shapes (drawn last, on top of grid) ---
+        // --- Accent 1: Large radial sweep from top-right corner ---
+        let arc1pts = [displace(W, 0)];
+        arc1pts = arc1pts.concat(sampledBezier([W * 0.35, 0], [W * 0.65, 0], [W, H * 0.25], [W, H * 0.65]));
+        let g1 = this.ctx.createRadialGradient(W, 0, W * 0.05, W, 0, W * 0.75);
+        g1.addColorStop(0, isDark ? 'rgba(35,5,5,0.95)' : 'rgba(255,242,242,0.95)');
+        g1.addColorStop(0.45, isDark ? 'rgba(120,20,20,0.6)' : 'rgba(239,68,68,0.3)');
+        g1.addColorStop(1, 'rgba(0,0,0,0)');
+        fillShape(arc1pts, g1);
+
+        // --- Accent 2: Sharper inner arc, top-right (adds depth) ---
+        let arc2pts = [displace(W, 0)];
+        arc2pts = arc2pts.concat(sampledBezier([W * 0.68, 0], [W * 0.88, 0], [W, H * 0.1], [W, H * 0.32]));
+        let g2 = this.ctx.createRadialGradient(W, 0, 0, W, 0, W * 0.38);
+        g2.addColorStop(0, isDark ? 'rgba(60,8,8,0.98)' : 'rgba(255,238,238,0.98)');
+        g2.addColorStop(0.55, isDark ? 'rgba(160,25,25,0.55)' : 'rgba(239,68,68,0.35)');
+        g2.addColorStop(1, 'rgba(0,0,0,0)');
+        fillShape(arc2pts, g2);
+
+        // --- Accent 3: Subtle counter-arc from bottom-left ---
+        let arc3pts = [displace(0, H)];
+        arc3pts = arc3pts.concat(sampledBezier([W * 0.28, H], [W * 0.1, H], [0, H * 0.82], [0, H * 0.55]));
+        let g3 = this.ctx.createRadialGradient(0, H, 0, 0, H, H * 0.48);
+        g3.addColorStop(0, isDark ? 'rgba(30,5,5,0.88)' : 'rgba(255,240,240,0.88)');
+        g3.addColorStop(0.5, isDark ? 'rgba(110,18,18,0.4)' : 'rgba(239,68,68,0.2)');
+        g3.addColorStop(1, 'rgba(0,0,0,0)');
+        fillShape(arc3pts, g3);
+
     }
 }">
     <canvas x-ref="canvas" class="block h-full w-full"></canvas>
