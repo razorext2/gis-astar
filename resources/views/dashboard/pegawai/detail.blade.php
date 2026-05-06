@@ -3,13 +3,15 @@
     <div class="space-y-4 lg:space-y-6">
         <!-- Header Navigation & Tabs -->
         <div
-            class="rounded-3xl border border-white/30 bg-white/70 p-4 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60 lg:p-6">
+            class="rounded-xl border border-white/30 bg-white/60 p-4 shadow-xl backdrop-blur-md dark:border-white/10 dark:bg-dark-primary/60 lg:p-6">
             <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-                <div class="flex items-center gap-4">
-                    <x-button.link id="back-btn" class="group justify-center bg-white/50 hover:bg-red-700 hover:text-white"
-                        wire:navigate href="{{ route('pegawai.index') }}">
-                        <x-icons.angle-left class="h-6 w-6 transition-transform group-hover:-translate-x-1" />
-                    </x-button.link>
+                <div class="flex items-center">
+
+                    <x-button.danger id="back-btn" class="my-auto me-4 max-h-10" wire:navigate
+                        href="{{ route('pegawai.index') }}">
+                        <x-icons.angle-left class="h-5 w-5" />
+                    </x-button.danger>
+
                     <div>
                         <h2 class="text-xl font-bold tracking-tight text-gray-800 dark:text-white">Detail Pegawai</h2>
                         <p class="text-xs text-gray-500 dark:text-gray-400">Manajemen informasi dan riwayat staf.</p>

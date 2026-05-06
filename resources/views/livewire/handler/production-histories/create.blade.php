@@ -96,9 +96,8 @@
                                                     : '');
                                     @endphp
                                     <img class="w-24 rounded-lg" src="{{ $src }}">
-                                    <x-button.danger
-                                        class="absolute end-0 top-0 !rounded-lg !p-1 !shadow-none" type="button"
-                                        wire:click="removeDocumentation({{ $index }})">
+                                    <x-button.danger class="absolute end-0 top-0 !rounded-lg !p-1 !shadow-none"
+                                        type="button" wire:click="removeDocumentation({{ $index }})">
                                         <x-icons.close class="h-4 w-4" />
                                     </x-button.danger>
 
@@ -161,7 +160,8 @@
             <x-slot name="icon">
                 <x-icons.angle-right class="icon h-5 w-5" />
             </x-slot>
-            Tambah Laporan
+            <span wire:target="store" wire:loading.remove>Tambah Laporan</span>
+            <span wire:target="store" wire:loading>Memproses...</span>
         </x-button.success>
     </div>
 

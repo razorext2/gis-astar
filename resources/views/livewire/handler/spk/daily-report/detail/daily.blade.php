@@ -1,7 +1,7 @@
 <div class="w-full">
     {{-- informasi project --}}
     <div
-        class="mb-2 w-full rounded-xl bg-white/60 shadow-sm border border-zinc-200 backdrop-blur-md dark:bg-gray-800 dark:border-zinc-800 lg:mb-4">
+        class="mb-2 w-full rounded-xl border border-zinc-200 bg-white/60 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800 lg:mb-4">
         {{-- HEADER --}}
         <div class="border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
@@ -125,7 +125,7 @@
 
             {{-- extend request --}}
             @if ($assignment->project->extend_request)
-                <div class="col-span-2 rounded-lg bg-gray-800 p-2 border border-zinc-200 dark:border-zinc-800 lg:p-4">
+                <div class="col-span-2 rounded-lg border border-zinc-200 bg-gray-800 p-2 dark:border-zinc-800 lg:p-4">
                     <div class="text-gray-800 dark:text-white">
                         <p>
                             <span class="font-semibold">
@@ -225,14 +225,10 @@
     <div class="flex flex-col gap-4">
         {{-- ACTION BAR --}}
         <div class="flex flex-wrap items-center justify-between gap-3">
-            <x-button.link href="{{ route('report.general.index') }}"
-                class="flex w-fit items-center gap-2 ring-1 ring-red-600 dark:bg-red-800 dark:text-white" wire:navigate
+            <x-button.danger href="{{ route('report.general.index') }}" class="my-auto me-4 max-h-10" wire:navigate
                 id="back-button">
-                <x-slot name="icon">
-                    <x-icons.angle-left class="h-5 w-5 text-red-500 dark:text-white" />
-                </x-slot>
-                Kembali
-            </x-button.link>
+                <x-icons.angle-left class="h-5 w-5" />
+            </x-button.danger>
 
             @can('laporan-harian-create')
                 @if (now()->lt(\Carbon\Carbon::parse($assignment->project->end_date)->endOfDay()) && $assignment->status != 'completed')
@@ -244,7 +240,8 @@
         </div>
 
         {{-- LIST CONTAINER --}}
-        <div class="w-full rounded-xl bg-white/60 shadow-sm border border-zinc-200 backdrop-blur-md dark:bg-gray-800 dark:border-zinc-800">
+        <div
+            class="w-full rounded-xl border border-zinc-200 bg-white/60 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800">
             <div class="flex flex-col divide-y divide-gray-200 dark:divide-gray-700">
                 @forelse ($this->dailyReports as $index => $row)
                     <div class="relative p-2 transition hover:bg-gray-50 dark:hover:bg-gray-700/40 lg:p-4">
@@ -375,10 +372,12 @@
                     @endphp
 
                     @forelse ($activities as $row)
-                        <div class="rounded-xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-800/50">
+                        <div
+                            class="rounded-xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-800/50">
                             <dl class="flex items-start justify-between gap-4 py-1">
                                 <dt class="shrink-0 text-xs font-medium text-zinc-500 dark:text-zinc-400">Aktivitas</dt>
-                                <dd class="text-right text-sm font-semibold text-zinc-900 dark:text-white">{!! nl2br(e($row['notes'])) !!}</dd>
+                                <dd class="text-right text-sm font-semibold text-zinc-900 dark:text-white">
+                                    {!! nl2br(e($row['notes'])) !!}</dd>
                             </dl>
                             <dl class="flex items-center justify-between gap-4 py-1">
                                 <dt class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Waktu</dt>
@@ -396,9 +395,11 @@
                             </dl>
                         </div>
                     @empty
-                        <div class="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-zinc-200 py-10 dark:border-zinc-800">
+                        <div
+                            class="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-zinc-200 py-10 dark:border-zinc-800">
                             <x-icons.question-circle class="mb-2 h-8 w-8 text-zinc-400" />
-                            <p class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Belum ada riwayat aktivitas.</p>
+                            <p class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Belum ada riwayat aktivitas.
+                            </p>
                         </div>
                     @endforelse
                 </div>
@@ -422,8 +423,8 @@
     {{-- extend deadline modal --}}
     @can('laporan-harian-extend')
         <x-modal.base-modal show="showExtendModal" title="Request Perpanjangan Deadline"
-            subtitle="Ajukan perpanjangan batas waktu laporan"
-            iconContainerClass="bg-blue-600 shadow-blue-500/20" maxWidth="lg">
+            subtitle="Ajukan perpanjangan batas waktu laporan" iconContainerClass="bg-blue-600 shadow-blue-500/20"
+            maxWidth="lg">
             <x-slot name="icon">
                 <x-icons.clock class="h-5 w-5" />
             </x-slot>
@@ -432,8 +433,8 @@
                 <form id="form-extend-deadline" wire:submit.prevent="extendProcess" method="POST"
                     class="flex flex-col gap-5">
                     <div>
-                        <x-input.basic id="days" name="days" wire:model="days" type="number"
-                            min="1" max="20" placeholder="Mau perpanjang berapa hari?">
+                        <x-input.basic id="days" name="days" wire:model="days" type="number" min="1"
+                            max="20" placeholder="Mau perpanjang berapa hari?">
                             Jumlah Hari
                         </x-input.basic>
                         @error('days')

@@ -4,14 +4,10 @@
 
     <div class="flex justify-between py-2">
         @if ($step != 1)
-            <x-button.link
-                class="w-fit ring-1 ring-red-700 hover:bg-red-300 dark:bg-red-800 dark:text-white dark:ring-zinc-800 dark:hover:bg-red-900"
-                wire:navigate href="{{ route('points.redeem', ['step' => 1]) }}">
-                <x-slot name="icon">
-                    <x-icons.angle-left class="icon h-6 w-6" />
-                </x-slot>
-                Kembali
-            </x-button.link>
+            <x-button.danger class="my-auto me-4 max-h-10" wire:navigate
+                href="{{ route('points.redeem', ['step' => 1]) }}">
+                <x-icons.angle-left class="icon h-6 w-6" />
+            </x-button.danger>
         @endif
 
         @if ($step == 2)
@@ -102,7 +98,8 @@
             @if ($showModal)
                 <div class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm">
                     <!-- Modal box -->
-                    <div class="flex max-w-lg flex-col gap-2 rounded-xl border border-zinc-200 bg-white/60 p-6 shadow-2xl backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
+                    <div
+                        class="flex max-w-lg flex-col gap-2 rounded-xl border border-zinc-200 bg-white/60 p-6 shadow-2xl backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
                         <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Konfirmasi Pengajuan</h2>
                         <p
                             class="overflow-y-auto border-y border-zinc-200 py-1 text-gray-800 dark:border-zinc-800 dark:text-white">

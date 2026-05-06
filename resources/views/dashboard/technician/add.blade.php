@@ -2,20 +2,16 @@
 @section('content')
     <div class="w-full space-y-6">
         <div
-            class="grid gap-4 rounded-xl bg-white/60 p-4 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 sm:p-6">
+            class="grid gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none sm:p-6">
 
             <div class="w-full">
-                <header class="flex flex-row">
-
-                    <form id="back-form" action="{{ route('technician.index') }}"></form>
-                    <x-button.danger class="my-auto me-4 max-h-10" form="back-form" type="submit">
-                        <x-slot name="icon">
-                            <x-icons.angle-left class="icon h-6 w-6 text-red-500 dark:text-white" />
-                        </x-slot>
-                        Kembali
+                <header class="flex items-center">
+                    <x-button.danger id="back-button" class="my-auto me-4 max-h-10" href="{{ route('technician.index') }}"
+                        wire:navigate>
+                        <x-icons.angle-left class="h-5 w-5" />
                     </x-button.danger>
 
-                    <h2 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-white">
                         Update Laporan Teknisi {{ Request::query('id') ?? '' }}
                     </h2>
 

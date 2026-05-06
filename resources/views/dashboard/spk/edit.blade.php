@@ -4,11 +4,8 @@
         class="mb-96 flex w-full flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 px-3 py-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
         <div class="flex w-full flex-row items-center gap-2 lg:gap-4">
             <div>
-                <x-button.danger href="{{ route('spk.index') }}" wire:navigate id="back-button">
-                    <x-slot name="icon">
-                        <x-icons.angle-left class="h-6 w-6" />
-                    </x-slot>
-                    {{ __('Kembali') }}
+                <x-button.danger class="my-auto me-4 max-h-10" href="{{ route('spk.index') }}" wire:navigate>
+                    <x-icons.angle-left class="h-5 w-5" />
                 </x-button.danger>
             </div>
 

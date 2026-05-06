@@ -1,7 +1,7 @@
 <div class="grid grid-cols-1 gap-y-4">
     {{-- Notification In --}}
     <div
-        class="flex h-[340px] flex-col rounded-2xl border border-zinc-200 bg-white/60 p-5 shadow-sm transition-shadow hover:shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none">
+        class="flex h-[340px] flex-col rounded-xl border border-zinc-200 bg-white/60 p-5 shadow-sm backdrop-blur-md transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none">
 
         <div class="mb-4 flex items-center justify-between border-b border-zinc-200 pb-3 dark:border-zinc-800">
             <div class="flex items-center gap-2">
@@ -19,7 +19,7 @@
             @forelse ($attendance_today as $at)
                 <li class="group">
                     <div
-                        class="flex items-start rounded-xl bg-zinc-50 p-3 transition-colors hover:bg-blue-50 dark:bg-dark-secondary dark:hover:bg-blue-900/10">
+                        class="flex items-start rounded-lg bg-zinc-50 p-3 transition-colors hover:bg-blue-50 dark:bg-dark-secondary dark:hover:bg-blue-900/10">
                         <img class="me-3 mt-0.5 h-8 w-8 rounded-full border border-zinc-200 object-cover shadow-sm dark:border-zinc-700"
                             src="{{ $at->user?->profile_pic ? asset('storage/profile-pictures/' . $at->user->profile_pic) : asset('assets/img/profile-picture-5.jpg') }}"
                             alt="{{ $at->pegawaiRelasi->full_name ?? 'User' }}" loading="lazy"
@@ -50,7 +50,7 @@
 
     {{-- Notification Out --}}
     <div
-        class="flex h-[340px] flex-col rounded-2xl border border-zinc-200 bg-white/60 p-5 shadow-sm transition-shadow hover:shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none">
+        class="flex h-[340px] flex-col rounded-xl border border-zinc-200 bg-white/60 p-5 shadow-sm backdrop-blur-md transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none">
 
         <div class="mb-4 flex items-center justify-between border-b border-zinc-200 pb-3 dark:border-zinc-800">
             <div class="flex items-center gap-2">
@@ -69,7 +69,7 @@
             @forelse ($attendance_out_today as $at)
                 <li class="group">
                     <div
-                        class="flex items-start rounded-xl bg-zinc-50 p-3 transition-colors hover:bg-red-50 dark:bg-dark-secondary dark:hover:bg-red-900/10">
+                        class="flex items-start rounded-lg bg-zinc-50 p-3 transition-colors hover:bg-red-50 dark:bg-dark-secondary dark:hover:bg-red-900/10">
                         <img class="me-3 mt-0.5 h-8 w-8 rounded-full border border-zinc-200 object-cover shadow-sm dark:border-zinc-700"
                             src="{{ $at->user?->profile_pic ? asset('storage/profile-pictures/' . $at->user->profile_pic) : asset('assets/img/profile-picture-5.jpg') }}"
                             alt="{{ $at->pegawaiRelasi->full_name ?? 'User' }}" loading="lazy"

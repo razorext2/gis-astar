@@ -1,14 +1,13 @@
 @extends('dashboard.layoutsDash.app')
-
 @section('content')
-    <div class="relative overflow-hidden rounded-2xl bg-white/80 p-4 text-zinc-900 shadow-2xl ring-1 ring-zinc-200 backdrop-blur-xl dark:bg-zinc-900/60 dark:text-white dark:ring-zinc-800 md:p-6"
+    <div class="relative overflow-hidden rounded-xl bg-white/60 p-4 text-zinc-900 shadow-2xl ring-1 ring-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:text-white dark:ring-zinc-800 md:p-6"
         id="Scan" data-aos="fade-up">
 
         {{-- Background Decoration --}}
         <div class="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-red-500/10 blur-3xl"></div>
         <div class="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl"></div>
 
-        <div class="relative grid grid-cols-1 gap-6">
+        <div class="relative grid grid-cols-1 gap-4">
             {{-- Unified Header --}}
             <div
                 class="flex flex-col items-start justify-between gap-4 rounded-xl bg-zinc-100 p-4 ring-1 ring-zinc-200 dark:bg-zinc-800/50 dark:ring-zinc-800 md:flex-row md:items-center">

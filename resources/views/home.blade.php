@@ -8,7 +8,7 @@
             Informasi mengenai anda akan muncul di bagian sebelah kanan<br />
         </x-landing.header-text>
 
-        <div class="relative mx-2 mb-5 rounded-lg border border-zinc-200 bg-white/70 shadow-lg dark:border-zinc-800 dark:bg-dark-primary/70 lg:mx-auto lg:p-4"
+        <div class="relative mx-2 mb-5 rounded-lg border border-zinc-200 bg-white/60 shadow-lg dark:border-zinc-800 dark:bg-dark-primary/70 lg:mx-auto lg:p-4"
             id="scan" data-aos="zoom-in-up" data-aos-delay="50">
 
             <div class="grid h-auto grid-cols-1 lg:w-[900px] lg:grid-cols-3 lg:gap-4">

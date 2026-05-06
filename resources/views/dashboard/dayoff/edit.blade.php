@@ -2,19 +2,15 @@
 @section('content')
     <div class="w-full space-y-6">
         <div
-            class="rounded-xl bg-white/60 p-4 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 sm:p-6">
+            class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none sm:p-6">
             <div class="w-full">
-                <header class="flex flex-row">
+                <header class="flex items-center">
 
-                    <form id="index-dayoff" action="{{ route('dayoff.index') }}"></form>
-                    <x-button.danger class="my-auto me-4 max-h-10" form="index-dayoff" type="submit">
-                        <x-slot name="icon">
-                            <x-icons.angle-left class="icon h-6 w-6 text-red-500 dark:text-white" />
-                        </x-slot>
-                        Kembali
+                    <x-button.danger class="my-auto me-4 max-h-10" href="{{ route('dayoff.index') }}" wire:navigate>
+                        <x-icons.angle-left class="h-5 w-5" />
                     </x-button.danger>
 
-                    <h2 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-white">
                         {{ __('Edit Pengajuan Off') }}
                     </h2>
 
@@ -93,7 +89,7 @@
                         $urls = json_decode($data->url, true);
                     @endphp
 
-                    <div class="flex flex-row gap-x-4">
+                    <div class="flex items-center">
                         @foreach ($urls as $url => $key)
                             <img src="{{ $key }}" alt=""
                                 class="w-56 rounded-lg transition-transform duration-300 hover:scale-110">

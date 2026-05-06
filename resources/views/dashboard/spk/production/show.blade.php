@@ -3,15 +3,12 @@
     <div
         class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 px-3 py-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
         {{-- header --}}
-        <div class="flex flex-row items-center gap-2 lg:gap-4">
+        <div class="flex items-center">
             <div>
-                <x-button.link href="{{ route('production.index') }}"
-                    class="w-fit ring-1 ring-red-700 dark:bg-red-800 dark:text-white" wire:navigate id="back-button">
-                    <x-slot name="icon">
-                        <x-icons.angle-left class="h-6 w-6 text-red-500 dark:text-white" />
-                    </x-slot>
-                    Kembali
-                </x-button.link>
+                <x-button.danger href="{{ route('production.index') }}" wire:navigate id="back-button"
+                    class="my-auto me-4 max-h-10">
+                    <x-icons.angle-left class="h-5 w-5" />
+                </x-button.danger>
             </div>
 
             <div>
@@ -181,15 +178,12 @@
             {{-- tambah riwayat --}}
             @can('produksi-create')
                 <div class="flex flex-row items-center gap-x-4">
-                    <x-button.link wire:navigate :href="route('production.history.add', $data->id)" wire:transition.duration.300ms
-                        class="flex w-fit flex-row items-center justify-center gap-x-2 px-2.5 py-2 ring-1 ring-green-700 dark:bg-green-800 dark:text-white dark:ring-zinc-800"
-                        id="produksi-histories-add">
+                    <x-button.primary wire:navigate :href="route('production.history.add', $data->id)" wire:transition.duration.300ms id="produksi-histories-add">
                         <x-slot name="icon">
                             <x-icons.plus class="h-6 w-6 -rotate-90 text-green-500 dark:text-white" />
                         </x-slot>
-
                         Laporan
-                    </x-button.link>
+                    </x-button.primary>
 
                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
                         Riwayat Produksi

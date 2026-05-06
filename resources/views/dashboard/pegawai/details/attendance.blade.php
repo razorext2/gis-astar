@@ -4,7 +4,7 @@
 
         <!-- Attendance In Section -->
         <div
-            class="overflow-hidden rounded-3xl border border-white/30 bg-white/70 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60">
+            class="overflow-hidden rounded-3xl border border-white/30 bg-white/60 shadow-xl backdrop-blur-md dark:border-white/10 dark:bg-dark-primary/60">
             <h2 id="attendance-accordion-heading-1">
                 <x-button.secondary
                     class="w-full !justify-between !gap-3 !rounded-none !border-none !bg-transparent !p-6 !shadow-none ring-0 hover:!bg-white/50 dark:!bg-transparent dark:hover:!bg-white/5"
@@ -36,7 +36,7 @@
 
         <!-- Attendance Out Section -->
         <div
-            class="overflow-hidden rounded-3xl border border-white/30 bg-white/70 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60">
+            class="overflow-hidden rounded-3xl border border-white/30 bg-white/60 shadow-xl backdrop-blur-md dark:border-white/10 dark:bg-dark-primary/60">
             <h2 id="attendance-accordion-heading-2">
                 <x-button.secondary
                     class="w-full !justify-between !gap-3 !rounded-none !border-none !bg-transparent !p-6 !shadow-none ring-0 hover:!bg-white/50 dark:!bg-transparent dark:hover:!bg-white/5"

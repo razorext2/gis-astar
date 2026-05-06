@@ -17,7 +17,7 @@
             </x-slot>
         </x-landing.header-text>
 
-        <div class="relative mx-2 mb-5 rounded-lg border border-zinc-200 bg-white/70 p-0 dark:border-zinc-800 dark:bg-dark-primary/70 lg:mx-auto lg:p-4"
+        <div class="relative mx-2 mb-5 rounded-lg border border-zinc-200 bg-white/60 p-0 dark:border-zinc-800 dark:bg-dark-primary/70 lg:mx-auto lg:p-4"
             id="scan" data-aos="zoom-in-up" data-aos-delay="50">
             <form id="photoForm" action="{{ route('photo.registProcess') }}" method="POST"
                 enctype="multipart/form-data">

@@ -108,7 +108,7 @@
                     </span>
                 @endif
 
-                <div class="flex flex-row gap-x-2 lg:gap-x-4">
+                <div class="flex items-center lg:gap-x-4">
                     <div class="flex flex-col gap-1 text-xs font-normal leading-none text-gray-400 dark:text-gray-500">
                         <p> Dibuat piutang:</p>
                         <time>

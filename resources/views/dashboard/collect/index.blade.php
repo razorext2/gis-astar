@@ -5,7 +5,7 @@
     <div class="relative grid grid-cols-1 gap-4">
 
         <div
-            class="rounded-xl border border-zinc-200 bg-white/60 p-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none md:p-6">
+            class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none md:p-6">
 
             {{-- desktop view --}}
             <div class="hidden items-center lg:flex">
@@ -47,7 +47,7 @@
                 {{-- button --}}
                 <x-button.secondary class="flex w-full items-center justify-between !p-2.5" @click="open = ! open">
                     <span>Actions...</span>
-                    <x-icons.carred-down class="h-3 w-3 shrink-0 transform transition-transform duration-300" 
+                    <x-icons.carred-down class="h-3 w-3 shrink-0 transform transition-transform duration-300"
                         ::class="{ 'rotate-180 ': open }" />
                 </x-button.secondary>
 
@@ -86,48 +86,44 @@
             </div>
         </div>
 
-        <div class="flex h-auto items-center justify-center">
-            <div
-                class="grid w-full grid-cols-2 gap-2 rounded-xl bg-white/60 p-2 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 md:gap-4 md:p-6">
+        <div
+            class="grid h-auto w-full grid-cols-2 items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none md:gap-4 md:p-6">
+            {{-- filter --}}
+            <div class="col-span-2 mb-4">
+                <x-filter.filter-bar>
+                    <div class="col-span-2 mx-auto flex w-full items-center lg:col-span-1">
+                        <x-filter.filter-input-text id="no_sr" name="no_sr" :text="'no SR'">
+                            <x-icons.fingerprint class="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                        </x-filter.filter-input-text>
+                    </div>
 
-                {{-- filter --}}
-                <div class="col-span-2 mb-4">
-                    <x-filter.filter-bar>
-                        <div class="col-span-2 mx-auto flex w-full items-center lg:col-span-1">
-                            <x-filter.filter-input-text id="no_sr" name="no_sr" :text="'no SR'">
-                                <x-icons.fingerprint class="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                            </x-filter.filter-input-text>
-                        </div>
+                    <div class="col-span-2 mx-auto flex w-full items-center lg:col-span-1">
+                        <x-filter.filter-input-text id="kode_pegawai" name="kode_pegawai" :text="'kode jari pegawai'">
+                            <x-icons.fingerprint class="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                        </x-filter.filter-input-text>
+                    </div>
 
-                        <div class="col-span-2 mx-auto flex w-full items-center lg:col-span-1">
-                            <x-filter.filter-input-text id="kode_pegawai" name="kode_pegawai" :text="'kode jari pegawai'">
-                                <x-icons.fingerprint class="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                            </x-filter.filter-input-text>
-                        </div>
+                    <div class="col-span-2 mx-auto flex w-full items-center lg:col-span-1">
+                        <x-filter.filter-input-text id="title" name="title" :text="'nama customer'">
+                            <x-icons.font-case class="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                        </x-filter.filter-input-text>
+                    </div>
 
-                        <div class="col-span-2 mx-auto flex w-full items-center lg:col-span-1">
-                            <x-filter.filter-input-text id="title" name="title" :text="'nama customer'">
-                                <x-icons.font-case class="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                            </x-filter.filter-input-text>
-                        </div>
+                    <div class="col-span-2 mx-auto w-full items-center lg:col-span-1">
+                        <x-filter.filter-input-select id="bill_type" name="bill_type" :options="['idcnonppn' => 'IDC Non PPN', 'idcppn' => 'IDC PPN', 'idyppn' => 'IDY PPN']"
+                            default-option="Filter by tipe" />
+                    </div>
 
-                        <div class="col-span-2 mx-auto w-full items-center lg:col-span-1">
-                            <x-filter.filter-input-select id="bill_type" name="bill_type" :options="['idcnonppn' => 'IDC Non PPN', 'idcppn' => 'IDC PPN', 'idyppn' => 'IDY PPN']"
-                                default-option="Filter by tipe" />
-                        </div>
+                    <div class="col-span-2 mx-auto w-full items-center lg:col-span-1">
+                        <x-filter.date-range />
+                    </div>
 
-                        <div class="col-span-2 mx-auto w-full items-center lg:col-span-1">
-                            <x-filter.date-range />
-                        </div>
-
-                    </x-filter.filter-bar>
-                </div>
-                {{-- end filter --}}
-
-                {{-- subcontent --}}
-                @yield('subcontent')
-
+                </x-filter.filter-bar>
             </div>
+            {{-- end filter --}}
+
+            {{-- subcontent --}}
+            @yield('subcontent')
         </div>
     </div>
 

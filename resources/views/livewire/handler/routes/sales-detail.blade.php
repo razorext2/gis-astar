@@ -67,18 +67,18 @@
     }
 }" x-init="initMap()"
     x-on:map-waypoints-updated.window="waypoints = $event.detail.waypoints; activeIndex = null; $nextTick(() => initMap())"
-    class="grid w-full gap-6 md:grid-cols-2">
+    class="grid w-full gap-4 md:grid-cols-2">
 
     {{-- Left column: header + timeline --}}
     <div
-        class="flex w-full flex-col gap-5 rounded-3xl border border-zinc-200 bg-white/70 p-5 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/70 md:p-6">
+        class="flex w-full flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
 
         {{-- Header --}}
-        <div class="flex items-center gap-3 border-b border-zinc-200 pb-5 dark:border-zinc-800/50">
-            <a href="{{ route('routes.sales') }}"
-                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-500 transition hover:border-red-300 hover:bg-red-50 hover:text-red-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:border-red-800 dark:hover:bg-red-950/20 dark:hover:text-red-400">
+        <div class="flex items-center border-b border-zinc-200 pb-5 dark:border-zinc-800/50">
+            <x-button.danger href="{{ route('routes.sales') }}" class="my-auto me-4 max-h-10" wire:navigate>
                 <x-icons.angle-left class="h-5 w-5" />
-            </a>
+            </x-button.danger>
+
             <div>
                 <h2 class="text-xl font-black tracking-tight text-zinc-900 dark:text-white">
                     {{ $this->pegawai->full_name ?? 'N/A' }}
@@ -200,7 +200,7 @@
 
     {{-- Right column: map --}}
     <div
-        class="flex h-max w-full flex-col gap-5 rounded-3xl border border-zinc-200 bg-white/70 p-5 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/70 md:p-6">
+        class="flex h-max w-full flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
         <div class="flex items-center gap-3 border-b border-zinc-200 pb-4 dark:border-zinc-800/50">
             <div
                 class="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-500/20">

@@ -2,7 +2,7 @@
 @section('subcontent')
     <div class="flex h-auto items-center justify-center">
         <div
-            class="grid w-full grid-cols-2 gap-2 rounded-xl bg-white/60 p-2 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 md:gap-4 md:p-6">
+            class="grid w-full grid-cols-2 gap-2 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none md:gap-4 md:p-6">
 
             {{-- filter --}}
             <div class="col-span-2 mb-4">

@@ -55,7 +55,7 @@
 
 <!-- Sidebar Navigation -->
 <aside
-    class="left-0 top-0 z-[60] hidden h-screen w-[272px] flex-col border-r border-zinc-200/50 bg-white/80 pb-14 backdrop-blur-xl transition-all duration-300 ease-out dark:border-zinc-800 dark:bg-zinc-950/80 dark:shadow-none md:fixed md:flex"
+    class="left-0 top-0 z-[60] hidden h-screen w-[272px] flex-col border-r border-zinc-200/50 bg-white/60 pb-14 backdrop-blur-md transition-all duration-300 ease-out dark:border-zinc-800 dark:bg-zinc-950/80 dark:shadow-none md:fixed md:flex"
     id="logo-sidebar" aria-label="Sidebar" :class="openSidebar ? 'translate-x-0' : '-translate-x-72'">
 
     {{-- Header / Toggle --}}

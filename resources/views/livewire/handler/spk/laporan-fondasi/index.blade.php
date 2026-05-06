@@ -21,7 +21,7 @@
                 </div>
             </div>
 
-            <div class="flex flex-row gap-x-2">
+            <div class="flex items-center">
                 @can('laporan-fondasi-create')
                     @if ($spk->added_by == auth()->id() || auth()->user()->can('spk-validate'))
                         <x-button.success wire:click="openCreateLaporanFondasiModal" class="z-10 w-fit">
@@ -106,8 +106,8 @@
     {{-- end laporan fondasi --}}
 
     {{-- modal tambah laporan Fondasi --}}
-    <x-modal.base-modal show="showModalAddLaporanFondasi" :title="($isEditing ? 'Edit' : 'Tambah') . ' Laporan Fondasi'"
-        subtitle="Input Progress Pekerjaan Fondasi" iconContainerClass="bg-blue-600 shadow-blue-500/20" maxWidth="2xl">
+    <x-modal.base-modal show="showModalAddLaporanFondasi" :title="($isEditing ? 'Edit' : 'Tambah') . ' Laporan Fondasi'" subtitle="Input Progress Pekerjaan Fondasi"
+        iconContainerClass="bg-blue-600 shadow-blue-500/20" maxWidth="2xl">
         <x-slot name="icon">
             @if ($isEditing)
                 <x-icons.file-pen class="h-5 w-5" />
@@ -117,8 +117,8 @@
         </x-slot>
 
         @if ($showModalAddLaporanFondasi)
-            <form wire:submit="{{ $isEditing ? 'updateLaporanFondasi' : 'storeLaporanFondasi' }}" id="form-laporan-fondasi"
-                class="flex flex-col gap-6">
+            <form wire:submit="{{ $isEditing ? 'updateLaporanFondasi' : 'storeLaporanFondasi' }}"
+                id="form-laporan-fondasi" class="flex flex-col gap-6">
 
                 <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
                     <div class="flex flex-col gap-4">

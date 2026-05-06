@@ -2,20 +2,14 @@
 @section('content')
     <div class="w-full space-y-6">
         <div
-            class="grid gap-6 rounded-xl bg-white/60 p-4 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 sm:p-6">
+            class="grid gap-6 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none sm:p-6">
             <div class="w-full">
-                <header class="flex flex-row gap-x-4">
+                <header class="flex items-center">
+                    <x-button.danger href="{{ route('driver.index') }}" wire:navigate class="my-auto me-4 max-h-10">
+                        <x-icons.angle-left class="h-5 w-5" />
+                    </x-button.danger>
 
-                    <div class="max-w-xs">
-                        <x-button.danger href="{{ route('driver.index') }}" wire:navigate>
-                            <x-slot name="icon">
-                                <x-icons.angle-left class="h-6 w-6" />
-                            </x-slot>
-                            {{ __('Kembali') }}
-                        </x-button.danger>
-                    </div>
-
-                    <h2 class="font-base mt-2 text-lg text-gray-900 dark:text-gray-300">
+                    <h2 class="text-lg text-gray-900 dark:text-gray-300">
                         Detail: <span class="font-bold text-white">{{ $data->title ?? 'N/A' }}</span>
                     </h2>
                 </header>

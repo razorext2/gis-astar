@@ -2,17 +2,14 @@
 @section('content')
     <div class="mb-16 flex flex-col text-gray-800 dark:text-white">
         <div
-            class="flex flex-col gap-4 rounded-xl bg-white/60 p-2 shadow-md border border-zinc-200 backdrop-blur-md transition-all duration-500 dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 md:p-4 lg:p-6">
+            class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-2 shadow-md backdrop-blur-md transition-all duration-500 dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none md:p-4 lg:p-6">
 
             <div class="col-span-2 mb-4 flex w-full flex-row items-center gap-4">
                 <div class="max-w-xs">
-                    <x-button.link wire:navigate href="{{ route('event.show', $participant->bigEventId->id) }}"
-                        class="w-fit ring-1 ring-red-700 dark:bg-red-800 dark:text-white">
-                        <x-slot name="icon">
-                            <x-icons.angle-right class="h-6 w-6 rotate-180 text-red-500 dark:text-white" />
-                        </x-slot>
-                        Kembali
-                    </x-button.link>
+                    <x-button.danger wire:navigate href="{{ route('event.show', $participant->bigEventId->id) }}"
+                        class="my-auto max-h-10">
+                        <x-icons.angle-right class="h-5 w-5" />
+                    </x-button.danger>
                 </div>
 
                 <div class="w-full">

@@ -4,7 +4,7 @@
     @livewire('components.card', ['type' => 'servermonitor'])
 
     <div
-        class="mb-4 rounded-2xl border border-white/60 bg-white/70 p-4 shadow-lg shadow-zinc-200/50 backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60 dark:shadow-black/30 md:p-6">
+        class="mb-4 rounded-2xl border border-white/60 bg-white/60 p-4 shadow-lg shadow-zinc-200/50 backdrop-blur-md dark:border-white/10 dark:bg-dark-primary/60 dark:shadow-black/30 md:p-6">
 
         <!-- Header -->
         <div class="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">

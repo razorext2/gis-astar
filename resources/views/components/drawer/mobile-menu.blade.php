@@ -1,9 +1,11 @@
+{{-- Goal: Mobile Drawer Menu with dynamic background, Livewire: None, Alpine: dynamicBg scope from parent --}}
 <x-drawer.navigation />
 
 <!-- drawer component -->
 <div x-data="{ search: '' }"
-    class="fixed bottom-0 left-0 right-0 z-[150] mx-auto w-[96vw] max-w-lg translate-y-full overflow-hidden rounded-t-2xl border-x border-t border-zinc-200 bg-white/60 pb-16 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.3)] backdrop-blur-md transition-transform dark:border-zinc-800 dark:bg-dark-primary/60 md:hidden"
-    id="drawer-swipe" aria-labelledby="drawer-swipe-label" tabindex="-1">
+    class="fixed bottom-0 left-0 right-0 z-[150] mx-auto w-[96vw] max-w-lg translate-y-full overflow-hidden rounded-t-2xl border-x border-t border-zinc-200 pb-16 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.3)] backdrop-blur-md transition-transform dark:border-zinc-800 md:hidden"
+    :class="dynamicBg ? 'bg-white/60 dark:bg-dark-primary/60' : 'bg-white dark:bg-dark-primary'" id="drawer-swipe"
+    aria-labelledby="drawer-swipe-label" tabindex="-1">
 
     <!-- Drag Handle -->
     <div class="cursor-pointer p-5 transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-900"

@@ -4,7 +4,7 @@
         <!-- Left Column: Personal Info -->
         <div class="space-y-2 lg:col-span-1 lg:space-y-4">
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-6 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60 lg:p-8">
+                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md dark:border-white/10 dark:bg-dark-primary/60 lg:p-8">
                 <!-- Decoration -->
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-blue-500/5 blur-3xl transition-colors group-hover:bg-blue-500/10">
@@ -70,7 +70,7 @@
         <!-- Right Column: Calendar & Stats -->
         <div class="space-y-2 lg:col-span-2 lg:space-y-4">
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-6 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60 lg:p-8">
+                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md dark:border-white/10 dark:bg-dark-primary/60 lg:p-8">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-green-500/5 blur-3xl transition-colors group-hover:bg-green-500/10">
                 </div>

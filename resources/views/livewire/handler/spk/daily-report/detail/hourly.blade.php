@@ -9,14 +9,9 @@
     @endphp
 
     <div>
-        <x-button.link href="{{ $redirectRoute }}"
-            class="flex w-fit items-center gap-2 ring-1 ring-red-600 dark:bg-red-800 dark:text-white" wire:navigate
-            id="back-button">
-            <x-slot name="icon">
-                <x-icons.angle-left class="h-5 w-5 text-red-500 dark:text-white" />
-            </x-slot>
-            Kembali
-        </x-button.link>
+        <x-button.danger href="{{ $redirectRoute }}" class="my-auto me-4 max-h-10" wire:navigate id="back-button">
+            <x-icons.angle-left class="h-5 w-5" />
+        </x-button.danger>
     </div>
 
     @can('laporan-harian-create')
@@ -26,8 +21,7 @@
                 $dailyReport->assignment->status !== 'completed' &&
                 $dailyReport->status !== 'submitted')
             <div wire:show="showAddForm" id="accordion-packing-form" x-data="{ accordionOpen: true }">
-                <x-button.success type="button"
-                    class="w-full flex-row-reverse justify-between rounded-lg p-5"
+                <x-button.success type="button" class="w-full flex-row-reverse justify-between rounded-lg p-5"
                     @click="accordionOpen = !accordionOpen" ::class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
                     <x-slot name="icon">
                         <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
@@ -42,7 +36,7 @@
 
                 {{-- Form Tambah Aktivitas --}}
                 <div x-show="accordionOpen" x-collapse x-cloak
-                    class="w-full rounded-b-lg bg-white/60 p-2 shadow-sm border border-zinc-200 backdrop-blur-md dark:bg-gray-800 dark:border-zinc-800 lg:p-4">
+                    class="w-full rounded-b-lg border border-zinc-200 bg-white/60 p-2 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800 lg:p-4">
 
                     <form wire:submit.prevent="store" class="grid grid-cols-1 gap-4 lg:grid-cols-2">
 
@@ -99,9 +93,9 @@
                                             </div>
 
                                             <x-button.link type="button" wire:click="removeAttachment({{ $index }})"
-                                                 class="!p-0 font-medium text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
-                                                 Hapus
-                                             </x-button.link>
+                                                class="!p-0 font-medium text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                                                Hapus
+                                            </x-button.link>
                                         </li>
                                     @endforeach
 
@@ -227,7 +221,8 @@
         </div>
 
         {{-- LIST CONTAINER --}}
-        <div class="w-full rounded-xl bg-white/60 shadow-sm border border-zinc-200 backdrop-blur-md dark:bg-gray-800 dark:border-zinc-800">
+        <div
+            class="w-full rounded-xl border border-zinc-200 bg-white/60 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800">
             <div class="flex flex-col divide-y divide-gray-200 dark:divide-gray-700">
                 @forelse ($this->hourlyReports as $index => $row)
                     <div class="p-2 transition hover:bg-gray-50 dark:hover:bg-gray-700/40 lg:p-4">

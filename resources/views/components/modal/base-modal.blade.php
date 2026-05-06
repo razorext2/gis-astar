@@ -26,8 +26,8 @@
 @endphp
 
 <template x-teleport="body">
-    <div x-data="{ open: @if($isAlpine) {{ $show }} @else @entangle($show) @endif }"
-        @if($isAlpine) x-init="$watch('open', val => {{ $show }} = val); $watch('{{ $show }}', val => open = val)" @endif
+    <div x-data="{ open: @if ($isAlpine) {{ $show }} @else @entangle($show) @endif }"
+        @if ($isAlpine) x-init="$watch('open', val => {{ $show }} = val); $watch('{{ $show }}', val => open = val)" @endif
         x-show="open" x-cloak
         class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-900/60 p-4 backdrop-blur-md"
         x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
@@ -37,14 +37,14 @@
         <div x-show="open" x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0 scale-95 translate-y-4"
             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-            class="relative flex w-full {{ $maxWidthClass }} max-h-[calc(100vh-2rem)] flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-2xl dark:border-zinc-800 dark:bg-zinc-900">
+            class="{{ $maxWidthClass }} relative flex max-h-[calc(100vh-2rem)] w-full flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-2xl dark:border-zinc-800 dark:bg-zinc-900">
 
             {{-- Header --}}
-            <div class="shrink-0 flex items-center justify-between border-b border-zinc-200 p-5 dark:border-zinc-800">
+            <div class="flex shrink-0 items-center justify-between border-b border-zinc-200 p-5 dark:border-zinc-800">
                 <div class="flex items-center gap-3">
                     @isset($icon)
                         <div
-                            class="flex h-10 w-10 items-center justify-center rounded-xl text-white shadow-lg {{ $iconContainerClass }}">
+                            class="{{ $iconContainerClass }} flex h-10 w-10 items-center justify-center rounded-xl text-white shadow-lg">
                             {{ $icon }}
                         </div>
                     @endisset
@@ -75,7 +75,7 @@
             {{-- Footer --}}
             @isset($footer)
                 <div
-                    class="shrink-0 flex justify-end gap-3 border-t border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-800/50">
+                    class="flex shrink-0 justify-end gap-3 border-t border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-800/50">
                     {{ $footer }}
                 </div>
             @endisset

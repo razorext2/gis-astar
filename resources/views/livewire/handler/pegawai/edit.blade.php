@@ -1,12 +1,12 @@
 <div class="w-full space-y-6">
     <!-- Top Header Navigation -->
     <div
-        class="rounded-3xl border border-white/30 bg-white/70 p-6 shadow-2xl backdrop-blur-sm transition-all duration-500 ease-in-out dark:border-white/10 dark:bg-zinc-900/60">
+        class="rounded-3xl border border-white/30 bg-white/60 p-6 shadow-2xl backdrop-blur-sm transition-all duration-500 ease-in-out dark:border-white/10 dark:bg-dark-primary/60">
         <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div class="flex items-center gap-4">
                 <x-button.link id="back-btn" class="group justify-center bg-white/50 hover:bg-red-700 hover:text-white"
                     wire:navigate href="{{ route('pegawai.detail', $pegawai->id) }}">
-                    <x-icons.angle-left class="h-6 w-6" />
+                    <x-icons.angle-left class="h-5 w-5" />
                 </x-button.link>
                 <div>
                     <h2 class="text-2xl font-bold tracking-tight text-gray-800 dark:text-white">Edit Data Pegawai</h2>
@@ -29,7 +29,7 @@
         <div class="space-y-2 lg:col-span-2 lg:space-y-4">
             <!-- Data Personal Section -->
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-zinc-900/60">
+                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-dark-primary/60">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-blue-500/5 blur-3xl transition-colors group-hover:bg-blue-500/10">
                 </div>
@@ -115,7 +115,7 @@
 
             <!-- Penempatan & Jabatan Section -->
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-zinc-900/60">
+                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-dark-primary/60">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-purple-500/5 blur-3xl transition-colors group-hover:bg-purple-500/10">
                 </div>
@@ -157,7 +157,7 @@
             <!-- Akun Login Section -->
             @if ($has_account)
                 <div
-                    class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-zinc-900/60">
+                    class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-dark-primary/60">
                     <div
                         class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-green-500/5 blur-3xl transition-colors group-hover:bg-green-500/10">
                     </div>
@@ -235,7 +235,7 @@
         <div class="space-y-2 lg:space-y-4">
             <!-- Upload New Photos -->
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-zinc-900/60">
+                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-dark-primary/60">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-orange-500/5 blur-3xl transition-colors group-hover:bg-orange-500/10">
                 </div>
@@ -257,8 +257,7 @@
                                     class="absolute inset-0 h-full w-full object-cover">
                                 <div
                                     class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
-                                    <x-button.danger class="!px-4 !py-2 !text-xs"
-                                        wire:click="$set('photo1', null)">
+                                    <x-button.danger class="!px-4 !py-2 !text-xs" wire:click="$set('photo1', null)">
                                         Ganti Foto
                                     </x-button.danger>
                                 </div>
@@ -276,7 +275,7 @@
                             @endif
 
                             <div wire:loading wire:target="photo1"
-                                class="absolute inset-0 flex items-center justify-center bg-white/80 dark:bg-dark-primary/80">
+                                class="absolute inset-0 flex items-center justify-center bg-white/60 dark:bg-dark-primary/80">
                                 <div class="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
                             </div>
                         </div>
@@ -296,8 +295,7 @@
                                     class="absolute inset-0 h-full w-full object-cover">
                                 <div
                                     class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
-                                    <x-button.danger class="!px-4 !py-2 !text-xs"
-                                        wire:click="$set('photo2', null)">
+                                    <x-button.danger class="!px-4 !py-2 !text-xs" wire:click="$set('photo2', null)">
                                         Ganti Foto
                                     </x-button.danger>
                                 </div>
@@ -315,7 +313,7 @@
                             @endif
 
                             <div wire:loading wire:target="photo2"
-                                class="absolute inset-0 flex items-center justify-center bg-white/80 dark:bg-dark-primary/80">
+                                class="absolute inset-0 flex items-center justify-center bg-white/60 dark:bg-dark-primary/80">
                                 <div class="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
                             </div>
                         </div>
@@ -328,7 +326,7 @@
 
             <!-- Existing Photos Display -->
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-zinc-900/60">
+                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-dark-primary/60">
                 <div class="mb-6 flex items-center gap-3">
                     <div class="h-10 w-1 rounded-full bg-zinc-600"></div>
                     <h3 class="text-xl font-bold text-gray-800 dark:text-white">Foto Saat Ini</h3>

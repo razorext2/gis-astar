@@ -3,7 +3,7 @@
     @livewire('components.card', ['type' => 'technicianteam'])
 
     <div
-        class="rounded-2xl bg-white/60 p-4 shadow-sm border border-zinc-200 backdrop-blur-md backdrop-blur-xl dark:bg-dark-primary/60 dark:border-zinc-800 md:p-6 lg:p-8">
+        class="rounded-2xl border border-zinc-200 bg-white/60 p-4 shadow-sm backdrop-blur-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 md:p-6 lg:p-8">
         <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
             <div>
                 <h2 class="w-full text-xl font-bold text-gray-900 dark:text-white lg:text-2xl">Tim Teknisi</h2>

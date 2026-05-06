@@ -59,12 +59,12 @@
                 <div class="ms-3 mt-0.5 text-sm font-normal text-black"><x-auth.auth-session-status class="mb-4"
                         :status="session('status')" />
                 </div>
-                <x-button.secondary
+                <x-button.danger
                     class="!ms-auto !h-8 !w-8 !bg-transparent !p-1.5 !shadow-none ring-0 sm:-mx-1.5 sm:-my-1.5"
                     type="button" aria-label="Close" @click="showToast = false">
                     <span class="sr-only">Close</span>
                     <x-icons.close class="h-3 w-3" />
-                </x-button.secondary>
+                </x-button.danger>
             </div>
         </div>
     @endif

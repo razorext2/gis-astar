@@ -2,16 +2,14 @@
 @section('content')
     <div class="space-y-6 xl:w-1/2">
         <div
-            class="rounded-xl bg-white/60 p-4 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 sm:p-6">
+            class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none sm:p-6">
 
-            <header class="flex flex-row gap-x-2">
-                <x-button.danger class="w-fit" href="{{ route('permissions.index') }}" wire:navigate>
-                    <x-slot name="icon">
-                        <x-icons.angle-left class="h-6 w-6" />
-                    </x-slot>
-                    {{ __('Kembali') }}
+            <header class="flex items-center">
+                <x-button.danger class="my-auto me-4 max-h-10" href="{{ route('permissions.index') }}" wire:navigate>
+                    <x-icons.angle-left class="h-5 w-5" />
                 </x-button.danger>
-                <h2 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
+
+                <h2 class="text-lg font-medium text-gray-900 dark:text-white">
                     {{ __('Ubah Data Permission') }}
                 </h2>
             </header>

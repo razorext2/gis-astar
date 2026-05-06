@@ -3,7 +3,7 @@
     <div class="relative grid grid-cols-1 gap-6">
 
         <div
-            class="relative grid grid-cols-1 rounded-xl border border-zinc-200 bg-white/60 py-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
+            class="relative grid grid-cols-1 rounded-xl border border-zinc-200 bg-white/60 px-2 py-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
 
             <div class="flex flex-col px-3 md:mb-2 lg:p-0">
                 <div class="mb-2">

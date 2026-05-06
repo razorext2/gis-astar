@@ -11,11 +11,8 @@
                     $routePrefix = Str::beforeLast($currentRoute, '.');
                 @endphp
 
-                <x-button.danger wire:navigate href="{{ route($routePrefix . '.index') }}">
-                    <x-slot name="icon">
-                        <x-icons.angle-left class="h-6 w-6" />
-                    </x-slot>
-                    {{ __('Kembali') }}
+                <x-button.danger wire:navigate href="{{ route($routePrefix . '.index') }}" class="max-h-10">
+                    <x-icons.angle-left class="h-5 w-5" />
                 </x-button.danger>
             </div>
 

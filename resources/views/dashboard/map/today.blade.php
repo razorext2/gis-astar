@@ -9,7 +9,7 @@
     <div class="flex flex-col gap-6">
         {{-- Absensi Masuk --}}
         <div
-            class="flex w-full flex-col gap-5 rounded-3xl border border-zinc-200 bg-white/70 p-5 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/70 md:p-7">
+            class="flex w-full flex-col gap-5 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
             <div class="flex items-center gap-3 border-b border-zinc-200 pb-5 dark:border-zinc-800/50">
                 <div
                     class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-lg shadow-emerald-500/20">
@@ -29,7 +29,7 @@
 
         {{-- Absensi Keluar --}}
         <div
-            class="flex w-full flex-col gap-5 rounded-3xl border border-zinc-200 bg-white/70 p-5 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/70 md:p-7">
+            class="flex w-full flex-col gap-5 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 md:p-6">
             <div class="flex items-center gap-3 border-b border-zinc-200 pb-5 dark:border-zinc-800/50">
                 <div
                     class="flex h-10 w-10 items-center justify-center rounded-xl bg-red-600 text-white shadow-lg shadow-red-500/20">

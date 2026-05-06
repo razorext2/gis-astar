@@ -2,20 +2,17 @@
 @section('content')
     <div class="w-full space-y-6">
         <div
-            class="grid gap-6 rounded-xl bg-white/60 p-4 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 sm:p-6">
+            class="grid gap-6 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none sm:p-6">
 
             <div class="w-full">
-                <header class="flex flex-row">
+                <header class="flex items-center">
 
-                    <form id="index-collector" action="{{ route('collect.show', $data->id) }}"></form>
-                    <x-button.danger class="my-auto me-4 max-h-10" form="index-collector" type="submit">
-                        <x-slot name="icon">
-                            <x-icons.angle-left class="icon h-6 w-6 text-red-500 dark:text-white" />
-                        </x-slot>
-                        Kembali
+                    <x-button.danger class="my-auto me-4 max-h-10" href="{{ route('collect.show', $data->id) }}"
+                        wire:navigate>
+                        <x-icons.angle-left class="h-5 w-5" />
                     </x-button.danger>
 
-                    <h2 class="font-base mt-2 text-lg text-gray-900 dark:text-gray-300">
+                    <h2 class="text-lg text-gray-900 dark:text-gray-300">
                         Ubah: <span class="font-bold lowercase text-white">{{ $data->title ?? 'N/A' }}</span>
                     </h2>
                 </header>

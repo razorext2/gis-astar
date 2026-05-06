@@ -25,14 +25,9 @@
         @endphp
 
         <div>
-            <x-button.link href="{{ $redirectRoute }}"
-                class="flex w-fit items-center gap-2 ring-1 ring-red-600 dark:bg-red-800 dark:text-white" wire:navigate
-                id="back-button">
-                <x-slot name="icon">
-                    <x-icons.angle-left class="h-5 w-5 text-red-500 dark:text-white" />
-                </x-slot>
-                Kembali
-            </x-button.link>
+            <x-button.danger href="{{ $redirectRoute }}" class="my-auto me-4 max-h-10" wire:navigate id="back-button">
+                <x-icons.angle-left class="h-5 w-5" />
+            </x-button.danger>
         </div>
 
         <div class="flex flex-col gap-2 lg:gap-4">

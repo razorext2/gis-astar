@@ -4,7 +4,7 @@
     Alpine: serverMonitor() — didefinisikan di @push('script') bawah, diinisialisasi oleh x-server.card.
 --}}
 <div
-    class="mx-auto max-w-screen-2xl rounded-2xl border border-white/60 bg-white/70 p-4 shadow-lg shadow-zinc-200/50 backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60 dark:shadow-black/30 md:p-6">
+    class="mx-auto max-w-screen-2xl rounded-2xl border border-white/60 bg-white/60 p-4 shadow-lg shadow-zinc-200/50 backdrop-blur-md dark:border-white/10 dark:bg-dark-primary/60 dark:shadow-black/30 md:p-6">
 
     {{-- Column Headers --}}
     @if (count($servers) > 0)
@@ -195,13 +195,13 @@
 
                 getNetRate(net, type) {
                     if (!net) return 0;
-                    const priorityKeys = type === 'rx' ?
-                        ['bytes_recv_rate_per_sec', 'rx_rate', 'rx_rate_per_sec', 'rx_bytes_per_sec',
-                            'rx_kbps', 'rx'
-                        ] :
-                        ['bytes_sent_rate_per_sec', 'tx_rate', 'tx_rate_per_sec', 'tx_bytes_per_sec',
-                            'tx_kbps', 'tx'
-                        ];
+                    const priorityKeys = type === 'rx' ? ['bytes_recv_rate_per_sec', 'rx_rate',
+                        'rx_rate_per_sec', 'rx_bytes_per_sec',
+                        'rx_kbps', 'rx'
+                    ] : ['bytes_sent_rate_per_sec', 'tx_rate', 'tx_rate_per_sec',
+                        'tx_bytes_per_sec',
+                        'tx_kbps', 'tx'
+                    ];
 
                     for (let key of priorityKeys) {
                         if (net[key] !== undefined && net[key] !== null) {
