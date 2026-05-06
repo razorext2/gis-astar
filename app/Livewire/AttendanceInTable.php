@@ -16,6 +16,7 @@ use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\Traits\WithExport;
+use Spatie\Permission\Models\Role;
 
 final class AttendanceInTable extends PowerGridComponent
 {
@@ -29,6 +30,10 @@ final class AttendanceInTable extends PowerGridComponent
 
     public $pegawai;
 
+    public $jabatan;
+
+    public $roles;
+
     public ?int $kodePegawai = null;
 
     public function setUp(): array
@@ -37,6 +42,8 @@ final class AttendanceInTable extends PowerGridComponent
 
         if ($auth->can('attendance-approve')) {
             $this->checkbox = true;
+            $this->jabatan = \App\Models\Jabatan::select('id', 'nama_jabatan')->get();
+            $this->roles = Role::select('id', 'name')->get();
         }
 
         $this->pegawai = Pegawai::orderBy('full_name')
@@ -50,8 +57,6 @@ final class AttendanceInTable extends PowerGridComponent
             PowerGrid::footer()
                 ->showPerPage()
                 ->showRecordCount(),
-            PowerGrid::responsive()
-                ->fixedColumns('kode_pegawai_formatted', 'action'),
             PowerGrid::exportable(fileName: 'absensi-masuk-'.now()->format('YmdHis'))
                 ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV)
                 ->stripTags(true),
@@ -61,10 +66,16 @@ final class AttendanceInTable extends PowerGridComponent
     public function datasource(): Builder
     {
         return Attendance::query()
-            ->with(['pegawaiRelasi', 'verifiedBy'])
-            ->when(auth()->user()->kode_pegawai, fn ($query, $kode) => $query->where('kode_pegawai', $kode))
-            ->when($this->kodePegawai, fn ($query, $kode) => $query->where('kode_pegawai', $kode))
-            ->latest();
+            ->with(['pegawaiRelasi', 'verifiedBy', 'user'])
+            ->join('tb_pegawai', 'tb_attendance.kode_pegawai', '=', 'tb_pegawai.kode_pegawai')
+            ->leftJoin('users', 'tb_pegawai.kode_pegawai', '=', 'users.kode_pegawai')
+            ->leftJoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+            ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
+            ->select('tb_attendance.*', 'tb_pegawai.full_name', 'tb_pegawai.jabatan', 'users.is_active')
+            ->groupBy('tb_attendance.id', 'tb_pegawai.full_name', 'tb_pegawai.jabatan', 'users.is_active')
+            ->when(auth()->user()->kode_pegawai, fn ($query, $kode) => $query->where('tb_attendance.kode_pegawai', $kode))
+            ->when($this->kodePegawai, fn ($query, $kode) => $query->where('tb_attendance.kode_pegawai', $kode))
+            ->latest('tb_attendance.jam_masuk');
     }
 
     public function relationSearch(): array
@@ -106,7 +117,11 @@ final class AttendanceInTable extends PowerGridComponent
             ->add('photo_url', fn ($query) => Blade::render('components.table-component.image-column', ['data' => $query]))
             ->add('created_at')
             ->add('updated_at')
-            ->add('verified');
+            ->add('verified')
+            ->add('full_name', fn ($query) => $query->full_name ?? '')
+            ->add('jabatan', fn ($query) => $query->jabatan ?? '')
+            ->add('roles_formatted', fn ($query) => collect($query->pegawaiRelasi?->userRelasi?->roles?->pluck('name'))->implode(', '))
+            ->add('is_active', fn ($query) => $query->is_active ?? '');
     }
 
     public function columns(): array
@@ -135,21 +150,28 @@ final class AttendanceInTable extends PowerGridComponent
 
             Column::make('Verified', 'verified')
                 ->hidden(isHidden: true, isForceHidden: true),
+
+            Column::make('Nama Pegawai', 'full_name')
+                ->hidden(isHidden: true, isForceHidden: true),
+
+            Column::make('Jabatan', 'jabatan')
+                ->hidden(isHidden: true, isForceHidden: true),
+
+            Column::make('Roles', 'roles_formatted')
+                ->hidden(isHidden: true, isForceHidden: true),
+
+            Column::make('Status Akun', 'is_active')
+                ->hidden(isHidden: true, isForceHidden: true),
         ];
     }
 
     public function filters(): array
     {
-        return [
-            Filter::datetimepicker('created_at')
+        $filters = [
+            Filter::datetimepicker('created_at', 'tb_attendance.created_at')
                 ->params([
                     'timezone' => 'Asia/Jakarta',
-                    'no_weekends' => true,
                 ]),
-            Filter::select('kode_pegawai', 'kode_pegawai')
-                ->dataSource($this->pegawai)
-                ->optionLabel('full_name')
-                ->optionValue('kode_pegawai'),
             Filter::select('verified', 'verified')
                 ->dataSource([
                     0 => [
@@ -164,6 +186,36 @@ final class AttendanceInTable extends PowerGridComponent
                 ->optionLabel('name')
                 ->optionValue('value'),
         ];
+
+        if (Auth::user()->can('attendance-approve')) {
+            $filters = array_merge($filters, [
+                Filter::inputText('full_name', 'tb_pegawai.full_name')
+                    ->placeholder('Nama Pegawai'),
+
+                Filter::inputText('kode_pegawai', 'tb_attendance.kode_pegawai')
+                    ->placeholder('Kode Jari'),
+
+                Filter::select('jabatan', 'tb_pegawai.jabatan')
+                    ->dataSource(collect($this->jabatan))
+                    ->optionLabel('nama_jabatan')
+                    ->optionValue('id'),
+
+                Filter::select('roles_formatted', 'roles.id')
+                    ->dataSource(collect($this->roles))
+                    ->optionLabel('name')
+                    ->optionValue('id'),
+
+                Filter::boolean('is_active', 'users.is_active')
+                    ->label('Aktif', 'Non-aktif'),
+            ]);
+        } else {
+            $filters[] = Filter::select('kode_pegawai', 'kode_pegawai')
+                ->dataSource($this->pegawai)
+                ->optionLabel('full_name')
+                ->optionValue('kode_pegawai');
+        }
+
+        return $filters;
     }
 
     public function actionsFromView($data)
