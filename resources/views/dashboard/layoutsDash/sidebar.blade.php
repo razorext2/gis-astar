@@ -55,17 +55,19 @@
 
 <!-- Sidebar Navigation -->
 <aside
-    class="left-0 top-0 z-[60] hidden h-screen w-[272px] flex-col border-r border-zinc-200/50 bg-white/60 pb-14 backdrop-blur-md transition-all duration-300 ease-out dark:border-zinc-800 dark:bg-zinc-950/80 dark:shadow-none md:fixed md:flex"
+    class="left-0 top-0 z-[60] hidden h-screen w-[272px] flex-col border-r border-zinc-200/50 bg-white/80 pb-14 backdrop-blur-xl transition-all duration-300 ease-out dark:border-zinc-800 dark:bg-zinc-950/80 dark:shadow-none md:fixed md:flex"
     id="logo-sidebar" aria-label="Sidebar" :class="openSidebar ? 'translate-x-0' : '-translate-x-72'">
 
     {{-- Header / Toggle --}}
-    <div id="tombolSidebar" :class="openSidebar ? 'translate-x-0' : 'absolute translate-x-24 bg-white dark:bg-[#09090b]'"
-        class="mx-auto flex w-full justify-between rounded-br-2xl p-5 shadow-md drop-shadow-lg transition-all duration-200 ease-out dark:border-b-[1px] dark:border-r-[4px] dark:border-red-800 dark:shadow-none dark:drop-shadow-none">
+    <div id="tombolSidebar" :class="openSidebar ? 'translate-x-0' : 'absolute translate-x-24 '"
+        class="mx-auto flex w-full justify-between rounded-br-2xl bg-white p-4 shadow-md transition-all duration-200 ease-out dark:border-b-[1px] dark:border-r-[4px] dark:border-red-800 dark:bg-dark-primary dark:shadow-none">
+
         <div class="flex items-center justify-start">
             <a class="flex items-center" href="{{ config('app.url') }}">
                 <img class="h-8" src="{{ asset('assets/img/logo.png') }}" alt="Indodacin Logo" loading="lazy" />
             </a>
         </div>
+
         <button @click="openSidebar = !openSidebar" class="rounded-lg px-2 py-1">
             <span x-show="!openSidebar">
                 <x-icons.open-sidebar-alt data-tooltip-target="open-sidebar-alt"
@@ -86,6 +88,7 @@
                 </div>
             </span>
         </button>
+
     </div>
 
     {{-- Search Bar --}}

@@ -13,8 +13,8 @@
     mouseY: -1000,
     gridSize: 24,
     baseDotSize: 1.5,
-    lensRadius: 160,
-    glowRadius: 200,
+    lensRadius: 100,
+    glowRadius: 150,
     maxMagnification: 2,
     pendingFrame: false,
     chartPoints: [],
@@ -51,30 +51,30 @@
 
     getChartPoints() {
         let points = [];
-        points.push({x: 100, y: 0});
-        points.push({x: 100, y: 100});
-        points.push({x: 0, y: 100});
-        
+        points.push({ x: 100, y: 0 });
+        points.push({ x: 100, y: 100 });
+        points.push({ x: 0, y: 100 });
+
         const addCurve = (p0, p1, p2, p3) => {
-            const steps = 50; 
-            for(let i=1; i<=steps; i++) {
+            const steps = 50;
+            for (let i = 1; i <= steps; i++) {
                 let t = i / steps;
                 let mt = 1 - t;
                 let mt2 = mt * mt;
                 let mt3 = mt2 * mt;
                 let t2 = t * t;
                 let t3 = t2 * t;
-                
-                let x = mt3*p0.x + 3*mt2*t*p1.x + 3*mt*t2*p2.x + t3*p3.x;
-                let y = mt3*p0.y + 3*mt2*t*p1.y + 3*mt*t2*p2.y + t3*p3.y;
-                points.push({x: x, y: y});
+
+                let x = mt3 * p0.x + 3 * mt2 * t * p1.x + 3 * mt * t2 * p2.x + t3 * p3.x;
+                let y = mt3 * p0.y + 3 * mt2 * t * p1.y + 3 * mt * t2 * p2.y + t3 * p3.y;
+                points.push({ x: x, y: y });
             }
         };
-        
-        addCurve({x:0, y:100}, {x:20, y:100}, {x:45, y:99}, {x:58, y:92});
-        addCurve({x:58, y:92}, {x:68, y:86}, {x:75, y:72}, {x:82, y:55});
-        addCurve({x:82, y:55}, {x:88, y:40}, {x:92, y:20}, {x:100, y:0});
-        
+
+        addCurve({ x: 0, y: 100 }, { x: 20, y: 100 }, { x: 45, y: 99 }, { x: 58, y: 92 });
+        addCurve({ x: 58, y: 92 }, { x: 68, y: 86 }, { x: 75, y: 72 }, { x: 82, y: 55 });
+        addCurve({ x: 82, y: 55 }, { x: 88, y: 40 }, { x: 92, y: 20 }, { x: 100, y: 0 });
+
         return points.map(p => ({
             origX: (p.x / 100) * this.width,
             origY: (p.y / 100) * this.height
@@ -136,7 +136,9 @@
                 let dist = Math.sqrt(dx * dx + dy * dy);
 
                 if (dist < this.glowRadius) {
-                    let finalX = ox, finalY = oy, dotSize = this.baseDotSize;
+                    let finalX = ox,
+                        finalY = oy,
+                        dotSize = this.baseDotSize;
                     if (dist < this.lensRadius && dist > 0) {
                         let nd = dist / this.lensRadius;
                         let bulgeFactor = 1 + (this.maxMagnification - 1) * Math.pow(1 - nd, 2);
