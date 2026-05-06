@@ -5,7 +5,7 @@
         {{-- Filter Section --}}
         <div class="lg:col-span-2">
             <div
-                class="rounded-xl border border-white/30 bg-white/60 p-4 shadow-xl backdrop-blur-md dark:border-white/10 dark:bg-dark-primary/60 lg:p-6">
+                class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-lg backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
                 <form id="dateForm" action="{{ route('pegawai.timeline', ['pegawai' => $pegawai->kode_pegawai]) }}"
                     method="GET" class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div class="flex items-center gap-3">
@@ -23,8 +23,8 @@
 
         {{-- Activity Timeline --}}
         <div
-            class="relative overflow-hidden rounded-xl border border-white/30 bg-white/60 p-4 shadow-xl backdrop-blur-md dark:border-white/10 dark:bg-dark-primary/60 lg:p-6">
-            <div class="mb-8 border-b border-white/20 pb-4 dark:border-zinc-800">
+            class="relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-lg backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
+            <div class="mb-8 border-b border-zinc-200 pb-4 dark:border-zinc-800">
                 <h2 class="text-2xl font-bold tracking-tight text-gray-800 dark:text-white">
                     {{ $pegawai->full_name }}
                 </h2>
@@ -61,7 +61,7 @@
                                 @endphp
 
                                 <div
-                                    class="{{ $currentColor }} absolute -left-[45px] top-1 flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-br text-white shadow-sm ring-4 ring-white transition-all group-hover:brightness-110 dark:ring-zinc-900">
+                                    class="{{ $currentColor }} absolute -left-[50px] top-1 flex h-8 w-8 items-center justify-center rounded-2xl bg-gradient-to-br text-white shadow-sm ring-4 ring-white transition-all group-hover:brightness-110 dark:ring-zinc-900">
                                     <x-icons.lock-time class="h-4 w-4" />
                                 </div>
 
@@ -132,7 +132,7 @@
 
         {{-- Map Section --}}
         <div
-            class="relative h-max overflow-hidden rounded-xl border border-white/30 bg-white/60 p-4 shadow-xl backdrop-blur-md dark:border-white/10 dark:bg-dark-primary/60 lg:p-6">
+            class="relative h-max overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-lg backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
             <div class="mb-6 flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="h-8 w-1 rounded-full bg-red-600"></div>

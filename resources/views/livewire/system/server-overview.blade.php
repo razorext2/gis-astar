@@ -4,7 +4,7 @@
     Alpine: serverMonitor() — didefinisikan di @push('script') bawah, diinisialisasi oleh x-server.card.
 --}}
 <div
-    class="mx-auto max-w-screen-2xl rounded-2xl border border-white/60 bg-white/60 p-4 shadow-lg shadow-zinc-200/50 backdrop-blur-md dark:border-white/10 dark:bg-dark-primary/60 dark:shadow-black/30 md:p-6">
+    class="mx-auto max-w-screen-2xl rounded-2xl border border-white/60 bg-white/60 p-4 shadow-lg shadow-zinc-200/50 backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-black/30 md:p-6">
 
     {{-- Column Headers --}}
     @if (count($servers) > 0)

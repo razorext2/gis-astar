@@ -1,9 +1,9 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div class="space-y-4 lg:space-y-6">
+    <div class="space-y-4">
         <!-- Header Navigation & Tabs -->
         <div
-            class="rounded-xl border border-white/30 bg-white/60 p-4 shadow-xl backdrop-blur-md dark:border-white/10 dark:bg-dark-primary/60 lg:p-6">
+            class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-lg backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
             <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
                 <div class="flex items-center">
 
@@ -66,8 +66,6 @@
         </div>
 
         <!-- Main Dynamic Content -->
-        <div id="mainContent" class="space-y-2 lg:space-y-4">
-            @yield('menus')
-        </div>
+        @yield('menus')
     </div>
 @endsection

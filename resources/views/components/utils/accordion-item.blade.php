@@ -2,7 +2,7 @@
 @props(['id', 'title' => '', 'description' => null, 'iconColor' => 'blue', 'expanded' => false])
 
 <div x-data="{ open: @js($expanded) }"
-    {{ $attributes->merge(['class' => 'overflow-hidden rounded-xl border border-zinc-200 bg-white/60 backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60']) }}>
+    {{ $attributes->merge(['class' => 'overflow-hidden shadow-lg rounded-xl border border-zinc-200 bg-white/60 backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60']) }}>
 
     <h2 id="{{ $id }}-heading" class="m-0">
         <button type="button"
@@ -51,7 +51,7 @@
     </h2>
 
     <div id="{{ $id }}-body" x-show="open" x-collapse aria-labelledby="{{ $id }}-heading" x-cloak>
-        <div class="border-t border-white/20 p-5 transition-all duration-500 dark:border-zinc-800 lg:p-6">
+        <div class="border-t border-zinc-200 p-4 transition-all duration-500 dark:border-zinc-800 lg:p-6">
             {{ $slot }}
         </div>
     </div>

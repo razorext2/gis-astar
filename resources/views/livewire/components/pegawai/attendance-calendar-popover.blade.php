@@ -1,7 +1,8 @@
 <div id="popover-click-{{ $date }}" data-popover role="tooltip"
-    class="invisible absolute z-[100] inline-block w-80 overflow-hidden rounded-2xl border border-white/30 bg-white/95 p-4 text-sm opacity-0 shadow-2xl backdrop-blur-md transition-opacity duration-300 dark:border-white/10 dark:bg-zinc-900/95">
+    class="invisible absolute z-20 inline-block w-80 overflow-hidden rounded-xl border border-zinc-200 bg-white/95 p-4 text-sm opacity-0 shadow-md backdrop-blur-md transition-opacity duration-300 dark:border-zinc-800 dark:bg-zinc-900/95">
 
-    <div class="space-y-4">
+    <div
+        class="{{ $attendance->count() + $attendanceOut->count() > 2 ? 'max-h-[380px] overflow-y-auto pr-2 custom-scrollbar' : '' }} space-y-4">
         {{-- Attendance In Section --}}
         <div>
             <div class="mb-2 flex items-center gap-2 border-b border-zinc-200 pb-1 dark:border-zinc-800">

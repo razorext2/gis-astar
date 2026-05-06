@@ -1,7 +1,7 @@
 <div class="w-full space-y-6">
     <!-- Top Header Navigation -->
     <div
-        class="rounded-3xl border border-white/30 bg-white/60 p-6 shadow-2xl backdrop-blur-sm transition-all duration-500 ease-in-out dark:border-white/10 dark:bg-dark-primary/60">
+        class="rounded-3xl border border-zinc-200 bg-white/60 p-6 shadow-2xl backdrop-blur-sm transition-all duration-500 ease-in-out dark:border-zinc-800 dark:bg-dark-primary/60">
         <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div class="flex items-center gap-4">
                 <x-button.link id="back-btn" class="group justify-center bg-white/50 hover:bg-red-700 hover:text-white"
@@ -32,7 +32,7 @@
         <div class="space-y-2 lg:col-span-2 lg:space-y-4">
             <!-- Informasi Akun Section -->
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-dark-primary/60">
+                class="group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-zinc-800 dark:bg-dark-primary/60">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-blue-500/5 blur-3xl transition-colors group-hover:bg-blue-500/10">
                 </div>
@@ -67,7 +67,7 @@
 
             <!-- Keamanan Section -->
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-dark-primary/60">
+                class="group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-zinc-800 dark:bg-dark-primary/60">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-purple-500/5 blur-3xl transition-colors group-hover:bg-purple-500/10">
                 </div>
@@ -104,7 +104,7 @@
         <!-- Right Column: Role Selection -->
         <div class="space-y-2 lg:space-y-4">
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-dark-primary/60">
+                class="group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-zinc-800 dark:bg-dark-primary/60">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-green-500/5 blur-3xl transition-colors group-hover:bg-green-500/10">
                 </div>

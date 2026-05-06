@@ -8,7 +8,7 @@
     x-transition:leave-end="transform translate-y-[-20px] opacity-0 scale-95">
 
     <div
-        class="relative flex w-full items-center gap-4 overflow-hidden rounded-xl border border-white/40 bg-white/60 p-5 shadow-[0_20px_50px_rgba(0,0,0,0.1)] backdrop-blur-md dark:border-white/10 dark:bg-dark-primary/60 dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] md:gap-5">
+        class="relative flex w-full items-center gap-4 overflow-hidden rounded-xl border border-white/40 bg-white/60 p-5 shadow-[0_20px_50px_rgba(0,0,0,0.1)] backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] md:gap-5">
 
         <!-- Decoration Gradient -->
         <div class="absolute -left-10 -top-10 h-24 w-24 rounded-full bg-blue-500/10 blur-2xl"></div>

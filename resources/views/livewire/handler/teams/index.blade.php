@@ -58,7 +58,7 @@
         </div>
     @empty
         <div
-            class="flex flex-col items-center justify-center rounded-2xl border border-zinc-200/50 bg-white/50 py-12 backdrop-blur-md dark:border-white/10 dark:bg-dark-primary/50">
+            class="flex flex-col items-center justify-center rounded-2xl border border-zinc-200/50 bg-white/50 py-12 backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/50">
             <x-icons.user-group class="mb-4 h-16 w-16 text-gray-300 dark:text-gray-600" />
             <p class="text-lg font-medium text-gray-600 dark:text-gray-300">Belum ada tim yang terbentuk</p>
             <p class="mt-1 text-sm text-gray-400 dark:text-gray-500">Buat tim baru terlebih dahulu untuk mulai
