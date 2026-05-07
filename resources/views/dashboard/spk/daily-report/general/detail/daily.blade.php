@@ -8,7 +8,7 @@
                 Rekap Laporan Harian
             </span>
 
-            <p class="mt-0.5 text-base text-gray-600 dark:text-gray-400">
+            <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
                 Laporan Lapangan adalah feature yang diperuntukkan untuk staff lapangan seperti Teknisi dan Mekanik untuk
                 perekapan pelaporan pekerjaan mereka yang mereka lakukan dilapangan.
             </p>

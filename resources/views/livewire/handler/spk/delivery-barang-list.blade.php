@@ -5,7 +5,7 @@
             Riwayat Pengiriman
         </h3>
 
-        <p class="text-base text-gray-600 dark:text-gray-400">
+        <p class="text-sm text-gray-600 dark:text-gray-400">
             Berikut ini adalah riwayat pengiriman SPK ini:
         </p>
     </div>
@@ -288,7 +288,7 @@
                             <x-icons.date class="h-4 w-4 text-zinc-400" />
                         </div>
                         <input id="delayed_eta" name="delayed_eta" wire:model="delayed_eta" type="date"
-                            class="block w-full rounded-xl border border-zinc-200 bg-white py-2.5 pr-4 ps-11 text-sm font-medium text-zinc-900 transition-all focus:border-amber-500 focus:ring-amber-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-white">
+                            class="block w-full rounded-xl border border-zinc-200 bg-white/60 py-2.5 pr-4 ps-11 text-sm font-medium text-zinc-900 transition-all focus:border-amber-500 focus:ring-amber-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-white">
                     </div>
                     @error('delayed_eta')
                         <span class="mt-2 text-xs text-red-500">{{ $message }}</span>

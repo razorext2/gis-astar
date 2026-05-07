@@ -1,306 +1,401 @@
-<div class="flex flex-col gap-4">
+<div class="space-y-4">
     <div
-        class="relative flex flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white text-zinc-800 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 dark:text-white">
+        class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
 
-        {{-- informasi spk --}}
-        <div class="grid grid-cols-2 divide-y divide-zinc-200 transition-all duration-500 dark:divide-zinc-800">
+        {{-- Header Section: Order Status --}}
+        <div
+            class="flex flex-col justify-between gap-4 border-b border-zinc-200 pb-4 dark:border-zinc-800 md:flex-row md:items-start">
+            <div class="flex flex-col gap-2">
+                <div class="flex flex-wrap items-center gap-2">
+                    <h1 class="text-xl font-bold tracking-tight text-zinc-900 dark:text-white lg:text-2xl">
+                        {{ $data->nomor_order . ($data->revision_count ? 'R' . str_pad($data->revision_count, 2, '0', STR_PAD_LEFT) : '') }}
+                    </h1>
 
-            <div
-                class="{{ auth()->user()->cannot('spk-create') ? 'col-span-2' : 'col-span-2 lg:col-span-1 lg:border-r border-zinc-200 dark:border-zinc-800' }} p-4">
-                <p class="text-xs italic">Nomor Order </p>
-                <div class="flex flex-col gap-y-2 font-semibold">
-                    <div class="flex items-center gap-x-2">
-                        <p>
-                            {{ $data->nomor_order . ($data->revision_count ? 'R' . str_pad($data->revision_count, 2, '0', STR_PAD_LEFT) : '') }}
-                        </p>
-
-                        @php
-                            $color = match ($data->status_approval) {
-                                0 => 'yellow',
-                                1 => 'green',
-                                2 => 'red',
-                                3 => 'yellow',
-                                4 => 'red',
-                                default => 'zinc',
-                            };
-                        @endphp
-
-                        <span
-                            class="bg-{{ $color }}-500 text-{{ $color }}-800 rounded-lg px-2 py-1 text-xs">
-                            {{ $data->status_approval_description }}
-                        </span>
-
-                        @if ($data->is_booked)
-                            <span
-                                class='flex w-fit items-center justify-center rounded-lg bg-blue-500 px-2 py-1.5 text-xs text-blue-800'>
-                                Booked
-                            </span>
-                        @endif
-
-                        @if ($data->is_cancelled && $data->cancel_request_validated_by === null)
-                            <span
-                                class='flex w-fit items-center justify-center rounded-lg bg-yellow-500 px-2 py-1.5 text-xs text-yellow-800'>
-                                Request Pembatalan
-                            </span>
-                        @endif
-                    </div>
-
-                    @if (
-                        $data->status_approval === 0 &&
-                            auth()->user()->can('spk-validate') &&
-                            ($data->is_booked == false && $data->is_cancelled == false))
-                        <x-button.primary class="w-fit text-sm" id="btn-validate-spk" wire:click="validateSpk">
-                            Setujui SPK
-                        </x-button.primary>
-                    @endif
-
-                    @if ($data->is_cancelled && auth()->user()->can('spk-validate') && $data->cancel_request_validated_by === null)
-                        <x-button.danger class="w-fit text-sm"
-                            wire:confirm.prompt="Apakah anda yakin ingin membatalkan SPK ini? SPK yang dibatalkan tidak dapat diproses lagi.\n\nKetik BATAL untuk mengkonfirmasi.|BATAL"
-                            id="btn-validate-spk" wire:click="cancelSpk">
-                            Setujui Pembatalan
-                        </x-button.danger>
-                    @endif
-
-                    @if ($data->latest_revision_request_detail)
-                        <p class="text-sm font-light text-red-500">
-                            <span class="font-semibold tracking-wide text-zinc-600 dark:text-zinc-400">
-                                Revisi Terakhir:
-                            </span>
-                            {{ $data->latest_revision_request_detail }}
-                        </p>
-                    @endif
-
-                    @if ($data->is_cancelled && $data->cancel_request_reason)
-                        <p class="text-sm font-light text-red-500">
-                            <span class="font-semibold tracking-wide text-zinc-600 dark:text-zinc-400">
-                                Alasan Pembatalan:
-                            </span>
-                            {{ $data->cancel_request_reason }}
-                        </p>
-                    @endif
-                </div>
-            </div>
-
-            @if (auth()->user()->can('spk-create') || auth()->user()->can('spk-validate'))
-                <div class="col-span-2 flex flex-col gap-2 p-4 lg:col-span-1">
-                    <div>
-                        <p class="text-xs italic">Tipe Tagihan</p>
-                        <p class="font-semibold"> {{ $data->tipe_tagihan }} </p>
-                    </div>
-
-                    <div>
-                        <p class="text-xs italic">No. Dokumen Penawaran</p>
-                        <p class="font-semibold"> {{ $data->nomor_dokumen_penawaran ?? 'Belum diatur.' }} </p>
-                    </div>
-                </div>
-
-                <div class="col-span-2 p-4 lg:col-span-1 lg:border-r border-zinc-200 dark:border-zinc-800">
-                    <p class="text-xs italic"> Nomor Tagihan </p>
-                    <p class="font-semibold">
-                        {{ $data->status_nomor_tagihan ? $data->nomor_tagihan : $data->status_nomor_tagihan_description }}
-                    </p>
-                </div>
-
-                <div class="col-span-2 p-4 lg:col-span-1">
-                    <p class="text-xs italic">Tipe Bayar </p>
-                    <p class="font-semibold"> {{ $data->tipe_bayar }}</p>
-                </div>
-            @endif
-
-            @can('produksi-create')
-                <div
-                    class="col-span-2 bg-green-50/50 p-4 text-green-800 dark:bg-green-900/20 dark:text-green-400">
-                    <p class="font-semibold"> Produksi menggunakan bahan stok lama? </p>
-
-                    @if ($data->is_using_old_stock == false)
-                        <x-button.primary class="mt-2 text-sm" id="old-stock" type="button" wire:click="setOldStock"
-                            wire:confirm.prompt="Silahkan ketik YA untuk melanjutkan|YA">
-                            Ya, produksi menggunakan stok lama
-                        </x-button.primary>
-                    @else
-                        <p class="font-bold"> Ya </p>
-                    @endif
-                </div>
-            @endcan
-
-            <div class="col-span-2 p-4 lg:col-span-1 lg:border-r border-zinc-200 dark:border-zinc-800">
-                <p class="text-xs italic">Tanggal Cetak </p>
-                <p class="font-semibold">
-                    {{ $data->tgl_cetak ? \Carbon\Carbon::parse($data->tgl_cetak)->locale('id')->isoFormat('D MMMM Y') : '-' }}
-                </p>
-            </div>
-
-            <div class="col-span-2 p-4 lg:col-span-1">
-                <p class="text-xs italic">Waktu Penyerahan</p>
-                <p class="font-semibold">
-                    {{ $data->tgl_kirim }} Hari
-                    {{ $data->tgl_kirim <= 1 ? '(SEGERA)' : '' }}
-                </p>
-            </div>
-
-            <div class="col-span-2 p-4 lg:col-span-1 lg:border-r border-zinc-200 dark:border-zinc-800">
-                <p class="text-xs italic">Nama Customer </p>
-                <p class="font-semibold"> {{ $data->customer['nama_perusahaan'] ?? 'N/A' }} </p>
-
-
-                @hasanyrole(['Admin', 'Marketing', 'Management', 'Management-Special'])
-                    <div class="mt-1 flex flex-col text-sm text-zinc-500 dark:text-zinc-400">
-                        <p> {{ $data->customer['contact_person'] ?? '-' }}
-                            (telp: {{ $data->customer['no_hp'] ?? '-' }})
-                        </p>
-                        <p> {{ $data->customer['alamat'] ?? '-' }} </p>
-                    </div>
-                @endhasanyrole
-            </div>
-
-            <div class="col-span-2 p-4 lg:col-span-1">
-                <p class="text-xs italic"> Produk Dipesan </p>
-                <p class="text-sm font-semibold capitalize">
-                    {{ $data->tipe_timbangan ?? 'Tipe timbangan tidak diatur.' }} </p>
-                <ul class="ml-5 list-disc text-sm font-semibold">
-                    @forelse ($data->products as $row)
-                        <li>
-                            {{ $row['jumlah_unit'] ?? '' }}
-                            {{ $row['satuan_barang'] ?? '' }}
-                            {{ $row['nama_barang'] ?? '' }}
-                        </li>
-                    @empty
-                        Tidak ada produk dipesan
-                    @endforelse
-                </ul>
-            </div>
-
-            <div class="col-span-2 p-4 lg:col-span-1 lg:border-r border-zinc-200 dark:border-zinc-800">
-                <p class="text-xs italic"> Dibuat Oleh </p>
-                <p class="font-semibold capitalize"> {{ $data->addedBy->name }}</p>
-            </div>
-
-            <div class="col-span-2 p-4 lg:col-span-1">
-                <p class="text-xs italic"> Diproduksi Oleh </p>
-                <p class="text-sm font-semibold capitalize lg:text-base">
-                    {{ $data->assignTo?->name ?? 'Belum di assign.' }}
-                    <span class="block text-xs font-normal text-zinc-500 dark:text-zinc-400">
-                        {{ $data->assignTo?->pegawai?->jabatanRelasi?->nama_jabatan ?? '' }}
-                        ({{ $data->assignTo?->pegawai?->jabatanRelasi?->placementRelasi?->penempatan ?? '' }})
+                    @php
+                        $badgeClasses = match ($data->status_approval) {
+                            0 => 'bg-amber-50 text-amber-700 ring-amber-600/20 dark:bg-amber-900/20 dark:text-amber-400 dark:ring-amber-500/30',
+                            1 => 'bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-900/20 dark:text-green-400 dark:ring-green-500/30',
+                            2 => 'bg-red-50 text-red-700 ring-red-600/20 dark:bg-red-900/20 dark:text-red-400 dark:ring-red-500/30',
+                            3 => 'bg-amber-50 text-amber-700 ring-amber-600/20 dark:bg-amber-900/20 dark:text-amber-400 dark:ring-amber-500/30',
+                            4 => 'bg-red-50 text-red-700 ring-red-600/20 dark:bg-red-900/20 dark:text-red-400 dark:ring-red-500/30',
+                            default => 'bg-zinc-50 text-zinc-700 ring-zinc-600/20 dark:bg-zinc-900/20 dark:text-zinc-400 dark:ring-zinc-500/30',
+                        };
+                    @endphp
+                    <span class="{{ $badgeClasses }} rounded-lg px-2.5 py-1 text-xs font-medium ring-1">
+                        {{ $data->status_approval_description }}
                     </span>
-                </p>
-            </div>
 
-            <div class="col-span-2 flex flex-col gap-y-2 p-4 lg:col-span-1 lg:border-r border-zinc-200 dark:border-zinc-800">
-                @if ($data->is_booked)
-                    <div>
-                        <p class="text-xs italic"> Dibooking Oleh </p>
-                        <p class="font-semibold capitalize"> {{ $data->bookedBy->name ?? '-' }}</p>
-                    </div>
-                @endif
+                    @if ($data->is_booked)
+                        <span
+                            class="rounded-lg bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20 dark:bg-blue-900/20 dark:text-blue-400 dark:ring-blue-500/30">
+                            Booked
+                        </span>
+                    @endif
 
-                <div>
-                    <p class="text-xs italic"> Divalidasi Oleh </p>
-                    <p class="font-semibold capitalize"> {{ $data->approvedBy->name ?? '-' }}</p>
+                    @if ($data->is_cancelled && $data->cancel_request_validated_by === null)
+                        <span
+                            class="rounded-lg bg-yellow-50 px-2.5 py-1 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20 dark:bg-yellow-900/20 dark:text-yellow-400 dark:ring-yellow-500/30">
+                            Request Pembatalan
+                        </span>
+                    @endif
                 </div>
 
-                @if ($data->is_cancelled)
-                    <div
-                        class="flex flex-col rounded-lg border border-red-200 bg-red-50 p-3 dark:border-red-900/50 dark:bg-red-900/20">
-                        <div class="text-red-600 dark:text-red-400">
-                            <p class="text-xs italic"> Dibatalkan Oleh </p>
-                            <p class="font-semibold capitalize"> {{ $data->cancelRequestBy->name ?? '-' }}</p>
-                        </div>
+                @if ($data->latest_revision_request_detail)
+                    <p class="text-sm text-red-600 dark:text-red-400">
+                        <span class="font-semibold text-zinc-700 dark:text-zinc-300">Revisi Terakhir:</span>
+                        {{ $data->latest_revision_request_detail }}
+                    </p>
+                @endif
 
-                        <div class="mt-2">
-                            <p class="text-xs italic"> Pembatalan Divalidasi Oleh </p>
-                            <p class="font-semibold capitalize">
-                                {{ $data->cancelRequestValidatedBy->name ?? '-' }}</p>
-                        </div>
-                    </div>
+                @if ($data->is_cancelled && $data->cancel_request_reason)
+                    <p class="text-sm text-red-600 dark:text-red-400">
+                        <span class="font-semibold text-zinc-700 dark:text-zinc-300">Alasan Pembatalan:</span>
+                        {{ $data->cancel_request_reason }}
+                    </p>
                 @endif
             </div>
 
-            <div class="col-span-2 p-4 lg:col-span-1">
-                <p class="text-xs italic"> Divalidasi Pada </p>
-                <p class="font-semibold capitalize">
-                    {{ $data->approved_at
-                        ? \Carbon\Carbon::parse($data->approved_at)->locale('id')->isoFormat('D MMMM Y HH:mm:ss')
-                        : '-' }}
-                </p>
+            <div class="flex shrink-0 gap-2">
+                @if (
+                    $data->status_approval === 0 &&
+                        auth()->user()->can('spk-validate') &&
+                        ($data->is_booked == false && $data->is_cancelled == false))
+                    <x-button.primary id="btn-validate-spk" wire:click="validateSpk">
+                        <x-slot name="icon">
+                            <x-icons.check-circle class="h-4 w-4" />
+                        </x-slot>
+
+                        Setujui SPK
+                    </x-button.primary>
+                @endif
+
+                @if ($data->is_cancelled && auth()->user()->can('spk-validate') && $data->cancel_request_validated_by === null)
+                    <x-button.danger
+                        wire:confirm.prompt="Apakah anda yakin ingin membatalkan SPK ini? SPK yang dibatalkan tidak dapat diproses lagi.\n\nKetik BATAL untuk mengkonfirmasi.|BATAL"
+                        id="btn-cancel-spk" wire:click="cancelSpk">
+                        <x-slot name="icon">
+                            <x-icons.check-circle class="h-4 w-4" />
+                        </x-slot>
+
+                        Setujui Pembatalan
+                    </x-button.danger>
+                @endif
+            </div>
+        </div>
+
+        {{-- Main Content Grid --}}
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+
+            {{-- Card: Detail Order --}}
+            <div
+                class="flex flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50">
+                <h3
+                    class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
+                    <x-icons.file-invoice class="h-4 w-4 text-blue-500" /> Detail Order
+                </h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col">
+                        <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Tanggal Cetak</span>
+                        <span class="text-sm font-semibold text-zinc-900 dark:text-white">
+                            {{ $data->tgl_cetak ? \Carbon\Carbon::parse($data->tgl_cetak)->locale('id')->isoFormat('D MMMM Y') : '-' }}
+                        </span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Waktu Penyerahan</span>
+                        <span class="text-sm font-semibold text-zinc-900 dark:text-white">
+                            {{ $data->tgl_kirim }} Hari {{ $data->tgl_kirim <= 1 ? '(SEGERA)' : '' }}
+                        </span>
+                    </div>
+
+                    @if (auth()->user()->can('spk-create') || auth()->user()->can('spk-validate'))
+                        <div class="flex flex-col">
+                            <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Tipe Tagihan</span>
+                            <span
+                                class="text-sm font-semibold uppercase text-zinc-900 dark:text-white">{{ $data->tipe_tagihan }}</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Tipe Bayar</span>
+                            <span
+                                class="text-sm font-semibold text-zinc-900 dark:text-white">{{ $data->tipe_bayar }}</span>
+                        </div>
+                        <div class="col-span-2 flex flex-col">
+                            <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Nomor Tagihan</span>
+                            <span class="text-sm font-semibold text-zinc-900 dark:text-white">
+                                {{ $data->status_nomor_tagihan ? $data->nomor_tagihan : $data->status_nomor_tagihan_description }}
+                            </span>
+                        </div>
+                        <div class="col-span-2 flex flex-col">
+                            <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">No. Dokumen
+                                Penawaran</span>
+                            <span
+                                class="text-sm font-semibold text-zinc-900 dark:text-white">{{ $data->nomor_dokumen_penawaran ?? 'Belum diatur.' }}</span>
+                        </div>
+                    @endif
+                </div>
             </div>
 
-            <div class="col-span-2 p-4">
-                <p class="text-xs italic"> Request Fondasi </p>
+            {{-- Card: Customer --}}
+            <div
+                class="flex flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50">
+                <h3
+                    class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
+                    <x-icons.user class="h-4 w-4 text-blue-500" /> Informasi Customer
+                </h3>
+                <div class="flex flex-col gap-4">
+                    <div class="flex flex-col">
+                        <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Nama Perusahaan /
+                            Customer</span>
+                        <span
+                            class="text-sm font-semibold text-zinc-900 dark:text-white">{{ $data->customer['nama_perusahaan'] ?? 'N/A' }}</span>
+                    </div>
+
+                    @hasanyrole(['Admin', 'Marketing', 'Management', 'Management-Special'])
+                        <div class="flex flex-col">
+                            <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Contact Person</span>
+                            <span class="text-sm font-semibold text-zinc-900 dark:text-white">
+                                {{ $data->customer['contact_person'] ?? '-' }}
+                                <span class="font-normal text-zinc-500">(Telp:
+                                    {{ $data->customer['no_hp'] ?? '-' }})</span>
+                            </span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Alamat Pengiriman</span>
+                            <span class="text-sm font-medium leading-relaxed text-zinc-700 dark:text-zinc-300">
+                                {{ $data->customer['alamat'] ?? '-' }}
+                            </span>
+                        </div>
+                    @endhasanyrole
+                </div>
+            </div>
+
+            {{-- Card: Produk --}}
+            <div
+                class="flex flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50 md:col-span-2">
                 <div
-                    class="mt-2 flex flex-col divide-y divide-zinc-200 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:divide-zinc-800 dark:border-zinc-800 dark:bg-zinc-900/50">
-                    @forelse ($this->filteredAttachmentsOnlyRequestFondasi as $index => $row)
-                        <a href="{{ route('spk.attachment.download', $row['url']) }}"
-                            class="p-3 transition hover:bg-zinc-50 dark:hover:bg-zinc-800">
-                            <p class="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                                {{ $row['nama_file'] }}
-                            </p>
-                            <p class="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
-                                {{ $row['tipe_dokumen'] }}
-                            </p>
-                        </a>
-                    @empty
-                        <p class="p-4 text-xs font-semibold capitalize italic">
-                            Tidak ada request fondasi dari Customer.
-                        </p>
-                    @endforelse
+                    class="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-100 pb-3 dark:border-zinc-800">
+                    <h3 class="flex items-center gap-2 text-sm font-semibold text-zinc-900 dark:text-white">
+                        <x-icons.archive class="h-4 w-4 text-blue-500" /> Daftar Produk Dipesan
+                    </h3>
+                    <span
+                        class="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium uppercase text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+                        {{ $data->tipe_timbangan ?? 'Tipe timbangan tidak diatur.' }}
+                    </span>
+                </div>
+
+                <div class="max-h-52 overflow-x-auto overflow-y-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead
+                            class="border-b border-zinc-100 text-xs text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
+                            <tr>
+                                <th class="pb-2 font-medium">Nama Barang / Spesifikasi</th>
+                                <th class="w-32 pb-2 text-center font-medium">Jumlah</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                            @forelse ($data->products as $row)
+                                <tr>
+                                    <td class="py-3 pr-4">
+                                        <p class="font-semibold text-zinc-900 dark:text-white">
+                                            {{ $row['nama_barang'] ?? '-' }}</p>
+                                        @if (isset($row['spesifikasi']))
+                                            <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+                                                {!! nl2br(e($row['spesifikasi'])) !!}</p>
+                                        @endif
+                                    </td>
+                                    <td class="py-3 text-center align-top">
+                                        <span
+                                            class="inline-flex items-center rounded-md bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10 dark:bg-blue-400/10 dark:text-blue-400 dark:ring-blue-400/30">
+                                            {{ $row['jumlah_unit'] ?? '' }} {{ $row['satuan_barang'] ?? '' }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="2" class="py-4 text-center text-sm text-zinc-500">Tidak ada produk
+                                        dipesan.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                @can('produksi-create')
+                    <div
+                        class="mt-2 flex flex-col justify-between gap-4 rounded-lg bg-zinc-50 p-4 dark:bg-zinc-800/50 sm:flex-row sm:items-center">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-semibold text-zinc-900 dark:text-white">Produksi menggunakan bahan
+                                stok lama?</span>
+                            <span class="text-xs text-zinc-500 dark:text-zinc-400">Fitur khusus produksi untuk
+                                mengidentifikasi bahan baku yang digunakan.</span>
+                        </div>
+
+                        @if ($data->is_using_old_stock == false)
+                            <x-button.primary class="shrink-0 text-sm" id="old-stock" type="button"
+                                wire:click="setOldStock" wire:confirm.prompt="Silahkan ketik YA untuk melanjutkan|YA">
+                                Gunakan Stok Lama
+                            </x-button.primary>
+                        @else
+                            <span
+                                class="inline-flex shrink-0 items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                                Menggunakan Stok Lama
+                            </span>
+                        @endif
+                    </div>
+                @endcan
+            </div>
+
+            {{-- Card: Keterlibatan & Riwayat --}}
+            <div
+                class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50">
+                <h3
+                    class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
+                    <x-icons.users class="h-4 w-4 text-blue-500" /> Staff
+                </h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col">
+                        <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Dibuat Oleh</span>
+                        <span
+                            class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->addedBy->name }}</span>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Diproduksi Oleh</span>
+                        <span class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">
+                            {{ $data->assignTo?->name ?? 'Belum di assign.' }}
+                        </span>
+                        @if ($data->assignTo)
+                            <span class="text-xs text-zinc-500 dark:text-zinc-400">
+                                {{ $data->assignTo?->pegawai?->jabatanRelasi?->nama_jabatan ?? '' }}
+                                ({{ $data->assignTo?->pegawai?->jabatanRelasi?->placementRelasi?->penempatan ?? '' }})
+                            </span>
+                        @endif
+                    </div>
+
+                    @if ($data->is_booked)
+                        <div class="flex flex-col">
+                            <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Dibooking Oleh</span>
+                            <span
+                                class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->bookedBy->name ?? '-' }}</span>
+                        </div>
+                    @endif
+
+                    <div class="flex flex-col">
+                        <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Divalidasi Oleh</span>
+                        <span
+                            class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->approvedBy->name ?? '-' }}</span>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Divalidasi Pada</span>
+                        <span class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">
+                            {{ $data->approved_at ? \Carbon\Carbon::parse($data->approved_at)->locale('id')->isoFormat('D MMMM Y HH:mm:ss') : '-' }}
+                        </span>
+                    </div>
+
+                    @if ($data->is_cancelled)
+                        <div
+                            class="col-span-2 mt-2 flex flex-col gap-2 rounded-lg border border-red-100 bg-red-50 p-3 dark:border-red-900/30 dark:bg-red-900/20">
+                            <div class="flex flex-col">
+                                <span class="text-xs font-medium text-red-600 dark:text-red-400">Dibatalkan Oleh</span>
+                                <span
+                                    class="text-sm font-semibold capitalize text-red-700 dark:text-red-300">{{ $data->cancelRequestBy->name ?? '-' }}</span>
+                            </div>
+                            <div class="mt-1 flex flex-col">
+                                <span class="text-xs font-medium text-red-600 dark:text-red-400">Pembatalan Divalidasi
+                                    Oleh</span>
+                                <span
+                                    class="text-sm font-semibold capitalize text-red-700 dark:text-red-300">{{ $data->cancelRequestValidatedBy->name ?? '-' }}</span>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
 
-            @if (auth()->user()->can('spk-validate') || auth()->user()->can('spk-create') || auth()->user()->can('spk-lampiran'))
-                <div class="col-span-2 p-4">
-                    <p class="text-xs italic"> Lampiran </p>
+            {{-- Card: Dokumen Pendukung --}}
+            <div
+                class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50">
+                <h3
+                    class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
+                    <x-icons.clipboard class="h-4 w-4 text-blue-500" /> Dokumen Pendukung
+                </h3>
 
-                    <div
-                        class="mt-2 flex flex-col divide-y divide-zinc-200 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:divide-zinc-800 dark:border-zinc-800 dark:bg-zinc-900/50">
-                        @forelse ($this->filteredAttachmentsExcludeRequestFondasi as $index => $row)
-                            <a href="{{ route('spk.attachment.download', $row['url']) }}"
-                                class="p-3 transition hover:bg-zinc-50 dark:hover:bg-zinc-800">
-                                <p class="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                                    {{ $row['nama_file'] }}
-                                </p>
-                                <p class="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
-                                    {{ $row['tipe_dokumen'] }}
-                                </p>
-                            </a>
-                        @empty
-                            <p class="p-4 text-xs font-semibold capitalize italic">
-                                Tidak ada lampiran.
-                            </p>
-                        @endforelse
+                <div class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-2">
+                        <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Request Fondasi</span>
+                        <div
+                            class="flex flex-col divide-y divide-zinc-100 overflow-hidden rounded-lg border border-zinc-100 dark:divide-zinc-800 dark:border-zinc-800">
+                            @forelse ($this->filteredAttachmentsOnlyRequestFondasi as $index => $row)
+                                <a href="{{ route('spk.attachment.download', $row['url']) }}"
+                                    class="flex items-center justify-between p-3 transition hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+                                    target="_blank">
+                                    <div class="flex flex-col">
+                                        <span
+                                            class="text-sm font-medium text-zinc-900 dark:text-zinc-100">{{ $row['nama_file'] }}</span>
+                                        <span
+                                            class="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">{{ $row['tipe_dokumen'] }}</span>
+                                    </div>
+                                    <span class="text-xs font-medium text-blue-600 dark:text-blue-400">Download</span>
+                                </a>
+                            @empty
+                                <div class="p-3 text-center text-xs italic text-zinc-500 dark:text-zinc-400">Tidak ada
+                                    request fondasi dari Customer.</div>
+                            @endforelse
+                        </div>
                     </div>
 
+                    @if (auth()->user()->can('spk-validate') || auth()->user()->can('spk-create') || auth()->user()->can('spk-lampiran'))
+                        <div class="flex flex-col gap-2">
+                            <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Lampiran Lainnya</span>
+                            <div
+                                class="flex flex-col divide-y divide-zinc-100 overflow-hidden rounded-lg border border-zinc-100 dark:divide-zinc-800 dark:border-zinc-800">
+                                @forelse ($this->filteredAttachmentsExcludeRequestFondasi as $index => $row)
+                                    <a href="{{ route('spk.attachment.download', $row['url']) }}"
+                                        class="flex items-center justify-between p-3 transition hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+                                        target="_blank">
+                                        <div class="flex flex-col">
+                                            <span
+                                                class="text-sm font-medium text-zinc-900 dark:text-zinc-100">{{ $row['nama_file'] }}</span>
+                                            <span
+                                                class="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">{{ $row['tipe_dokumen'] }}</span>
+                                        </div>
+                                        <span
+                                            class="text-xs font-medium text-blue-600 dark:text-blue-400">Download</span>
+                                    </a>
+                                @empty
+                                    <div class="p-3 text-center text-xs italic text-zinc-500 dark:text-zinc-400">Tidak
+                                        ada lampiran.</div>
+                                @endforelse
+                            </div>
+                        </div>
+                    @endif
                 </div>
-            @endif
+            </div>
 
         </div>
-        {{-- end informasi spk --}}
-
-        {{-- progress spk --}}
-        @livewire('utils.progres-spk', ['id' => $data->id])
-        {{-- end progress spk --}}
-
-        {{-- download button --}}
-        @if ($data->status_approval === 1 || auth()->user()->can('spk-validate'))
-            <div
-                class="flex justify-center gap-x-1 border-t border-zinc-200 bg-zinc-50/50 p-4 text-center dark:border-zinc-800 dark:bg-zinc-800/50 lg:absolute lg:right-0 lg:top-0 lg:border-none lg:bg-transparent lg:p-4 lg:dark:bg-transparent">
-                @can('spk-create')
-                    <x-button.primary id="spk-pdf-export" wire:click="export">
-                        Ekspor SPK
-                    </x-button.primary>
-                @endcan
-
-                @hasanyrole(['Produksi', 'Admin', 'Management'])
-                    <x-button.secondary
-                        href="{{ route('spk.generate.pdf', ['id' => $data->id]) }}" id="spk-pdf-export">
-                        Ekspor SPK (Produksi)
-                    </x-button.secondary>
-                @endhasanyrole
-            </div>
-        @endif
-        {{-- end download button --}}
     </div>
+
+    {{-- progress spk --}}
+    @livewire('utils.progres-spk', ['id' => $data->id])
+    {{-- end progress spk --}}
+
+    {{-- download button --}}
+    @if ($data->status_approval === 1 || auth()->user()->can('spk-validate'))
+        <div
+            class="flex justify-center gap-x-1 border-t border-zinc-200 bg-zinc-50/50 p-4 text-center dark:border-zinc-800 dark:bg-zinc-800/50 lg:absolute lg:right-0 lg:top-0 lg:border-none lg:bg-transparent lg:p-4 lg:dark:bg-transparent">
+            @can('spk-create')
+                <x-button.primary id="spk-pdf-export" wire:click="export">
+                    Ekspor SPK
+                </x-button.primary>
+            @endcan
+
+            @hasanyrole(['Produksi', 'Admin', 'Management'])
+                <x-button.secondary href="{{ route('spk.generate.pdf', ['id' => $data->id]) }}" id="spk-pdf-export">
+                    Ekspor SPK (Produksi)
+                </x-button.secondary>
+            @endhasanyrole
+        </div>
+    @endif
+    {{-- end download button --}}
 
     @can('spk-history')
         @livewire('handler.spk.spk-histories', ['id' => $data->id])

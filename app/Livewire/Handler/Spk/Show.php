@@ -79,7 +79,9 @@ class Show extends Component
 
         $this->runSafely(function () {
             $this->data->update([
+                'nomor_order' => $this->data->nomor_order.'-CANCELLED',
                 'status_approval' => 4,
+                'is_cancelled' => true,
                 'cancel_request_validated_by' => Auth::id(),
                 'cancel_request_validated_at' => now(),
             ]);

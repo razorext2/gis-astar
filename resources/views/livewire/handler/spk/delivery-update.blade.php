@@ -16,7 +16,7 @@
                 <tbody>
                     @if (isset($spk_data->production->packing_list))
                         @foreach ($spk_data->production->packing_list as $index => $row)
-                            <tr class="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-gray-800">
+                            <tr class="border-b border-zinc-200 bg-white/60 dark:border-zinc-800 dark:bg-gray-800">
                                 <td class="px-3 py-2 text-center">
                                     {{ $index + 1 }}
                                 </td>
@@ -32,7 +32,7 @@
                             </tr>
                         @endforeach
                     @else
-                        <tr class="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-gray-800">
+                        <tr class="border-b border-zinc-200 bg-white/60 dark:border-zinc-800 dark:bg-gray-800">
                             <td colspan="4" class="px-6 py-4 text-center text-sm font-semibold italic text-red-500">
                                 Packing list belum ditambah.
                             </td>

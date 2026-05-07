@@ -1,17 +1,16 @@
 <div id="laporan-fondasi-container" x-data="{ open: @entangle('showLaporanFondasi') }">
     <section
-        class="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        class="overflow-hidden rounded-xl border border-zinc-200 bg-white/60 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
 
-        <div class="z-0 flex flex-row items-center justify-between gap-2 bg-zinc-50/50 p-4 transition-all duration-500 ease-in-out hover:cursor-pointer hover:bg-zinc-100 dark:bg-zinc-800/50 dark:hover:bg-zinc-800 lg:gap-4"
+        <div class="flex items-center space-x-2 p-4 transition-all duration-500 ease-in-out hover:cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/30 lg:p-6"
             @click="open = !open">
-            <div class="w-fit text-nowrap">
-                <h3 class="text-lg font-bold text-zinc-900 dark:text-white">
-                    Laporan Fondasi
-                </h3>
-            </div>
 
-            <div class="relative hidden w-full rounded-full bg-zinc-200 dark:bg-zinc-800 lg:block">
-                <div class="flex h-6 items-center justify-center gap-2 rounded-full bg-blue-600 p-0.5"
+            <h3 class="text-lg font-bold text-zinc-900 dark:text-white">
+                Laporan Fondasi
+            </h3>
+
+            <div class="relative hidden w-full rounded-xl bg-zinc-200 dark:bg-zinc-800 lg:block">
+                <div class="flex h-6 items-center justify-center gap-2 rounded-xl bg-blue-600 p-0.5"
                     style="width: {{ $laporanFondasiLastProgress['value'] }}%">
                 </div>
 
@@ -21,10 +20,10 @@
                 </div>
             </div>
 
-            <div class="flex items-center">
+            <div class="flex items-center space-x-2">
                 @can('laporan-fondasi-create')
                     @if ($spk->added_by == auth()->id() || auth()->user()->can('spk-validate'))
-                        <x-button.success wire:click="openCreateLaporanFondasiModal" class="z-10 w-fit">
+                        <x-button.success wire:click="openCreateLaporanFondasiModal" class="z-10 w-fit !p-2">
                             <x-icons.plus class="h-5 w-5 dark:text-white" />
                         </x-button.success>
                     @endif
@@ -35,12 +34,13 @@
                         ::class="open ? 'rotate-180' : ''" />
                 </x-button.secondary>
             </div>
+
         </div>
 
         <div x-show="open" x-collapse>
             <div class="flex flex-col divide-y divide-zinc-200 dark:divide-zinc-800">
                 @forelse ($laporanFondasi as $row)
-                    <div class="flex flex-col gap-2 p-4 transition hover:bg-zinc-50 dark:hover:bg-zinc-800/30">
+                    <div class="flex flex-col gap-2 p-4 transition hover:bg-zinc-100 dark:hover:bg-zinc-800/30 lg:p-6">
                         <div class="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-8">
                             <div class="text-right text-xs text-zinc-500 dark:text-zinc-400 lg:text-left">
                                 <p>Pukul {{ \Carbon\Carbon::parse($row->created_at)->isoFormat('hh:mm:ss') }}</p>

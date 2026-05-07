@@ -21,14 +21,9 @@
                 $dailyReport->assignment->status !== 'completed' &&
                 $dailyReport->status !== 'submitted')
             <div wire:show="showAddForm">
-                <x-utils.accordion-item
-                    id="accordion-add-activity"
-                    title="Tambah aktivitas?"
-                    description="Silakan isi detail aktivitas harian pada form di bawah ini."
-                    iconColor="green"
-                    :expanded="true"
-                    class="w-full"
-                >
+                <x-utils.accordion-item id="accordion-add-activity" title="Tambah aktivitas?"
+                    description="Silakan isi detail aktivitas harian pada form di bawah ini." iconColor="green"
+                    :expanded="true" class="w-full">
                     <x-slot:icon>
                         <x-icons.plus class="h-4 w-4" />
                     </x-slot:icon>
@@ -68,11 +63,10 @@
                                 </span>
 
                                 <ul
-                                    class="divide-y divide-gray-200 rounded-lg border border-zinc-200 bg-white shadow-sm dark:divide-gray-700 dark:border-zinc-800 dark:bg-gray-700">
+                                    class="divide-y divide-gray-200 rounded-lg border border-zinc-200 bg-white/60 shadow-sm dark:divide-gray-700 dark:border-zinc-800 dark:bg-gray-700">
 
                                     @foreach ($docForm->new_attachments as $index => $row)
-                                        <li
-                                            class="flex items-center gap-2 p-2 transition hover:bg-gray-50 dark:hover:bg-gray-800"
+                                        <li class="flex items-center gap-2 p-2 transition hover:bg-gray-50 dark:hover:bg-gray-800"
                                             wire:key="attachment-{{ $index }}">
                                             <div
                                                 class="w-8 text-center text-sm font-medium text-gray-600 dark:text-gray-400">

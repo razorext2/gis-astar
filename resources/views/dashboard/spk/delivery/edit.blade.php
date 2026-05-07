@@ -31,7 +31,7 @@
                     SPK: {{ $data->nomor_order }}
                 </p>
 
-                <p class="mt-0.5 text-base text-gray-600 dark:text-gray-400">
+                <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
                     Halaman ini digunakan untuk memperbarui detail pengiriman produk yang telah selesai diproses dan
                     siap
                     dikirim.

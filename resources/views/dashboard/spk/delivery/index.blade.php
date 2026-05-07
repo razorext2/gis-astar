@@ -13,7 +13,7 @@
                     Pengiriman
                 </span>
 
-                <p class="mt-0.5 text-base text-gray-600 dark:text-gray-400">
+                <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
                     Pengiriman adalah proses memindahkan atau mengirim barang, dokumen, atau produk dari satu pihak ke pihak
                     lain melalui suatu jasa atau sistem logistik, baik dalam jarak dekat maupun jauh.
                 </p>
