@@ -1,6 +1,6 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div class="mb-16 flex flex-col gap-4">
+    <div class="mb-16 space-y-4">
         <div
             class="flex items-center gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
 
