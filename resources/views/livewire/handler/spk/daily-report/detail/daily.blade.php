@@ -1,7 +1,7 @@
 <div class="w-full">
     {{-- informasi project --}}
     <div
-        class="mb-2 w-full rounded-xl border border-zinc-200 bg-white/60 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800 lg:mb-4">
+        class="mb-2 w-full rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800 dark:shadow-none lg:mb-4">
         {{-- HEADER --}}
         <div class="border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
@@ -241,7 +241,7 @@
 
         {{-- LIST CONTAINER --}}
         <div
-            class="w-full rounded-xl border border-zinc-200 bg-white/60 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800">
+            class="w-full rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800 dark:shadow-none">
             <div class="flex flex-col divide-y divide-gray-200 dark:divide-gray-700">
                 @forelse ($this->dailyReports as $index => $row)
                     <div class="relative p-2 transition hover:bg-gray-50 dark:hover:bg-gray-700/40 lg:p-4">

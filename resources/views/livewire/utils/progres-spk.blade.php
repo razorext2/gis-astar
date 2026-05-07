@@ -1,5 +1,5 @@
 <div
-    class="{{ $data->on_delay || $data->status_approval === 4 ? 'overflow-hidden' : 'overflow-x-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700' }} relative flex w-full flex-row items-center gap-2 rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 sm:p-6">
+    class="{{ $data->on_delay || $data->status_approval === 4 ? 'overflow-hidden' : 'overflow-x-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700' }} relative flex w-full flex-row items-center gap-2 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 sm:p-6">
 
     {{-- Timeline items container --}}
     <div
@@ -12,7 +12,8 @@
 
     {{-- DELAY OVERLAY --}}
     @if ($data->on_delay && $data->status_approval !== 4)
-        <div class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-red-50/90 p-4 backdrop-blur-md dark:bg-red-950/80">
+        <div
+            class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-red-50/90 p-4 backdrop-blur-md dark:bg-red-950/80">
             <div class="flex items-start gap-4">
                 <div
                     class="mt-0.5 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600 ring-1 ring-red-500/30 dark:bg-red-500/20 dark:text-red-400 dark:ring-red-500/50">
@@ -22,7 +23,8 @@
                     </svg>
                 </div>
                 <div class="flex flex-col">
-                    <h4 class="text-lg font-black uppercase tracking-widest text-red-600 dark:text-red-400">SPK MENGALAMI DELAY</h4>
+                    <h4 class="text-lg font-black uppercase tracking-widest text-red-600 dark:text-red-400">SPK
+                        MENGALAMI DELAY</h4>
                     <p class="text-xs font-medium text-red-800/60 dark:text-red-300/60">
                         {{ $data->on_delay_at }}
                     </p>
@@ -41,14 +43,16 @@
 
     {{-- CANCELED OVERLAY --}}
     @if ($data->status_approval === 4)
-        <div class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-red-50/90 p-4 backdrop-blur-md dark:bg-red-950/80">
+        <div
+            class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-red-50/90 p-4 backdrop-blur-md dark:bg-red-950/80">
             <div class="flex items-start gap-4">
                 <div
                     class="mt-0.5 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-100 text-red-600 shadow-xl shadow-red-500/10 ring-1 ring-red-500/30 dark:bg-red-500/20 dark:text-red-500 dark:ring-red-500/50">
                     <x-icons.close class="h-6 w-6" />
                 </div>
                 <div class="flex flex-col">
-                    <h4 class="text-lg font-black uppercase tracking-widest text-red-600 dark:text-red-500">SPK DIBATALKAN</h4>
+                    <h4 class="text-lg font-black uppercase tracking-widest text-red-600 dark:text-red-500">SPK
+                        DIBATALKAN</h4>
                     <p class="text-xs font-medium text-red-800/60 dark:text-red-300/60">
                         {{ $data->cancel_request_at }} <span class="mx-1 opacity-30">|</span> Divalidasi:
                         {{ $data->cancel_request_validated_at }}

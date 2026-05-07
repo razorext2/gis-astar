@@ -94,7 +94,7 @@
 
             {{-- Card: Detail Order --}}
             <div
-                class="flex flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50">
+                class="flex flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none">
                 <h3
                     class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.file-invoice class="h-4 w-4 text-blue-500" /> Detail Order
@@ -142,7 +142,7 @@
 
             {{-- Card: Customer --}}
             <div
-                class="flex flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50">
+                class="flex flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none">
                 <h3
                     class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.user class="h-4 w-4 text-blue-500" /> Informasi Customer
@@ -176,7 +176,7 @@
 
             {{-- Card: Produk --}}
             <div
-                class="flex flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50 md:col-span-2">
+                class="flex flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none md:col-span-2">
                 <div
                     class="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-100 pb-3 dark:border-zinc-800">
                     <h3 class="flex items-center gap-2 text-sm font-semibold text-zinc-900 dark:text-white">
@@ -252,7 +252,7 @@
 
             {{-- Card: Keterlibatan & Riwayat --}}
             <div
-                class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50">
+                class="flex flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none">
                 <h3
                     class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.users class="h-4 w-4 text-blue-500" /> Staff
@@ -319,7 +319,7 @@
 
             {{-- Card: Dokumen Pendukung --}}
             <div
-                class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50">
+                class="flex flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none">
                 <h3
                     class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.clipboard class="h-4 w-4 text-blue-500" /> Dokumen Pendukung
@@ -387,7 +387,7 @@
     {{-- download button --}}
     @if ($data->status_approval === 1 || auth()->user()->can('spk-validate'))
         <div
-            class="flex justify-center gap-x-2 rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 text-center dark:border-zinc-800 dark:bg-dark-primary/60 lg:absolute lg:right-6 lg:top-0 lg:border-none lg:bg-transparent lg:p-0 lg:dark:bg-transparent">
+            class="flex justify-center gap-x-2 rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 text-center shadow-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:absolute lg:right-6 lg:top-0 lg:border-none lg:bg-transparent lg:p-0 lg:shadow-none lg:dark:bg-transparent">
             @can('spk-create')
                 <x-button.primary id="spk-pdf-export" wire:click="export">
                     Ekspor SPK

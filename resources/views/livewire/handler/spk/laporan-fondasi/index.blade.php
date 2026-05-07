@@ -1,8 +1,8 @@
 <div id="laporan-fondasi-container" x-data="{ open: @entangle('showLaporanFondasi') }">
     <section
-        class="overflow-hidden rounded-xl border border-zinc-200 bg-white/60 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
+        class="overflow-hidden rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none">
 
-        <div class="flex items-center space-x-2 p-4 transition-all duration-500 ease-in-out hover:cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/30 lg:p-6"
+        <div class="flex items-center justify-between space-x-2 p-4 transition-all duration-500 ease-in-out hover:cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/30 lg:p-6"
             @click="open = !open">
 
             <h3 class="text-lg font-bold text-zinc-900 dark:text-white">
@@ -191,7 +191,7 @@
                                                 <img class="h-24 w-24 rounded-lg border border-zinc-200 object-cover dark:border-zinc-800"
                                                     src="{{ $doc->temporaryUrl() }}">
                                                 <x-button.danger type="button"
-                                                    class="absolute -end-2 -top-2 !rounded-full !p-1 shadow-lg"
+                                                    class="absolute -end-2 -top-2 !rounded-full !p-1 shadow-md"
                                                     wire:click="removeDocumentation({{ $index }})">
                                                     <x-slot name="icon">
                                                         <x-icons.close class="h-3 w-3" />

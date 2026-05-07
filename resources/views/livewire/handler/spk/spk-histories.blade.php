@@ -1,5 +1,5 @@
  <section x-data="{ open: @entangle('showRiwayatSpk') }"
-     class="overflow-hidden rounded-xl border border-zinc-200 bg-white/60 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
+     class="overflow-hidden rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none">
 
      <div class="flex flex-row items-center justify-between p-4 transition-all duration-500 ease-in-out hover:cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/30 lg:p-6"
          @click="open = !open">

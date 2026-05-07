@@ -2,7 +2,7 @@
 @props(['id', 'title' => '', 'description' => null, 'iconColor' => 'blue', 'expanded' => false])
 
 <div x-data="{ open: @js($expanded) }"
-    {{ $attributes->merge(['class' => 'overflow-hidden shadow-lg rounded-xl border border-zinc-200 bg-white/60 backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60']) }}>
+    {{ $attributes->merge(['class' => 'overflow-hidden shadow-md rounded-xl border border-zinc-200 bg-white/60 backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60']) }}>
 
     <h2 id="{{ $id }}-heading" class="m-0">
         <button type="button"

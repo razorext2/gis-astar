@@ -63,7 +63,7 @@
                                 </span>
 
                                 <ul
-                                    class="divide-y divide-gray-200 rounded-lg border border-zinc-200 bg-white/60 shadow-sm dark:divide-gray-700 dark:border-zinc-800 dark:bg-gray-700">
+                                    class="divide-y divide-gray-200 rounded-lg border border-zinc-200 bg-white/60 shadow dark:divide-gray-700 dark:border-zinc-800 dark:bg-gray-700">
 
                                     @foreach ($docForm->new_attachments as $index => $row)
                                         <li class="flex items-center gap-2 p-2 transition hover:bg-gray-50 dark:hover:bg-gray-800"
@@ -211,7 +211,7 @@
 
         {{-- LIST CONTAINER --}}
         <div
-            class="w-full rounded-xl border border-zinc-200 bg-white/60 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800">
+            class="w-full rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800 dark:shadow-none">
             <div class="flex flex-col divide-y divide-gray-200 dark:divide-gray-700">
                 @forelse ($this->hourlyReports as $index => $row)
                     <div class="p-2 transition hover:bg-gray-50 dark:hover:bg-gray-700/40 lg:p-4">

@@ -86,7 +86,7 @@
 
                 {{-- Form Tambah Barang --}}
                 <div
-                    class="flex w-full flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow-sm dark:border-zinc-700 dark:bg-zinc-800">
+                    class="flex w-full flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow dark:border-zinc-700 dark:bg-zinc-800">
                     <div class="w-full">
                         <x-input.select id="tipe_timbangan" name="tipe_timbangan" :labels="true" :textLabel="'Tipe Timbangan Yang Dipesan'"
                             :defaultOption="'Pilih tipe timbangan'" wire:model="createForm.tipe_timbangan" :options="config('spk-config.tipe_timbangan')" />
@@ -159,7 +159,7 @@
                     </h3>
 
                     <div
-                        class="overflow-hidden rounded-xl border border-zinc-200 bg-white/60 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
+                        class="overflow-hidden rounded-xl border border-zinc-200 bg-white/60 shadow backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
                         <table id="barang-list-table" class="w-full text-left">
                             <thead
                                 class="border-b border-zinc-200 bg-zinc-50 text-xs uppercase tracking-wider text-zinc-600 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-zinc-400">
@@ -390,7 +390,7 @@
 
                 {{-- Attachment Upload Section --}}
                 <div
-                    class="col-span-1 flex w-full flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow-sm dark:border-zinc-700 dark:bg-zinc-800 lg:col-span-2 lg:flex-row">
+                    class="col-span-1 flex w-full flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow dark:border-zinc-700 dark:bg-zinc-800 lg:col-span-2 lg:flex-row">
 
                     <div class="flex w-full flex-col lg:w-1/2">
                         <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
@@ -482,7 +482,7 @@
                     </h3>
 
                     <ul
-                        class="flex flex-col divide-y divide-zinc-200 rounded-xl border border-zinc-200 bg-white/60 shadow-sm backdrop-blur-md dark:divide-zinc-800 dark:border-zinc-800 dark:bg-dark-primary/60">
+                        class="flex flex-col divide-y divide-zinc-200 rounded-xl border border-zinc-200 bg-white/60 shadow backdrop-blur-md dark:divide-zinc-800 dark:border-zinc-800 dark:bg-dark-primary/60">
                         @foreach ($docForm->new_attachments as $index => $row)
                             <li
                                 class="flex items-center gap-4 px-4 py-3 transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
@@ -624,7 +624,7 @@
         {{-- end form info tambahan --}}
 
         <div
-            class="flex w-full items-center justify-end gap-3 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
+            class="flex w-full items-center justify-end gap-3 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
             <x-button.primary id="summary-button" wire:click="summary" type="button"
                 class="!bg-zinc-800 !text-white hover:!bg-zinc-700 dark:!bg-zinc-700 dark:hover:!bg-zinc-600">
                 <x-slot name="icon">
