@@ -646,13 +646,13 @@
             <x-icons.file-invoice class="h-5 w-5" />
         </x-slot>
 
-        @if ($showSummary)
-            <div class="-m-6 h-[70vh]" x-data="{ pdfUrl: '' }"
-                x-on:show-pdf-modal.window="pdfUrl = $event.detail.url">
+        <div class="-m-6 h-[70vh]" x-data="{ pdfUrl: '' }"
+            x-on:show-pdf-modal.window="pdfUrl = $event.detail.url">
+            <template x-if="pdfUrl">
                 <iframe x-bind:src="pdfUrl" class="h-full w-full" title="SPK Summary PDF"
                     frameborder="0"></iframe>
-            </div>
-        @endif
+            </template>
+        </div>
     </x-modal.base-modal>
 
 </div>

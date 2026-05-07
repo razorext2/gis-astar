@@ -101,7 +101,7 @@ class Create extends Component
         $this->showSummary = true;
 
         // munculkan modal pdf
-        $this->dispatch('show-pdf-modal', url: route('spk.pdf'));
+        $this->dispatch('show-pdf-modal', url: route('spk.pdf') . '?t=' . now()->timestamp);
     }
 
     public function store()

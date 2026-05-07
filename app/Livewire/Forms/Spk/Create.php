@@ -323,7 +323,7 @@ class Create extends Form
     public function stream()
     {
         // validasi form
-        // $this->validate();
+        $this->validate();
 
         // ambil data dari form createForm
         $spk_data = $this->all();
