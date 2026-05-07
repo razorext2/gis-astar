@@ -1,6 +1,6 @@
 <nav class="mb-6 flex" aria-label="Breadcrumb">
     <ol
-        class="inline-flex items-center gap-1 rounded-xl border border-zinc-200 bg-white/40 px-4 py-2 shadow-sm backdrop-blur-md dark:border-zinc-800/50 dark:bg-zinc-950/40 md:gap-2">
+        class="inline-flex items-center gap-1 rounded-xl border border-zinc-200 bg-white/40 px-4 py-2 shadow-md backdrop-blur-md dark:border-zinc-800/50 dark:bg-zinc-950/40 dark:shadow-none md:gap-2">
         @foreach ($crumbs as $i => $crumb)
             <li class="flex items-center">
                 <div class="flex items-center">

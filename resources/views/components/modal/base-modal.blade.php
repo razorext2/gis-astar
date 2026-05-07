@@ -37,7 +37,7 @@
         <div x-show="open" x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0 scale-95 translate-y-4"
             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-            class="{{ $maxWidthClass }} relative flex max-h-[calc(100vh-2rem)] w-full flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-xl dark:border-zinc-800 dark:bg-zinc-900">
+            class="{{ $maxWidthClass }} relative flex max-h-[calc(75vh-2rem)] w-full flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-xl dark:border-zinc-800 dark:bg-zinc-900 lg:max-h-[calc(95vh-2rem)]">
 
             {{-- Header --}}
             <div class="flex shrink-0 items-center justify-between border-b border-zinc-200 p-5 dark:border-zinc-800">

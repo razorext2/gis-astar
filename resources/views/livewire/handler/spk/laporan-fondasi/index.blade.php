@@ -23,7 +23,7 @@
             <div class="flex items-center space-x-2">
                 @can('laporan-fondasi-create')
                     @if ($spk->added_by == auth()->id() || auth()->user()->can('spk-validate'))
-                        <x-button.success wire:click="openCreateLaporanFondasiModal" class="z-10 w-fit !p-2">
+                        <x-button.success wire:click.stop="openCreateLaporanFondasiModal" class="z-10 w-fit !p-2">
                             <x-icons.plus class="h-5 w-5 dark:text-white" />
                         </x-button.success>
                     @endif
