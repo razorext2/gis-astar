@@ -9,7 +9,7 @@
                 Manajemen Event
             </span>
 
-            <p class="text-base text-gray-600 dark:text-gray-400">
+            <p class="text-sm text-gray-600 dark:text-gray-400">
                 Kamu dapat menambah event, mengubah nama event, dan menghapus data event.
             </p>
 

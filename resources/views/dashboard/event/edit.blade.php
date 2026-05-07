@@ -8,7 +8,7 @@
                 Edit Data Event
             </span>
 
-            <p class="mt-0.5 text-base text-gray-600 dark:text-gray-400">
+            <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
                 Silahkan isi data event sesuai dengan form yang diberikan.
             </p>
         </div>

@@ -8,7 +8,7 @@
                 Laporan rute {{ $pegawai->full_name }}
             </span>
 
-            <p class="mt-0.5 text-base text-gray-600 dark:text-gray-400">
+            <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
                 Kamu dapat melihat detail rute harian <i class="font-semibold not-italic">{{ $pegawai->full_name }}</i>
                 dihalaman ini.
             </p>

@@ -9,7 +9,7 @@
                 Manajemen Invoice Pekanbaru
             </span>
 
-            <p class="text-base text-gray-600 dark:text-gray-400">
+            <p class="text-sm text-gray-600 dark:text-gray-400">
                 Kamu dapat menambah invoice, mengubah nama invoice, dan menghapus data invoice transaksi Kantor Cabang
                 Pekanbaru.
             </p>

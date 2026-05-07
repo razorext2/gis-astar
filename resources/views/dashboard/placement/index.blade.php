@@ -11,7 +11,7 @@
                         Manajemen Penempatan
                     </span>
 
-                    <p class="mt-0.5 text-base text-gray-600 dark:text-gray-400">
+                    <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
                         Kamu dapat menambah penempatan, mengubah nama penempatan, dan menghapus data penempatan.
                     </p>
                 </div>

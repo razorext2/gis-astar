@@ -11,7 +11,7 @@
                     Update Nomor Tagihan
                 </span>
 
-                <p class="mt-0.5 text-base text-gray-600 dark:text-gray-400">
+                <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
                     Silahkan isi nomor penagihan menggunakan nomor SR ataupun Faktur Pajak sesuai dengan data SPK.
                 </p>
 

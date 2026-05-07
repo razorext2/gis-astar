@@ -13,7 +13,7 @@
                     Tambah Invoice
                 </span>
 
-                <p class="mt-0.5 text-base text-gray-600 dark:text-gray-400">
+                <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
                     Cari terlebih dahulu invoice yang ingin ditambah berdasarkan <span class="font-semibold text-green-500">
                         Nomor Faktur Pajak ({{ Request::get('tipe_tagihan') }})</span>
                 </p>

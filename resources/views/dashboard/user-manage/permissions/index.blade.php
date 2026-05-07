@@ -11,7 +11,7 @@
                         Manajemen Perizinan
                     </span>
 
-                    <p class="mt-0.5 text-base text-gray-600 dark:text-gray-400">
+                    <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
                         Kamu dapat membuat izin, mengubah status dan menghapus izin disini.
                     </p>
                 </div>

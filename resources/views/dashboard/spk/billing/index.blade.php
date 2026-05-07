@@ -13,7 +13,7 @@
                     Manajemen Penagihan
                 </span>
 
-                <p class="mt-0.5 text-base text-gray-600 dark:text-gray-400">
+                <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
                     Manajemen Penagihan adalah feature yang diperuntukkan untuk Piutang dalam mengelola data penagihan
                     atas SPK Customer.
                 </p>

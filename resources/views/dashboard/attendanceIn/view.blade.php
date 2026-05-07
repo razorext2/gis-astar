@@ -11,7 +11,7 @@
                     Absen Masuk
                 </span>
 
-                <p class="mt-0.5 text-base text-gray-600 dark:text-gray-400">
+                <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
                     Berisi semua data absensi masuk yang dilakukan oleh pegawai.
                 </p>
             </div>

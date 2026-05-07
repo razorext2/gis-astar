@@ -12,7 +12,7 @@
                         <script></script>
                     </span>
 
-                    <p class="mt-0.5 text-base text-gray-600 dark:text-gray-400">
+                    <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
                         Kamu dapat membuat pengumuman, mengubah status dan menghapus pengumuman disini.
                     </p>
                 </div>
