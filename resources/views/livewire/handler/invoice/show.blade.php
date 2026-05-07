@@ -1,7 +1,7 @@
 <div class="mb-16 flex flex-col text-gray-800 dark:text-white">
 
     <div
-        class="relative grid grid-cols-2 rounded-t-xl bg-white/60 p-2 border border-zinc-200 backdrop-blur-md transition-all duration-500 dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 md:p-4 lg:p-6">
+        class="relative grid grid-cols-2 rounded-t-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-md transition-all duration-500 dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
 
         <div class="col-span-2 mb-4 flex w-full flex-row items-center justify-between">
             <div class="w-full">
@@ -10,13 +10,12 @@
 
             @can('invoice-add')
                 <div class="max-w-xs">
-                    <x-button.link wire:navigate class="w-fit ring-1 ring-green-700 dark:bg-green-800 dark:text-white"
-                        href="{{ route($routePrefix . '.addDetails', $id) }}">
+                    <x-button.success wire:navigate href="{{ route($routePrefix . '.addDetails', $id) }}">
                         <x-slot name="icon">
                             <x-icons.angle-right class="h-6 w-6 text-green-500 dark:text-white" />
                         </x-slot>
                         Update
-                    </x-button.link>
+                    </x-button.success>
                 </div>
             @endcan
 
@@ -112,7 +111,7 @@
     </div>
 
     <div
-        class="flex flex-col gap-4 rounded-b-xl bg-white/60 p-2 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:text-white dark:shadow-none dark:border-zinc-800 lg:p-6">
+        class="flex flex-col gap-4 rounded-b-xl border border-zinc-200 bg-white/60 p-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:text-white dark:shadow-none lg:p-6">
 
         <div class="w-fit items-center justify-between self-end">
             <x-input.select id="sort" name="sort" wire:model.live="sort" :defaultOption="'Urutkan'" :options="[

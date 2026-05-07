@@ -1,9 +1,9 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div class="relative grid grid-cols-1 gap-4">
+    <div class="relative space-y-4">
 
         <div
-            class="flex flex-col rounded-xl border border-zinc-200 bg-white/60 p-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
+            class="flex flex-col rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
 
             <span class="text-xl font-semibold text-gray-900 dark:text-white">
                 Manajemen Invoice Pekanbaru
@@ -16,7 +16,7 @@
 
         </div>
 
-        <div class="flex flex-row items-center justify-between gap-2">
+        <div class="flex flex-col justify-between gap-2 lg:flex-row lg:items-center">
             @can(['invoice-list', 'invoice-add'])
                 <div class="flex flex-row gap-2">
                     <x-button.success wire:navigate href="{{ route('invoice.pku.create', ['tipe_tagihan' => 'idcppn']) }}">
@@ -43,7 +43,7 @@
         </div>
 
         <div
-            class="rounded-xl border border-zinc-200 bg-white/60 p-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
+            class="rounded-xl border border-zinc-200 bg-white/60 px-2 py-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
             <livewire:table-refresher table-name="InvoiceTable" />
         </div>
     </div>
