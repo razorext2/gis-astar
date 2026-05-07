@@ -1,4 +1,4 @@
-<div class="space-y-4">
+<div class="relative space-y-4">
     <div
         class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
 
@@ -13,12 +13,18 @@
 
                     @php
                         $badgeClasses = match ($data->status_approval) {
-                            0 => 'bg-amber-50 text-amber-700 ring-amber-600/20 dark:bg-amber-900/20 dark:text-amber-400 dark:ring-amber-500/30',
-                            1 => 'bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-900/20 dark:text-green-400 dark:ring-green-500/30',
-                            2 => 'bg-red-50 text-red-700 ring-red-600/20 dark:bg-red-900/20 dark:text-red-400 dark:ring-red-500/30',
-                            3 => 'bg-amber-50 text-amber-700 ring-amber-600/20 dark:bg-amber-900/20 dark:text-amber-400 dark:ring-amber-500/30',
-                            4 => 'bg-red-50 text-red-700 ring-red-600/20 dark:bg-red-900/20 dark:text-red-400 dark:ring-red-500/30',
-                            default => 'bg-zinc-50 text-zinc-700 ring-zinc-600/20 dark:bg-zinc-900/20 dark:text-zinc-400 dark:ring-zinc-500/30',
+                            0
+                                => 'bg-amber-50 text-amber-700 ring-amber-600/20 dark:bg-amber-900/20 dark:text-amber-400 dark:ring-amber-500/30',
+                            1
+                                => 'bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-900/20 dark:text-green-400 dark:ring-green-500/30',
+                            2
+                                => 'bg-red-50 text-red-700 ring-red-600/20 dark:bg-red-900/20 dark:text-red-400 dark:ring-red-500/30',
+                            3
+                                => 'bg-amber-50 text-amber-700 ring-amber-600/20 dark:bg-amber-900/20 dark:text-amber-400 dark:ring-amber-500/30',
+                            4
+                                => 'bg-red-50 text-red-700 ring-red-600/20 dark:bg-red-900/20 dark:text-red-400 dark:ring-red-500/30',
+                            default
+                                => 'bg-zinc-50 text-zinc-700 ring-zinc-600/20 dark:bg-zinc-900/20 dark:text-zinc-400 dark:ring-zinc-500/30',
                         };
                     @endphp
                     <span class="{{ $badgeClasses }} rounded-lg px-2.5 py-1 text-xs font-medium ring-1">
@@ -381,7 +387,7 @@
     {{-- download button --}}
     @if ($data->status_approval === 1 || auth()->user()->can('spk-validate'))
         <div
-            class="flex justify-center gap-x-1 border-t border-zinc-200 bg-zinc-50/50 p-4 text-center dark:border-zinc-800 dark:bg-zinc-800/50 lg:absolute lg:right-0 lg:top-0 lg:border-none lg:bg-transparent lg:p-4 lg:dark:bg-transparent">
+            class="flex justify-center gap-x-2 rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 text-center dark:border-zinc-800 dark:bg-dark-primary/60 lg:absolute lg:right-6 lg:top-0 lg:border-none lg:bg-transparent lg:p-0 lg:dark:bg-transparent">
             @can('spk-create')
                 <x-button.primary id="spk-pdf-export" wire:click="export">
                     Ekspor SPK
@@ -389,9 +395,9 @@
             @endcan
 
             @hasanyrole(['Produksi', 'Admin', 'Management'])
-                <x-button.secondary href="{{ route('spk.generate.pdf', ['id' => $data->id]) }}" id="spk-pdf-export">
+                <x-button.primary href="{{ route('spk.generate.pdf', ['id' => $data->id]) }}" id="spk-pdf-export">
                     Ekspor SPK (Produksi)
-                </x-button.secondary>
+                </x-button.primary>
             @endhasanyrole
         </div>
     @endif
