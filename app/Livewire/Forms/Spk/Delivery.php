@@ -50,7 +50,7 @@ class Delivery extends Form
             'no_plat' => 'nullable|string|max:20|required_if:via,darat',
             'nama_supir' => 'nullable|string|max:100|required_if:via,darat',
             'no_telp_supir' => 'nullable|string|max:20|required_if:via,darat',
-            'berat' => 'nullable|string',
+            'berat' => 'required|string',
             'etd' => 'required|string',
             'eta' => 'required|string',
             'note' => 'required|string',

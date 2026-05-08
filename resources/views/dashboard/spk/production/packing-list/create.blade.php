@@ -1,31 +1,50 @@
+{{-- Goal: Form to update Packing List, Caller: production.packing-list.create route, Deps: handler.production-histories.packing-list (Livewire) --}}
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div
-        class="flex w-full flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 px-3 py-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
-        <div class="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-4">
+    <div class="relative space-y-4">
 
-            <x-button.danger href="{{ route('production.index') }}" wire:navigate id="back-button"
-                class="my-auto me-4 max-h-10">
-                <x-icons.angle-left class="h-5 w-5" />
-            </x-button.danger>
+        {{-- Main Container --}}
+        <div
+            class="flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
 
-            <div>
-                <p class="text-xl font-semibold text-gray-900 dark:text-white">
-                    Update Packing List
-                    {{ $data->spk->nomor_order . ($data->spk->revision_count ? 'R' . str_pad($data->spk->revision_count, 2, '0', STR_PAD_LEFT) : '') }}
-                    <span class="text-sm uppercase italic">(
-                        {{ $data->spk->customer['nama_perusahaan'] }}
-                        )</span>
-                </p>
+            {{-- Header Section --}}
+            <div
+                class="flex flex-col justify-between gap-4 border-b border-zinc-200 pb-6 dark:border-zinc-800 md:flex-row md:items-start">
+                <div class="flex items-center gap-3">
+                    <x-button.danger href="{{ route('production.index') }}" wire:navigate id="back-button" class="shrink-0">
+                        <x-icons.angle-left class="h-5 w-5" />
+                    </x-button.danger>
 
-                <p class="text-sm text-gray-600 dark:text-gray-400 md:text-base">
-                    Anda sedang mengupdate packing list SPK Customer melalui halaman ini.
-                </p>
+                    <div class="flex flex-col gap-1">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <h1 class="text-xl font-bold tracking-tight text-zinc-900 dark:text-white lg:text-2xl">
+                                Update Packing List
+                            </h1>
+                            <span class="font-mono text-sm font-semibold text-blue-600 dark:text-blue-400">
+                                {{ $data->spk->nomor_order . ($data->spk->revision_count ? 'R' . str_pad($data->spk->revision_count, 2, '0', STR_PAD_LEFT) : '') }}
+                            </span>
+                        </div>
+                        <p class="text-sm text-zinc-500 dark:text-zinc-400">
+                            Customer: <span
+                                class="font-medium text-zinc-700 dark:text-zinc-300">{{ $data->spk->customer['nama_perusahaan'] }}</span>
+                        </p>
+                    </div>
+                </div>
+
+                {{-- Status / Hint --}}
+                <div class="hidden items-center gap-2 rounded-lg bg-blue-50 px-3 py-2 dark:bg-blue-900/20 md:flex">
+                    <x-icons.info class="h-4 w-4 text-blue-500" />
+                    <p class="text-xs font-medium text-blue-700 dark:text-blue-300">
+                        Pastikan semua item terdata dengan benar.
+                    </p>
+                </div>
+            </div>
+
+            {{-- Livewire Content --}}
+            <div class="relative">
+                @livewire('handler.production-histories.packing-list', ['id' => $data->id])
             </div>
 
         </div>
-
-        @livewire('handler.production-histories.packing-list', ['id' => $data->id])
-
     </div>
 @endsection

@@ -1,125 +1,138 @@
-<div class="grid grid-cols-1 gap-2 lg:gap-4">
+{{-- Goal: Manage packing list document attachments, Caller: packing-list.kits (Livewire), Livewire: Handler\ProductionHistories\PackingListFiles --}}
+<div class="flex flex-col gap-6">
 
-    <section>
-        <h4 class="mb-2 text-base font-semibold text-gray-800 dark:text-white">Daftar Dokumen</h4>
+    {{-- File List Section --}}
+    <section class="space-y-3">
+        <div class="flex items-center gap-2">
+            <x-icons.clipboard-check class="h-4 w-4 text-blue-500" />
+            <h4 class="text-sm font-bold text-zinc-900 dark:text-white">Daftar Dokumen Lampiran</h4>
+        </div>
 
         <div
-            class="flex flex-col rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-gray-700">
-
-            <ul class="divide-y divide-gray-200 dark:divide-gray-600">
+            class="overflow-hidden rounded-xl border border-zinc-200 bg-white/50 dark:border-zinc-800 dark:bg-zinc-900/50">
+            <ul class="divide-y divide-zinc-100 dark:divide-zinc-800">
                 @forelse ($data['files'] as $index => $row)
                     <li
-                        class="group flex items-center justify-between gap-2 p-2 transition-all duration-150 ease-in-out hover:rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 lg:p-4">
-                        <a href="{{ route('spk.attachment.download', $row['url']) }}"
-                            class="grow text-gray-900 group-hover:text-blue-500 dark:text-gray-100">
-                            <p class="text-base font-medium">
-                                {{ $row['nama_file'] }}
-                            </p>
-                            <p
-                                class="mt-0.5 text-sm text-gray-500 group-hover:text-blue-400 dark:text-gray-400 dark:group-hover:text-blue-200">
-                                {{ $row['tipe_dokumen'] }}
-                            </p>
-                        </a>
+                        class="group flex items-center justify-between gap-4 p-4 transition-colors hover:bg-zinc-50/50 dark:hover:bg-zinc-800/50">
+                        <div class="flex items-center gap-3 overflow-hidden">
+                            {{-- File Icon based on type --}}
+                            <div
+                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+                                @if (str_contains(strtolower($row['tipe_dokumen']), 'excel') || str_contains(strtolower($row['nama_file']), 'xls'))
+                                    <x-icons.file-excel class="h-5 w-5 text-green-600" />
+                                @elseif(str_contains(strtolower($row['tipe_dokumen']), 'pdf'))
+                                    <x-icons.file-invoice class="h-5 w-5 text-red-600" />
+                                @else
+                                    <x-icons.archive class="h-5 w-5 text-blue-600" />
+                                @endif
+                            </div>
 
-                        <div class="h-fit w-fit">
-                            <x-button.danger id="remove-documentation"
-                                wire:click="removeFile('{{ $index }}', '{{ $row['_key'] }}')">
+                            <div class="flex flex-col overflow-hidden">
+                                <a href="{{ route('spk.attachment.download', $row['url']) }}"
+                                    class="truncate text-sm font-semibold text-zinc-900 hover:text-blue-600 dark:text-white dark:hover:text-blue-400">
+                                    {{ $row['nama_file'] }}
+                                </a>
+                                <span class="text-[10px] font-medium uppercase tracking-wider text-zinc-500">
+                                    {{ $row['tipe_dokumen'] }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="flex shrink-0 items-center gap-2">
+                            <x-button.danger wire:click="removeFile('{{ $index }}', '{{ $row['_key'] }}')"
+                                wire:confirm="Hapus file ini?" class="!p-2">
                                 <x-icons.trash-bin class="h-4 w-4" />
                             </x-button.danger>
                         </div>
                     </li>
                 @empty
-                    <li class="p-2 text-xs font-semibold capitalize italic lg:p-4">
-                        Tidak ada lampiran.
+                    <li class="flex flex-col items-center justify-center py-8 text-center">
+                        <p class="text-xs italic text-zinc-500">Belum ada lampiran dokumen.</p>
                     </li>
                 @endforelse
             </ul>
-
         </div>
     </section>
 
-    <x-utils.accordion-item id="accordion-packing-form" title="Tambah Dokumen?"
-        description="Klik untuk mengupload lampiran baru" iconColor="green" :expanded="false">
+    {{-- Upload Form Section --}}
+    <x-utils.accordion-item id="accordion-packing-files" title="Tambah Dokumen Baru"
+        description="Upload lampiran PDF, Excel, atau gambar" iconColor="blue" :expanded="false">
         <x-slot:icon>
             <x-icons.cloud-upload class="h-4 w-4" />
         </x-slot:icon>
 
-        <form wire:submit.prevent="store" class="flex flex-col gap-4">
+        <form wire:submit.prevent="store" class="space-y-5">
+            {{-- Dropzone Area --}}
+            <div class="w-full" x-data="{ uploading: false, progress: 0 }" x-on:livewire-upload-start="uploading = true"
+                x-on:livewire-upload-finish="uploading = false" x-on:livewire-upload-cancel="uploading = false"
+                x-on:livewire-upload-error="uploading = false"
+                x-on:livewire-upload-progress="progress = $event.detail.progress">
 
-            <div class="w-full">
-                <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                    for="attachment">Lampiran</label>
+                <label for="attachment"
+                    class="relative flex min-h-[160px] w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-zinc-200 bg-white/50 p-6 transition-all hover:border-blue-400 hover:bg-blue-50/30 dark:border-zinc-700 dark:bg-zinc-900/50 dark:hover:border-blue-500/50">
 
-                <div class="flex w-full flex-col gap-y-2" x-data="{ uploading: false, progress: 0 }"
-                    x-on:livewire-upload-start="uploading = true" x-on:livewire-upload-finish="uploading = false"
-                    x-on:livewire-upload-cancel="uploading = false" x-on:livewire-upload-error="uploading = false"
-                    x-on:livewire-upload-progress="progress = $event.detail.progress">
-                    <label for="attachment"
-                        class="flex h-36 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-200 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-zinc-800 dark:bg-gray-700 dark:hover:border-zinc-800 dark:hover:bg-gray-800">
-                        <div class="flex flex-col items-center justify-center pb-6 pt-5">
-                            <x-icons.cloud-upload class="mb-2 h-8 w-8 text-gray-500 dark:text-gray-400" />
-
-                            <p wire:loading.remove wire:target="docForm.attachment"
-                                class="mb-0.5 text-sm text-gray-500 dark:text-white"> Klik untuk upload
-                            </p>
-
-                            <p class="mb-0.5 text-sm text-gray-500 dark:text-gray-400">
-                                @if ($docForm->attachment)
-                                    <span class="font-semibold dark:text-white">
-                                        {{ $docForm->attachment->getClientOriginalName() }}</span>
-                                @endif
-                            </p>
-
-                            <div x-show="uploading"
-                                class="mb-2 flex flex-col items-center gap-2 text-gray-800 dark:text-white">
-                                <span wire:target="docForm.attachment" class="font-semibold">
-                                    Sedang Mengupload...</span>
-
-                                <x-button.danger id="cancel-upload" type="button" class="text-xs"
-                                    wire:click="$cancelUpload('docForm.attachment')">
-                                    Cancel
-                                </x-button.danger>
+                    <div class="flex flex-col items-center text-center">
+                        @if (!$docForm->attachment)
+                            <x-icons.cloud-upload class="mb-3 h-10 w-10 text-zinc-400 group-hover:text-blue-500" />
+                            <p class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Klik atau seret file
+                                ke sini</p>
+                            <p class="mt-1 text-[10px] text-zinc-500">PDF, Excel, Word (Maks 2MB)</p>
+                        @else
+                            <div
+                                class="flex items-center gap-2 rounded-lg bg-green-50 px-3 py-2 text-green-700 ring-1 ring-green-600/20 dark:bg-green-900/20 dark:text-green-400">
+                                <x-icons.checklist-stepper class="h-4 w-4" />
+                                <span
+                                    class="text-xs font-bold">{{ $docForm->attachment->getClientOriginalName() }}</span>
                             </div>
-
-                            <p class="w-full text-center text-xs text-gray-500 dark:text-gray-400">
-                                *Dokumentasi dapat berupa file PNG, JPG, PDF, DOC, XLS (Min 10KB, Maks
-                                2MB)
-                            </p>
-                        </div>
-                        <input id="attachment" name="attachment" type="file" wire:model="docForm.attachment"
-                            class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx" />
-                    </label>
-
-                    <div x-show="uploading" class="h-4 w-full rounded-full bg-gray-200 dark:bg-gray-700">
-                        <div class="h-4 rounded-full bg-blue-600" x-bind:style="{ width: progress + '%' }">
-                        </div>
+                            <button type="button" wire:click="$set('docForm.attachment', null)"
+                                class="mt-2 text-[10px] font-bold text-red-500 hover:underline">Hapus &
+                                Ganti</button>
+                        @endif
                     </div>
 
-                </div>
+                    <input id="attachment" name="attachment" type="file" wire:model="docForm.attachment"
+                        class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg" />
+
+                    {{-- Uploading State Overlay --}}
+                    <div x-show="uploading"
+                        class="absolute inset-0 z-20 flex flex-col items-center justify-center rounded-xl bg-white/90 backdrop-blur-sm dark:bg-zinc-900/90">
+                        <div class="flex w-48 flex-col items-center gap-3">
+                            <x-icons.loading class="h-8 w-8 animate-spin text-blue-600" />
+                            <div class="h-1.5 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
+                                <div class="h-full bg-blue-600 transition-all duration-300"
+                                    :style="`width: ${progress}%`"></div>
+                            </div>
+                            <span class="text-[10px] font-bold text-zinc-600 dark:text-zinc-400">Mengupload: <span
+                                    x-text="progress"></span>%</span>
+                        </div>
+                    </div>
+                </label>
 
                 @error('docForm.attachment')
-                    <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                    <p class="mt-2 text-xs font-medium text-red-500">{{ $message }}</p>
                 @enderror
             </div>
 
-            <div class="w-full">
-                <x-input.select id="attachment_type" name="attachment_type" :defaultOption="'Pilih Tipe Dokumen'" :options="[
-                    'packing' => 'Packing List',
-                    'detail' => 'Detail Item Packing',
-                    'all' => 'Semua Dokumen',
-                    'other' => 'Dokumen Lainnya',
-                ]"
-                    :labels="true" :textLabel="'Tipe Dokumen'" wire:model.defer="docForm.attachment_type" />
+            {{-- Type Selection & Submit --}}
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-end">
+                <div class="flex-1">
+                    <x-input.select id="attachment_type" name="attachment_type" :defaultOption="'Pilih Tipe Dokumen'" :options="[
+                        'packing' => 'Packing List',
+                        'detail' => 'Detail Item Packing',
+                        'all' => 'Semua Dokumen',
+                        'other' => 'Dokumen Lainnya',
+                    ]"
+                        :labels="true" :textLabel="'Kategori Dokumen'" wire:model.defer="docForm.attachment_type" />
+                </div>
 
-                @error('docForm.attachment_type')
-                    <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div class="flex w-full justify-end">
-                <x-button.primary id="add-attachment" type="submit">
-                    Tambah
-                </x-button.primary>
+                <div class="shrink-0">
+                    <x-button.primary type="submit" class="w-full sm:w-auto" wire:loading.attr="disabled">
+                        <x-slot name="icon">
+                            <x-icons.plus class="h-4 w-4" />
+                        </x-slot>
+                        Simpan Dokumen
+                    </x-button.primary>
+                </div>
             </div>
         </form>
     </x-utils.accordion-item>

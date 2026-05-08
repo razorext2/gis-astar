@@ -12,9 +12,12 @@
 
             <x-button.primary class="w-full sm:w-auto" wire:click="fetchPR">
                 <x-slot name="icon">
-                    <x-icons.search class="h-4 w-4" />
+                    <x-icons.search wire:loading.remove wire:target="fetchPR" class="h-4 w-4" />
+                    <x-icons.loading wire:loading wire:target="fetchPR" class="h-4 w-4 animate-spin" />
                 </x-slot>
-                Fetch Data
+
+                <span wire:loading.remove wire:target="fetchPR">Fetch Data</span>
+                <span wire:loading wire:target="fetchPR">Mencari...</span>
             </x-button.primary>
         </div>
 
@@ -174,7 +177,13 @@
     <div class="flex w-full flex-row justify-end border-t border-zinc-200 pt-4 dark:border-zinc-800">
         <x-button.success id="assign-pr" wire:click="assign" type="button"
             wire:confirm.prompt="Anda yakin ingin assign PR untuk SPK ini? Periksa item yang akan di assign.\n\nJika sudah yakin, ketik ASSIGN untuk mengkonfirmasi.|ASSIGN">
-            Assign PR
+            <x-slot name="icon">
+                <x-icons.loading wire:loading wire:target="assign" class="h-4 w-4 animate-spin" />
+                <x-icons.angle-right wire:loading.remove wire:target="assign" class="icon h-5 w-5" />
+            </x-slot>
+
+            <span wire:loading.remove wire:target="assign">Assign PR</span>
+            <span wire:loading wire:target="assign">Menyimpan...</span>
         </x-button.success>
     </div>
 

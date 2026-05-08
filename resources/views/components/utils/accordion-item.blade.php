@@ -50,7 +50,7 @@
         </button>
     </h2>
 
-    <div id="{{ $id }}-body" x-show="open" x-collapse aria-labelledby="{{ $id }}-heading" x-cloak>
+    <div id="{{ $id }}-body" x-show="open" x-collapse aria-labelledby="{{ $id }}-heading" x-cloak wire:ignore.self>
         <div class="border-t border-zinc-200 p-4 transition-all duration-500 dark:border-zinc-800 lg:p-6">
             {{ $slot }}
         </div>

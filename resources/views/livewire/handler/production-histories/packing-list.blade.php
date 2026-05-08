@@ -1,5 +1,5 @@
-<div class="flex flex-col gap-2 lg:gap-4" x-data="{ pdfUrl: null }"
-    x-on:show-detail-modal.window="pdfUrl = $event.detail.url">
+{{-- Goal: Main Packing List management component, Caller: production.packing-list.create, Livewire: Handler\ProductionHistories\PackingList --}}
+<div class="flex flex-col gap-6" x-data="{ pdfUrl: null }" x-on:show-detail-modal.window="pdfUrl = $event.detail.url">
 
     {{-- accordion form tambah packing list --}}
     <x-utils.accordion-item id="accordion-packing-form" title="Tambah Packing List?"
@@ -335,8 +335,12 @@
             </div>
 
             <div class="flex w-full justify-center gap-4 border-t border-zinc-200 pt-4 dark:border-zinc-800">
-                <x-button.success type="submit" id="store" class="w-full">
-                    <span wire:loading.remove wire:target="store">Simpan Seluruh Data Packing List</span>
+                <x-button.success type="submit" id="store">
+                    <x-slot name="icon">
+                        <x-icons.angle-right wire:loading.remove wire:target="store" class="icon h-5 w-5" />
+                        <x-icons.loading wire:loading wire:target="store" class="h-4 w-4 animate-spin" />
+                    </x-slot>
+                    <span wire:loading.remove wire:target="store">Simpan Packing List</span>
                     <span wire:loading wire:target="store">Memproses...</span>
                 </x-button.success>
             </div>
@@ -344,15 +348,19 @@
     </x-utils.accordion-item>
     {{-- end accordion form tambah packing list --}}
 
-    {{-- table packing list --}}
-    <div class="flex flex-col">
-        <h3 class="text-base font-semibold text-gray-800 dark:text-white">
-            Daftar Data Packing List
-        </h3>
+    {{-- Main Table Section --}}
+    <div class="space-y-4">
+        <div class="flex items-center gap-2 border-l-4 border-blue-500 pl-3">
+            <h3 class="text-base font-bold text-zinc-900 dark:text-white">Daftar Data Packing List</h3>
+            <span
+                class="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-600 dark:bg-blue-900/30">Existing
+                Records</span>
+        </div>
 
-        @livewire('packing-list-table', ['id' => $id], key($id))
+        <div class="relative min-h-[200px]">
+            @livewire('packing-list-table', ['id' => $id], key($id))
+        </div>
     </div>
-    {{-- end table packing list --}}
 
     {{-- Modal Print Packing List --}}
     <x-modal.base-modal show="showDetailModal" title="Pratinjau Packing List"

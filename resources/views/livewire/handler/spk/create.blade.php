@@ -634,7 +634,13 @@
             </x-button.primary>
 
             <x-button.success id="simpan-button" type="submit">
-                Simpan SPK
+                <x-slot name="icon">
+                    <x-icons.loading wire:loading wire:target="submit" class="h-4 w-4 animate-spin" />
+                    <x-icons.check-circle wire:loading.remove wire:target="submit" class="h-4 w-4" />
+                </x-slot>
+
+                <span wire:loading.remove wire:target="submit">Simpan SPK</span>
+                <span wire:loading wire:target="submit">Menyimpan...</span>
             </x-button.success>
         </div>
     </form>
@@ -646,8 +652,7 @@
             <x-icons.file-invoice class="h-5 w-5" />
         </x-slot>
 
-        <div class="-m-6 h-[70vh]" x-data="{ pdfUrl: '' }"
-            x-on:show-pdf-modal.window="pdfUrl = $event.detail.url">
+        <div class="-m-6 h-[70vh]" x-data="{ pdfUrl: '' }" x-on:show-pdf-modal.window="pdfUrl = $event.detail.url">
             <template x-if="pdfUrl">
                 <iframe x-bind:src="pdfUrl" class="h-full w-full" title="SPK Summary PDF"
                     frameborder="0"></iframe>

@@ -4,7 +4,6 @@
     @livewire('components.card', ['type' => 'spk'])
 
     <div class="relative space-y-4">
-
         <div
             class="flex flex-col rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
             <span class="text-xl font-semibold text-gray-900 dark:text-white">

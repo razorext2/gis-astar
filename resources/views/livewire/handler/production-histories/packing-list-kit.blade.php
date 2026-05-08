@@ -1,10 +1,5 @@
-<x-utils.accordion-item
-    id="accordion-box-form"
-    title="Tambah Detail Item di Peti?"
-    description="Klik untuk menambah detail komponen baru ke dalam peti"
-    iconColor="green"
-    :expanded="false"
->
+<x-utils.accordion-item id="accordion-box-form" title="Tambah Detail Item di Peti?"
+    description="Klik untuk menambah detail komponen baru ke dalam peti" iconColor="green" :expanded="false">
     <x-slot:icon>
         <x-icons.archive class="h-4 w-4" />
     </x-slot:icon>
@@ -38,8 +33,8 @@
 
                 <div class="flex w-fit gap-x-4">
                     <div class="w-full">
-                        <x-input.basic id="qty_barang" name="qty_barang" :labels="true" type="number"
-                            min="1" wire:model="formBox.qty_barang" placeholder="Input jumlah barang...">
+                        <x-input.basic id="qty_barang" name="qty_barang" :labels="true" type="number" min="1"
+                            wire:model="formBox.qty_barang" placeholder="Input jumlah barang...">
                             Qty / Jlh
                         </x-input.basic>
 
@@ -72,8 +67,7 @@
                 {{-- daftar peti --}}
                 <div class="flex flex-col gap-y-4">
                     <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
-                        <thead
-                            class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+                        <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th scope="col" class="py-3 text-center" width="5%">#</th>
                                 <th scope="col" class="py-3 text-center" width="25%">Nama Peti</th>
@@ -167,10 +161,9 @@
                             </div>
 
                             <div class="w-24">
-                                <x-input.basic id="jumlah_kit{{ $i }}"
-                                    name="jumlah_kit{{ $i }}" :labels="true" type="number"
-                                    wire:model="formKit.kits.{{ $i }}.kit_qty"
-                                    placeholder="Qty">
+                                <x-input.basic id="jumlah_kit{{ $i }}" name="jumlah_kit{{ $i }}"
+                                    :labels="true" type="number"
+                                    wire:model="formKit.kits.{{ $i }}.kit_qty" placeholder="Qty">
                                     Qty
                                 </x-input.basic>
 
@@ -206,9 +199,15 @@
                     @endfor
                     {{-- end form input untuk kit --}}
 
-                    <div class="flex h-full items-center justify-center">
-                        <x-button.primary id="tambahKit" class="w-full" type="button" wire:click="storeBox">
-                            Simpan Peti Ke Daftar
+                    <div class="flex h-full items-center justify-end">
+                        <x-button.primary id="tambahKit" class="w-fit" type="button" wire:click="storeBox">
+                            <x-slot name="icon">
+                                <x-icons.angle-right wire:loading.remove wire:target="storeBox"
+                                    class="icon h-5 w-5" />
+                                <x-icons.loading wire:loading wire:target="storeBox" class="h-4 w-4 animate-spin" />
+                            </x-slot>
+                            <span wire:loading.remove wire:target="storeBox">Tambah Peti Ke Daftar</span>
+                            <span wire:loading wire:target="storeBox">Memproses...</span>
                         </x-button.primary>
                     </div>
 
@@ -217,9 +216,13 @@
             </div>
         </div>
 
-        <div class="flex w-full gap-4 border-t border-zinc-200 pt-4 dark:border-zinc-800">
-            <x-button.success type="submit" id="store" class="w-full">
-                <span wire:loading.remove wire:target="store">Simpan Seluruh Data Packing Kit</span>
+        <div class="flex w-full justify-center border-t border-zinc-200 pt-4 dark:border-zinc-800">
+            <x-button.success type="submit" id="store" class="w-fit">
+                <x-slot name="icon">
+                    <x-icons.angle-right wire:loading.remove wire:target="store" class="icon h-5 w-5" />
+                    <x-icons.loading wire:loading wire:target="store" class="h-4 w-4 animate-spin" />
+                </x-slot>
+                <span wire:loading.remove wire:target="store">Simpan Packing Kit</span>
                 <span wire:loading wire:target="store">Memproses...</span>
             </x-button.success>
         </div>

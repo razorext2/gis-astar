@@ -1,7 +1,7 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
     <div
-        class="grid grid-cols-1 gap-2 rounded-xl border border-zinc-200 bg-white/60 p-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:gap-4 lg:p-6">
+        class="grid grid-cols-1 gap-2 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:gap-4 lg:p-6">
 
         <div class="flex items-center">
             <x-button.danger href="{{ route('daily-report.index') }}" wire:navigate id="back-button"

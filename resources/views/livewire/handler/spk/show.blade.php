@@ -238,7 +238,13 @@
                         @if ($data->is_using_old_stock == false)
                             <x-button.primary class="shrink-0 text-sm" id="old-stock" type="button"
                                 wire:click="setOldStock" wire:confirm.prompt="Silahkan ketik YA untuk melanjutkan|YA">
-                                Gunakan Stok Lama
+                                <x-slot name="icon">
+                                    <x-icons.loading wire:loading wire:target="setOldStock" class="h-4 w-4 animate-spin" />
+                                    <x-icons.archive wire:loading.remove wire:target="setOldStock" class="h-4 w-4" />
+                                </x-slot>
+
+                                <span wire:loading.remove wire:target="setOldStock">Gunakan Stok Lama</span>
+                                <span wire:loading wire:target="setOldStock">Memakai Stok...</span>
                             </x-button.primary>
                         @else
                             <span

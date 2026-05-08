@@ -158,10 +158,13 @@
     <div class="relative col-span-2 w-full">
         <x-button.success wire:target="store" class="float-right" id="store" type="submit">
             <x-slot name="icon">
-                <x-icons.angle-right class="icon h-5 w-5" />
+                <x-icons.angle-right wire:loading.remove wire:target="store" class="icon h-5 w-5" />
+                <x-icons.loading wire:loading wire:target="store" class="h-4 w-4 animate-spin" />
             </x-slot>
-            <span wire:target="store" wire:loading.remove>Tambah Laporan</span>
-            <span wire:target="store" wire:loading>Memproses...</span>
+            <span wire:target="store" wire:loading.remove>Simpan Laporan</span>
+            <span wire:target="store" wire:loading class="flex items-center gap-2">
+                Memproses...
+            </span>
         </x-button.success>
     </div>
 

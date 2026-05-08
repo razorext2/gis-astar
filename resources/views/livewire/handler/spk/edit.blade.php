@@ -744,7 +744,13 @@
         <div
             class="flex w-full items-center justify-end gap-3 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
             <x-button.success id="ubah-button" type="submit">
-                Simpan Perubahan
+                <x-slot name="icon">
+                    <x-icons.loading wire:loading wire:target="store" class="h-4 w-4 animate-spin" />
+                    <x-icons.check-circle wire:loading.remove wire:target="store" class="h-4 w-4" />
+                </x-slot>
+
+                <span wire:loading.remove wire:target="store">Simpan Perubahan</span>
+                <span wire:loading wire:target="store">Menyimpan...</span>
             </x-button.success>
         </div>
     </form>

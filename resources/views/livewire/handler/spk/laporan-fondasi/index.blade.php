@@ -120,32 +120,30 @@
             <form wire:submit="{{ $isEditing ? 'updateLaporanFondasi' : 'storeLaporanFondasi' }}"
                 id="form-laporan-fondasi" class="flex flex-col gap-6">
 
-                <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                    <div class="flex flex-col gap-4">
-                        <div class="w-full">
-                            <x-input.basic name="title" id="title" wire:model="form.title">
-                                Judul Laporan
-                            </x-input.basic>
+                <div class="grid gap-4">
+                    <div class="w-full">
+                        <x-input.basic name="title" id="title" wire:model="form.title">
+                            Judul Laporan
+                        </x-input.basic>
 
-                            @error('form.title')
-                                <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
-                            @enderror
-                        </div>
+                        @error('form.title')
+                            <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
 
-                        <div class="w-full">
-                            <x-input.select id="progress" name="progress" :labels="true" :textLabel="'Progres Pengerjaan'"
-                                :defaultOption="'Pilih Status'" :options="[
-                                    10 => 'Persiapan bahan',
-                                    33 => 'Tahap 1',
-                                    50 => 'Tahap 2',
-                                    88 => 'Finishing',
-                                    100 => 'Selesai',
-                                ]" wire:model="form.progress" />
+                    <div class="w-full">
+                        <x-input.select id="progress" name="progress" :labels="true" :textLabel="'Progres Pengerjaan'"
+                            :defaultOption="'Pilih Status'" :options="[
+                                10 => 'Persiapan bahan',
+                                33 => 'Tahap 1',
+                                50 => 'Tahap 2',
+                                88 => 'Finishing',
+                                100 => 'Selesai',
+                            ]" wire:model="form.progress" />
 
-                            @error('form.progress')
-                                <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
-                            @enderror
-                        </div>
+                        @error('form.progress')
+                            <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="w-full">
@@ -223,6 +221,15 @@
                 Batal
             </x-button.secondary>
             <x-button.primary type="submit" form="form-laporan-fondasi">
+                <x-slot name="icon">
+                    <x-icons.loading wire:loading
+                        wire:target="{{ $isEditing ? 'updateLaporanFondasi' : 'storeLaporanFondasi' }}"
+                        class="h-4 w-4 animate-spin" />
+                    <x-icons.check-circle wire:loading.remove
+                        wire:target="{{ $isEditing ? 'updateLaporanFondasi' : 'storeLaporanFondasi' }}"
+                        class="h-4 w-4" />
+                </x-slot>
+
                 <span wire:loading.remove
                     wire:target="{{ $isEditing ? 'updateLaporanFondasi' : 'storeLaporanFondasi' }}">
                     {{ $isEditing ? 'Update Laporan' : 'Simpan Laporan' }}
