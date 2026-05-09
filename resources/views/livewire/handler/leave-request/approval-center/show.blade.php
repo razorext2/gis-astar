@@ -3,10 +3,10 @@
 <div class="mt-4 flex flex-col gap-6" x-data="{ showRejectModal: false }">
     {{-- Header / Navigation --}}
     <div class="flex items-center gap-3">
-        <x-button.link wire:navigate href="{{ route('leave-request.approval-center.index') }}"
-            class="group rounded-full bg-white/50 !p-2 ring-1 ring-zinc-200 dark:bg-white/5 dark:ring-white/10">
-            <x-icons.chevron-left class="h-5 w-5 text-zinc-500 transition-colors group-hover:text-red-500" />
-        </x-button.link>
+        <x-button.danger wire:navigate href="{{ route('leave-request.approval-center.index') }}"
+            class="max-h-10 max-w-fit">
+            <x-icons.angle-left class="h-5 w-5" />
+        </x-button.danger>
         <div>
             <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white">Detail Persetujuan</h1>
             <p class="text-sm text-zinc-500 dark:text-zinc-400">Tinjau informasi lengkap sebelum memberikan keputusan.

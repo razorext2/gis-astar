@@ -134,9 +134,18 @@
                         class="rounded-xl border border-zinc-200 px-6 py-2 text-sm font-bold text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-400">
                         Batal
                     </button>
-                    <x-button.primary type="submit">
-                        <x-slot name="icon"><x-icons.check class="h-4 w-4" /></x-slot>
-                        {{ $editMode ? 'Simpan Perubahan' : 'Buat Tipe Cuti' }}
+                    <x-button.primary type="submit" wire:loading.attr="disabled" wire:loading.target="saveType">
+                        <x-slot name="icon">
+                            <x-icons.loading wire:loading wire:target="saveType" class="h-4 w-4 animate-spin" />
+                            <x-icons.angle-right wire:loading.remove wire:target="saveType" class="h-4 w-4" />
+                        </x-slot>
+
+                        <span wire:loading.remove wire:target="saveType">
+                            {{ $editMode ? 'Simpan Perubahan' : 'Buat Tipe Cuti' }}
+                        </span>
+                        <span wire:loading wire:target="saveType">
+                            {{ $editMode ? 'Menyimpan...' : 'Membuat...' }}
+                        </span>
                     </x-button.primary>
                 </div>
             </form>

@@ -3,13 +3,14 @@
 
     {{-- Breadcrumbs/Header --}}
     <div class="flex items-center gap-3">
-        <x-button.link wire:navigate href="{{ route('leave-request.my-requests.index') }}"
-            class="group rounded-full bg-white/50 !p-2 ring-1 ring-zinc-200 dark:bg-white/5 dark:ring-white/10">
-            <x-icons.chevron-left class="h-5 w-5 text-gray-500 transition-colors group-hover:text-primary" />
-        </x-button.link>
+        <x-button.danger wire:navigate href="{{ route('leave-request.my-requests.index') }}" class="max-h-10 max-w-fit">
+            <x-icons.angle-left class="h-5 w-5" />
+        </x-button.danger>
+
         <div>
             <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Buat Pengajuan Pinjam Cuti</h1>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Silakan lengkapi formulir di bawah ini untuk meminjam kuota cuti tahunan di depan.</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Silakan lengkapi formulir di bawah ini untuk meminjam
+                kuota cuti tahunan di depan.</p>
         </div>
     </div>
 
@@ -55,8 +56,9 @@
                 <div class="flex flex-col">
                     <label class="mb-1 block text-sm font-bold text-gray-700 dark:text-gray-300">Tipe Cuti</label>
                     <input type="text" value="Cuti Tahunan (Pinjaman)" disabled
-                        class="w-full rounded-xl border border-zinc-200 bg-gray-100 py-3 pl-4 pr-10 text-sm opacity-70 cursor-not-allowed dark:border-zinc-800 dark:bg-gray-800/50 dark:text-gray-400">
-                    <p class="mt-1 text-xs text-amber-600">Otomatis dipilih karena menu ini khusus untuk meminjam Cuti Tahunan.</p>
+                        class="w-full cursor-not-allowed rounded-xl border border-zinc-200 bg-gray-100 py-3 pl-4 pr-10 text-sm opacity-70 dark:border-zinc-800 dark:bg-gray-800/50 dark:text-gray-400">
+                    <p class="mt-1 text-xs text-amber-600">Otomatis dipilih karena menu ini khusus untuk meminjam Cuti
+                        Tahunan.</p>
                 </div>
                 <div class="flex flex-col">
                     <label class="mb-1 block text-sm font-bold text-gray-700 dark:text-gray-300">Personel
@@ -83,21 +85,23 @@
                                     $isOnLeave = $emp->currentLeave !== null;
                                 @endphp
                                 <button type="button"
-                                    @if($isOnLeave)
-                                        wire:click="showOnLeaveError('{{ addslashes($emp->name) }}')"
+                                    @if ($isOnLeave) wire:click="showOnLeaveError('{{ addslashes($emp->name) }}')"
                                     @else
                                         wire:click="selectBackupPerson({{ $emp->id }}, '{{ addslashes($emp->name) }}')"
-                                        @click="open = false"
-                                    @endif
-                                    class="{{ $backup_person_id == $emp->id ? 'bg-red-50 dark:bg-red-900/20' : '' }} flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-zinc-50 dark:hover:bg-white/5 {{ $isOnLeave ? 'opacity-70' : '' }}">
+                                        @click="open = false" @endif
+                                    class="{{ $backup_person_id == $emp->id ? 'bg-red-50 dark:bg-red-900/20' : '' }} {{ $isOnLeave ? 'opacity-70' : '' }} flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-zinc-50 dark:hover:bg-white/5">
                                     <div class="flex flex-col gap-0.5">
                                         <div class="flex items-center gap-2">
-                                            <span class="text-sm font-bold text-zinc-900 dark:text-white">{{ $emp->name }}</span>
-                                            @if($isOnLeave)
-                                                <span class="rounded-md bg-red-100 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-red-600 dark:bg-red-900/30 dark:text-red-400">Sedang Cuti</span>
+                                            <span
+                                                class="text-sm font-bold text-zinc-900 dark:text-white">{{ $emp->name }}</span>
+                                            @if ($isOnLeave)
+                                                <span
+                                                    class="rounded-md bg-red-100 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-red-600 dark:bg-red-900/30 dark:text-red-400">Sedang
+                                                    Cuti</span>
                                             @endif
                                         </div>
-                                        <span class="text-[10px] uppercase tracking-wider text-zinc-500">{{ $emp->kode_pegawai }}</span>
+                                        <span
+                                            class="text-[10px] uppercase tracking-wider text-zinc-500">{{ $emp->kode_pegawai }}</span>
                                     </div>
                                     @if ($backup_person_id == $emp->id)
                                         <x-icons.check class="h-4 w-4 text-red-600" />
@@ -222,24 +226,26 @@
                         </div>
                         <div class="divider my-1 border-t border-zinc-200 dark:border-white/5"></div>
                         <div class="flex flex-col gap-1">
-                            <span class="text-[10px] uppercase tracking-wider text-gray-500 dark:text-gray-400">Alur Persetujuan:</span>
+                            <span class="text-[10px] uppercase tracking-wider text-gray-500 dark:text-gray-400">Alur
+                                Persetujuan:</span>
                             <div class="mt-1 flex flex-col gap-2">
                                 <div class="flex items-center gap-2 text-[11px]">
                                     <div class="h-1.5 w-1.5 rounded-full bg-zinc-300 dark:bg-zinc-600"></div>
-                                    <span class="text-gray-600 dark:text-gray-400 italic">Atasan:</span>
-                                    <span class="font-bold text-gray-700 dark:text-gray-200">{{ auth()->user()->pegawai->jabatanRelasi->supervisor->name ?? 'Belum Diatur' }}</span>
+                                    <span class="italic text-gray-600 dark:text-gray-400">Atasan:</span>
+                                    <span
+                                        class="font-bold text-gray-700 dark:text-gray-200">{{ auth()->user()->pegawai->jabatanRelasi->supervisor->name ?? 'Belum Diatur' }}</span>
                                 </div>
                                 <div class="flex items-start gap-2 text-[11px]">
                                     <div class="mt-1 h-1.5 w-1.5 rounded-full bg-zinc-300 dark:bg-zinc-600"></div>
-                                    <span class="text-gray-600 dark:text-gray-400 italic">HRD:</span>
-                                    <span class="flex-1 font-bold text-gray-700 dark:text-gray-200 leading-relaxed">
+                                    <span class="italic text-gray-600 dark:text-gray-400">HRD:</span>
+                                    <span class="flex-1 font-bold leading-relaxed text-gray-700 dark:text-gray-200">
                                         {{ implode(', ', $hrd_approvers) ?: 'HRD Department' }}
                                     </span>
                                 </div>
                                 <div class="flex items-start gap-2 text-[11px]">
                                     <div class="mt-1 h-1.5 w-1.5 rounded-full bg-zinc-300 dark:bg-zinc-600"></div>
-                                    <span class="text-gray-600 dark:text-gray-400 italic">Management:</span>
-                                    <span class="flex-1 font-bold text-gray-700 dark:text-gray-200 leading-relaxed">
+                                    <span class="italic text-gray-600 dark:text-gray-400">Management:</span>
+                                    <span class="flex-1 font-bold leading-relaxed text-gray-700 dark:text-gray-200">
                                         {{ implode(', ', $management_approvers) ?: 'Direksi/Management' }}
                                     </span>
                                 </div>
@@ -305,10 +311,12 @@
 
             {{-- Submit Button --}}
             <x-button.primary type="submit" class="w-full !py-4 disabled:cursor-not-allowed disabled:opacity-50"
-                :disabled="(bool) $activeRequest">
+                :disabled="(bool) $activeRequest" wire:loading.attr="disabled" wire:loading.target="save">
                 <x-slot name="icon">
-                    <x-icons.loading-circle wire:loading wire:target="save" class="h-6 w-6" />
+                    <x-icons.loading wire:loading wire:target="save" class="h-4 w-4 animate-spin" />
+                    <x-icons.angle-right wire:loading.remove wire:target="save" class="h-4 w-4" />
                 </x-slot>
+
                 <span wire:loading.remove wire:target="save">Kirim Pengajuan</span>
                 <span wire:loading wire:target="save">Memproses...</span>
             </x-button.primary>

@@ -2,15 +2,17 @@
     class="mt-4 flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary md:p-6">
     {{-- Breadcrumbs/Header --}}
     <div class="flex items-center gap-3">
-        <x-button.link wire:navigate href="{{ route('leave-request.my-requests.index') }}"
-            class="group rounded-full bg-white/50 !p-2 ring-1 ring-zinc-200 dark:bg-white/5 dark:ring-white/10">
-            <x-icons.chevron-left class="h-5 w-5 text-gray-500 transition-colors group-hover:text-primary" />
-        </x-button.link>
+        <x-button.danger wire:navigate href="{{ route('leave-request.my-requests.index') }}" class="max-h-10 max-w-fit">
+            <x-icons.angle-left class="h-5 w-5" />
+        </x-button.danger>
+
         <div>
-            <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Edit Pengajuan
-                #{{ $requestId }}</h1>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Anda dapat mengubah detail pengajuan selama belum
-                disetujui oleh HRD.</p>
+            <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                Edit Pengajuan #{{ $requestId }}
+            </h1>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+                Anda dapat mengubah detail pengajuan selama belum disetujui oleh HRD.
+            </p>
         </div>
     </div>
 
@@ -255,10 +257,13 @@
                 </div>
             </div>
 
-            <x-button.primary type="submit" class="w-full !py-4">
+            <x-button.primary type="submit" class="w-full !py-4" wire:loading.attr="disabled"
+                wire:loading.target="update">
                 <x-slot name="icon">
-                    <x-icons.loading-circle wire:loading wire:target="update" class="h-6 w-6" />
+                    <x-icons.loading wire:loading wire:target="update" class="h-6 w-6" />
+                    <x-icons.angle-right wire:loading.remove wire:target="update" class="h-6 w-6" />
                 </x-slot>
+
                 <span wire:loading.remove wire:target="update">Simpan Perubahan</span>
                 <span wire:loading wire:target="update">Menyimpan...</span>
             </x-button.primary>

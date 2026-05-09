@@ -39,8 +39,6 @@
                         <span>{{ $history->created_at->diffForHumans() }}</span>
                     </div>
 
-
-
                     @if ($history->note)
                         <p
                             class="mt-1 rounded-xl bg-zinc-50 px-3 py-1.5 text-xs italic text-zinc-600 dark:bg-white/5 dark:text-zinc-400">

@@ -2,10 +2,11 @@
     {{-- Header with Quick Info --}}
     <div class="flex flex-col justify-between gap-6 md:flex-row md:items-center">
         <div class="flex items-center gap-4">
-            <x-button.link wire:navigate href="{{ route('leave-request.my-requests.index') }}"
-                class="group rounded-full bg-white !p-2 ring-1 ring-zinc-200 dark:bg-white/5 dark:ring-white/10">
-                <x-icons.chevron-left class="h-6 w-6 text-gray-500 transition-colors group-hover:text-primary" />
-            </x-button.link>
+            <x-button.danger wire:navigate href="{{ route('leave-request.my-requests.index') }}"
+                class="max-h-10 max-w-fit">
+                <x-icons.angle-left class="h-5 w-5" />
+            </x-button.danger>
+
             <div>
                 <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Detail Pengajuan
                     #{{ $request->id }}</h1>
@@ -20,8 +21,15 @@
         <div class="flex items-center gap-3">
             @if ($request->status === 'pending_backup')
                 <x-button.danger wire:click="cancelRequest"
-                    wire:confirm="Apakah Anda yakin ingin membatalkan pengajuan cuti ini?">
-                    Batalkan Pengajuan
+                    wire:confirm="Apakah Anda yakin ingin membatalkan pengajuan cuti ini?" wire:loading.attr="disabled"
+                    wire:target="cancelRequest">
+                    <x-slot name="icon">
+                        <x-icons.loading wire:loading wire:target="cancelRequest" class="h-4 w-4 animate-spin" />
+                        <x-icons.close wire:loading.remove wire:target="cancelRequest" class="h-4 w-4" />
+                    </x-slot>
+
+                    <span wire:loading.remove wire:target="cancelRequest">Batalkan Pengajuan</span>
+                    <span wire:loading wire:target="cancelRequest">Memproses...</span>
                 </x-button.danger>
 
                 <x-button.primary wire:navigate href="{{ route('leave-request.my-requests.edit', $request->id) }}"

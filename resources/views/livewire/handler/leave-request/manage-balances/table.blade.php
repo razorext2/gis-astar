@@ -1,5 +1,4 @@
 {{-- Goal: Leave balance filter, table, pagination & edit modal, Livewire: Handler.LeaveRequest.ManageBalances.Table, Alpine: true --}}
-
 <div class="flex flex-col gap-6">
 
     {{-- Toolbar: Search + Year + Reset Massal --}}
