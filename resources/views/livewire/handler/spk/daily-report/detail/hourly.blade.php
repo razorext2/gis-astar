@@ -1,18 +1,5 @@
-<div class="flex flex-col gap-2 lg:gap-4">
-
-    @php
-        if ($route === 'report.general.hourly') {
-            $redirectRoute = route('report.general.daily', ['id' => $dailyReport->assignment_id]);
-        } elseif ($route === 'daily-report.hourly') {
-            $redirectRoute = route('daily-report.daily', ['id' => $dailyReport->assignment_id]);
-        }
-    @endphp
-
-    <div>
-        <x-button.danger href="{{ $redirectRoute }}" class="my-auto me-4 max-h-10" wire:navigate id="back-button">
-            <x-icons.angle-left class="h-5 w-5" />
-        </x-button.danger>
-    </div>
+<div
+    class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
 
     @can('laporan-harian-create')
         @if (
@@ -223,7 +210,7 @@
 
         {{-- LIST CONTAINER --}}
         <div
-            class="w-full rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800 dark:shadow-none">
+            class="w-full rounded-xl border border-zinc-200 bg-white/60 shadow backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800 dark:shadow-none">
             <div class="flex flex-col divide-y divide-gray-200 dark:divide-gray-700">
                 @forelse ($this->hourlyReports as $index => $row)
                     <div class="p-2 transition hover:bg-gray-50 dark:hover:bg-gray-700/40 lg:p-4">

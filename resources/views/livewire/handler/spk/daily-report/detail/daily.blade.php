@@ -1,102 +1,89 @@
-<div class="w-full">
+<div class="w-full space-y-4">
     {{-- informasi project --}}
     <div
-        class="mb-2 w-full rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800 dark:shadow-none lg:mb-4">
+        class="mb-4 w-full rounded-xl border border-zinc-200 bg-white/60 p-4 shadow backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
         {{-- HEADER --}}
-        <div class="border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">
-            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
-                Informasi Project <span
-                    class="bg-{{ $assignment->status == 'in_progress' ? 'yellow' : 'green' }}-500 text-{{ $assignment->status == 'in_progress' ? 'yellow' : 'green' }}-100 ms-2 rounded-lg px-2 py-0.5 text-xs">
+        <div class="relative flex items-center gap-3 border-b border-zinc-200 pb-4 dark:border-zinc-800">
+            <div
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600 shadow-sm dark:bg-blue-900/30 dark:text-blue-400">
+                <x-icons.info-circle class="h-5 w-5" />
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+                <h2 class="text-lg font-bold tracking-tight text-zinc-900 dark:text-white lg:text-xl">
+                    Informasi Project
+                </h2>
+                <span
+                    class="bg-{{ $assignment->status == 'in_progress' ? 'yellow' : 'green' }}-50 text-{{ $assignment->status == 'in_progress' ? 'yellow' : 'green' }}-600 ring-{{ $assignment->status == 'in_progress' ? 'yellow' : 'green' }}-500/20 dark:bg-{{ $assignment->status == 'in_progress' ? 'yellow' : 'green' }}-900/20 dark:text-{{ $assignment->status == 'in_progress' ? 'yellow' : 'green' }}-400 dark:ring-{{ $assignment->status == 'in_progress' ? 'yellow' : 'green' }}-500/30 rounded-lg px-2.5 py-1 text-xs font-bold ring-1 ring-inset">
                     {{ ucwords(str_replace('_', ' ', $assignment->status)) }}
                 </span>
-            </h3>
-        </div>
+            </div>
 
-        {{-- CONTENT --}}
-        <div class="relative grid grid-cols-1 gap-2 p-2 lg:grid-cols-2 lg:gap-4 lg:p-4">
             @if ($assignment->status === 'completed')
                 {{-- signature dan ekspor  --}}
                 <x-button.link
-                    class="absolute right-2 top-2 bg-green-100 ring-1 ring-green-700 hover:bg-green-300 focus:scale-105 dark:bg-green-800 dark:text-white dark:ring-zinc-800 dark:hover:bg-green-900"
+                    class="absolute right-0 top-0 bg-green-50 ring-1 ring-green-600 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400 dark:ring-green-500/30 dark:hover:bg-green-900/50"
                     id="signature-btn" type="button"
                     href="{{ route('report.general.customer-assignment', ['id' => $assignment->id]) }}" wire:navigate>
-                    <x-icons.pen-nib class="h-5 w-5" />
+                    <x-icons.pen-nib class="h-4 w-4" />
                 </x-button.link>
             @endif
+        </div>
 
+        {{-- CONTENT --}}
+        <div class="grid grid-cols-1 gap-4 pt-4 sm:grid-cols-2 lg:grid-cols-4">
             {{-- Customer Name --}}
-            <div class="lg:col-span-2">
-                <dt class="text-sm text-gray-500 dark:text-gray-400">
-                    Perusahaan
-                </dt>
-
-                <dd class="font-medium text-gray-900 dark:text-white">
-                    {{ $assignment->project->customer_name ?? '-' }}
-                </dd>
+            <div class="flex flex-col sm:col-span-2 lg:col-span-4">
+                <dt class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Perusahaan</dt>
+                <dd class="text-sm font-semibold text-zinc-900 dark:text-white">
+                    {{ $assignment->project->customer_name ?? '-' }}</dd>
             </div>
 
             {{-- PROJECT NAME --}}
-            <div class="lg:col-span-2">
-                <dt class="text-sm text-gray-500 dark:text-gray-400">
-                    Nama Project
-                </dt>
-
-                <dd class="font-medium text-gray-900 dark:text-white">
-                    {{ $assignment->project->project_name }}
+            <div class="flex flex-col sm:col-span-2 lg:col-span-4">
+                <dt class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Nama Project</dt>
+                <dd class="text-sm font-semibold text-zinc-900 dark:text-white">{{ $assignment->project->project_name }}
                 </dd>
             </div>
 
             {{-- DESCRIPTION --}}
-            <div class="lg:col-span-2">
-                <dt class="text-sm text-gray-500 dark:text-gray-400">
-                    Deskripsi Project
-                </dt>
-
-                <dd class="mt-1 text-gray-800 dark:text-gray-200">
-                    {{ $assignment->project->description }}
-                </dd>
+            <div class="flex flex-col sm:col-span-2 lg:col-span-4">
+                <dt class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Deskripsi Project</dt>
+                <dd class="mt-1 text-sm text-zinc-800 dark:text-zinc-200">{{ $assignment->project->description }}</dd>
             </div>
 
             {{-- START DATE --}}
-            <div>
-                <dt class="text-sm text-gray-500 dark:text-gray-400">
-                    Tanggal Mulai
-                </dt>
-
-                <dd class="font-medium text-gray-900 dark:text-white">
-                    {{ \Carbon\Carbon::parse($assignment->project->start_date)->isoFormat('DD MMMM YYYY') }}
-                </dd>
+            <div class="flex flex-col">
+                <dt class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Tanggal Mulai</dt>
+                <dd class="text-sm font-semibold text-zinc-900 dark:text-white">
+                    {{ \Carbon\Carbon::parse($assignment->project->start_date)->isoFormat('DD MMM YYYY') }}</dd>
             </div>
 
             {{-- END DATE --}}
-            <div>
-                <dt class="text-sm text-gray-500 dark:text-gray-400">
-                    Tanggal Selesai
-                </dt>
-
-                <dd class="font-medium text-gray-900 dark:text-white">
-                    {{ \Carbon\Carbon::parse($assignment->project->end_date)->isoFormat('DD MMMM YYYY') }}
-                </dd>
+            <div class="flex flex-col">
+                <dt class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Tanggal Selesai</dt>
+                <dd class="text-sm font-semibold text-zinc-900 dark:text-white">
+                    {{ \Carbon\Carbon::parse($assignment->project->end_date)->isoFormat('DD MMM YYYY') }}</dd>
             </div>
 
             {{-- DEADLINE --}}
-            <div>
-                <dt class="text-sm text-gray-500 dark:text-gray-400">
-                    Deadline
-                </dt>
-
-                <dd class="font-medium text-gray-900 dark:text-white">
-                    {{ \Carbon\Carbon::parse($assignment->project->deadline)->isoFormat('DD MMMM YYYY') }}
+            <div class="flex flex-col">
+                <dt class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Deadline</dt>
+                <dd class="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+                    <span
+                        class="text-sm font-semibold text-zinc-900 dark:text-white">{{ \Carbon\Carbon::parse($assignment->project->deadline)->isoFormat('DD MMM YYYY') }}</span>
 
                     @php
                         $sisa = $this->getSisaHari();
                     @endphp
 
                     <span @class([
-                        'text-xs px-2.5 w-fit py-1 rounded-lg',
-                        'bg-red-500 text-red-100' => $sisa['type'] === 'danger',
-                        'bg-yellow-500 text-yellow-800' => $sisa['type'] === 'warning',
-                        'bg-green-500 text-green-800' => $sisa['type'] === 'success',
+                        'rounded-lg px-2 py-0.5 text-[10px] font-bold w-fit ring-1 ring-inset',
+                        'bg-red-50 text-red-600 ring-red-500/20 dark:bg-red-900/20 dark:text-red-400 dark:ring-red-500/30' =>
+                            $sisa['type'] === 'danger',
+                        'bg-yellow-50 text-yellow-600 ring-yellow-500/20 dark:bg-yellow-900/20 dark:text-yellow-400 dark:ring-yellow-500/30' =>
+                            $sisa['type'] === 'warning',
+                        'bg-green-50 text-green-600 ring-green-500/20 dark:bg-green-900/20 dark:text-green-400 dark:ring-green-500/30' =>
+                            $sisa['type'] === 'success',
                     ])>
                         {{ $sisa['label'] }}
                     </span>
@@ -104,102 +91,110 @@
 
                 @if (!$assignment->project->extend_request && $assignment->status != 'completed')
                     @can('laporan-harian-extend')
-                        <x-button.primary class="mt-2 text-sm" wire:click.prevent="$set('showExtendModal', true)"
-                            type="button" id="extend-report-btn">
-                            Permohonan Perpanjang Deadline?
+                        <x-button.primary class="mt-2 min-h-0 w-fit px-2.5 py-1 text-xs"
+                            wire:click.prevent="$set('showExtendModal', true)" type="button" id="extend-report-btn">
+                            Perpanjang Deadline?
                         </x-button.primary>
                     @endcan
                 @endif
             </div>
 
             {{-- CREATED BY --}}
-            <div>
-                <dt class="text-sm text-gray-500 dark:text-gray-400">
-                    Dibuat Oleh
-                </dt>
-
-                <dd class="font-medium text-gray-900 dark:text-white">
-                    {{ $assignment->project->createdBy->name }}
-                </dd>
+            <div class="flex flex-col">
+                <dt class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Dibuat Oleh</dt>
+                <dd class="text-sm font-semibold text-zinc-900 dark:text-white">
+                    {{ $assignment->project->createdBy->name }}</dd>
             </div>
 
             {{-- extend request --}}
             @if ($assignment->project->extend_request)
-                <div class="col-span-2 rounded-lg border border-zinc-200 bg-gray-800 p-2 dark:border-zinc-800 lg:p-4">
-                    <div class="text-gray-800 dark:text-white">
+                <div
+                    class="mt-2 rounded-xl border border-zinc-100 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/50 sm:col-span-2 lg:col-span-4">
+                    <div class="text-sm text-zinc-800 dark:text-zinc-200">
                         <p>
-                            <span class="font-semibold">
+                            <span class="font-semibold text-zinc-900 dark:text-white">
                                 {{ $assignment->project->extendRequestBy->name }}
                             </span>
                             meminta perpanjangan deadline ke tanggal
-                            <span class="font-semibold text-green-500">
+                            <span class="font-bold text-blue-600 dark:text-blue-400">
                                 {{ $assignment->project->extend_to->isoFormat('DD MMMM YYYY') }}
                             </span>
                             dengan alasan:
                         </p>
-                        <p>
-                            {{ ucfirst($assignment->project->extend_request_notes) }}
+                        <p class="mt-1 font-medium italic text-zinc-600 dark:text-zinc-400">
+                            "{{ ucfirst($assignment->project->extend_request_notes) }}"
                         </p>
                     </div>
 
                     @if ($assignment->project->extend_request_status == 'pending')
                         @if ($showDenyProcessButton)
-                            <div class="mt-2 border-t border-t-gray-400 pt-2 dark:border-t-gray-700">
+                            <div class="mt-4 border-t border-zinc-200 pt-4 dark:border-zinc-800">
                                 <x-input.textarea id="extendRequestNotes" name="extendRequestNotes"
-                                    wire:model="extend_request_rejected_notes" class="mt-2"
-                                    placeholder="Alasan Penolakan" :labels="true" :textLabel="'Alasan penolakan'"
-                                    :rows="6" />
+                                    wire:model="extend_request_rejected_notes" placeholder="Alasan Penolakan..."
+                                    :labels="true" :textLabel="'Alasan Penolakan'" :rows="3" />
                             </div>
                         @endif
 
                         @can('laporan-harian-validate')
-                            <div class="mt-2 flex gap-2">
+                            <div class="mt-4 flex flex-wrap gap-2">
                                 {{-- tombol terima --}}
                                 <x-button.success wire:show="showAcceptButton" class="text-sm"
                                     wire:click.prevent="acceptExtendRequest">
-                                    Terima
+                                    Terima Permohonan
                                 </x-button.success>
-
-                                {{-- tombol cancel --}}
-                                <x-button.primary wire:show="showCancelButton" class="text-sm"
-                                    wire:click.prevent="handleCancelButton">
-                                    Cancel
-                                </x-button.primary>
 
                                 {{-- tombol tolak --}}
                                 <x-button.danger wire:show="showDenyButton" class="text-sm"
                                     wire:click.prevent="rejectExtendRequest">
-                                    Tolak
+                                    Tolak Permohonan
                                 </x-button.danger>
 
                                 {{-- tombol proses tolak --}}
                                 <x-button.danger wire:show="showDenyProcessButton" class="text-sm"
                                     wire:click.prevent="rejectExtendRequestProcess">
-                                    Proses Tolak
+                                    Proses Penolakan
                                 </x-button.danger>
+
+                                {{-- tombol cancel --}}
+                                <x-button.secondary wire:show="showCancelButton" class="text-sm"
+                                    wire:click.prevent="handleCancelButton">
+                                    Batal
+                                </x-button.secondary>
                             </div>
                         @endcan
                     @else
-                        <div class="mt-2 border-t border-t-gray-400 pt-2 dark:border-t-gray-700">
+                        <div class="mt-3 border-t border-zinc-200 pt-3 dark:border-zinc-800">
                             @if ($assignment->project->extend_request_status == 'approved')
-                                <p class="text-sm font-medium text-green-500">
-                                    {{ '[' . $assignment->project->extend_request_validated_at . '] ' . $assignment->project->extendRequestValidatedBy->name }}
-                                </p>
-                                <p class="text-sm text-green-500">
-                                    Perpanjangan telah
-                                    disetujui. Deadline laporan telah diperpanjang ke tanggal
-                                    <span
-                                        class="font-semibold underline underline-offset-2">{{ $assignment->project->extend_to->isoFormat('DD MMMM YYYY') }}</span>
-                                </p>
+                                <div
+                                    class="flex items-start gap-2 rounded-lg bg-green-50 p-3 ring-1 ring-inset ring-green-500/20 dark:bg-green-900/20 dark:ring-green-500/30">
+                                    <x-icons.check-circle
+                                        class="mt-0.5 h-4 w-4 shrink-0 text-green-600 dark:text-green-400" />
+                                    <div class="flex flex-col">
+                                        <span class="text-xs font-semibold text-green-700 dark:text-green-400">
+                                            Disetujui oleh {{ $assignment->project->extendRequestValidatedBy->name }}
+                                            ({{ $assignment->project->extend_request_validated_at }})
+                                        </span>
+                                        <span class="text-xs text-green-600 dark:text-green-500">
+                                            Deadline laporan telah diperpanjang ke tanggal <span
+                                                class="font-bold underline underline-offset-2">{{ $assignment->project->extend_to->isoFormat('DD MMMM YYYY') }}</span>.
+                                        </span>
+                                    </div>
+                                </div>
                             @else
-                                <p class="text-sm font-medium text-red-500">
-                                    {{ '[' . $assignment->project->extend_request_validated_at . '] ' . $assignment->project->extendRequestValidatedBy->name }}
-                                </p>
-                                <p class="text-sm text-red-500">
-                                    Perpanjangan telah
-                                    ditolak dengan alasan: <span
-                                        class="font-semibold underline underline-offset-2">{{ $assignment->project->extend_request_validated_notes }}</span>
-                                </p>
+                                <div
+                                    class="flex items-start gap-2 rounded-lg bg-red-50 p-3 ring-1 ring-inset ring-red-500/20 dark:bg-red-900/20 dark:ring-red-500/30">
+                                    <x-icons.lock-time class="mt-0.5 h-4 w-4 shrink-0 text-red-600 dark:text-red-400" />
+                                    <div class="flex flex-col">
+                                        <span class="text-xs font-semibold text-red-700 dark:text-red-400">
+                                            Ditolak oleh {{ $assignment->project->extendRequestValidatedBy->name }}
+                                            ({{ $assignment->project->extend_request_validated_at }})
+                                        </span>
+                                        <span class="text-xs text-red-600 dark:text-red-500">
+                                            Alasan penolakan: <span
+                                                class="font-bold">{{ $assignment->project->extend_request_validated_notes }}</span>
+                                        </span>
+                                    </div>
+                                </div>
                             @endif
                         </div>
                     @endif
@@ -207,83 +202,92 @@
             @endif
 
             {{-- tandai sebagai selesai --}}
-            @if ($assignment->status != 'completed')
-                @can('laporan-harian-validate')
-                    <div id="mark-as-complete-container">
-                        <x-button.success id="btn-mark-as-complete" type="button" wire:click.prevent="markAsComplete"
-                            wire:confirm.prompt="Apakah anda yakin ingin menandai Laporan ini sebagai Selesai?\nJika ya, silahkan ketik SELESAI|SELESAI"
-                            wire:loading.attr="disabled" wire:target="markAsComplete">
-                            <x-slot name="icon">
-                                <x-icons.angle-right wire:loading.remove wire:target="markAsComplete"
-                                    class="icon h-5 w-5" />
-                                <x-icons.loading wire:loading wire:target="markAsComplete" class="h-4 w-4 animate-spin" />
-                            </x-slot>
+            @if ($assignment->status != 'completed' && auth()->user()->can('laporan-harian-validate'))
+                <div class="mt-4 border-t border-zinc-200 pt-4 dark:border-zinc-800 sm:col-span-2 lg:col-span-4"
+                    id="mark-as-complete-container">
+                    <x-button.success id="btn-mark-as-complete" type="button" wire:click.prevent="markAsComplete"
+                        wire:confirm.prompt="Apakah anda yakin ingin menandai Laporan ini sebagai Selesai?\nJika ya, silahkan ketik SELESAI|SELESAI"
+                        wire:loading.attr="disabled" wire:target="markAsComplete" class="w-full sm:w-auto">
+                        <x-slot name="icon">
+                            <x-icons.check-circle wire:loading.remove wire:target="markAsComplete"
+                                class="icon h-5 w-5" />
+                            <x-icons.loading wire:loading wire:target="markAsComplete" class="h-4 w-4 animate-spin" />
+                        </x-slot>
 
-                            <span wire:loading.remove wire:target="markAsComplete">Tandai Selesai</span>
-                            <span wire:loading wire:target="markAsComplete">Memproses...</span>
-                        </x-button.success>
-                    </div>
-                @endcan
+                        <span wire:loading.remove wire:target="markAsComplete">Tandai Laporan Selesai</span>
+                        <span wire:loading wire:target="markAsComplete">Memproses...</span>
+                    </x-button.success>
+                </div>
             @endif
         </div>
-
     </div>
 
     {{-- list report --}}
     <div class="flex flex-col gap-4">
         {{-- ACTION BAR --}}
-        <div class="flex flex-wrap items-center justify-between gap-3">
-            <x-button.danger href="{{ route('report.general.index') }}" class="my-auto me-4 max-h-10" wire:navigate
-                id="back-button">
-                <x-icons.angle-left class="h-5 w-5" />
-            </x-button.danger>
-
+        <div class="flex justify-end">
             @can('laporan-harian-create')
                 @if (now()->lt(\Carbon\Carbon::parse($assignment->project->end_date)->endOfDay()) && $assignment->status != 'completed')
-                    <x-button.success wire:click.prevent="add" type="button" id="add-report-btn">
+                    <x-button.primary wire:click.prevent="add" type="button" id="add-report-btn">
+                        <x-slot name="icon">
+                            <x-icons.plus class="h-5 w-5" />
+                        </x-slot>
                         Tambah Laporan
-                    </x-button.success>
+                    </x-button.primary>
                 @endif
             @endcan
         </div>
 
         {{-- LIST CONTAINER --}}
         <div
-            class="w-full rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800 dark:shadow-none">
-            <div class="flex flex-col divide-y divide-gray-200 dark:divide-gray-700">
+            class="w-full rounded-xl border border-zinc-200 bg-white/60 p-4 shadow backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
+
+            <div class="mb-4 flex items-center gap-3 border-b border-zinc-200 pb-4 dark:border-zinc-800">
+                <div
+                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600 shadow-sm dark:bg-blue-900/30 dark:text-blue-400">
+                    <x-icons.file-invoice class="h-5 w-5" />
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold tracking-tight text-zinc-900 dark:text-white lg:text-xl">
+                        Daftar Aktivitas Laporan
+                    </h2>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4">
                 @forelse ($this->dailyReports as $index => $row)
-                    <div class="relative p-2 transition hover:bg-gray-50 dark:hover:bg-gray-700/40 lg:p-4">
+                    <div
+                        class="relative flex flex-col gap-4 overflow-hidden rounded-xl border border-zinc-100 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none">
 
                         {{-- WATERMARK --}}
-                        <div class="pointer-events-none absolute inset-0 flex items-center justify-center">
+                        <div class="pointer-events-none absolute inset-y-0 right-4 flex items-center justify-center">
                             <span
-                                class="text-2xl font-bold text-gray-300 opacity-30 dark:text-gray-700 md:text-2xl lg:text-6xl">
-                                {{ strtoupper($row->status) }}
+                                class="text-4xl font-black uppercase tracking-widest text-zinc-900/[0.03] dark:text-white/[0.02]">
+                                {{ $row->status }}
                             </span>
                         </div>
 
-                        {{-- HEADER --}}
-                        <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-
-                            {{-- TIME INFO --}}
-                            <div class="text-sm text-gray-600 dark:text-gray-300">
-                                <p class="font-medium">
-                                    Pukul {{ \Carbon\Carbon::parse($row->submitted_at)->isoFormat('HH:mm:ss') }}
-                                </p>
-
-                                <p class="text-xs text-gray-500 dark:text-gray-400">
-                                    {{ \Carbon\Carbon::parse($row->submitted_at)->isoFormat('dddd, DD MMM YYYY') }}
-                                </p>
+                        {{-- HEADER ROW --}}
+                        <div class="z-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-sm font-bold text-blue-600 ring-1 ring-inset ring-blue-500/20 dark:bg-blue-900/20 dark:text-blue-400 dark:ring-blue-500/30">
+                                    {{ $index + 1 }}
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-bold text-zinc-900 dark:text-white">
+                                        Tanggal Laporan:
+                                        {{ \Carbon\Carbon::parse($row->report_date)->isoFormat('DD MMM YYYY') }}
+                                    </span>
+                                </div>
                             </div>
 
-                            {{-- REPORT DATE --}}
-                            <div class="flex flex-col lg:items-end">
-                                <span class="text-xs text-gray-500 dark:text-gray-400">
-                                    Tanggal Laporan
+                            <div class="flex flex-col sm:items-end">
+                                <span class="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                                    Pukul {{ \Carbon\Carbon::parse($row->submitted_at)->isoFormat('HH:mm:ss') }}
                                 </span>
-
-                                <span class="font-semibold text-gray-900 dark:text-white">
-                                    {{ \Carbon\Carbon::parse($row->report_date)->isoFormat('dddd, DD MMM YYYY') }}
+                                <span class="text-xs text-zinc-500 dark:text-zinc-400">
+                                    {{ \Carbon\Carbon::parse($row->submitted_at)->isoFormat('dddd, DD MMM YYYY') }}
                                 </span>
                             </div>
                         </div>
@@ -294,23 +298,24 @@
                         @endphp
 
                         @if (now()->gt($end_date) || now()->gt($report_date))
-                            <div class="mt-2 w-full">
-                                <p
-                                    class="w-full bg-red-100 text-center text-xs text-red-600 dark:bg-transparent dark:text-red-500 md:text-sm">
+                            <div
+                                class="z-10 rounded-lg bg-red-50 p-3 ring-1 ring-inset ring-red-500/20 dark:bg-red-900/20 dark:ring-red-500/30">
+                                <p class="text-center text-xs font-medium text-red-600 dark:text-red-400">
                                     Tidak dapat menambah aktivitas dikarenakan sudah melewati batas waktu.
                                 </p>
                             </div>
                         @endif
 
-                        {{-- FOOTER --}}
-                        <div class="mt-2 flex items-center justify-between">
-                            {{-- STATUS BADGE --}}
-                            <span
-                                class="inline-flex items-center rounded-md bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700 dark:bg-blue-900 dark:text-blue-200">
-                                {{ ucfirst($row->status) }}
-                            </span>
+                        {{-- FOOTER / ACTIONS --}}
+                        <div
+                            class="z-10 flex flex-col gap-4 border-t border-zinc-100 pt-3 dark:border-zinc-800 sm:flex-row sm:items-center sm:justify-between">
+                            <div>
+                                <span
+                                    class="rounded-lg bg-blue-50 px-2.5 py-1 text-xs font-bold text-blue-700 ring-1 ring-inset ring-blue-600/20 dark:bg-blue-900/20 dark:text-blue-400 dark:ring-blue-500/30">
+                                    {{ ucfirst($row->status) }}
+                                </span>
+                            </div>
 
-                            {{-- ACTION --}}
                             <div class="flex items-center gap-2">
                                 @php
                                     if ($route == 'daily-report.daily') {
@@ -340,7 +345,7 @@
                                         wire:target="summary">
                                         <x-slot name="icon">
                                             <x-icons.badge-check wire:loading.remove wire:target="summary"
-                                                class="icon h-5 w-5" />
+                                                class="icon h-4 w-4" />
                                             <x-icons.loading wire:loading wire:target="summary"
                                                 class="h-4 w-4 animate-spin" />
                                         </x-slot>
@@ -349,21 +354,23 @@
                                         <span wire:loading wire:target="summary">Memuat...</span>
                                     </x-button.success>
                                 @endcan
-
                             </div>
                         </div>
                     </div>
                 @empty
-                    <div class="flex flex-col items-center justify-center p-10 text-center">
-                        <div class="text-sm text-gray-400">
-                            Staf belum membuat laporan harian.
+                    <div
+                        class="rounded-xl border border-zinc-100 bg-zinc-50 p-6 text-center shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none">
+                        <div class="flex flex-col items-center justify-center gap-2">
+                            <x-icons.calendar class="h-8 w-8 text-zinc-400" />
+                            <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Staf belum membuat
+                                laporan harian.</span>
                         </div>
                     </div>
                 @endforelse
             </div>
 
             {{-- PAGINATION --}}
-            <div class="border-t border-zinc-200 p-2 dark:border-zinc-800 lg:p-4">
+            <div class="mt-4 border-t border-zinc-200 pt-4 dark:border-zinc-800">
                 {{ $this->dailyReports->links() }}
             </div>
         </div>
@@ -378,7 +385,7 @@
                 <x-icons.badge-check class="h-5 w-5" />
             </x-slot>
 
-            @if ($showSummaryModal && $modalData)
+            @if ($modalData)
                 <div class="flex flex-col gap-3">
                     @php
                         $activities = collect($modalData->hourlyReport)
@@ -422,7 +429,7 @@
             @endif
 
             @can('laporan-harian-validate')
-                @if ($showSummaryModal && $modalData && $modalData->status === 'submitted')
+                @if ($modalData && $modalData->status === 'submitted')
                     <x-slot name="footer">
                         <x-button.secondary @click="open = false">Tutup</x-button.secondary>
                         <x-button.success id="approve-btn" wire:click.prevent="approve"
@@ -451,29 +458,26 @@
                 <x-icons.clock class="h-5 w-5" />
             </x-slot>
 
-            @if ($showExtendModal)
-                <form id="form-extend-deadline" wire:submit.prevent="extendProcess" method="POST"
-                    class="flex flex-col gap-5">
-                    <div>
-                        <x-input.basic id="days" name="days" wire:model="days" type="number" min="1"
-                            max="20" placeholder="Mau perpanjang berapa hari?">
-                            Jumlah Hari
-                        </x-input.basic>
-                        @error('days')
-                            <span class="mt-1.5 block text-xs text-red-500">{{ $message }}</span>
-                        @enderror
-                    </div>
+            <form id="form-extend-deadline" wire:submit.prevent="extendProcess" method="POST"
+                class="flex flex-col gap-5">
+                <div>
+                    <x-input.basic id="days" name="days" wire:model="days" type="number" min="1"
+                        max="20" placeholder="Mau perpanjang berapa hari?">
+                        Jumlah Hari
+                    </x-input.basic>
+                    @error('days')
+                        <span class="mt-1.5 block text-xs text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
 
-                    <div>
-                        <x-input.textarea id="extend-reason" name="extend-reason" wire:model="extend_reason"
-                            rows="6" placeholder="Apa alasan ingin perpanjang?" :labels="true"
-                            :textLabel="'Alasan Perpanjang'" />
-                        @error('extend_reason')
-                            <span class="mt-1.5 block text-xs text-red-500">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </form>
-            @endif
+                <div>
+                    <x-input.textarea id="extend-reason" name="extend-reason" wire:model="extend_reason" rows="6"
+                        placeholder="Apa alasan ingin perpanjang?" :labels="true" :textLabel="'Alasan Perpanjang'" />
+                    @error('extend_reason')
+                        <span class="mt-1.5 block text-xs text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
+            </form>
 
             @can('laporan-harian-extend')
                 <x-slot name="footer">

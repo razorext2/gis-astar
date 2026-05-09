@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Spk;
 
 use App\Http\Controllers\Controller;
 use App\Models\Spk\ProjectAssignment;
+use App\Models\Spk\ProjectDailyReport;
 use App\Models\Spk\SpkMain;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
@@ -29,7 +30,9 @@ class DailyReportController extends Controller
 
     public function daily($id)
     {
-        return view('dashboard.spk.daily-report.detail.daily', compact('id'));
+        $route = request()->route()->getName();
+        $assignment = ProjectAssignment::with('project')->findOrFail($id);
+        return view('dashboard.spk.daily-report.detail.daily', compact('id', 'assignment', 'route'));
     }
 
     public function customerAssignment($id)
@@ -39,7 +42,9 @@ class DailyReportController extends Controller
 
     public function hourly($id, $daily)
     {
-        return view('dashboard.spk.daily-report.detail.hourly', compact(['id', 'daily']));
+        $route = request()->route()->getName();
+        $dailyReport = ProjectDailyReport::findOrFail($daily);
+        return view('dashboard.spk.daily-report.detail.hourly', compact(['id', 'daily', 'dailyReport', 'route']));
     }
 
     public function general()
@@ -54,12 +59,16 @@ class DailyReportController extends Controller
 
     public function generalDaily($id)
     {
-        return view('dashboard.spk.daily-report.general.detail.daily', compact('id'));
+        $route = request()->route()->getName();
+        $assignment = ProjectAssignment::with('project')->findOrFail($id);
+        return view('dashboard.spk.daily-report.general.detail.daily', compact('id', 'assignment', 'route'));
     }
 
     public function generalHourly($id, $daily)
     {
-        return view('dashboard.spk.daily-report.general.detail.hourly', compact(['id', 'daily']));
+        $route = request()->route()->getName();
+        $dailyReport = ProjectDailyReport::findOrFail($daily);
+        return view('dashboard.spk.daily-report.general.detail.hourly', compact(['id', 'daily', 'dailyReport', 'route']));
     }
 
     public function generalCustomerAssignment($id)

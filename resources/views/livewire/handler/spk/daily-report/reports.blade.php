@@ -1,126 +1,111 @@
-<div class="w-full">
+<div
+    class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
 
-    <h3 class="mb-2 text-base font-semibold text-gray-800 dark:text-white lg:mb-4">
-        Daftar staff pada project ini
-    </h3>
+    <div class="flex items-center gap-3 border-b border-zinc-200 pb-4 dark:border-zinc-800">
+        <div
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600 shadow-sm dark:bg-blue-900/30 dark:text-blue-400">
+            <x-icons.users class="h-5 w-5" />
+        </div>
+        <div>
+            <h2 class="text-lg font-bold tracking-tight text-zinc-900 dark:text-white lg:text-xl">
+                Daftar staff pada project ini
+            </h2>
+        </div>
+    </div>
 
-    <div
-        class="w-full rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800 dark:shadow-none">
+    <div class="grid grid-cols-1 gap-4">
+        @forelse ($this->assignments as $index => $row)
+            <div
+                class="flex flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none">
 
-        <div class="divide-y divide-gray-200 dark:divide-gray-700">
-
-            @forelse ($this->assignments as $index => $row)
-                <div class="relative p-2 transition hover:bg-gray-50 dark:hover:bg-gray-700/40 lg:p-4">
-
-                    <span
-                        class="absolute right-0 top-0 flex h-6 w-6 items-center justify-center rounded bg-green-500 text-xs font-semibold text-white">
-                        {{ $index + 1 }}
-                    </span>
-
-                    <div class="mb-2 w-full lg:mb-4">
-                        <h4 class="text-lg font-semibold text-gray-800 dark:text-white">
-                            {{ ucwords($row->project->project_name) }}
-                        </h4>
-
-                        <p class="text-base font-medium text-gray-600 dark:text-gray-200">
-                            [{{ $row->project->spk->customer['nama_perusahaan'] }}]
-                        </p>
-                    </div>
-
-                    {{-- HEADER --}}
-                    <div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-                        {{-- TIME --}}
-                        <div class="text-sm text-gray-600 dark:text-gray-300">
-                            <p class="font-medium">
-                                Pukul {{ \Carbon\Carbon::parse($row->assign_at)->isoFormat('HH:mm:ss') }}
-                            </p>
-
-                            <p class="text-xs text-gray-500 dark:text-gray-400">
-                                {{ \Carbon\Carbon::parse($row->assign_at)->isoFormat('dddd, DD MMM YYYY') }}
-                            </p>
-                        </div>
-
-                        {{-- DATA --}}
-                        <div class="w-full lg:max-w-xl">
-                            <dl class="grid grid-cols-1 gap-2 text-sm sm:grid-cols-2">
-                                <div class="flex justify-between sm:block">
-                                    <dt class="text-gray-500 dark:text-gray-400">
-                                        Tipe Laporan
-                                    </dt>
-                                    <dd class="font-medium text-gray-900 dark:text-white">
-                                        {{ ucfirst($row->laporan_type) }}
-                                    </dd>
-                                </div>
-
-                                <div class="flex justify-between sm:block">
-                                    <dt class="text-gray-500 dark:text-gray-400">
-                                        Nomor VT
-                                    </dt>
-                                    <dd class="font-medium text-gray-900 dark:text-white">
-                                        {{ $row->nomor_vt }}
-                                    </dd>
-                                </div>
-
-                                <div class="flex justify-between sm:block">
-                                    <dt class="text-gray-500 dark:text-gray-400">
-                                        Nama Staf
-                                    </dt>
-                                    <dd class="font-medium text-gray-900 dark:text-white">
-                                        [{{ $row->assignTo->kode_pegawai }}]
-                                        {{ $row->assignTo->name }}
-                                    </dd>
-                                </div>
-
-                                <div class="flex justify-between sm:block">
-                                    <dt class="text-gray-500 dark:text-gray-400">
-                                        Deadline
-                                    </dt>
-                                    <dd class="font-medium text-gray-900 dark:text-white">
-                                        {{ $row->project->start_date }} s/d
-                                        {{ $row->project->end_date }}
-                                    </dd>
-                                </div>
-                            </dl>
-                        </div>
-                    </div>
-
-                    {{-- FOOTER --}}
-                    <div class="mt-2 flex items-center justify-between lg:mt-4">
-                        {{-- STATUS --}}
+                <div
+                    class="flex flex-col gap-3 border-b border-zinc-100 pb-3 dark:border-zinc-800 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="flex items-center gap-3 text-sm font-semibold text-zinc-900 dark:text-white">
                         <span
-                            class="inline-flex items-center rounded-md bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700 dark:bg-blue-900 dark:text-blue-200">
+                            class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-sm font-bold text-blue-600 ring-1 ring-inset ring-blue-500/20 dark:bg-blue-900/20 dark:text-blue-400 dark:ring-blue-500/30">
+                            {{ $index + 1 }}
+                        </span>
+                        <div class="flex flex-col">
+                            <span
+                                class="text-base font-bold text-zinc-900 dark:text-white">{{ ucwords($row->project->project_name) }}</span>
+                            <span
+                                class="text-xs font-medium text-zinc-500 dark:text-zinc-400">[{{ $row->project->spk->customer['nama_perusahaan'] }}]</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:items-end">
+                        <span class="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                            Pukul {{ \Carbon\Carbon::parse($row->assign_at)->isoFormat('HH:mm:ss') }}
+                        </span>
+                        <span class="text-xs text-zinc-500 dark:text-zinc-400">
+                            {{ \Carbon\Carbon::parse($row->assign_at)->isoFormat('dddd, DD MMM YYYY') }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+                    <div class="flex flex-col">
+                        <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Tipe Laporan</span>
+                        <span
+                            class="text-sm font-semibold text-zinc-900 dark:text-white">{{ ucfirst($row->laporan_type) }}</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Nomor VT</span>
+                        <span class="text-sm font-semibold text-zinc-900 dark:text-white">{{ $row->nomor_vt }}</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Nama Staf</span>
+                        <span
+                            class="text-sm font-semibold text-zinc-900 dark:text-white">[{{ $row->assignTo->kode_pegawai }}]
+                            {{ $row->assignTo->name }}</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Deadline</span>
+                        <span class="text-sm font-semibold text-zinc-900 dark:text-white">
+                            {{ \Carbon\Carbon::parse($row->project->start_date)->isoFormat('DD MMM YYYY') }} s/d
+                            {{ \Carbon\Carbon::parse($row->project->end_date)->isoFormat('DD MMM YYYY') }}
+                        </span>
+                    </div>
+                </div>
+
+                <div
+                    class="flex flex-col gap-4 border-t border-zinc-100 pt-3 dark:border-zinc-800 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <span
+                            class="rounded-lg bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20 dark:bg-blue-900/20 dark:text-blue-400 dark:ring-blue-500/30">
                             {{ ucfirst($row->status) }}
                         </span>
+                    </div>
 
-                        {{-- ACTION --}}
-                        <div class="flex items-center gap-2 text-sm">
-
-                            <x-button.link
-                                class="ring-blue-600 hover:bg-blue-100 dark:bg-blue-800 dark:text-white dark:hover:bg-blue-900"
-                                id="detail-button" href="{{ route('daily-report.daily', ['id' => $row->id]) }}">
-                                Detail
-                            </x-button.link>
-
-                            @can('unassign-laporan-harian-spk')
-                                <x-button.danger id="unassign-button" wire:click="unassign('{{ $row->id }}')"
-                                    wire:confirm.prompt="Anda yakin ingin menghapus staf ini dari projek?\nKetik YA jika ingin menghapus|YA">
-                                    Unassign
-                                </x-button.danger>
-                            @endcan
-                        </div>
+                    <div class="flex gap-2">
+                        <x-button.link
+                            class="ring-blue-600 hover:bg-blue-100 dark:bg-blue-800 dark:text-white dark:hover:bg-blue-900"
+                            id="detail-button" href="{{ route('daily-report.daily', ['id' => $row->id]) }}"
+                            wire:navigate>
+                            Detail
+                        </x-button.link>
+                        @can('unassign-laporan-harian-spk')
+                            <x-button.danger id="unassign-button" wire:click="unassign('{{ $row->id }}')"
+                                wire:confirm.prompt="Anda yakin ingin menghapus staf ini dari projek?\nKetik YA jika ingin menghapus|YA">
+                                Unassign
+                            </x-button.danger>
+                        @endcan
                     </div>
                 </div>
-            @empty
-                <div class="p-10 text-center text-gray-500 dark:text-gray-400">
-                    Belum ada staf yang diassign.
+            </div>
+        @empty
+            <div
+                class="rounded-xl border border-zinc-100 bg-zinc-50 p-6 text-center shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none">
+                <div class="flex flex-col items-center justify-center gap-2">
+                    <x-icons.users class="h-8 w-8 text-zinc-400" />
+                    <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Belum ada staf yang
+                        diassign.</span>
                 </div>
-            @endforelse
+            </div>
+        @endforelse
+    </div>
 
-        </div>
-
-        {{-- PAGINATION --}}
-        <div class="border-t border-zinc-200 p-2 dark:border-zinc-800 lg:p-4">
-            {{ $this->assignments->links() }}
-        </div>
+    {{-- PAGINATION --}}
+    <div class="border-t border-zinc-200 pt-4 dark:border-zinc-800">
+        {{ $this->assignments->links() }}
     </div>
 </div>

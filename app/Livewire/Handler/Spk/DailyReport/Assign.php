@@ -25,6 +25,11 @@ class Assign extends Component
     {
         if (request()->has('spk_id')) {
             $this->form->spk_id = request('spk_id');
+
+            $spk = \App\Models\Spk\SpkMain::find($this->form->spk_id);
+            if ($spk && !empty($spk->company_name)) {
+                $this->form->customer_name = $spk->company_name;
+            }
         }
     }
 
