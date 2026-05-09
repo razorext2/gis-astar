@@ -30,7 +30,7 @@
 
         <!-- Ketua Tim -->
         <div
-            class="flex flex-col rounded-xl border border-zinc-200 bg-gray-50/50 p-4 dark:border-zinc-800/50 dark:bg-gray-800/30">
+            class="flex flex-col rounded-xl border border-zinc-200 bg-white/60 p-4 shadow dark:border-zinc-800 dark:bg-zinc-900/60">
             <div class="mb-2 flex items-center gap-3">
                 <div class="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg">
                     <x-icons.user class="text-primary h-6 w-6" />
