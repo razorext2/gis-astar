@@ -104,7 +104,13 @@
             </x-button.danger>
 
             <x-button.primary type="submit"
-                class="shadow-primary/20 w-full px-8 transition-all hover:shadow-lg sm:w-auto">
+                class="shadow-primary/20 w-full px-8 transition-all hover:shadow-lg sm:w-auto"
+                wire:loading.attr="disabled" wire:target="store">
+                <x-slot name="icon">
+                    <x-icons.angle-right wire:loading.remove wire:target="store" class="icon h-5 w-5" />
+                    <x-icons.loading wire:loading wire:target="store" class="h-4 w-4 animate-spin" />
+                </x-slot>
+
                 <span wire:loading.remove wire:target="store">Simpan Perubahan</span>
                 <span wire:loading wire:target="store">Memproses Data...</span>
             </x-button.primary>
@@ -136,9 +142,11 @@
                 Batal
             </x-button.secondary>
 
-            <x-button.danger wire:click="removeTeamProcess" class="justify-center">
+            <x-button.danger wire:click="removeTeamProcess" class="justify-center" wire:loading.attr="disabled"
+                wire:target="removeTeamProcess">
                 <x-slot name="icon">
-                    <x-icons.loading class="mr-2 h-4 w-4 animate-spin" wire:loading wire:target="removeTeamProcess" />
+                    <x-icons.angle-right wire:loading.remove wire:target="removeTeamProcess" class="icon h-5 w-5" />
+                    <x-icons.loading wire:loading wire:target="removeTeamProcess" class="h-4 w-4 animate-spin" />
                 </x-slot>
                 <span wire:loading.remove wire:target="removeTeamProcess">Hapus Tim Permanen</span>
                 <span wire:loading wire:target="removeTeamProcess">Memproses...</span>

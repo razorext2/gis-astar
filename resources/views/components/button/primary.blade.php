@@ -1,5 +1,5 @@
 {{-- Goal: Tombol primary untuk aksi utama (Blue), Smart Tag (a/button), Livewire: -, Alpine: - --}}
-@props(['icon' => null, 'type' => 'button', 'id' => null, 'loading' => null, 'href' => null])
+@props(['icon' => null, 'type' => 'button', 'id' => null, 'href' => null])
 
 @php
     $tag = $href ? 'a' : 'button';
@@ -11,10 +11,6 @@
     {{ $attributes->merge(['class' => $baseClasses]) }}>
     @if ($icon)
         {{ $icon }}
-    @endif
-
-    @if ($loading)
-        <x-icons.loading wire:loading wire:target="{{ $loading }}" class="h-4 w-4 animate-spin" />
     @endif
 
     @if ($slot->isNotEmpty())

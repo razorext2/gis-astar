@@ -139,7 +139,13 @@
                 </div>
 
                 <div class="mt-6 flex items-center gap-3">
-                    <x-button.primary wire:click="save" wire:loading.attr="disabled" type="button" id="save-placement">
+                    <x-button.primary wire:click="save" wire:loading.attr="disabled" type="button" id="save-placement"
+                        wire:loading.attr="disabled" wire:target="save">
+                        <x-slot name="icon">
+                            <x-icons.angle-right wire:loading.remove wire:target="save" class="icon h-5 w-5" />
+                            <x-icons.loading wire:loading wire:target="save" class="h-4 w-4 animate-spin" />
+                        </x-slot>
+
                         <span wire:loading.remove wire:target="save">Simpan</span>
                         <span wire:loading wire:target="save">Menyimpan...</span>
                     </x-button.primary>

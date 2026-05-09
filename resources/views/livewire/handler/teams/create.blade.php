@@ -113,13 +113,14 @@
             <div class="mt-2 flex w-full justify-end gap-3 border-t border-zinc-200 pt-6 dark:border-zinc-800/50">
                 <x-button.danger href="{{ route('teams.index') }}" wire:navigate as="a">Batal</x-button.danger>
 
-                <x-button.primary type="submit" class="shadow-primary/20 px-8 transition-all hover:shadow-lg">
+                <x-button.primary type="submit" class="shadow-primary/20 px-8 transition-all hover:shadow-lg"
+                    wire:loading.attr="disabled" wire:target="store">
                     <x-slot name="icon">
                         <x-icons.loading class="h-5 w-5 animate-spin" wire:loading wire:target="store" />
                         <x-icons.plus class="h-5 w-5" wire:loading.remove wire:target="store" />
                     </x-slot>
                     <span wire:loading.remove wire:target="store">Simpan Tim Baru</span>
-                    <span wire:loading wire:target="store" class="ml-2">Memproses Data...</span>
+                    <span wire:loading wire:target="store" class="ml-2">Menyimpan...</span>
                 </x-button.primary>
             </div>
         </form>

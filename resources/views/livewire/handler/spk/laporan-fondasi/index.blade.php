@@ -220,7 +220,9 @@
             <x-button.secondary @click="open = false">
                 Batal
             </x-button.secondary>
-            <x-button.primary type="submit" form="form-laporan-fondasi">
+
+            <x-button.primary type="submit" form="form-laporan-fondasi" wire:loading.attr="disabled"
+                wire:target="{{ $isEditing ? 'updateLaporanFondasi' : 'storeLaporanFondasi' }}">
                 <x-slot name="icon">
                     <x-icons.loading wire:loading
                         wire:target="{{ $isEditing ? 'updateLaporanFondasi' : 'storeLaporanFondasi' }}"
@@ -259,7 +261,16 @@
             <x-button.secondary @click="open = false">
                 Batal
             </x-button.secondary>
-            <x-button.danger wire:click="deleteLaporanFondasiAction">
+
+            <x-button.danger wire:click="deleteLaporanFondasiAction" wire:loading.attr="disabled"
+                wire:target="deleteLaporanFondasiAction">
+                <x-slot name="icon">
+                    <x-icons.angle-right wire:loading.remove wire:target="deleteLaporanFondasiAction"
+                        class="icon h-5 w-5" />
+                    <x-icons.loading wire:loading wire:target="deleteLaporanFondasiAction"
+                        class="h-4 w-4 animate-spin" />
+                </x-slot>
+
                 <span wire:loading.remove wire:target="deleteLaporanFondasiAction">Hapus Laporan</span>
                 <span wire:loading wire:target="deleteLaporanFondasiAction">Menghapus...</span>
             </x-button.danger>

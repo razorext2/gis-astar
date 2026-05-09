@@ -211,8 +211,16 @@
                 @can('laporan-harian-validate')
                     <div id="mark-as-complete-container">
                         <x-button.success id="btn-mark-as-complete" type="button" wire:click.prevent="markAsComplete"
-                            wire:confirm.prompt="Apakah anda yakin ingin menandai Laporan ini sebagai Selesai?\nJika ya, silahkan ketik SELESAI|SELESAI">
-                            Tandai Selesai
+                            wire:confirm.prompt="Apakah anda yakin ingin menandai Laporan ini sebagai Selesai?\nJika ya, silahkan ketik SELESAI|SELESAI"
+                            wire:loading.attr="disabled" wire:target="markAsComplete">
+                            <x-slot name="icon">
+                                <x-icons.angle-right wire:loading.remove wire:target="markAsComplete"
+                                    class="icon h-5 w-5" />
+                                <x-icons.loading wire:loading wire:target="markAsComplete" class="h-4 w-4 animate-spin" />
+                            </x-slot>
+
+                            <span wire:loading.remove wire:target="markAsComplete">Tandai Selesai</span>
+                            <span wire:loading wire:target="markAsComplete">Memproses...</span>
                         </x-button.success>
                     </div>
                 @endcan
@@ -328,7 +336,15 @@
 
                                 @can('laporan-harian-validate')
                                     <x-button.success id="summary" class="text-sm" type="button"
-                                        wire:click.prevent="summary('{{ $row->id }}')">
+                                        wire:click.prevent="summary('{{ $row->id }}')" wire:loading.attr="disabled"
+                                        wire:target="summary">
+                                        <x-slot name="icon">
+                                            <x-icons.badge-check wire:loading.remove wire:target="summary"
+                                                class="icon h-5 w-5" />
+                                            <x-icons.loading wire:loading wire:target="summary"
+                                                class="h-4 w-4 animate-spin" />
+                                        </x-slot>
+
                                         <span wire:loading.remove wire:target="summary">Summary</span>
                                         <span wire:loading wire:target="summary">Memuat...</span>
                                     </x-button.success>
@@ -411,8 +427,14 @@
                         <x-button.secondary @click="open = false">Tutup</x-button.secondary>
                         <x-button.success id="approve-btn" wire:click.prevent="approve"
                             wire:confirm.prompt="Apakah anda yakin ingin menyetujui laporan ini?\nKetik YA untuk mengkonfirmasi|YA"
-                            type="button">
-                            Approve Laporan
+                            type="button" wire:loading.attr="disabled" wire:target="approve">
+                            <x-slot name="icon">
+                                <x-icons.angle-right wire:loading.remove wire:target="approve" class="icon h-5 w-5" />
+                                <x-icons.loading wire:loading wire:target="approve" class="h-4 w-4 animate-spin" />
+                            </x-slot>
+
+                            <span wire:loading.remove wire:target="approve">Approve Laporan</span>
+                            <span wire:loading wire:target="approve">Memproses...</span>
                         </x-button.success>
                     </x-slot>
                 @endif
@@ -456,7 +478,13 @@
             @can('laporan-harian-extend')
                 <x-slot name="footer">
                     <x-button.secondary @click="open = false">Batal</x-button.secondary>
-                    <x-button.success id="extend-submit-btn" type="submit" form="form-extend-deadline">
+                    <x-button.success id="extend-submit-btn" type="submit" form="form-extend-deadline"
+                        wire:loading.attr="disabled" wire:target="extendProcess">
+                        <x-slot name="icon">
+                            <x-icons.plus wire:loading.remove wire:target="extendProcess" class="icon h-5 w-5" />
+                            <x-icons.loading wire:loading wire:target="extendProcess" class="h-4 w-4 animate-spin" />
+                        </x-slot>
+
                         <span wire:loading.remove wire:target="extendProcess">Ajukan Permintaan</span>
                         <span wire:loading wire:target="extendProcess">Memproses...</span>
                     </x-button.success>

@@ -126,11 +126,15 @@
                 </div>
 
                 <div class="shrink-0">
-                    <x-button.primary type="submit" class="w-full sm:w-auto" wire:loading.attr="disabled">
+                    <x-button.primary type="submit" class="w-full sm:w-auto" wire:loading.attr="disabled"
+                        wire:target="store">
                         <x-slot name="icon">
-                            <x-icons.plus class="h-4 w-4" />
+                            <x-icons.plus wire:loading.remove wire:target="store" class="icon h-5 w-5" />
+                            <x-icons.loading wire:loading wire:target="store" class="h-4 w-4 animate-spin" />
                         </x-slot>
-                        Simpan Dokumen
+
+                        <span wire:loading.remove wire:target="store">Simpan Dokumen</span>
+                        <span wire:loading wire:target="store">Memproses...</span>
                     </x-button.primary>
                 </div>
             </div>

@@ -200,12 +200,14 @@
                     {{-- end form input untuk kit --}}
 
                     <div class="flex h-full items-center justify-end">
-                        <x-button.primary id="tambahKit" class="w-fit" type="button" wire:click="storeBox">
+                        <x-button.primary id="tambahKit" class="w-fit" type="button" wire:click="storeBox"
+                            wire:loading.attr="disabled" wire:target="storeBox">
                             <x-slot name="icon">
                                 <x-icons.angle-right wire:loading.remove wire:target="storeBox"
                                     class="icon h-5 w-5" />
                                 <x-icons.loading wire:loading wire:target="storeBox" class="h-4 w-4 animate-spin" />
                             </x-slot>
+
                             <span wire:loading.remove wire:target="storeBox">Tambah Peti Ke Daftar</span>
                             <span wire:loading wire:target="storeBox">Memproses...</span>
                         </x-button.primary>
@@ -217,11 +219,13 @@
         </div>
 
         <div class="flex w-full justify-center border-t border-zinc-200 pt-4 dark:border-zinc-800">
-            <x-button.success type="submit" id="store" class="w-fit">
+            <x-button.success type="submit" id="store" class="w-fit" wire:loading.attr="disabled"
+                wire:target="store">
                 <x-slot name="icon">
                     <x-icons.angle-right wire:loading.remove wire:target="store" class="icon h-5 w-5" />
                     <x-icons.loading wire:loading wire:target="store" class="h-4 w-4 animate-spin" />
                 </x-slot>
+
                 <span wire:loading.remove wire:target="store">Simpan Packing Kit</span>
                 <span wire:loading wire:target="store">Memproses...</span>
             </x-button.success>

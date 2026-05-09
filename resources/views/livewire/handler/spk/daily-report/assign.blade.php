@@ -46,8 +46,14 @@
                     placeholder="cth: VT-12345678" :labels="false" />
 
                 <x-button.primary type="button" wire:click="fetchVT" class="absolute bottom-[1px] end-0 focus:outline"
-                    id="no_vt_submit">
-                    Cek VT
+                    id="no_vt_submit" wire:loading.attr="disabled" wire:target="fetchVT">
+                    <x-slot name="icon">
+                        <x-icons.search wire:loading.remove wire:target="fetchVT" class="icon h-5 w-5" />
+                        <x-icons.loading wire:loading wire:target="fetchVT" class="h-4 w-4 animate-spin" />
+                    </x-slot>
+
+                    <span wire:loading.remove wire:target="fetchVT">Cek VT</span>
+                    <span wire:loading wire:target="fetchVT">Memproses...</span>
                 </x-button.primary>
             </div>
 
@@ -108,7 +114,12 @@
 
         {{-- actions --}}
         <div class="col-span-2 flex justify-end gap-2">
-            <x-button.primary type="submit" id="submitBtn">
+            <x-button.primary type="submit" id="submitBtn" wire:loading.attr="disabled" wire:target="store">
+                <x-slot name="icon">
+                    <x-icons.plus wire:loading.remove wire:target="store" class="icon h-5 w-5" />
+                    <x-icons.loading wire:loading wire:target="store" class="h-4 w-4 animate-spin" />
+                </x-slot>
+
                 <span wire:loading.remove wire:target="store">Simpan</span>
                 <span wire:loading wire:target="store">Menyimpan...</span>
             </x-button.primary>

@@ -173,7 +173,12 @@
 
                         {{-- ACTION --}}
                         <div class="col-span-1 flex justify-end lg:col-span-2">
-                            <x-button.success type="submit">
+                            <x-button.success type="submit" wire:loading.attr="disabled" wire:target="store">
+                                <x-slot name="icon">
+                                    <x-icons.plus wire:loading.remove wire:target="store" class="icon h-5 w-5" />
+                                    <x-icons.loading wire:loading wire:target="store" class="h-4 w-4 animate-spin" />
+                                </x-slot>
+
                                 <span wire:loading.remove wire:target="store">Simpan Aktivitas</span>
                                 <span wire:loading wire:target="store">Menyimpan...</span>
                             </x-button.success>
@@ -200,7 +205,14 @@
             @if ($dailyReport->status === 'draft')
                 <div class="flex gap-2 lg:gap-4">
                     @can('laporan-harian-edit')
-                        <x-button.primary id="submit" type="button" wire:click.prevent="reportSubmit">
+                        <x-button.primary id="submit" type="button" wire:click.prevent="reportSubmit"
+                            wire:loading.attr="disabled" wire:target="reportSubmit">
+                            <x-slot name="icon">
+                                <x-icons.angle-right wire:loading.remove wire:target="reportSubmit"
+                                    class="icon h-5 w-5" />
+                                <x-icons.loading wire:loading wire:target="reportSubmit" class="h-4 w-4 animate-spin" />
+                            </x-slot>
+
                             <span wire:loading.remove wire:target="reportSubmit">Ajukan Laporan</span>
                             <span wire:loading wire:target="reportSubmit">Mengajukan...</span>
                         </x-button.primary>
@@ -294,9 +306,12 @@
                                     class="text-sm ring-blue-600 hover:bg-blue-100 dark:bg-blue-800 dark:text-white dark:hover:bg-blue-900"
                                     id="detail-button"
                                     wire:confirm.prompt="Anda yakin ingin menghapus laporan ini?\nKetik YA jika anda yakin.|YA"
-                                    wire:click="delete('{{ $row->id }}')">
+                                    wire:click="delete('{{ $row->id }}')" wire:loading.attr="disabled"
+                                    wire:target="delete">
                                     <x-slot name="icon">
-                                        <x-icons.trash-bin class="h-4 w-4" />
+                                        <x-icons.trash-bin wire:loading.remove wire:target="delete"
+                                            class="icon h-5 w-5" />
+                                        <x-icons.loading wire:loading wire:target="delete" class="h-4 w-4 animate-spin" />
                                     </x-slot>
 
                                     <span wire:loading.remove wire:target="delete">Hapus</span>

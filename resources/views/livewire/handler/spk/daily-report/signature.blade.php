@@ -29,7 +29,12 @@
             </div>
 
             <div class="flex gap-2 lg:gap-4">
-                <x-button.success type="submit" id="save">
+                <x-button.success type="submit" id="save" wire:loading.attr="disabled" wire:target="store">
+                    <x-slot name="icon">
+                        <x-icons.plus wire:loading.remove wire:target="store" class="icon h-5 w-5" />
+                        <x-icons.loading wire:loading wire:target="store" class="h-4 w-4 animate-spin" />
+                    </x-slot>
+
                     <span wire:loading.remove wire:target="store">Simpan</span>
                     <span wire:loading wire:target="store">Menyimpan...</span>
                 </x-button.success>
@@ -215,7 +220,13 @@
             <div class="mt-2 flex justify-center gap-x-2 lg:mt-4 lg:gap-x-4">
                 @livewire('handler.spk.daily-report.pdf.laporan-harian', ['assignmentId' => $model->id], key($model->id))
 
-                <x-button.success wire:click.prevent="sentPdfToEmail" id="btn-sent-report-to-email">
+                <x-button.success wire:click.prevent="sentPdfToEmail" id="btn-sent-report-to-email"
+                    wire:loading.attr="disabled" wire:target="sentPdfToEmail">
+                    <x-slot name="icon">
+                        <x-icons.letter-sent wire:loading.remove wire:target="sentPdfToEmail" class="icon h-5 w-5" />
+                        <x-icons.loading wire:loading wire:target="sentPdfToEmail" class="h-4 w-4 animate-spin" />
+                    </x-slot>
+
                     <span wire:loading.remove wire:target="sentPdfToEmail">Kirim PDF</span>
                     <span wire:loading wire:target="sentPdfToEmail">Mengirim Email...</span>
                 </x-button.success>

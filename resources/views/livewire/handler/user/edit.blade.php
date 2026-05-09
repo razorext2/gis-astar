@@ -16,12 +16,14 @@
                 </div>
             </div>
             <div class="flex items-center gap-3">
-                <x-button.primary wire:click="save" wire:loading.attr="disabled">
+                <x-button.primary wire:click="save" wire:loading.attr="disabled" wire:target="save">
                     <x-slot name="icon">
                         <x-icons.checklist-stepper wire:loading.remove wire:target="save" class="h-5 w-5" />
+                        <x-icons.loading wire:loading wire:target="save" class="h-4 w-4 animate-spin" />
                     </x-slot>
+
                     <span wire:loading.remove wire:target="save">Update User</span>
-                    <span wire:loading wire:target="save">Memproses...</span>
+                    <span wire:loading wire:target="save">Memperbarui...</span>
                 </x-button.primary>
             </div>
         </div>
@@ -161,7 +163,8 @@
                                     <label
                                         x-show="search === '' || '{{ strtolower($role->name) }}'.includes(search.toLowerCase())"
                                         class="role-item group/role flex cursor-pointer items-center gap-3 rounded-2xl border border-zinc-200 p-4 transition-all hover:border-blue-300 hover:bg-blue-50 dark:border-zinc-800 dark:hover:border-blue-700 dark:hover:bg-blue-900/20">
-                                        <input wire:model="selected_roles" type="checkbox" value="{{ $role->name }}"
+                                        <input wire:model="selected_roles" type="checkbox"
+                                            value="{{ $role->name }}"
                                             class="h-5 w-5 rounded-lg border-zinc-200 text-blue-600 focus:ring-blue-500">
                                         <span
                                             class="text-sm font-medium text-gray-700 transition-colors group-hover/role:text-blue-600 dark:text-gray-200">{{ $role->name }}</span>

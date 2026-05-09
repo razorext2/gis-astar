@@ -66,24 +66,29 @@
                     $data->status_approval === 0 &&
                         auth()->user()->can('spk-validate') &&
                         ($data->is_booked == false && $data->is_cancelled == false))
-                    <x-button.primary id="btn-validate-spk" wire:click="validateSpk">
+                    <x-button.primary id="btn-validate-spk" wire:click="validateSpk" wire:loading.attr="disabled"
+                        wire:target="validateSpk">
                         <x-slot name="icon">
-                            <x-icons.check-circle class="h-4 w-4" />
+                            <x-icons.check-circle class="h-5 w-5" wire:loading.remove wire:target="validateSpk" />
+                            <x-icons.loading wire:loading wire:target="validateSpk" class="h-4 w-4 animate-spin" />
                         </x-slot>
 
-                        Setujui SPK
+                        <span wire:loading.remove wire:target="validateSpk">Setujui SPK</span>
+                        <span wire:loading wire:target="validateSpk">Memproses...</span>
                     </x-button.primary>
                 @endif
 
                 @if ($data->is_cancelled && auth()->user()->can('spk-validate') && $data->cancel_request_validated_by === null)
                     <x-button.danger
                         wire:confirm.prompt="Apakah anda yakin ingin membatalkan SPK ini? SPK yang dibatalkan tidak dapat diproses lagi.\n\nKetik BATAL untuk mengkonfirmasi.|BATAL"
-                        id="btn-cancel-spk" wire:click="cancelSpk">
+                        id="btn-cancel-spk" wire:click="cancelSpk" wire:loading.attr="disabled" wire:target="cancelSpk">
                         <x-slot name="icon">
-                            <x-icons.check-circle class="h-4 w-4" />
+                            <x-icons.check-circle class="h-5 w-5" wire:loading.remove wire:target="cancelSpk" />
+                            <x-icons.loading wire:loading wire:target="cancelSpk" class="h-4 w-4 animate-spin" />
                         </x-slot>
 
-                        Setujui Pembatalan
+                        <span wire:loading.remove wire:target="cancelSpk">Setujui Pembatalan</span>
+                        <span wire:loading wire:target="cancelSpk">Memproses...</span>
                     </x-button.danger>
                 @endif
             </div>
@@ -237,9 +242,11 @@
 
                         @if ($data->is_using_old_stock == false)
                             <x-button.primary class="shrink-0 text-sm" id="old-stock" type="button"
-                                wire:click="setOldStock" wire:confirm.prompt="Silahkan ketik YA untuk melanjutkan|YA">
+                                wire:click="setOldStock" wire:confirm.prompt="Silahkan ketik YA untuk melanjutkan|YA"
+                                wire:loading.attr="disabled" wire:target="setOldStock">
                                 <x-slot name="icon">
-                                    <x-icons.loading wire:loading wire:target="setOldStock" class="h-4 w-4 animate-spin" />
+                                    <x-icons.loading wire:loading wire:target="setOldStock"
+                                        class="h-4 w-4 animate-spin" />
                                     <x-icons.archive wire:loading.remove wire:target="setOldStock" class="h-4 w-4" />
                                 </x-slot>
 
@@ -395,8 +402,15 @@
         <div
             class="flex justify-center gap-x-2 rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 text-center shadow-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:absolute lg:right-6 lg:top-0 lg:border-none lg:bg-transparent lg:p-0 lg:shadow-none lg:dark:bg-transparent">
             @can('spk-create')
-                <x-button.primary id="spk-pdf-export" wire:click="export">
-                    Ekspor SPK
+                <x-button.primary id="spk-pdf-export" wire:click="export" wire:loading.attr="disabled"
+                    wire:target="export">
+                    <x-slot name="icon">
+                        <x-icons.loading wire:loading wire:target="export" class="h-4 w-4 animate-spin" />
+                        <x-icons.file-invoice wire:loading.remove wire:target="export" class="h-4 w-4" />
+                    </x-slot>
+
+                    <span wire:loading.remove wire:target="export">Ekspor SPK</span>
+                    <span wire:loading wire:target="export">Memproses...</span>
                 </x-button.primary>
             @endcan
 

@@ -124,11 +124,15 @@
 
             <x-slot name="footer">
                 <x-button.secondary type="button" @click="open = false">Batal</x-button.secondary>
-                <x-button.primary type="submit" form="form-add-member" class="px-6">
+                <x-button.primary type="submit" form="form-add-member" class="px-6" wire:loading.attr="disabled"
+                    wire:target="addMemberProcess">
                     <x-slot name="icon">
-                        <x-icons.loading class="h-5 w-5" wire:loading wire:target="addMemberProcess" />
+                        <x-icons.angle-right wire:loading.remove wire:target="addMemberProcess" class="icon h-5 w-5" />
+                        <x-icons.loading wire:loading wire:target="addMemberProcess" class="h-4 w-4 animate-spin" />
                     </x-slot>
+
                     <span wire:loading.remove wire:target="addMemberProcess"> Masukkan ke Tim </span>
+                    <span wire:loading wire:target="addMemberProcess"> Menyimpan... </span>
                 </x-button.primary>
             </x-slot>
         </x-modal.base-modal>
@@ -159,7 +163,19 @@
                         @click="open = false">Batal</x-button.secondary>
                     <x-button.danger class="w-full justify-center sm:w-auto"
                         wire:click="removeMemberProcess('{{ $kode_pegawai }}', '{{ $team_code }}')">
-                        Keluarkan
+                        <x-slot name="icon">
+                            <x-icons.angle-right wire:loading.remove
+                                wire:target="removeMemberProcess('{{ $kode_pegawai }}', '{{ $team_code }}')"
+                                class="icon h-5 w-5" />
+                            <x-icons.loading wire:loading
+                                wire:target="removeMemberProcess('{{ $kode_pegawai }}', '{{ $team_code }}')"
+                                class="h-4 w-4 animate-spin" />
+                        </x-slot>
+
+                        <span wire:loading.remove
+                            wire:target="removeMemberProcess('{{ $kode_pegawai }}', '{{ $team_code }}')">Keluarkan</span>
+                        <span wire:loading
+                            wire:target="removeMemberProcess('{{ $kode_pegawai }}', '{{ $team_code }}')">Memproses...</span>
                     </x-button.danger>
                 </div>
             </x-slot>

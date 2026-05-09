@@ -127,21 +127,24 @@
                 </div>
 
                 <div class="flex items-center justify-end gap-3 border-t border-zinc-100 pt-6 dark:border-zinc-800">
-                    <x-button.primary type="submit" id="search" class="!px-6">
+                    <x-button.primary type="submit" id="search" class="!px-6" wire:loading.attr="disabled"
+                        wire:target="search">
                         <x-slot name="icon">
                             <x-icons.angle-right wire:loading.remove wire:target="search" class="icon h-5 w-5" />
                             <x-icons.loading wire:loading wire:target="search" class="h-4 w-4 animate-spin" />
                         </x-slot>
+
                         <span wire:loading.remove wire:target="search">Cari Tagihan</span>
                         <span wire:loading wire:target="search">Memproses...</span>
                     </x-button.primary>
 
                     <x-button.success type="button" wire:show="form.nomor_tagihan_baru" wire:transition id="assign"
-                        wire:click="assign">
+                        wire:click="assign" wire:loading.attr="disabled" wire:target="assign">
                         <x-slot name="icon">
                             <x-icons.angle-right wire:loading.remove wire:target="assign" class="icon h-5 w-5" />
                             <x-icons.loading wire:loading wire:target="assign" class="h-4 w-4 animate-spin" />
                         </x-slot>
+
                         <span wire:loading.remove wire:target="assign">Assign ke SPK</span>
                         <span wire:loading wire:target="assign">Memproses...</span>
                     </x-button.success>

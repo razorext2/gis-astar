@@ -84,9 +84,15 @@
             </div>
 
             <div class="col-span-2">
-                <x-button.primary class="mx-auto" type="submit" id="proceed-accumulation">
-                    <x-icons.loading wire:loading />
-                    <span wire:loading.remove>Akumulasikan</span>
+                <x-button.primary class="mx-auto" type="submit" id="proceed-accumulation" wire:loading.attr="disabled"
+                    wire:target="process">
+                    <x-slot name="icon">
+                        <x-icons.angle-right wire:loading.remove wire:target="process" class="icon h-5 w-5" />
+                        <x-icons.loading wire:loading wire:target="process" class="h-4 w-4 animate-spin" />
+                    </x-slot>
+
+                    <span wire:loading wire:target="process">Memproses...</span>
+                    <span wire:loading.remove wire:target="process">Akumulasikan</span>
                 </x-button.primary>
             </div>
         </form>
@@ -108,7 +114,18 @@
                             <b>{{ $start_period }}</b> sampai tanggal <b>{{ $end_period }}</b>?
                         </p>
                         <div class="mt-4 flex justify-end space-x-2">
-                            <x-button.success wire:click="validateData">Konfirmasi</x-button.success>
+                            <x-button.success wire:click="validateData" wire:loading.attr="disabled"
+                                wire:target="validateData">
+                                <x-slot name="icon">
+                                    <x-icons.angle-right wire:loading.remove wire:target="validateData"
+                                        class="icon h-5 w-5" />
+                                    <x-icons.loading wire:loading wire:target="validateData"
+                                        class="h-4 w-4 animate-spin" />
+                                </x-slot>
+
+                                <span wire:loading.remove wire:target="validateData">Konfirmasi</span>
+                                <span wire:loading wire:target="validateData">Memproses...</span>
+                            </x-button.success>
                             <x-button.danger wire:click="closeModal">Batal</x-button.danger>
                         </div>
                     </div>
@@ -187,11 +204,16 @@
             @if ($results->first()->status == 1)
                 <div class="mt-4 flex items-center justify-end">
                     <x-button.primary class="w-fit"
-                        wire:click="processRedeem('{{ $results->first()->transaction_id }}')">
+                        wire:click="processRedeem('{{ $results->first()->transaction_id }}')"
+                        wire:loading.attr="disabled" wire:target="processRedeem">
                         <x-slot name="icon">
-                            <x-icons.angle-right class="icon h-6 w-6" />
+                            <x-icons.angle-right wire:loading.remove wire:target="processRedeem"
+                                class="icon h-5 w-5" />
+                            <x-icons.loading wire:loading wire:target="processRedeem" class="h-4 w-4 animate-spin" />
                         </x-slot>
-                        Proses Redeem
+
+                        <span wire:loading.remove wire:target="processRedeem">Proses Redeem</span>
+                        <span wire:loading wire:target="processRedeem">Memproses...</span>
                     </x-button.primary>
                 </div>
             @endif

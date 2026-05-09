@@ -545,8 +545,17 @@
                                     </div>
 
                                     <x-button.primary class="h-fit w-fit" id="cek-nomor-tagihan"
-                                        name="cek-nomor-tagihan" wire:click="cekNomorTagihan" type="button">
-                                        Check
+                                        name="cek-nomor-tagihan" wire:click="cekNomorTagihan" type="button"
+                                        wire:loading.attr="disabled" wire:target="cekNomorTagihan">
+                                        <x-slot name="icon">
+                                            <x-icons.angle-right wire:loading.remove wire:target="cekNomorTagihan"
+                                                class="icon h-5 w-5" />
+                                            <x-icons.loading wire:loading wire:target="cekNomorTagihan"
+                                                class="h-4 w-4 animate-spin" />
+                                        </x-slot>
+
+                                        <span wire:loading.remove wire:target="cekNomorTagihan">Check</span>
+                                        <span wire:loading wire:target="cekNomorTagihan">Memproses...</span>
                                     </x-button.primary>
 
                                     @error('createForm.nomor_tagihan')
@@ -626,14 +635,18 @@
         <div
             class="flex w-full items-center justify-end gap-3 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
             <x-button.primary id="summary-button" wire:click="summary" type="button"
-                class="!bg-zinc-800 !text-white hover:!bg-zinc-700 dark:!bg-zinc-700 dark:hover:!bg-zinc-600">
+                class="!bg-zinc-800 !text-white hover:!bg-zinc-700 dark:!bg-zinc-700 dark:hover:!bg-zinc-600"
+                wire:loading.attr="disabled" wire:target="summary">
                 <x-slot name="icon">
-                    <x-icons.file-invoice class="h-5 w-5" />
+                    <x-icons.file-invoice wire:loading.remove wire:target="summary" class="h-5 w-5" />
+                    <x-icons.loading wire:loading wire:target="summary" class="h-4 w-4 animate-spin" />
                 </x-slot>
-                Summary
+
+                <span wire:loading.remove wire:target="summary">Summary</span>
+                <span wire:loading wire:target="summary">Memuat...</span>
             </x-button.primary>
 
-            <x-button.success id="simpan-button" type="submit">
+            <x-button.success id="simpan-button" type="submit" wire:loading.attr="disabled" wire:target="submit">
                 <x-slot name="icon">
                     <x-icons.loading wire:loading wire:target="submit" class="h-4 w-4 animate-spin" />
                     <x-icons.check-circle wire:loading.remove wire:target="submit" class="h-4 w-4" />

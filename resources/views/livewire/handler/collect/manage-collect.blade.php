@@ -50,8 +50,10 @@
             <x-button.success wire:click="confirmReschedule" wire:loading.attr="disabled"
                 wire:target="confirmReschedule">
                 <x-slot name="icon">
-                    <x-icons.check class="h-4 w-4" />
+                    <x-icons.check wire:loading.remove wire:target="confirmReschedule" class="icon h-5 w-5" />
+                    <x-icons.loading wire:loading wire:target="confirmReschedule" class="h-4 w-4 animate-spin" />
                 </x-slot>
+
                 <span wire:loading.remove wire:target="confirmReschedule">Simpan Reschedule</span>
                 <span wire:loading wire:target="confirmReschedule">Menyimpan...</span>
             </x-button.success>
@@ -59,8 +61,8 @@
     </x-modal.base-modal>
 
     {{-- ==================== CHANGE COLLECTOR MODAL ==================== --}}
-    <x-modal.base-modal show="showChangeCollectorModal" title="Ganti Kolektor" subtitle="Alihkan Tagihan Ke Kolektor Lain"
-        iconContainerClass="bg-blue-600 shadow-blue-500/20" maxWidth="lg">
+    <x-modal.base-modal show="showChangeCollectorModal" title="Ganti Kolektor"
+        subtitle="Alihkan Tagihan Ke Kolektor Lain" iconContainerClass="bg-blue-600 shadow-blue-500/20" maxWidth="lg">
         <x-slot name="icon">
             <x-icons.users class="h-5 w-5" />
         </x-slot>
@@ -142,7 +144,8 @@
                             <p class="text-xs font-medium text-blue-600 dark:text-blue-400">
                                 {{ $new_kode_pegawai }}</p>
                         </div>
-                        <div class="ml-auto flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 text-white">
+                        <div
+                            class="ml-auto flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 text-white">
                             <x-icons.check class="h-3 w-3" />
                         </div>
                     </div>
@@ -158,8 +161,10 @@
             <x-button.primary wire:click="confirmChangeCollector" wire:loading.attr="disabled"
                 wire:target="confirmChangeCollector">
                 <x-slot name="icon">
-                    <x-icons.check class="h-4 w-4" />
+                    <x-icons.check wire:loading.remove wire:target="confirmChangeCollector" class="icon h-5 w-5" />
+                    <x-icons.loading wire:loading wire:target="confirmChangeCollector" class="h-4 w-4 animate-spin" />
                 </x-slot>
+
                 <span wire:loading.remove wire:target="confirmChangeCollector">Ganti Kolektor</span>
                 <span wire:loading wire:target="confirmChangeCollector">Mengalihkan...</span>
             </x-button.primary>

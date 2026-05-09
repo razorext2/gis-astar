@@ -253,7 +253,15 @@
                     <x-button.secondary class="w-full justify-center sm:w-auto" wire:click="resetModal">
                         Batal
                     </x-button.secondary>
-                    <x-button.success class="w-full justify-center sm:w-auto" type="submit" form="form-validation">
+                    <x-button.success class="w-full justify-center sm:w-auto" type="submit" form="form-validation"
+                        wire:loading.attr="disabled" wire:target="proof_pic, confirmValidation">
+                        <x-slot name="icon">
+                            <x-icons.angle-right wire:loading.remove wire:target="proof_pic, confirmValidation"
+                                class="icon h-5 w-5" />
+                            <x-icons.loading wire:loading wire:target="proof_pic, confirmValidation"
+                                class="h-4 w-4 animate-spin" />
+                        </x-slot>
+
                         <span wire:loading wire:target="proof_pic">Uploading...</span>
                         <span wire:loading wire:target="confirmValidation">Menyimpan...</span>
                         <span wire:loading.remove wire:target="proof_pic, confirmValidation">Proses
@@ -263,8 +271,17 @@
                     <x-button.secondary class="w-full justify-center sm:w-auto" wire:click="resetModal">
                         Batal
                     </x-button.secondary>
-                    <x-button.danger class="w-full justify-center sm:w-auto" wire:click="confirmRejection">
-                        Konfirmasi Penolakan
+                    <x-button.danger class="w-full justify-center sm:w-auto" wire:click="confirmRejection"
+                        wire:loading.attr="disabled" wire:target="confirmRejection">
+                        <x-slot name="icon">
+                            <x-icons.angle-right wire:loading.remove wire:target="confirmRejection"
+                                class="icon h-5 w-5" />
+                            <x-icons.loading wire:loading wire:target="confirmRejection"
+                                class="h-4 w-4 animate-spin" />
+                        </x-slot>
+
+                        <span wire:loading wire:target="confirmRejection">Proses...</span>
+                        <span wire:loading.remove wire:target="confirmRejection">Konfirmasi Penolakan</span>
                     </x-button.danger>
                 @endif
             </div>

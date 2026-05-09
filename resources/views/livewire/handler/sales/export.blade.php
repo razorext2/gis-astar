@@ -82,7 +82,12 @@
                 Batal
             </x-button.secondary>
 
-            <x-button.success type="submit" form="form-export-sales">
+            <x-button.success type="submit" form="form-export-sales" wire:loading.attr="disabled" wire:target="export">
+                <x-slot name="icon">
+                    <x-icons.angle-right wire:loading.remove wire:target="export" class="icon h-5 w-5" />
+                    <x-icons.loading wire:loading wire:target="export" class="h-4 w-4 animate-spin" />
+                </x-slot>
+
                 <span wire:loading.remove wire:target="export">Proses Export</span>
                 <span wire:loading wire:target="export">Memproses...</span>
             </x-button.success>

@@ -158,9 +158,15 @@
                                 <span class="mt-1.5 block text-xs font-medium text-red-500">{{ $message }}</span>
                             @enderror
                         </div>
-                        <x-button.primary class="shrink-0 !py-2.5" wire:click="fetchSR">
+                        <x-button.primary class="shrink-0 !py-2.5" wire:click="fetchSR" wire:loading.attr="disabled"
+                            wire:target="fetchSR">
+                            <x-slot name="icon">
+                                <x-icons.angle-right wire:loading.remove wire:target="fetchSR" class="icon h-5 w-5" />
+                                <x-icons.loading wire:loading wire:target="fetchSR" class="h-4 w-4 animate-spin" />
+                            </x-slot>
+
                             <span wire:loading.remove wire:target="fetchSR">Fetch Data</span>
-                            <span wire:loading wire:target="fetchSR"><x-icons.loading class="h-4 w-4" /></span>
+                            <span wire:loading wire:target="fetchSR">Memuat...</span>
                         </x-button.primary>
                     </div>
 
@@ -277,7 +283,7 @@
                 class="col-span-2 flex items-center justify-end gap-3 border-t border-zinc-100 pt-6 dark:border-zinc-800">
                 <x-button.secondary type="button" wire:click="clearForm" class="!px-6">Reset</x-button.secondary>
 
-                <x-button.primary type="submit">
+                <x-button.primary type="submit" wire:loading.attr="disabled" wire:target="store">
                     <x-slot name="icon">
                         <x-icons.angle-right wire:loading.remove wire:target="store" class="icon h-5 w-5" />
                         <x-icons.loading wire:loading wire:target="store" class="h-4 w-4 animate-spin" />

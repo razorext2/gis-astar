@@ -315,8 +315,16 @@
 
                     <div class="flex w-full justify-end">
                         <x-button.primary id="add-attachment" wire:click="storeLampiran" type="button"
-                            class="w-full lg:w-fit">
-                            Tambah Lampiran
+                            class="w-full lg:w-fit" wire:loading.attr="disabled" wire:target="storeLampiran">
+                            <x-slot name="icon">
+                                <x-icons.cloud-upload wire:loading.remove wire:target="storeLampiran"
+                                    class="icon h-5 w-5" />
+                                <x-icons.loading wire:loading wire:target="storeLampiran"
+                                    class="h-4 w-4 animate-spin" />
+                            </x-slot>
+
+                            <span wire:loading.remove wire:target="storeLampiran">Tambah Lampiran</span>
+                            <span wire:loading wire:target="storeLampiran">Memproses...</span>
                         </x-button.primary>
                     </div>
 
@@ -335,11 +343,12 @@
             </div>
 
             <div class="flex w-full justify-center gap-4 border-t border-zinc-200 pt-4 dark:border-zinc-800">
-                <x-button.success type="submit" id="store">
+                <x-button.success type="submit" id="store" wire:loading.attr="disabled" wire:target="store">
                     <x-slot name="icon">
                         <x-icons.angle-right wire:loading.remove wire:target="store" class="icon h-5 w-5" />
                         <x-icons.loading wire:loading wire:target="store" class="h-4 w-4 animate-spin" />
                     </x-slot>
+
                     <span wire:loading.remove wire:target="store">Simpan Packing List</span>
                     <span wire:loading wire:target="store">Memproses...</span>
                 </x-button.success>

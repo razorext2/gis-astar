@@ -4,10 +4,10 @@
         <x-slot name="icon">
             <x-icons.bookmark class="h-6 w-6 text-green-500 dark:text-white" />
         </x-slot>
+
         Export Invoice
     </x-button.success>
 
-    {{-- Modal --}}
     {{-- Modal --}}
     <x-modal.base-modal show="showModal" title="Export Data Invoice" subtitle="Unduh Laporan Invoice"
         iconContainerClass="bg-green-600 shadow-green-500/20">
@@ -55,7 +55,8 @@
 
                 {{-- Region Filter --}}
                 <div class="w-full">
-                    <label class="mb-2 block text-sm font-bold text-zinc-900 dark:text-white" for="invoice-export-region">
+                    <label class="mb-2 block text-sm font-bold text-zinc-900 dark:text-white"
+                        for="invoice-export-region">
                         Wilayah
                     </label>
                     <select id="invoice-export-region" wire:model="region"
@@ -87,15 +88,18 @@
                 </div>
             </div>
 
-            <div class="mt-6 flex justify-end gap-3 border-t border-zinc-200 bg-zinc-50 -mx-6 -mb-6 p-4 dark:border-zinc-800 dark:bg-zinc-800/50">
+            <div
+                class="-mx-6 -mb-6 mt-6 flex justify-end gap-3 border-t border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-800/50">
                 <x-button.secondary @click="open = false" type="button">
                     Batal
                 </x-button.secondary>
 
                 <x-button.success type="submit" wire:loading.attr="disabled" wire:target="export">
                     <x-slot name="icon">
-                        <x-icons.cloud-upload class="h-4 w-4" />
+                        <x-icons.cloud-upload wire:loading.remove wire:target="export" class="icon h-5 w-5" />
+                        <x-icons.loading wire:loading wire:target="export" class="h-4 w-4 animate-spin" />
                     </x-slot>
+
                     <span wire:loading.remove wire:target="export">Proses Export</span>
                     <span wire:loading wire:target="export">Memproses...</span>
                 </x-button.success>

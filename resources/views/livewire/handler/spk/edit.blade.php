@@ -553,8 +553,17 @@
                                     </div>
 
                                     <x-button.primary class="h-fit w-fit" id="cek-nomor-tagihan"
-                                        name="cek-nomor-tagihan" wire:click="cekNomorTagihan" type="button">
-                                        Check
+                                        name="cek-nomor-tagihan" wire:click="cekNomorTagihan" type="button"
+                                        wire:loading.attr="disabled" wire:target="cekNomorTagihan">
+                                        <x-slot name="icon">
+                                            <x-icons.angle-right wire:loading.remove wire:target="cekNomorTagihan"
+                                                class="icon h-5 w-5" />
+                                            <x-icons.loading wire:loading wire:target="cekNomorTagihan"
+                                                class="h-4 w-4 animate-spin" />
+                                        </x-slot>
+
+                                        <span wire:loading.remove wire:target="cekNomorTagihan">Check</span>
+                                        <span wire:loading wire:target="cekNomorTagihan">Memproses...</span>
                                     </x-button.primary>
 
                                     @error('createForm.nomor_tagihan')
@@ -743,7 +752,7 @@
 
         <div
             class="flex w-full items-center justify-end gap-3 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
-            <x-button.success id="ubah-button" type="submit">
+            <x-button.success id="ubah-button" type="submit" wire:loading.attr="disabled" wire:target="store">
                 <x-slot name="icon">
                     <x-icons.loading wire:loading wire:target="store" class="h-4 w-4 animate-spin" />
                     <x-icons.check-circle wire:loading.remove wire:target="store" class="h-4 w-4" />

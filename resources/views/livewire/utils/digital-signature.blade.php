@@ -72,10 +72,13 @@
                 Batal
             </x-button.secondary>
 
-            <x-button.danger wire:click="removeSignature" class="justify-center">
+            <x-button.danger wire:click="removeSignature" class="justify-center" wire:loading.attr="disabled"
+                wire:target="removeSignature">
                 <x-slot name="icon">
-                    <x-icons.loading class="mr-2 h-4 w-4 animate-spin" wire:loading wire:target="removeSignature" />
+                    <x-icons.trash wire:loading.remove wire:target="removeSignature" class="h-5 w-5" />
+                    <x-icons.loading wire:loading wire:target="removeSignature" class="h-4 w-4 animate-spin" />
                 </x-slot>
+
                 <span wire:loading.remove wire:target="removeSignature">Hapus</span>
                 <span wire:loading wire:target="removeSignature">Menghapus...</span>
             </x-button.danger>

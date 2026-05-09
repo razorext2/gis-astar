@@ -74,10 +74,12 @@
     </div>
 
     <div class="flex items-center gap-x-2">
-        <x-button.primary id="store" type="submit">
+        <x-button.primary id="store" type="submit" wire:loading.attr="disabled" wire:target="save">
             <x-slot name="icon">
-                <x-icons.angle-right class="h-5 w-5 text-blue-500 dark:text-white" />
+                <x-icons.angle-right wire:loading.remove wire:target="save" class="icon h-5 w-5" />
+                <x-icons.loading wire:loading wire:target="save" class="h-4 w-4 animate-spin" />
             </x-slot>
+
             <span wire:loading.remove wire:target="save">Submit</span>
             <span wire:loading wire:target="save"> Memproses... </span>
         </x-button.primary>
