@@ -599,7 +599,7 @@ return [
                 'check' => ['server.overview'],
                 'icon' => 'computer',
                 'permission' => 'manage-server',
-                'navigate' => true,
+                'navigate' => false,
             ],
         ],
     ],
