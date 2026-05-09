@@ -1,6 +1,6 @@
-<div class="fixed bottom-28 z-50 flex h-auto w-full scale-90 transform items-center divide-x rounded-lg opacity-0 transition duration-300 md:bottom-5"
+<div class="fixed bottom-28 z-[100] flex h-auto w-full scale-90 transform items-center divide-x rounded-xl opacity-0 transition duration-300 md:bottom-5"
     id="toast-bottom-right" role="alert">
-    <div class="toast-bottom-right mx-auto flex w-full max-w-xs items-center rounded-lg bg-white p-4 text-gray-500 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:text-gray-100 dark:ring-zinc-800 md:fixed md:bottom-0 md:right-5 md:mx-0"
+    <div class="toast-bottom-right mx-auto flex w-full max-w-xs items-center rounded-xl bg-white/60 backdrop-blur-md p-4 text-zinc-500 shadow-lg ring-1 ring-zinc-200 dark:bg-dark-primary/60 dark:backdrop-blur-md dark:text-zinc-100 dark:ring-zinc-800 md:fixed md:bottom-0 md:right-5 md:mx-0"
         id="toast-success" role="alert">
         <div
             class="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500">
@@ -13,7 +13,7 @@
         </div>
         <div class="ms-3 text-sm font-normal text-black dark:text-white">{{ session('success') }}</div>
         <button
-            class="-mx-1.5 -my-1.5 ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-900 focus:ring-2 focus:ring-zinc-200"
+            class="-mx-1.5 -my-1.5 ms-auto inline-flex h-8 w-8 items-center justify-center rounded-md bg-transparent p-1.5 text-zinc-400 hover:bg-zinc-100/50 hover:text-zinc-900 focus:ring-2 focus:ring-zinc-200 dark:hover:bg-zinc-800/50 dark:hover:text-white"
             data-dismiss-target="#toast-success" type="button" aria-label="Close">
             <span class="sr-only">Close</span>
             <svg class="h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"

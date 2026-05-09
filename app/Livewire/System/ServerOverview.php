@@ -29,6 +29,7 @@ class ServerOverview extends Component
 
     public function mount(): void
     {
+        $this->showModal = false;
         $this->loadServers();
     }
 

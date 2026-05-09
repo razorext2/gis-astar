@@ -1,6 +1,6 @@
 @props(['active', 'navigate' => false])
 
-<a class="{{ $active ? 'text-red-600 font-bold bg-gray-100 dark:bg-dark-primary' : 'text-gray-900 dark:text-gray-300' }} group flex flex-row items-center rounded-xl p-2 hover:text-red-600"
+<a class="{{ $active ? 'text-red-600 font-bold bg-zinc-100 dark:bg-dark-primary' : 'text-zinc-900 dark:text-zinc-300' }} group flex flex-row items-center rounded-xl p-2 hover:text-red-600"
     {{ $attributes }} {{ $navigate ? 'wire:navigate' : '' }}>
 
     {{ $icon }}

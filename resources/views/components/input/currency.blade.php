@@ -1,13 +1,13 @@
 @props(['values' => '', 'id', 'name', 'labels' => true])
 
 @if ($labels)
-    <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+    <label class="mb-2 block text-sm font-medium text-zinc-900 dark:text-white"
         for="{{ $id }}">{{ $slot }}</label>
 @endif
 
 <div class="flex items-center">
     <div
-        class="z-10 inline-flex flex-shrink-0 items-center rounded-s-lg border border-zinc-200 bg-gray-100 px-4 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-200 dark:border-zinc-800 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600">
+        class="z-10 inline-flex flex-shrink-0 items-center rounded-s-lg border border-zinc-200 bg-zinc-100 px-4 py-2.5 text-center text-sm font-medium text-zinc-900 hover:bg-zinc-200 dark:border-zinc-800 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700">
         Rp.
     </div>
 

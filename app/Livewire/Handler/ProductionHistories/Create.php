@@ -145,8 +145,8 @@ class Create extends Component
                 }
             });
 
-            // reset form
-            $this->reset();
+            // reset form, tapi simpan id_produksi untuk redirect
+            $this->resetExcept(['id_produksi', 'status_produksi']);
 
             // munculkan pesan swal
             $this->dispatch(
@@ -155,7 +155,7 @@ class Create extends Component
                 title: 'Berhasil',
                 text: $isEdit ? 'Berhasil mengubah riwayat produksi.' : 'Berhasil menyimpan riwayat produksi.',
                 redirect: [
-                    'url' => route('production.index'),
+                    'url' => route('production.show', $this->id_produksi),
                     'delay' => 2000,
                 ]
             );

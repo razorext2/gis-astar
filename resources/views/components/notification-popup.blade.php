@@ -8,7 +8,7 @@
     x-transition:leave-end="transform translate-y-[-20px] opacity-0 scale-95">
 
     <div
-        class="relative flex w-full items-center gap-4 overflow-hidden rounded-2xl border border-white/40 bg-white/80 p-5 shadow-[0_20px_50px_rgba(0,0,0,0.1)] backdrop-blur-2xl dark:border-white/10 dark:bg-zinc-900/80 dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] md:gap-5">
+        class="relative flex w-full items-center gap-4 overflow-hidden rounded-xl border border-white/40 bg-white/60 p-5 shadow-[0_20px_50px_rgba(0,0,0,0.1)] backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] md:gap-5">
 
         <!-- Decoration Gradient -->
         <div class="absolute -left-10 -top-10 h-24 w-24 rounded-full bg-blue-500/10 blur-2xl"></div>
@@ -23,20 +23,20 @@
         <!-- Content -->
         <div class="flex-grow pr-6">
             <h4 class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Pemberitahuan</h4>
-            <div class="mt-1 text-sm font-medium leading-relaxed text-gray-700 dark:text-gray-200">
+            <div class="mt-1 text-sm font-medium leading-relaxed text-zinc-700 dark:text-zinc-200">
                 {{ $slot }}
             </div>
         </div>
 
         <!-- Close Button -->
         <button @click="showToast = false"
-            class="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-lg text-gray-400 transition-all hover:bg-gray-100 hover:text-gray-900 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-100">
+            class="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-lg text-zinc-400 transition-all hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-100">
             <span class="sr-only">Tutup</span>
             <x-icons.close class="h-4 w-4" />
         </button>
 
         <!-- Progress Bar -->
-        <div class="absolute bottom-0 left-0 h-0.5 w-full bg-gray-100 dark:bg-zinc-800">
+        <div class="absolute bottom-0 left-0 h-0.5 w-full bg-zinc-100 dark:bg-zinc-800">
             <div class="h-full bg-gradient-to-r from-blue-500 to-indigo-600 shadow-[0_0_10px_rgba(59,130,246,0.5)]"
                 x-init="$el.style.transition = 'width 5s linear';
                 setTimeout(() => $el.style.width = '0%', 50)" style="width: 100%"></div>

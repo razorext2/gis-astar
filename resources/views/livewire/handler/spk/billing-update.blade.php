@@ -1,219 +1,232 @@
-<div class="flex flex-col gap-2 p-2 lg:gap-4 lg:p-0">
-    {{-- info cust spk --}}
-    <div class="grid w-full grid-cols-2">
-        <div
-            class="col-span-2 rounded-t-xl border-[1px] border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1 lg:rounded-tr-none">
-            <p class="text-xs italic"> No. SPK </p>
-            <p class="font-semibold">
-                {{ $spk_data->nomor_order . ($spk_data->revision_count ? 'R' . str_pad($spk_data->revision_count, 2, '0', STR_PAD_LEFT) : '') }}
-            </p>
+<div class="flex flex-col gap-6">
+    {{-- Info Cust SPK --}}
+    <div
+        class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 shadow dark:border-zinc-800 dark:bg-zinc-800/30 dark:shadow-none lg:p-6">
+        <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+            <div class="space-y-1">
+                <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">No. SPK</p>
+                <p class="font-semibold text-zinc-900 dark:text-white">
+                    {{ $spk_data->nomor_order . ($spk_data->revision_count ? 'R' . str_pad($spk_data->revision_count, 2, '0', STR_PAD_LEFT) : '') }}
+                </p>
+            </div>
+            <div class="space-y-1">
+                <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Tanggal Dibuat</p>
+                <p class="font-semibold text-zinc-900 dark:text-white">
+                    {{ \Carbon\Carbon::parse($spk_data->created_at)->isoFormat('DD MMM YYYY') }}
+                </p>
+            </div>
+            <div class="space-y-1">
+                <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Nama Customer</p>
+                <p class="font-semibold text-zinc-900 dark:text-white">
+                    {{ empty($spk_data->customer['nama_perusahaan']) ? '-' : $spk_data->customer['nama_perusahaan'] }}
+                </p>
+            </div>
+            <div class="space-y-1">
+                <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Nama Penerima</p>
+                <p class="font-semibold text-zinc-900 dark:text-white">
+                    {{ empty($spk_data->customer['contact_person']) ? '-' : $spk_data->customer['contact_person'] }}
+                </p>
+            </div>
         </div>
 
         <div
-            class="col-span-2 border-[1px] border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1 lg:rounded-tr-xl">
-            <p class="text-xs italic">Tanggal SPK Dibuat</p>
-            <p class="font-semibold">
-                {{ $spk_data->created_at }}
-            </p>
-        </div>
-
-        <div
-            class="col-span-2 border-[1px] border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1">
-            <p class="text-xs italic">Nama Customer</p>
-            <p class="font-semibold">
-                {{ empty($spk_data->customer['nama_perusahaan']) ? '-' : $spk_data->customer['nama_perusahaan'] }}</p>
-        </div>
-
-        <div
-            class="col-span-2 border-[1px] border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1">
-            <p class="text-xs italic">Nama Penerima</p>
-            <p class="font-semibold">
-                {{ empty($spk_data->customer['contact_person']) ? '-' : $spk_data->customer['contact_person'] }}
-            </p>
-        </div>
-
-        <div
-            class="col-span-2 border-[1px] border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:rounded-b-xl">
-            <p class="text-xs italic">Nomor Tagihan</p>
-            <p class="font-semibold"> {{ $spk_data->nomor_tagihan ?? 'Belum di assign.' }}</p>
+            class="mt-2 flex items-center gap-3 rounded-lg border border-blue-100 bg-blue-50/50 p-3 shadow-sm dark:border-blue-900/30 dark:bg-blue-900/10">
+            <div
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white shadow-sm dark:bg-zinc-800">
+                <x-icons.file-invoice class="h-5 w-5 text-blue-500" />
+            </div>
+            <div>
+                <p class="text-[10px] font-bold uppercase tracking-wider text-blue-500">Nomor Tagihan (SR/FP)</p>
+                <p class="font-bold text-blue-600 dark:text-blue-400">
+                    {{ $spk_data->nomor_tagihan ?? 'Belum ada sinkronisasi.' }}</p>
+            </div>
         </div>
     </div>
-    {{-- end info cust spk --}}
 
     @if (!$form->status_nomor_tagihan)
-        <form class="flex w-full flex-col gap-2 lg:col-span-2 lg:gap-4" wire:submit.prevent="search">
-            <div class="flex w-full gap-2 lg:gap-4">
-                <div class="flex flex-col">
-                    <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="tipe_tagihan">
-                        Tipe Tagihan
-                    </label>
+        <div
+            class="rounded-xl border border-zinc-200 bg-white p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
+            <div class="mb-6 flex items-center gap-2 border-l-4 border-blue-500 pl-3">
+                <h3 class="text-base font-bold text-zinc-900 dark:text-white">Cari Tagihan</h3>
+                <span
+                    class="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-600 dark:bg-blue-900/30">
+                    Sinkronisasi BSI
+                </span>
+            </div>
 
-                    <select
-                        class="block w-full rounded-lg border border-zinc-200 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                        id="tipe_tagihan" name="tipe_tagihan" wire:model.live="form.tipe_tagihan" disabled>
-                        <option value="">Pilih tipe tagihan...</option>
-                        @foreach (config('spk-config.spk_tipe_tagihan') as $key => $row)
-                            <option value="{{ $key }}">
-                                {{ $row['label'] }}
-                            </option>
-                        @endforeach
-                    </select>
+            <form class="flex w-full flex-col gap-6" wire:submit.prevent="search">
+                <div class="space-y-4">
+                    <div>
+                        <x-input.select id="tipe_tagihan" name="tipe_tagihan" :labels="true" :textLabel="'Tipe Tagihan'"
+                            :defaultOption="'Pilih tipe tagihan...'" :options="collect(config('spk-config.spk_tipe_tagihan'))
+                                ->mapWithKeys(fn($row, $key) => [$key => $row['label']])
+                                ->toArray()" wire:model.live="form.tipe_tagihan" disabled />
 
-                    @error('form.tipe_tagihan')
-                        <span class="mt-2 text-xs text-red-500"> {{ $message }}</span>
-                    @enderror
-                </div>
+                        @error('form.tipe_tagihan')
+                            <span class="mt-2 text-xs font-bold text-red-600 dark:text-red-400">{{ $message }}</span>
+                        @enderror
+                    </div>
 
-                <div class="flex flex-1 flex-col">
                     <div>
                         <x-input.basic id="nomor_tagihan" name="nomor_tagihan" wire:model="form.nomor_tagihan"
                             type="text" placeholder="Masukkan nomor SR spk..." :labels="true">
-                            Nomor SR
+                            Nomor SR / FP
                         </x-input.basic>
+
+                        @error('form.nomor_tagihan')
+                            <span class="mt-2 text-xs font-bold text-red-600 dark:text-red-400">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div>
+
+                <div wire:show="form.nomor_tagihan_baru" wire:transition
+                    class="rounded-xl border border-zinc-200 bg-zinc-50 p-4 shadow-inner dark:border-zinc-800 dark:bg-zinc-800/50 lg:p-6">
+                    <div class="mb-4 flex items-center gap-3">
+                        <span
+                            class="inline-flex rounded-full bg-indigo-100 px-2.5 py-0.5 text-[10px] font-bold tracking-wider text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400">
+                            REKAP PIUTANG (BSI)
+                        </span>
+                        <div class="h-px flex-1 bg-zinc-200 dark:bg-zinc-700"></div>
                     </div>
 
-                    @error('form.nomor_tagihan')
-                        <span class="mt-2 text-xs text-red-500"> {{ $message }}</span>
-                    @enderror
+                    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                        <div class="flex flex-col gap-4">
+                            <div class="space-y-1">
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">No. Tagihan
+                                    (SR/FP)</p>
+                                <p class="font-bold text-zinc-900 dark:text-white">{{ $form->nomor_tagihan ?? '-' }}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Nama Customer
+                                </p>
+                                <p class="font-bold text-zinc-900 dark:text-white">{{ $form->nama_customer ?? '-' }}</p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-700 dark:bg-zinc-800">
+                            <dl class="flex items-center justify-between gap-4">
+                                <dt class="text-sm font-medium text-blue-600 dark:text-blue-400">Total Piutang</dt>
+                                <dd class="text-lg font-bold text-zinc-900 dark:text-white">Rp
+                                    {{ number_format($form->total_tagihan, 2, '.', ',') }}</dd>
+                            </dl>
+                            <dl
+                                class="flex items-center justify-between gap-4 border-t border-dashed border-zinc-200 pt-3 dark:border-zinc-700">
+                                <dt class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Total Bayar</dt>
+                                <dd class="font-bold text-zinc-700 dark:text-zinc-300">Rp
+                                    {{ number_format($form->total_bayar, 2, '.', ',') }}</dd>
+                            </dl>
+                            <dl
+                                class="flex items-center justify-between gap-4 border-t border-zinc-200 pt-3 dark:border-zinc-700">
+                                <dt class="text-xs font-bold uppercase tracking-wider text-red-500">Sisa Piutang</dt>
+                                <dd class="text-xl font-bold text-red-600 dark:text-red-400">Rp
+                                    {{ number_format($form->sisa, 2, '.', ',') }}</dd>
+                            </dl>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div wire:show="form.nomor_tagihan_baru" wire:transition class="relative mt-6 grid w-full grid-cols-2">
-                <span
-                    class="absolute -top-6 block rounded-t-lg border border-b-0 border-zinc-200 bg-gray-50 px-2 py-0.5 text-sm font-medium text-gray-900 dark:border-zinc-800 dark:bg-gray-700 dark:text-white">
-                    Rekap Piutang (BSI)
-                </span>
+                <div class="flex items-center justify-end gap-3 border-t border-zinc-100 pt-6 dark:border-zinc-800">
+                    <x-button.primary type="submit" id="search" class="!px-6" wire:loading.attr="disabled"
+                        wire:target="search">
+                        <x-slot name="icon">
+                            <x-icons.angle-right wire:loading.remove wire:target="search" class="icon h-5 w-5" />
+                            <x-icons.loading wire:loading wire:target="search" class="h-4 w-4 animate-spin" />
+                        </x-slot>
 
-                <div
-                    class="col-span-2 border-[1px] border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1">
-                    <p class="text-xs italic"> No. Tagihan (SR/FP) </p>
-                    <p class="font-semibold"> {{ $form->nomor_tagihan ?? '-' }}</p>
+                        <span wire:loading.remove wire:target="search">Cari Tagihan</span>
+                        <span wire:loading wire:target="search">Memproses...</span>
+                    </x-button.primary>
+
+                    <x-button.success type="button" wire:show="form.nomor_tagihan_baru" wire:transition id="assign"
+                        wire:click="assign" wire:loading.attr="disabled" wire:target="assign">
+                        <x-slot name="icon">
+                            <x-icons.angle-right wire:loading.remove wire:target="assign" class="icon h-5 w-5" />
+                            <x-icons.loading wire:loading wire:target="assign" class="h-4 w-4 animate-spin" />
+                        </x-slot>
+
+                        <span wire:loading.remove wire:target="assign">Assign ke SPK</span>
+                        <span wire:loading wire:target="assign">Memproses...</span>
+                    </x-button.success>
                 </div>
-
-                <div
-                    class="col-span-2 border-[1px] border-zinc-200 bg-gray-50 p-2 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:col-span-1">
-                    <p class="text-xs italic">Nama Customer</p>
-                    <p class="font-semibold"> {{ $form->nama_customer ?? '-' }}</p>
-                </div>
-
-                <div
-                    class="col-span-2 rounded-b-xl border-[1px] border-zinc-200 bg-gray-50 p-2 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white">
-
-                    <dl class="items-center justify-between gap-4 sm:flex">
-                        <dt class="mb-1 font-normal text-blue-500 dark:text-blue-400 sm:mb-0">Total Piutang</dt>
-                        <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                            Rp. {{ number_format($form->total_tagihan, 2, '.', ',') }}
-                        </dd>
-                    </dl>
-
-                    <dl class="items-center justify-between gap-4 sm:flex">
-                        <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">Total Bayar</dt>
-                        <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                            Rp. {{ number_format($form->total_bayar, 2, '.', ',') }}
-                        </dd>
-                    </dl>
-
-                    <dl class="items-center justify-between gap-4 sm:flex">
-                        <dt class="mb-1 font-normal text-red-500 dark:text-red-400 sm:mb-0">Sisa Piutang</dt>
-                        <dd class="font-semibold text-gray-900 dark:text-white sm:text-end">
-                            Rp. {{ number_format($form->sisa, 2, '.', ',') }}
-                        </dd>
-                    </dl>
-
-                </div>
-            </div>
-
-            <div class="flex gap-2">
-                <x-button.primary type="submit" id="search">
-                    <span wire:loading.remove wire:target="search">Cari Tagihan</span>
-                    <span wire:loading wire:target="search">Memproses...</span>
-                </x-button.primary>
-
-                <x-button.success type="button" wire:show="form.nomor_tagihan_baru" wire:transition id="assign"
-                    wire:click="assign">
-                    <span wire:loading.remove wire:target="assign">Assign</span>
-                    <span wire:loading wire:target="assign">Memproses...</span>
-                </x-button.success>
-            </div>
-        </form>
+            </form>
+        </div>
     @endif
 
     @if ($form->status_nomor_tagihan)
-        <div class="w-full">
-            <h3 class="mb-2 text-base font-medium text-gray-800 dark:text-white lg:mb-4">
-                Riwayat Penagihan (BSI)
-            </h3>
+        <div
+            class="rounded-xl border border-zinc-200 bg-white p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
+            <div class="mb-6 flex items-center gap-2 border-l-4 border-blue-500 pl-3">
+                <h3 class="text-base font-bold text-zinc-900 dark:text-white">Riwayat Penagihan (BSI)</h3>
+                <span
+                    class="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-600 dark:bg-blue-900/30">History</span>
+            </div>
 
-            <div
-                class="flex w-full flex-col items-center justify-center gap-2 rounded-lg p-2 ring-1 ring-zinc-200 dark:bg-gray-700 dark:ring-zinc-800 lg:gap-4 lg:p-4">
-
+            <div class="space-y-4">
                 @foreach ($this->histories as $index => $row)
                     <div
-                        class="flex w-full flex-col gap-2 border-b border-zinc-200 pb-2 text-gray-800 dark:border-zinc-800 dark:text-white">
-                        <div class="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-8">
-                            <div class="text-right text-xs lg:text-left">
-                                <p>
-                                    Pukul {{ \Carbon\Carbon::parse($row->created_at)->isoFormat('hh:mm:ss') }}
-                                </p>
-                                <p>
-                                    {{ \Carbon\Carbon::parse($row->created_at)->isoFormat('dddd, DD MMM YYYY') }}
-                                </p>
-                            </div>
+                        class="relative overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50 shadow-sm transition-all hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-800/30 dark:hover:border-zinc-700">
+                        <div
+                            class="{{ $row->selisih > 0 ? 'bg-emerald-500' : 'bg-blue-500' }} absolute left-0 top-0 h-full w-1">
+                        </div>
+                        <div class="p-4 pl-5">
+                            <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                                <div class="flex-shrink-0">
+                                    <div class="flex items-center gap-2">
+                                        <p class="text-sm font-bold text-zinc-900 dark:text-white">
+                                            {{ \Carbon\Carbon::parse($row->created_at)->isoFormat('dddd, DD MMM YYYY') }}
+                                        </p>
+                                        <span
+                                            class="rounded-full bg-blue-500 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
+                                            {{ ucfirst($row->source ?? '-') }}
+                                        </span>
+                                    </div>
+                                    <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+                                        Pukul {{ \Carbon\Carbon::parse($row->created_at)->isoFormat('HH:mm:ss') }}
+                                        @if ($row->updated_by)
+                                            • Oleh: {{ $row->updatedBy?->name ?? '-' }}
+                                        @endif
+                                    </p>
+                                </div>
 
-                            <div class="w-full">
-                                <dl class="items-center justify-between gap-4 sm:flex">
-                                    <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">
-                                        Total Piutang
-                                    </dt>
-                                    <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                                        Rp. {{ number_format($row->total_piutang, 2, '.', ',') }}
-                                    </dd>
-                                </dl>
-
-                                <dl class="items-center justify-between gap-4 sm:flex">
-                                    <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">
-                                        Sisa Piutang Sebelumnya
-                                    </dt>
-                                    <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                                        Rp. {{ number_format($row->sisa_piutang_sebelum, 2, '.', ',') }}
-                                    </dd>
-                                </dl>
-
-                                <dl class="items-center justify-between gap-4 sm:flex">
-                                    <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">
-                                        Sisa Piutang Sesudah
-                                    </dt>
-                                    <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                                        Rp. {{ number_format($row->sisa_piutang_sesudah, 2, '.', ',') }}
-                                    </dd>
-                                </dl>
-
-                                <dl class="items-center justify-between gap-4 sm:flex">
-                                    <dt class="mb-1 font-normal text-green-500 sm:mb-0">
-                                        Pembayaran
-                                    </dt>
-                                    <dd class="font-medium text-green-500 sm:text-end">
-                                        Rp. {{ number_format($row->selisih, 2, '.', ',') }}
-                                    </dd>
-                                </dl>
+                                <div class="w-full lg:w-1/2">
+                                    <div
+                                        class="space-y-2 rounded-xl border border-zinc-100 bg-white p-4 shadow-sm dark:border-zinc-700 dark:bg-zinc-800/80">
+                                        <dl class="flex items-center justify-between text-xs">
+                                            <dt class="font-medium text-zinc-500 dark:text-zinc-400">Total Piutang</dt>
+                                            <dd class="font-semibold text-zinc-900 dark:text-white">Rp
+                                                {{ number_format($row->total_piutang, 2, '.', ',') }}</dd>
+                                        </dl>
+                                        <dl
+                                            class="flex items-center justify-between border-t border-dashed border-zinc-100 pt-2 text-xs dark:border-zinc-700">
+                                            <dt class="font-medium text-zinc-500 dark:text-zinc-400">Sisa Sebelumnya
+                                            </dt>
+                                            <dd class="font-semibold text-zinc-900 dark:text-white">Rp
+                                                {{ number_format($row->sisa_piutang_sebelum, 2, '.', ',') }}</dd>
+                                        </dl>
+                                        <dl
+                                            class="flex items-center justify-between border-t border-dashed border-zinc-100 pt-2 text-xs dark:border-zinc-700">
+                                            <dt class="font-medium text-zinc-500 dark:text-zinc-400">Sisa Sesudah</dt>
+                                            <dd class="font-semibold text-zinc-900 dark:text-white">Rp
+                                                {{ number_format($row->sisa_piutang_sesudah, 2, '.', ',') }}</dd>
+                                        </dl>
+                                        <dl
+                                            class="flex items-center justify-between border-t border-zinc-200 pt-3 text-sm dark:border-zinc-600">
+                                            <dt class="font-bold text-emerald-500">Pembayaran</dt>
+                                            <dd class="text-base font-bold text-emerald-600 dark:text-emerald-400">Rp
+                                                {{ number_format($row->selisih, 2, '.', ',') }}</dd>
+                                        </dl>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="flex flex-row justify-between text-xs">
-                            <span class="rounded-lg bg-blue-500 px-2 py-0.5 text-white">
-                                {{ ucfirst($row->source ?? '-') }}
-                            </span>
-                            @if ($row->updated_by)
-                                <p class="text-right italic">Oleh: {{ $row->updatedBy?->name ?? '-' }}</p>
-                            @endif
-                        </div>
-
                     </div>
                 @endforeach
 
-                {{ $this->histories->links() }}
+                <div class="mt-6">
+                    {{ $this->histories->links() }}
+                </div>
             </div>
-
         </div>
     @endif
 </div>

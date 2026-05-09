@@ -60,7 +60,7 @@ class ValidateSales extends Component
             : $this->data->customer_telp;
     }
 
-    public function toQuestionnaire()
+    public function toValidation()
     {
         $this->step = 2;
     }
@@ -70,7 +70,7 @@ class ValidateSales extends Component
         $this->step = 3;
     }
 
-    public function confirmQuestionnaire()
+    public function confirmValidation()
     {
         $this->validate();
 

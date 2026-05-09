@@ -2,16 +2,14 @@
 @section('content')
     <div class="w-fit space-y-6">
         <div
-            class="rounded-xl bg-white p-4 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 sm:p-6">
+            class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none sm:p-6">
             <div class="max-w-2xl">
-                <header class="flex flex-row gap-x-2">
-                    <x-button.danger class="w-fit" href="{{ route('permissions.index') }}" wire:navigate>
-                        <x-slot name="icon">
-                            <x-icons.angle-left class="h-6 w-6" />
-                        </x-slot>
-                        {{ __('Kembali') }}
+                <header class="flex items-center">
+                    <x-button.danger class="my-auto me-4 max-h-10" href="{{ route('permissions.index') }}" wire:navigate>
+                        <x-icons.angle-left class="h-5 w-5" />
                     </x-button.danger>
-                    <h2 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
+
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-white">
                         {{ __('Tambah Perizinan') }}
                     </h2>
                 </header>

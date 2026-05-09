@@ -77,7 +77,7 @@
             <!-- Modal overlay -->
             <div class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm">
                 <!-- Modal box -->
-                <div class="flex max-w-lg flex-col gap-2 rounded-xl ring-1 ring-zinc-200 bg-white p-6 shadow-2xl dark:ring-zinc-800 dark:bg-dark-primary">
+                <div class="flex max-w-lg flex-col gap-2 rounded-xl border border-zinc-200 bg-white/60 p-6 shadow-2xl backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
                     <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Konfirmasi Pengajuan</h2>
                     <p class="text-gray-800 dark:text-gray-300">Apakah Anda yakin ingin mengonfirmasi transaksi <span
                             class="font-semibold">{{ $transactionID }}</span>?</p>

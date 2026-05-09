@@ -37,7 +37,7 @@
                 {{-- Notification Dropdown --}}
                 <div class="z-50 my-3 hidden !w-[100vw] max-w-none sm:!w-[384px]" id="notification-dropdown">
                     <div
-                        class="mx-4 overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 sm:mx-0">
+                        class="mx-4 overflow-hidden rounded-2xl bg-white shadow-lg border border-zinc-200 dark:bg-dark-primary dark:border-zinc-800 sm:mx-0">
                         <div
                             class="flex items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
                             <div class="flex items-center gap-2">
@@ -73,7 +73,7 @@
                 </button>
 
                 {{-- Profile Dropdown --}}
-                <div class="z-50 my-3 hidden w-60 overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800"
+                <div class="z-50 my-3 hidden w-60 overflow-hidden rounded-2xl bg-white shadow-lg border border-zinc-200 dark:bg-dark-primary dark:border-zinc-800"
                     id="profile-dropdown">
 
                     {{-- User Info --}}

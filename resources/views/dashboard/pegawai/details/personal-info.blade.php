@@ -4,11 +4,7 @@
         <!-- Left Column: Personal Info -->
         <div class="space-y-2 lg:col-span-1 lg:space-y-4">
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-6 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60 lg:p-8">
-                <!-- Decoration -->
-                <div
-                    class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-blue-500/5 blur-3xl transition-colors group-hover:bg-blue-500/10">
-                </div>
+                class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-lg backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
 
                 <div class="mb-6 flex items-center justify-between">
                     <div class="flex items-center gap-3">
@@ -29,7 +25,8 @@
                     <div class="grid grid-cols-2 gap-2 lg:gap-3">
                         @foreach ($images as $image)
                             @if (!is_null($image))
-                                <div class="overflow-hidden rounded-2xl border border-white/20 shadow-inner">
+                                <div
+                                    class="overflow-hidden rounded-2xl border border-zinc-200 shadow-inner dark:border-zinc-800">
                                     <img onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}';"
                                         class="h-40 w-full object-cover transition-transform duration-500 hover:scale-110"
                                         src="{{ asset('storage/' . $pegawai->storage . $image) }}" alt=""
@@ -63,7 +60,7 @@
 
                         @foreach ($infoData as $item)
                             <div
-                                class="{{ $item['full'] ?? false ? 'col-span-full' : '' }} rounded-2xl border border-white/20 bg-white/40 p-3 shadow-sm transition-all hover:bg-white/60 dark:border-zinc-800 dark:bg-white/5 dark:hover:bg-white/10">
+                                class="{{ $item['full'] ?? false ? 'col-span-full' : '' }} rounded-xl border border-zinc-100 bg-white/40 p-3 transition-all hover:bg-white/60 dark:border-zinc-800 dark:bg-white/5 dark:hover:bg-white/10">
                                 <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
                                     {{ $item['label'] }}</p>
                                 <p class="text-sm font-semibold text-gray-700 dark:text-gray-200">
@@ -78,10 +75,7 @@
         <!-- Right Column: Calendar & Stats -->
         <div class="space-y-2 lg:col-span-2 lg:space-y-4">
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-6 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60 lg:p-8">
-                <div
-                    class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-green-500/5 blur-3xl transition-colors group-hover:bg-green-500/10">
-                </div>
+                class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-lg backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
 
                 <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div class="flex items-center gap-3">
@@ -149,7 +143,7 @@
             {{-- Popovers (Rendered outside overflow-hidden) --}}
             @foreach ($dd as $date)
                 @if ($date)
-                    <livewire:component.pegawai.attendance-calendar-popover :date="$date" :pegawaiId="$pegawai->id"
+                    <livewire:components.pegawai.attendance-calendar-popover :date="$date" :pegawaiId="$pegawai->id"
                         :kodePegawai="$pegawai->kode_pegawai" :key="'popover-' . $date" />
                 @endif
             @endforeach

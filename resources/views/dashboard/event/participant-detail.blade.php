@@ -2,17 +2,14 @@
 @section('content')
     <div class="mb-16 flex flex-col text-gray-800 dark:text-white">
         <div
-            class="flex flex-col gap-4 rounded-xl bg-white p-2 shadow-md ring-1 ring-zinc-200 transition-all duration-500 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 md:p-4 lg:p-6">
+            class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-2 shadow-md backdrop-blur-md transition-all duration-500 dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none md:p-4 lg:p-6">
 
             <div class="col-span-2 mb-4 flex w-full flex-row items-center gap-4">
                 <div class="max-w-xs">
-                    <x-button.link wire:navigate href="{{ route('event.show', $participant->bigEventId->id) }}"
-                        class="w-fit ring-1 ring-red-700 dark:bg-red-800 dark:text-white">
-                        <x-slot name="icon">
-                            <x-icons.angle-right class="h-6 w-6 rotate-180 text-red-500 dark:text-white" />
-                        </x-slot>
-                        Kembali
-                    </x-button.link>
+                    <x-button.danger wire:navigate href="{{ route('event.show', $participant->bigEventId->id) }}"
+                        class="my-auto max-h-10">
+                        <x-icons.angle-right class="h-5 w-5" />
+                    </x-button.danger>
                 </div>
 
                 <div class="w-full">
@@ -23,18 +20,18 @@
 
             <div class="col-span-2 grid w-full grid-cols-2">
                 <div
-                    class="col-span-2 rounded-t-xl border-[1px] border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:p-4">
+                    class="col-span-2 rounded-t-xl border border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:p-4">
                     <p class="text-xs italic"> Nama Partisipan </p>
                     <p class="break-words font-semibold"> {{ ucwords($participant->userId->name) }}
                         [{{ $participant->userId->kode_pegawai ?? '-' }}]</p>
                 </div>
                 <div
-                    class="col-span-2 flex flex-col border-[1px] border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:p-4">
+                    class="col-span-2 flex flex-col border border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:p-4">
                     <p class="text-xs italic"> Visitor Api </p>
                     <p class="break-words font-semibold"> {{ $participant->visitor_api }}</p>
                 </div>
                 <div
-                    class="col-span-2 rounded-b-xl border-[1px] border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:p-4">
+                    class="col-span-2 rounded-b-xl border border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:p-4">
                     <p class="text-xs italic"> Redirect URL </p>
                     <p class="break-words font-semibold"> {{ $participant->redirect_to }}</p>
                 </div>
@@ -50,7 +47,7 @@
                 </div>
 
                 <div class="flex flex-col rounded-xl bg-gray-50 dark:bg-dark-secondary">
-                    {{-- <div class="grid grid-cols-4 gap-1 overflow-x-auto rounded-t-xl border-[1px] border-b-0 border-zinc-800 p-2 lg:p-4">
+                    {{-- <div class="grid grid-cols-4 gap-1 overflow-x-auto rounded-t-xl border border-b-0 border-zinc-800 p-2 lg:p-4">
 						<p class="font-semibold text-gray-800 dark:text-gray-400"> IP </p>
 						<p class="font-semibold text-gray-800 dark:text-gray-400"> User Agent </p>
 						<p class="font-semibold text-gray-800 dark:text-gray-400"> Second Bucket </p>
@@ -59,7 +56,7 @@
                     @forelse ($visitor as $row)
                         @php $info = json_decode($row->real_info ?? '[]', true) ?: []; @endphp
                         <div
-                            class="{{ $loop->last ? 'rounded-b-xl' : '' }} {{ $loop->first ? 'rounded-t-xl' : '' }} flex flex-row gap-4 overflow-x-auto border-[1px] border-zinc-200 p-4 dark:border-zinc-800 lg:p-6">
+                            class="{{ $loop->last ? 'rounded-b-xl' : '' }} {{ $loop->first ? 'rounded-t-xl' : '' }} flex flex-row gap-4 overflow-x-auto border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6">
                             <p class="grow text-gray-800 dark:text-white"> {{ $row->ip }} </p>
                             <p class="grow-0 text-gray-800 dark:text-white"> {{ $row->ua }} </p>
                             <p class="grow text-gray-800 dark:text-white"> {{ $row->second_bucket }} </p>

@@ -1,154 +1,316 @@
 @extends('dashboard.layoutsDash.app')
+{{-- Goal: Show Purchasing Request details for a specific SPK, Caller: purchasing-request.show, Deps: SpkDelivery --}}
 @section('content')
-    <div
-        class="flex w-full flex-col gap-2 rounded-xl border-[1px] border-zinc-200 bg-white p-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
+    <div class="relative space-y-4">
 
-        <div class="flex flex-row items-center gap-2 lg:gap-4">
-
-            <div>
-                <x-button.link href="{{ route('purchasing-request.index') }}"
-                    class="w-fit ring-1 ring-red-700 dark:bg-red-800 dark:text-white" wire:navigate id="back-button">
-                    <x-slot name="icon">
-                        <x-icons.angle-left class="h-6 w-6 text-red-500 dark:text-white" />
-                    </x-slot>
-                    Kembali
-                </x-button.link>
+        {{-- Header Card --}}
+        <div
+            class="flex flex-col rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
+            <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                <div class="flex items-center gap-3">
+                    <x-button.danger href="{{ route('purchasing-request.index') }}" class="shrink-0" wire:navigate
+                        id="back-button">
+                        <x-icons.angle-left class="h-5 w-5" />
+                    </x-button.danger>
+                    <div class="space-y-0.5">
+                        <div class="flex items-center gap-2">
+                            <h1 class="text-xl font-bold text-zinc-900 dark:text-white">Purchasing Request</h1>
+                            <span
+                                class="inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 text-xs font-bold text-blue-700 ring-1 ring-inset ring-blue-700/10 dark:bg-blue-900/30 dark:text-blue-400">
+                                {{ $spk->nomor_order . ($spk->revision_count ? 'R' . str_pad($spk->revision_count, 2, '0', STR_PAD_LEFT) : '') }}
+                            </span>
+                        </div>
+                        <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+                            Update nomor PR terlebih dahulu agar laporan produksi dapat diupdate oleh team produksi.
+                        </p>
+                    </div>
+                </div>
             </div>
 
-            <div class="flex w-full flex-col gap-0.5 p-2 lg:p-0">
-                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Purchasing Request
-                    {{ $spk->nomor_order . ($spk->revision_count ? 'R' . str_pad($spk->revision_count, 2, '0', STR_PAD_LEFT) : '') }}
-                </h3>
-                <h4 class="text-sm font-semibold uppercase text-gray-800 dark:text-white">
-                    {{ $spk->customer['nama_perusahaan' ?? 'N/A'] }}
-                </h4>
-                <p class="text-sm text-gray-600 dark:text-gray-400">
-                    Update nomor PR terlebih dahulu agar laporan produksi dapat diupdate oleh team produksi.
-                </p>
+            {{-- Customer Quick Info --}}
+            <div
+                class="mt-4 flex items-center gap-3 rounded-lg border border-zinc-100 bg-zinc-50/50 p-3 shadow dark:border-zinc-800/50 dark:bg-zinc-800/30">
+                <div
+                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white shadow-sm dark:bg-zinc-800">
+                    <x-icons.office-building class="h-5 w-5 text-zinc-400" />
+                </div>
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wider text-zinc-400">Pelanggan / Perusahaan</p>
+                    <p class="text-sm font-bold text-blue-600 dark:text-blue-400">
+                        {{ $spk->customer['nama_perusahaan'] ?? 'N/A' }}
+                    </p>
+                </div>
             </div>
         </div>
 
-        <div class="grid w-full gap-2 lg:gap-4">
+        {{-- Main Content Card --}}
+        <div
+            class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
 
             @if (!$spk->is_using_old_stock)
-                {{-- @if (count($data) > 0) --}}
-                <div class="relative overflow-x-auto rounded-lg">
+                <div class="space-y-6">
+
                     @if ($is_multiple)
-                        {{-- KALO NOMOR PR MULTIPLE --}}
+                        {{-- MULTIPLE PR --}}
+                        <div class="mb-3 flex items-center gap-2 border-l-4 border-blue-500 pl-3">
+                            <h3 class="text-base font-bold text-zinc-900 dark:text-white">Daftar Item PR</h3>
+                            <span
+                                class="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-600 dark:bg-blue-900/30">Multiple
+                                PR</span>
+                        </div>
+
                         @forelse ($data as $nomorPr => $rows)
-                            <h4 class="mb-2 text-gray-800 dark:text-white">{{ $nomorPr }}</h4>
-                            <table class="mb-2 w-full min-w-max text-left text-sm text-gray-500 dark:text-gray-400 lg:mb-4">
+                            <div class="space-y-3">
+                                {{-- PR Group Header --}}
+                                <div class="flex items-center gap-2 rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
+                                    <x-icons.file-invoice class="h-4 w-4 shrink-0 text-blue-500" />
+                                    <h4 class="font-bold text-zinc-900 dark:text-white">{{ $nomorPr }}</h4>
+                                    <span class="ml-auto text-xs text-zinc-400">{{ count($rows) }} item</span>
+                                </div>
+
+                                {{-- Desktop Table --}}
+                                <div
+                                    class="hidden overflow-x-auto rounded-xl border border-zinc-200 shadow-sm dark:border-zinc-800 md:block">
+                                    <table class="w-full min-w-max text-left text-sm text-zinc-500 dark:text-zinc-400">
+                                        <thead
+                                            class="border-b border-zinc-200 bg-zinc-50 text-xs uppercase text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-zinc-400">
+                                            <tr>
+                                                <th scope="col" class="px-4 py-3 text-center">#</th>
+                                                <th scope="col" class="px-4 py-3 text-center">Kode Item</th>
+                                                <th scope="col" class="px-4 py-3">Nama Item</th>
+                                                <th scope="col" class="px-4 py-3 text-center">Jlh Brg</th>
+                                                <th scope="col" class="px-4 py-3">Gudang Penerima</th>
+                                                <th scope="col" class="px-4 py-3">Keterangan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
+                                            @foreach ($rows as $index => $row)
+                                                <tr
+                                                    class="bg-white/40 transition-colors hover:bg-zinc-50 dark:bg-transparent dark:hover:bg-zinc-800/50">
+                                                    <td class="px-4 py-3 text-center text-xs font-medium text-zinc-500">
+                                                        {{ $index + 1 }}</td>
+                                                    <td class="px-4 py-3 text-center">
+                                                        <span
+                                                            class="rounded bg-zinc-100 px-2 py-1 font-mono text-xs text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                                                            {{ $row->kode_item ?? '-' }}
+                                                        </span>
+                                                    </td>
+                                                    <td class="px-4 py-3 font-medium text-zinc-900 dark:text-white">
+                                                        {{ $row->nama_item ?? '-' }}</td>
+                                                    <td class="px-4 py-3 text-center">
+                                                        <span
+                                                            class="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-bold text-blue-600 ring-1 ring-inset ring-blue-600/20 dark:bg-blue-900/30 dark:text-blue-400">
+                                                            {{ $row->jumlah_item_dipesan ?? '-' }} {{ $row->satuan ?? '-' }}
+                                                        </span>
+                                                    </td>
+                                                    <td class="px-4 py-3 text-sm text-zinc-700 dark:text-zinc-300">
+                                                        {{ $row->lokasi_gudang_terima ?? '-' }}</td>
+                                                    <td class="px-4 py-3 text-xs italic text-zinc-500">
+                                                        {{ $row->keterangan ?? '-' }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                {{-- Mobile Cards --}}
+                                <div class="space-y-3 md:hidden">
+                                    @foreach ($rows as $index => $row)
+                                        <div
+                                            class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50">
+                                            <div
+                                                class="mb-3 flex items-center justify-between border-b border-zinc-100 pb-3 dark:border-zinc-800">
+                                                <div class="flex items-center gap-2">
+                                                    <span
+                                                        class="text-xs font-bold text-zinc-400">#{{ $index + 1 }}</span>
+                                                    <span
+                                                        class="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[10px] font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                                                        {{ $row->kode_item ?? '-' }}
+                                                    </span>
+                                                </div>
+                                                <span
+                                                    class="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-bold text-blue-600 ring-1 ring-inset ring-blue-600/20 dark:bg-blue-900/30 dark:text-blue-400">
+                                                    {{ $row->jumlah_item_dipesan ?? '-' }} {{ $row->satuan ?? '-' }}
+                                                </span>
+                                            </div>
+                                            <div class="grid grid-cols-1 gap-3">
+                                                <div>
+                                                    <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">
+                                                        Nama Item</p>
+                                                    <p class="text-sm font-medium text-zinc-900 dark:text-white">
+                                                        {{ $row->nama_item ?? '-' }}</p>
+                                                </div>
+                                                <div>
+                                                    <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">
+                                                        Gudang Penerima</p>
+                                                    <p class="text-sm text-zinc-700 dark:text-zinc-300">
+                                                        {{ $row->lokasi_gudang_terima ?? '-' }}</p>
+                                                </div>
+                                                @if (!empty($row->keterangan))
+                                                    <div>
+                                                        <p
+                                                            class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">
+                                                            Keterangan</p>
+                                                        <p class="text-xs italic text-zinc-500 dark:text-zinc-400">
+                                                            {{ $row->keterangan }}</p>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @empty
+                            <div
+                                class="flex flex-col items-center justify-center rounded-xl border border-dashed border-zinc-300 py-12 dark:border-zinc-700">
+                                <x-icons.file-invoice class="mb-2 h-10 w-10 text-zinc-300 dark:text-zinc-600" />
+                                <p class="text-sm font-semibold text-zinc-500 dark:text-zinc-400">Tidak ada data PR yang
+                                    ditemukan.</p>
+                            </div>
+                        @endforelse
+                    @else
+                        {{-- SINGLE PR --}}
+                        <div class="mb-3 flex items-center gap-2 border-l-4 border-blue-500 pl-3">
+                            <h3 class="text-base font-bold text-zinc-900 dark:text-white">Daftar Item PR</h3>
+                        </div>
+
+                        {{-- Desktop Table --}}
+                        <div
+                            class="hidden overflow-x-auto rounded-xl border border-zinc-200 shadow-sm dark:border-zinc-800 md:block">
+                            <table class="w-full min-w-max text-left text-sm text-zinc-500 dark:text-zinc-400">
                                 <thead
-                                    class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+                                    class="border-b border-zinc-200 bg-zinc-50 text-xs uppercase text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-zinc-400">
                                     <tr>
-                                        <th scope="col" class="w-fit px-6 py-3 text-center">#</th>
-                                        <th scope="col" class="w-[200px] px-6 py-3 text-center">Kode Item</th>
-                                        <th scope="col" class="w-[300px] px-6 py-3 text-center">Nama Item</th>
-                                        <th scope="col" class="w-[150px] px-6 py-3 text-center">Jlh Brg</th>
-                                        <th scope="col" class="px-6 py-3 text-center">Rencana Gudang Penerima</th>
-                                        <th scope="col" class="px-6 py-3 text-center">Keterangan</th>
+                                        <th scope="col" class="px-4 py-3 text-center">#</th>
+                                        <th scope="col" class="px-4 py-3 text-center">Nomor PR</th>
+                                        <th scope="col" class="px-4 py-3 text-center">Kode Item</th>
+                                        <th scope="col" class="px-4 py-3">Nama Item</th>
+                                        <th scope="col" class="px-4 py-3 text-center">Jlh Brg</th>
+                                        <th scope="col" class="px-4 py-3">Gudang Penerima</th>
+                                        <th scope="col" class="px-4 py-3">Keterangan</th>
                                     </tr>
                                 </thead>
-
-                                <tbody>
-                                    @forelse ($rows as $index => $row)
+                                <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
+                                    @forelse ($data as $index => $row)
                                         <tr
-                                            class="border-b border-zinc-200 bg-white hover:bg-gray-50 dark:border-zinc-800 dark:bg-gray-800 dark:hover:bg-gray-600">
-                                            <td class="px-6 py-4 text-center">
-                                                <span>{{ $index + 1 ?? '-' }}</span>
+                                            class="bg-white/40 transition-colors hover:bg-zinc-50 dark:bg-transparent dark:hover:bg-zinc-800/50">
+                                            <td class="px-4 py-3 text-center text-xs font-medium text-zinc-500">
+                                                {{ $index + 1 }}</td>
+                                            <td class="px-4 py-3 text-center font-bold text-zinc-900 dark:text-white">
+                                                {{ $row->nomor_purchasing_request ?? '-' }}
                                             </td>
-                                            <td class="px-6 py-4 text-center">
-                                                {{ $row->kode_item ?? '-' }}
+                                            <td class="px-4 py-3 text-center">
+                                                <span
+                                                    class="rounded bg-zinc-100 px-2 py-1 font-mono text-xs text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                                                    {{ $row->kode_item ?? '-' }}
+                                                </span>
                                             </td>
-                                            <td class="px-6 py-4">
-                                                {{ $row->nama_item ?? '-' }}
+                                            <td class="px-4 py-3 font-medium text-zinc-900 dark:text-white">
+                                                {{ $row->nama_item ?? '-' }}</td>
+                                            <td class="px-4 py-3 text-center">
+                                                <span
+                                                    class="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-bold text-blue-600 ring-1 ring-inset ring-blue-600/20 dark:bg-blue-900/30 dark:text-blue-400">
+                                                    {{ $row->jumlah_item_dipesan ?? '-' }} {{ $row->satuan ?? '-' }}
+                                                </span>
                                             </td>
-                                            <td class="px-6 py-4 text-center">
-                                                {{ $row->jumlah_item_dipesan ?? '-' }} {{ $row->satuan ?? '-' }}
-                                            </td>
-                                            <td class="px-6 py-4 text-center">
-                                                {{ $row->lokasi_gudang_terima ?? '-' }}
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                {{ $row->keterangan ?? '-' }}
-                                            </td>
+                                            <td class="px-4 py-3 text-sm text-zinc-700 dark:text-zinc-300">
+                                                {{ $row->lokasi_gudang_terima ?? '-' }}</td>
+                                            <td class="px-4 py-3 text-xs italic text-zinc-500">
+                                                {{ $row->keterangan ?? '-' }}</td>
                                         </tr>
                                     @empty
-                                        <tr
-                                            class="border-b border-zinc-200 bg-white hover:bg-gray-50 dark:border-zinc-800 dark:bg-gray-800 dark:hover:bg-gray-600">
-                                            <td colspan="6" class="px-6 py-4 text-center">Tidak ada data yang ditemukan.
+                                        <tr>
+                                            <td colspan="7"
+                                                class="px-6 py-12 text-center text-zinc-500 dark:text-zinc-400">
+                                                Tidak ada data Purchasing Request yang ditemukan.
                                             </td>
                                         </tr>
                                     @endforelse
                                 </tbody>
                             </table>
-                        @empty
-                            <p
-                                class="border-b border-zinc-200 bg-white hover:bg-gray-50 dark:border-zinc-800 dark:bg-gray-800 dark:hover:bg-gray-600">
-                                <span class="px-6 py-4 text-center">Tidak ada data yang ditemukan.</span>
-                            </p>
-                        @endforelse
-                    @else
-                        {{-- KALO NOMOR PR SINGLE --}}
-                        <table class="w-full min-w-max text-left text-sm text-gray-500 dark:text-gray-400">
-                            <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
-                                <tr>
-                                    <th scope="col" class="w-fit px-6 py-3 text-center">#</th>
-                                    <th scope="col" class="w-[200px] px-6 py-3 text-center">Kode Item</th>
-                                    <th scope="col" class="w-[200px] px-6 py-3 text-center">Nomor Purchasing Request</th>
-                                    <th scope="col" class="w-[300px] px-6 py-3 text-center">Nama Item</th>
-                                    <th scope="col" class="w-[150px] px-6 py-3 text-center">Jlh Brg</th>
-                                    <th scope="col" class="px-6 py-3 text-center">Rencana Gudang Penerima</th>
-                                    <th scope="col" class="px-6 py-3 text-center">Keterangan</th>
-                                </tr>
-                            </thead>
+                        </div>
 
-                            <tbody>
-                                @forelse ($data as $index => $row)
-                                    <tr
-                                        class="border-b border-zinc-200 bg-white hover:bg-gray-50 dark:border-zinc-800 dark:bg-gray-800 dark:hover:bg-gray-600">
-                                        <td class="px-6 py-4 text-center">
-                                            <span>{{ $index + 1 ?? '-' }}</span>
-                                        </td>
-                                        <td class="px-6 py-4 text-center">
-                                            {{ $row->nomor_purchasing_request ?? '-' }}
-                                        </td>
-                                        <td class="px-6 py-4 text-center">
-                                            {{ $row->kode_item ?? '-' }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            {{ $row->nama_item ?? '-' }}
-                                        </td>
-                                        <td class="px-6 py-4 text-center">
+                        {{-- Mobile Cards --}}
+                        <div class="space-y-3 md:hidden">
+                            @forelse ($data as $index => $row)
+                                <div
+                                    class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50">
+                                    <div
+                                        class="mb-3 flex items-center justify-between border-b border-zinc-100 pb-3 dark:border-zinc-800">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-xs font-bold text-zinc-400">#{{ $index + 1 }}</span>
+                                            <span
+                                                class="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[10px] font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                                                {{ $row->kode_item ?? '-' }}
+                                            </span>
+                                        </div>
+                                        <span
+                                            class="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-bold text-blue-600 ring-1 ring-inset ring-blue-600/20 dark:bg-blue-900/30 dark:text-blue-400">
                                             {{ $row->jumlah_item_dipesan ?? '-' }} {{ $row->satuan ?? '-' }}
-                                        </td>
-                                        <td class="px-6 py-4 text-center">
-                                            {{ $row->lokasi_gudang_terima ?? '-' }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            {{ $row->keterangan ?? '-' }}
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr
-                                        class="border-b border-zinc-200 bg-white hover:bg-gray-50 dark:border-zinc-800 dark:bg-gray-800 dark:hover:bg-gray-600">
-                                        <td colspan="7" class="px-6 py-4 text-center">Tidak ada data yang ditemukan.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                                        </span>
+                                    </div>
+                                    <div class="grid grid-cols-1 gap-3">
+                                        <div>
+                                            <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Nomor
+                                                PR</p>
+                                            <p class="text-sm font-bold text-zinc-900 dark:text-white">
+                                                {{ $row->nomor_purchasing_request ?? '-' }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Nama
+                                                Item</p>
+                                            <p class="text-sm font-medium text-zinc-900 dark:text-white">
+                                                {{ $row->nama_item ?? '-' }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Gudang
+                                                Penerima</p>
+                                            <p class="text-sm text-zinc-700 dark:text-zinc-300">
+                                                {{ $row->lokasi_gudang_terima ?? '-' }}</p>
+                                        </div>
+                                        @if (!empty($row->keterangan))
+                                            <div>
+                                                <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">
+                                                    Keterangan</p>
+                                                <p class="text-xs italic text-zinc-500 dark:text-zinc-400">
+                                                    {{ $row->keterangan }}</p>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            @empty
+                                <div
+                                    class="flex flex-col items-center justify-center rounded-xl border border-dashed border-zinc-300 px-6 py-12 dark:border-zinc-700">
+                                    <x-icons.file-invoice class="mb-2 h-10 w-10 text-zinc-300 dark:text-zinc-600" />
+                                    <p class="text-sm font-semibold text-zinc-500 dark:text-zinc-400">Tidak ada data
+                                        Purchasing Request yang ditemukan.</p>
+                                </div>
+                            @endforelse
+                        </div>
                     @endif
                 </div>
 
+                {{-- Action Footer --}}
                 @can('purchasing-request-update')
                     @if (!is_null($spk->nomor_purchasing_request) || !is_null($spk->nomor_purchasing_request_json))
-                        @livewire('handler.spk.unassign-purchasing-request', ['id' => $spk->id])
+                        <div class="flex justify-end pt-6">
+                            @livewire('handler.spk.unassign-purchasing-request', ['id' => $spk->id])
+                        </div>
                     @endif
                 @endcan
             @else
-                <p class="mt-4 text-center text-lg text-green-600 dark:text-green-400">
-                    SPK ini diproduksi menggunakan barang - barang atau bahan baku sisa stok yang ada digudang.
-                </p>
+                {{-- Old Stock Notice --}}
+                <div
+                    class="flex flex-col items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50/50 py-12 text-center dark:border-emerald-900/30 dark:bg-emerald-900/10">
+                    <div
+                        class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30">
+                        <x-icons.check-circle class="h-10 w-10 text-emerald-500" />
+                    </div>
+                    <h4 class="text-base font-bold text-emerald-700 dark:text-emerald-400">Menggunakan Stok Gudang</h4>
+                    <p class="mt-1 max-w-md text-sm font-medium text-emerald-600 dark:text-emerald-500">
+                        SPK ini diproduksi menggunakan barang atau bahan baku sisa stok yang ada di gudang.
+                    </p>
+                </div>
             @endif
 
         </div>

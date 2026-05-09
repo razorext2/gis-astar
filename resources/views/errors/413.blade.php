@@ -54,7 +54,7 @@
 
         <div class="relative w-full max-w-6xl">
             <div
-                class="grid items-center gap-8 rounded-[2.5rem] border border-white/40 bg-white/70 p-8 shadow-2xl shadow-blue-500/10 backdrop-blur-3xl dark:border-zinc-800/50 dark:bg-zinc-900/60 lg:grid-cols-2 lg:p-16">
+                class="grid items-center gap-8 rounded-[2.5rem] border border-white/40 bg-white/60 p-8 shadow-2xl shadow-blue-500/10 backdrop-blur-3xl dark:border-zinc-800/50 dark:bg-dark-primary/60 lg:grid-cols-2 lg:p-16">
 
                 {{-- Left Side: Content --}}
                 <div class="order-2 space-y-8 text-center lg:order-1 lg:text-left">

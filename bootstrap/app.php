@@ -38,6 +38,7 @@ return Application::configure(basePath: dirname(__DIR__))
             LogUserActions::class,
         ]);
 
+        $middleware->append(\App\Http\Middleware\RemoveHeadersMiddleware::class);
         $middleware->append(EnsureDatabaseConnection::class);
     })
 

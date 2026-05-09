@@ -1,19 +1,15 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div
-        class="flex w-full flex-col gap-2 rounded-xl border-[1px] border-zinc-200 bg-white p-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:gap-4 lg:p-6">
+    <div class="mb-16 space-y-4">
 
-        <div class="flex flex-row items-center gap-2 lg:gap-4">
+        <div
+            class="flex items-center gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
 
-            <div>
-                <x-button.link href="{{ route('purchasing-request.index') }}"
-                    class="w-fit ring-1 ring-red-700 dark:bg-red-800 dark:text-white" wire:navigate id="back-button">
-                    <x-slot name="icon">
-                        <x-icons.angle-left class="h-6 w-6 text-red-500 dark:text-white" />
-                    </x-slot>
-                    Kembali
-                </x-button.link>
-            </div>
+
+            <x-button.danger href="{{ route('purchasing-request.index') }}" wire:navigate id="back-button"
+                class="max-h-10 max-w-fit">
+                <x-icons.angle-left class="h-5 w-5" />
+            </x-button.danger>
 
             <div class="flex w-full flex-col gap-0.5 p-2 lg:p-0">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Purchasing Request

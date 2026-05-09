@@ -1,7 +1,7 @@
 <x-guest-layout>
     <div class="mx-auto w-full max-w-md">
         <div
-            class="flex w-full flex-col rounded-3xl bg-white p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 sm:p-10">
+            class="flex w-full flex-col rounded-xl bg-white/60 backdrop-blur-md p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] ring-1 ring-zinc-200 dark:bg-dark-primary/60 dark:backdrop-blur-md dark:ring-zinc-800 sm:p-10">
 
             <div class="mb-6 pb-2">
                 <a href="{{ route('login') }}"

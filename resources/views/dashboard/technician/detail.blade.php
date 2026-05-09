@@ -2,26 +2,22 @@
 @section('content')
     <div class="w-full space-y-6">
         <div
-            class="grid gap-6 rounded-xl bg-white p-4 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 sm:p-6">
+            class="grid gap-6 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none sm:p-6">
             <div class="w-full">
-                <header class="flex flex-row">
-
-                    <form id="actionForm" action="{{ route('technician.index') }}"></form>
-                    <x-button.danger class="my-auto me-4 max-h-10" id="back-button" form="actionForm" type="submit">
-                        <x-slot name="icon">
-                            <x-icons.angle-left class="icon h-6 w-6 text-red-500 dark:text-white" />
-                        </x-slot>
-                        Kembali
+                <header class="flex items-center">
+                    <x-button.danger id="back-button" href="{{ route('technician.index') }}" class="my-auto me-4 max-h-10"
+                        wire:navigate>
+                        <x-icons.angle-left class="h-5 w-5" />
                     </x-button.danger>
 
-                    <h2 class="font-base mt-2 text-lg text-gray-900 dark:text-gray-300">
+                    <h2 class="text-lg text-gray-900 dark:text-gray-300">
                         Detail: <span class="font-bold text-white" id="no_vt_label"> Laporan </span>
                     </h2>
 
                     @can('technician-approve')
                         <div class="flex w-full items-center justify-end">
                             <form id="fetchForm" action="{{ route('technician.fetch.update', $data->no_vt) }}"></form>
-                            <x-button.primary class="my-auto me-4 max-h-10" id="fetch-button" form="fetchForm" type="submit">
+                            <x-button.primary id="fetch-button" form="fetchForm" type="submit">
                                 <x-slot name="icon">
                                     <x-icons.clipboard class="icon h-6 w-6 text-blue-500 dark:text-white" />
                                 </x-slot>

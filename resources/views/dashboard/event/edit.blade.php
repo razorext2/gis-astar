@@ -1,14 +1,14 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
     <div
-        class="flex w-full flex-col gap-4 rounded-xl bg-white p-4 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 sm:p-6 md:max-w-lg lg:max-w-xl xl:max-w-2xl">
+        class="flex w-full flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none sm:p-6 md:max-w-lg lg:max-w-xl xl:max-w-2xl">
 
         <div>
-            <span class="text-xl font-semibold text-gray-900 dark:bg-dark-primary dark:text-white">
+            <span class="text-xl font-semibold text-gray-900 dark:text-white">
                 Edit Data Event
             </span>
 
-            <p class="mt-0.5 text-base text-gray-600 dark:text-gray-400">
+            <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
                 Silahkan isi data event sesuai dengan form yang diberikan.
             </p>
         </div>

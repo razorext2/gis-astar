@@ -1,342 +1,264 @@
-{{-- riwayat pengiriman --}}
-<div id="delivery-history-section" class="flex w-full flex-col gap-2 lg:gap-4">
-    <div id="delivery-history-header">
-        <h3 class="text-sm font-semibold text-gray-900 dark:text-white lg:text-lg">
-            Riwayat Pengiriman
-        </h3>
-
-        <p class="text-base text-gray-600 dark:text-gray-400">
-            Berikut ini adalah riwayat pengiriman SPK ini:
-        </p>
+<div class="space-y-4">
+    <div class="flex items-center gap-2 border-l-4 border-blue-500 pl-3">
+        <h3 class="text-base font-bold text-zinc-900 dark:text-white">Riwayat Pengiriman</h3>
+        <span
+            class="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-600 dark:bg-blue-900/30">Logistik
+            Log</span>
     </div>
 
     <div id="delivery-history-content" class="grid w-full gap-2 lg:grid-cols-2 lg:gap-4">
         @forelse ($deliveries as $row)
             <div class="w-full">
-                <div
-                    class="mb-2 rounded-lg border border-zinc-200 bg-gray-50 p-4 dark:border-zinc-800 dark:bg-gray-800 sm:space-y-2 lg:mb-4">
-
-                    <div class="flex items-center gap-x-2">
-                        <span class="rounded bg-gray-400 px-2 py-0.5 text-xs font-semibold text-gray-800">
-                            {{ $row->kode_kirim ?? 'N/A' }}
-                        </span>
-
-                        <span
-                            class="{{ $this->form->generateViaColor($row->via)['color'] }} rounded px-2 py-0.5 text-xs font-semibold">
-                            {{ $this->form->generateViaColor($row->via)['label'] }}
-                        </span>
-
-                        <span
-                            class="{{ $this->form->generateStatusColor($row->status_kirim)['color'] }} rounded px-2 py-0.5 text-xs font-semibold">
+                <div class="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/50">
+                    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-800/30">
+                        <div class="flex items-center gap-2">
+                            <span class="rounded-full bg-zinc-200 px-2.5 py-0.5 font-mono text-[10px] font-bold tracking-wide text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                                {{ $row->kode_kirim ?? 'N/A' }}
+                            </span>
+                            <span class="{{ $this->form->generateViaColor($row->via)['color'] }} rounded-full px-2.5 py-0.5 text-[10px] font-bold">
+                                {{ $this->form->generateViaColor($row->via)['label'] }}
+                            </span>
+                        </div>
+                        <span class="{{ $this->form->generateStatusColor($row->status_kirim)['color'] }} rounded-full px-2.5 py-0.5 text-[10px] font-bold shadow-sm ring-1 ring-inset">
                             {{ $this->form->generateStatusColor($row->status_kirim)['label'] }}
                         </span>
                     </div>
 
-                    <dl class="items-center justify-between gap-4 sm:flex">
-                        <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">Tanggal</dt>
-                        <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                            {{ \Carbon\Carbon::parse($row->created_at)->isoFormat('dddd, D MMMM YYYY HH:mm:ss') }}
-                        </dd>
-                    </dl>
+                    <div class="p-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="col-span-2">
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Tanggal Dibuat</p>
+                                <p class="text-sm font-medium text-zinc-900 dark:text-white">
+                                    {{ \Carbon\Carbon::parse($row->created_at)->isoFormat('dddd, D MMMM YYYY HH:mm:ss') }}
+                                </p>
+                            </div>
 
-                    @if ($row['via'] === 'laut')
-                        <dl class="items-center justify-between gap-4 sm:flex">
-                            <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">Partay</dt>
-                            <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                                {{ ucfirst($row->partay ?? 'N/A') }}
-                            </dd>
-                        </dl>
+                            @if ($row['via'] === 'laut')
+                                <div>
+                                    <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Partay</p>
+                                    <p class="text-sm font-medium text-zinc-900 dark:text-white">{{ ucfirst($row->partay ?? 'N/A') }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">No. Container</p>
+                                    <p class="text-sm font-medium text-zinc-900 dark:text-white">{{ strtoupper($row->no_container ?? 'N/A') }}</p>
+                                </div>
+                                <div class="col-span-2">
+                                    <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Nama Kapal</p>
+                                    <p class="text-sm font-medium text-zinc-900 dark:text-white">{{ ucfirst($row->nama_kapal ?? 'N/A') }}</p>
+                                </div>
+                            @else
+                                @if ($row->voa === 'supir')
+                                    <div>
+                                        <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Nomor SR</p>
+                                        <p class="text-sm font-medium text-zinc-900 dark:text-white">{{ ucfirst($row->nomor_sr ?? 'N/A') }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Kode Jari Supir</p>
+                                        <p class="text-sm font-medium text-zinc-900 dark:text-white">{{ ucfirst($row->id_supir ?? 'N/A') }}</p>
+                                    </div>
+                                @endif
+                                <div class="col-span-2">
+                                    <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Nama Supir</p>
+                                    <p class="text-sm font-medium text-zinc-900 dark:text-white">{{ ucfirst($row->nama_supir ?? 'N/A') }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">No. Telp Supir</p>
+                                    <p class="text-sm font-medium text-zinc-900 dark:text-white">{{ ucfirst($row->no_telp_supir ?? 'N/A') }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">No. Plat Kendaraan</p>
+                                    <p class="text-sm font-medium text-zinc-900 dark:text-white">{{ strtoupper($row->no_plat ?? 'N/A') }}</p>
+                                </div>
+                            @endif
 
-                        <dl class="items-center justify-between gap-4 sm:flex">
-                            <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">No. Container</dt>
-                            <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                                {{ strtoupper($row->no_container ?? 'N/A') }}
-                            </dd>
-                        </dl>
-
-                        <dl class="items-center justify-between gap-4 sm:flex">
-                            <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">Nama Kapal</dt>
-                            <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                                {{ ucfirst($row->nama_kapal ?? 'N/A') }}
-                            </dd>
-                        </dl>
-                    @else
-                        @if ($row->voa === 'supir')
-                            <dl class="items-center justify-between gap-4 sm:flex">
-                                <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">Nomor SR</dt>
-                                <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                                    {{ ucfirst($row->nomor_sr ?? 'N/A') }}
-                                </dd>
-                            </dl>
-
-                            <dl class="items-center justify-between gap-4 sm:flex">
-                                <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">Kode Jari Supir
-                                </dt>
-                                <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                                    {{ ucfirst($row->id_supir ?? 'N/A') }}
-                                </dd>
-                            </dl>
-                        @endif
-
-                        <dl class="items-center justify-between gap-4 sm:flex">
-                            <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">Nama Supir</dt>
-                            <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                                {{ ucfirst($row->nama_supir ?? 'N/A') }}
-                            </dd>
-                        </dl>
-
-                        <dl class="items-center justify-between gap-4 sm:flex">
-                            <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">No. Telp Supir</dt>
-                            <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                                {{ ucfirst($row->no_telp_supir ?? 'N/A') }}
-                            </dd>
-                        </dl>
-
-                        <dl class="items-center justify-between gap-4 sm:flex">
-                            <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">No. Plat Kendaraan
-                            </dt>
-                            <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                                {{ strtoupper($row->no_plat ?? 'N/A') }}
-                            </dd>
-                        </dl>
-                    @endif
-
-                    <dl class="items-center justify-between gap-4 sm:flex">
-                        <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">Estimasi Berat Barang</dt>
-                        <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                            {{ strtoupper($row->berat ?? 'N/A') }}
-                        </dd>
-                    </dl>
-
-                    <dl class="items-center justify-between gap-4 sm:flex">
-                        <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">Estimasi Waktu Kirim</dt>
-                        <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                            {{ Carbon\Carbon::parse($row->etd)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}
-                        </dd>
-                    </dl>
-
-                    <dl class="items-center justify-between gap-4 sm:flex">
-                        <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">Estimasi Waktu Tiba</dt>
-                        <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                            {{ Carbon\Carbon::parse($row->eta)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}
-                        </dd>
-                    </dl>
-
-                    <dl class="items-center justify-between gap-4 sm:flex">
-                        <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">Catatan</dt>
-                        <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                            {{ ucfirst($row->note ?? 'N/A') }}
-                        </dd>
-                    </dl>
-
-                    @if ($row->via != 'supir')
-                        <div class="flex w-full flex-col gap-1">
-                            <p class="font-semibold text-gray-800 dark:text-white">
-                                Barang yang dibawa:
-                            </p>
-                            <ul class="text-gray-600 dark:text-white">
-                                @forelse ($row->product_details as $key => $barang)
-                                    <li class="flex gap-x-2">
-                                        <span>{{ $key + 1 }}. </span>
-                                        <span>
-                                            {{ $barang['nama_barang'] ?? '-' }}
-                                            ({{ $barang['qty_barang'] ?? 0 }}
-                                            {{ $barang['satuan_barang'] ?? '' }})
-                                        </span>
-                                    </li>
-                                @empty
-                                    <li class="text-sm">
-                                        Tidak ada barang yang dibawa.
-                                    </li>
-                                @endforelse
-                            </ul>
+                            <div>
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Est. Keberangkatan</p>
+                                <p class="text-sm font-medium text-zinc-900 dark:text-white">
+                                    {{ Carbon\Carbon::parse($row->etd)->locale('id')->isoFormat('D MMM YYYY') }}
+                                </p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Est. Tiba</p>
+                                <p class="text-sm font-medium text-zinc-900 dark:text-white">
+                                    {{ Carbon\Carbon::parse($row->eta)->locale('id')->isoFormat('D MMM YYYY') }}
+                                </p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Estimasi Berat</p>
+                                <p class="text-sm font-medium text-zinc-900 dark:text-white">{{ strtoupper($row->berat ?? 'N/A') }}</p>
+                            </div>
+                            <div class="col-span-2">
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Catatan</p>
+                                <p class="text-sm font-medium text-zinc-900 dark:text-white">{{ ucfirst($row->note ?? '-') }}</p>
+                            </div>
                         </div>
-                    @endif
 
-                    <div class="mt-2 flex items-center justify-between space-x-2 lg:space-x-4">
-                        @if ($row->status_kirim == 0)
-                            <x-button.primary
-                                class="bg-yellow-600 text-white ring-yellow-700 hover:bg-yellow-800 dark:bg-yellow-700 dark:ring-yellow-700 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
-                                type="button" wire:click="delayModal({{ $row->id }})">
-                                Delay?
-                            </x-button.primary>
+                        @if ($row->via != 'supir')
+                            <div class="mt-4 rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/50">
+                                <p class="mb-2 text-[10px] font-bold uppercase tracking-wider text-zinc-500">Daftar Barang (Packing List)</p>
+                                <ul class="space-y-1 text-xs text-zinc-700 dark:text-zinc-300">
+                                    @forelse ($row->product_details as $key => $barang)
+                                        <li class="flex items-center gap-2 border-b border-zinc-200/50 pb-1 last:border-0 last:pb-0 dark:border-zinc-700/50">
+                                            <span class="font-mono text-zinc-400">{{ $key + 1 }}.</span>
+                                            <span class="flex-grow font-medium text-zinc-900 dark:text-white">{{ $barang['nama_barang'] ?? '-' }}</span>
+                                            <span class="rounded-full bg-white px-2 py-0.5 font-bold ring-1 ring-inset ring-zinc-200 dark:bg-zinc-800 dark:ring-zinc-700">
+                                                {{ $barang['qty_barang'] ?? 0 }} {{ $barang['satuan_barang'] ?? '' }}
+                                            </span>
+                                        </li>
+                                    @empty
+                                        <li class="italic text-zinc-400">Tidak ada barang yang dibawa.</li>
+                                    @endforelse
+                                </ul>
+                            </div>
                         @endif
 
-                        <x-button.primary
-                            class="bg-blue-700 text-white hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            type="button" wire:click="detailModal({{ $row->id }})">
-                            Cek Riwayat
-                        </x-button.primary>
+                        <div class="mt-4 flex items-center justify-end gap-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
+                            @if ($row->status_kirim == 0)
+                                <x-button.secondary class="text-amber-600 ring-amber-200 hover:bg-amber-50 hover:text-amber-700 dark:text-amber-500 dark:ring-amber-900/50 dark:hover:bg-amber-900/20" type="button" wire:click="delayModal({{ $row->id }})">
+                                    Delay?
+                                </x-button.secondary>
+                            @endif
+
+                            <x-button.primary type="button" wire:click="detailModal({{ $row->id }})">
+                                Cek Riwayat
+                            </x-button.primary>
+                        </div>
                     </div>
                 </div>
-
             </div>
         @empty
-            <p class="col-span-2 text-center text-sm italic text-red-500">Belum ada riwayat pengiriman.</p>
+            <div class="col-span-2 rounded-xl border-2 border-dashed border-zinc-200 py-10 text-center dark:border-zinc-800">
+                <p class="text-sm font-semibold text-zinc-500 dark:text-zinc-400">Belum ada riwayat pengiriman.</p>
+            </div>
         @endforelse
     </div>
 
     {{ $deliveries->links(data: ['scrollTo' => '#delivery-history-section']) }}
 
     {{-- modal detail pengiriman --}}
-    <div id="detail-pengiriman-modal" wire:show="showDetailModal" wire:transition.duration.300ms
-        class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 py-8">
-        @if ($showDetailModal)
-            <div class="relative mx-4 my-6 flex w-full flex-col gap-1 overflow-y-auto rounded-xl bg-white p-4 shadow-2xl dark:bg-dark-primary md:w-2/3 md:gap-2 lg:w-1/2 lg:p-6 xl:w-2/5"
-                style="max-height: calc(100vh - 6rem);">
+    <x-modal.base-modal show="showDetailModal" title="Riwayat Pengiriman"
+        subtitle="{{ $showDetailModal && $modalData ? $modalData->kode_kirim : '' }}"
+        iconContainerClass="bg-blue-600 shadow-blue-500/20" maxWidth="lg">
+        <x-slot name="icon">
+            <x-icons.truck class="h-5 w-5" />
+        </x-slot>
 
-                <x-button.secondary class="absolute right-2 top-2 !p-1 !bg-transparent ring-0 hover:!bg-gray-100 dark:hover:!bg-gray-800" type="button" wire:click="$set('showDetailModal', false)">
-                    <x-slot name="icon">
-                        <x-icons.close class="h-6 w-6 text-red-600 hover:text-red-800" />
-                    </x-slot>
-                </x-button.secondary>
+        @if ($showDetailModal && $modalData)
+            <div class="flex flex-col gap-3">
+                @php
+                    $histories = collect($modalData->history)
+                        ->sortByDesc(fn($item) => \Carbon\Carbon::parse($item['created_at']))
+                        ->values()
+                        ->toArray();
+                @endphp
 
-                <h2
-                    class="mb-2 flex items-center gap-x-2 text-lg font-semibold text-gray-900 dark:text-white lg:text-xl">
-                    Riwayat Pengiriman <span
-                        class="rounded bg-gray-400 px-2 py-0.5 text-xs font-semibold text-gray-800">
-                        {{ $row->kode_kirim ?? 'N/A' }}
-                    </span>
-                </h2>
-
-                <div class="h-96 overflow-auto">
-                    @php
-                        $histories = collect($modalData->history)
-                            ->sortByDesc(function ($item) {
-                                return Carbon\Carbon::parse($item['created_at']);
-                            })
-                            ->values()
-                            ->toArray();
-                    @endphp
-
-                    @forelse($histories as $row)
-                        <div
-                            class="mb-2 rounded-lg border border-zinc-200 bg-gray-50 p-4 dark:border-zinc-800 dark:bg-gray-800 sm:space-y-2 lg:mb-4">
-
-                            <dl class="items-center justify-between gap-4 sm:flex">
-                                <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">ID Riwayat</dt>
-                                <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                                    {{ $row['id'] }}
-                                </dd>
-                            </dl>
-                            <dl class="items-center justify-between gap-4 sm:flex">
-                                <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">Status Pengiriman
-                                </dt>
-                                <dd class="font-medium text-green-500 sm:text-end">
-                                    {{ $row['status'] }}
-                                </dd>
-                            </dl>
-                            <dl class="items-center justify-between gap-4 sm:flex">
-                                <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">Keterangan</dt>
-                                <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                                    {{ ucfirst($row['desc']) }}
-                                </dd>
-                            </dl>
-                            <dl class="items-center justify-between gap-4 sm:flex">
-                                <dt class="mb-1 font-normal text-blue-500 dark:text-blue-400 sm:mb-0">Tanggal Dibuat
-                                </dt>
-                                <dd class="font-medium text-blue-500 dark:text-blue-400 sm:text-end">
-                                    {{ \Carbon\Carbon::parse($row['created_at'])->isoFormat('dddd, D MMMM YYYY HH:mm:ss') }}
-                                </dd>
-                            </dl>
-
+                @forelse ($histories as $row)
+                    <div class="relative overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50">
+                        <div class="absolute left-0 top-0 h-full w-1 {{ $row['status'] == 'Selesai' ? 'bg-emerald-500' : ($row['status'] == 'Delay' ? 'bg-amber-500' : 'bg-blue-500') }}"></div>
+                        <div class="p-4 pl-5">
+                            <div class="flex items-start justify-between gap-4">
+                                <div>
+                                    <span class="inline-flex items-center rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] font-bold text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+                                        ID: {{ $row['id'] }}
+                                    </span>
+                                    <h4 class="mt-2 text-sm font-bold text-zinc-900 dark:text-white">{{ $row['status'] }}</h4>
+                                    <p class="mt-1 text-xs text-zinc-600 dark:text-zinc-400">{{ ucfirst($row['desc']) }}</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Tanggal</p>
+                                    <p class="text-xs font-semibold text-zinc-900 dark:text-white">
+                                        {{ \Carbon\Carbon::parse($row['created_at'])->isoFormat('D MMM YYYY') }}
+                                    </p>
+                                    <p class="text-[10px] text-zinc-500">
+                                        {{ \Carbon\Carbon::parse($row['created_at'])->isoFormat('HH:mm:ss') }}
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                    @empty
-                        <div
-                            class="mb-2 rounded-lg border border-zinc-200 bg-gray-50 p-4 dark:border-zinc-800 dark:bg-gray-800 sm:space-y-2 lg:mb-4">
-                            <p class="font-semibold text-gray-800 dark:text-white">Belum ada riwayat pengiriman.</p>
-                        </div>
-                    @endforelse
-                </div>
-
-                @can('spk-validate-pengiriman')
-                    <div class="mx-auto flex w-fit justify-end gap-x-2">
-                        @if ($modalData->status_kirim == 0)
-                            <x-button.success id="delivery-btn-done" wire:click="deliveryArrivedConfirmation"
-                                wire:confirm.prompt="Apakah anda yakin ingin menyelesaikan pengiriman ini?\nKetik YA untuk mengkonfirmasi|YA"
-                                type="button">
-                                Pengiriman Selesai
-                            </x-button.success>
-                        @endif
-
-                        @if ($modalData->status_kirim == 2)
-                            <x-button.primary id="continue-btn-done" wire:click="continueAfterDelayConfirmation"
-                                type="button">
-                                Pengiriman Dilanjutkan?
-                            </x-button.primary>
-                        @endif
                     </div>
-                @endcan
-
+                @empty
+                    <div class="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-zinc-200 py-10 dark:border-zinc-800">
+                        <x-icons.question-circle class="mb-2 h-8 w-8 text-zinc-400" />
+                        <p class="text-sm font-semibold text-zinc-500 dark:text-zinc-400">Belum ada riwayat pengiriman.</p>
+                    </div>
+                @endforelse
             </div>
         @endif
-    </div>
+
+        @can('spk-validate-pengiriman')
+            @if ($showDetailModal && $modalData && ($modalData->status_kirim == 0 || $modalData->status_kirim == 2))
+                <x-slot name="footer">
+                    <x-button.secondary @click="open = false">Tutup</x-button.secondary>
+                    @if ($modalData->status_kirim == 0)
+                        <x-button.success id="delivery-btn-done" wire:click="deliveryArrivedConfirmation"
+                            wire:confirm.prompt="Apakah anda yakin ingin menyelesaikan pengiriman ini?\nKetik YA untuk mengkonfirmasi|YA"
+                            type="button">
+                            Pengiriman Selesai
+                        </x-button.success>
+                    @endif
+                    @if ($modalData->status_kirim == 2)
+                        <x-button.primary id="continue-btn-done" wire:click="continueAfterDelayConfirmation" type="button">
+                            Pengiriman Dilanjutkan?
+                        </x-button.primary>
+                    @endif
+                </x-slot>
+            @endif
+        @endcan
+    </x-modal.base-modal>
     {{-- end modal detail pengiriman --}}
 
     {{-- modal delayed --}}
-    <div id="pengiriman-delay-modal" wire:show="showDelayedModal" wire:transition.duration.300ms
-        class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 py-8">
-        @if ($showDelayedModal)
-            <div class="relative mx-4 my-6 flex w-full flex-col gap-1 overflow-y-auto rounded-xl bg-white p-4 shadow-2xl dark:bg-dark-primary md:w-2/3 md:gap-2 lg:w-1/2 lg:p-6 xl:w-2/5"
-                style="max-height: calc(100vh - 6rem);">
+    <x-modal.base-modal show="showDelayedModal" title="Konfirmasi Delay Pengiriman"
+        subtitle="{{ $showDelayedModal && $modalData ? $modalData->kode_kirim : '' }}"
+        iconContainerClass="bg-amber-600 shadow-amber-500/20" maxWidth="lg">
+        <x-slot name="icon">
+            <x-icons.clock class="h-5 w-5" />
+        </x-slot>
 
-                <x-button.secondary class="absolute right-2 top-2 !p-1 !bg-transparent ring-0 hover:!bg-gray-100 dark:hover:!bg-gray-800" type="button" wire:click="$set('showDelayedModal', false)">
-                    <x-slot name="icon">
-                        <x-icons.close class="h-6 w-6 text-red-600 hover:text-red-800" />
-                    </x-slot>
-                </x-button.secondary>
+        @if ($showDelayedModal && $modalData)
+            <form id="form-delay-pengiriman" wire:submit.prevent="delayDelivery({{ $modalData->id }})"
+                class="flex flex-col gap-5">
 
-                <h2 class="mb-2 gap-x-2 text-lg font-semibold text-gray-900 dark:text-white lg:text-xl">
-                    Pengiriman <span class="text-green-500">{{ $modalData->kode_kirim }}</span> Mengalami
-                    Delay?
-                </h2>
+                <div class="rounded-xl bg-amber-50 px-4 py-3 dark:bg-amber-950/20">
+                    <p class="text-sm font-semibold text-amber-800 dark:text-amber-300">
+                        Pengiriman <span class="font-black">{{ $modalData->kode_kirim }}</span> mengalami delay?
+                    </p>
+                </div>
 
-                <form wire:submit.prevent="delayDelivery({{ $modalData->id }})"
-                    class="grid grid-cols-1 gap-2 rounded-lg border border-zinc-200 bg-gray-50 p-4 dark:border-zinc-800 dark:bg-gray-800 sm:space-y-2">
+                <div class="w-full">
+                    <x-input.textarea id="reason" :labels="true" :textLabel="'Alasan Delay'" name="reason"
+                        wire:model="delayed_reason"
+                        placeholder="Tuliskan alasan kenapa pengiriman mengalami delay..." />
+                    @error('delayed_reason')
+                        <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
 
-                    <div class="w-full">
-                        <x-input.textarea id="reason" :labels="true" :textLabel="'Alasan Delay'" name="reason"
-                            wire:model="delayed_reason"
-                            placeholder="Tuliskan alasan kenapa pengiriman mengalami delay..." />
-
-                        @error('delayed_reason')
-                            <span class="mt-2 text-sm text-red-500">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="w-full">
-                        <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                            for="delayed_eta">Estimasi Tanggal Tiba</label>
-
-                        <div class="relative">
-                            <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
-                                <x-icons.date class="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                            </div>
-
-                            <input id="delayed_eta" name="delayed_eta" wire:model="delayed_eta" type="date"
-                                class="block w-full rounded-lg border border-zinc-200 bg-gray-50 p-2.5 ps-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500">
+                <div class="w-full">
+                    <label class="mb-2 block text-sm font-bold text-zinc-900 dark:text-white" for="delayed_eta">
+                        Estimasi Tanggal Tiba
+                    </label>
+                    <div class="relative">
+                        <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-4">
+                            <x-icons.date class="h-4 w-4 text-zinc-400" />
                         </div>
-
-                        @error('delayed_eta')
-                            <span class="mt-2 text-sm text-red-500">{{ $message }}</span>
-                        @enderror
+                        <input id="delayed_eta" name="delayed_eta" wire:model="delayed_eta" type="date"
+                            class="block w-full rounded-xl border border-zinc-200 bg-white/60 py-2.5 pr-4 ps-11 text-sm font-medium text-zinc-900 transition-all focus:border-amber-500 focus:ring-amber-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-white">
                     </div>
-
-                    <div class="flex w-full justify-end gap-2 lg:gap-4">
-                        <x-button.danger type="button" wire:click="$set('showDelayedModal', false)">
-                            Batal
-                        </x-button.danger>
-
-                        <x-button.primary type="submit" name="submit-delay">
-                            Konfirmasi
-                        </x-button.primary>
-                    </div>
-
-                </form>
-
-            </div>
+                    @error('delayed_eta')
+                        <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
+            </form>
         @endif
-    </div>
+
+        <x-slot name="footer">
+            <x-button.secondary @click="open = false">Batal</x-button.secondary>
+            <x-button.primary type="submit" form="form-delay-pengiriman" name="submit-delay">
+                Konfirmasi
+            </x-button.primary>
+        </x-slot>
+    </x-modal.base-modal>
     {{-- end modal delayed --}}
 </div>
 {{-- end riwayat pengiriman --}}

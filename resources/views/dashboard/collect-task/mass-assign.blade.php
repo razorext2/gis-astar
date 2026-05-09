@@ -1,90 +1,78 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div class="w-full space-y-6">
-        <div
-            class="rounded-xl bg-white p-4 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 sm:p-6">
-            <div class="w-full">
-                <header class="flex flex-row">
+    <div
+        class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none sm:p-6">
+        <header class="flex items-center">
+            <x-button.danger class="my-auto me-4 max-h-10" href="{{ route('collect-task.index') }}" wire:navigate>
+                <x-icons.angle-left class="h-5 w-5" />
+            </x-button.danger>
 
-                    <form id="index-collect-task" action="{{ route('collect-task.index') }}"></form>
-                    <x-button.danger class="my-auto me-4 max-h-10" form="index-collect-task" type="submit">
-                        <x-slot name="icon">
-                            <x-icons.angle-left class="icon h-6 w-6 text-red-500 dark:text-white" />
-                        </x-slot>
-                        Kembali
-                    </x-button.danger>
+            <h2 class="text-lg font-medium text-gray-900 dark:text-white">
+                {{ __('Assign Surat Jalan (SR)') }}
+            </h2>
+        </header>
 
-                    <h2 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
-                        {{ __('Assign Surat Jalan (SR)') }}
-                    </h2>
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-300">
+            {{ __('Silahkan sesuaikan data dibawah ini dengan data yang benar.') }}
+        </p>
 
-                </header>
-                <p class="mt-1 text-sm text-gray-600 dark:text-gray-300">
-                    {{ __('Silahkan sesuaikan data dibawah ini dengan data yang benar.') }}
-                </p>
+        <form id="mass-assign" method="POST">
+            @csrf
+            <div class="mb-6 mt-4 grid grid-cols-2 gap-6">
 
-                <form id="mass-assign" method="POST">
-                    @csrf
-                    <div class="mb-6 mt-4 grid grid-cols-2 gap-6">
+                <div class="w-full">
 
-                        <div class="w-full">
+                    <x-input.basic id="full_name" name="full_name" placeholder="Cari nama kolektor.." required>
+                        Nama Kolektor
+                    </x-input.basic>
+                    <div class="autocomplete-pegawai-results" id="autocomplete-pegawai-results"></div>
+                    <div class="mt-2 hidden text-sm text-red-500" id="alert-full_name"></div>
+                </div>
 
-                            <x-input.basic id="full_name" name="full_name" placeholder="Cari nama kolektor.." required>
-                                Nama Kolektor
-                            </x-input.basic>
-                            <div class="autocomplete-pegawai-results" id="autocomplete-pegawai-results"></div>
-                            <div class="mt-2 hidden text-sm text-red-500" id="alert-full_name"></div>
-                        </div>
+                <div class="w-full">
 
-                        <div class="w-full">
+                    <x-input.basic class="cursor-not-allowed" id="kode_pegawai" name="kode_pegawai"
+                        placeholder="Kode pegawai" required readonly>
+                        Kode Jari
+                    </x-input.basic>
+                    <div class="mt-2 hidden text-sm text-red-500" id="alert-kode_pegawai"></div>
+                </div>
 
-                            <x-input.basic class="cursor-not-allowed" id="kode_pegawai" name="kode_pegawai"
-                                placeholder="Kode pegawai" required readonly>
-                                Kode Jari
-                            </x-input.basic>
-                            <div class="mt-2 hidden text-sm text-red-500" id="alert-kode_pegawai"></div>
-                        </div>
+                <div class="col-span-2 w-full">
 
-                        <div class="col-span-2 w-full">
+                    <x-input.basic id="no_sr" name="no_sr" placeholder="SR-XXXXXX">
+                        No. SR
+                    </x-input.basic>
 
-                            <x-input.basic id="no_sr" name="no_sr" placeholder="SR-XXXXXX">
-                                No. SR
-                            </x-input.basic>
+                    <div class="autocomplete-collect-task-container" id="autocomplete-collect-task-container"></div>
 
-                            <div class="autocomplete-collect-task-container" id="autocomplete-collect-task-container"></div>
+                </div>
 
-                        </div>
+                <div class="col-span-2 w-full">
 
-                        <div class="col-span-2 w-full">
-
-                            <p class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> List SR yang dipilih
-                            </p>
-                            <div class="grid w-full gap-2" id="selected-container">
-                                <x-input.basic id="empty" name="empty" value="Belum ada SR yang dipilih..."
-                                    :labels="false" readonly></x-input.basic>
-                                {{-- disini harusnya --}}
-                            </div>
-
-                            <div class="mt-2 hidden text-sm text-red-500" id="alert-sr_data"></div>
-
-                        </div>
-
+                    <p class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> List SR yang dipilih
+                    </p>
+                    <div class="grid w-full gap-2" id="selected-container">
+                        <x-input.basic id="empty" name="empty" value="Belum ada SR yang dipilih..." :labels="false"
+                            readonly></x-input.basic>
+                        {{-- disini harusnya --}}
                     </div>
 
-                    <div class="relative inline-flex w-full gap-4">
+                    <div class="mt-2 hidden text-sm text-red-500" id="alert-sr_data"></div>
 
-                        <x-button.primary id="store" type="button">
-                            <x-slot name="icon">
-                                <x-icons.angle-right class="h-5 w-5 text-blue-500 dark:text-white" />
-                            </x-slot>
-                            Submit
-                        </x-button.primary>
+                </div>
 
-                    </div>
-
-                </form>
             </div>
-        </div>
+
+            <div class="relative inline-flex w-full gap-4">
+                <x-button.primary id="store" type="button">
+                    <x-slot name="icon">
+                        <x-icons.angle-right class="h-5 w-5 text-blue-500 dark:text-white" />
+                    </x-slot>
+                    Submit
+                </x-button.primary>
+            </div>
+        </form>
     </div>
 @endsection
 @push('script')

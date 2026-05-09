@@ -5,5 +5,5 @@
 		src="{{ asset('assets/img/grid.webp') }}" alt="Background Image" loading="lazy" />
 
 	<!-- Overlay -->
-	<div class="fixed inset-0 -z-40 w-full bg-gray-300 opacity-10 dark:bg-gray-700 dark:opacity-70"></div>
+	<div class="fixed inset-0 -z-40 w-full bg-zinc-300 opacity-10 dark:bg-zinc-700 dark:opacity-70"></div>
 </div>

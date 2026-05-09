@@ -1,128 +1,122 @@
 @extends('dashboard.pegawai.detail')
 @section('menus')
 @section('menus')
-    <div class="space-y-4 lg:space-y-6" id="sales" role="tabpanel">
-        <div class="grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap-4">
+    <div id="sales" role="tabpanel" class="grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap-4">
 
-            {{-- Filter Section --}}
-            <div class="lg:col-span-2">
-                <div
-                    class="rounded-3xl border border-white/30 bg-white/70 p-4 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60 lg:p-6">
-                    <form id="dateForm" action="{{ route('pegawai.sales', ['pegawai' => $pegawai->kode_pegawai]) }}"
-                        method="GET" class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="h-8 w-1 rounded-full bg-blue-600"></div>
-                            <h3 class="text-sm font-bold uppercase tracking-wider text-gray-800 dark:text-white">Filter
-                                Laporan Sales</h3>
-                        </div>
-                        <div class="w-full sm:max-w-xs">
-                            <x-dashboard.date-picker id="datepicker-actions" name="date" form="dateForm"
-                                :text="'Filter tanggal'" />
-                        </div>
-                    </form>
+        {{-- Filter Section --}}
+        <div
+            class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-xl backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:col-span-2 lg:p-6">
+            <form id="dateForm" action="{{ route('pegawai.sales', ['pegawai' => $pegawai->kode_pegawai]) }}" method="GET"
+                class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="h-8 w-1 rounded-full bg-blue-600"></div>
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-gray-800 dark:text-white">Filter
+                        Laporan Sales</h3>
                 </div>
+                <div class="w-full sm:max-w-xs">
+                    <x-dashboard.date-picker id="datepicker-actions" name="date" form="dateForm" :text="'Filter tanggal'" />
+                </div>
+            </form>
+        </div>
+
+        {{-- Report History --}}
+        <div
+            class="relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-xl backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
+            <div class="mb-8 border-b border-zinc-200 pb-4 dark:border-zinc-800">
+                <h2 class="text-2xl font-bold tracking-tight text-gray-800 dark:text-white">
+                    Laporan Sales
+                </h2>
+                <p class="text-sm font-medium text-blue-600 dark:text-blue-400">
+                    @if (Request::query('date'))
+                        Riwayat Kunjungan,
+                        {{ \Carbon\Carbon::parse(Request::query('date'))->locale('id')->isoFormat('D MMMM YYYY') }}
+                    @else
+                        Riwayat Kunjungan,
+                        {{ \Carbon\Carbon::today()->locale('id')->isoFormat('D MMMM YYYY') }}
+                    @endif
+                </p>
             </div>
 
-            {{-- Report History --}}
-            <div
-                class="relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-6 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60 lg:p-8">
-                <div class="mb-8 border-b border-white/20 pb-4 dark:border-zinc-800">
-                    <h2 class="text-2xl font-bold tracking-tight text-gray-800 dark:text-white">
-                        Laporan Sales
-                    </h2>
-                    <p class="text-sm font-medium text-blue-600 dark:text-blue-400">
-                        @if (Request::query('date'))
-                            Histori Kunjungan,
-                            {{ \Carbon\Carbon::parse(Request::query('date'))->locale('id')->isoFormat('D MMMM YYYY') }}
-                        @else
-                            Histori Kunjungan,
-                            {{ \Carbon\Carbon::today()->locale('id')->isoFormat('D MMMM YYYY') }}
-                        @endif
-                    </p>
-                </div>
-
-                <div class="relative overflow-hidden pl-2">
-                    <ol class="relative ml-4 border-l-2 border-dashed border-zinc-200 dark:border-zinc-800"
-                        id="salesContent">
-                        @if ($report->isNotEmpty())
-                            @foreach ($report as $data)
-                                <li class="relative mb-10 ml-8 transition-all last:mb-0 hover:translate-x-1">
-                                    {{-- Status Dot --}}
-                                    <div
-                                        class="absolute -left-[45px] top-1 flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg ring-4 ring-white dark:ring-zinc-900">
-                                        <x-icons.briefcase class="h-4 w-4" />
-                                    </div>
-
-                                    <div class="flex flex-col gap-1">
-                                        <h3
-                                            class="flex flex-wrap items-center gap-2 text-sm font-bold text-gray-900 dark:text-white">
-                                            <a class="group flex items-center gap-1"
-                                                href="{{ route('sales.show', $data->id) }}" target="_blank">
-                                                <span>{{ $data->title }}</span>
-                                                <x-icons.eye
-                                                    class="h-3.5 w-3.5 text-blue-500 opacity-50 transition-opacity group-hover:opacity-100" />
-                                            </a>
-
-                                            @php
-                                                $statusConfigs = [
-                                                    0 => [
-                                                        'label' => 'Unapproved',
-                                                        'class' =>
-                                                            'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
-                                                    ],
-                                                    1 => [
-                                                        'label' => 'Approved',
-                                                        'class' =>
-                                                            'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
-                                                    ],
-                                                ];
-                                                $currentStatus = $statusConfigs[$data->status] ?? [
-                                                    'label' => 'Rejected',
-                                                    'class' =>
-                                                        'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400',
-                                                ];
-                                            @endphp
-
-                                            <span
-                                                class="{{ $currentStatus['class'] }} inline-flex items-center rounded-lg px-2 py-0.5 text-[10px] font-bold uppercase tracking-tight">
-                                                {{ $currentStatus['label'] }}
-                                            </span>
-                                        </h3>
-
-                                        <div
-                                            class="flex items-center gap-2 text-[11px] font-semibold text-gray-500 dark:text-gray-400">
-                                            <x-icons.lock-time class="h-3 w-3" />
-                                            <span>{{ $data->created_at->locale('id')->isoFormat('HH:mm:ss') }}</span>
-                                        </div>
-                                    </div>
-                                </li>
-                            @endforeach
-                        @else
-                            <div class="flex flex-col items-center justify-center py-12 text-center">
+            <div class="relative overflow-hidden pl-2">
+                <ol class="relative ml-4 border-l-2 border-dashed border-zinc-200 dark:border-zinc-800" id="salesContent">
+                    @if ($report->isNotEmpty())
+                        @foreach ($report as $data)
+                            <li class="relative mb-10 ml-8 transition-all last:mb-0 hover:translate-x-1">
+                                {{-- Status Dot --}}
                                 <div
-                                    class="mb-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-gray-50 dark:bg-zinc-800/50">
-                                    <x-icons.info class="h-8 w-8 text-gray-300" />
+                                    class="absolute -left-[50px] top-1 flex h-8 w-8 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg ring-4 ring-white dark:ring-zinc-900">
+                                    <x-icons.briefcase class="h-4 w-4" />
                                 </div>
-                                <h1 class="text-sm font-bold text-gray-500">Tidak ada data laporan sales</h1>
+
+                                <div class="flex flex-col gap-1">
+                                    <h3
+                                        class="flex flex-wrap items-center gap-2 text-sm font-bold text-gray-900 dark:text-white">
+                                        <a class="group flex items-center gap-1" href="{{ route('sales.show', $data->id) }}"
+                                            target="_blank">
+                                            <span>{{ $data->title }}</span>
+                                            <x-icons.eye
+                                                class="h-3.5 w-3.5 text-blue-500 opacity-50 transition-opacity group-hover:opacity-100" />
+                                        </a>
+
+                                        @php
+                                            $statusConfigs = [
+                                                0 => [
+                                                    'label' => 'Unapproved',
+                                                    'class' =>
+                                                        'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
+                                                ],
+                                                1 => [
+                                                    'label' => 'Approved',
+                                                    'class' =>
+                                                        'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
+                                                ],
+                                            ];
+                                            $currentStatus = $statusConfigs[$data->status] ?? [
+                                                'label' => 'Rejected',
+                                                'class' =>
+                                                    'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400',
+                                            ];
+                                        @endphp
+
+                                        <span
+                                            class="{{ $currentStatus['class'] }} inline-flex items-center rounded-lg px-2 py-0.5 text-[10px] font-bold uppercase tracking-tight">
+                                            {{ $currentStatus['label'] }}
+                                        </span>
+                                    </h3>
+
+                                    <div
+                                        class="flex items-center gap-2 text-[11px] font-semibold text-gray-500 dark:text-gray-400">
+                                        <x-icons.lock-time class="h-3 w-3" />
+                                        <span>{{ $data->created_at->locale('id')->isoFormat('HH:mm:ss') }}</span>
+                                    </div>
+                                </div>
+                            </li>
+                        @endforeach
+                    @else
+                        <div class="flex flex-col items-center justify-center py-12 text-center">
+                            <div
+                                class="mb-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-gray-50 dark:bg-zinc-800/50">
+                                <x-icons.info class="h-8 w-8 text-gray-300" />
                             </div>
-                        @endif
-                    </ol>
+                            <h1 class="text-sm font-bold text-gray-500">Tidak ada data laporan sales</h1>
+                        </div>
+                    @endif
+                </ol>
+            </div>
+        </div>
+
+        {{-- Map Section --}}
+        <div
+            class="relative h-max overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-xl backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
+            <div class="mb-6 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="h-8 w-1 rounded-full bg-red-600"></div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white">Mapping & Teritori</h3>
                 </div>
             </div>
 
-            {{-- Map Section --}}
-            <div
-                class="relative h-max overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-6 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/60 lg:p-8">
-                <div class="mb-6 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="h-8 w-1 rounded-full bg-red-600"></div>
-                        <h3 class="text-xl font-bold text-gray-800 dark:text-white">Mapping & Teritori</h3>
-                    </div>
-                </div>
-
-                <div class="relative z-10 h-[500px] w-full overflow-hidden rounded-2xl border border-white/20 shadow-inner lg:h-[600px]"
-                    id="map"></div>
-            </div>
+            <div class="relative z-10 h-[500px] w-full overflow-hidden rounded-2xl border border-white/20 shadow-inner lg:h-[600px]"
+                id="map"></div>
         </div>
     </div>
 

@@ -3,7 +3,7 @@
     @livewire('components.card', ['type' => 'spkpurchasingrequest'])
 
     <div
-        class="flex flex-col gap-2 rounded-xl bg-white py-2 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 lg:gap-4 lg:p-6">
+        class="flex flex-col gap-2 rounded-xl border border-zinc-200 bg-white/60 px-2 py-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:gap-4 lg:p-6">
 
         <div class="flex w-full flex-col p-2 lg:p-0">
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Purchasing Request</h3>

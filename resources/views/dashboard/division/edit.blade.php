@@ -2,22 +2,18 @@
 @section('content')
     <div class="w-full space-y-6 xl:w-6/12 2xl:w-1/3">
         <div
-            class="rounded-xl bg-white p-4 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 sm:p-6">
+            class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none sm:p-6">
             <div class="max-w-xl">
-                <header class="flex flex-row gap-x-3">
-                    <div class="max-w-xs">
-                        <x-button.danger href="{{ route('division.index') }}" wire:navigate>
-                            <x-slot name="icon">
-                                <x-icons.angle-left class="h-6 w-6" />
-                            </x-slot>
-                            {{ __('Kembali') }}
-                        </x-button.danger>
-                    </div>
-                    <h2 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
+                <header class="flex items-center">
+                    <x-button.danger href="{{ route('division.index') }}" class="my-auto me-4 max-h-10" wire:navigate>
+                        <x-icons.angle-left class="h-5 w-5" />
+                    </x-button.danger>
+
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-white">
                         {{ __('Edit Data Division') }}
                     </h2>
-
                 </header>
+
                 <p class="mt-1 text-sm text-gray-600 dark:text-gray-300">
                     {{ __('Silahkan sesuaikan data dibawah ini dengan data yang benar.') }}
                 </p>

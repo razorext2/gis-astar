@@ -8,6 +8,8 @@ class LaporanHarian extends Component
 {
     public bool $showPreview = false;
 
+    public ?string $pdfUrl = null;
+
     public ?string $assignmentId = null;
 
     public function mount($assignmentId)
@@ -17,7 +19,7 @@ class LaporanHarian extends Component
 
     public function previewPdf()
     {
-        // munculkan modal summary
+        $this->pdfUrl = route('daily-report.pdf.stream', ['assignmentId' => $this->assignmentId]);
         $this->showPreview = true;
 
         // munculkan modal pdf

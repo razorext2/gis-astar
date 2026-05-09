@@ -10,7 +10,7 @@
 ])
 
 @if ($labels)
-	<label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="{{ $id }}">
+	<label class="mb-2 block text-sm font-medium text-zinc-900 dark:text-white" for="{{ $id }}">
 		{{ $textLabel }}
 	</label>
 @endif
@@ -18,7 +18,7 @@
 <div class="relative">
 	@if ($icon)
 		<div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
-			<x-icons.search class="h-4 w-4 text-gray-500 dark:text-gray-400" />
+			<x-icons.search class="h-4 w-4 text-zinc-500 dark:text-zinc-400" />
 		</div>
 	@endif
 

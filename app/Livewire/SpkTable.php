@@ -19,7 +19,7 @@ final class SpkTable extends PowerGridComponent
 
     public bool $deferLoading = true;
 
-    public bool $showFilters = true;
+    public bool $showFilters = false;
 
     public string $sortField = 'created_at';
 

@@ -1,29 +1,28 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div
-        class="mb-96 flex w-full flex-col gap-4 rounded-xl bg-white px-3 py-2 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 lg:p-6">
-        <div class="flex w-full flex-row items-center gap-2 lg:gap-4">
-            <div>
-                <x-button.danger href="{{ route('spk.index') }}" wire:navigate id="back-button">
-                    <x-slot name="icon">
-                        <x-icons.angle-left class="h-6 w-6" />
-                    </x-slot>
-                    {{ __('Kembali') }}
-                </x-button.danger>
-            </div>
+    <div class="mb-16 space-y-4">
+        <div
+            class="flex items-center gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
+
+            <x-button.danger href="{{ route('spk.index') }}" class="max-h-10 max-w-fit" wire:navigate id="back-button">
+                <x-icons.angle-left class="h-5 w-5" />
+            </x-button.danger>
 
             <div>
-                <p class="text-xl font-semibold text-gray-900 dark:bg-dark-primary dark:text-white">
+                <span class="text-xl font-semibold text-gray-900 dark:text-white">
                     Ubah SPK
                     {{ $spk->nomor_order . ($spk->revision_count ? 'R' . str_pad($spk->revision_count, 2, '0', STR_PAD_LEFT) : '') }}
-                    <span class="text-sm uppercase italic">( {{ $spk->tipe_tagihan }}
-                        )</span>
-                </p>
+
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                        ({{ $spk->tipe_tagihan }})
+                    </p>
+                </span>
 
                 <p class="text-sm text-gray-600 dark:text-gray-400 md:text-base">
                     Anda dapat mengubah data SPK Customer melalui halaman ini.
                 </p>
             </div>
+
         </div>
 
         @livewire('handler.spk.edit', ['id' => $spk->id])

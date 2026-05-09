@@ -55,7 +55,7 @@
 
         {{-- Main Card --}}
         <div
-            class="{{ $style['shadow'] }} relative h-full overflow-hidden rounded-2xl bg-white p-4 shadow-sm ring-1 ring-zinc-200 transition-all duration-300 group-hover:shadow-lg dark:bg-dark-primary dark:ring-zinc-800">
+            class="{{ $style['shadow'] }} relative h-full overflow-hidden rounded-xl bg-white/60 backdrop-blur-md p-4 shadow-md ring-1 ring-zinc-200 transition-all duration-300 group-hover:shadow-xl dark:bg-dark-primary/60 dark:backdrop-blur-md dark:ring-zinc-800">
 
             {{-- Accent Top Line --}}
             <div

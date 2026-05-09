@@ -1,22 +1,22 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div class="relative grid grid-cols-1 gap-4">
+    <div class="relative space-y-4">
 
         <div
-            class="flex flex-col rounded-xl bg-white p-2 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 lg:p-6">
+            class="flex flex-col rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
 
-            <span class="text-xl font-semibold text-gray-900 dark:bg-dark-primary dark:text-white">
+            <span class="text-xl font-semibold text-gray-900 dark:text-white">
                 Manajemen Invoice Pekanbaru
             </span>
 
-            <p class="text-base text-gray-600 dark:text-gray-400">
+            <p class="text-sm text-gray-600 dark:text-gray-400">
                 Kamu dapat menambah invoice, mengubah nama invoice, dan menghapus data invoice transaksi Kantor Cabang
                 Pekanbaru.
             </p>
 
         </div>
 
-        <div class="flex flex-row items-center justify-between gap-2">
+        <div class="flex flex-col justify-between gap-2 lg:flex-row lg:items-center">
             @can(['invoice-list', 'invoice-add'])
                 <div class="flex flex-row gap-2">
                     <x-button.success wire:navigate href="{{ route('invoice.pku.create', ['tipe_tagihan' => 'idcppn']) }}">
@@ -43,7 +43,7 @@
         </div>
 
         <div
-            class="rounded-xl bg-white p-2 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 lg:p-6">
+            class="rounded-xl border border-zinc-200 bg-white/60 px-2 py-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
             <livewire:table-refresher table-name="InvoiceTable" />
         </div>
     </div>

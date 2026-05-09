@@ -1,7 +1,7 @@
 <div class="w-full">
     {{-- informasi project --}}
     <div
-        class="mb-2 w-full rounded-xl bg-white shadow-sm ring-1 ring-zinc-200 dark:bg-gray-800 dark:ring-zinc-800 lg:mb-4">
+        class="mb-2 w-full rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800 dark:shadow-none lg:mb-4">
         {{-- HEADER --}}
         <div class="border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
@@ -125,7 +125,7 @@
 
             {{-- extend request --}}
             @if ($assignment->project->extend_request)
-                <div class="col-span-2 rounded-lg bg-gray-800 p-2 ring-1 ring-zinc-200 dark:ring-zinc-800 lg:p-4">
+                <div class="col-span-2 rounded-lg border border-zinc-200 bg-gray-800 p-2 dark:border-zinc-800 lg:p-4">
                     <div class="text-gray-800 dark:text-white">
                         <p>
                             <span class="font-semibold">
@@ -211,8 +211,16 @@
                 @can('laporan-harian-validate')
                     <div id="mark-as-complete-container">
                         <x-button.success id="btn-mark-as-complete" type="button" wire:click.prevent="markAsComplete"
-                            wire:confirm.prompt="Apakah anda yakin ingin menandai Laporan ini sebagai Selesai?\nJika ya, silahkan ketik SELESAI|SELESAI">
-                            Tandai Selesai
+                            wire:confirm.prompt="Apakah anda yakin ingin menandai Laporan ini sebagai Selesai?\nJika ya, silahkan ketik SELESAI|SELESAI"
+                            wire:loading.attr="disabled" wire:target="markAsComplete">
+                            <x-slot name="icon">
+                                <x-icons.angle-right wire:loading.remove wire:target="markAsComplete"
+                                    class="icon h-5 w-5" />
+                                <x-icons.loading wire:loading wire:target="markAsComplete" class="h-4 w-4 animate-spin" />
+                            </x-slot>
+
+                            <span wire:loading.remove wire:target="markAsComplete">Tandai Selesai</span>
+                            <span wire:loading wire:target="markAsComplete">Memproses...</span>
                         </x-button.success>
                     </div>
                 @endcan
@@ -225,14 +233,10 @@
     <div class="flex flex-col gap-4">
         {{-- ACTION BAR --}}
         <div class="flex flex-wrap items-center justify-between gap-3">
-            <x-button.link href="{{ route('report.general.index') }}"
-                class="flex w-fit items-center gap-2 ring-1 ring-red-600 dark:bg-red-800 dark:text-white" wire:navigate
+            <x-button.danger href="{{ route('report.general.index') }}" class="my-auto me-4 max-h-10" wire:navigate
                 id="back-button">
-                <x-slot name="icon">
-                    <x-icons.angle-left class="h-5 w-5 text-red-500 dark:text-white" />
-                </x-slot>
-                Kembali
-            </x-button.link>
+                <x-icons.angle-left class="h-5 w-5" />
+            </x-button.danger>
 
             @can('laporan-harian-create')
                 @if (now()->lt(\Carbon\Carbon::parse($assignment->project->end_date)->endOfDay()) && $assignment->status != 'completed')
@@ -244,7 +248,8 @@
         </div>
 
         {{-- LIST CONTAINER --}}
-        <div class="w-full rounded-xl bg-white shadow-sm ring-1 ring-zinc-200 dark:bg-gray-800 dark:ring-zinc-800">
+        <div
+            class="w-full rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800 dark:shadow-none">
             <div class="flex flex-col divide-y divide-gray-200 dark:divide-gray-700">
                 @forelse ($this->dailyReports as $index => $row)
                     <div class="relative p-2 transition hover:bg-gray-50 dark:hover:bg-gray-700/40 lg:p-4">
@@ -331,7 +336,15 @@
 
                                 @can('laporan-harian-validate')
                                     <x-button.success id="summary" class="text-sm" type="button"
-                                        wire:click.prevent="summary('{{ $row->id }}')">
+                                        wire:click.prevent="summary('{{ $row->id }}')" wire:loading.attr="disabled"
+                                        wire:target="summary">
+                                        <x-slot name="icon">
+                                            <x-icons.badge-check wire:loading.remove wire:target="summary"
+                                                class="icon h-5 w-5" />
+                                            <x-icons.loading wire:loading wire:target="summary"
+                                                class="h-4 w-4 animate-spin" />
+                                        </x-slot>
+
                                         <span wire:loading.remove wire:target="summary">Summary</span>
                                         <span wire:loading wire:target="summary">Memuat...</span>
                                     </x-button.success>
@@ -358,146 +371,125 @@
 
     {{-- summary modal --}}
     @can('laporan-harian-validate')
-        <div id="summary-modal" wire:show="showSummaryModal" wire:transition.duration.300ms
-            class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 py-8">
-            @if ($showSummaryModal)
-                <div class="relative mx-4 my-6 flex w-full flex-col gap-1 overflow-y-auto rounded-xl bg-white p-4 shadow-2xl dark:bg-dark-primary md:w-1/2 md:gap-2 lg:p-6"
-                    style="max-height: calc(100vh - 6rem);">
+        <x-modal.base-modal show="showSummaryModal" title="Rekap Aktivitas"
+            subtitle="{{ $showSummaryModal && $modalData ? \Carbon\Carbon::parse($modalData->report_date)->locale('id')->isoFormat('dddd, DD MMMM YYYY') : '' }}"
+            iconContainerClass="bg-emerald-600 shadow-emerald-500/20" maxWidth="2xl">
+            <x-slot name="icon">
+                <x-icons.badge-check class="h-5 w-5" />
+            </x-slot>
 
-                    <x-button.secondary class="absolute right-2 top-2 !p-1 !bg-transparent ring-0 hover:!bg-gray-100 dark:hover:!bg-gray-800" type="button"
-                        wire:click.prevent="$set('showSummaryModal', false)">
-                        <x-slot name="icon">
-                            <x-icons.close class="h-6 w-6 text-red-600 hover:text-red-800" />
-                        </x-slot>
-                    </x-button.secondary>
+            @if ($showSummaryModal && $modalData)
+                <div class="flex flex-col gap-3">
+                    @php
+                        $activities = collect($modalData->hourlyReport)
+                            ->sortByDesc(fn($item) => \Carbon\Carbon::parse($item['created_at']))
+                            ->values()
+                            ->toArray();
+                    @endphp
 
-                    <h2
-                        class="mb-2 flex items-center gap-x-2 text-lg font-semibold text-gray-900 dark:text-white lg:text-xl">
-                        Rekap Aktivitas:
-                        {{ \Carbon\Carbon::parse($modalData->report_date)->locale('id')->isoFormat('dddd, DD MMMM YYYY') }}
-                    </h2>
-
-                    <div class="h-96 overflow-auto">
-                        @php
-                            $activities = collect($modalData->hourlyReport)
-                                ->sortByDesc(function ($item) {
-                                    return Carbon\Carbon::parse($item['created_at']);
-                                })
-                                ->values()
-                                ->toArray();
-                        @endphp
-
-                        @forelse($activities as $row)
-                            <div
-                                class="mb-2 rounded-lg border border-zinc-200 bg-gray-50 p-4 dark:border-zinc-800 dark:bg-gray-800 sm:space-y-2 lg:mb-4">
-
-                                <dl class="items-start justify-between gap-4 sm:flex">
-                                    <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">
-                                        Aktivitas</dt>
-                                    <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                                        {!! nl2br($row['notes']) !!}
-                                    </dd>
-                                </dl>
-
-                                <dl class="items-center justify-between gap-4 sm:flex">
-                                    <dt class="mb-1 font-normal text-gray-500 dark:text-gray-400 sm:mb-0">Waktu</dt>
-                                    <dd class="font-medium text-gray-900 dark:text-white sm:text-end">
-                                        {{ \Carbon\Carbon::parse($row['start_time'])->locale('id')->isoFormat('HH:mm') }}
-                                        -
-                                        {{ \Carbon\Carbon::parse($row['end_time'])->locale('id')->isoFormat('HH:mm') }}
-                                    </dd>
-                                </dl>
-                                <dl class="items-center justify-between gap-4 sm:flex">
-                                    <dt class="mb-1 font-normal text-blue-500 dark:text-blue-400 sm:mb-0">
-                                        Tanggal Dibuat
-                                    </dt>
-                                    <dd class="font-medium text-blue-500 dark:text-blue-400 sm:text-end">
-                                        {{ \Carbon\Carbon::parse($row['created_at'])->isoFormat('dddd, D MMMM YYYY HH:mm:ss') }}
-                                    </dd>
-                                </dl>
-
-                            </div>
-                        @empty
-                            <div
-                                class="mb-2 rounded-lg border border-zinc-200 bg-gray-50 p-4 dark:border-zinc-800 dark:bg-gray-800 sm:space-y-2 lg:mb-4">
-                                <p class="font-semibold text-gray-800 dark:text-white">Belum ada riwayat aktivitas.</p>
-                            </div>
-                        @endforelse
-                    </div>
-
-                    @can('laporan-harian-validate')
-                        <div class="mx-auto flex w-fit justify-end gap-x-2">
-                            @if ($modalData->status === 'submitted')
-                                <x-button.success id="delivery-btn-done" wire:click.prevent="approve"
-                                    wire:confirm.prompt="Apakah anda yakin ingin menyetujui laporan ini?\nKetik YA untuk mengkonfirmasi|YA"
-                                    type="button">
-                                    Approve Laporan
-                                </x-button.success>
-                            @endif
+                    @forelse ($activities as $row)
+                        <div
+                            class="rounded-xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-800/50">
+                            <dl class="flex items-start justify-between gap-4 py-1">
+                                <dt class="shrink-0 text-xs font-medium text-zinc-500 dark:text-zinc-400">Aktivitas</dt>
+                                <dd class="text-right text-sm font-semibold text-zinc-900 dark:text-white">
+                                    {!! nl2br(e($row['notes'])) !!}</dd>
+                            </dl>
+                            <dl class="flex items-center justify-between gap-4 py-1">
+                                <dt class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Waktu</dt>
+                                <dd class="text-sm font-semibold text-zinc-900 dark:text-white">
+                                    {{ \Carbon\Carbon::parse($row['start_time'])->locale('id')->isoFormat('HH:mm') }}
+                                    –
+                                    {{ \Carbon\Carbon::parse($row['end_time'])->locale('id')->isoFormat('HH:mm') }}
+                                </dd>
+                            </dl>
+                            <dl class="flex items-center justify-between gap-4 py-1">
+                                <dt class="text-xs font-medium text-blue-500 dark:text-blue-400">Tanggal Dibuat</dt>
+                                <dd class="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                                    {{ \Carbon\Carbon::parse($row['created_at'])->isoFormat('dddd, D MMMM YYYY HH:mm:ss') }}
+                                </dd>
+                            </dl>
                         </div>
-                    @endcan
-
+                    @empty
+                        <div
+                            class="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-zinc-200 py-10 dark:border-zinc-800">
+                            <x-icons.question-circle class="mb-2 h-8 w-8 text-zinc-400" />
+                            <p class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Belum ada riwayat aktivitas.
+                            </p>
+                        </div>
+                    @endforelse
                 </div>
             @endif
-        </div>
+
+            @can('laporan-harian-validate')
+                @if ($showSummaryModal && $modalData && $modalData->status === 'submitted')
+                    <x-slot name="footer">
+                        <x-button.secondary @click="open = false">Tutup</x-button.secondary>
+                        <x-button.success id="approve-btn" wire:click.prevent="approve"
+                            wire:confirm.prompt="Apakah anda yakin ingin menyetujui laporan ini?\nKetik YA untuk mengkonfirmasi|YA"
+                            type="button" wire:loading.attr="disabled" wire:target="approve">
+                            <x-slot name="icon">
+                                <x-icons.angle-right wire:loading.remove wire:target="approve" class="icon h-5 w-5" />
+                                <x-icons.loading wire:loading wire:target="approve" class="h-4 w-4 animate-spin" />
+                            </x-slot>
+
+                            <span wire:loading.remove wire:target="approve">Approve Laporan</span>
+                            <span wire:loading wire:target="approve">Memproses...</span>
+                        </x-button.success>
+                    </x-slot>
+                @endif
+            @endcan
+        </x-modal.base-modal>
     @endcan
 
     {{-- extend deadline modal --}}
     @can('laporan-harian-extend')
-        <div id="extend-modal" wire:show="showExtendModal" wire:transition.duration.300ms
-            class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 py-8">
+        <x-modal.base-modal show="showExtendModal" title="Request Perpanjangan Deadline"
+            subtitle="Ajukan perpanjangan batas waktu laporan" iconContainerClass="bg-blue-600 shadow-blue-500/20"
+            maxWidth="lg">
+            <x-slot name="icon">
+                <x-icons.clock class="h-5 w-5" />
+            </x-slot>
+
             @if ($showExtendModal)
-                <div class="relative mx-4 my-6 flex w-full flex-col gap-1 overflow-y-auto rounded-xl bg-white p-4 shadow-2xl dark:bg-dark-primary md:w-1/3 md:gap-2 lg:p-6"
-                    style="max-height: calc(100vh - 6rem);">
+                <form id="form-extend-deadline" wire:submit.prevent="extendProcess" method="POST"
+                    class="flex flex-col gap-5">
+                    <div>
+                        <x-input.basic id="days" name="days" wire:model="days" type="number" min="1"
+                            max="20" placeholder="Mau perpanjang berapa hari?">
+                            Jumlah Hari
+                        </x-input.basic>
+                        @error('days')
+                            <span class="mt-1.5 block text-xs text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
 
-                    <x-button.secondary class="absolute right-2 top-2 !p-1 !bg-transparent ring-0 hover:!bg-gray-100 dark:hover:!bg-gray-800" type="button"
-                        wire:click.prevent="$set('showExtendModal', false)">
-                        <x-slot name="icon">
-                            <x-icons.close class="h-6 w-6 text-red-600 hover:text-red-800" />
-                        </x-slot>
-                    </x-button.secondary>
-
-                    <h2
-                        class="mb-2 flex items-center gap-x-2 text-lg font-semibold text-gray-900 dark:text-white lg:text-xl">
-                        Request Perpanjangan Deadline
-                    </h2>
-
-                    <form wire:submit.prevent="extendProcess" method="POST">
-                        <div class="flex h-96 flex-col gap-2 overflow-auto">
-                            <div class="h-fit">
-                                <x-input.basic id="days" name="days" wire:model="days" type="number"
-                                    min="1" max="20" placeholder="Mau perpanjang berapa hari?">
-                                    Jumlah Hari
-                                </x-input.basic>
-
-                                @error('days')
-                                    <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <div class="h-fit">
-                                <x-input.textarea id="extend-reason" name="extend-reason" wire:model="extend_reason"
-                                    rows="10" placeholder="Apa alasan ingin perpanjang?" :labels="true"
-                                    :textLabel="'Alasan Perpanjang'" />
-
-                                @error('extend_reason')
-                                    <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        @can('laporan-harian-extend')
-                            <div class="mx-auto flex w-fit justify-end gap-x-2">
-                                <x-button.success id="delivery-btn-done" type="submit">
-                                    <span wire:loading.remove wire:target="extendProcess"> Ajukan Permintaan </span>
-                                    <span wire:loading wire:target="extendProcess"> Memproses... </span>
-                                </x-button.success>
-                            </div>
-                        @endcan
-                    </form>
-
-                </div>
+                    <div>
+                        <x-input.textarea id="extend-reason" name="extend-reason" wire:model="extend_reason"
+                            rows="6" placeholder="Apa alasan ingin perpanjang?" :labels="true"
+                            :textLabel="'Alasan Perpanjang'" />
+                        @error('extend_reason')
+                            <span class="mt-1.5 block text-xs text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </form>
             @endif
-        </div>
+
+            @can('laporan-harian-extend')
+                <x-slot name="footer">
+                    <x-button.secondary @click="open = false">Batal</x-button.secondary>
+                    <x-button.success id="extend-submit-btn" type="submit" form="form-extend-deadline"
+                        wire:loading.attr="disabled" wire:target="extendProcess">
+                        <x-slot name="icon">
+                            <x-icons.plus wire:loading.remove wire:target="extendProcess" class="icon h-5 w-5" />
+                            <x-icons.loading wire:loading wire:target="extendProcess" class="h-4 w-4 animate-spin" />
+                        </x-slot>
+
+                        <span wire:loading.remove wire:target="extendProcess">Ajukan Permintaan</span>
+                        <span wire:loading wire:target="extendProcess">Memproses...</span>
+                    </x-button.success>
+                </x-slot>
+            @endcan
+        </x-modal.base-modal>
     @endcan
 </div>

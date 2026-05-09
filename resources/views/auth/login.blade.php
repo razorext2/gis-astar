@@ -8,7 +8,7 @@
 
     <div class="mx-auto w-full max-w-md">
         <div
-            class="flex w-full flex-col rounded-3xl bg-white p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 sm:p-10">
+            class="flex w-full flex-col rounded-xl bg-white/60 p-8 shadow-lg ring-1 ring-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:ring-zinc-800 sm:p-10">
             <div class="mb-8 border-b border-zinc-200 pb-5 dark:border-zinc-800">
                 <h2 class="text-left text-3xl font-black tracking-tight text-zinc-900 dark:text-white">
                     Sign In
@@ -35,12 +35,12 @@
                     <div class="mb-2 flex items-center justify-between">
                         <x-input-label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300" for="password"
                             :value="__('Password')" />
-                        @if (Route::has('password.request'))
+                        {{-- @if (Route::has('password.request'))
                             <a class="text-xs font-semibold text-red-600 transition-colors hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
                                 href="{{ route('password.request') }}">
                                 Lupa password?
                             </a>
-                        @endif
+                        @endif --}}
                     </div>
 
                     <x-text-input

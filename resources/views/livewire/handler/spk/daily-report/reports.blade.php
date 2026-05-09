@@ -4,7 +4,8 @@
         Daftar staff pada project ini
     </h3>
 
-    <div class="w-full rounded-xl bg-white shadow-sm ring-1 ring-zinc-200 dark:bg-gray-800 dark:ring-zinc-800">
+    <div
+        class="w-full rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800 dark:shadow-none">
 
         <div class="divide-y divide-gray-200 dark:divide-gray-700">
 

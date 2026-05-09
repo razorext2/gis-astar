@@ -1,4 +1,4 @@
-<div class="grid cursor-pointer grid-cols-3 items-center justify-between gap-2 text-gray-500">
+<div class="grid cursor-pointer grid-cols-3 items-center justify-between gap-2 text-zinc-500">
 
     @php $hasVisibleLinks = false; @endphp
 

@@ -6,20 +6,15 @@
     {{-- ===================== KOLOM FORM ===================== --}}
     <div class="w-full space-y-6">
         <div
-            class="rounded-xl bg-white p-4 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 sm:p-6">
+            class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none sm:p-6">
             <div class="max-w-xl">
 
                 {{-- Header --}}
-                <header class="flex flex-row items-center gap-x-3">
-                    <div class="max-w-xs">
-                        <x-button.link class="w-fit ring-1 ring-red-700 dark:bg-red-800 dark:text-white"
-                            href="{{ route('placement.index') }}" wire:navigate>
-                            <x-slot name="icon">
-                                <x-icons.angle-left class="h-6 w-6 text-red-500 dark:text-white" />
-                            </x-slot>
-                            Kembali
-                        </x-button.link>
-                    </div>
+                <header class="flex flex-row items-center">
+                    <x-button.danger href="{{ route('placement.index') }}" class="my-auto me-4 max-h-10" wire:navigate>
+                        <x-icons.angle-left class="h-5 w-5" />
+                    </x-button.danger>
+
                     <h2 class="text-lg font-medium text-gray-900 dark:text-white">
                         {{ isset($placement) ? 'Edit Data Penempatan' : 'Tambah Penempatan' }}
                     </h2>
@@ -288,7 +283,13 @@
                 </div>
 
                 <div class="mt-6 flex items-center gap-3">
-                    <x-button.primary wire:click="save" wire:loading.attr="disabled" type="button" id="save-placement">
+                    <x-button.primary wire:click="save" wire:loading.attr="disabled" type="button" id="save-placement"
+                        wire:loading.attr="disabled" wire:target="save">
+                        <x-slot name="icon">
+                            <x-icons.angle-right wire:loading.remove wire:target="save" class="icon h-5 w-5" />
+                            <x-icons.loading wire:loading wire:target="save" class="h-4 w-4 animate-spin" />
+                        </x-slot>
+
                         <span wire:loading.remove wire:target="save">Simpan</span>
                         <span wire:loading wire:target="save">Menyimpan...</span>
                     </x-button.primary>
@@ -301,7 +302,7 @@
     {{-- ===================== KOLOM PETA ===================== --}}
     <div class="w-full">
         <div
-            class="rounded-xl bg-white p-4 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 sm:p-6">
+            class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none sm:p-6">
             <div class="max-w-xl">
                 <header>
                     <h2 class="text-lg font-medium text-gray-900 dark:text-white">
@@ -314,7 +315,7 @@
 
                 {{-- Map div — data attributes sebagai config untuk JS, tanpa global variables --}}
                 <div wire:ignore>
-                    <div id="placement-map" class="relative z-0 my-4 rounded-lg ring-1 ring-zinc-200"
+                    <div id="placement-map" class="relative z-0 my-4 rounded-lg border border-zinc-200"
                         style="height: 500px;" data-icon="{{ asset('assets/img/marker.png') }}"
                         data-shadow="{{ asset('assets/img/marker-shadow.png') }}" data-lat="{{ $latitude ?: '' }}"
                         data-lng="{{ $longitude ?: '' }}" data-radius="{{ $radius }}">

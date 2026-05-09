@@ -1,5 +1,5 @@
 <div
-    class="group relative flex flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-red-600 to-red-800 p-5 ring-1 ring-red-500/50 backdrop-blur-sm dark:from-dark-secondary/70 dark:to-dark-primary/70 dark:ring-zinc-800 sm:p-6">
+    class="group relative flex flex-col overflow-hidden rounded-xl bg-gradient-to-br from-red-600 to-red-800 p-5 ring-1 ring-red-500/50 backdrop-blur-sm dark:from-dark-secondary/70 dark:to-dark-primary/70 dark:ring-zinc-800 sm:p-6">
 
     {{-- Decorative Background Pattern --}}
     <div

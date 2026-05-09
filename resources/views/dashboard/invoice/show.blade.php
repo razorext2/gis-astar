@@ -3,31 +3,25 @@
     <div class="relative grid w-full grid-cols-1 gap-4">
 
         <div
-            class="flex flex-row items-center gap-4 rounded-xl bg-white p-2 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 lg:p-6">
+            class="flex items-center gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
 
-            <div class="max-w-xs">
-                @php
-                    $currentRoute = request()->route()->getName();
-                    $routePrefix = Str::beforeLast($currentRoute, '.');
-                @endphp
+            @php
+                $currentRoute = request()->route()->getName();
+                $routePrefix = Str::beforeLast($currentRoute, '.');
+            @endphp
 
-                <x-button.danger wire:navigate href="{{ route($routePrefix . '.index') }}">
-                    <x-slot name="icon">
-                        <x-icons.angle-left class="h-6 w-6" />
-                    </x-slot>
-                    {{ __('Kembali') }}
-                </x-button.danger>
-            </div>
+            <x-button.danger wire:navigate href="{{ route($routePrefix . '.index') }}" class="max-h-10">
+                <x-icons.angle-left class="h-5 w-5" />
+            </x-button.danger>
 
-            <div class="flex flex-col gap-1.5">
-                <span class="text-xl font-semibold text-gray-900 dark:bg-dark-primary dark:text-white">
+            <div>
+                <span class="text-xl font-semibold text-gray-900 dark:text-white">
                     Riwayat Status Invoice
                 </span>
 
-                <p class="text-base text-gray-600 dark:text-gray-400">
+                <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
                     Berikut adalah riwayat status invoice
                 </p>
-
             </div>
 
         </div>

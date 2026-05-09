@@ -3,7 +3,7 @@
     <div class="flex flex-col gap-5">
         {{-- Main Profile Section --}}
         <div
-            class="flex flex-col rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800 lg:p-7">
+            class="flex flex-col rounded-2xl bg-white p-5 shadow-sm border border-zinc-200 dark:bg-dark-primary dark:border-zinc-800 lg:p-7">
             <div class="flex flex-col gap-6">
 
                 <div class="flex items-center gap-2 border-b border-zinc-200 pb-4 dark:border-zinc-800">
@@ -212,7 +212,7 @@
             {{-- Calendar Widget --}}
             @if (auth()->user()->kode_pegawai)
                 <div
-                    class="flex-1 items-start rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-200 dark:bg-dark-primary dark:ring-zinc-800">
+                    class="flex-1 items-start rounded-2xl bg-white p-5 shadow-sm border border-zinc-200 dark:bg-dark-primary dark:border-zinc-800">
                     @livewire('utils.attendance-calendar')
                 </div>
             @endif

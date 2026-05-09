@@ -1,24 +1,27 @@
-<div class="flex flex-col gap-4" x-data="{ open: false, pdfUrl: '', focusNamaCustomer() { this.$nextTick(() => this.$refs.namaCustomer?.focus()); } }" x-init="focusNamaCustomer()"
-    x-on:focus-nama-customer.window="focusNamaCustomer()"
+<div class="space-y-4" x-data="{ open: false, pdfUrl: '', focusNamaCustomer() { this.$nextTick(() => this.$refs.namaCustomer?.focus()); } }" x-init="focusNamaCustomer()" x-on:focus-nama-customer.window="focusNamaCustomer()"
     x-on:show-pdf-modal.window="open = true; pdfUrl = $event.detail.url">
 
     <form class="grid gap-4" method="POST" wire:submit.prevent="store">
 
         {{-- form info customer --}}
-        <div id="informasi-customer" class="flex flex-col items-start gap-2 lg:flex-row lg:gap-0">
+        <div id="informasi-customer"
+            class="flex flex-col rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none">
 
-            <div class="flex w-full items-start lg:w-44 xl:w-60">
-                <a href="#informasi-customer"
-                    class="text-wrap rounded-b-xl rounded-tl-xl border-t-2 border-zinc-200 bg-white p-4 py-2 text-lg font-semibold text-gray-900 transition-all duration-300 ease-in-out hover:scale-[1.05] hover:text-blue-700 dark:border-zinc-800 dark:bg-dark-primary dark:text-white hover:dark:text-blue-600">
-                    Customer
-                </a>
-                <hr width="100%" class="border border-t border-zinc-200 dark:border-zinc-800">
+            <div class="flex items-center gap-3 border-b border-zinc-200 px-4 py-4 dark:border-zinc-800 lg:px-6">
+                <div
+                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-500">
+                    <x-icons.user class="h-6 w-6" />
+                </div>
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Customer</h2>
+                    <p class="text-sm text-gray-500 dark:text-zinc-400">Informasi data diri dan alamat dari customer.
+                    </p>
+                </div>
             </div>
 
-            <div
-                class="grid w-full grid-cols-2 gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:grow lg:gap-4 lg:rounded-b-xl lg:rounded-tl-none lg:rounded-tr-xl lg:p-6">
+            <div class="grid w-full grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:p-6">
 
-                <div class="col-span-2 w-full">
+                <div class="col-span-1 md:col-span-2">
                     <x-input.basic x-ref="namaCustomer" id="nama_customer" name="nama_customer"
                         wire:model="createForm.nama_customer" placeholder="Nama Bon Customer">
                         Nama Bon Customer
@@ -51,7 +54,7 @@
                     @enderror
                 </div>
 
-                <div class="col-span-2 w-full">
+                <div class="col-span-1 md:col-span-2">
                     <x-input.textarea id="alamat_customer" name="alamat_customer"
                         wire:model="createForm.alamat_customer" :labels="true" :textLabel="'Alamat Customer'" />
 
@@ -65,19 +68,25 @@
         {{-- end form info customer --}}
 
         {{-- form barang --}}
-        <div id="informasi-barang" class="flex flex-col items-start gap-2 lg:flex-row lg:gap-0">
-            <div class="flex w-full items-start lg:w-44 xl:w-60">
-                <a href="#informasi-barang"
-                    class="text-wrap rounded-b-xl rounded-tl-xl border-t-2 border-zinc-200 bg-white p-4 py-2 text-lg font-semibold text-gray-900 transition-all duration-300 ease-in-out hover:scale-[1.05] hover:text-blue-700 dark:border-zinc-800 dark:bg-dark-primary dark:text-white hover:dark:text-blue-600">
-                    Barang
-                </a>
-                <hr width="100%" class="border border-t border-zinc-200 dark:border-zinc-800">
+        <div id="informasi-barang"
+            class="flex flex-col rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none">
+
+            <div class="flex items-center gap-3 border-b border-zinc-200 px-4 py-4 dark:border-zinc-800 lg:px-6">
+                <div
+                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-500">
+                    <x-icons.archive class="h-6 w-6" />
+                </div>
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Barang</h2>
+                    <p class="text-sm text-gray-500 dark:text-zinc-400">Informasi dan daftar barang yang dipesan.</p>
+                </div>
             </div>
 
-            <div
-                class="grid w-full grid-cols-2 gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:grow lg:gap-4 lg:rounded-b-xl lg:rounded-tl-none lg:rounded-tr-xl lg:p-6">
+            <div class="grid w-full grid-cols-1 gap-6 p-4 lg:p-6">
 
-                <div class="col-span-2 flex w-full flex-col items-start gap-4">
+                {{-- Form Tambah Barang --}}
+                <div
+                    class="flex w-full flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow dark:border-zinc-700 dark:bg-zinc-800">
                     <div class="w-full">
                         <x-input.select id="tipe_timbangan" name="tipe_timbangan" :labels="true" :textLabel="'Tipe Timbangan Yang Dipesan'"
                             :defaultOption="'Pilih tipe timbangan'" wire:model="createForm.tipe_timbangan" :options="config('spk-config.tipe_timbangan')" />
@@ -87,7 +96,7 @@
                         @enderror
                     </div>
 
-                    <div class="flex w-full gap-2 lg:gap-4">
+                    <div class="grid w-full grid-cols-1 gap-4 md:grid-cols-3">
                         <div class="w-full">
                             <x-input.basic id="nama_barang" name="nama_barang" wire:model="barangForm.nama_barang"
                                 placeholder="Ketik nama barang">
@@ -122,84 +131,91 @@
 
                     <div class="w-full">
                         <x-input.textarea id="spesifikasi" name="spesifikasi" wire:model="barangForm.spesifikasi"
-                            rows="8" :labels="true" :textLabel="'Spesifikasi'" />
+                            rows="4" :labels="true" :textLabel="'Spesifikasi'" />
 
                         @error('barangForm.spesifikasi')
                             <span class="mt-2 text-xs text-red-500"> {{ $message }}</span>
                         @enderror
                     </div>
 
-                    <div class="flex w-full justify-end gap-x-2">
-                        <x-button.primary id="tambah-barang" wire:click="tambahBarang">
+                    <div
+                        class="mt-2 flex w-full justify-end gap-x-2 border-t border-zinc-100 pt-4 dark:border-zinc-700">
+                        <x-button.danger id="reset-barang" wire:click="resetBarang" type="button">
+                            Clear
+                        </x-button.danger>
+
+                        <x-button.primary id="tambah-barang" wire:click="tambahBarang" type="button">
                             <x-slot name="icon">
                                 <x-icons.plus class="h-5 w-5" />
                             </x-slot>
-                            {{ $is_edit ? 'Ubah' : 'Tambah' }}
+                            {{ $is_edit ? 'Ubah Barang' : 'Tambah Barang' }}
                         </x-button.primary>
-
-                        <x-button.danger id="reset-barang" wire:click="resetBarang">
-                            Clear
-                        </x-button.danger>
                     </div>
                 </div>
 
-                <div class="col-span-2 flex w-full flex-col">
-                    <p class="mb-2 text-sm font-medium text-gray-900 dark:text-white">Daftar Barang Yang Dipesan</p>
+                {{-- Daftar Barang --}}
+                <div class="flex w-full flex-col">
+                    <h3 class="mb-3 text-base font-semibold text-gray-900 dark:text-white">Daftar Barang Yang Dipesan
+                    </h3>
 
-                    <div class="flex flex-col gap-y-1 rounded-xl bg-gray-50 p-4 dark:bg-gray-600">
-                        <table id="barang-list-table" class="w-full">
+                    <div
+                        class="overflow-hidden rounded-xl border border-zinc-200 bg-white/60 shadow backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
+                        <table id="barang-list-table" class="w-full text-left">
                             <thead
-                                class="border-b border-zinc-200 text-sm font-semibold text-gray-800 dark:border-zinc-800 dark:text-white">
-                                <th class="px-2 py-2">#</th>
-                                <th class="px-2 py-2">Nama Barang</th>
-                                <th class="px-2 py-2">Jumlah</th>
-                                <th class="px-2 py-2">Satuan</th>
-                                <th class="px-2 py-2">Aksi</th>
+                                class="border-b border-zinc-200 bg-zinc-50 text-xs uppercase tracking-wider text-zinc-600 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-zinc-400">
+                                <tr>
+                                    <th class="w-12 px-4 py-3 text-center">#</th>
+                                    <th class="px-4 py-3">Barang & Spesifikasi</th>
+                                    <th class="w-28 px-4 py-3 text-center">Jumlah</th>
+                                    <th class="w-28 px-4 py-3 text-center">Aksi</th>
+                                </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
                                 @forelse ($createForm->barang as $index => $row)
-                                    <tr class="py-1" wire:key="{{ $row['_key'] }}">
-                                        <td rowspan="2"
-                                            class="w-10 items-center text-center text-sm text-gray-800 dark:text-white">
-                                            {{ $index + 1 }}.
+                                    <tr class="transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+                                        wire:key="{{ $row['_key'] }}">
+                                        <td
+                                            class="px-4 py-4 text-center align-top text-sm font-medium text-zinc-900 dark:text-white">
+                                            {{ $index + 1 }}
                                         </td>
-                                        <td class="text-sm text-gray-800 dark:text-white">
-                                            {{ $row['nama_barang'] }}
+                                        <td class="px-4 py-4 align-top">
+                                            <p class="text-sm font-semibold text-gray-900 dark:text-white">
+                                                {{ $row['nama_barang'] }}</p>
+                                            <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+                                                {!! nl2br(e($row['spesifikasi'] ?? '-')) !!}</p>
                                         </td>
-                                        <td rowspan="2"
-                                            class="items-center text-center text-sm text-gray-800 dark:text-white">
-                                            {{ $row['jumlah_unit'] }}
+                                        <td class="px-4 py-4 text-center align-top">
+                                            <span
+                                                class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10 dark:bg-blue-400/10 dark:text-blue-400 dark:ring-blue-400/30">
+                                                {{ $row['jumlah_unit'] }} {{ ucfirst($row['satuan_barang']) }}
+                                            </span>
                                         </td>
-                                        <td rowspan="2"
-                                            class="items-center text-center text-sm text-gray-800 first-letter:uppercase dark:text-white">
-                                            {{ $row['satuan_barang'] }}
-                                        </td>
-                                        <td rowspan="2" class="h-full">
-                                            <div
-                                                class="flex h-full w-full items-center justify-center gap-x-1 py-1.5 lg:gap-x-2">
-                                                <x-button.primary class="!p-2 text-xs" id="edit-barang"
-                                                    wire:click="editBarang({{ $index }})">
+                                        <td class="px-4 py-4 align-top">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <button type="button"
+                                                    class="rounded p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-blue-600 dark:hover:bg-zinc-800 dark:hover:text-blue-400"
+                                                    id="edit-barang" wire:click="editBarang({{ $index }})"
+                                                    title="Edit">
                                                     <x-icons.pen class="h-4 w-4" />
-                                                </x-button.primary>
-
-                                                <x-button.danger class="!p-2 text-xs" id="hapus-barang"
-                                                    wire:click="hapusBarang({{ $index }})">
+                                                </button>
+                                                <button type="button"
+                                                    class="rounded p-1 text-zinc-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-500"
+                                                    id="hapus-barang" wire:click="hapusBarang({{ $index }})"
+                                                    title="Hapus">
                                                     <x-icons.trash-bin class="h-4 w-4" />
-                                                </x-button.danger>
+                                                </button>
                                             </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr class="border-b border-zinc-200 dark:border-zinc-800">
-                                        <td class="text-sm text-gray-800 dark:text-white">
-                                            {!! nl2br(e($row['spesifikasi'] ?? '')) !!}
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5"
-                                            class="h-10 items-center text-center text-sm italic text-red-500">
-                                            Belum ada barang pada list.
+                                        <td colspan="4"
+                                            class="px-4 py-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
+                                            <div class="flex flex-col items-center justify-center">
+                                                <x-icons.archive
+                                                    class="mb-2 h-8 w-8 text-zinc-300 dark:text-zinc-600" />
+                                                <p>Belum ada barang yang ditambahkan.</p>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforelse
@@ -217,19 +233,24 @@
         {{-- end form barang --}}
 
         {{-- form spk --}}
-        <div id="informasi-order" class="flex flex-col items-start gap-2 lg:flex-row lg:gap-0">
-            <div class="flex w-full items-start lg:w-44 xl:w-60">
-                <a href="#informasi-order"
-                    class="text-wrap rounded-b-xl rounded-tl-xl border-t-2 border-zinc-200 bg-white p-4 py-2 text-lg font-semibold text-gray-900 transition-all duration-300 ease-in-out hover:scale-[1.05] hover:text-blue-700 dark:border-zinc-800 dark:bg-dark-primary dark:text-white hover:dark:text-blue-600">
-                    Order
-                </a>
-                <hr width="100%" class="border border-t border-zinc-200 dark:border-zinc-800">
+        <div id="informasi-order"
+            class="flex flex-col rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none">
+
+            <div class="flex items-center gap-3 border-b border-zinc-200 px-4 py-4 dark:border-zinc-800 lg:px-6">
+                <div
+                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-500">
+                    <x-icons.file-invoice class="h-6 w-6" />
+                </div>
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Order</h2>
+                    <p class="text-sm text-gray-500 dark:text-zinc-400">Detail penagihan, nomor urut SPK, dan tenggat
+                        waktu penyelesaian.</p>
+                </div>
             </div>
 
-            <div
-                class="grid w-full grid-cols-2 gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:grow lg:gap-4 lg:rounded-b-xl lg:rounded-tl-none lg:rounded-tr-xl lg:p-6">
+            <div class="grid w-full grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-2 lg:p-6">
 
-                <div class="col-span-2 w-full dark:text-white">
+                <div class="col-span-1 w-full md:col-span-2">
                     <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="tipe_tagihan">
                         Tipe Tagihan
                     </label>
@@ -258,7 +279,7 @@
                         </x-input.basic>
                     </div>
 
-                    <span class="mt-2 text-xs text-green-500 lg:text-sm">
+                    <span class="mt-2 text-xs text-green-600 dark:text-green-400 lg:text-sm">
                         SPK Terakhir: {{ $nomor_order_lama }}
                     </span>
 
@@ -299,10 +320,10 @@
                             </x-input.basic>
                         </div>
 
-                        <span class="mt-7 text-gray-800 dark:text-white">Hari</span>
+                        <span class="mt-7 text-sm font-medium text-gray-800 dark:text-zinc-200">Hari</span>
                     </div>
 
-                    <p class="mt-2 text-xs text-green-500">
+                    <p class="mt-2 text-xs text-green-600 dark:text-green-400">
                         * Isi dengan 1 Hari jika ingin mendapatkan output (SEGERA)
                     </p>
 
@@ -311,7 +332,7 @@
                     @enderror
                 </div>
 
-                <div class="col-span-2 w-full">
+                <div class="col-span-1 w-full md:col-span-2">
 
                     <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="assign_to">
                         Assign Ke
@@ -337,9 +358,9 @@
 
                 </div>
 
-                <div class="col-span-2 w-full">
+                <div class="col-span-1 w-full md:col-span-2">
                     <x-input.textarea id="keterangan" name="keterangan" wire:model="createForm.keterangan"
-                        :labels="true" :rows="'10'" :textLabel="'Keterangan Lainnya'" />
+                        :labels="true" :rows="'5'" :textLabel="'Keterangan Lainnya'" />
 
                     @error('createForm.keterangan')
                         <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
@@ -351,62 +372,29 @@
         {{-- end form spk --}}
 
         {{-- form info tambahan --}}
-        <div id="informasi-tambahan" class="flex flex-col items-start gap-2 lg:flex-row lg:gap-0">
-            <div class="flex w-full items-start lg:w-44 xl:w-60">
-                <a href="#informasi-tambahan"
-                    class="text-wrap rounded-b-xl rounded-tl-xl border-t-2 border-zinc-200 bg-white p-4 py-2 text-lg font-semibold text-gray-900 transition-all duration-300 ease-in-out hover:scale-[1.05] hover:text-blue-700 dark:border-zinc-800 dark:bg-dark-primary dark:text-white hover:dark:text-blue-600">
-                    Additional
-                </a>
-                <hr width="100%" class="border border-t border-zinc-200 dark:border-zinc-800">
+        <div id="informasi-tambahan"
+            class="flex flex-col rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none">
+
+            <div class="flex items-center gap-3 border-b border-zinc-200 px-4 py-4 dark:border-zinc-800 lg:px-6">
+                <div
+                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-500">
+                    <x-icons.cloud-upload class="h-6 w-6" />
+                </div>
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Additional</h2>
+                    <p class="text-sm text-gray-500 dark:text-zinc-400">Lampiran file dan opsi tambahan lainnya.</p>
+                </div>
             </div>
 
-            <div
-                class="grid w-full grid-cols-2 gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:grow lg:gap-4 lg:rounded-b-xl lg:rounded-tl-none lg:rounded-tr-xl lg:p-6">
+            <div class="grid w-full grid-cols-1 gap-6 p-4 lg:grid-cols-2 lg:p-6">
 
+                {{-- Attachment Upload Section --}}
                 <div
-                    class="col-span-2 grid w-full grid-cols-1 gap-2 rounded-lg border border-zinc-200 p-2 dark:border-zinc-800 lg:gap-4 lg:p-4">
+                    class="col-span-1 flex w-full flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow dark:border-zinc-700 dark:bg-zinc-800 lg:col-span-2 lg:flex-row">
 
-                    <div x-show="$wire.docForm.new_attachments.length > 0">
-                        <span class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-                            Daftar Lampiran
-                        </span>
-
-                        <ul
-                            class="divide-y divide-gray-200 rounded-lg border border-zinc-200 bg-white shadow-sm dark:divide-gray-700 dark:border-zinc-800 dark:bg-gray-700">
-
-                            @foreach ($docForm->new_attachments as $index => $row)
-                                <li
-                                    class="flex items-center gap-2 p-2 transition hover:bg-gray-50 dark:hover:bg-gray-800">
-                                    <div class="w-8 text-center text-sm font-medium text-gray-600 dark:text-gray-400">
-                                        {{ $index + 1 }}.
-                                    </div>
-
-                                    <div class="flex-1">
-                                        <p class="text-base font-medium text-gray-900 dark:text-gray-100">
-                                            {{ $row['nama_file'] }}
-                                        </p>
-                                        <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
-                                            {{ $row['tipe_dokumen'] }}
-                                        </p>
-                                    </div>
-
-                                    <x-button.danger class="!bg-transparent !p-1 !text-xs !shadow-none ring-0"
-                                        type="button" wire:click="removeAttachment({{ $index }})">
-                                        Hapus
-                                    </x-button.danger>
-                                </li>
-                            @endforeach
-
-                        </ul>
-
-                        @error('docForm.new_attachments.*')
-                            <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="w-full">
+                    <div class="flex w-full flex-col lg:w-1/2">
                         <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                            for="attachment">Lampiran</label>
+                            for="attachment">Upload Lampiran</label>
 
                         <div class="flex w-full flex-col gap-y-2" x-data="{ uploading: false, progress: 0 }"
                             x-on:livewire-upload-start="uploading = true"
@@ -415,34 +403,38 @@
                             x-on:livewire-upload-error="uploading = false"
                             x-on:livewire-upload-progress="progress = $event.detail.progress">
                             <label for="attachment"
-                                class="flex h-36 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-200 bg-gray-50 transition-all duration-500 hover:bg-gray-100 dark:border-zinc-800 dark:bg-gray-700 dark:hover:border-zinc-800 dark:hover:bg-gray-800">
+                                class="group flex h-36 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-200 bg-gray-50 transition-all duration-300 hover:border-blue-400 hover:bg-gray-100 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-blue-500 dark:hover:bg-zinc-700">
                                 <div class="flex flex-col items-center justify-center pb-6 pt-5">
-                                    <x-icons.cloud-upload class="mb-2 h-8 w-8 text-gray-500 dark:text-gray-400" />
+                                    <x-icons.cloud-upload
+                                        class="mb-2 h-8 w-8 text-gray-400 transition-colors group-hover:text-blue-500 dark:text-gray-500" />
 
                                     <p wire:loading.remove wire:target="docForm.attachment"
-                                        class="mb-0.5 text-sm text-gray-500 dark:text-white"> Klik untuk upload
+                                        class="mb-0.5 text-sm text-gray-500 dark:text-gray-300">
+                                        <span class="font-semibold text-blue-600 dark:text-blue-400">Klik untuk
+                                            upload</span> atau drag and drop
                                     </p>
 
                                     <p class="mb-0.5 text-sm text-gray-500 dark:text-gray-400">
                                         @if ($docForm->attachment)
-                                            <span class="font-semibold dark:text-white">
+                                            <span class="font-semibold text-green-600 dark:text-green-400">
                                                 {{ $docForm->attachment->getClientOriginalName() }}</span>
                                         @endif
                                     </p>
 
                                     <div x-show="uploading"
-                                        class="mb-2 flex flex-col items-center gap-2 text-gray-800 dark:text-white">
-                                        <span wire:target="docForm.attachment" class="font-semibold">
+                                        class="mb-2 flex w-full max-w-xs flex-col items-center gap-2 text-gray-800 dark:text-white">
+                                        <span wire:target="docForm.attachment" class="text-sm font-medium">
                                             Sedang Mengupload...</span>
 
-                                        <x-button.danger id="cancel-upload" type="button" class="text-xs"
+                                        <x-button.danger id="cancel-upload" type="button"
+                                            class="!px-3 !py-1 text-xs"
                                             wire:click="$cancelUpload('docForm.attachment')">
                                             Cancel
                                         </x-button.danger>
                                     </div>
 
-                                    <p class="w-full text-center text-xs text-gray-500 dark:text-gray-400">
-                                        *Dokumentasi dapat berupa file PNG, JPG, PDF, DOC, XLS (Min, 10KB, Maks 2MB)
+                                    <p class="mt-2 w-full px-4 text-center text-xs text-gray-400 dark:text-zinc-500">
+                                        PNG, JPG, PDF, DOC, XLS (Min 10KB, Maks 2MB)
                                     </p>
                                 </div>
                                 <input id="attachment" name="attachment" type="file"
@@ -450,8 +442,10 @@
                                     accept=".png,.jpg,.jpeg,.pdf,.doc,.docx,.xls,.xlsx" />
                             </label>
 
-                            <div x-show="uploading" class="h-4 w-full rounded-full bg-gray-200 dark:bg-gray-700">
-                                <div class="h-4 rounded-full bg-blue-600" x-bind:style="{ width: progress + '%' }">
+                            <div x-show="uploading"
+                                class="mt-2 h-2 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+                                <div class="h-2 rounded-full bg-blue-600 transition-all duration-300"
+                                    x-bind:style="{ width: progress + '%' }">
                                 </div>
                             </div>
 
@@ -462,162 +456,221 @@
                         @enderror
                     </div>
 
-                    <div class="w-full">
-                        <x-input.select id="attachment_type" name="attachment_type" :defaultOption="'Pilih Tipe Dokumen'"
-                            :options="config('spk-config.tipe_dokumen')" :labels="true" :textLabel="'Tipe Dokumen'"
-                            wire:model="docForm.attachment_type" />
+                    <div class="flex w-full flex-col justify-between gap-4 lg:w-1/2">
+                        <div class="w-full">
+                            <x-input.select id="attachment_type" name="attachment_type" :defaultOption="'Pilih Tipe Dokumen'"
+                                :options="config('spk-config.tipe_dokumen')" :labels="true" :textLabel="'Tipe Dokumen'"
+                                wire:model="docForm.attachment_type" />
 
-                        @error('docForm.attachment_type')
-                            <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="flex w-full justify-end">
-                        <x-button.primary id="add-attachment" wire:click="storeLampiran" type="button">
-                            Tambah
-                        </x-button.primary>
-                    </div>
-
-                </div>
-
-                <div class="col-span-2 flex w-full items-center gap-4">
-                    <div class="{{ $createForm->status_nomor_tagihan == 0 ? 'w-full' : 'w-fit' }}">
-                        <x-input.select id="status_nomor_tagihan" name="status_nomor_tagihan"
-                            wire:model.live="createForm.status_nomor_tagihan" :defaultOption="'Pilih status no. tagihan'" :options="[
-                                '0' => 'Belum ada',
-                                '1' => 'Sudah ada',
-                            ]"
-                            :labels="true" :textLabel="'Status No. Tagihan'" />
-
-                        @error('createForm.status_nomor_tagihan')
-                            <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    @if ($createForm->status_nomor_tagihan == 1)
-                        <div class="flex w-full gap-2" wire:transition>
-                            <div class="w-full">
-                                <x-input.basic id="nomor_tagihan" name="nomor_tagihan"
-                                    wire:model="createForm.nomor_tagihan" placeholder="Nomor SR / Nomor Faktur Pajak">
-                                    No. SR / Faktur Pajak
-                                </x-input.basic>
-                            </div>
-
-                            <x-button.primary class="h-fit w-fit self-end" id="cek-nomor-tagihan"
-                                name="cek-nomor-tagihan" wire:click="cekNomorTagihan">
-                                Check
-                            </x-button.primary>
-
-                            @error('createForm.nomor_tagihan')
+                            @error('docForm.attachment_type')
                                 <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
                             @enderror
                         </div>
-                    @endif
-                </div>
 
-                <div class="col-span-2 w-full">
-                    <div>
-                        <x-input.basic id="nomor_dokumen_penawaran" name="nomor_dokumen_penawaran"
-                            wire:model="createForm.nomor_dokumen_penawaran" placeholder="00XX.XX/X/X-X/X/XX">
-                            No. Dokumen Penawaran
-                        </x-input.basic>
+                        <div class="flex w-full justify-end">
+                            <x-button.primary id="add-attachment" wire:click="storeLampiran" type="button">
+                                Tambah Lampiran
+                            </x-button.primary>
+                        </div>
                     </div>
 
-                    <span class="mt-2 text-xs text-green-500 lg:text-sm">
-                        Kosongkan kolom No. Dokumen Penawaran jika tidak ada, Anda dapat mengeditnya nanti.
-                    </span>
+                </div>
 
-                    @error('createForm.nomor_dokumen_penawaran')
+                {{-- Attachment List --}}
+                <div class="col-span-1 w-full lg:col-span-2" x-show="$wire.docForm.new_attachments.length > 0">
+                    <h3 class="mb-3 text-base font-semibold text-gray-900 dark:text-white">Daftar Lampiran Tersimpan
+                    </h3>
+
+                    <ul
+                        class="flex flex-col divide-y divide-zinc-200 rounded-xl border border-zinc-200 bg-white/60 shadow backdrop-blur-md dark:divide-zinc-800 dark:border-zinc-800 dark:bg-dark-primary/60">
+                        @foreach ($docForm->new_attachments as $index => $row)
+                            <li
+                                class="flex items-center gap-4 px-4 py-3 transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
+                                <div
+                                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-500">
+                                    <x-icons.clipboard class="h-5 w-5" />
+                                </div>
+
+                                <div class="flex-1">
+                                    <p class="text-sm font-semibold text-gray-900 dark:text-white">
+                                        {{ $row['nama_file'] }}
+                                    </p>
+                                    <p class="mt-0.5 text-xs font-medium text-gray-500 dark:text-zinc-400">
+                                        Tipe: {{ $row['tipe_dokumen'] }}
+                                    </p>
+                                </div>
+
+                                <x-button.danger class="!p-2 text-xs" type="button"
+                                    wire:click="removeAttachment({{ $index }})" title="Hapus">
+                                    <x-icons.trash-bin class="h-4 w-4" />
+                                </x-button.danger>
+                            </li>
+                        @endforeach
+                    </ul>
+
+                    @error('docForm.new_attachments.*')
                         <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
                     @enderror
                 </div>
 
-                <div class="col-span-2 w-full">
-                    <div class="flex items-center">
-                        <input id="is_using_company_driver" type="checkbox"
-                            wire:model.live="createForm.is_using_company_driver"
-                            class="h-4 w-4 rounded-sm border-zinc-200 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800 lg:h-5 lg:w-5">
-                        <label for="is_using_company_driver"
-                            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 lg:text-base">
-                            Apakah SPK akan dikirim menggunakan supir perusahaan?
-                        </label>
+                {{-- Other Options --}}
+                <div
+                    class="col-span-1 flex w-full flex-col gap-4 border-t border-zinc-200 pt-6 dark:border-zinc-800 lg:col-span-2">
+                    <h3 class="text-base font-semibold text-gray-900 dark:text-white">Opsi Tambahan & Dokumen Pendukung
+                    </h3>
+
+                    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                        <div class="flex w-full flex-col gap-4">
+                            <div class="{{ $createForm->status_nomor_tagihan == 0 ? 'w-full' : 'w-full' }}">
+                                <x-input.select id="status_nomor_tagihan" name="status_nomor_tagihan"
+                                    wire:model.live="createForm.status_nomor_tagihan" :defaultOption="'Pilih status no. tagihan'"
+                                    :options="[
+                                        '0' => 'Belum ada',
+                                        '1' => 'Sudah ada',
+                                    ]" :labels="true" :textLabel="'Status No. Tagihan'" />
+
+                                @error('createForm.status_nomor_tagihan')
+                                    <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            @if ($createForm->status_nomor_tagihan == 1)
+                                <div class="flex w-full items-end gap-2" wire:transition>
+                                    <div class="w-full">
+                                        <x-input.basic id="nomor_tagihan" name="nomor_tagihan"
+                                            wire:model="createForm.nomor_tagihan"
+                                            placeholder="Nomor SR / Nomor Faktur Pajak">
+                                            No. SR / Faktur Pajak
+                                        </x-input.basic>
+                                    </div>
+
+                                    <x-button.primary class="h-fit w-fit" id="cek-nomor-tagihan"
+                                        name="cek-nomor-tagihan" wire:click="cekNomorTagihan" type="button"
+                                        wire:loading.attr="disabled" wire:target="cekNomorTagihan">
+                                        <x-slot name="icon">
+                                            <x-icons.angle-right wire:loading.remove wire:target="cekNomorTagihan"
+                                                class="icon h-5 w-5" />
+                                            <x-icons.loading wire:loading wire:target="cekNomorTagihan"
+                                                class="h-4 w-4 animate-spin" />
+                                        </x-slot>
+
+                                        <span wire:loading.remove wire:target="cekNomorTagihan">Check</span>
+                                        <span wire:loading wire:target="cekNomorTagihan">Memproses...</span>
+                                    </x-button.primary>
+
+                                    @error('createForm.nomor_tagihan')
+                                        <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            @endif
+
+                            <div class="w-full">
+                                <div>
+                                    <x-input.basic id="nomor_dokumen_penawaran" name="nomor_dokumen_penawaran"
+                                        wire:model="createForm.nomor_dokumen_penawaran"
+                                        placeholder="00XX.XX/X/X-X/X/XX">
+                                        No. Dokumen Penawaran
+                                    </x-input.basic>
+                                </div>
+
+                                <span class="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
+                                    Kosongkan jika tidak ada, dapat diedit kemudian.
+                                </span>
+
+                                @error('createForm.nomor_dokumen_penawaran')
+                                    <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div
+                            class="flex w-full flex-col justify-center gap-4 rounded-xl border border-zinc-100 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-800/50">
+
+                            <div class="flex items-center">
+                                <input id="is_using_company_driver" type="checkbox"
+                                    wire:model.live="createForm.is_using_company_driver"
+                                    class="h-5 w-5 rounded-md border-zinc-300 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-700 dark:ring-offset-zinc-800">
+                                <label for="is_using_company_driver"
+                                    class="ms-3 text-sm font-medium text-gray-900 dark:text-zinc-200">
+                                    Dikirim menggunakan supir perusahaan?
+                                </label>
+                            </div>
+                            @error('createForm.is_using_company_driver')
+                                <span class="mt-1 text-xs text-red-500">{{ $message }}</span>
+                            @enderror
+
+                            <div class="flex items-center">
+                                <input id="is_picked_up_by_customer" type="checkbox"
+                                    wire:model.live="createForm.is_picked_up_by_customer"
+                                    class="h-5 w-5 rounded-md border-zinc-300 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-700 dark:ring-offset-zinc-800">
+                                <label for="is_picked_up_by_customer"
+                                    class="ms-3 text-sm font-medium text-gray-900 dark:text-zinc-200">
+                                    Dijemput oleh customer?
+                                </label>
+                            </div>
+                            @error('createForm.is_picked_up_by_customer')
+                                <span class="mt-1 text-xs text-red-500">{{ $message }}</span>
+                            @enderror
+
+                            <div class="flex items-center">
+                                <input id="is_booked" type="checkbox" wire:model.live="createForm.is_booked"
+                                    class="h-5 w-5 rounded-md border-zinc-300 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-700 dark:ring-offset-zinc-800">
+                                <label for="is_booked"
+                                    class="ms-3 text-sm font-medium text-gray-900 dark:text-zinc-200">
+                                    Book Nomor SPK
+                                </label>
+                            </div>
+                            @error('createForm.is_booked')
+                                <span class="mt-1 text-xs text-red-500">{{ $message }}</span>
+                            @enderror
+
+                        </div>
                     </div>
-
-                    @error('createForm.is_using_company_driver')
-                        <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
-                    @enderror
-                </div>
-
-                <div class="col-span-2 w-full">
-                    <div class="flex items-center">
-                        <input id="is_picked_up_by_customer" type="checkbox"
-                            wire:model.live="createForm.is_picked_up_by_customer"
-                            class="h-4 w-4 rounded-sm border-zinc-200 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800 lg:h-5 lg:w-5">
-                        <label for="is_picked_up_by_customer"
-                            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 lg:text-base">
-                            Apakah SPK akan dijemput oleh customer?
-                        </label>
-                    </div>
-
-                    @error('createForm.is_picked_up_by_customer')
-                        <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
-                    @enderror
-                </div>
-
-                <div class="col-span-2 w-full">
-                    <div class="flex items-center">
-                        <input id="is_booked" type="checkbox" wire:model.live="createForm.is_booked"
-                            class="h-4 w-4 rounded-sm border-zinc-200 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800 lg:h-5 lg:w-5">
-                        <label for="is_booked"
-                            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 lg:text-base">
-                            Book Nomor SPK
-                        </label>
-                    </div>
-
-                    @error('createForm.is_booked')
-                        <span class="mt-2 text-xs text-red-500">{{ $message }}</span>
-                    @enderror
                 </div>
 
             </div>
         </div>
         {{-- end form info tambahan --}}
 
-        <div class="flex w-full justify-start gap-2 lg:pl-[8.75rem] xl:pl-48 2xl:pl-[12.5rem]">
-            <x-button.primary id="summary-button" wire:click="summary">
-                Summary
+        <div
+            class="flex w-full items-center justify-end gap-3 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
+            <x-button.primary id="summary-button" wire:click="summary" type="button"
+                class="!bg-zinc-800 !text-white hover:!bg-zinc-700 dark:!bg-zinc-700 dark:hover:!bg-zinc-600"
+                wire:loading.attr="disabled" wire:target="summary">
+                <x-slot name="icon">
+                    <x-icons.file-invoice wire:loading.remove wire:target="summary" class="h-5 w-5" />
+                    <x-icons.loading wire:loading wire:target="summary" class="h-4 w-4 animate-spin" />
+                </x-slot>
+
+                <span wire:loading.remove wire:target="summary">Summary</span>
+                <span wire:loading wire:target="summary">Memuat...</span>
             </x-button.primary>
 
-            <x-button.success id="simpan-button" type="submit">
-                Simpan
+            <x-button.success id="simpan-button" type="submit" wire:loading.attr="disabled" wire:target="store">
+                <x-slot name="icon">
+                    <x-icons.loading wire:loading wire:target="store" class="h-4 w-4 animate-spin" />
+                    <x-icons.check-circle wire:loading.remove wire:target="store" class="h-4 w-4" />
+                </x-slot>
+
+                <span wire:loading.remove wire:target="store">Simpan SPK</span>
+                <span wire:loading wire:target="store">Menyimpan...</span>
             </x-button.success>
         </div>
     </form>
 
-    @if ($showSummary)
-        <!-- Overlay -->
-        <div x-show="open" class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm"
-            x-transition.opacity>
-            <!-- Modal -->
-            <div class="h-[85vh] w-full max-w-7xl overflow-hidden rounded-xl ring-1 ring-zinc-200 bg-white text-gray-800 shadow-xl dark:ring-zinc-800 dark:bg-dark-primary dark:text-white"
-                @keydown.escape.window="open=false">
-                <div class="flex items-center justify-between border-b px-4 py-2">
-                    <h2 class="font-semibold">SPK Summary</h2>
+    {{-- SPK Summary Modal --}}
+    <x-modal.base-modal show="showSummary" title="SPK Summary" subtitle="Preview Dokumen"
+        iconContainerClass="bg-blue-600 shadow-blue-500/20" maxWidth="7xl">
+        <x-slot name="icon">
+            <x-icons.file-invoice class="h-5 w-5" />
+        </x-slot>
 
-                    <x-button.secondary class="!bg-transparent !p-2 !shadow-none ring-0"
-                        @click="open=false; $wire.set('showSummary', false)">
-                        <x-icons.close class="h-5 w-5 text-red-500" />
-                    </x-button.secondary>
-                </div>
-
-                <!-- Konten PDF: iframe -->
-                <div class="h-[calc(85vh-48px)] w-full">
-                    <iframe x-bind:src="pdfUrl" class="h-full w-full" title="SPK Summary PDF"
-                        frameborder="0">
-                    </iframe>
-                </div>
-            </div>
+        <div class="-m-6 h-[70vh]" x-data="{ pdfUrl: '' }" x-on:show-pdf-modal.window="pdfUrl = $event.detail.url">
+            <template x-if="pdfUrl">
+                <iframe x-bind:src="pdfUrl" class="h-full w-full" title="SPK Summary PDF"
+                    frameborder="0"></iframe>
+            </template>
         </div>
-    @endif
+    </x-modal.base-modal>
 
 </div>

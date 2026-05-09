@@ -2,25 +2,24 @@
 @section('content')
     @livewire('components.card', ['type' => 'collectoridcppn'])
 
-    <div class="relative grid grid-cols-1 gap-6">
-
+    <div class="relative grid grid-cols-1 gap-4">
         <div
-            class="rounded-xl border border-zinc-200 bg-white p-4 shadow-md dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none">
-            <ul class="flex flex-wrap text-center text-sm font-medium">
+            class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
+            <ul class="flex flex-wrap gap-x-4 text-center text-sm font-medium">
                 <li>
-                    <a class="{{ Route::is('collect-task-ppn.index') ? 'text-red-600 border-b border-zinc-200' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-red-600 dark:hover:text-red-600"
+                    <a class="{{ Route::is('collect-task-ppn.index') ? 'text-red-600 border-b border-zinc-200' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg py-2 hover:text-red-600 dark:hover:text-red-600"
                         href="{{ route('collect-task-ppn.index') }}">Belum Tagih</a>
                 </li>
                 <li>
-                    <a class="{{ Route::is('collect-task-ppn.pending') ? 'text-red-600 border-b border-zinc-200' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-red-600 dark:hover:text-red-600"
+                    <a class="{{ Route::is('collect-task-ppn.pending') ? 'text-red-600 border-b border-zinc-200' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg py-2 hover:text-red-600 dark:hover:text-red-600"
                         href="{{ route('collect-task-ppn.pending') }}">Tertunda</a>
                 </li>
                 <li>
-                    <a class="{{ Route::is('collect-task-ppn.onprogress') ? 'text-red-600 border-b border-zinc-200' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-red-600 dark:hover:text-red-600"
+                    <a class="{{ Route::is('collect-task-ppn.onprogress') ? 'text-red-600 border-b border-zinc-200' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg py-2 hover:text-red-600 dark:hover:text-red-600"
                         href="{{ route('collect-task-ppn.onprogress') }}">Berjalan</a>
                 </li>
                 <li>
-                    <a class="{{ Route::is('collect-task-ppn.completed') ? 'text-red-600 border-b border-zinc-200' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg px-4 py-2 hover:text-red-600 dark:hover:text-red-600"
+                    <a class="{{ Route::is('collect-task-ppn.completed') ? 'text-red-600 border-b border-zinc-200' : 'text-gray-600 dark:text-gray-400' }} inline-block rounded-t-lg py-2 hover:text-red-600 dark:hover:text-red-600"
                         href="{{ route('collect-task-ppn.completed') }}">Selesai</a>
                 </li>
             </ul>
@@ -28,7 +27,6 @@
 
         @if (Auth::user()->can('collect-task-ppn-create') || Auth::user()->can('collect-task-ppn-assign'))
             <div class="inline-flex gap-4">
-
                 @can('collect-task-ppn-create')
                     <div>
                         <form id="add-collect-task-ppn" action="{{ route('collect-task-ppn.create') }}"></form>
@@ -44,6 +42,5 @@
         @endif
 
         @yield('subcontent')
-
     </div>
 @endsection

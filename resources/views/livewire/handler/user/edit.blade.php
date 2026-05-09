@@ -1,12 +1,12 @@
 <div class="w-full space-y-6">
     <!-- Top Header Navigation -->
     <div
-        class="rounded-3xl border border-white/30 bg-white/70 p-6 shadow-2xl backdrop-blur-sm transition-all duration-500 ease-in-out dark:border-white/10 dark:bg-zinc-900/60">
+        class="rounded-3xl border border-zinc-200 bg-white/60 p-6 shadow-2xl backdrop-blur-sm transition-all duration-500 ease-in-out dark:border-zinc-800 dark:bg-dark-primary/60">
         <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div class="flex items-center gap-4">
                 <x-button.link id="back-btn" class="group justify-center bg-white/50 hover:bg-red-700 hover:text-white"
                     wire:navigate href="{{ route('users.index') }}">
-                    <x-icons.angle-left class="h-6 w-6" />
+                    <x-icons.angle-left class="h-5 w-5" />
                 </x-button.link>
                 <div>
                     <h2 class="text-2xl font-bold tracking-tight text-gray-800 dark:text-white">Edit Data User</h2>
@@ -16,12 +16,14 @@
                 </div>
             </div>
             <div class="flex items-center gap-3">
-                <x-button.primary wire:click="save" wire:loading.attr="disabled">
+                <x-button.primary wire:click="save" wire:loading.attr="disabled" wire:target="save">
                     <x-slot name="icon">
                         <x-icons.checklist-stepper wire:loading.remove wire:target="save" class="h-5 w-5" />
+                        <x-icons.loading wire:loading wire:target="save" class="h-4 w-4 animate-spin" />
                     </x-slot>
+
                     <span wire:loading.remove wire:target="save">Update User</span>
-                    <span wire:loading wire:target="save">Memproses...</span>
+                    <span wire:loading wire:target="save">Memperbarui...</span>
                 </x-button.primary>
             </div>
         </div>
@@ -32,7 +34,7 @@
         <div class="space-y-2 lg:col-span-2 lg:space-y-4">
             <!-- Informasi Dasar Section -->
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-zinc-900/60">
+                class="group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-zinc-800 dark:bg-dark-primary/60">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-blue-500/5 blur-3xl transition-colors group-hover:bg-blue-500/10">
                 </div>
@@ -67,7 +69,7 @@
 
             <!-- Status Akun Section -->
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-zinc-900/60">
+                class="group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-zinc-800 dark:bg-dark-primary/60">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-orange-500/5 blur-3xl transition-colors group-hover:bg-orange-500/10">
                 </div>
@@ -100,7 +102,7 @@
 
             <!-- Keamanan Section -->
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-zinc-900/60">
+                class="group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-zinc-800 dark:bg-dark-primary/60">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-purple-500/5 blur-3xl transition-colors group-hover:bg-purple-500/10">
                 </div>
@@ -138,7 +140,7 @@
         <!-- Right Column: Role Selection -->
         <div class="space-y-2 lg:space-y-4">
             <div
-                class="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/70 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-zinc-900/60">
+                class="group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-zinc-800 dark:bg-dark-primary/60">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-green-500/5 blur-3xl transition-colors group-hover:bg-green-500/10">
                 </div>
@@ -161,7 +163,8 @@
                                     <label
                                         x-show="search === '' || '{{ strtolower($role->name) }}'.includes(search.toLowerCase())"
                                         class="role-item group/role flex cursor-pointer items-center gap-3 rounded-2xl border border-zinc-200 p-4 transition-all hover:border-blue-300 hover:bg-blue-50 dark:border-zinc-800 dark:hover:border-blue-700 dark:hover:bg-blue-900/20">
-                                        <input wire:model="selected_roles" type="checkbox" value="{{ $role->name }}"
+                                        <input wire:model="selected_roles" type="checkbox"
+                                            value="{{ $role->name }}"
                                             class="h-5 w-5 rounded-lg border-zinc-200 text-blue-600 focus:ring-blue-500">
                                         <span
                                             class="text-sm font-medium text-gray-700 transition-colors group-hover/role:text-blue-600 dark:text-gray-200">{{ $role->name }}</span>

@@ -1,4 +1,4 @@
-<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+<div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
     {{-- Scanner Section (Large) --}}
     <div class="lg:col-span-2" data-aos="zoom-in" data-aos-delay="100">
         <div class="relative h-[32rem] w-full overflow-hidden rounded-2xl bg-zinc-100 shadow-inner dark:bg-black">
@@ -30,7 +30,7 @@
         </div>
 
         {{-- Action Control --}}
-        <div class="mt-6">
+        <div class="mt-4">
             <x-button.primary id="snap" class="group w-full !py-4 !text-lg !shadow-xl">
                 <x-slot name="icon">
                     <x-icons.video-camera class="h-5 w-5 transition-transform group-hover:scale-110" />
@@ -41,8 +41,9 @@
     </div>
 
     {{-- Information Panel --}}
-    <div class="flex flex-col gap-6" data-aos="fade-left" data-aos-delay="200">
-        <div class="space-y-4 rounded-xl bg-zinc-100 p-5 ring-1 ring-zinc-200 dark:bg-zinc-800/30 dark:ring-zinc-800">
+    <div class="flex flex-col gap-4" data-aos="fade-left" data-aos-delay="200">
+        <div
+            class="space-y-4 rounded-xl border border-zinc-200 bg-zinc-100 p-5 dark:border-zinc-800 dark:bg-zinc-800/30">
             <div class="space-y-4">
                 {{-- Data Items --}}
                 <div

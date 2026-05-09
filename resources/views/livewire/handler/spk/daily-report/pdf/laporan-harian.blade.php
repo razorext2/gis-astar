@@ -1,34 +1,33 @@
-<div class="flex flex-col gap-4" x-data="{ open: false, pdfUrl: '' }"
-    x-on:show-pdf-modal.window="open = true; pdfUrl = $event.detail.url">
+<div class="flex flex-col gap-4">
 
     <x-button.primary class="w-fit" id="summary-button" wire:click.prevent="previewPdf">
         Preview PDF
     </x-button.primary>
 
-    @if ($showPreview)
-        <!-- Overlay -->
-        <div x-show="open" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" x-transition.opacity>
-            <!-- Modal -->
-            <div class="h-[85vh] w-[90vw] overflow-hidden rounded-lg bg-white text-gray-800 shadow-xl dark:bg-dark-secondary dark:text-white"
-                @keydown.escape.window="open=false">
-                <div class="flex items-center justify-between border-b px-4 py-2">
-                    <h2 class="font-semibold">Laporan Harian Teknisi/Mekanik</h2>
+    <x-modal.base-modal show="showPreview" maxWidth="6xl" title="Laporan Harian Teknisi/Mekanik"
+        subtitle="Pratinjau Dokumen PDF">
 
-                    <x-button.secondary class="!bg-transparent !p-1 !ring-0 hover:!bg-gray-100 dark:hover:!bg-gray-800" @click="open=false; $wire.set('showPreview', false)">
-                        <x-slot name="icon">
-                            <x-icons.close class="h-5 w-5 text-red-500" />
-                        </x-slot>
-                    </x-button.secondary>
-                </div>
+        <x-slot name="icon">
+            <x-icons.file-invoice class="h-5 w-5" />
+        </x-slot>
 
-                <!-- Konten PDF: iframe -->
-                <div class="h-[calc(85vh-48px)] w-full">
-                    <iframe x-bind:src="pdfUrl" class="h-full w-full"
-                        title="Laporan Harian Teknisi/Mekanik PDF" frameborder="0">
-                    </iframe>
+        <div
+            class="h-[70vh] w-full overflow-hidden border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
+            @if ($pdfUrl)
+                <iframe src="{{ $pdfUrl }}" class="h-full w-full" title="Laporan Harian Teknisi/Mekanik PDF"
+                    frameborder="0">
+                </iframe>
+            @else
+                <div class="flex h-full items-center justify-center">
+                    <x-icons.loading class="h-8 w-8 animate-spin text-zinc-400" />
                 </div>
-            </div>
+            @endif
         </div>
-    @endif
 
+        <x-slot name="footer">
+            <x-button.secondary wire:click="$set('showPreview', false)" class="w-full justify-center sm:w-auto">
+                Tutup Pratinjau
+            </x-button.secondary>
+        </x-slot>
+    </x-modal.base-modal>
 </div>

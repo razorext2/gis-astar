@@ -4,14 +4,10 @@
 
     <div class="flex justify-between py-2">
         @if ($step != 1)
-            <x-button.link
-                class="w-fit ring-1 ring-red-700 hover:bg-red-300 dark:bg-red-800 dark:text-white dark:ring-zinc-800 dark:hover:bg-red-900"
-                wire:navigate href="{{ route('points.redeem', ['step' => 1]) }}">
-                <x-slot name="icon">
-                    <x-icons.angle-left class="icon h-6 w-6" />
-                </x-slot>
-                Kembali
-            </x-button.link>
+            <x-button.danger class="my-auto me-4 max-h-10" wire:navigate
+                href="{{ route('points.redeem', ['step' => 1]) }}">
+                <x-icons.angle-left class="icon h-6 w-6" />
+            </x-button.danger>
         @endif
 
         @if ($step == 2)
@@ -88,9 +84,15 @@
             </div>
 
             <div class="col-span-2">
-                <x-button.primary class="mx-auto" type="submit" id="proceed-accumulation">
-                    <x-icons.loading wire:loading />
-                    <span wire:loading.remove>Akumulasikan</span>
+                <x-button.primary class="mx-auto" type="submit" id="proceed-accumulation" wire:loading.attr="disabled"
+                    wire:target="process">
+                    <x-slot name="icon">
+                        <x-icons.angle-right wire:loading.remove wire:target="process" class="icon h-5 w-5" />
+                        <x-icons.loading wire:loading wire:target="process" class="h-4 w-4 animate-spin" />
+                    </x-slot>
+
+                    <span wire:loading wire:target="process">Memproses...</span>
+                    <span wire:loading.remove wire:target="process">Akumulasikan</span>
                 </x-button.primary>
             </div>
         </form>
@@ -102,7 +104,8 @@
             @if ($showModal)
                 <div class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/65 p-4 backdrop-blur-sm">
                     <!-- Modal box -->
-                    <div class="flex max-w-lg flex-col gap-2 rounded-xl ring-1 ring-zinc-200 bg-white p-6 shadow-2xl dark:ring-zinc-800 dark:bg-dark-primary">
+                    <div
+                        class="flex max-w-lg flex-col gap-2 rounded-xl border border-zinc-200 bg-white/60 p-6 shadow-2xl backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
                         <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Konfirmasi Pengajuan</h2>
                         <p
                             class="overflow-y-auto border-y border-zinc-200 py-1 text-gray-800 dark:border-zinc-800 dark:text-white">
@@ -111,7 +114,18 @@
                             <b>{{ $start_period }}</b> sampai tanggal <b>{{ $end_period }}</b>?
                         </p>
                         <div class="mt-4 flex justify-end space-x-2">
-                            <x-button.success wire:click="validateData">Konfirmasi</x-button.success>
+                            <x-button.success wire:click="validateData" wire:loading.attr="disabled"
+                                wire:target="validateData">
+                                <x-slot name="icon">
+                                    <x-icons.angle-right wire:loading.remove wire:target="validateData"
+                                        class="icon h-5 w-5" />
+                                    <x-icons.loading wire:loading wire:target="validateData"
+                                        class="h-4 w-4 animate-spin" />
+                                </x-slot>
+
+                                <span wire:loading.remove wire:target="validateData">Konfirmasi</span>
+                                <span wire:loading wire:target="validateData">Memproses...</span>
+                            </x-button.success>
                             <x-button.danger wire:click="closeModal">Batal</x-button.danger>
                         </div>
                     </div>
@@ -190,11 +204,16 @@
             @if ($results->first()->status == 1)
                 <div class="mt-4 flex items-center justify-end">
                     <x-button.primary class="w-fit"
-                        wire:click="processRedeem('{{ $results->first()->transaction_id }}')">
+                        wire:click="processRedeem('{{ $results->first()->transaction_id }}')"
+                        wire:loading.attr="disabled" wire:target="processRedeem">
                         <x-slot name="icon">
-                            <x-icons.angle-right class="icon h-6 w-6" />
+                            <x-icons.angle-right wire:loading.remove wire:target="processRedeem"
+                                class="icon h-5 w-5" />
+                            <x-icons.loading wire:loading wire:target="processRedeem" class="h-4 w-4 animate-spin" />
                         </x-slot>
-                        Proses Redeem
+
+                        <span wire:loading.remove wire:target="processRedeem">Proses Redeem</span>
+                        <span wire:loading wire:target="processRedeem">Memproses...</span>
                     </x-button.primary>
                 </div>
             @endif

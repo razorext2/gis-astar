@@ -1,5 +1,5 @@
 <div
-    class="relative mt-4 overflow-hidden rounded-2xl bg-white/60 p-6 shadow-sm ring-1 ring-zinc-200/60 backdrop-blur-sm dark:bg-dark-primary/60 dark:ring-white/10 lg:p-8">
+    class="relative mt-4 overflow-hidden rounded-2xl border border-zinc-200/60 bg-white/60 p-6 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-8">
     <!-- Dekorasi Blur Blob -->
     <div
         class="bg-primary/5 dark:bg-primary/10 pointer-events-none absolute -right-20 -top-20 z-0 h-64 w-64 rounded-full opacity-50 blur-3xl">
@@ -43,7 +43,7 @@
 
             <!-- Ketua Tim -->
             <div
-                class="flex flex-col rounded-xl bg-gray-50/50 p-5 ring-1 ring-zinc-200 dark:bg-gray-800/30 dark:ring-zinc-800/50">
+                class="flex flex-col rounded-xl border border-zinc-200 bg-gray-50/50 p-5 dark:border-zinc-800/50 dark:bg-gray-800/30">
                 <div class="mb-2 flex items-center gap-3">
                     <div class="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg">
                         <x-icons.user class="text-primary h-6 w-6" />
@@ -71,7 +71,7 @@
 
                     @if ($search_user != '')
                         <div
-                            class="mt-3 max-h-[220px] overflow-y-auto rounded-xl bg-white p-2 shadow-sm ring-1 ring-zinc-200 dark:bg-gray-800 dark:ring-zinc-800">
+                            class="mt-3 max-h-[220px] overflow-y-auto rounded-xl border border-zinc-200 bg-white/60 p-2 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800">
                             @forelse ($users as $user)
                                 <label for="helper-radio-{{ $user->kode_pegawai }}"
                                     class="group flex cursor-pointer items-center rounded-lg p-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50">
@@ -113,13 +113,14 @@
             <div class="mt-2 flex w-full justify-end gap-3 border-t border-zinc-200 pt-6 dark:border-zinc-800/50">
                 <x-button.danger href="{{ route('teams.index') }}" wire:navigate as="a">Batal</x-button.danger>
 
-                <x-button.primary type="submit" class="shadow-primary/20 px-8 transition-all hover:shadow-lg">
+                <x-button.primary type="submit" class="shadow-primary/20 px-8 transition-all hover:shadow-lg"
+                    wire:loading.attr="disabled" wire:target="store">
                     <x-slot name="icon">
                         <x-icons.loading class="h-5 w-5 animate-spin" wire:loading wire:target="store" />
                         <x-icons.plus class="h-5 w-5" wire:loading.remove wire:target="store" />
                     </x-slot>
                     <span wire:loading.remove wire:target="store">Simpan Tim Baru</span>
-                    <span wire:loading wire:target="store" class="ml-2">Memproses Data...</span>
+                    <span wire:loading wire:target="store" class="ml-2">Menyimpan...</span>
                 </x-button.primary>
             </div>
         </form>

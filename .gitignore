@@ -43,4 +43,9 @@ rr
 .rr.yaml
 python/pegawai
 SYSTEM_MAP.MD
+<<<<<<< HEAD
 AGENTS.md
+=======
+AGENTS.MD
+/.cursor
+>>>>>>> master

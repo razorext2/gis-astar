@@ -1,23 +1,25 @@
-{{-- Goal: Tombol Tab untuk navigasi panel (Flowbite compatible), Livewire: -, Alpine: - --}}
+{{-- Goal: Tombol Tab untuk navigasi panel (Premium Line Style), Livewire: -, Alpine: - --}}
 @props(['active' => false, 'icon' => null, 'id' => null])
 
 @php
-    $baseClasses = 'inline-flex items-center justify-center gap-2 rounded-t-lg border-b-2 p-4 text-sm font-medium transition-all duration-300 focus:outline-none';
-    
-    // Default Flowbite Tab Styles
-    $activeClasses = 'border-blue-600 text-blue-600 dark:border-blue-500 dark:text-blue-500';
-    $inactiveClasses = 'border-transparent text-gray-500 hover:border-zinc-300 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300';
-    
-    $classes = $baseClasses . ' ' . ($active ? $activeClasses : $inactiveClasses);
+    $baseClasses =
+        'group relative inline-flex items-center justify-center gap-2 px-1 py-4 text-sm font-medium transition-colors duration-300 focus:outline-none';
+
+    // State Colors
+    $classes =
+        $baseClasses .
+        ' text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white' . // Inactive / Hover
+        ' aria-selected:text-red-600 dark:aria-selected:text-red-500 aria-selected:border-b-2 aria-selected:border-red-600 dark:aria-selected:border-red-500'; // Active
 @endphp
 
 <button id="{{ $id }}" type="button" role="tab" aria-selected="{{ $active ? 'true' : 'false' }}"
     {{ $attributes->merge(['class' => $classes]) }}>
+
     @if ($icon)
-        <span class="inline-flex items-center">{{ $icon }}</span>
+        <span class="relative z-10 inline-flex items-center">{{ $icon }}</span>
     @endif
 
     @if ($slot->isNotEmpty())
-        <span>{{ $slot }}</span>
+        <span class="relative z-10">{{ $slot }}</span>
     @endif
 </button>

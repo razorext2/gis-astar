@@ -2,21 +2,14 @@
 @section('content')
     <div class="w-full space-y-6">
         <div
-            class="grid gap-4 rounded-xl bg-white p-4 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 sm:p-6">
+            class="grid gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none sm:p-6">
             <div class="w-full">
-                <header class="flex flex-row gap-x-4">
+                <header class="flex items-center">
+                    <x-button.danger href="{{ route('driver.index') }}" wire:navigate class="my-auto me-4 max-h-10">
+                        <x-icons.angle-left class="h-5 w-5" />
+                    </x-button.danger>
 
-                    <div class="max-w-xs">
-                        <x-button.link class="w-fit ring-1 ring-red-700 dark:bg-red-800 dark:text-white"
-                            href="{{ route('driver.index') }}" wire:navigate>
-                            <x-slot name="icon">
-                                <x-icons.angle-right class="h-6 w-6 text-red-500 dark:text-white" />
-                            </x-slot>
-                            Kembali
-                        </x-button.link>
-                    </div>
-
-                    <h2 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-white">
                         {{ __('Assign Laporan Driver') }}
                     </h2>
 

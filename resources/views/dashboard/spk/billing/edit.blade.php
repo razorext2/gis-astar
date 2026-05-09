@@ -1,24 +1,31 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div class="grid grid-cols-1 gap-6">
+    <div class="relative space-y-4">
 
+        {{-- Header Card --}}
         <div
-            class="grid w-full grid-cols-1 rounded-xl bg-white py-2 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 lg:p-6">
-
-            <div class="flex flex-col px-3 md:mb-2 lg:p-0">
-
-                <span class="text-xl font-semibold text-gray-900 dark:bg-dark-primary dark:text-white">
-                    Update Nomor Tagihan
-                </span>
-
-                <p class="mt-0.5 text-base text-gray-600 dark:text-gray-400">
-                    Silahkan isi nomor penagihan menggunakan nomor SR ataupun Faktur Pajak sesuai dengan data SPK.
-                </p>
-
+            class="flex flex-col rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
+            <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-xl font-bold text-zinc-900 dark:text-white">Update Nomor Tagihan</h1>
+                        <span
+                            class="inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 text-xs font-bold text-blue-700 ring-1 ring-inset ring-blue-700/10 dark:bg-blue-900/30 dark:text-blue-400">
+                            SPK Billing
+                        </span>
+                    </div>
+                    <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+                        Silahkan isi nomor penagihan menggunakan nomor SR ataupun Faktur Pajak sesuai dengan data SPK.
+                    </p>
+                </div>
             </div>
-
-            @livewire('handler.spk.billing-update', ['id' => $id])
-
         </div>
+
+        {{-- Main Content --}}
+        <div
+            class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
+            @livewire('handler.spk.billing-update', ['id' => $id])
+        </div>
+
     </div>
 @endsection

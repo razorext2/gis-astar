@@ -75,6 +75,7 @@ class SpkMain extends Model
         'on_delay' => 'boolean',
         'production_has_download_spk_pdf' => 'boolean',
         'is_picked_up_by_customer' => 'boolean',
+        'is_cancelled' => 'boolean',
         'is_revision' => 'boolean',
         'is_booked' => 'boolean',
         'is_using_old_stock' => 'boolean',

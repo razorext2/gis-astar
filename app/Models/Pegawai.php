@@ -71,21 +71,6 @@ class Pegawai extends Model
         return $this->hasManyThrough(Jadwal::class, Golongan::class, 'id', 'id_golongan', 'golongan', 'id');
     }
 
-    public function salaryRelasi()
-    {
-        return $this->belongsTo(Salary::class, 'salary_id', 'id');
-    }
-
-    public function allowanceRelasi()
-    {
-        return $this->hasMany(Allowance::class, 'kode_pegawai', 'kode_pegawai');
-    }
-
-    public function deductionRelasi()
-    {
-        return $this->hasMany(Deduction::class, 'kode_pegawai', 'kode_pegawai');
-    }
-
     public function salesReport()
     {
         return $this->hasMany(Sales::class, 'kode_pegawai', 'kode_pegawai');

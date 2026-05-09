@@ -2,7 +2,7 @@
 	<span class="font-medium">
 		{{ $date }}
 	</span>
-	<span class="text-xs text-gray-400">
+	<span class="text-xs text-zinc-400">
 		{{ $name ?? '' }}
 	</span>
 </div>

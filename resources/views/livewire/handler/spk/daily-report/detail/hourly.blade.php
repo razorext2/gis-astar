@@ -9,14 +9,9 @@
     @endphp
 
     <div>
-        <x-button.link href="{{ $redirectRoute }}"
-            class="flex w-fit items-center gap-2 ring-1 ring-red-600 dark:bg-red-800 dark:text-white" wire:navigate
-            id="back-button">
-            <x-slot name="icon">
-                <x-icons.angle-left class="h-5 w-5 text-red-500 dark:text-white" />
-            </x-slot>
-            Kembali
-        </x-button.link>
+        <x-button.danger href="{{ $redirectRoute }}" class="my-auto me-4 max-h-10" wire:navigate id="back-button">
+            <x-icons.angle-left class="h-5 w-5" />
+        </x-button.danger>
     </div>
 
     @can('laporan-harian-create')
@@ -25,24 +20,13 @@
                 now()->lt(\Carbon\Carbon::parse($dailyReport->assignment->project->end_date)->endOfDay()) &&
                 $dailyReport->assignment->status !== 'completed' &&
                 $dailyReport->status !== 'submitted')
-            <div wire:show="showAddForm" id="accordion-packing-form" x-data="{ accordionOpen: true }">
-                <x-button.success type="button"
-                    class="w-full flex-row-reverse justify-between rounded-lg p-5"
-                    @click="accordionOpen = !accordionOpen" ::class="accordionOpen ? 'rounded-b-none border-b-0' : ''">
-                    <x-slot name="icon">
-                        <span class="transition-all duration-300 ease-in-out" :class="accordionOpen ? 'rotate-180' : ''">
-                            <x-icons.carred-down class="h-4 w-4" />
-                        </span>
-                    </x-slot>
-
-                    <h3 class="text-base font-semibold text-white">
-                        Tambah aktivitas?
-                    </h3>
-                </x-button.success>
-
-                {{-- Form Tambah Aktivitas --}}
-                <div x-show="accordionOpen" x-collapse x-cloak
-                    class="w-full rounded-b-lg bg-white p-2 shadow-sm ring-1 ring-zinc-200 dark:bg-gray-800 dark:ring-zinc-800 lg:p-4">
+            <div wire:show="showAddForm">
+                <x-utils.accordion-item id="accordion-add-activity" title="Tambah aktivitas?"
+                    description="Silakan isi detail aktivitas harian pada form di bawah ini." iconColor="green"
+                    :expanded="true" class="w-full">
+                    <x-slot:icon>
+                        <x-icons.plus class="h-4 w-4" />
+                    </x-slot:icon>
 
                     <form wire:submit.prevent="store" class="grid grid-cols-1 gap-4 lg:grid-cols-2">
 
@@ -79,11 +63,11 @@
                                 </span>
 
                                 <ul
-                                    class="divide-y divide-gray-200 rounded-lg border border-zinc-200 bg-white shadow-sm dark:divide-gray-700 dark:border-zinc-800 dark:bg-gray-700">
+                                    class="divide-y divide-gray-200 rounded-lg border border-zinc-200 bg-white/60 shadow dark:divide-gray-700 dark:border-zinc-800 dark:bg-gray-700">
 
                                     @foreach ($docForm->new_attachments as $index => $row)
-                                        <li
-                                            class="flex items-center gap-2 p-2 transition hover:bg-gray-50 dark:hover:bg-gray-800">
+                                        <li class="flex items-center gap-2 p-2 transition hover:bg-gray-50 dark:hover:bg-gray-800"
+                                            wire:key="attachment-{{ $index }}">
                                             <div
                                                 class="w-8 text-center text-sm font-medium text-gray-600 dark:text-gray-400">
                                                 {{ $index + 1 }}.
@@ -99,9 +83,9 @@
                                             </div>
 
                                             <x-button.link type="button" wire:click="removeAttachment({{ $index }})"
-                                                 class="!p-0 font-medium text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
-                                                 Hapus
-                                             </x-button.link>
+                                                class="!p-0 font-medium text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                                                Hapus
+                                            </x-button.link>
                                         </li>
                                     @endforeach
 
@@ -189,15 +173,19 @@
 
                         {{-- ACTION --}}
                         <div class="col-span-1 flex justify-end lg:col-span-2">
-                            <x-button.success type="submit">
+                            <x-button.success type="submit" wire:loading.attr="disabled" wire:target="store">
+                                <x-slot name="icon">
+                                    <x-icons.plus wire:loading.remove wire:target="store" class="icon h-5 w-5" />
+                                    <x-icons.loading wire:loading wire:target="store" class="h-4 w-4 animate-spin" />
+                                </x-slot>
+
                                 <span wire:loading.remove wire:target="store">Simpan Aktivitas</span>
                                 <span wire:loading wire:target="store">Menyimpan...</span>
                             </x-button.success>
                         </div>
 
                     </form>
-
-                </div>
+                </x-utils.accordion-item>
             </div>
         @else
             <p class="w-full text-center text-sm text-red-500">
@@ -217,7 +205,14 @@
             @if ($dailyReport->status === 'draft')
                 <div class="flex gap-2 lg:gap-4">
                     @can('laporan-harian-edit')
-                        <x-button.primary id="submit" type="button" wire:click.prevent="reportSubmit">
+                        <x-button.primary id="submit" type="button" wire:click.prevent="reportSubmit"
+                            wire:loading.attr="disabled" wire:target="reportSubmit">
+                            <x-slot name="icon">
+                                <x-icons.angle-right wire:loading.remove wire:target="reportSubmit"
+                                    class="icon h-5 w-5" />
+                                <x-icons.loading wire:loading wire:target="reportSubmit" class="h-4 w-4 animate-spin" />
+                            </x-slot>
+
                             <span wire:loading.remove wire:target="reportSubmit">Ajukan Laporan</span>
                             <span wire:loading wire:target="reportSubmit">Mengajukan...</span>
                         </x-button.primary>
@@ -227,7 +222,8 @@
         </div>
 
         {{-- LIST CONTAINER --}}
-        <div class="w-full rounded-xl bg-white shadow-sm ring-1 ring-zinc-200 dark:bg-gray-800 dark:ring-zinc-800">
+        <div
+            class="w-full rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800 dark:shadow-none">
             <div class="flex flex-col divide-y divide-gray-200 dark:divide-gray-700">
                 @forelse ($this->hourlyReports as $index => $row)
                     <div class="p-2 transition hover:bg-gray-50 dark:hover:bg-gray-700/40 lg:p-4">
@@ -310,9 +306,12 @@
                                     class="text-sm ring-blue-600 hover:bg-blue-100 dark:bg-blue-800 dark:text-white dark:hover:bg-blue-900"
                                     id="detail-button"
                                     wire:confirm.prompt="Anda yakin ingin menghapus laporan ini?\nKetik YA jika anda yakin.|YA"
-                                    wire:click="delete('{{ $row->id }}')">
+                                    wire:click="delete('{{ $row->id }}')" wire:loading.attr="disabled"
+                                    wire:target="delete">
                                     <x-slot name="icon">
-                                        <x-icons.trash-bin class="h-4 w-4" />
+                                        <x-icons.trash-bin wire:loading.remove wire:target="delete"
+                                            class="icon h-5 w-5" />
+                                        <x-icons.loading wire:loading wire:target="delete" class="h-4 w-4 animate-spin" />
                                     </x-slot>
 
                                     <span wire:loading.remove wire:target="delete">Hapus</span>

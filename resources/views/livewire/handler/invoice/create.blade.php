@@ -23,9 +23,15 @@
                         name="nofakturpajak" placeholder="No. Faktur Pajak" :labels="false" />
 
                     <x-button.primary type="submit" class="absolute bottom-[1px] end-0 focus:outline"
-                        id="nofakturpajak_submit">
-                        <span wire:loading wire:target="fetchFakturPajak">Loading...</span>
+                        id="nofakturpajak_submit" wire:loading.attr="disabled" wire:target="fetchFakturPajak">
+                        <x-slot name="icon">
+                            <x-icons.angle-right wire:loading.remove wire:target="fetchFakturPajak"
+                                class="icon h-5 w-5" />
+                            <x-icons.loading wire:loading wire:target="fetchFakturPajak" class="h-4 w-4 animate-spin" />
+                        </x-slot>
+
                         <span wire:loading.remove wire:target="fetchFakturPajak">Cek</span>
+                        <span wire:loading wire:target="fetchFakturPajak">Memproses...</span>
                     </x-button.primary>
                 </div>
 
@@ -223,9 +229,8 @@
                                 <div class="flex-none px-1.5 py-3 first:pl-3 last:pr-3">
                                     <div class="relative flex flex-col items-center justify-center gap-3">
                                         <img class="w-24 rounded-lg" src="{{ $doc->temporaryUrl() }}">
-                                        <x-button.danger
-                                            class="absolute end-0 top-0 !rounded-lg !p-1 !shadow-none" type="button"
-                                            wire:click="removeDocumentation({{ $index }})">
+                                        <x-button.danger class="absolute end-0 top-0 !rounded-lg !p-1 !shadow-none"
+                                            type="button" wire:click="removeDocumentation({{ $index }})">
                                             <x-icons.close class="h-4 w-4" />
                                         </x-button.danger>
                                         <p class="text-xs text-gray-600 dark:text-white">
@@ -259,11 +264,15 @@
         </div>
 
         <div class="relative col-span-2 w-full">
-            <x-button.primary class="float-right" id="store" type="submit">
+            <x-button.primary class="float-right" id="store" type="submit" wire:loading.attr="disabled"
+                wire:target="store">
                 <x-slot name="icon">
-                    <x-icons.angle-right class="icon h-5 w-5" />
+                    <x-icons.angle-right wire:loading.remove wire:target="store" class="icon h-5 w-5" />
+                    <x-icons.loading wire:loading wire:target="store" class="h-4 w-4 animate-spin" />
                 </x-slot>
-                Update Riwayat Invoice
+
+                <span wire:loading.remove wire:target="store">Update Riwayat Invoice</span>
+                <span wire:loading wire:target="store">Mengupdate...</span>
             </x-button.primary>
         </div>
     </form>

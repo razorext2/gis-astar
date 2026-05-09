@@ -96,9 +96,8 @@
                                                     : '');
                                     @endphp
                                     <img class="w-24 rounded-lg" src="{{ $src }}">
-                                    <x-button.danger
-                                        class="absolute end-0 top-0 !rounded-lg !p-1 !shadow-none" type="button"
-                                        wire:click="removeDocumentation({{ $index }})">
+                                    <x-button.danger class="absolute end-0 top-0 !rounded-lg !p-1 !shadow-none"
+                                        type="button" wire:click="removeDocumentation({{ $index }})">
                                         <x-icons.close class="h-4 w-4" />
                                     </x-button.danger>
 
@@ -157,11 +156,17 @@
     {{-- end keterangan --}}
 
     <div class="relative col-span-2 w-full">
-        <x-button.success wire:target="store" class="float-right" id="store" type="submit">
+        <x-button.success wire:target="store" class="float-right" id="store" type="submit"
+            wire:loading.attr="disabled" wire:target="store">
             <x-slot name="icon">
-                <x-icons.angle-right class="icon h-5 w-5" />
+                <x-icons.angle-right wire:loading.remove wire:target="store" class="icon h-5 w-5" />
+                <x-icons.loading wire:loading wire:target="store" class="h-4 w-4 animate-spin" />
             </x-slot>
-            Tambah Laporan
+
+            <span wire:target="store" wire:loading.remove>Simpan Laporan</span>
+            <span wire:target="store" wire:loading class="flex items-center gap-2">
+                Memproses...
+            </span>
         </x-button.success>
     </div>
 

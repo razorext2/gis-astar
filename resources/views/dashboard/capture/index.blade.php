@@ -1,13 +1,13 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div class="relative overflow-hidden rounded-2xl bg-white/80 p-4 text-zinc-900 shadow-2xl ring-1 ring-zinc-200 backdrop-blur-xl dark:bg-zinc-900/60 dark:text-white dark:ring-zinc-800 md:p-6"
+    <div class="relative overflow-hidden rounded-xl bg-white/60 p-4 text-zinc-900 shadow-2xl ring-1 ring-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:text-white dark:ring-zinc-800 md:p-6"
         id="Scan" data-aos="fade-up">
 
         {{-- Background Decoration --}}
         <div class="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-red-500/10 blur-3xl"></div>
         <div class="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl"></div>
 
-        <div class="relative grid h-auto w-full grid-cols-1 gap-6 lg:grid-cols-3">
+        <div class="relative grid h-auto w-full grid-cols-1 gap-4 lg:grid-cols-3">
 
             {{-- Scanner Section (Large) --}}
             <div class="lg:col-span-2" data-aos="zoom-in" data-aos-delay="100">
@@ -41,7 +41,7 @@
                 </div>
 
                 {{-- Action Controls --}}
-                <div class="mt-6 flex flex-col gap-4">
+                <div class="mt-4 flex flex-col gap-4">
                     <x-button.primary class="group w-full !py-4 !text-lg" id="startButton">
                         <x-slot name="icon">
                             <x-icons.play class="h-5 w-5 transition-transform group-hover:scale-110" />
@@ -56,7 +56,7 @@
             </div>
 
             {{-- Information Panel --}}
-            <div class="flex flex-col gap-6" data-aos="fade-left" data-aos-delay="200">
+            <div class="flex flex-col gap-4" data-aos="fade-left" data-aos-delay="200">
                 {{-- Panel Header --}}
                 <div
                     class="flex items-center justify-between rounded-xl bg-zinc-100 p-4 ring-1 ring-zinc-200 dark:bg-zinc-800/50 dark:ring-zinc-800">

@@ -55,7 +55,7 @@ class UnassignPurchasingRequest extends Component
                 title: 'Berhasil',
             );
 
-            $this->redirect(route('purchasing-request.show', $this->id));
+            $this->redirect(route('purchasing-request.edit', $this->id), navigate: true);
         }, 'Gagal Unassign Purchasing Request.', [
             'user_id' => auth()->user()->id,
             'spk_id' => $this->id,

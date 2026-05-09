@@ -1,21 +1,18 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
     <div
-        class="flex w-full flex-col gap-4 rounded-xl bg-white px-3 py-2 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 lg:p-6">
-        <div class="flex flex-row items-center gap-2 lg:gap-4">
+        class="flex w-full flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
+        <div class="flex items-center">
 
             <div>
-                <x-button.link href="{{ route('production.show', $data->id) }}"
-                    class="w-fit ring-1 ring-red-700 dark:bg-red-800 dark:text-white" wire:navigate id="back-button">
-                    <x-slot name="icon">
-                        <x-icons.angle-left class="h-6 w-6 text-red-500 dark:text-white" />
-                    </x-slot>
-                    Kembali
-                </x-button.link>
+                <x-button.danger href="{{ route('production.show', $data->id) }}" wire:navigate id="back-button"
+                    class="my-auto me-4 max-h-10">
+                    <x-icons.angle-left class="h-5 w-5" />
+                </x-button.danger>
             </div>
 
             <div>
-                <p class="text-xl font-semibold text-gray-900 dark:bg-dark-primary dark:text-white">
+                <p class="text-xl font-semibold text-gray-900 dark:text-white">
                     Laporan Progres Produksi
                     {{ $data->spk->nomor_order . ($data->spk->revision_count ? 'R' . str_pad($data->spk->revision_count, 2, '0', STR_PAD_LEFT) : '') }}
                     <span class="text-sm uppercase italic">(

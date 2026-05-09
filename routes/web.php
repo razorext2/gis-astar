@@ -204,24 +204,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('driver/assign/to/{id}', [\App\Http\Controllers\DriverController::class, 'assignToView'])->name('driver.assign.to');
         Route::get('driver/assign/update/{id}', [\App\Http\Controllers\DriverController::class, 'assignUpdateView'])->name('driver.assign.update');
 
-        // route kuesioner
-        Route::resource('kuesioner', \App\Http\Controllers\QuestionnaireController::class)
-            ->only('index', 'show', 'create', 'edit');
-
         // route pegawai
         Route::get('pegawai/autocomplete/', [\App\Http\Controllers\PegawaiController::class, 'autocomplete'])->name('pegawai.autocomplete');
         Route::get('pegawai/{pegawai}/detail', [\App\Http\Controllers\PegawaiController::class, 'detail'])->name('pegawai.detail');
         Route::get('pegawai/attendance', [\App\Http\Controllers\PegawaiController::class, 'getAttendanceDate'])->name('pegawai.get.attendance.date');
-        Route::get('pegawai/{pegawai}/payroll', [\App\Http\Controllers\PegawaiController::class, 'payrollInfo'])->name('pegawai.payrollinfo');
         Route::get('pegawai/{pegawai}/attendance', [\App\Http\Controllers\PegawaiController::class, 'attendance'])->name('pegawai.attendance');
         Route::get('pegawai/{pegawai}/timeline', [\App\Http\Controllers\PegawaiController::class, 'timeline'])->name('pegawai.timeline');
         Route::get('pegawai/{pegawai}/collectors', [\App\Http\Controllers\PegawaiController::class, 'reportCollectors'])->name('pegawai.collectors');
         Route::get('pegawai/{pegawai}/sales', [\App\Http\Controllers\PegawaiController::class, 'reportSales'])->name('pegawai.sales');
         Route::resource('pegawai', \App\Http\Controllers\PegawaiController::class)->except('store', 'update');
-
-        // route pegawai allowance & deductions
-        Route::resource('pegawai/allowances', \App\Http\Controllers\AllowanceController::class);
-        Route::resource('pegawai/deductions', \App\Http\Controllers\DeductionController::class);
 
         // backup
         Route::resource('backup', \App\Http\Controllers\BackupController::class)->only('index');

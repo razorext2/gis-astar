@@ -22,9 +22,9 @@
     @endif
 
     <div class="flex flex-col text-left">
-        <span class="text-sm font-semibold text-gray-800 dark:text-gray-200">{{ $title }}</span>
+        <span class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">{{ $title }}</span>
         @if (isset($item3) && $item3)
-            <span class="text-xs text-gray-500 dark:text-gray-400">{{ $item3 }}</span>
+            <span class="text-xs text-zinc-500 dark:text-zinc-400">{{ $item3 }}</span>
         @endif
     </div>
 </div>

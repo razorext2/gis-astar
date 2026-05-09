@@ -22,7 +22,11 @@
             <input
                 class="w-full cursor-pointer rounded-lg border border-zinc-200 bg-gray-50 text-sm text-gray-900 focus:outline-none dark:border-zinc-800 dark:bg-gray-700 dark:text-gray-400 dark:placeholder-gray-400"
                 aria-describedby="user_avatar_help" id="user_avatar" wire:model="photo" type="file">
-            <x-button.primary type="submit">
+            <x-button.primary type="submit" wire:loading.attr="disabled" wire:target="photo, save">
+                <x-slot name="icon">
+                    <x-icons.angle-right wire:loading.remove wire:target="photo, save" class="icon h-5 w-5" />
+                    <x-icons.loading wire:loading wire:target="photo, save" class="h-4 w-4 animate-spin" />
+                </x-slot>
 
                 <span wire:loading wire:target="photo">Uploading...</span>
                 <span wire:loading wire:target="save">Menyimpan...</span>

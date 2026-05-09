@@ -7,6 +7,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <meta name="description" content="" />
     <meta name="keywords" content="" />
+    <meta name="robots" content="noindex, nofollow" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
@@ -58,20 +59,19 @@
                 <div class="ms-3 mt-0.5 text-sm font-normal text-black"><x-auth.auth-session-status class="mb-4"
                         :status="session('status')" />
                 </div>
-                <x-button.secondary
-                    class="!ms-auto !h-8 !w-8 !p-1.5 !bg-transparent !shadow-none ring-0 sm:-mx-1.5 sm:-my-1.5"
+                <x-button.danger
+                    class="!ms-auto !h-8 !w-8 !bg-transparent !p-1.5 !shadow-none ring-0 sm:-mx-1.5 sm:-my-1.5"
                     type="button" aria-label="Close" @click="showToast = false">
                     <span class="sr-only">Close</span>
                     <x-icons.close class="h-3 w-3" />
-                </x-button.secondary>
+                </x-button.danger>
             </div>
         </div>
     @endif
 
     {{-- Fixed Logo Top-Left --}}
     <div class="fixed left-6 top-5 z-50 hidden md:block">
-        <img src="{{ asset('assets/img/logo.png') }}" class="h-10 w-auto object-contain drop-shadow-sm"
-            alt="Indodacin Logo">
+        <img src="{{ asset('assets/img/logo.png') }}" class="h-10 w-auto object-contain drop-shadow-sm" alt="Logo">
     </div>
 
     <div class="container mx-auto flex min-h-screen items-center justify-center px-6">
@@ -91,7 +91,7 @@
                         isDeleting: false,
                         type() {
                             const current = this.words[this.wordIndex];
-                    
+
                             if (this.isDeleting) {
                                 this.currentWord = current.substring(0, this.charIndex - 1);
                                 this.charIndex--;
@@ -99,10 +99,10 @@
                                 this.currentWord = current.substring(0, this.charIndex + 1);
                                 this.charIndex++;
                             }
-                    
+
                             let typeSpeed = 100 - Math.random() * 50;
                             if (this.isDeleting) typeSpeed /= 2.5; // Delete faster
-                    
+
                             if (!this.isDeleting && this.currentWord === current) {
                                 typeSpeed = 2000; // Pause at the end before deleting
                                 this.isDeleting = true;
@@ -111,7 +111,7 @@
                                 this.wordIndex = (this.wordIndex + 1) % this.words.length;
                                 typeSpeed = 500; // Pause before starting new word
                             }
-                    
+
                             setTimeout(() => this.type(), typeSpeed);
                         }
                     }" x-init="setTimeout(() => type(), 800)"
