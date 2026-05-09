@@ -151,7 +151,7 @@ class Create extends Component
     {
         $this->runSafely(function () use ($userId) {
             DB::transaction(function () use ($userId) {
-                Invoice::create([
+                $invoice = Invoice::create([
                     'nomor_btt' => $this->addForm->btt_number,
                     'tgl_invoice' => $this->addForm->invoice_date,
                     'tgl_btt' => $this->addForm->btt_created_at,
@@ -168,6 +168,8 @@ class Create extends Component
                     'latest_update_by' => $userId,
                 ]);
 
+                $this->id = $invoice->id;
+
                 $this->addHistory($userId);
             });
 
@@ -182,12 +184,15 @@ class Create extends Component
     {
         $this->runSafely(function () use ($userId) {
             DB::transaction(function () use ($userId) {
-                Invoice::where('no_faktur_pajak', $this->addForm->tax_number)->update([
+                $invoice = Invoice::where('no_faktur_pajak', $this->addForm->tax_number)->first();
+                $invoice->update([
                     'status_pengiriman' => $this->addForm->delivery_status,
                     'status_terbaru' => $this->addForm->newest_status,
                     'tipe_tagihan' => $this->fetchDataForm->tipe_tagihan,
                     'latest_update_by' => $userId,
                 ]);
+
+                $this->id = $invoice->id;
 
                 $this->addHistory($userId);
             });
@@ -250,14 +255,16 @@ class Create extends Component
     public function getRoute($currentRoute)
     {
         return match ($currentRoute) {
-            'invoice.medan.create' => 'invoice.medan.addDetails',
-            'invoice.jkt.create' => 'invoice.jkt.addDetails',
-            'invoice.pku.create' => 'invoice.pku.addDetails',
-            'invoice.cust.create' => 'invoice.cust.addDetails',
-            'invoice.medan.addDetails' => 'invoice.medan.addDetails',
-            'invoice.jkt.addDetails' => 'invoice.jkt.addDetails',
-            'invoice.pku.addDetails' => 'invoice.pku.addDetails',
-            'invoice.cust.addDetails' => 'invoice.cust.addDetails',
+            'invoice.all.create' => 'invoice.all.create',
+            'invoice.medan.create' => 'invoice.medan.create',
+            'invoice.jkt.create' => 'invoice.jkt.create',
+            'invoice.pku.create' => 'invoice.pku.create',
+            'invoice.cust.create' => 'invoice.cust.create',
+            'invoice.all.addDetails' => 'invoice.all.index',
+            'invoice.medan.addDetails' => 'invoice.medan.index',
+            'invoice.jkt.addDetails' => 'invoice.jkt.index',
+            'invoice.pku.addDetails' => 'invoice.pku.index',
+            'invoice.cust.addDetails' => 'invoice.cust.index',
             default => $currentRoute,
         };
     }
