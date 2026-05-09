@@ -646,14 +646,14 @@
                 <span wire:loading wire:target="summary">Memuat...</span>
             </x-button.primary>
 
-            <x-button.success id="simpan-button" type="submit" wire:loading.attr="disabled" wire:target="submit">
+            <x-button.success id="simpan-button" type="submit" wire:loading.attr="disabled" wire:target="store">
                 <x-slot name="icon">
-                    <x-icons.loading wire:loading wire:target="submit" class="h-4 w-4 animate-spin" />
-                    <x-icons.check-circle wire:loading.remove wire:target="submit" class="h-4 w-4" />
+                    <x-icons.loading wire:loading wire:target="store" class="h-4 w-4 animate-spin" />
+                    <x-icons.check-circle wire:loading.remove wire:target="store" class="h-4 w-4" />
                 </x-slot>
 
-                <span wire:loading.remove wire:target="submit">Simpan SPK</span>
-                <span wire:loading wire:target="submit">Menyimpan...</span>
+                <span wire:loading.remove wire:target="store">Simpan SPK</span>
+                <span wire:loading wire:target="store">Menyimpan...</span>
             </x-button.success>
         </div>
     </form>
