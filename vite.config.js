@@ -60,7 +60,6 @@ export default defineConfig({
 
                 // technician
                 "resources/js/pages/technician/add.js",
-                "resources/js/pages/technician/detail.js",
 
                 // announcement
                 "resources/js/pages/announcement/index.js",

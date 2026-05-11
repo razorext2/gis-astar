@@ -1,22 +1,29 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div
-        class="grid grid-cols-1 gap-2 rounded-xl border border-zinc-200 bg-white/60 p-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:gap-4 lg:p-6">
+    <div class="mb-16 space-y-4">
+        <div
+            class="flex items-center gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
+            <x-button.danger
+                href="{{ $route == 'report.general.daily' ? route('report.general.index') : route('daily-report.assign', ['spk_id' => $assignment->project->spk_id]) }}"
+                wire:navigate id="back-button">
+                <x-slot name="icon">
+                    <x-icons.angle-left class="h-5 w-5" />
+                </x-slot>
+            </x-button.danger>
 
-        <div class="flex flex-col">
-            <span class="text-xl font-semibold text-gray-900 dark:text-white">
-                Rekap Laporan Harian
-            </span>
+            <div class="flex flex-col">
+                <span class="text-xl font-semibold text-gray-900 dark:text-white">
+                    Rekap Laporan Harian
+                </span>
 
-            <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
-                Laporan Lapangan adalah feature yang diperuntukkan untuk staff lapangan seperti Teknisi dan Mekanik untuk
-                perekapan pelaporan pekerjaan mereka yang mereka lakukan dilapangan.
-            </p>
+                <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
+                    Laporan Lapangan adalah feature yang diperuntukkan untuk staff lapangan seperti Teknisi dan Mekanik
+                    untuk
+                    perekapan pelaporan pekerjaan mereka yang mereka lakukan dilapangan.
+                </p>
+            </div>
         </div>
 
-        <div class="flex flex-col gap-2 lg:gap-4">
-            @livewire('handler.spk.daily-report.detail.daily', ['id' => $id])
-        </div>
-
+        @livewire('handler.spk.daily-report.detail.daily', ['id' => $id])
     </div>
 @endsection

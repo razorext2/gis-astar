@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\IdObfuscator;
 use App\Models\Collector;
 use App\Models\User;
 use Carbon\Carbon;
@@ -148,7 +149,7 @@ class CollectController extends Controller
                 })
                 ->addColumn('actions', function ($data) {
                     $actions = [
-                        ['id' => 'show-btn', 'action' => route('collect.show', $data->id), 'label' => 'Detail'],
+                        ['id' => 'show-btn', 'action' => route('collect.show', IdObfuscator::encode($data->id)), 'label' => 'Detail'],
                     ];
 
                     if (auth()->user()->can('collect-edit') && $data->status != 1) {
@@ -178,7 +179,7 @@ class CollectController extends Controller
 
                     return view('components.dashboard.single-button', [
                         'id' => $data->id,
-                        'data' => ['id' => 'detailBtn'.$data->id, 'action' => route('collect.show', $data->id), 'label' => 'Detail'],
+                        'data' => ['id' => 'detailBtn'.$data->id, 'action' => route('collect.show', IdObfuscator::encode($data->id)), 'label' => 'Detail'],
                     ]);
                 })
                 ->filter(function ($query) use ($request) {
@@ -215,7 +216,8 @@ class CollectController extends Controller
 
     public function show($id)
     {
-        $data = Collector::with('photoCollectRelasi', 'pegawaiRelasi')->findOrFail($id);
+        $decodedId = IdObfuscator::decode($id);
+        $data = Collector::with('photoCollectRelasi', 'pegawaiRelasi')->findOrFail($decodedId);
 
         if (auth()->user()->hasRole('Collector') && auth()->user()->kode_pegawai != $data->kode_pegawai) {
             return abort(403);

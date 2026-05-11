@@ -1,7 +1,7 @@
 <div class="mt-4 grid gap-4 lg:gap-6">
     @forelse ($teams as $row)
         <div wire:key="{{ $row->team_code }}"
-            class="hover:shadow-primary/5 hover:ring-primary/20 group relative overflow-hidden rounded-2xl bg-white/60 p-4 ring-1 ring-zinc-200/60 backdrop-blur-sm transition-all duration-300 hover:shadow-xl dark:bg-dark-primary/60 dark:ring-white/10 dark:hover:bg-dark-primary/80 lg:p-6">
+            class="hover:shadow-primary/5 hover:ring-primary/20 group relative overflow-hidden rounded-md bg-white/60 p-4 ring-1 ring-zinc-200/60 backdrop-blur-sm transition-all duration-300 hover:shadow-xl dark:bg-dark-primary/60 dark:ring-white/10 dark:hover:bg-dark-primary/80 lg:p-6">
             <!-- Dekorasi Blur Blob -->
             <div
                 class="bg-primary/10 dark:bg-primary/20 pointer-events-none absolute -right-10 -top-10 z-0 h-40 w-40 rounded-full opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100">

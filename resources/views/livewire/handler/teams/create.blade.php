@@ -1,15 +1,18 @@
 <div
-    class="relative mt-4 overflow-hidden rounded-2xl border border-zinc-200/60 bg-white/60 p-6 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-8">
-    <!-- Dekorasi Blur Blob -->
-    <div
-        class="bg-primary/5 dark:bg-primary/10 pointer-events-none absolute -right-20 -top-20 z-0 h-64 w-64 rounded-full opacity-50 blur-3xl">
-    </div>
+    class="relative mt-4 overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
 
-    <div class="relative z-10">
-        <div class="mb-6">
-            <h2 class="text-xl font-bold text-gray-900 dark:text-white lg:text-3xl">Pembentukan Tim Baru</h2>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Silakan masukkan detail tim dan tunjuk ketua tim
-                untuk memimpin divisi teknisi.</p>
+    <div class="relative">
+        <div class="mb-6 flex items-center gap-4">
+            <x-button.danger href="{{ route('teams.index') }}" class="w-fit" wire:navigate id="back-button"
+                class="max-h-10 max-w-fit">
+                <x-icons.angle-left class="h-5 w-5" />
+            </x-button.danger>
+
+            <div>
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white lg:text-3xl">Pembentukan Tim Baru</h2>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Silakan masukkan detail tim dan tunjuk ketua tim
+                    untuk memimpin divisi teknisi.</p>
+            </div>
         </div>
 
         <form class="flex w-full flex-col gap-5 lg:gap-8" wire:submit.prevent="store">
