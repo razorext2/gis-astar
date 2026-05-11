@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Team;
 use App\Models\Technician;
+use App\Support\IdObfuscator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Request;
@@ -223,7 +224,7 @@ final class TechnicianTable extends PowerGridComponent
                 ->slot('Detail')
                 ->id($row->id)
                 ->class('dark:bg-green-800 text-sm dark:hover:bg-green-900 dark:text-white dark:border-zinc-800 rounded-lg bg-green-400 px-2 py-1.5 font-semibold text-white border border-zinc-200 hover:bg-green-700')
-                ->route('technician.show', ['technician' => $row->no_vt]),
+                ->route('technician.show', ['technician' => IdObfuscator::encode($row->id)]),
         ];
 
         if ($row->status == 2 || $row->status == 4 || auth()->user()->can('technician-approve')) {

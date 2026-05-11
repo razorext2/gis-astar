@@ -4,6 +4,7 @@ namespace App\Livewire\Handler\Technician;
 
 use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Technician;
+use App\Support\IdObfuscator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Jfcherng\Diff\DiffHelper;
@@ -100,7 +101,7 @@ class Fetch extends Component
                 ]);
             });
 
-            return redirect()->route('technician.show', $this->id)->with('status', 'Data berhasil diperbarui');
+            return redirect()->route('technician.show', IdObfuscator::encode($this->dbData->id))->with('status', 'Data berhasil diperbarui');
         }, 'Gagal mengupdate data kunjungan teknisi.', [
             'action' => 'update technician visit fetch',
             'no_vt' => $this->id,

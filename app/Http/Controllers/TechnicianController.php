@@ -6,27 +6,24 @@ use App\Http\Resources\ApiResource;
 use App\Models\PhotoCollect;
 use App\Models\Technician;
 use App\Models\TechnicianPoints;
-use Carbon\Carbon;
+use App\Support\IdObfuscator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Typography\FontFactory;
 
 class TechnicianController extends Controller
 {
-    function __construct()
+    public function __construct()
     {
-        $this->middleware("permission:technician-list", ["only" => "index"]);
-        $this->middleware("permission:technician-create", ["only" => "create"]);
+        $this->middleware('permission:technician-list', ['only' => 'index']);
+        $this->middleware('permission:technician-create', ['only' => 'create']);
     }
 
     public function index()
     {
-        return view("dashboard.technician.index");
+        return view('dashboard.technician.index');
     }
 
     public function create()
@@ -132,7 +129,7 @@ class TechnicianController extends Controller
                     ]);
 
                     // kalo blm ada, tambah
-                    if (!$point) {
+                    if (! $point) {
                         TechnicianPoints::create([
                             'from_vt' => $partner['no_vt'],
                             'point' => $data['point'],
@@ -156,11 +153,11 @@ class TechnicianController extends Controller
                     $no_vt = strtoupper($partner['no_vt']);
 
                     $document = $request->file('bast_document');
-                    $documentName = 'dokumen_bast_' . $no_vt . '.' . $document->getClientOriginalExtension();
+                    $documentName = 'dokumen_bast_'.$no_vt.'.'.$document->getClientOriginalExtension();
                     $document->storeAs('public/technician/pdf', $documentName);
 
                     $check = PhotoCollect::where('no_vt', $no_vt)
-                        ->where('photourl', 'pdf/' . $documentName)
+                        ->where('photourl', 'pdf/'.$documentName)
                         ->first();
 
                     if ($check) {
@@ -170,40 +167,35 @@ class TechnicianController extends Controller
                     } else {
                         $upload = PhotoCollect::create([
                             'no_vt' => $no_vt,
-                            'photourl' => 'pdf/' . $documentName,
+                            'photourl' => 'pdf/'.$documentName,
                         ]);
                     }
 
-                    if (!$upload) {
+                    if (! $upload) {
                         return new ApiResource(false, 'Gagal mengupload dokumen.');
                     }
                 }
             }
 
             DB::commit();
+
             return new ApiResource(true, 'Laporan berhasil diperbarui');
         } catch (\Exception $e) {
             DB::rollBack();
+
             return new ApiResource(false, 'Gagal memperbarui kunjungan', $e->getMessage());
         }
     }
 
-    public function show($id)
+    public function show(string $hash): \Illuminate\Contracts\View\View
     {
-        $query = Technician::with('pegawai', 'photo_collects:id,no_vt,photourl')
-            ->where('no_vt', $id)
-            ->first();
+        $id = $this->decodeOrAbort($hash);
 
-        if (!$query) {
-            return new ApiResource(false, 'Gagal', 'Laporan kunjungan tidak ditemukan');
-        }
-
-        $query->technician_name = $query->pegawai->full_name ?? 'Teknisi belum terdaftar di sistem';
-        $query->no_telp = $query->pegawai->no_telp ?? '-';
-        $query->update_teknisi = Carbon::parse($query->updated_at)->locale('id')->isoFormat('HH:mm:ss, DD MMMM YYYY');
+        $technician = Technician::with(['pegawai:kode_pegawai,full_name,no_telp', 'photo_collects:id,no_vt,photourl', 'user:id,name', 'revised_by:id,name'])
+            ->findOrFail($id);
 
         return view('dashboard.technician.detail', [
-            'data' => $query
+            'technician' => $technician,
         ]);
     }
 
@@ -212,7 +204,7 @@ class TechnicianController extends Controller
         $query = Technician::where('no_vt', $id)->first();
         $point = TechnicianPoints::where('from_vt', $id)->first();
 
-        if (!$query) {
+        if (! $query) {
             return new ApiResource(false, 'Gagal', 'Laporan kunjungan tidak ditemukan');
         }
 
@@ -230,19 +222,19 @@ class TechnicianController extends Controller
             ]);
 
             // kirim update ke API
-            Http::asForm()->post("https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=updateKunjungan", [
-                "NomorKunjungan" => $query->no_vt,
-                "UpdatePekerjaan" => $query->job_update,
-                "JenisTimbangan" => $query->weight_type,
-                "Ukuran" => $query->size,
-                "Kapasitas" => $query->capacity,
-                "TipeIndikator" => $query->indicator_type,
-                "TipeIndikatorSN" => $query->indicator_sn,
-                "TipeLoadcell" => $query->loadcell_type,
-                "TipeLoadcellSN" => $query->loadcell_sn,
-                "TipeJunctionBox" => $query->junction_type,
-                "TipeJunctionBoxSN" => $query->loadcell_qty,
-            ]);
+            // Http::asForm()->post('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=updateKunjungan', [
+            //     'NomorKunjungan' => $query->no_vt,
+            //     'UpdatePekerjaan' => $query->job_update,
+            //     'JenisTimbangan' => $query->weight_type,
+            //     'Ukuran' => $query->size,
+            //     'Kapasitas' => $query->capacity,
+            //     'TipeIndikator' => $query->indicator_type,
+            //     'TipeIndikatorSN' => $query->indicator_sn,
+            //     'TipeLoadcell' => $query->loadcell_type,
+            //     'TipeLoadcellSN' => $query->loadcell_sn,
+            //     'TipeJunctionBox' => $query->junction_type,
+            //     'TipeJunctionBoxSN' => $query->loadcell_qty,
+            // ]);
 
             DB::commit();
 
@@ -255,7 +247,7 @@ class TechnicianController extends Controller
     public function deny(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'note' => 'required|string|max:200'
+            'note' => 'required|string|max:200',
         ]);
 
         if ($validator->fails()) {
@@ -264,7 +256,7 @@ class TechnicianController extends Controller
 
         $query = Technician::where('no_vt', $id)->first();
 
-        if (!$query) {
+        if (! $query) {
             return new ApiResource(false, 'Terjadi kegagalan saat mengambil data', 'Laporan kunjungan tidak ditemukan');
         }
 
@@ -273,8 +265,9 @@ class TechnicianController extends Controller
                 'status' => 3,
                 'validate_by' => Auth::id(),
                 'validate_at' => now(),
-                'notes' => $request->note
+                'notes' => $request->note,
             ]);
+
             return new ApiResource(true, 'Berhasil', 'Laporan kunjungan telah ditolak');
         } catch (\Exception $e) {
             return new ApiResource(false, 'Terjadi kegagalan pada server', $e->getMessage());
@@ -284,7 +277,7 @@ class TechnicianController extends Controller
     public function revision(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'note' => 'required|string|max:200'
+            'note' => 'required|string|max:200',
         ]);
 
         if ($validator->fails()) {
@@ -293,7 +286,7 @@ class TechnicianController extends Controller
 
         $query = Technician::where('no_vt', $id)->first();
 
-        if (!$query) {
+        if (! $query) {
             return new ApiResource(false, 'Terjadi kegagalan saat mengambil data', 'Laporan kunjungan tidak ditemukan');
         }
 
@@ -303,8 +296,9 @@ class TechnicianController extends Controller
                 'validate_by' => Auth::id(),
                 'validate_at' => now(),
                 'notes' => $request->note,
-                'total_revision' => $query->total_revision + 1
+                'total_revision' => $query->total_revision + 1,
             ]);
+
             return new ApiResource(true, 'Berhasil', 'Permintaan revisi telah dikirim');
         } catch (\Exception $e) {
             return new ApiResource(false, 'Terjadi kegagalan pada server', $e->getMessage());
@@ -327,7 +321,7 @@ class TechnicianController extends Controller
             ->where('no_vt', $no_vt)
             ->first();
 
-        if (!$technician) {
+        if (! $technician) {
             return new ApiResource(false, 'Data tidak ditemukan', 'Laporan kunjungan tidak ditemukan');
         }
 
@@ -345,14 +339,14 @@ class TechnicianController extends Controller
             return [
                 'id' => $photo_collect->id,
                 'no_vt' => $photo_collect->no_vt,
-                'photourl' => $photo_collect->photourl
+                'photourl' => $photo_collect->photourl,
             ];
         });
 
         $id = rawurlencode($technician->id_permintaan);
         $date = $technician->visit_date;
 
-        $url = 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchKunjunganRelasi&IDPermintaanKunjungan=' . $id . '&TanggalKunjungan=' . $date;
+        $url = 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchKunjunganRelasi&IDPermintaanKunjungan='.$id.'&TanggalKunjungan='.$date;
 
         $response = Http::get($url);
 
@@ -367,10 +361,27 @@ class TechnicianController extends Controller
         return new ApiResource(true, 'Berhasil mengambil data dari database', $technician);
     }
 
-    public function fetchUpdate($id)
+    public function fetchUpdate(string $hash): \Illuminate\Contracts\View\View
     {
+        $id = $this->decodeOrAbort($hash);
+
+        $technician = Technician::findOrFail($id);
+
         return view('dashboard.technician.fetch-update', [
-            'id' => $id
+            'id' => $technician->no_vt,
         ]);
+    }
+
+    /**
+     * Decode hash dari URL ke integer ID.
+     * Abort 404 jika hash tidak valid agar tidak mengekspos informasi sistem.
+     */
+    private function decodeOrAbort(string $hash): int
+    {
+        try {
+            return IdObfuscator::decode($hash);
+        } catch (\InvalidArgumentException) {
+            abort(404);
+        }
     }
 }
