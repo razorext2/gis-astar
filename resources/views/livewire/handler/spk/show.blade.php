@@ -1,4 +1,4 @@
-<div class="relative space-y-4">
+<div class="space-y-4">
     <div
         class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
 
@@ -96,6 +96,31 @@
 
         {{-- Main Content Grid --}}
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+
+            {{-- download button --}}
+            @if ($data->status_approval === 1 || auth()->user()->can('spk-validate'))
+                <div class="flex justify-between gap-4 md:col-span-2 lg:justify-end">
+                    @can('spk-create')
+                        <x-button.primary id="spk-pdf-export" wire:click="export" wire:loading.attr="disabled"
+                            wire:target="export">
+                            <x-slot name="icon">
+                                <x-icons.loading wire:loading wire:target="export" class="h-4 w-4 animate-spin" />
+                                <x-icons.file-invoice wire:loading.remove wire:target="export" class="h-4 w-4" />
+                            </x-slot>
+
+                            <span wire:loading.remove wire:target="export">Ekspor SPK</span>
+                            <span wire:loading wire:target="export">Memproses...</span>
+                        </x-button.primary>
+                    @endcan
+
+                    @hasanyrole(['Produksi', 'Admin', 'Management'])
+                        <x-button.primary href="{{ route('spk.generate.pdf', ['id' => $data->id]) }}" id="spk-pdf-export">
+                            Ekspor SPK (Produksi)
+                        </x-button.primary>
+                    @endhasanyrole
+                </div>
+            @endif
+            {{-- end download button --}}
 
             {{-- Card: Detail Order --}}
             <div
@@ -396,32 +421,6 @@
     {{-- progress spk --}}
     @livewire('utils.progres-spk', ['id' => $data->id])
     {{-- end progress spk --}}
-
-    {{-- download button --}}
-    @if ($data->status_approval === 1 || auth()->user()->can('spk-validate'))
-        <div
-            class="flex justify-center gap-x-2 rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 text-center shadow-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:absolute lg:right-6 lg:top-0 lg:border-none lg:bg-transparent lg:p-0 lg:shadow-none lg:dark:bg-transparent">
-            @can('spk-create')
-                <x-button.primary id="spk-pdf-export" wire:click="export" wire:loading.attr="disabled"
-                    wire:target="export">
-                    <x-slot name="icon">
-                        <x-icons.loading wire:loading wire:target="export" class="h-4 w-4 animate-spin" />
-                        <x-icons.file-invoice wire:loading.remove wire:target="export" class="h-4 w-4" />
-                    </x-slot>
-
-                    <span wire:loading.remove wire:target="export">Ekspor SPK</span>
-                    <span wire:loading wire:target="export">Memproses...</span>
-                </x-button.primary>
-            @endcan
-
-            @hasanyrole(['Produksi', 'Admin', 'Management'])
-                <x-button.primary href="{{ route('spk.generate.pdf', ['id' => $data->id]) }}" id="spk-pdf-export">
-                    Ekspor SPK (Produksi)
-                </x-button.primary>
-            @endhasanyrole
-        </div>
-    @endif
-    {{-- end download button --}}
 
     @can('spk-history')
         @livewire('handler.spk.spk-histories', ['id' => $data->id])
