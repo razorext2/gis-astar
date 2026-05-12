@@ -50,10 +50,20 @@ class LeaveRequestCardService
      */
     public function getApprovalCenterCards(): array
     {
+        $user = auth()->user();
+        $hasPegawai = $user->pegawai !== null;
+
+        $baseQuery = fn () => $hasPegawai
+            ? LeaveRequest::where(function ($q) use ($user) {
+                $this->scopeByApproverRole($q, $user);
+                $q->orWhere('user_id', $user->id);
+            })
+            : LeaveRequest::query();
+
         return [
             [
                 'label' => 'Total Masuk',
-                'count' => LeaveRequest::whereYear('created_at', date('Y'))->count(),
+                'count' => (clone $baseQuery())->whereYear('created_at', date('Y'))->count(),
                 'indicator' => 'Pengajuan',
                 'icon' => 'icons.envelope',
                 'color' => 'blue',
@@ -61,7 +71,11 @@ class LeaveRequestCardService
             ],
             [
                 'label' => 'Butuh Review',
-                'count' => LeaveRequest::whereIn('status', ['pending_backup', 'pending_spv', 'pending_hrd', 'pending_management'])->count(),
+                'count' => $hasPegawai
+                    ? LeaveRequest::whereIn('status', ['pending_backup', 'pending_spv', 'pending_hrd', 'pending_management'])
+                        ->where(fn ($q) => $this->scopeByApproverRole($q, $user))
+                        ->count()
+                    : LeaveRequest::whereIn('status', ['pending_backup', 'pending_spv', 'pending_hrd', 'pending_management'])->count(),
                 'indicator' => 'Pengajuan',
                 'icon' => 'icons.clock',
                 'color' => 'yellow',
@@ -69,13 +83,43 @@ class LeaveRequestCardService
             ],
             [
                 'label' => 'Selesai Diproses',
-                'count' => LeaveRequest::whereIn('status', ['approved', 'rejected'])->whereYear('created_at', date('Y'))->count(),
+                'count' => (clone $baseQuery())->whereIn('status', ['approved', 'rejected'])->whereYear('created_at', date('Y'))->count(),
                 'indicator' => 'Pengajuan',
                 'icon' => 'icons.badge-check',
                 'color' => 'green',
                 'permission' => 'all',
             ],
         ];
+    }
+
+    /**
+     * Scope query to only include requests where the user is the designated approver.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  \App\Models\User  $user
+     */
+    private function scopeByApproverRole($query, $user): void
+    {
+        $query->where(function ($q) use ($user) {
+            $q->where(function ($sq) use ($user) {
+                $sq->where('status', 'pending_backup')->where('backup_person_id', $user->id);
+            });
+
+            $q->orWhere(function ($sq) use ($user) {
+                $sq->where('status', 'pending_spv')
+                    ->whereHas('user.pegawai.jabatanRelasi', fn ($jq) => $jq->where('supervisor_id', $user->id));
+            });
+
+            $q->orWhere(function ($sq) use ($user) {
+                $sq->where('status', 'pending_hrd')
+                    ->whereHas('user.pegawai.jabatanRelasi.placementRelasi.hrds', fn ($jq) => $jq->where('users.id', $user->id));
+            });
+
+            $q->orWhere(function ($sq) use ($user) {
+                $sq->where('status', 'pending_management')
+                    ->whereHas('user.pegawai.jabatanRelasi.placementRelasi.managements', fn ($jq) => $jq->where('users.id', $user->id));
+            });
+        });
     }
 
     /**
