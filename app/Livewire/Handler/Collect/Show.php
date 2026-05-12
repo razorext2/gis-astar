@@ -85,6 +85,7 @@ class Show extends Component
 
             $this->loadData();
             $this->dispatch('swal', title: 'Berhasil', text: 'Laporan berhasil dikonfirmasi.', icon: 'success');
+            $this->redirect(route('collect.submitted'), true);
         }, 'Gagal mengonfirmasi laporan.');
     }
 
@@ -124,6 +125,7 @@ class Show extends Component
             $this->notes = '';
             $this->loadData();
             $this->dispatch('swal', title: 'Berhasil', text: 'Laporan telah ditolak.', icon: 'success');
+            $this->redirect(route('collect.submitted'), true);
         }, 'Gagal menolak laporan.');
     }
 
@@ -160,6 +162,7 @@ class Show extends Component
             $this->notes = '';
             $this->loadData();
             $this->dispatch('swal', title: 'Berhasil', text: 'Permintaan revisi telah dikirim.', icon: 'success');
+            $this->redirect(route('collect.submitted'), true);
         }, 'Gagal mengirim permintaan revisi.');
     }
 
