@@ -2,7 +2,7 @@
 @section('content')
     <div class="flex h-auto items-center justify-center">
         <div
-            class="grid w-full gap-2 rounded-xl bg-white/60 p-2 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 md:gap-4 md:p-6">
+            class="grid w-full gap-2 rounded-xl border border-zinc-200 bg-white/60 p-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none md:gap-4 md:p-6">
 
             <div id="notificationHeader">
                 <div class="flex items-center justify-between">
@@ -39,13 +39,14 @@
                                     {{ $notification->data['message'] }}
                                 </div>
 
-                                <div class="inline-flex">
+                                <div class="flex gap-2">
                                     {{-- show notification additional button --}}
 
                                     <form id="formNotification-{{ $notification->id }}"
                                         action="{{ $notification->data['button']['url'] }}">
                                     </form>
-                                    <x-button.primary id="btnNotification" form="formNotification-{{ $notification->id }}" type="submit">
+                                    <x-button.primary id="btnNotification" form="formNotification-{{ $notification->id }}"
+                                        type="submit">
                                         {{ $notification->data['button']['label'] }}
                                     </x-button.primary>
 
@@ -53,7 +54,8 @@
                                     @if ($notification->read_at == null)
                                         <form id="markAsRead-{{ $notification->id }}"
                                             action="{{ route('notification.mark-as-read', $notification->id) }}"></form>
-                                        <x-button.success id="btnMarkAsRead" form="markAsRead-{{ $notification->id }}" type="submit">
+                                        <x-button.success id="btnMarkAsRead" form="markAsRead-{{ $notification->id }}"
+                                            type="submit">
                                             {{ __('Mark as Read') }}
                                         </x-button.success>
                                     @endif
