@@ -33,6 +33,7 @@ return new class extends Migration
                 'pending_management',
                 'approved',
                 'rejected',
+                'auto_reject',
                 'delayed',
                 'canceled',
             ])->default('draft');

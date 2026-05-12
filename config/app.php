@@ -123,4 +123,16 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Leave Request Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Batas waktu (hari) untuk approver menyelesaikan approval.
+    | Jika melebihi batas waktu, pengajuan akan otomatis ditolak.
+    |
+    */
+
+    'leave_approval_deadline_days' => (int) env('LEAVE_APPROVAL_DEADLINE_DAYS', 3),
+
 ];

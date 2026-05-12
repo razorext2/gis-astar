@@ -37,6 +37,7 @@ class LeaveRequestHistory extends Model
             'approve' => 'Disetujui',
             'final_approve' => 'Cuti Disetujui Sepenuhnya',
             'reject' => 'Pengajuan Ditolak',
+            'auto_reject' => 'Ditolak Otomatis (Expired)',
             'cancel' => 'Pengajuan Dibatalkan',
             default => 'Status diperbarui'
         };

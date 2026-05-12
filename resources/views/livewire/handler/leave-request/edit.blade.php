@@ -257,8 +257,7 @@
                 </div>
             </div>
 
-            <x-button.primary type="submit" class="w-full !py-4" wire:loading.attr="disabled"
-                wire:loading.target="update">
+            <x-button.primary type="submit" class="w-full !py-4" wire:loading.attr="disabled" wire:target="update">
                 <x-slot name="icon">
                     <x-icons.loading wire:loading wire:target="update" class="h-6 w-6" />
                     <x-icons.angle-right wire:loading.remove wire:target="update" class="h-6 w-6" />

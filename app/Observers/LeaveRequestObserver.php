@@ -35,8 +35,8 @@ class LeaveRequestObserver
             // Log History
             LeaveRequestHistory::create([
                 'leave_request_id' => $request->id,
-                'acted_by' => $request->acted_by ?? auth()->id(),
-                'action' => $this->resolveActionName($newStatus),
+                'acted_by' => $request->acted_by ?? auth()->id() ?? $request->user_id,
+                'action' => $this->resolveActionName($newStatus, $request->acted_by ?? auth()->id()),
                 'status_from' => $oldStatus,
                 'status_to' => $newStatus,
                 'note' => $request->current_note ?? 'Status diperbarui.',
@@ -52,11 +52,11 @@ class LeaveRequestObserver
         }
     }
 
-    protected function resolveActionName(string $status): string
+    protected function resolveActionName(string $status, mixed $actedBy = null): string
     {
         return match ($status) {
             'approved' => 'final_approve',
-            'rejected' => 'reject',
+            'rejected' => $actedBy === null ? 'auto_reject' : 'reject',
             'cancelled' => 'cancel',
             default => 'approve',
         };

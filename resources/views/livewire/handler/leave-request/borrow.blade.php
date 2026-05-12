@@ -311,7 +311,7 @@
 
             {{-- Submit Button --}}
             <x-button.primary type="submit" class="w-full !py-4 disabled:cursor-not-allowed disabled:opacity-50"
-                :disabled="(bool) $activeRequest" wire:loading.attr="disabled" wire:loading.target="save">
+                :disabled="(bool) $activeRequest" wire:loading.attr="disabled" wire:target="save">
                 <x-slot name="icon">
                     <x-icons.loading wire:loading wire:target="save" class="h-4 w-4 animate-spin" />
                     <x-icons.angle-right wire:loading.remove wire:target="save" class="h-4 w-4" />
