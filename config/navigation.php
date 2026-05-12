@@ -153,6 +153,7 @@ return [
                 // 'permission' => 'access-approval-center-leaves',
                 'permission' => null,
                 'navigate' => true,
+                'counter' => 'utils.counter.leave-request-approval-center-counter',
             ],
             [
                 'label' => 'Kelola Cuti',
@@ -163,6 +164,7 @@ return [
                 // 'permission' => 'leave-balance-manage',
                 'permission' => null,
                 'navigate' => true,
+                'counter' => 'utils.counter.leave-request-manage-counter',
             ],
         ],
     ],
