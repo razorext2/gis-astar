@@ -138,9 +138,9 @@
                         class="border-amber-500/50 text-amber-600 hover:bg-amber-50 dark:text-amber-400 dark:hover:bg-amber-900/20">
                         Minta Revisi
                     </x-button.secondary>
-                    <x-button.danger wire:click="$set('showDenyModal', true)">
+                    {{-- <x-button.danger wire:click="$set('showDenyModal', true)">
                         Tolak Laporan
-                    </x-button.danger>
+                    </x-button.danger> --}}
                     <x-button.primary wire:click="confirm" wire:loading.attr="disabled" class="min-w-[140px]">
                         <x-slot name="icon">
                             <x-icons.loading class="h-4 w-4 animate-spin" wire:loading wire:target="confirm" />
