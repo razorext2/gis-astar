@@ -241,7 +241,13 @@ class Create extends Component
             ]);
         }
 
-        $this->redirect(route($this->getRoute($this->currentRoute), ['id' => $this->id]).'?tipe_tagihan='.$this->fetchDataForm->tipe_tagihan, navigate: true);
+        $params = ['id' => $this->id];
+
+        if ($this->fetchDataForm->tipe_tagihan) {
+            $params['tipe_tagihan'] = $this->fetchDataForm->tipe_tagihan;
+        }
+
+        $this->redirect(route($this->getRoute($this->currentRoute), $params), navigate: true);
     }
 
     public function removeDocumentation($index)
