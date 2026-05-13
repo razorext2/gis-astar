@@ -177,7 +177,7 @@ class UnassignPurchasingRequest extends Component
                 title: 'Berhasil',
             );
 
-            $this->redirect(route('purchasing-request.edit', $this->id), navigate: true);
+            $this->redirect(route('purchasing-request.show', $this->id), navigate: true);
         }, 'Gagal memproses update PR.', [
             'user_id' => Auth::id(),
             'spk_id' => $this->id,

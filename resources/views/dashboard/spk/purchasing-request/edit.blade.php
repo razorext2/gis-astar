@@ -13,7 +13,7 @@
 
             <div class="flex w-full flex-col gap-0.5 p-2 lg:p-0">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Purchasing Request
-                    {{ $data->nomor_order . ($data->revision_count ? 'R' . str_pad($data->revision_count, 2, '0', STR_PAD_LEFT) : '') }}
+                    {{ $data->nomor_order }}
                 </h3>
                 <h4 class="text-sm font-semibold uppercase text-gray-800 dark:text-white">
                     {{ $data->customer['nama_perusahaan' ?? 'N/A'] }}
@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        @livewire('handler.spk.fetch-purchasing-request', ['id' => $data->id])
+        @livewire('handler.spk.fetch-purchasing-request', ['id' => $data->id, 'nomorOrder' => $data->nomor_order])
 
     </div>
 @endsection

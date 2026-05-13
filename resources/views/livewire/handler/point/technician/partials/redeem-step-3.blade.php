@@ -1,12 +1,14 @@
 <div class="flex flex-col gap-4">
+    <h3 class="mt-2 text-xl font-semibold text-zinc-900 dark:text-white lg:text-2xl">Summary Pengajuan</h3>
+
     @if ($results->isNotEmpty())
         <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
 
             {{-- Card: Informasi Transaksi --}}
             <div
-                class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 dark:shadow-none">
+                class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none">
                 <h3
-                    class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
+                    class="flex items-center gap-2 border-b border-zinc-200 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.info-circle class="h-4 w-4 text-blue-500" /> Informasi Transaksi
                 </h3>
 
@@ -19,7 +21,8 @@
                     </div>
 
                     <div class="flex flex-col">
-                        <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Kuartal / Tahun</span>
+                        <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Kuartal /
+                            Tahun</span>
                         <span class="text-sm font-semibold text-zinc-900 dark:text-white">
                             Q{{ $results->first()->quartal }} {{ $results->first()->year }}
                         </span>
@@ -85,7 +88,8 @@
                     </div>
 
                     <div class="flex flex-col">
-                        <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Total Poin Redeem</span>
+                        <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Total Poin
+                            Redeem</span>
                         <span
                             class="mt-1 inline-flex w-fit items-center rounded-md bg-green-50 px-2.5 py-1 text-sm font-bold text-green-700 ring-1 ring-inset ring-green-600/20 dark:bg-green-900/20 dark:text-green-400 dark:ring-green-500/30">
                             + {{ $results->sum('total_points') }} Poin
@@ -96,19 +100,19 @@
 
             {{-- Card: Daftar Pegawai --}}
             <div
-                class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 dark:shadow-none lg:row-span-2">
+                class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none lg:row-span-2">
                 <div
-                    class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
+                    class="flex items-center gap-2 border-b border-zinc-200 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.users class="h-4 w-4 text-blue-500" /> Daftar Teknisi Terlibat
                 </div>
 
-                <div class="max-h-[300px] overflow-y-auto">
+                <div class="max-h-64 overflow-y-auto">
                     <table class="w-full whitespace-nowrap text-left text-sm">
                         <thead
-                            class="sticky top-0 border-b border-zinc-100 bg-white/90 text-xs text-zinc-500 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/90 dark:text-zinc-400">
+                            class="sticky top-0 border-b border-zinc-200 bg-white/90 text-xs text-zinc-500 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/90 dark:text-zinc-400">
                             <tr>
-                                <th class="p-2 font-medium">Pegawai</th>
-                                <th class="p-2 text-right font-medium">Poin Terkumpul</th>
+                                <th class="pb-2 font-medium">Pegawai</th>
+                                <th class="pb-2 text-right font-medium">Poin Terkumpul</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
@@ -134,70 +138,37 @@
                 </div>
             </div>
 
-            {{-- User Actions --}}
-            @if ($results->first()->status == 2 && auth()->user()->can('point-approve'))
+            {{-- Card: Call to Action --}}
+            @if ($results->first()->status == 1)
                 <div
-                    class="flex flex-col items-center justify-between gap-4 rounded-xl border border-amber-200 bg-amber-50/60 p-4 backdrop-blur-md dark:border-amber-900/30 dark:bg-amber-900/10 sm:flex-row">
+                    class="flex flex-col items-center justify-between gap-4 rounded-xl border border-blue-200 bg-blue-50/50 p-4 dark:border-blue-900/30 dark:bg-blue-900/10 sm:flex-row">
                     <div class="flex flex-col">
-                        <span class="text-sm font-semibold text-zinc-900 dark:text-white">
-                            Verifikasi Transaksi
-                        </span>
-                        <span class="text-xs text-zinc-500 dark:text-zinc-400">
-                            Pengajuan ini membutuhkan persetujuan HRD.
-                        </span>
+                        <span class="text-sm font-semibold text-zinc-900 dark:text-white">Lanjutkan
+                            Pengajuan</span>
+                        <span class="text-xs text-zinc-500 dark:text-zinc-400">Transaksi ini akan diteruskan ke
+                            tim HRD untuk diverifikasi.</span>
                     </div>
-                    <x-button.primary class="w-full shrink-0 sm:w-auto" wire:click="openModal">
+                    <x-button.primary class="w-full shrink-0 sm:w-auto"
+                        wire:click="processRedeem('{{ $results->first()->transaction_id }}')"
+                        wire:loading.attr="disabled" wire:target="processRedeem">
                         <x-slot name="icon">
-                            <x-icons.check-circle class="h-5 w-5" />
+                            <x-icons.angle-right wire:loading.remove wire:target="processRedeem"
+                                class="icon h-5 w-5" />
+                            <x-icons.loading wire:loading wire:target="processRedeem"
+                                class="h-4 w-4 animate-spin" />
                         </x-slot>
-                        Tinjau Pengajuan
+                        <span wire:loading.remove wire:target="processRedeem">Kirim ke HRD</span>
+                        <span wire:loading wire:target="processRedeem">Memproses...</span>
                     </x-button.primary>
                 </div>
-            @elseif ($results->first()->status == 3 && auth()->user()->can('point-approve'))
-                <div
-                    class="flex flex-col items-center justify-between gap-4 rounded-xl border border-green-200 bg-green-50/60 p-4 shadow-sm shadow-green-300 backdrop-blur-md dark:border-green-900/30 dark:bg-green-900/10 dark:shadow-none sm:flex-row">
-                    <div class="flex flex-col">
-                        <span class="text-sm font-semibold text-zinc-900 dark:text-white">
-                            Dokumen Selesai
-                        </span>
-                        <span class="text-xs text-zinc-500 dark:text-zinc-400">
-                            Transaksi telah disetujui, Anda dapat mengekspor rekapitulasinya.
-                        </span>
-                    </div>
-                    <livewire:handler.point.technician.export-point-transactions :transactionID="$results->first()->transaction_id" />
-                </div>
             @endif
+
         </div>
     @else
-        <div class="flex flex-col items-center justify-center py-12">
-            <x-icons.info-circle class="h-10 w-10 text-zinc-300 dark:text-zinc-600" />
-            <p class="mt-4 text-sm font-medium text-zinc-500 dark:text-zinc-400">Transaksi tidak ditemukan.</p>
+        <div class="py-8 text-center">
+            <p class="text-zinc-500 dark:text-zinc-400">Tidak ada data ditemukan.</p>
+            <a href="{{ route('points.redeem', ['step' => 1]) }}"
+                class="mt-2 inline-block text-blue-500 hover:underline dark:text-blue-400">Kembali</a>
         </div>
     @endif
-
-    {{-- Modal Konfirmasi --}}
-    <x-modal.base-modal wire:model="showModal" show="showModal" id="konfirmasi-transaksi" maxWidth="md">
-        <x-slot name="title">
-            Konfirmasi Pengajuan
-        </x-slot>
-
-        <div class="mt-2">
-            <p class="text-sm text-zinc-600 dark:text-zinc-400">
-                Apakah Anda yakin ingin mengonfirmasi transaksi dengan ID <br> <span
-                    class="mt-1 block font-mono font-bold text-zinc-900 dark:text-white">{{ $transactionID }}</span>
-            </p>
-        </div>
-
-        <x-slot name="footer">
-            <x-button.success wire:click="confirm" wire:loading.attr="disabled">
-                Terima
-            </x-button.success>
-            <x-button.danger wire:click="reject" wire:loading.attr="disabled">
-                Tolak
-            </x-button.danger>
-            <x-button.secondary wire:click="closeModal" wire:loading.attr="disabled">
-                Batal
-            </x-button.secondary>
-        </x-slot>
-    </x-modal.base-modal>
 </div>

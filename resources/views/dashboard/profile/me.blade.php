@@ -3,7 +3,7 @@
     <div class="flex flex-col gap-5">
         {{-- Main Profile Section --}}
         <div
-            class="flex flex-col rounded-2xl bg-white p-5 shadow-sm border border-zinc-200 dark:bg-dark-primary dark:border-zinc-800 lg:p-7">
+            class="flex flex-col rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
             <div class="flex flex-col gap-6">
 
                 <div class="flex items-center gap-2 border-b border-zinc-200 pb-4 dark:border-zinc-800">
@@ -126,7 +126,7 @@
 
                     {{-- Right Info Area : Permissions --}}
                     <div
-                        class="h-full rounded-2xl bg-zinc-50 p-5 ring-1 ring-zinc-200 dark:bg-dark-secondary dark:ring-zinc-800">
+                        class="h-full rounded-xl bg-zinc-50 p-4 shadow ring-1 ring-zinc-200 dark:bg-dark-secondary dark:ring-zinc-800 lg:p-6">
                         <div class="flex flex-col space-y-3">
                             <div class="flex items-center gap-2">
                                 <x-icons.badge-check class="h-5 w-5 text-zinc-400 dark:text-zinc-500" />
@@ -152,11 +152,11 @@
         </div>
 
         {{-- Bottom Sections --}}
-        <div class="flex flex-col items-stretch gap-5 lg:flex-row">
+        <div class="flex flex-col items-stretch gap-4 lg:flex-row">
 
             {{-- Call To Action Widget --}}
             <div
-                class="group relative flex-1 content-center overflow-hidden rounded-2xl bg-gradient-to-br from-red-600 to-red-800 px-6 py-10 shadow-sm ring-1 ring-red-500/50 dark:from-dark-secondary dark:to-dark-primary dark:shadow-none dark:ring-zinc-800">
+                class="group relative flex-1 content-center overflow-hidden rounded-xl bg-gradient-to-br from-red-600 to-red-800 px-6 py-10 shadow-md shadow-red-200 ring-1 ring-red-500/50 dark:from-dark-secondary dark:to-dark-primary dark:shadow-none dark:ring-zinc-800">
                 {{-- Decorative background glow --}}
                 <div
                     class="absolute -right-12 -top-12 h-44 w-44 rounded-full bg-white/10 blur-3xl transition-transform duration-1000 group-hover:scale-150 dark:bg-red-900/10">
@@ -212,7 +212,7 @@
             {{-- Calendar Widget --}}
             @if (auth()->user()->kode_pegawai)
                 <div
-                    class="flex-1 items-start rounded-2xl bg-white p-5 shadow-sm border border-zinc-200 dark:bg-dark-primary dark:border-zinc-800">
+                    class="flex-1 items-start rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-dark-primary">
                     @livewire('utils.attendance-calendar')
                 </div>
             @endif
