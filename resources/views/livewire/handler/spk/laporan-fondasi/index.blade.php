@@ -21,16 +21,14 @@
             </div>
 
             <div class="flex items-center space-x-2">
-                @can('laporan-fondasi-create')
-                    @if (
-                        $spk->added_by == auth()->id() ||
-                            auth()->user()->can('spk-validate') ||
-                            auth()->user()->can('laporan-fondasi-create'))
-                        <x-button.success wire:click.stop="openCreateLaporanFondasiModal" class="z-10 w-fit !p-2">
-                            <x-icons.plus class="h-5 w-5 dark:text-white" />
-                        </x-button.success>
-                    @endif
-                @endcan
+                @if (
+                    $spk->added_by == auth()->id() ||
+                        auth()->user()->can('spk-validate') ||
+                        auth()->user()->can('laporan-fondasi-create'))
+                    <x-button.success wire:click.stop="openCreateLaporanFondasiModal" class="z-10 w-fit !p-2">
+                        <x-icons.plus class="h-5 w-5 dark:text-white" />
+                    </x-button.success>
+                @endif
 
                 <x-button.secondary class="!p-2" @click.stop="open = !open">
                     <x-icons.carred-down class="h-5 w-5 transition-transform duration-300 dark:text-white"
