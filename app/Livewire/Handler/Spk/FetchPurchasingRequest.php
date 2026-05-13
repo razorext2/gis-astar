@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Handle fetch & assign PR by nomor PR or nomor order, Caller: fetch-purchasing-request.blade.php, Deps: SpkMain, PurchasingRequest, ProductionHistory */
+
 namespace App\Livewire\Handler\Spk;
 
 use App\Livewire\Concerns\HandlesErrors;
@@ -33,10 +35,21 @@ class FetchPurchasingRequest extends Component
 
     public ?string $spk_id;
 
-    public function mount($id)
+    /** Nomor order untuk fetch PR by KeteranganDetail */
+    public ?string $nomor_order = null;
+
+    /** Preview data hasil fetch by nomor order */
+    public array $orderPreviewData = [];
+
+    public bool $showOrderPreview = false;
+
+    public function mount(string $id, ?string $nomorOrder = null): void
     {
-        // assign id
         $this->spk_id = $id;
+
+        if ($nomorOrder) {
+            $this->nomor_order = $nomorOrder;
+        }
     }
 
     public function fetchPR()
@@ -82,19 +95,41 @@ class FetchPurchasingRequest extends Component
         return $this->data = data_get($response->json(), 'data', []);
     }
 
-    public function addPr()
+    public function addPr(): void
     {
         if (empty($this->data)) {
-            return $this->dispatch('swal', icon: 'error', text: 'Data PR belum di fetch.', title: 'Gagal');
+            $this->dispatch('swal', icon: 'error', text: 'Data PR belum di fetch.', title: 'Gagal');
+
+            return;
         }
 
         if ($this->checkExistingPr($this->nomor_pr)) {
-            return $this->dispatch('swal', icon: 'error', text: 'Nomor PR sudah ada di dalam daftar.', title: 'Gagal');
+            $this->dispatch('swal', icon: 'error', text: 'Nomor PR sudah ada di dalam daftar.', title: 'Gagal');
+
+            return;
+        }
+
+        // Ambil kode_item yang sudah ada di DB untuk nomor PR ini
+        $existingKodes = PurchasingRequest::where('id_spk', $this->spk_id)
+            ->where('nomor_purchasing_request', $this->nomor_pr)
+            ->pluck('kode_item')
+            ->toArray();
+
+        $newItems = collect($this->data)
+            ->filter(fn ($item) => ! in_array($item['KodeItem'] ?? '', $existingKodes))
+            ->values()
+            ->toArray();
+
+        if (empty($newItems)) {
+            $this->dispatch('swal', icon: 'info', text: 'Semua item PR ini sudah ada di database.', title: 'Info');
+            $this->clearPr();
+
+            return;
         }
 
         $this->data_pr[] = [
             'nomor_pr' => $this->nomor_pr,
-            'data' => $this->data,
+            'data' => $newItems,
         ];
 
         $this->clearPr();
@@ -213,6 +248,127 @@ class FetchPurchasingRequest extends Component
             ->where('nomor_pr', $nomor_pr)
             ->values()
             ->isNotEmpty();
+    }
+
+    /**
+     * Fetch data PR dari API berdasarkan KeteranganDetail = nomor_order lalu tampilkan preview.
+     */
+    public function fetchByNomorOrder(): void
+    {
+        $this->validate(['nomor_order' => 'required|min:3'], [
+            'nomor_order.required' => 'Nomor order wajib diisi.',
+            'nomor_order.min' => 'Nomor order minimal 3 karakter.',
+        ]);
+
+        $this->runSafely(function () {
+            $url = 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchPermintaanBeli&KeteranganDetail='.urlencode($this->nomor_order);
+
+            $response = Http::timeout(10)->get($url);
+
+            if (! $response->successful()) {
+                $this->orderPreviewData = [];
+                $this->showOrderPreview = false;
+                $this->dispatch('swal', icon: 'error', text: 'Gagal memuat data dari API.', title: 'Gagal');
+
+                return;
+            }
+
+            $json = $response->json();
+
+            if (($json['status'] ?? '') !== 'success' || empty($json['data'])) {
+                $this->orderPreviewData = [];
+                $this->showOrderPreview = false;
+                $this->dispatch('swal', icon: 'error', text: 'Data PR tidak ditemukan di BSI untuk nomor order ini.', title: 'Gagal');
+
+                return;
+            }
+
+            $this->orderPreviewData = $json['data'];
+            $this->showOrderPreview = true;
+        }, 'Gagal fetch data PR dari API.');
+    }
+
+    /**
+     * Tambahkan item-item baru dari orderPreviewData ke data_pr,
+     * dikelompokkan per NomorPermintaanBeli, dengan deduplication.
+     */
+    public function processAddByNomorOrder(): void
+    {
+        if (empty($this->orderPreviewData)) {
+            $this->dispatch('swal', icon: 'error', text: 'Tidak ada data untuk diproses.', title: 'Gagal');
+
+            return;
+        }
+
+        // Ambil semua kode_item yang sudah ada di DB untuk SPK ini (composite key)
+        $existingDbKeys = PurchasingRequest::where('id_spk', $this->spk_id)
+            ->select(['nomor_purchasing_request', 'kode_item'])
+            ->get()
+            ->map(fn ($row) => $row->nomor_purchasing_request.'|'.$row->kode_item)
+            ->toArray();
+
+        $grouped = collect($this->orderPreviewData)->groupBy('NomorPermintaanBeli');
+        $addedCount = 0;
+
+        foreach ($grouped as $nomorPr => $items) {
+            // Filter item yang belum ada di DB
+            $newFromDb = $items->filter(
+                fn ($item) => ! in_array($nomorPr.'|'.($item['KodeItem'] ?? ''), $existingDbKeys)
+            )->values();
+
+            if ($newFromDb->isEmpty()) {
+                continue;
+            }
+
+            // Cek apakah nomor PR sudah ada di data_pr (in-memory)
+            $existingIndex = collect($this->data_pr)
+                ->search(fn ($row) => $row['nomor_pr'] === $nomorPr);
+
+            if ($existingIndex !== false) {
+                // Merge: dedup by KodeItem terhadap data_pr yang sudah ada
+                $existingKodes = collect($this->data_pr[$existingIndex]['data'])
+                    ->pluck('KodeItem')
+                    ->toArray();
+
+                $newItems = $newFromDb
+                    ->filter(fn ($item) => ! in_array($item['KodeItem'] ?? '', $existingKodes))
+                    ->values()
+                    ->toArray();
+
+                if (! empty($newItems)) {
+                    $this->data_pr[$existingIndex]['data'] = array_merge(
+                        $this->data_pr[$existingIndex]['data'],
+                        $newItems
+                    );
+                    $addedCount += count($newItems);
+                }
+            } else {
+                $this->data_pr[] = [
+                    'nomor_pr' => $nomorPr,
+                    'data' => $newFromDb->toArray(),
+                ];
+                $addedCount += $newFromDb->count();
+            }
+        }
+
+        $this->cancelOrderPreview();
+
+        if ($addedCount === 0) {
+            $this->dispatch('swal', icon: 'info', text: 'Semua item PR dari nomor order ini sudah ada di database.', title: 'Info');
+
+            return;
+        }
+
+        $this->dispatch('swal', icon: 'success', text: "{$addedCount} item berhasil ditambahkan ke daftar PR.", title: 'Berhasil');
+    }
+
+    /**
+     * Batalkan preview fetch by nomor order.
+     */
+    public function cancelOrderPreview(): void
+    {
+        $this->orderPreviewData = [];
+        $this->showOrderPreview = false;
     }
 
     public function render()
