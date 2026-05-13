@@ -1,5 +1,6 @@
-<nav
-    class="fixed top-0 z-40 w-full border-b border-zinc-200 bg-white/60 px-4 py-2.5 shadow-sm backdrop-blur-2xl dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none md:bg-white md:backdrop-blur-none md:dark:bg-dark-primary lg:px-6">
+<nav class="fixed top-0 z-40 w-full border-b border-zinc-200 px-4 py-2.5 shadow-sm transition-colors dark:border-zinc-800 dark:shadow-none md:bg-white md:dark:bg-dark-primary lg:px-6"
+    :class="dynamicBg ? 'bg-white/60 backdrop-blur-2xl dark:bg-dark-primary/60' :
+        'bg-white backdrop-blur-none dark:bg-dark-primary'">
     <div class="flex items-center justify-between gap-2">
 
         {{-- Logo & Title --}}
