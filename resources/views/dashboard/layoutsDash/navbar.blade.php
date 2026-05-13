@@ -1,26 +1,27 @@
 <nav
-    class="fixed top-0 z-40 w-full border-b border-zinc-200 bg-white px-4 py-2.5 shadow-sm dark:border-zinc-800 dark:bg-dark-primary dark:shadow-none lg:px-6">
-    <div class="flex flex-wrap items-center justify-between gap-2 sm:flex-nowrap">
+    class="fixed top-0 z-40 w-full border-b border-zinc-200 bg-white/60 px-4 py-2.5 shadow-sm backdrop-blur-2xl dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none md:bg-white md:backdrop-blur-none md:dark:bg-dark-primary lg:px-6">
+    <div class="flex items-center justify-between gap-2">
 
         {{-- Logo & Title --}}
         <div :class="openSidebar ? 'translate-x-0 sm:-translate-x-40' : 'translate-x-20 sm:translate-x-20'"
-            class="flex items-center justify-start transition-all duration-500 ease-out">
-            <a class="flex items-center gap-2" href="{{ config('app.url') }}">
-                <img class="h-8 w-auto object-contain" src="{{ asset('assets/img/logo.png') }}" alt="Indodacin Logo"
+            class="flex shrink-0 items-center justify-start transition-all duration-500 ease-out">
+            <a class="flex items-center gap-1.5 sm:gap-2" href="{{ config('app.url') }}">
+                <img class="h-6 w-auto object-contain sm:h-8" src="{{ asset('assets/img/logo.png') }}" alt="Indodacin Logo"
                     loading="lazy" />
-                <span class="text-sm font-semibold italic text-zinc-600 dark:text-zinc-400">attendance</span>
+                <span
+                    class="hidden text-sm font-semibold italic text-zinc-600 dark:text-zinc-400 sm:block">attendance</span>
             </a>
         </div>
 
         {{-- Points (Teknisi) --}}
-        <div id="point-container">
+        <div id="point-container" class="hidden sm:block">
             @if (auth()->user()->hasRole('Teknisi'))
                 @livewire('widget.technician.points-accumulation')
             @endif
         </div>
 
         {{-- Right Actions --}}
-        <div class="flex w-full items-center justify-between gap-2 sm:w-auto lg:gap-3">
+        <div class="flex items-center justify-end gap-2 sm:gap-3">
 
             @livewire('utils.ping-checker')
 
@@ -37,7 +38,7 @@
                 {{-- Notification Dropdown --}}
                 <div class="z-50 my-3 hidden !w-[100vw] max-w-none sm:!w-[384px]" id="notification-dropdown">
                     <div
-                        class="mx-4 overflow-hidden rounded-2xl bg-white shadow-lg border border-zinc-200 dark:bg-dark-primary dark:border-zinc-800 sm:mx-0">
+                        class="mx-4 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-dark-primary sm:mx-0">
                         <div
                             class="flex items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
                             <div class="flex items-center gap-2">
@@ -73,7 +74,7 @@
                 </button>
 
                 {{-- Profile Dropdown --}}
-                <div class="z-50 my-3 hidden w-60 overflow-hidden rounded-2xl bg-white shadow-lg border border-zinc-200 dark:bg-dark-primary dark:border-zinc-800"
+                <div class="z-50 my-3 hidden w-60 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-dark-primary"
                     id="profile-dropdown">
 
                     {{-- User Info --}}
