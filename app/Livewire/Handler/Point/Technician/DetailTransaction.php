@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Detail transaction view with per-pegawai confirm/reject, Caller: detail-transaction.blade.php, Deps: PointTransactions, TechnicianPoints */
+
 namespace App\Livewire\Handler\Point\Technician;
 
 use App\Livewire\Concerns\HandlesErrors;
@@ -27,7 +29,7 @@ class DetailTransaction extends Component
         return PointTransactions::where('transaction_id', $this->transactionID);
     }
 
-    public function mount()
+    public function mount(): void
     {
         $this->results = $this->getTransaction()->get();
 
@@ -41,17 +43,20 @@ class DetailTransaction extends Component
         $this->to_date = $data->to_date;
     }
 
-    public function confirm()
+    public function confirm(): void
     {
         $this->runSafely(function () {
             DB::transaction(function () {
-                TechnicianPoints::where('created_at', '>=', $this->from_date)
-                    ->where('created_at', '<=', $this->to_date)
-                    ->update([
-                        'is_redeemed' => 1,
-                        'transaction_id' => $this->transactionID,
-                        'redeemed_status' => 3,
-                    ]);
+                $transactions = $this->getTransaction()->get();
+
+                foreach ($transactions as $tx) {
+                    TechnicianPoints::where('transaction_id', $this->transactionID)
+                        ->where('kode_pegawai', $tx->kode_pegawai)
+                        ->update([
+                            'is_redeemed' => 1,
+                            'redeemed_status' => 3,
+                        ]);
+                }
 
                 $this->getTransaction()->update([
                     'status' => 3,
@@ -68,23 +73,28 @@ class DetailTransaction extends Component
         ]);
     }
 
-    public function reject()
+    public function reject(): void
     {
         $this->runSafely(function () {
             DB::transaction(function () {
-                TechnicianPoints::where('created_at', '>=', $this->from_date)
-                    ->where('created_at', '<=', $this->to_date)
-                    ->update([
-                        'is_redeemed' => 0,
-                        'redeemed_status' => 0,
-                    ]);
+                $transactions = $this->getTransaction()->get();
+
+                foreach ($transactions as $tx) {
+                    TechnicianPoints::where('transaction_id', $this->transactionID)
+                        ->where('kode_pegawai', $tx->kode_pegawai)
+                        ->update([
+                            'is_redeemed' => 0,
+                            'redeemed_status' => 0,
+                            'transaction_id' => null,
+                        ]);
+                }
 
                 $this->getTransaction()->update([
                     'status' => 4,
                 ]);
             });
 
-            $this->dispatch('swal', title: 'Berhasil', text: 'Transaksi berhasil di batalkan', icon: 'success');
+            $this->dispatch('swal', title: 'Berhasil', text: 'Transaksi berhasil dibatalkan', icon: 'success');
             $this->closeModal();
             $this->results = $this->getTransaction()->get();
         }, 'Gagal membatalkan transaksi point.', [
@@ -94,12 +104,12 @@ class DetailTransaction extends Component
         ]);
     }
 
-    public function openModal()
+    public function openModal(): void
     {
         $this->showModal = true;
     }
 
-    public function closeModal()
+    public function closeModal(): void
     {
         $this->showModal = false;
     }

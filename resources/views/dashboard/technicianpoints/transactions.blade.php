@@ -1,12 +1,12 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
     <div
-        class="w-full rounded-xl bg-white/60 p-4 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 md:p-6">
+        class="flex w-full flex-col gap-4 rounded-2xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
 
-        <header class="mb-4 flex items-center justify-between">
-            <p class="text-lg font-semibold text-gray-900 dark:text-white lg:text-xl">
+        <header class="flex items-center justify-between">
+            <h1 class="text-lg font-bold tracking-tight text-zinc-900 dark:text-white lg:text-xl">
                 Riwayat Transaksi Poin Keluar
-            </p>
+            </h1>
         </header>
 
         <livewire:table-refresher table-name="PointTransactionsTable" />

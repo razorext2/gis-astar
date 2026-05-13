@@ -1,28 +1,35 @@
 <?php
 
+/** Goal: Menangani preview & export data poin teknisi, Caller: detail-transaction.blade.php, Deps: PointTransactions, TechPointTransactionExport */
+
 namespace App\Livewire\Handler\Point\Technician;
 
 use App\Exports\TechPointTransactionExport;
 use App\Models\PointTransactions;
+use Illuminate\View\View;
 use Livewire\Component;
 use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ExportPointTransactions extends Component
 {
-    public $transactionID;
-    public $data;
-    public $showModal = false;
+    public string $transactionID;
 
-    public function export()
+    public $data = [];
+
+    public bool $showModal = false;
+
+    public function export(): void
     {
-        $this->data = PointTransactions::with('point')
+        // Menyelesaikan masalah N+1 Query dengan eager-loading relasi pegawai dan redeemedby
+        $this->data = PointTransactions::with(['point', 'pegawai', 'redeemedby'])
             ->where('transaction_id', $this->transactionID)
             ->get();
 
         $this->showModal = true;
     }
 
-    public function process()
+    public function process(): BinaryFileResponse
     {
         $this->showModal = false;
         $this->dispatch('swal', title: 'Berhasil', text: 'Data sedang diekspor', icon: 'success');
@@ -30,7 +37,7 @@ class ExportPointTransactions extends Component
         return Excel::download(new TechPointTransactionExport($this->transactionID), 'tech_point_transaction.xlsx');
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.handler.point.technician.export-point-transactions', [
             'data' => $this->data,

@@ -1,14 +1,28 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div
-        class="w-full rounded-xl bg-white/60 p-4 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 md:p-6">
+    <div class="mb-16 space-y-4">
 
-        <header class="mb-4 flex items-center justify-between">
-            <p class="text-lg font-semibold text-gray-900 dark:text-white lg:text-xl">
-                Detail Transaksi Poin Keluar
-            </p>
-        </header>
+        {{-- Header Card --}}
+        <div
+            class="flex items-center gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
 
+            <x-button.danger href="{{ route('technicianpoints.transactions') }}" wire:navigate id="back-button"
+                class="max-h-10 max-w-fit">
+                <x-icons.angle-left class="h-5 w-5" />
+            </x-button.danger>
+
+            <div>
+                <span class="text-xl font-semibold text-zinc-900 dark:text-white">
+                    Detail Transaksi Poin Keluar
+                </span>
+
+                <p class="mt-0.5 text-sm text-zinc-600 dark:text-zinc-400">
+                    Informasi terperinci mengenai pengajuan dan riwayat penukaran poin teknisi.
+                </p>
+            </div>
+        </div>
+
+        {{-- Component Card (Wrapper is handled inside component if necessary, but here we just call it) --}}
         <livewire:handler.point.technician.detail-transaction :transactionID="$transactionID" />
 
     </div>
