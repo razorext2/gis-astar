@@ -1,4 +1,5 @@
-<section>
+<div
+    class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
     <header class="mb-6 border-b border-zinc-200 pb-5 dark:border-zinc-800">
         <h2 class="text-base font-bold text-zinc-900 dark:text-white">
             {{ __('Informasi Profil') }}
@@ -36,7 +37,8 @@
                         Verified
                     </span>
                 @else
-                    <x-button.secondary form="send-verification" class="!px-2.5 !py-1.5 !text-xs !bg-amber-100 !text-amber-700 hover:!bg-amber-200 dark:!bg-amber-900/30 dark:!text-amber-400 border-none ring-0">
+                    <x-button.secondary form="send-verification"
+                        class="border-none !bg-amber-100 !px-2.5 !py-1.5 !text-xs !text-amber-700 ring-0 hover:!bg-amber-200 dark:!bg-amber-900/30 dark:!text-amber-400">
                         <x-slot name="icon">
                             <x-icons.info class="h-3.5 w-3.5" />
                         </x-slot>
@@ -133,4 +135,4 @@
             @endif
         </div>
     </form>
-</section>
+</div>

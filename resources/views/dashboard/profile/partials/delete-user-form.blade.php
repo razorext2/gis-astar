@@ -1,4 +1,5 @@
-<section class="space-y-4">
+<div
+    class="col-span-full space-y-4 rounded-xl border border-red-200 bg-red-50/80 p-6 shadow-sm dark:border-red-900/30 dark:bg-red-950/80 sm:p-8">
     <header class="border-b border-red-200 pb-5 dark:border-red-900/30">
         <div class="flex items-center gap-2">
             <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/30">
@@ -74,4 +75,4 @@
             </div>
         </form>
     </x-auth.modal>
-</section>
+</div>

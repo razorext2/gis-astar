@@ -1,10 +1,11 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
     {{-- Hero Profile Header --}}
-    <div class="relative mb-6 rounded-3xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+    <div
+        class="relative mb-6 rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60">
         {{-- Decorative gradient background --}}
         <div
-            class="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-red-600/10 via-transparent to-transparent dark:from-red-900/20">
+            class="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-br from-red-600/10 via-transparent to-transparent dark:from-red-900/20">
         </div>
 
         <div class="relative flex flex-col gap-6 p-6 sm:flex-row sm:items-end sm:p-8">
@@ -16,7 +17,7 @@
                         alt="{{ auth()->user()->name }}" onerror="this.src = '{{ asset('assets/img/noImage.webp') }}'">
                     {{-- Edit overlay --}}
                     <x-button.secondary @click="open = !open"
-                        class="!absolute !inset-0 !flex !items-center !justify-center !rounded-2xl !bg-zinc-950/50 !opacity-0 !transition-opacity !duration-200 group-hover:!opacity-100 !border-none !shadow-none !ring-0"
+                        class="!absolute !inset-0 !flex !items-center !justify-center !rounded-2xl !border-none !bg-zinc-950/50 !opacity-0 !shadow-none !ring-0 !transition-opacity !duration-200 group-hover:!opacity-100"
                         type="button">
                         <x-slot name="icon">
                             <x-icons.camera class="h-7 w-7 text-white" />
@@ -67,20 +68,13 @@
     <div class="grid gap-4 lg:grid-cols-2">
 
         {{-- Update Profile Info --}}
-        <div class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 sm:p-8">
-            @include('dashboard.profile.partials.update-profile-information-form')
-        </div>
+        @include('dashboard.profile.partials.update-profile-information-form')
 
         {{-- Update Password --}}
-        <div class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 sm:p-8">
-            @include('dashboard.profile.partials.update-password-form')
-        </div>
+        @include('dashboard.profile.partials.update-password-form')
 
         {{-- Delete Account --}}
-        <div
-            class="col-span-full rounded-2xl border border-red-200 bg-red-50/80 p-6 shadow-sm dark:border-red-900/30 dark:bg-red-950/80 sm:p-8">
-            @include('dashboard.profile.partials.delete-user-form')
-        </div>
+        @include('dashboard.profile.partials.delete-user-form')
 
     </div>
 @endsection
