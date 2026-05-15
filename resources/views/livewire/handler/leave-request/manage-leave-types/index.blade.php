@@ -27,9 +27,9 @@
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                 @foreach ($leaveTypes as $type)
                     <div
-                        class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-6 backdrop-blur-xl transition-all hover:border-red-500/50 hover:shadow-lg dark:border-zinc-800 dark:bg-dark-primary/60">
+                        class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-xl transition-all hover:border-red-500/50 hover:shadow-lg dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
                         <div class="flex items-start justify-between">
-                            <div>
+                            <div class="text-left">
                                 <span
                                     class="text-[10px] font-black uppercase tracking-widest text-zinc-400">{{ $type->code }}</span>
                                 <h3 class="text-lg font-bold text-zinc-900 dark:text-white">{{ $type->name }}</h3>
