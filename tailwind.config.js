@@ -29,6 +29,7 @@ export default {
             },
             colors: {
                 "pg-primary": colors.zinc,
+                primary: colors.red[600],
                 "dark-primary": "#18181b",
                 "dark-secondary": "#242427",
             },

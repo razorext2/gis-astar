@@ -10,7 +10,6 @@
         'collect-task-ppn.*' => 'Tagihan IDC PPN',
         'collect-idy-ppn.*' => 'Tagihan IDY PPN',
         'placement.*' => 'Penempatan',
-        'dayoff.*' => 'Pengajuan Off',
         'attendanceIn.*' => 'Absen Masuk',
         'attendanceOut.*' => 'Absen Keluar',
         'capture.*' => 'Rekam Absensi',
@@ -41,7 +40,10 @@
         'billing.*' => 'Penagihan',
         'daily-report.*' => 'Laporan Kerja Harian',
         'report.*' => 'Laporan Kerja Harian',
+        'leave-request.approval-center.*' => 'Pusat Persetujuan',
+        'leave-request.*' => 'Pengajuan Cuti',
         'server.overview' => 'Manajemen Server',
+        'system.holidays.*' => 'Manajemen Hari Libur',
     ];
 
     // Temukan judul berdasarkan rute dengan wildcard

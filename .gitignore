@@ -30,7 +30,7 @@ yarn-error.log
 /python/services/__pycache__
 /dbexport/*.sql
 /.agents
-/.agents/
+/.cursor
 
 **/caddy
 frankenphp
@@ -43,5 +43,9 @@ rr
 .rr.yaml
 python/pegawai
 SYSTEM_MAP.MD
+<<<<<<< HEAD
+AGENTS.md
+=======
 AGENTS.MD
 /.cursor
+>>>>>>> master

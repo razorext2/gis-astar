@@ -11,7 +11,12 @@ class Jabatan extends Model
 
     protected $table = 'tb_jabatan';
 
-    protected $fillable = ['nama_jabatan', 'divisi', 'penempatan'];
+    protected $fillable = [
+        'nama_jabatan',
+        'divisi',
+        'penempatan',
+        'supervisor_id',
+    ];
 
     public function divisionRelasi()
     {
@@ -21,5 +26,15 @@ class Jabatan extends Model
     public function placementRelasi()
     {
         return $this->belongsTo(Placement::class, 'penempatan', 'id');
+    }
+
+    public function supervisor()
+    {
+        return $this->belongsTo(User::class, 'supervisor_id');
+    }
+
+    public function pegawai()
+    {
+        return $this->hasMany(Pegawai::class, 'jabatan', 'id');
     }
 }

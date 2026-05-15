@@ -36,12 +36,19 @@ final class PlacementTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return Placement::query();
+        return Placement::with(['hrds', 'managements']);
     }
 
     public function relationSearch(): array
     {
-        return [];
+        return [
+            'hrds' => [
+                'name',
+            ],
+            'managements' => [
+                'name',
+            ],
+        ];
     }
 
     public function fields(): PowerGridFields
@@ -66,6 +73,12 @@ final class PlacementTable extends PowerGridComponent
                 ])
                     ->render();
             })
+            ->add('hrd_names', function ($query) {
+                return $query->hrds->pluck('name')->implode(', ') ?: '-';
+            })
+            ->add('management_names', function ($query) {
+                return $query->managements->pluck('name')->implode(', ') ?: '-';
+            })
             ->add('restrict_app')
             ->add('created_at_formatted', fn($query) => Carbon::parse($query->created_at)->locale('id')->isoFormat('DD MMMM YYYY, HH:mm:ss'));
     }
@@ -82,6 +95,12 @@ final class PlacementTable extends PowerGridComponent
 
             Column::make('Penempatan', 'penempatan')
                 ->sortable()
+                ->searchable(),
+
+            Column::make('Tim HRD', 'hrd_names')
+                ->searchable(),
+                
+            Column::make('Tim Manajemen', 'management_names')
                 ->searchable(),
 
             Column::make('Longitude', 'longitude')

@@ -40,5 +40,7 @@ return [
     'binderbyte' => [
         'api_key' => env('BINDERBYTE_API_KEY'),
     ],
-
+    'national_holiday_api' => [
+        'url' => env('NATIONAL_HOLIDAY_API_URL', 'https://libur.deno.dev/api'),
+    ],
 ];

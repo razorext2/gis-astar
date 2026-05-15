@@ -65,3 +65,12 @@ Schedule::command('server:check-status')
     ->name('Server status check')
     ->withoutOverlapping()
     ->runInBackground();
+
+// Auto reject pengajuan cuti yang melebihi batas waktu approval
+Schedule::command('app:auto-reject-expired-leave-requests')
+    ->timezone('Asia/Jakarta')
+    ->name('Auto reject expired leave requests')
+    ->dailyAt('00:00')
+    ->onOneServer()
+    ->withoutOverlapping()
+    ->evenInMaintenanceMode();

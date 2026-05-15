@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Main Web Routing File, Caller: ServiceProvider, Deps: Many Controllers, features/*.php */
+
 use App\Http\Controllers\InvoiceController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -171,10 +173,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('collect-idy-ppn/assign', [\App\Http\Controllers\CollectIdyPpnController::class, 'assign'])->name('collect-idy-ppn.assign');
         Route::resource('collect-idy-ppn', \App\Http\Controllers\CollectIdyPpnController::class)->except(['store', 'update', 'destroy']);
 
-        // route dayoff
-        Route::post('dayoff/upload-image', [\App\Http\Controllers\DayoffController::class, 'uploadImage'])->name('dayoff.uploadimage');
-        Route::resource('dayoff', \App\Http\Controllers\DayoffController::class)->except(['store', 'update', 'destroy']);
-
         // route announcement
         Route::resource('announcement', \App\Http\Controllers\AnnouncementController::class)->only(['index']);
 
@@ -200,6 +198,9 @@ Route::middleware(['auth'])->group(function () {
 
         // route jabatan
         Route::resource('jabatan', \App\Http\Controllers\JabatanController::class);
+
+        // route libur nasional
+        Route::get('system/holidays', [\App\Http\Controllers\System\HolidayController::class, 'index'])->name('system.holidays.index');
 
         // route driver
         Route::resource('driver', \App\Http\Controllers\DriverController::class)
@@ -343,6 +344,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('daily-report/general/{id}/customer-assignment', [\App\Http\Controllers\Spk\DailyReportController::class, 'generalCustomerAssignment'])->name('report.general.customer-assignment');
         Route::get('daily-report/general/{id}/{hourly}/detail', [\App\Http\Controllers\Spk\DailyReportController::class, 'generalHourly'])->name('report.general.hourly');
 
+        // route pengajuan cuti
+        require __DIR__.'/features/leave-request.php';
     });
 });
 
@@ -400,9 +403,6 @@ Route::get('/offline', function () {
 
 // stream gambar
 Route::get('/file/{path}', function ($path) {
-
     abort_unless(Storage::exists($path), 404);
-
     return Storage::response($path);
-
-})->where('path', '.*');
+})->where('path', '.*')->name('file.show');

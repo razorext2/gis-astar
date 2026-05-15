@@ -41,6 +41,8 @@ class Create extends Component
 
     public $selected_roles = [];
 
+    public $join_date;
+
     // Photo Labels
     public $photo1;
 
@@ -61,6 +63,7 @@ class Create extends Component
             'photo1' => 'nullable|image|max:2048',
             'photo2' => 'nullable|image|max:2048',
             'selected_roles' => 'required_if:make_user,true|array',
+            'join_date' => 'required_if:make_user,true|date',
         ];
     }
 
@@ -91,6 +94,7 @@ class Create extends Component
                     'name' => $this->full_name,
                     'email' => strtolower($this->nick_name).$this->kode_pegawai.'@indodacin.com',
                     'password' => Hash::make($this->kode_pegawai),
+                    'join_date' => $this->join_date,
                 ]);
 
                 $user->syncRoles($this->selected_roles);

@@ -2,26 +2,31 @@
 
 namespace App\Livewire;
 
-use \App\Models\Jabatan;
+use App\Models\Jabatan;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
-use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 
 final class JabatanTable extends PowerGridComponent
 {
     use WithExport;
+
     public string $tableName = 'JabatanTable';
+
     public bool $deferLoading = true;
+
     public bool $showFilters = true;
+
     public $penempatan;
+
     public $divisi;
 
     public function setUp(): array
@@ -38,17 +43,17 @@ final class JabatanTable extends PowerGridComponent
                 ->showPerPage()
                 ->showRecordCount(),
 
-            PowerGrid::exportable(fileName: 'jabatanReport-' . now()->format('YmdHis'))
+            PowerGrid::exportable(fileName: 'jabatanReport-'.now()->format('YmdHis'))
                 ->type(Exportable::TYPE_XLS),
 
-            PowerGrid::responsive()
+            PowerGrid::responsive(),
         ];
     }
 
     public function datasource(): Builder
     {
         return Jabatan::query()
-            ->with('divisionRelasi', 'placementRelasi')
+            ->with(['divisionRelasi', 'placementRelasi', 'supervisor'])
             ->orderBy('nama_jabatan', 'asc');
     }
 
@@ -56,11 +61,14 @@ final class JabatanTable extends PowerGridComponent
     {
         return [
             'placementRelasi' => [
-                'penempatan'
+                'penempatan',
             ],
             'divisionRelasi' => [
-                'nama_divisi'
-            ]
+                'nama_divisi',
+            ],
+            'supervisor' => [
+                'name',
+            ],
         ];
     }
 
@@ -69,9 +77,16 @@ final class JabatanTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             ->add('nama_jabatan')
-            ->add('divisi', fn($query) => $query->divisionRelasi->nama_divisi)
-            ->add('penempatan', fn($query) => $query->placementRelasi->penempatan)
-            ->add('created_at_formatted', fn($query) => Carbon::parse($query->created_at)->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss'));
+            ->add('nama_jabatan_formatted', function ($query) {
+                return view('components.dashboard.name-w-code', [
+                    'code' => '',
+                    'name' => $query->nama_jabatan,
+                    'item3' => $query->supervisor?->name ?? 'Belum diatur.',
+                ]);
+            })
+            ->add('divisi', fn ($query) => $query->divisionRelasi->nama_divisi)
+            ->add('penempatan', fn ($query) => $query->placementRelasi->penempatan)
+            ->add('created_at_formatted', fn ($query) => Carbon::parse($query->created_at)->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss'));
     }
 
     public function columns(): array
@@ -82,7 +97,7 @@ final class JabatanTable extends PowerGridComponent
                 ->bodyAttribute('text-center'),
             Column::make('ID', 'id')
                 ->hidden(),
-            Column::make('Nama jabatan', 'nama_jabatan')
+            Column::make('Nama jabatan', 'nama_jabatan_formatted', 'nama_jabatan')
                 ->sortable()
                 ->searchable(),
 
@@ -121,8 +136,8 @@ final class JabatanTable extends PowerGridComponent
             [
                 'id' => 'edit-btn',
                 'action' => route('jabatan.edit', $row->id),
-                'label' => 'Edit'
-            ]
+                'label' => 'Edit',
+            ],
         ];
 
         return view('components.dashboard.action-buttons', [
@@ -143,8 +158,9 @@ final class JabatanTable extends PowerGridComponent
     {
         $data = Jabatan::find($id);
 
-        if (!$data) {
+        if (! $data) {
             $this->swal('Gagal!', "Terjadi kesalahan saat menghapus data dengan ID <b>$id</b>", 'error');
+
             return;
         }
 
@@ -153,11 +169,11 @@ final class JabatanTable extends PowerGridComponent
 
             $this->swal('Terhapus!', 'Data yang dipilih berhasil dihapus.', 'success');
 
-            Log::info($request->user() . " : Menghapus data {$id}");
+            Log::info($request->user()." : Menghapus data {$id}");
         } catch (\Exception $e) {
             $this->swal('Gagal!', "Terjadi kesalahan saat menghapus data dengan ID <b>$id</b>", 'error');
 
-            Log::info($request->user()->kode_pegawai . " : Gagal menghapus data {$id}. {$e->getMessage()}");
+            Log::info($request->user()->kode_pegawai." : Gagal menghapus data {$id}. {$e->getMessage()}");
         }
     }
 

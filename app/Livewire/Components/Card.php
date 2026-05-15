@@ -13,10 +13,11 @@ use App\Services\Attendance\AttendanceCardService;
 use App\Services\Collector\CollectorCardService;
 use App\Services\DailyReport\DailyReportCardService;
 use App\Services\Driver\DriverCardService;
+use App\Services\LeaveRequest\LeaveRequestCardService;
 use App\Services\Sales\SalesCardService;
 use App\Services\Spk\SpkCardService;
-use App\Services\Technician\TechnicianCardService;
 use App\Services\System\ServerCardService;
+use App\Services\Technician\TechnicianCardService;
 use Livewire\Component;
 
 class Card extends Component
@@ -65,6 +66,9 @@ class Card extends Component
             'driverreport' => $this->getDriverReportCards(),
             'salesreport' => $this->getSalesReportCards(),
             'servermonitor' => $this->getServerMonitorCards(),
+            'my-leave-request' => $this->getMyLeaveRequestCards(),
+            'approval-center-leave' => $this->getApprovalCenterLeaveCards(),
+            'manage-leave-balance' => $this->getManageLeaveBalanceCards(),
             default => [],
         };
     }
@@ -196,5 +200,20 @@ class Card extends Component
     protected function getServerMonitorCards(): array
     {
         return app(ServerCardService::class)->getServerMonitorCards();
+    }
+
+    protected function getMyLeaveRequestCards(): array
+    {
+        return app(LeaveRequestCardService::class)->getMyRequestCards();
+    }
+
+    protected function getApprovalCenterLeaveCards(): array
+    {
+        return app(LeaveRequestCardService::class)->getApprovalCenterCards();
+    }
+
+    protected function getManageLeaveBalanceCards(): array
+    {
+        return app(LeaveRequestCardService::class)->getManageBalanceCards();
     }
 }

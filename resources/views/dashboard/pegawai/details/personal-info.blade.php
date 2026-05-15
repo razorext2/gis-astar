@@ -47,6 +47,14 @@
                                 ['label' => 'Tanggal Lahir', 'value' => $pegawai->tgl_lahir],
                                 ['label' => 'Jabatan', 'value' => $pegawai->jabatanRelasi->nama_jabatan ?? 'N/A'],
                                 ['label' => 'Alamat', 'value' => $pegawai->alamat, 'full' => true],
+                                [
+                                    'label' => 'Tanggal Bergabung',
+                                    'value' => $pegawai->userRelasi->join_date
+                                        ? \Carbon\Carbon::parse($pegawai->userRelasi->join_date)
+                                            ->locale('id')
+                                            ->isoFormat('DD MMMM YYYY')
+                                        : 'Belum diatur.',
+                                ],
                             ];
                         @endphp
 

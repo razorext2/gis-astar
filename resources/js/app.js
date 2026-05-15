@@ -50,10 +50,6 @@ document.addEventListener("livewire:navigated", function () {
         import("./pages/capture/route.js").then((module) => {
             module.initRecognition();
         });
-    } else if (window.location.pathname === "/dashboard/dayoff") {
-        import("./pages/dayoff/index.js").then((module) => {
-            module.initDayoff();
-        });
     } else if (
         window.location.pathname.startsWith("/dashboard/collect-idy-ppn")
     ) {

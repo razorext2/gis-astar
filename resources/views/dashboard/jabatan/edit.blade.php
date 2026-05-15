@@ -1,5 +1,9 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
+<<<<<<< HEAD
+    <div class="xl:w-6/12 2xl:w-1/3">
+        <livewire:handler.jabatan.edit :jabatan="$jabatan" />
+=======
     <div class="w-full space-y-6 xl:w-6/12 2xl:w-1/3">
         <div
             class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none sm:p-6">
@@ -74,5 +78,6 @@
                 </form>
             </div>
         </div>
+>>>>>>> master
     </div>
 @endsection

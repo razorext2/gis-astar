@@ -248,6 +248,17 @@
                             <span class="text-xs text-red-500">{{ $message }}</span>
                         @enderror
                     </div>
+
+                    {{-- Join Date --}}
+                    <div class="space-y-2 mt-4">
+                        <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                            for="join_date">Tanggal Bergabung (Join Date)</label>
+                        <input wire:model="join_date" type="date" id="join_date"
+                            class="block w-full rounded-xl border-zinc-200 bg-white/50 p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-dark-secondary dark:text-white">
+                        @error('join_date')
+                            <span class="text-xs text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
                 </div>
             </div>
         </div>
