@@ -91,6 +91,13 @@
                             + {{ $results->sum('total_points') }} Poin
                         </span>
                     </div>
+
+                    <div class="col-span-2 flex flex-col">
+                        <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Waktu di Redeem</span>
+                        <span class="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                            {{ \Carbon\Carbon::parse($results->first()->created_at)->locale('id')->isoFormat('D MMMM Y, HH:mm:ss') }}
+                        </span>
+                    </div>
                 </div>
             </div>
 
