@@ -1,7 +1,7 @@
 {{-- Goal: Render Jabatan edit form, Livewire: App\Livewire\Handler\Jabatan\Edit, Alpine: Dropdown search logic for supervisor --}}
 <div class="w-full space-y-6">
     <div
-        class="rounded-xl bg-white p-4 shadow-md ring-1 ring-zinc-200 dark:bg-dark-primary dark:shadow-none dark:ring-zinc-800 sm:p-6">
+        class="rounded-xl bg-white/60 p-4 shadow-md ring-1 ring-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:ring-zinc-800 sm:p-6">
         <div class="max-w-xl">
             <header class="mb-6 flex flex-row items-center gap-4 border-b border-zinc-100 pb-4 dark:border-white/5">
                 <x-button.danger href="{{ route('jabatan.index') }}" class="mb-0">
