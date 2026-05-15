@@ -31,8 +31,9 @@ class TechPointTransactionExport implements WithMultipleSheets
     {
         $sheets = [];
 
-        // Mengambil semua transaksi poin berdasarkan transaction_id
-        $transactions = PointTransactions::with(['point', 'pegawai', 'redeemedby'])
+        // Mengambil semua transaksi poin berdasarkan transaction_id (tanpa eager-load 'point'
+        // karena relasi menggunakan constraint dinamis from_date/to_date per model)
+        $transactions = PointTransactions::with(['pegawai', 'redeemedby'])
             ->where('transaction_id', $this->transactionID)
             ->get();
 

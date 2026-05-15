@@ -1,15 +1,13 @@
 <?php
 
-/** Goal: Menangani preview & export data poin teknisi, Caller: detail-transaction.blade.php, Deps: PointTransactions, TechPointTransactionExport */
+/** Goal: Menangani preview & export data poin teknisi via background job, Caller: detail-transaction.blade.php, Deps: PointTransactions, CreatePointTechnicianTransactionExcelJob */
 
 namespace App\Livewire\Handler\Point\Technician;
 
-use App\Exports\TechPointTransactionExport;
+use App\Jobs\CreatePointTechnicianTransactionExcelJob;
 use App\Models\PointTransactions;
 use Illuminate\View\View;
 use Livewire\Component;
-use Maatwebsite\Excel\Facades\Excel;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ExportPointTransactions extends Component
 {
@@ -21,20 +19,21 @@ class ExportPointTransactions extends Component
 
     public function export(): void
     {
-        // Menyelesaikan masalah N+1 Query dengan eager-loading relasi pegawai dan redeemedby
-        $this->data = PointTransactions::with(['point', 'pegawai', 'redeemedby'])
+        $this->data = PointTransactions::with(['pegawai', 'redeemedby'])
             ->where('transaction_id', $this->transactionID)
             ->get();
 
         $this->showModal = true;
     }
 
-    public function process(): BinaryFileResponse
+    public function process(): void
     {
         $this->showModal = false;
-        $this->dispatch('swal', title: 'Berhasil', text: 'Data sedang diekspor', icon: 'success');
 
-        return Excel::download(new TechPointTransactionExport($this->transactionID), 'tech_point_transaction.xlsx');
+        // dispatch job ke queue — user akan mendapat notifikasi + push ketika selesai
+        CreatePointTechnicianTransactionExcelJob::dispatch($this->transactionID, auth()->id());
+
+        $this->dispatch('swal', title: 'Diproses', text: 'Export sedang berjalan di background. Anda akan menerima notifikasi ketika selesai.', icon: 'info');
     }
 
     public function render(): View

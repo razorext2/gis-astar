@@ -11,6 +11,7 @@ class PointTransactions extends Model
     use SoftDeletes;
 
     protected $table = 'tb_point_transactions';
+
     protected $fillable = [
         'transaction_id',
         'quartal',
@@ -23,7 +24,7 @@ class PointTransactions extends Model
         'valid_points',
         'invalid_points',
         'total_points',
-        'status' // 0 = validation, 1 = confirmation, 2 = approval hrd, 3 = acc, 4 = ditolak
+        'status', // 0 = validation, 1 = confirmation, 2 = approval hrd, 3 = acc, 4 = ditolak
     ];
 
     public function pegawai()
@@ -38,6 +39,17 @@ class PointTransactions extends Model
 
     public function point(): HasMany
     {
-        return $this->hasMany(TechnicianPoints::class, 'kode_pegawai', 'kode_pegawai');
+        $fromDate = $this->from_date;
+        $toDate = $this->to_date;
+
+        return $this->hasMany(TechnicianPoints::class, 'kode_pegawai', 'kode_pegawai')
+            ->join('tb_technician', 'tb_technician.no_vt', '=', 'tb_technician_points.from_vt')
+            ->whereBetween('tb_technician_points.created_at', [$fromDate, $toDate])
+            ->where('tb_technician_points.is_redeemable', 1)
+            ->select([
+                'tb_technician_points.*',
+                'tb_technician.customer_contact',
+                'tb_technician.visit_date',
+            ]);
     }
 }

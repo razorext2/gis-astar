@@ -74,19 +74,21 @@ class Show extends Component
                 }
 
                 // Sinkronisasi ke server eksternal
-                Http::asForm()->post('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=updateKunjungan', [
-                    'NomorKunjungan' => $this->report->no_vt,
-                    'UpdatePekerjaan' => $this->report->job_update,
-                    'JenisTimbangan' => $this->report->weight_type,
-                    'Ukuran' => $this->report->size,
-                    'Kapasitas' => $this->report->capacity,
-                    'TipeIndikator' => $this->report->indicator_type,
-                    'TipeIndikatorSN' => $this->report->indicator_sn,
-                    'TipeLoadcell' => $this->report->loadcell_type,
-                    'TipeLoadcellSN' => $this->report->loadcell_sn,
-                    'TipeJunctionBox' => $this->report->junction_type,
-                    'TipeJunctionBoxSN' => $this->report->loadcell_qty,
-                ]);
+                if (app()->isProduction()) {
+                    Http::asForm()->post('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=updateKunjungan', [
+                        'NomorKunjungan' => $this->report->no_vt,
+                        'UpdatePekerjaan' => $this->report->job_update,
+                        'JenisTimbangan' => $this->report->weight_type,
+                        'Ukuran' => $this->report->size,
+                        'Kapasitas' => $this->report->capacity,
+                        'TipeIndikator' => $this->report->indicator_type,
+                        'TipeIndikatorSN' => $this->report->indicator_sn,
+                        'TipeLoadcell' => $this->report->loadcell_type,
+                        'TipeLoadcellSN' => $this->report->loadcell_sn,
+                        'TipeJunctionBox' => $this->report->junction_type,
+                        'TipeJunctionBoxSN' => $this->report->loadcell_qty,
+                    ]);
+                }
             });
 
             $this->report->refresh();
