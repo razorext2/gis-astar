@@ -28,10 +28,12 @@ class Index extends Component
 
     public bool $typeRequiresAttachment = false;
 
+    public bool $typeUseCalendarDays = false;
+
     public function openModal(?int $id = null): void
     {
         $this->resetValidation();
-        $this->reset(['typeName', 'typeCode', 'typeAnualDeduction', 'typeDefaultDays', 'typeRequiresAttachment', 'editMode', 'typeId']);
+        $this->reset(['typeName', 'typeCode', 'typeAnualDeduction', 'typeDefaultDays', 'typeRequiresAttachment', 'typeUseCalendarDays', 'editMode', 'typeId']);
 
         if ($id) {
             $this->editMode = true;
@@ -42,6 +44,7 @@ class Index extends Component
             $this->typeAnualDeduction = $type->is_anual_deduction;
             $this->typeDefaultDays = $type->default_days ?? 0;
             $this->typeRequiresAttachment = $type->requires_attachment;
+            $this->typeUseCalendarDays = $type->use_calendar_days;
         }
 
         $this->isModalOpen = true;
@@ -49,19 +52,22 @@ class Index extends Component
 
     public function saveType(): void
     {
+        abort_unless(auth()->user()->can('leave-type-manage'), 403);
+
         $this->validate([
-            'typeName'       => 'required|min:3',
-            'typeCode'       => 'required|unique:tb_leave_types,code,'.$this->typeId,
+            'typeName' => 'required|min:3',
+            'typeCode' => 'required|unique:tb_leave_types,code,'.$this->typeId,
             'typeDefaultDays' => 'integer|min:0',
         ]);
 
         $this->runSafely(function () {
             LeaveType::updateOrCreate(['id' => $this->typeId], [
-                'name'               => $this->typeName,
-                'code'               => $this->typeCode,
+                'name' => $this->typeName,
+                'code' => $this->typeCode,
                 'is_anual_deduction' => $this->typeAnualDeduction,
-                'default_days'       => $this->typeDefaultDays,
+                'default_days' => $this->typeDefaultDays,
                 'requires_attachment' => $this->typeRequiresAttachment,
+                'use_calendar_days' => $this->typeUseCalendarDays,
             ]);
 
             $this->isModalOpen = false;
@@ -71,6 +77,8 @@ class Index extends Component
 
     public function deleteType(int $id): void
     {
+        abort_unless(auth()->user()->can('leave-type-manage'), 403);
+
         $this->runSafely(function () use ($id) {
             $type = LeaveType::findOrFail($id);
             if ($type->leaveRequests()->exists()) {

@@ -64,6 +64,12 @@
                                     Wajib Lampiran
                                 </span>
                             @endif
+                            @if ($type->use_calendar_days)
+                                <span
+                                    class="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-[10px] font-bold text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                                    Hari Kalender
+                                </span>
+                            @endif
                         </div>
                     </div>
                 @endforeach
@@ -126,6 +132,15 @@
                             class="rounded border-zinc-300 text-red-600 focus:ring-red-500">
                         <span class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Wajib Lampiran (Dokumen
                             Pendukung)</span>
+                    </label>
+
+                    <label class="flex cursor-pointer items-center gap-3">
+                        <input type="checkbox" wire:model="typeUseCalendarDays"
+                            class="rounded border-zinc-300 text-blue-600 focus:ring-blue-500">
+                        <div>
+                            <span class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Hitung Hari Kalender</span>
+                            <p class="text-[10px] text-zinc-400">Jika aktif, durasi cuti dihitung berdasarkan hari kalender (termasuk weekend & libur). Cocok untuk cuti melahirkan, dsb.</p>
+                        </div>
                     </label>
                 </div>
 

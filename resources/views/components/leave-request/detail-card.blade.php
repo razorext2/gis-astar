@@ -69,11 +69,11 @@
                 <hr class="my-2 border-zinc-200 dark:border-zinc-800">
             </div>
 
-            @if ($showApprovalRole && isset($request->approval_role))
+            @if ($showApprovalRole && isset($request->approval_role_label))
                 <div class="flex flex-col items-end">
                     <span
                         class="inline-flex items-center rounded-full bg-red-100 px-3 py-1 text-[10px] font-black uppercase tracking-tighter text-red-700 dark:bg-red-900/30 dark:text-red-400">
-                        {{ $request->approval_role }}
+                        {{ $request->approval_role_label }}
                     </span>
                 </div>
             @endif

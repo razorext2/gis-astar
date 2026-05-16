@@ -105,6 +105,14 @@
                     </div>
                 </div>
 
+                @if ($dateOverlapError)
+                    <div
+                        class="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50/70 p-3 dark:border-red-900/30 dark:bg-red-900/10">
+                        <x-icons.info-circle class="mt-0.5 h-4 w-4 flex-shrink-0 text-red-600 dark:text-red-400" />
+                        <p class="text-sm font-medium text-red-700 dark:text-red-400">{{ $dateOverlapError }}</p>
+                    </div>
+                @endif
+
                 <div class="flex flex-col">
                     <label class="mb-1 block text-sm font-bold text-gray-700 dark:text-gray-300">Alasan /
                         Keperluan</label>
@@ -195,7 +203,7 @@
                         <div class="flex items-center gap-2">
                             <x-icons.calendar class="h-4 w-4 text-emerald-500" />
                             <span class="text-sm font-black text-gray-800 dark:text-white">
-                                {{ $end_date ? app(\App\Services\LeaveRequest\LeaveRequestService::class)->calculateReturnDate($end_date) : '-' }}
+                                {{ $return_date ? \Carbon\Carbon::parse($return_date)->locale('id')->isoFormat('dddd, DD MMM YYYY') : '-' }}
                             </span>
                         </div>
                     </div>
@@ -217,22 +225,7 @@
                         <div class="flex flex-col gap-2">
                             <span class="text-[10px] font-bold uppercase text-gray-400">Informasi Hari Libur:</span>
                             <div class="flex flex-col gap-1.5">
-                                @php
-                                    $hasSunday = false;
-                                    if ($start_date && $end_date) {
-                                        $curr = \Carbon\Carbon::parse($start_date);
-                                        $end = \Carbon\Carbon::parse($end_date);
-                                        while ($curr <= $end) {
-                                            if ($curr->isSunday()) {
-                                                $hasSunday = true;
-                                                break;
-                                            }
-                                            $curr->addDay();
-                                        }
-                                    }
-                                @endphp
-
-                                @if ($hasSunday)
+                                @if (count($intersected_sundays) > 0)
                                     <div class="flex items-center gap-2">
                                         <div class="h-1.5 w-1.5 rounded-full bg-red-500"></div>
                                         <span class="text-[11px] text-gray-600 dark:text-gray-400">Termasuk hari
@@ -247,7 +240,7 @@
                                             {{ $holiday->name }}</span>
                                     </div>
                                 @empty
-                                    @if (!$hasSunday)
+                                    @if (count($intersected_sundays) === 0)
                                         <span class="text-[11px] italic text-gray-400">Tidak ada hari libur</span>
                                     @endif
                                 @endforelse
@@ -257,7 +250,8 @@
                 </div>
             </div>
 
-            <x-button.primary type="submit" class="w-full !py-4" wire:loading.attr="disabled" wire:target="update">
+            <x-button.primary type="submit" class="w-full !py-4 disabled:cursor-not-allowed disabled:opacity-50"
+                :disabled="(bool) $dateOverlapError" wire:loading.attr="disabled" wire:target="update">
                 <x-slot name="icon">
                     <x-icons.loading wire:loading wire:target="update" class="h-6 w-6" />
                     <x-icons.angle-right wire:loading.remove wire:target="update" class="h-6 w-6" />

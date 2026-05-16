@@ -38,7 +38,13 @@ class Edit extends Component
 
     public $intersectedHolidays = [];
 
+    public $intersected_sundays = [];
+
     public $search_backup = '';
+
+    public $dateOverlapError = null;
+
+    public $return_date;
 
     public function mount($id)
     {
@@ -69,25 +75,58 @@ class Edit extends Component
         $this->calculateDays();
     }
 
-    public function updatedLeaveTypeId()
+    public function updated($propertyName)
     {
-        $this->updateQuota();
-        $this->calculateDays();
+        if ($propertyName === 'leave_type_id') {
+            $this->updateQuota();
+            $this->calculateDays();
+        }
+
+        if (in_array($propertyName, ['start_date', 'end_date'])) {
+            $this->checkDateOverlap();
+            if (! $this->dateOverlapError) {
+                $this->calculateDays();
+            } else {
+                $this->total_days = 0;
+                $this->return_date = null;
+                $this->intersectedHolidays = [];
+                $this->intersected_sundays = [];
+            }
+        }
+
+        if ($propertyName === 'search_backup') {
+            $this->reset('backup_person_id');
+        }
     }
 
-    public function updatedStartDate()
+    protected function checkDateOverlap(): void
     {
-        $this->calculateDays();
-    }
+        $this->dateOverlapError = null;
 
-    public function updatedEndDate()
-    {
-        $this->calculateDays();
-    }
+        if (! $this->start_date || ! $this->end_date) {
+            return;
+        }
 
-    public function updatedSearchBackup()
-    {
-        $this->reset('backup_person_id');
+        if (\Carbon\Carbon::parse($this->start_date)->greaterThan(\Carbon\Carbon::parse($this->end_date))) {
+            $this->dateOverlapError = 'Tanggal mulai tidak boleh lebih besar dari tanggal berakhir.';
+
+            return;
+        }
+
+        $overlap = auth()->user()->leaveRequests()
+            ->where('id', '!=', $this->requestId)
+            ->whereNotIn('status', ['rejected', 'auto_reject', 'canceled'])
+            ->where(function ($query) {
+                $query->where('start_date', '<=', $this->end_date)
+                    ->where('end_date', '>=', $this->start_date);
+            })
+            ->first();
+
+        if ($overlap) {
+            $from = \Carbon\Carbon::parse($overlap->start_date)->locale('id')->isoFormat('D MMM YYYY');
+            $to = \Carbon\Carbon::parse($overlap->end_date)->locale('id')->isoFormat('D MMM YYYY');
+            $this->dateOverlapError = "Tanggal bertabrakan dengan pengajuan cuti yang sudah ada ({$from} s/d {$to}).";
+        }
     }
 
     protected function updateQuota()
@@ -105,7 +144,16 @@ class Edit extends Component
 
         if ($leaveType->is_anual_deduction) {
             $balance = auth()->user()->currentLeaveBalance();
-            $this->remaining_quota = $balance ? $balance->remaining_quota : 0;
+            $quota = $balance ? $balance->remaining_quota : 0;
+
+            if ($this->requestId) {
+                $currentRequest = LeaveRequest::find($this->requestId);
+                if ($currentRequest && $currentRequest->leave_type_id == $this->leave_type_id) {
+                    $quota += $currentRequest->total_days;
+                }
+            }
+
+            $this->remaining_quota = $quota;
         } else {
             // Logic for Special Leave: default_quota - usage this year
             $usage = auth()->user()->getLeaveUsageCount($leaveType->code);
@@ -126,7 +174,9 @@ class Edit extends Component
     {
         if (! $this->start_date || ! $this->end_date || ! $this->leave_type_id) {
             $this->total_days = 0;
+            $this->return_date = null;
             $this->intersectedHolidays = [];
+            $this->intersected_sundays = [];
 
             return;
         }
@@ -135,7 +185,7 @@ class Edit extends Component
         $leaveType = LeaveType::find($this->leave_type_id);
 
         // Pilih rumus: Hari Kerja (Cuti Umum) atau Hari Kalender (Cuti Khusus/Melahirkan)
-        $useBusinessDays = ! ($leaveType && $leaveType->code === 'CT-MELAHIRKAN');
+        $useBusinessDays = ! ($leaveType && $leaveType->use_calendar_days);
 
         // Tentukan batas maksimal hari
         $maxAllowedDays = $this->remaining_quota;
@@ -144,7 +194,6 @@ class Edit extends Component
         }
 
         $this->total_days = $service->calculateTotalDays($this->start_date, $this->end_date, $useBusinessDays);
-        $this->intersectedHolidays = $service->getIntersectedHolidays($this->start_date, $this->end_date);
 
         // Langsung sesuaikan jika melebihi batas (Kuota atau Aturan 6 Hari)
         if ($this->total_days > $maxAllowedDays) {
@@ -157,6 +206,17 @@ class Edit extends Component
                 : "Durasi disesuaikan menjadi maksimal {$this->remaining_quota} hari sesuai sisa kuota Anda.";
 
             $this->dispatch('swal', icon: 'warning', title: $title, text: $text);
+        }
+
+        $this->return_date = $service->calculateReturnDate($this->end_date);
+
+        if ($useBusinessDays) {
+            $this->intersectedHolidays = $service->getIntersectedHolidays($this->start_date, $this->end_date);
+
+            $this->intersected_sundays = $service->getIntersectedSundays($this->start_date, $this->end_date);
+        } else {
+            $this->intersectedHolidays = [];
+            $this->intersected_sundays = [];
         }
     }
 
@@ -177,16 +237,37 @@ class Edit extends Component
 
         $rules = [
             'leave_type_id' => 'required|exists:tb_leave_types,id',
-            'backup_person_id' => 'required|exists:users,id',
+            'backup_person_id' => 'nullable|exists:users,id',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'reason' => 'required|min:10',
-            'attachments.*' => 'nullable|file|mimes:jpg,png,pdf|max:3072',
+            'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:3072',
         ];
 
-        // Validasi lampiran jika wajib
         if ($leaveType->requires_attachment && empty($this->attachments) && empty($this->existingAttachments)) {
             $this->addError('attachments', 'Lampiran dokumen wajib diunggah untuk tipe cuti ini.');
+
+            return;
+        }
+
+        // Re-validate Overlap
+        $this->checkDateOverlap();
+        if ($this->dateOverlapError) {
+            $this->addError('start_date', $this->dateOverlapError);
+            $this->addError('end_date', $this->dateOverlapError);
+            $this->dispatch('swal', icon: 'error', title: 'Tanggal Tidak Valid', text: $this->dateOverlapError);
+
+            return;
+        }
+
+        // Re-validate Total Days & Quota Limit
+        $maxAllowed = $this->remaining_quota;
+        if ($leaveType->is_anual_deduction) {
+            $maxAllowed = min($this->remaining_quota, 6);
+        }
+
+        if ($this->total_days > $maxAllowed || $this->total_days <= 0) {
+            $this->dispatch('swal', icon: 'error', title: 'Durasi Tidak Valid', text: 'Total hari cuti melebihi batas maksimal atau tidak valid.');
 
             return;
         }
@@ -195,6 +276,20 @@ class Edit extends Component
 
         $this->runSafely(function () use ($service) {
             $request = LeaveRequest::where('user_id', auth()->id())->findOrFail($this->requestId);
+
+            // M1: Re-check status — pastikan belum diproses approver
+            if ($request->status !== 'pending_backup') {
+                $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Pengajuan sudah tidak dapat diubah karena sudah diproses oleh approver.');
+
+                return redirect()->route('leave-request.my-requests.index');
+            }
+
+            // Bersihkan file lama yang dihapus dari server
+            $originalFiles = $request->attachments ?? [];
+            $removedFiles = array_diff($originalFiles, $this->existingAttachments);
+            foreach ($removedFiles as $file) {
+                \Illuminate\Support\Facades\Storage::disk('local')->delete($file);
+            }
 
             // Simpan file baru
             $storedFiles = $this->existingAttachments;
@@ -222,7 +317,7 @@ class Edit extends Component
 
     public function render()
     {
-        $leaveTypes = LeaveType::all();
+        $leaveTypes = LeaveType::select(['id', 'name', 'code', 'is_anual_deduction', 'default_days', 'requires_attachment', 'use_calendar_days'])->get();
         $employees = User::query()
             ->has('pegawai')
             ->where('id', '!=', auth()->id())

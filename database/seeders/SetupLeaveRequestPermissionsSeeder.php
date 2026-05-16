@@ -5,9 +5,9 @@ namespace Database\Seeders;
 /** Goal: Setup permissions for Leave Request and assign them to roles, Caller: php artisan db:seed --class=SetupLeaveRequestPermissionsSeeder, Deps: Spatie\Permission */
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\DB;
 use Spatie\Permission\PermissionRegistrar;
 
 class SetupLeaveRequestPermissionsSeeder extends Seeder
@@ -39,7 +39,7 @@ class SetupLeaveRequestPermissionsSeeder extends Seeder
             foreach ($permissions as $permissionName) {
                 Permission::firstOrCreate([
                     'name' => $permissionName,
-                    'guard_name' => 'web'
+                    'guard_name' => 'web',
                 ]);
             }
 
@@ -69,7 +69,7 @@ class SetupLeaveRequestPermissionsSeeder extends Seeder
                 // Pastikan role ada, jika tidak ada maka dibuat
                 $role = Role::firstOrCreate([
                     'name' => $roleName,
-                    'guard_name' => 'web'
+                    'guard_name' => 'web',
                 ]);
 
                 // Menggunakan syncPermissions agar role hanya memiliki permission yang didefinisikan (opsional)

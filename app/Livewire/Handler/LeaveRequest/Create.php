@@ -50,6 +50,8 @@ class Create extends Component
 
     public $management_approvers = [];
 
+    public bool $hasAnnualBalance = true;
+
     public function mount()
     {
         $this->activeRequest = auth()->user()->leaveRequests()
@@ -69,6 +71,10 @@ class Create extends Component
             $this->hrd_approvers = $placement->hrds->pluck('name')->toArray();
             $this->management_approvers = $placement->managements->pluck('name')->toArray();
         }
+
+        // Cek saldo cuti tahunan — lebih andal daripada join_date
+        $annualBalance = $user->currentLeaveBalance();
+        $this->hasAnnualBalance = $annualBalance && $annualBalance->remaining_quota > 0;
     }
 
     protected $rules = [
@@ -88,7 +94,13 @@ class Create extends Component
 
         if (in_array($propertyName, ['start_date', 'end_date'])) {
             $this->checkDateOverlap();
-            $this->calculateDays();
+            if (! $this->dateOverlapError) {
+                $this->calculateDays();
+            } else {
+                $this->total_days = 0;
+                $this->return_date = null;
+                $this->reset(['intersected_holidays', 'intersected_sundays']);
+            }
         }
 
         if ($propertyName === 'search_backup') {
@@ -101,6 +113,12 @@ class Create extends Component
         $this->dateOverlapError = null;
 
         if (! $this->start_date || ! $this->end_date) {
+            return;
+        }
+
+        if (\Carbon\Carbon::parse($this->start_date)->greaterThan(\Carbon\Carbon::parse($this->end_date))) {
+            $this->dateOverlapError = 'Tanggal mulai tidak boleh lebih besar dari tanggal berakhir.';
+
             return;
         }
 
@@ -146,9 +164,9 @@ class Create extends Component
         if ($this->start_date && $this->end_date && $this->selected_leave_type) {
             $service = app(LeaveRequestService::class);
 
-            // Logika: Cuti Melahirkan (CT-LAHIR) biasanya dihitung hari kalender murni.
+            // Logika: Tipe cuti dengan use_calendar_days dihitung hari kalender murni.
             // Selain itu (Tahunan, Menikah, dll) dihitung hari kerja.
-            $exclude = $this->selected_leave_type->code !== 'CT-LAHIR';
+            $exclude = ! $this->selected_leave_type->use_calendar_days;
 
             $calculated = $service->calculateTotalDays($this->start_date, $this->end_date, $exclude);
 
@@ -181,15 +199,7 @@ class Create extends Component
                 $this->intersected_holidays = $service->getIntersectedHolidays($this->start_date, $this->end_date);
 
                 // Hitung Hari Minggu
-                $this->intersected_sundays = [];
-                $current = \Carbon\Carbon::parse($this->start_date);
-                $end = \Carbon\Carbon::parse($this->end_date);
-                while ($current <= $end) {
-                    if ($current->isSunday()) {
-                        $this->intersected_sundays[] = $current->toDateString();
-                    }
-                    $current->addDay();
-                }
+                $this->intersected_sundays = $service->getIntersectedSundays($this->start_date, $this->end_date);
             } else {
                 $this->reset(['intersected_holidays', 'intersected_sundays']);
             }
@@ -230,6 +240,27 @@ class Create extends Component
                 }
             }
         }
+        // Re-validate Overlap
+        $this->checkDateOverlap();
+        if ($this->dateOverlapError) {
+            $this->addError('start_date', $this->dateOverlapError);
+            $this->addError('end_date', $this->dateOverlapError);
+            $this->dispatch('swal', icon: 'error', title: 'Tanggal Tidak Valid', text: $this->dateOverlapError);
+
+            return;
+        }
+
+        // Re-validate Total Days & Quota Limit
+        $maxAllowed = $this->remaining_quota;
+        if ($this->selected_leave_type?->is_anual_deduction) {
+            $maxAllowed = min($this->remaining_quota, 6);
+        }
+
+        if ($this->total_days > $maxAllowed || $this->total_days <= 0) {
+            $this->dispatch('swal', icon: 'error', title: 'Durasi Tidak Valid', text: 'Total hari cuti melebihi batas maksimal atau tidak valid.');
+
+            return;
+        }
 
         $this->validate();
 
@@ -246,7 +277,8 @@ class Create extends Component
                 'start_date' => $this->start_date,
                 'end_date' => $this->end_date,
                 'reason' => $this->reason,
-                'attachments' => $storedFiles, // Kirim daftar path file
+                'attachments' => $storedFiles,
+                'total_days' => $this->total_days,
             ], auth()->user());
 
             $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Pengajuan cuti berhasil dikirim.');
@@ -276,7 +308,7 @@ class Create extends Component
 
     public function render()
     {
-        $leaveTypes = LeaveType::all();
+        $leaveTypes = LeaveType::select(['id', 'name', 'code', 'is_anual_deduction', 'default_days', 'requires_attachment', 'use_calendar_days'])->get();
 
         // Ambil semua user kecuali diri sendiri untuk backup
         $employees = User::query()

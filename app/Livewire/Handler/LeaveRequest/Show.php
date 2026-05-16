@@ -57,6 +57,16 @@ class Show extends Component
             'histories.actedByUser',
         ])->findOrFail($this->requestId);
 
+        // C1: Guard — hanya pemilik, backup person, atau user dengan permission leave-view-all
+        $user = auth()->user();
+        $isOwner = $request->user_id === $user->id;
+        $isBackup = $request->backup_person_id === $user->id;
+        $canViewAll = $user->can('leave-view-all') || $user->can('leave-approval-center');
+
+        if (! $isOwner && ! $isBackup && ! $canViewAll) {
+            abort(403, 'Anda tidak memiliki akses untuk melihat pengajuan ini.');
+        }
+
         return view('livewire.handler.leave-request.show', compact('request'));
     }
 }

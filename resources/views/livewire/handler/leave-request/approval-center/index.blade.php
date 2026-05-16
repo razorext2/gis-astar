@@ -56,21 +56,31 @@
             <div class="flex flex-wrap items-center gap-3">
                 <select wire:model.live="filterStatus"
                     class="rounded-xl border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-700 focus:border-primary focus:ring-primary dark:border-zinc-800 dark:bg-white/5 dark:text-white">
-                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="">Semua Status</option>
-                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="pending_backup">Menunggu Backup</option>
-                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="pending_spv">Menunggu SPV</option>
-                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="pending_hrd">Menunggu HRD</option>
-                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="pending_management">Menunggu Management</option>
-                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="approved">Disetujui</option>
-                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="rejected">Ditolak</option>
-                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="canceled">Dibatalkan</option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="">Semua Status
+                    </option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="pending_backup">
+                        Menunggu Backup</option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="pending_spv">Menunggu
+                        SPV</option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="pending_hrd">Menunggu
+                        HRD</option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="pending_management">
+                        Menunggu Management</option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="approved">Disetujui
+                    </option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="rejected">Ditolak
+                    </option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="canceled">Dibatalkan
+                    </option>
                 </select>
 
                 <select wire:model.live="filterLeaveType"
                     class="rounded-xl border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-700 focus:border-primary focus:ring-primary dark:border-zinc-800 dark:bg-white/5 dark:text-white">
-                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="">Semua Tipe Cuti</option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="">Semua Tipe
+                        Cuti</option>
                     @foreach ($leaveTypes as $type)
-                        <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="{{ $type->id }}">{{ $type->name }}</option>
+                        <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white"
+                            value="{{ $type->id }}">{{ $type->name }}</option>
                     @endforeach
                 </select>
 
@@ -114,12 +124,12 @@
                                 <span
                                     class="font-medium text-red-600 dark:text-red-500">{{ $request->leaveType->name ?? 'Tipe Cuti' }}</span>
 
-                                @if ($request->approval_role && $activeTab === 'pending')
+                                @if ($request->approval_role_label && $activeTab === 'pending')
                                     <span>•</span>
                                     <span
                                         class="flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary dark:bg-primary/20">
                                         <x-icons.user-circle class="h-3 w-3" />
-                                        {{ $request->approval_role }}
+                                        {{ $request->approval_role_label }}
                                     </span>
                                 @endif
 

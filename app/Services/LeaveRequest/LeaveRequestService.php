@@ -18,7 +18,20 @@ class LeaveRequestService
     public function createRequest(array $data, User $user): LeaveRequest
     {
         return DB::transaction(function () use ($data, $user) {
-            $totalDays = $this->calculateTotalDays($data['start_date'], $data['end_date']);
+            // H1: Pessimistic lock to prevent race condition double-submit
+            $hasActive = $user->leaveRequests()
+                ->whereIn('status', ['pending_backup', 'pending_spv', 'pending_hrd', 'pending_management'])
+                ->lockForUpdate()
+                ->exists();
+
+            if ($hasActive) {
+                throw new Exception('Anda masih memiliki pengajuan cuti yang sedang dalam proses.');
+            }
+
+            // H3: Use total_days from Livewire if provided, otherwise calculate
+            $leaveType = LeaveType::findOrFail($data['leave_type_id']);
+            $useBusinessDays = ! $leaveType->use_calendar_days;
+            $totalDays = $data['total_days'] ?? $this->calculateTotalDays($data['start_date'], $data['end_date'], $useBusinessDays);
 
             $isBorrowed = $data['is_borrowed'] ?? false;
 
@@ -73,9 +86,30 @@ class LeaveRequestService
 
             $request->save();
 
-            // Notify next actor if approved
+            // Notify next actor if approved but not final
             if ($action === 'approve' && $request->status !== 'approved') {
                 $this->notifyNextApprover($request);
+            }
+
+            // Notify applicant when fully approved (final stage)
+            if ($action === 'approve' && $request->status === 'approved') {
+                $request->user->notify(
+                    new \App\Notifications\LeaveRequestApprovedNotification($request)
+                );
+            }
+
+            // Notify applicant when rejected
+            if ($action === 'reject') {
+                $request->user->notify(
+                    new \App\Notifications\LeaveRequestRejectedNotification($request, $actor->name, $note)
+                );
+            }
+
+            // Notify backup person when cancelled by applicant
+            if ($action === 'cancel' && $request->backupPerson) {
+                $request->backupPerson->notify(
+                    new \App\Notifications\LeaveRequestCancelledNotification($request)
+                );
             }
 
             return $request;
@@ -205,6 +239,27 @@ class LeaveRequestService
             \Carbon\Carbon::parse($startDate)->toDateString(),
             \Carbon\Carbon::parse($endDate)->toDateString(),
         ])->orderBy('date')->get();
+    }
+
+    /**
+     * Get list of Sundays within a date range.
+     *
+     * @return string[]
+     */
+    public function getIntersectedSundays(string $startDate, string $endDate): array
+    {
+        $sundays = [];
+        $current = \Carbon\Carbon::parse($startDate);
+        $end = \Carbon\Carbon::parse($endDate);
+
+        while ($current <= $end) {
+            if ($current->isSunday()) {
+                $sundays[] = $current->toDateString();
+            }
+            $current->addDay();
+        }
+
+        return $sundays;
     }
 
     /**

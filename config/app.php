@@ -135,4 +135,6 @@ return [
 
     'leave_approval_deadline_days' => (int) env('LEAVE_APPROVAL_DEADLINE_DAYS', 3),
 
+    'max_borrow_leave_days' => (int) env('MAX_BORROW_LEAVE_DAYS', 3),
+
 ];

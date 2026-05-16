@@ -123,7 +123,7 @@ return [
         'type' => 'group',
         'label' => 'Pengajuan Cuti',
         'icon' => 'envelope',
-        'guard' => null,
+        'guard' => ['any_permission', ['leave-view-own', 'leave-create', 'leave-approval-center', 'leave-balance-manage']],
         'submenu' => [
             [
                 'label' => 'Pengajuan Cuti',
@@ -131,8 +131,7 @@ return [
                 'route' => 'leave-request.my-requests.index',
                 'check' => ['leave-request.my-requests.*'],
                 'icon' => 'envelope',
-                // 'permission' => 'view-own-leaves',
-                'permission' => null,
+                'permission' => 'leave-view-own',
                 'navigate' => true,
             ],
             [
@@ -141,7 +140,7 @@ return [
                 'route' => 'leave-request.borrow.index',
                 'check' => ['leave-request.borrow.*'],
                 'icon' => 'calendar',
-                'permission' => null,
+                'permission' => 'leave-create',
                 'navigate' => true,
             ],
             [
@@ -150,8 +149,7 @@ return [
                 'route' => 'leave-request.approval-center.index',
                 'check' => ['leave-request.approval-center.*'],
                 'icon' => 'command',
-                // 'permission' => 'access-approval-center-leaves',
-                'permission' => null,
+                'permission' => 'leave-approval-center',
                 'navigate' => true,
                 'counter' => 'utils.counter.leave-request-approval-center-counter',
             ],
@@ -161,8 +159,7 @@ return [
                 'route' => 'leave-request.manage.index',
                 'check' => ['leave-request.manage.*'],
                 'icon' => 'wallet',
-                // 'permission' => 'leave-balance-manage',
-                'permission' => null,
+                'permission' => 'leave-balance-manage',
                 'navigate' => true,
                 'counter' => 'utils.counter.leave-request-manage-counter',
             ],

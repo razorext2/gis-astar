@@ -105,7 +105,13 @@ class Borrow extends Component
 
         if (in_array($propertyName, ['start_date', 'end_date'])) {
             $this->checkDateOverlap();
-            $this->calculateDays();
+            if (! $this->dateOverlapError) {
+                $this->calculateDays();
+            } else {
+                $this->total_days = 0;
+                $this->return_date = null;
+                $this->reset(['intersected_holidays', 'intersected_sundays']);
+            }
         }
 
         if ($propertyName === 'search_backup') {
@@ -118,6 +124,12 @@ class Borrow extends Component
         $this->dateOverlapError = null;
 
         if (! $this->start_date || ! $this->end_date) {
+            return;
+        }
+
+        if (\Carbon\Carbon::parse($this->start_date)->greaterThan(\Carbon\Carbon::parse($this->end_date))) {
+            $this->dateOverlapError = 'Tanggal mulai tidak boleh lebih besar dari tanggal berakhir.';
+
             return;
         }
 
@@ -147,13 +159,13 @@ class Borrow extends Component
         $this->selected_leave_type = LeaveType::find($this->leave_type_id);
 
         // Get dynamic config for max borrow days
-        $maxBorrowDays = (int) config('app.max_borrow_leave_days', env('MAX_BORROW_LEAVE_DAYS', 3));
+        $maxBorrowDays = (int) config('app.max_borrow_leave_days', 3);
 
         // Get total borrowed days that are approved or pending this year
         $borrowedThisYear = auth()->user()->leaveRequests()
             ->where('is_borrowed', true)
             ->whereYear('created_at', now()->year)
-            ->whereNotIn('status', ['rejected', 'cancelled'])
+            ->whereNotIn('status', ['rejected', 'canceled'])
             ->sum('total_days');
 
         $this->remaining_quota = max(0, $maxBorrowDays - $borrowedThisYear);
@@ -166,7 +178,7 @@ class Borrow extends Component
         if ($this->start_date && $this->end_date && $this->selected_leave_type) {
             $service = app(LeaveRequestService::class);
 
-            $exclude = $this->selected_leave_type->code !== 'CT-LAHIR';
+            $exclude = ! $this->selected_leave_type->use_calendar_days;
 
             $calculated = $service->calculateTotalDays($this->start_date, $this->end_date, $exclude);
 
@@ -188,15 +200,7 @@ class Borrow extends Component
             if ($exclude) {
                 $this->intersected_holidays = $service->getIntersectedHolidays($this->start_date, $this->end_date);
 
-                $this->intersected_sundays = [];
-                $current = \Carbon\Carbon::parse($this->start_date);
-                $end = \Carbon\Carbon::parse($this->end_date);
-                while ($current <= $end) {
-                    if ($current->isSunday()) {
-                        $this->intersected_sundays[] = $current->toDateString();
-                    }
-                    $current->addDay();
-                }
+                $this->intersected_sundays = $service->getIntersectedSundays($this->start_date, $this->end_date);
             } else {
                 $this->reset(['intersected_holidays', 'intersected_sundays']);
             }
@@ -225,7 +229,18 @@ class Borrow extends Component
         // Bypass the 1-year tenure validation because this is Pinjam Cuti.
         // We only check if they have enough borrow quota, which is handled in calculateDays and remaining_quota.
 
-        if ($this->total_days <= 0 || $this->total_days > $this->remaining_quota) {
+        // Re-validate Overlap
+        $this->checkDateOverlap();
+        if ($this->dateOverlapError) {
+            $this->addError('start_date', $this->dateOverlapError);
+            $this->addError('end_date', $this->dateOverlapError);
+            $this->dispatch('swal', icon: 'error', title: 'Tanggal Tidak Valid', text: $this->dateOverlapError);
+
+            return;
+        }
+
+        $maxAllowed = min($this->remaining_quota, 6);
+        if ($this->total_days <= 0 || $this->total_days > $maxAllowed) {
             $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Hari cuti tidak valid atau melebihi kuota pinjaman Anda.');
 
             return;
@@ -246,7 +261,8 @@ class Borrow extends Component
                 'end_date' => $this->end_date,
                 'reason' => $this->reason,
                 'attachments' => $storedFiles,
-                'is_borrowed' => true, // Flag as borrowed
+                'is_borrowed' => true,
+                'total_days' => $this->total_days,
             ], auth()->user());
 
             $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Pengajuan pinjam cuti berhasil dikirim.');

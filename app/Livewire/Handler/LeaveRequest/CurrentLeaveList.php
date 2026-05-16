@@ -27,9 +27,11 @@ class CurrentLeaveList extends Component
             ->where('status', 'approved')
             ->whereDate('start_date', '<=', $today)
             ->whereDate('end_date', '>=', $today)
-            ->whereHas('user', function($q) {
-                $q->where('name', 'like', '%' . $this->search . '%')
-                  ->orWhere('kode_pegawai', 'like', '%' . $this->search . '%');
+            ->when($this->search, function ($q) {
+                $q->whereHas('user', function ($sub) {
+                    $sub->where('name', 'like', '%'.$this->search.'%')
+                        ->orWhere('kode_pegawai', 'like', '%'.$this->search.'%');
+                });
             })
             ->latest('start_date')
             ->paginate(10);

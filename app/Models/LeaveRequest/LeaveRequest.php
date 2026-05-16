@@ -58,4 +58,18 @@ class LeaveRequest extends Model
     {
         return $this->hasMany(LeaveRequestHistory::class, 'leave_request_id')->orderBy('created_at', 'asc');
     }
+
+    /**
+     * Accessor: Label role approval berdasarkan status saat ini.
+     */
+    public function getApprovalRoleLabelAttribute(): string
+    {
+        return match ($this->status) {
+            'pending_backup' => 'Personel Backup',
+            'pending_spv' => 'Atasan Langsung',
+            'pending_hrd' => 'HRD Department',
+            'pending_management' => 'Management',
+            default => '',
+        };
+    }
 }

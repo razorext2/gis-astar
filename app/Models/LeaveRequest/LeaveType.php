@@ -16,12 +16,14 @@ class LeaveType extends Model
         'is_anual_deduction',
         'default_days',
         'requires_attachment',
+        'use_calendar_days',
     ];
 
     protected $casts = [
         'is_anual_deduction' => 'boolean',
         'default_days' => 'integer',
         'requires_attachment' => 'boolean',
+        'use_calendar_days' => 'boolean',
     ];
 
     public function leaveRequests()

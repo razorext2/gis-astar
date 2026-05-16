@@ -80,6 +80,8 @@ class Table extends Component
 
     public function saveBalance(): void
     {
+        abort_unless(auth()->user()->can('leave-balance-manage'), 403);
+
         $this->validate([
             'editTotalQuota' => 'required|integer|min:0',
             'editUsedQuota' => 'required|integer|min:0',
@@ -100,7 +102,7 @@ class Table extends Component
 
     private function calculateDefaultQuota(User $user): int
     {
-        if (!$user->join_date) {
+        if (! $user->join_date) {
             return 12; // Jika join_date kosong, berikan default 12
         }
 
@@ -121,6 +123,8 @@ class Table extends Component
 
     public function resetBalance(int $userId): void
     {
+        abort_unless(auth()->user()->can('leave-balance-manage'), 403);
+
         $this->runSafely(function () use ($userId) {
             $user = User::findOrFail($userId);
             $quota = $this->calculateDefaultQuota($user);
@@ -136,6 +140,8 @@ class Table extends Component
 
     public function resetAll(): void
     {
+        abort_unless(auth()->user()->can('leave-balance-manage'), 403);
+
         $this->runSafely(function () {
             // Ambil ID User Pegawai yang sudah memiliki used_quota > 0 (untuk dilewati)
             $lockedUserIds = LeaveBalance::where('year', $this->year)
