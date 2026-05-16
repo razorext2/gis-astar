@@ -9,8 +9,9 @@
 
         <div>
             <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Buat Pengajuan Pinjam Cuti</h1>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Silakan lengkapi formulir di bawah ini untuk meminjam
-                kuota cuti tahunan di depan.</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+                Silakan lengkapi formulir di bawah ini untuk meminjam kuota cuti tahunan di depan.
+            </p>
         </div>
     </div>
 
@@ -54,15 +55,16 @@
 
             <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
                 <div class="flex flex-col">
-                    <label class="mb-1 block text-sm font-bold text-gray-700 dark:text-gray-300">Tipe Cuti</label>
+                    <label class="mb-1 block text-sm font-bold text-gray-700 dark:text-gray-300">Tipe Cuti*</label>
                     <input type="text" value="Cuti Tahunan (Pinjaman)" disabled
                         class="w-full cursor-not-allowed rounded-xl border border-zinc-200 bg-gray-100 py-3 pl-4 pr-10 text-sm opacity-70 dark:border-zinc-800 dark:bg-gray-800/50 dark:text-gray-400">
                     <p class="mt-1 text-xs text-amber-600">Otomatis dipilih karena menu ini khusus untuk meminjam Cuti
                         Tahunan.</p>
                 </div>
                 <div class="flex flex-col">
-                    <label class="mb-1 block text-sm font-bold text-gray-700 dark:text-gray-300">Personel
-                        Backup</label>
+                    <label class="mb-1 block text-sm font-bold text-gray-700 dark:text-gray-300">
+                        Personel Backup
+                    </label>
                     <div class="relative" x-data="{ open: false, selectedName: '' }" @click.away="open = false">
                         {{-- Search Input / Trigger --}}
                         <div class="relative">
@@ -124,16 +126,31 @@
                 <div class="flex flex-col">
                     <x-input.basic type="date" id="start_date" name="start_date" wire:model.live="start_date"
                         :labels="true" required>
-                        Tanggal Mulai
+                        Tanggal Mulai*
                     </x-input.basic>
+                    @error('start_date')
+                        <span class="mt-1 text-xs text-red-600">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="flex flex-col">
                     <x-input.basic type="date" id="end_date" name="end_date" wire:model.live="end_date"
                         :labels="true" required>
-                        Tanggal Berakhir
+                        Tanggal Berakhir*
                     </x-input.basic>
+                    @error('end_date')
+                        <span class="mt-1 text-xs text-red-600">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
+
+            @if ($dateOverlapError)
+                <div
+                    class="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50/70 p-3 dark:border-red-900/30 dark:bg-red-900/10">
+                    <x-icons.info-circle class="mt-0.5 h-4 w-4 flex-shrink-0 text-red-600 dark:text-red-400" />
+                    <p class="text-sm font-medium text-red-700 dark:text-red-400">{{ $dateOverlapError }}</p>
+                </div>
+            @endif
+
 
             @if ($return_date)
                 <div class="flex flex-col gap-3">
@@ -187,8 +204,9 @@
             @endif
 
             <div class="flex flex-col">
-                <label class="mb-1 block text-sm font-bold text-gray-700 dark:text-gray-300">Alasan /
-                    Keperluan</label>
+                <label class="mb-1 block text-sm font-bold text-gray-700 dark:text-gray-300">
+                    Alasan / Keperluan*
+                </label>
                 <textarea wire:model="reason" rows="4"
                     class="w-full rounded-xl border border-zinc-200 bg-white/50 p-4 text-gray-700 placeholder-gray-400 transition-all focus:ring-primary/50 dark:border-zinc-800 dark:bg-gray-800/50 dark:text-gray-200"
                     placeholder="Berikan alasan yang jelas untuk pengajuan cuti Anda..."></textarea>
@@ -311,7 +329,7 @@
 
             {{-- Submit Button --}}
             <x-button.primary type="submit" class="w-full !py-4 disabled:cursor-not-allowed disabled:opacity-50"
-                :disabled="(bool) $activeRequest" wire:loading.attr="disabled" wire:target="save">
+                :disabled="(bool) $activeRequest || (bool) $dateOverlapError" wire:loading.attr="disabled" wire:target="save">
                 <x-slot name="icon">
                     <x-icons.loading wire:loading wire:target="save" class="h-4 w-4 animate-spin" />
                     <x-icons.angle-right wire:loading.remove wire:target="save" class="h-4 w-4" />
