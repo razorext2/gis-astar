@@ -3,21 +3,24 @@
 namespace App\Livewire;
 
 use App\Models\LogHistory;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Blade;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
-use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use PowerComponents\LivewirePowerGrid\PowerGridFields;
 
 final class LogTable extends PowerGridComponent
 {
     public string $tableName = 'LogTable';
+
     public bool $deferLoading = true;
+
     public bool $showFilters = true;
+
     public $users;
 
     public function setUp(): array
@@ -41,7 +44,6 @@ final class LogTable extends PowerGridComponent
         ];
     }
 
-
     public function btnClass()
     {
         return 'dark:bg-red-800 dark:hover:bg-red-900 dark:text-white dark:border-zinc-800 rounded-lg bg-red-400 px-2 py-1.5 font-semibold text-white border border-zinc-200 hover:bg-red-700 me-0.5';
@@ -53,11 +55,7 @@ final class LogTable extends PowerGridComponent
             Button::add('bulk-delete')
                 ->slot('Bulk delete')
                 ->class($this->btnClass())
-                ->dispatch('bulkDelete.' . $this->tableName, []),
-            Button::add('refresh')
-                ->slot('Refresh')
-                ->class($this->btnClass())
-                ->dispatch('pg:eventRefresh-' . $this->tableName, []),
+                ->dispatch('bulkDelete.'.$this->tableName, []),
         ];
     }
 
@@ -74,7 +72,7 @@ final class LogTable extends PowerGridComponent
             'userRelasi' => [
                 'name',
                 'kode_pegawai',
-            ]
+            ],
         ];
     }
 
@@ -82,13 +80,13 @@ final class LogTable extends PowerGridComponent
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('user_name', fn($query) => e($query->userRelasi->name))
-            ->add('employee_code', fn($query) => e($query->userRelasi->kode_pegawai ?? '-'))
+            ->add('user_name', fn ($query) => e($query->userRelasi->name))
+            ->add('employee_code', fn ($query) => e($query->userRelasi->kode_pegawai ?? '-'))
             ->add('user_action')
             ->add('ip_address')
             ->add('user_agent')
             ->add('user_location')
-            ->add('created_at', fn($query) => Carbon::parse($query->created_at)->locale('id'));
+            ->add('created_at', fn ($query) => Carbon::parse($query->created_at)->locale('id'));
     }
 
     public function columns(): array
@@ -145,7 +143,7 @@ final class LogTable extends PowerGridComponent
                 ->slot(Blade::render('<x-icons.trash-bin class="h-5 w-5 text-white" />'))
                 ->id()
                 ->class($this->btnClass())
-                ->dispatch('delete', ['id' => $row->id])
+                ->dispatch('delete', ['id' => $row->id]),
         ];
     }
 
@@ -160,7 +158,7 @@ final class LogTable extends PowerGridComponent
     {
         $data = Loghistory::find($id);
 
-        if (!$data) {
+        if (! $data) {
             $this->dispatch(
                 'swal',
                 title: 'Gagal!',
@@ -184,7 +182,7 @@ final class LogTable extends PowerGridComponent
     #[\Livewire\Attributes\On('bulkDelete.{tableName}')]
     public function bulkDelete(): void
     {
-        if (!$this->checkboxValues) {
+        if (! $this->checkboxValues) {
             $this->dispatch(
                 'swal',
                 title: 'Gagal!',
