@@ -149,7 +149,7 @@
                         </div>
 
                         {{-- NOTES --}}
-                        <div class="col-span-1 space-y-2 lg:col-span-2">
+                        <div class="col-span-2 space-y-2">
                             <x-input.textarea required id="notes" name="notes" wire:model="form.notes"
                                 :labels="true" :textLabel="'Catatan'" :placeholder="'Cth: Instalasi dimulai dengan cara...'" />
 
@@ -159,7 +159,7 @@
                         </div>
 
                         {{-- ACTION --}}
-                        <div class="col-span-1 flex justify-end lg:col-span-2">
+                        <div class="col-span-2 flex justify-end">
                             <x-button.success type="submit" wire:loading.attr="disabled" wire:target="store">
                                 <x-slot name="icon">
                                     <x-icons.plus wire:loading.remove wire:target="store" class="icon h-5 w-5" />
