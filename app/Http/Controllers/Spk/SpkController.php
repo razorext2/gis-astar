@@ -27,12 +27,9 @@ class SpkController extends Controller
         return view('dashboard.spk.create');
     }
 
-    public function show($id)
+    public function show(SpkMain $spk)
     {
-        $this->authorize('view', SpkMain::class);
-
-        $spk = SpkMain::select('id', 'nomor_order', 'tipe_tagihan', 'revision_count')
-            ->findOrFail($id);
+        $this->authorize('view', $spk);
 
         return view('dashboard.spk.show', compact('spk'));
     }

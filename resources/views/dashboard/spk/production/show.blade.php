@@ -193,7 +193,7 @@
                         <x-icons.users class="h-4 w-4 text-blue-500" /> Staff
                     </h3>
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="flex flex-col">
+                        <div class="col-span-2 flex flex-col">
                             <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Ditambah Oleh</span>
                             <span
                                 class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->spk->addedBy->name }}</span>
@@ -202,6 +202,11 @@
                             <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Diproduksi Oleh</span>
                             <span
                                 class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->spk->assignTo->name ?? '-' }}</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Reassign Ke</span>
+                            <span
+                                class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->reassignTo->name ?? '-' }}</span>
                         </div>
                         <div class="flex flex-col">
                             <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Divalidasi Oleh</span>

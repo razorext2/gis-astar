@@ -186,10 +186,13 @@ class Show extends Component
         ]);
     }
 
+    public bool $isReturnToIdc = false;
+
     /** Goal: Buka modal reassign dan reset state pencarian. */
     public function openReassignModal(): void
     {
         $this->selectedReassignUserId = null;
+        $this->isReturnToIdc = false;
         $this->showReassignModal = true;
     }
 
@@ -207,6 +210,42 @@ class Show extends Component
     public function processReassign(): void
     {
         $this->authorize('spk-reassign');
+
+        if ($this->isReturnToIdc) {
+            $this->runSafely(function () {
+                DB::transaction(function () {
+                    $reassignData = [
+                        'reassign_to' => null,
+                        'reassign_by' => null,
+                        'reassign_at' => null,
+                    ];
+
+                    $this->data->update($reassignData);
+                    $this->data->production()->update($reassignData);
+
+                    $this->data->spkHistories()->create([
+                        'title' => 'SPK dikembalikan ke IDC.',
+                        'keterangan' => Auth::user()->name.' telah mengembalikan SPK ke staf yang di-assign sebelumnya.',
+                        'added_by' => Auth::id(),
+                    ]);
+                });
+
+                $this->showReassignModal = false;
+
+                $this->dispatch(
+                    event: 'swal',
+                    icon: 'success',
+                    title: 'Berhasil.',
+                    text: 'SPK berhasil dikembalikan ke staf assign sebelumnya.');
+
+                return $this->redirect(route('spk.show', $this->data->id), navigate: true);
+            }, 'Gagal mengembalikan SPK.', [
+                'user_id' => Auth::id(),
+                'spk_id' => $this->data->id,
+            ]);
+
+            return;
+        }
 
         if (! $this->selectedReassignUserId) {
             $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Pilih pegawai terlebih dahulu.');

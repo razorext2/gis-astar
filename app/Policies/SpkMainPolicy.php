@@ -18,9 +18,10 @@ class SpkMainPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user): bool
+    public function view(User $user, SpkMain $spkMain): bool
     {
-        return $user->hasPermissionTo('spk-detail');
+        return $user->hasPermissionTo('spk-create')
+            || ($user->hasPermissionTo('spk-detail') && ($user->id === $spkMain->assign_to || $user->id === $spkMain->reassign_to));
     }
 
     /**

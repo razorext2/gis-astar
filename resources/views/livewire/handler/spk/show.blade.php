@@ -78,7 +78,9 @@
                     </x-button.primary>
                 @endif
 
-                @if (auth()->user()->can('spk-reassign') && $data->reassign_to == null)
+                @if (
+                    (auth()->user()->can('spk-reassign') && $data->reassign_to == null) ||
+                        auth()->user()->hasAnyRole('Admin|Management'))
                     <x-button.secondary id="btn-reassign-spk" wire:click="openReassignModal"
                         wire:loading.attr="disabled" wire:target="openReassignModal">
                         <x-slot name="icon">
@@ -473,14 +475,24 @@
                     <label for="reassign-select" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
                         Pilih Pegawai Produksi
                     </label>
-                    <select id="reassign-select" wire:model.live="selectedReassignUserId"
-                        class="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2.5 text-sm text-zinc-900 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:border-blue-500">
+                    <select id="reassign-select" wire:model.live="selectedReassignUserId" :disabled="$wire.isReturnToIdc"
+                        class="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2.5 text-sm text-zinc-900 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 disabled:cursor-not-allowed disabled:bg-zinc-100 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:border-blue-500 dark:disabled:bg-zinc-800/50">
                         <option value="">-- Pilih Pegawai --</option>
                         @foreach ($this->produksiUsers as $user)
                             <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->kode_pegawai }})</option>
                         @endforeach
                     </select>
                 </div>
+
+                @hasanyrole('Admin|Management')
+                    <div class="mt-1 flex items-center gap-2">
+                        <input type="checkbox" id="return-to-idc" wire:model.live="isReturnToIdc"
+                            class="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-700 dark:ring-offset-zinc-800 dark:focus:ring-blue-600">
+                        <label for="return-to-idc" class="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                            Kembalikan produksi ke IDC
+                        </label>
+                    </div>
+                @endhasanyrole
             </div>
 
             <x-slot name="footer">
@@ -488,7 +500,7 @@
                     Batal
                 </x-button.secondary>
                 <x-button.primary id="btn-process-reassign" wire:click="processReassign" wire:loading.attr="disabled"
-                    wire:target="processReassign" :disabled="!$selectedReassignUserId">
+                    wire:target="processReassign" :disabled="!$selectedReassignUserId && !$isReturnToIdc">
                     <x-slot name="icon">
                         <x-icons.check-circle class="h-4 w-4" wire:loading.remove wire:target="processReassign" />
                         <x-icons.loading wire:loading wire:target="processReassign" class="h-4 w-4 animate-spin" />
