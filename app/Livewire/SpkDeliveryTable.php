@@ -19,9 +19,9 @@ final class SpkDeliveryTable extends PowerGridComponent
 
     public function setUp(): array
     {
-        if (auth()->user()->can('spk-validate')) {
-            $this->showCheckBox();
-        }
+        // if (auth()->user()->can('spk-validate')) {
+        //     $this->showCheckBox();
+        // }
 
         return [
             PowerGrid::header()
@@ -197,5 +197,10 @@ final class SpkDeliveryTable extends PowerGridComponent
                 ->class('dark:bg-green-800 text-sm dark:hover:bg-green-900 dark:text-white dark:border-zinc-800 rounded-lg bg-green-400 px-2 py-1.5 font-semibold text-white border border-zinc-200 hover:bg-green-700')
                 ->route('delivery.edit', ['id' => $row->id]),
         ];
+    }
+
+    public function queryString()
+    {
+        return $this->powerGridQueryString();
     }
 }

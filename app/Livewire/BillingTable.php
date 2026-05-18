@@ -145,4 +145,9 @@ final class BillingTable extends PowerGridComponent
                 ->hide(),
         ];
     }
+
+    public function queryString()
+    {
+        return $this->powerGridQueryString();
+    }
 }

@@ -286,4 +286,9 @@ final class ProductionTable extends PowerGridComponent
 
         return $button;
     }
+
+    public function queryString()
+    {
+        return $this->powerGridQueryString();
+    }
 }
