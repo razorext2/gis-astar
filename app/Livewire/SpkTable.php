@@ -52,8 +52,10 @@ final class SpkTable extends PowerGridComponent
             ]);
 
         if (! $this->user->can('spk-create')) {
-            $query->where('assign_to', $this->user->id)
-                ->where('status_approval', 1);
+            $query->where(function ($q) {
+                $q->where('assign_to', $this->user->id)
+                    ->orWhere('reassign_to', $this->user->id);
+            })->where('status_approval', 1);
         }
 
         if (! is_null($this->tipe_timbangan)) {

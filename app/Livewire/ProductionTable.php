@@ -66,7 +66,10 @@ final class ProductionTable extends PowerGridComponent
         // filter diluar spk
         if ($this->user->cannot('spk-create')) {
             $query->whereHas('productionHistories', fn ($history) => $history->where('status_produksi', '>', 0))
-                ->where('tb_produksi.assign_to', $this->user->id);
+                ->where(function ($q) {
+                    $q->where('tb_produksi.assign_to', $this->user->id)
+                        ->orWhere('tb_produksi.reassign_to', $this->user->id);
+                });
         }
 
         $query->orderByDesc('tb_produksi.created_at');

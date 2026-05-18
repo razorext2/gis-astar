@@ -34,6 +34,8 @@ class SpkMain extends Model
         'status',
         'added_by',
         'assign_to',
+        'reassign_to',
+        'reassign_by',
         'update_by',
         'pengiriman_updated_by',
         'no_tagihan_updated_by',
@@ -64,6 +66,7 @@ class SpkMain extends Model
         'is_using_company_driver',
         'is_picked_up_by_customer',
         'is_revision',
+        'reassign_at',
     ];
 
     protected $casts = [
@@ -101,6 +104,16 @@ class SpkMain extends Model
     public function assignTo()
     {
         return $this->belongsTo(User::class, 'assign_to', 'id');
+    }
+
+    public function reassignTo()
+    {
+        return $this->belongsTo(User::class, 'reassign_to', 'id');
+    }
+
+    public function reassignBy()
+    {
+        return $this->belongsTo(User::class, 'reassign_by', 'id');
     }
 
     public function approvedBy()

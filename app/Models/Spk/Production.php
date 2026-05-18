@@ -15,11 +15,15 @@ class Production extends Model
     protected $fillable = [
         'id_spk',
         'assign_to',
+        'reassign_to',
+        'reassign_by',
+        'reassign_at',
         'packing_list',
     ];
 
     protected $casts = [
         'packing_list' => 'array',
+        'reassign_at' => 'datetime',
     ];
 
     public function spk()
@@ -30,6 +34,16 @@ class Production extends Model
     public function assignTo()
     {
         return $this->belongsTo(\App\Models\User::class, 'assign_to');
+    }
+
+    public function reassignTo()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'reassign_to');
+    }
+
+    public function reassignBy()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'reassign_by');
     }
 
     public function productionHistories()

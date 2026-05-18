@@ -78,6 +78,20 @@
                     </x-button.primary>
                 @endif
 
+                @if (auth()->user()->can('spk-reassign') && $data->reassign_to == null)
+                    <x-button.secondary id="btn-reassign-spk" wire:click="openReassignModal"
+                        wire:loading.attr="disabled" wire:target="openReassignModal">
+                        <x-slot name="icon">
+                            <x-icons.user-add class="h-5 w-5" wire:loading.remove wire:target="openReassignModal" />
+                            <x-icons.loading wire:loading wire:target="openReassignModal"
+                                class="h-4 w-4 animate-spin" />
+                        </x-slot>
+
+                        <span wire:loading.remove wire:target="openReassignModal">Reassign SPK</span>
+                        <span wire:loading wire:target="openReassignModal">Memproses...</span>
+                    </x-button.secondary>
+                @endif
+
                 @if ($data->is_cancelled && auth()->user()->can('spk-validate') && $data->cancel_request_validated_by === null)
                     <x-button.danger
                         wire:confirm.prompt="Apakah anda yakin ingin membatalkan SPK ini? SPK yang dibatalkan tidak dapat diproses lagi.\n\nKetik BATAL untuk mengkonfirmasi.|BATAL"
@@ -99,7 +113,7 @@
 
             {{-- download button --}}
             @if ($data->status_approval === 1 || auth()->user()->can('spk-validate'))
-                <div class="flex justify-between gap-4 md:col-span-2 lg:justify-end">
+                <div class="flex justify-between gap-2 md:col-span-2 lg:justify-end">
                     @can('spk-create')
                         <x-button.primary id="spk-pdf-export" wire:click="export" wire:loading.attr="disabled"
                             wire:target="export">
@@ -296,7 +310,7 @@
                     <x-icons.users class="h-4 w-4 text-blue-500" /> Staff
                 </h3>
                 <div class="grid grid-cols-2 gap-4">
-                    <div class="flex flex-col">
+                    <div class="col-span-2 flex flex-col">
                         <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Dibuat Oleh</span>
                         <span
                             class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->addedBy->name }}</span>
@@ -314,6 +328,21 @@
                             </span>
                         @endif
                     </div>
+
+                    @if ($data->reassign_to)
+                        <div class="flex flex-col">
+                            <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Reassign Ke</span>
+                            <span class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">
+                                {{ $data->reassignTo?->name ?? '-' }}
+                            </span>
+                            @if ($data->reassignTo?->pegawai?->jabatanRelasi)
+                                <span class="text-xs text-zinc-500 dark:text-zinc-400">
+                                    {{ $data->reassignTo->pegawai->jabatanRelasi->nama_jabatan ?? '' }}
+                                    ({{ $data->reassignTo->pegawai->jabatanRelasi->placementRelasi?->penempatan ?? '' }})
+                                </span>
+                            @endif
+                        </div>
+                    @endif
 
                     @if ($data->is_booked)
                         <div class="flex flex-col">
@@ -429,5 +458,46 @@
     {{-- laporan fondasi --}}
     @can('laporan-fondasi-list')
         @livewire('handler.spk.laporan-fondasi.index', ['id_spk' => $data->id])
+    @endcan
+
+    {{-- Modal Reassign SPK --}}
+    @can('spk-reassign')
+        <x-modal.base-modal show="showReassignModal" title="Reassign SPK" subtitle="Pilih pegawai tujuan reassign"
+            iconContainerClass="bg-blue-600 shadow-blue-500/20" maxWidth="lg">
+            <x-slot name="icon">
+                <x-icons.user-add class="h-5 w-5" />
+            </x-slot>
+
+            <div class="flex flex-col gap-4">
+                <div class="space-y-1">
+                    <label for="reassign-select" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                        Pilih Pegawai Produksi
+                    </label>
+                    <select id="reassign-select" wire:model.live="selectedReassignUserId"
+                        class="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2.5 text-sm text-zinc-900 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:border-blue-500">
+                        <option value="">-- Pilih Pegawai --</option>
+                        @foreach ($this->produksiUsers as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->kode_pegawai }})</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <x-slot name="footer">
+                <x-button.secondary @click="open = false">
+                    Batal
+                </x-button.secondary>
+                <x-button.primary id="btn-process-reassign" wire:click="processReassign" wire:loading.attr="disabled"
+                    wire:target="processReassign" :disabled="!$selectedReassignUserId">
+                    <x-slot name="icon">
+                        <x-icons.check-circle class="h-4 w-4" wire:loading.remove wire:target="processReassign" />
+                        <x-icons.loading wire:loading wire:target="processReassign" class="h-4 w-4 animate-spin" />
+                    </x-slot>
+
+                    <span wire:loading.remove wire:target="processReassign">Proses Reassign</span>
+                    <span wire:loading wire:target="processReassign">Memproses...</span>
+                </x-button.primary>
+            </x-slot>
+        </x-modal.base-modal>
     @endcan
 </div>

@@ -101,7 +101,7 @@ class Create extends Component
         $this->showSummary = true;
 
         // munculkan modal pdf
-        $this->dispatch('show-pdf-modal', url: route('spk.pdf') . '?t=' . now()->timestamp);
+        $this->dispatch('show-pdf-modal', url: route('spk.pdf').'?t='.now()->timestamp);
     }
 
     public function store()
@@ -237,6 +237,7 @@ class Create extends Component
     {
         // ambil user dengan role Produksi
         $teamProduksi = User::whereHas('roles', fn ($role) => $role->where('name', 'Produksi'))
+            ->where('is_active', true)
             ->get();
 
         return view('livewire.handler.spk.create', [

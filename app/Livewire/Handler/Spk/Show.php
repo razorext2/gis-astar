@@ -6,8 +6,10 @@ use App\Jobs\ExportPdfJob;
 use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Spk\ProductionHistory;
 use App\Models\Spk\SpkMain;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 class Show extends Component
@@ -18,9 +20,13 @@ class Show extends Component
 
     public $data = null;
 
-    public function mount($id)
+    public bool $showReassignModal = false;
+
+    public ?int $selectedReassignUserId = null;
+
+    public function mount($id): void
     {
-        $this->data = SpkMain::with('addedBy', 'assignTo', 'updateBy', 'pengirimanUpdatedBy', 'noTagihanUpdatedBy', 'production')
+        $this->data = SpkMain::with('addedBy', 'assignTo', 'reassignTo', 'updateBy', 'pengirimanUpdatedBy', 'noTagihanUpdatedBy', 'production')
             ->findOrFail($id);
     }
 
@@ -177,6 +183,76 @@ class Show extends Component
         }, 'Gagal membuat SPK menggunakan stok lama', [
             'user_id' => Auth::id(),
             'spk_id' => $this->data->id,
+        ]);
+    }
+
+    /** Goal: Buka modal reassign dan reset state pencarian. */
+    public function openReassignModal(): void
+    {
+        $this->selectedReassignUserId = null;
+        $this->showReassignModal = true;
+    }
+
+    /** Goal: Computed property untuk list pegawai produksi yang aktif. */
+    #[Computed]
+    public function produksiUsers(): \Illuminate\Support\Collection
+    {
+        return User::whereHas('roles', fn ($role) => $role->where('name', 'Produksi'))
+            ->where('is_active', true)
+            ->where('id', '!=', $this->data->assign_to)
+            ->get();
+    }
+
+    /** Goal: Proses reassign SPK ke pegawai terpilih, update DB, catat history. */
+    public function processReassign(): void
+    {
+        $this->authorize('spk-reassign');
+
+        if (! $this->selectedReassignUserId) {
+            $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Pilih pegawai terlebih dahulu.');
+
+            return;
+        }
+
+        $targetUser = User::find($this->selectedReassignUserId, 'id');
+
+        if (! $targetUser) {
+            $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Pegawai tidak ditemukan.');
+
+            return;
+        }
+
+        $this->runSafely(function () use ($targetUser) {
+            DB::transaction(function () use ($targetUser) {
+                $reassignData = [
+                    'reassign_to' => $targetUser->id,
+                    'reassign_by' => Auth::id(),
+                    'reassign_at' => now(),
+                ];
+
+                $this->data->update($reassignData);
+                $this->data->production()->update($reassignData);
+
+                $this->data->spkHistories()->create([
+                    'title' => 'SPK di-reassign.',
+                    'keterangan' => Auth::user()->name.' telah mereassign SPK kepada '.$targetUser->name.' ('.$targetUser->kode_pegawai.').',
+                    'added_by' => Auth::id(),
+                ]);
+            });
+
+            $this->showReassignModal = false;
+
+            $this->dispatch(
+                event: 'swal',
+                icon: 'success',
+                title: 'Berhasil.',
+                text: 'SPK berhasil di-reassign kepada '.$targetUser->name.'.');
+
+            return $this->redirect(route('spk.show', $this->data->id), navigate: true);
+        }, 'Gagal mereassign SPK.', [
+            'user_id' => Auth::id(),
+            'spk_id' => $this->data->id,
+            'target_user_id' => $targetUser->id,
         ]);
     }
 
