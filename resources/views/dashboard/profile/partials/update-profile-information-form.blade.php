@@ -37,7 +37,7 @@
                         Verified
                     </span>
                 @else
-                    <x-button.secondary form="send-verification"
+                    <x-button.secondary form="send-verification" type="submit"
                         class="border-none !bg-amber-100 !px-2.5 !py-1.5 !text-xs !text-amber-700 ring-0 hover:!bg-amber-200 dark:!bg-amber-900/30 dark:!text-amber-400">
                         <x-slot name="icon">
                             <x-icons.info class="h-3.5 w-3.5" />
