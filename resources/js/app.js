@@ -1,3 +1,4 @@
+/** Goal: Main App Entry point & Lenis smooth scroll orchestration, Caller: Blade Layouts, Deps: Lenis, Flowbite, Livewire */
 import $ from "jquery";
 import "./bootstrap";
 import "flowbite";
@@ -9,19 +10,44 @@ import { initWebSocketListener } from "./utils/webSocketListener";
 import "./../../vendor/power-components/livewire-powergrid/dist/powergrid";
 import { zoomImage } from "./utils/zoomImage";
 
+import Lenis from "lenis";
+import "lenis/dist/lenis.css";
+
 window.flatpickr = flatpickr;
 window.$ = window.jQuery = $;
 window.Swal = Swal;
 
+// Initialize Lenis — https://github.com/darkroomengineering/lenis
+const lenis = new Lenis({
+    autoRaf: true,
+    anchors: true,
+    lerp: 0.06, // Smooth inertia — lower = silkier, less overshoot
+});
+
+window.lenis = lenis;
+
+let _lenisResizeTimer;
 Livewire.hook("commit", ({ component, commit, respond, succeed, fail }) => {
     succeed(({ snapshot, effect }) => {
         queueMicrotask(() => {
             initFlowbite();
+            // Debounce resize and skip if Lenis is actively scrolling to prevent jitter
+            if (window.lenis && !window.lenis.isScrolling) {
+                clearTimeout(_lenisResizeTimer);
+                _lenisResizeTimer = setTimeout(() => {
+                    if (window.lenis && !window.lenis.isScrolling) {
+                        window.lenis.resize();
+                    }
+                }, 200);
+            }
         });
     });
 });
 
 document.addEventListener("livewire:navigated", function () {
+    if (window.lenis) {
+        window.lenis.resize();
+    }
     initFlowbite();
     initEventListener();
     initWebSocketListener();

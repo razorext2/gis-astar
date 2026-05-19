@@ -109,7 +109,7 @@
     </div>
 
     {{-- Navigation Links --}}
-    <div class="overflow-x-hidden overflow-y-scroll p-5" wire:scroll>
+    <div class="overflow-x-hidden overflow-y-scroll p-5" wire:scroll data-lenis-prevent>
         <ul class="space-y-2 font-medium">
             @foreach ($menu as $item)
                 @if (($item['type'] ?? '') === 'header')

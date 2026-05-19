@@ -57,7 +57,7 @@
                             </div>
                         </div>
 
-                        <div class="max-h-72 overflow-y-auto md:max-h-96" id="notificationContainer">
+                        <div class="max-h-72 overflow-y-auto md:max-h-96" id="notificationContainer" data-lenis-prevent>
                             @livewire('utils.notification-dropdown')
                         </div>
 
