@@ -98,6 +98,11 @@ class Show extends Component
         $request = LeaveRequest::with(['user.pegawai.jabatanRelasi.divisionRelasi', 'user.pegawai.jabatanRelasi.placementRelasi', 'user.pegawai.jabatanRelasi.supervisor', 'leaveType', 'backupPerson', 'histories.actedByUser'])
             ->findOrFail($this->requestId);
 
+        // Guard: Hanya approver terkait atau yang punya permission
+        if (! $this->isAuthorizedApprover($request) && ! $user->can('leave-view-all')) {
+            abort(403, 'Anda tidak memiliki akses untuk melihat pengajuan ini.');
+        }
+
         // Otoritas validasi
         $canApprove = $this->isAuthorizedApprover($request);
 

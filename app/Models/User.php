@@ -149,11 +149,11 @@ class User extends Authenticatable implements CanBeSigned
      *
      * @param  string  $leaveCode  (khusus, tahunan, dll)
      */
-    public function getLeaveUsageCount(string $leaveCode)
+    public function getLeaveUsageCount(string $leaveCode): int
     {
-        return $this->leaveRequests()
+        return (int) $this->leaveRequests()
             ->whereHas('leaveType', fn ($q) => $q->where('code', $leaveCode))
-            ->whereIn('status', ['approved', 'pending_backup', 'pending_spv', 'pending_hrd', 'pending_management'])
+            ->whereNotIn('status', ['rejected', 'auto_reject', 'canceled'])
             ->sum('total_days');
     }
 
@@ -164,7 +164,7 @@ class User extends Authenticatable implements CanBeSigned
     {
         return $this->leaveRequests()
             ->whereHas('leaveType', fn ($q) => $q->where('code', $leaveCode))
-            ->whereIn('status', ['approved', 'pending_backup', 'pending_spv', 'pending_hrd', 'pending_management'])
+            ->whereNotIn('status', ['rejected', 'auto_reject', 'canceled'])
             ->exists();
     }
 }

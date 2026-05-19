@@ -70,6 +70,12 @@ class Borrow extends Component
             $this->management_approvers = $placement->managements->pluck('name')->toArray();
         }
 
+        // Cek apakah join_date terisi
+        if (! $user->join_date) {
+            return redirect()->route('leave-request.my-requests.index')
+                ->with('status', 'Data tanggal bergabung belum diisi. Hubungi HRD.');
+        }
+
         // Cek apakah masa kerjanya sudah > 1 tahun
         if ($user->join_date) {
             $anniversary = \Carbon\Carbon::parse($user->join_date)->addYear();
