@@ -49,6 +49,8 @@ class LeaveRequestController extends Controller
             'data' => $request,
         ])->setPaper([0, 0, 612, 936], 'portrait');
 
-        return $pdf->stream('leave-request-'.$request->id.'.pdf');
+        $fileName = 'Form_Cuti_'.\Illuminate\Support\Str::slug($request->user->name).'_'.\Carbon\Carbon::parse($request->start_date)->format('d-m-Y').'.pdf';
+
+        return $pdf->stream($fileName);
     }
 }

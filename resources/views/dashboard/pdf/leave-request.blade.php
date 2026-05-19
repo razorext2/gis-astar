@@ -89,10 +89,29 @@
             border: 1px solid #000;
             margin-right: 5px;
         }
+
+        .watermark {
+            position: absolute;
+            top: 35%;
+            left: 10%;
+            transform: rotate(-45deg);
+            font-size: 100px;
+            color: #ff0000;
+            opacity: 0.2;
+            font-weight: bold;
+            border: 15px solid #ff0000;
+            padding: 20px;
+            z-index: -1;
+            text-align: center;
+            letter-spacing: 5px;
+        }
     </style>
 </head>
 
 <body>
+    @if (in_array($data->status, ['rejected', 'auto_reject', 'canceled']))
+        <div class="watermark">DITOLAK</div>
+    @endif
     <h3 class="mb-8 text-center font-bold" style="padding-top:0; margin-top: 0;">PERMOHONAN CUTI TAHUNAN</h3>
 
     <table class="mb-4">
