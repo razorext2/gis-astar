@@ -30,4 +30,22 @@ class LeaveRequestController extends Controller
     {
         return view('dashboard.leave-request.borrow');
     }
+
+    public function streamPdf(\App\Models\LeaveRequest\LeaveRequest $request)
+    {
+        $request->load([
+            'user.pegawai.jabatanRelasi.divisionRelasi',
+            'user.pegawai.jabatanRelasi.placementRelasi',
+            'user.pegawai.jabatanRelasi.supervisor',
+            'leaveType',
+            'backupPerson',
+            'histories.actedByUser'
+        ]);
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('dashboard.pdf.leave-request', [
+            'data' => $request,
+        ])->setPaper([0, 0, 612, 936], 'portrait');
+
+        return $pdf->stream('leave-request-' . $request->id . '.pdf');
+    }
 }

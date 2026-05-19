@@ -17,6 +17,14 @@ class Show extends Component
 
     public $note = '';
 
+    public bool $showSummary = false;
+
+    public function summary()
+    {
+        $this->showSummary = true;
+        $this->dispatch('show-pdf-modal', url: route('leave-request.pdf', $this->requestId).'?t='.now()->timestamp);
+    }
+
     public function mount($id)
     {
         $this->requestId = $id;

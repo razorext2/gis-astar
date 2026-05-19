@@ -14,6 +14,8 @@ Route::prefix('leave-request')
 
         Route::get('borrow', [LeaveRequestController::class, 'borrow'])->name('borrow.index');
 
+        Route::get('stream/pdf/{request}', [LeaveRequestController::class, 'streamPdf'])->name('pdf');
+
         Route::resource('approval-center', ApprovalCenterController::class)->only(['index', 'create', 'edit', 'show']);
 
         Route::resource('manage', ManageLeavesController::class)->only(['index']);
