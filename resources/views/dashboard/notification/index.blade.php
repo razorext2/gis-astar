@@ -72,7 +72,7 @@
                     </div>
                 @endforelse
             </div>
-            {{ $notifications->withPath('/dashboard/notifications')->links() }}
+            {{ $notifications->withPath('/dashboard/notifications')->links('vendor.pagination.standard-tailwind') }}
         </div>
     </div>
 @endsection

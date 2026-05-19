@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ApiResource;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
@@ -12,8 +10,10 @@ class NotificationController extends Controller
     {
         $notifications = auth()->user()
             ->notifications()
+            ->reorder()
+            ->orderByRaw('read_at IS NOT NULL ASC')
             ->orderBy('created_at', 'desc')
-            ->paginate(5);
+            ->paginate(10);
 
         return view('dashboard.notification.index', compact('notifications'));
     }
@@ -33,7 +33,7 @@ class NotificationController extends Controller
             ->take(10)
             ->get();
 
-        if (!$notifications) {
+        if (! $notifications) {
             return new ApiResource(false, 'Data tidak ditemukan', null);
         }
 
