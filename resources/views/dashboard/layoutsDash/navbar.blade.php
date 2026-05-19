@@ -27,17 +27,25 @@
             @livewire('utils.ping-checker')
 
             {{-- Notification --}}
-            <div id="notifications">
+            {{-- Notification --}}
+            <div id="notifications" class="relative" x-data="{ open: false }">
                 <button
+                    @click="open = !open"
                     class="relative rounded-xl p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-300 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white dark:focus:ring-zinc-700"
-                    id="notificationButton" data-dropdown-toggle="notification-dropdown"
-                    data-dropdown-placement="bottom-end" data-dropdown-offset-distance="11" type="button">
+                    id="notificationButton" type="button" wire:ignore>
                     <span class="sr-only">View notifications</span>
                     @livewire('notification-bell')
                 </button>
 
                 {{-- Notification Dropdown --}}
-                <div class="z-50 my-3 hidden !w-[100vw] max-w-none sm:!w-[384px]" id="notification-dropdown">
+                <div x-show="open" @click.outside="open = false" style="display: none;"
+                     x-transition:enter="transition ease-out duration-200"
+                     x-transition:enter-start="opacity-0 scale-95"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-75"
+                     x-transition:leave-start="opacity-100 scale-100"
+                     x-transition:leave-end="opacity-0 scale-95"
+                     class="absolute right-[-16px] top-full z-50 mt-3 w-[100vw] max-w-none origin-top-right sm:right-0 sm:w-[384px]" id="notification-dropdown" wire:ignore.self>
                     <div
                         class="mx-4 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-dark-primary sm:mx-0">
                         <div
@@ -49,7 +57,9 @@
                             </div>
                         </div>
 
-                        <div class="max-h-72 overflow-y-auto md:max-h-96" id="notificationContainer"></div>
+                        <div class="max-h-72 overflow-y-auto md:max-h-96" id="notificationContainer">
+                            @livewire('utils.notification-dropdown')
+                        </div>
 
                         <div class="border-t border-zinc-200 px-4 py-3 dark:border-zinc-800">
                             <a class="text-sm font-semibold text-red-600 transition-colors hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"

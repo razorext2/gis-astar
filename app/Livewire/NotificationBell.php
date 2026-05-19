@@ -3,9 +3,12 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\Attributes\On;
 
 class NotificationBell extends Component
 {
+    #[On('notification-updated')]
+    #[On('notification-received')]
     public function render()
     {
         $notification = auth()->user()->unreadNotifications;
