@@ -9,7 +9,9 @@
     <!-- Sliced text layer (sits above doors) -->
     <div class="sliced-logo-wrapper">
         <div class="part-indo">INDO</div>
-        <div class="part-line"></div>
+        <div class="part-line-wrapper">
+            <div class="part-line"></div>
+        </div>
         <div class="part-dacin">DACIN</div>
     </div>
 </div>
