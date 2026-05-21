@@ -61,7 +61,7 @@
 
     {{-- preload --}}
     @persist('preloader')
-        <x-utils.preloader />
+        <x-utils.preloader x-show="dynamicBg" />
     @endpersist
 
     <!-- js -->

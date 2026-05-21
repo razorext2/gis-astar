@@ -28,8 +28,8 @@ const triggerPreloaderExit = () => {
 };
 
 window.addEventListener('load', () => {
-    // Only trigger exit when the page finishes loading, with a short visual delay
-    setTimeout(triggerPreloaderExit, 500);
+    // Only trigger exit when the page finishes loading, immediately
+    triggerPreloaderExit();
 });
 
 // Hard fallback (10s) just in case a network resource hangs the window.onload
@@ -45,7 +45,7 @@ Livewire.hook("commit", ({ component, commit, respond, succeed, fail }) => {
 
 document.addEventListener("livewire:navigated", function () {
     // For SPA navigation
-    setTimeout(triggerPreloaderExit, 500);
+    triggerPreloaderExit();
     initFlowbite();
     initEventListener();
     initWebSocketListener();

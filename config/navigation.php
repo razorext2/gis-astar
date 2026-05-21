@@ -217,7 +217,7 @@ return [
                 'check' => ['collect-task.*'],
                 'icon' => 'cash',
                 'permission' => 'collect-task-list',
-                'navigate' => false,
+                'navigate' => true,
                 'counter' => 'utils.counter.collector-idc-non-ppn-counter',
             ],
             [
@@ -227,7 +227,7 @@ return [
                 'check' => ['collect-task-ppn.*'],
                 'icon' => 'sale-percent',
                 'permission' => 'collect-task-ppn-list',
-                'navigate' => false,
+                'navigate' => true,
                 'counter' => 'utils.counter.collector-idc-ppn-counter',
             ],
             [
@@ -237,7 +237,7 @@ return [
                 'check' => ['collect-idy-ppn.*'],
                 'icon' => 'cash-register',
                 'permission' => 'collect-idy-ppn-list',
-                'navigate' => false,
+                'navigate' => true,
                 'counter' => 'utils.counter.collector-idy-ppn-counter',
             ],
             [
@@ -247,7 +247,7 @@ return [
                 'check' => ['collect.*'],
                 'icon' => 'clipboard',
                 'permission' => 'collect-list',
-                'navigate' => false,
+                'navigate' => true,
                 'counter' => 'utils.counter.collect-counter',
                 'counter_permission' => 'collect-approve',
             ],
