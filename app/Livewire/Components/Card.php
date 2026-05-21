@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Display various summary cards across different views, Caller: Blade dashboard or other list pages, Deps: Attendance, Collector, Sales, LeaveRequest */
+
 namespace App\Livewire\Components;
 
 use App\Models\Attendance;
@@ -142,6 +144,17 @@ class Card extends Component
                 'indicator' => 'Orang',
                 'icon' => 'icons.check',
                 'color' => 'red',
+            ],
+            [
+                'permission' => 'pegawai-list',
+                'label' => 'Cuti hari ini',
+                'count' => \App\Models\LeaveRequest\LeaveRequest::where('status', 'approved')
+                    ->whereDate('start_date', '<=', \Carbon\Carbon::today())
+                    ->whereDate('end_date', '>=', \Carbon\Carbon::today())
+                    ->count(),
+                'indicator' => 'Orang',
+                'icon' => 'icons.calendar',
+                'color' => 'yellow',
             ],
             [
                 'permission' => 'collect-edit',
