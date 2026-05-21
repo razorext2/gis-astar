@@ -1,6 +1,7 @@
 {{-- Goal: Main dashboard layout container, Livewire: None, Alpine: Yes --}}
 <!DOCTYPE html>
-<html class="scroll-smooth {{ (isset($_COOKIE['color-theme']) && $_COOKIE['color-theme'] === 'dark') ? 'dark' : '' }}" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html class="{{ isset($_COOKIE['color-theme']) && $_COOKIE['color-theme'] === 'dark' ? 'dark' : '' }} scroll-smooth"
+    lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     @include('dashboard.layoutsDash.head')
@@ -25,7 +26,7 @@
         @include('dashboard.layoutsDash.sidebar')
 
         <div :class="openSidebar ? 'max-w-screen-xl sm:ml-72 xl:ml-96' : 'mx-0 md:mx-12 lg:mx-20 xl:mx-44 max-w-screen-2xl'"
-            class="mb-20 mt-32 px-4 transition-all duration-300 ease-in-out sm:mt-24 md:mb-4">
+            class="mb-20 mt-[6.5rem] px-4 transition-all duration-300 ease-in-out md:mb-4">
 
             {{-- breadcrumb --}}
             @livewire('utils.breadcrumb')

@@ -1,7 +1,34 @@
-<nav class="fixed top-0 z-40 w-full border-b border-zinc-200 px-4 py-2.5 shadow-sm transition-colors dark:border-zinc-800 dark:shadow-none md:bg-white md:dark:bg-dark-primary lg:px-6"
-    :class="dynamicBg ? 'bg-white/60 backdrop-blur-2xl dark:bg-dark-primary/60' :
-        'bg-white backdrop-blur-none dark:bg-dark-primary'">
+{{-- Goal: Dashboard top navigation bar with hide-on-scroll UX (mobile only), Livewire: None, Alpine: Yes --}}
+<nav x-data="{
+    navVisible: true,
+    lastScrollY: 0,
+    isMobile() { return window.innerWidth < 768; },
+    handleScroll() {
+        if (!this.isMobile()) {
+            this.navVisible = true;
+            return;
+        }
+        const currentScrollY = window.scrollY;
+        if (currentScrollY <= 0) {
+            this.navVisible = true;
+        } else if (currentScrollY < this.lastScrollY) {
+            this.navVisible = true;
+        } else if (currentScrollY > this.lastScrollY && currentScrollY > 60) {
+            this.navVisible = false;
+        }
+        this.lastScrollY = currentScrollY;
+    }
+}" x-init="window.addEventListener('scroll', () => handleScroll(), { passive: true });
+window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; }, { passive: true });"
+    :class="{
+        '-translate-y-full': !navVisible,
+        'translate-y-0': navVisible,
+        'bg-white/40 backdrop-blur-lg dark:bg-dark-primary/40 border-b border-zinc-200/50 dark:border-zinc-800/50': dynamicBg,
+        'bg-white backdrop-blur-none dark:bg-dark-primary border-b border-zinc-200 dark:border-zinc-800': !dynamicBg
+    }"
+    class="fixed top-0 z-40 w-full px-4 py-2.5 shadow-sm transition-all duration-300 ease-in-out dark:shadow-none lg:px-6">
     <div class="flex items-center justify-between gap-2">
+
 
         {{-- Logo & Title --}}
         <div :class="openSidebar ? 'translate-x-0 sm:-translate-x-40' : 'translate-x-20 sm:translate-x-20'"
@@ -27,10 +54,8 @@
             @livewire('utils.ping-checker')
 
             {{-- Notification --}}
-            {{-- Notification --}}
             <div id="notifications" class="relative" x-data="{ open: false }">
-                <button
-                    @click="open = !open"
+                <button @click="open = !open"
                     class="relative rounded-xl p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-300 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white dark:focus:ring-zinc-700"
                     id="notificationButton" type="button" wire:ignore>
                     <span class="sr-only">View notifications</span>
@@ -39,15 +64,13 @@
 
                 {{-- Notification Dropdown --}}
                 <div x-show="open" @click.outside="open = false" style="display: none;"
-                     x-transition:enter="transition ease-out duration-200"
-                     x-transition:enter-start="opacity-0 scale-95"
-                     x-transition:enter-end="opacity-100 scale-100"
-                     x-transition:leave="transition ease-in duration-75"
-                     x-transition:leave-start="opacity-100 scale-100"
-                     x-transition:leave-end="opacity-0 scale-95"
-                     class="absolute right-[-16px] top-full z-50 mt-3 w-[100vw] max-w-none origin-top-right sm:right-0 sm:w-[384px]" id="notification-dropdown" wire:ignore.self>
+                    x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95"
+                    x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75"
+                    x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
+                    class="fixed left-0 right-0 top-14 z-50 px-4 origin-top sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-3 sm:w-[384px] sm:px-0 sm:origin-top-right"
+                    id="notification-dropdown" wire:ignore.self>
                     <div
-                        class="mx-4 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-dark-primary sm:mx-0">
+                        class="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-dark-primary">
                         <div
                             class="flex items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
                             <div class="flex items-center gap-2">
@@ -73,11 +96,10 @@
             {{-- End Notification --}}
 
             {{-- Profile --}}
-            <div id="profile-content">
-                <button
+            <div id="profile-content" class="relative" x-data="{ open: false }">
+                <button @click="open = !open"
                     class="flex rounded-full ring-2 ring-zinc-200 transition-all hover:ring-red-500 focus:outline-none dark:ring-zinc-700 dark:hover:ring-red-600"
-                    id="user-menu-button" data-dropdown-toggle="profile-dropdown" data-dropdown-placement="bottom-end"
-                    data-dropdown-offset-distance="13" type="button" aria-expanded="false">
+                    id="user-menu-button" type="button" :aria-expanded="open.toString()">
                     <span class="sr-only">Open user menu</span>
                     <img class="h-9 w-9 rounded-full object-cover"
                         src="{{ auth()->user()->profile_pic ? asset('storage/profile-pictures/' . auth()->user()->profile_pic) : asset('assets/img/profile-picture-5.jpg') }}"
@@ -85,7 +107,11 @@
                 </button>
 
                 {{-- Profile Dropdown --}}
-                <div class="z-50 my-3 hidden w-60 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-dark-primary"
+                <div x-show="open" @click.outside="open = false" style="display: none;"
+                    x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95"
+                    x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75"
+                    x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
+                    class="absolute right-0 top-full z-50 mt-3 w-60 origin-top-right overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-dark-primary"
                     id="profile-dropdown">
 
                     {{-- User Info --}}
