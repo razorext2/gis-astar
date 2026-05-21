@@ -32,42 +32,156 @@
 }
 
 /*--------------------------------------------------------------
-# Preloader
+# Preloader (Danzan-Inspired Diagonal Split)
 --------------------------------------------------------------*/
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@900&display=swap');
+
 #preloader {
-    overflow: hidden;
-    transition: all 0.6s ease-out;
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100vh;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    transition: opacity 0.6s ease-out 0.8s;
 }
 
-#preloader .typing-text {
-    width: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    border-right: 3px solid #dc2626; /* red-600 */
-    animation:
-        typing 1.5s steps(9, end) forwards,
-        blink-caret 0.75s step-end infinite;
+#preloader.preloader-exit {
+    opacity: 0;
+    pointer-events: none;
 }
 
-@keyframes typing {
-    from {
-        width: 0;
-    }
-    to {
-        width: 100%;
+/* Force animations to stop so transitions can take over smoothly */
+.preloader-exit .door-left,
+.preloader-exit .door-right,
+.preloader-exit .part-line,
+.preloader-exit .part-indo,
+.preloader-exit .part-dacin {
+    animation: none !important;
+}
+
+/* Background Doors */
+.door {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #ffffff;
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+}
+
+html.dark .door {
+    background-color: #09090b; /* zinc-950 */
+}
+
+/* 20 degree diagonal slice: tan(20) = 0.36397. 
+   Horizontal shift for 50vh is 50vh * 0.36397 = 18.2vh. */
+.door-left {
+    clip-path: polygon(0 0, calc(50vw + 18.2vh + 2px) 0, calc(50vw - 18.2vh + 2px) 100%, 0 100%);
+}
+
+.door-right {
+    clip-path: polygon(calc(50vw + 18.2vh) 0, 100% 0, 100% 100%, calc(50vw - 18.2vh) 100%);
+}
+
+.preloader-exit .door-left {
+    transform: translate(-100vw, -40vh);
+}
+
+.preloader-exit .door-right {
+    transform: translate(100vw, 40vh);
+}
+
+/* Sliced Text Wrapper */
+.sliced-logo-wrapper {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+    font-size: 8vw; /* Full hero size */
+    font-weight: 900;
+    color: #dc2626; /* red-600 */
+    line-height: 1;
+    letter-spacing: -0.02em;
+    user-select: none;
+}
+
+@media (max-width: 768px) {
+    .sliced-logo-wrapper {
+        font-size: 11vw;
     }
 }
 
-@keyframes blink-caret {
-    from,
-    to {
-        border-color: transparent;
-    }
-    50% {
-        border-color: #999999;
-    }
+.part-indo, .part-dacin {
+    position: relative;
+    padding: 0 0.05em;
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+}
+
+/* Precise geometric 20-degree slice through the text.
+   tan(20) = 0.36397. For 1em height, shift is 0.364em. */
+.part-indo {
+    clip-path: polygon(0 0, calc(100% - 0.15em) 0, calc(100% - 0.15em - 0.364em) 100%, 0 100%);
+    margin-right: -0.15em;
+}
+
+.part-dacin {
+    clip-path: polygon(calc(0.15em + 0.364em) 0, 100% 0, 100% 100%, 0.15em 100%);
+    margin-left: -0.15em;
+}
+
+.part-line {
+    position: relative;
+    z-index: 10;
+    width: 6px;
+    height: 1.2em;
+    background-color: #dc2626; /* red-600 */
+    transform: rotate(20deg);
+    margin: 0 0.15em;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+}
+
+/* Initial Entry Animation */
+.part-indo { animation: slideInIndo 1s cubic-bezier(0.2, 0.8, 0.2, 1) backwards; }
+.part-dacin { animation: slideInDacin 1s cubic-bezier(0.2, 0.8, 0.2, 1) backwards; }
+.part-line { animation: scaleInLine 1s cubic-bezier(0.2, 0.8, 0.2, 1) backwards; }
+
+@keyframes slideInIndo {
+    from { transform: translateX(-5vw); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInDacin {
+    from { transform: translateX(5vw); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes scaleInLine {
+    from { transform: rotate(20deg) scaleY(0); }
+    to { transform: rotate(20deg) scaleY(1); }
+}
+
+/* Exit Animations triggered by .preloader-exit */
+.preloader-exit .part-line {
+    transform: rotate(20deg) scaleY(0);
+}
+
+.preloader-exit .part-indo {
+    transform: translate(-100vw, -40vh);
+}
+
+.preloader-exit .part-dacin {
+    transform: translate(100vw, 40vh);
 }
 
 .dark .datatable-wrapper .datatable-table thead {

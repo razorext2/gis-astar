@@ -13,6 +13,28 @@ window.flatpickr = flatpickr;
 window.$ = window.jQuery = $;
 window.Swal = Swal;
 
+const triggerPreloaderExit = () => {
+    const preloader = document.getElementById('preloader');
+    if (preloader && !preloader.classList.contains('preloader-exit')) {
+        preloader.classList.add('preloader-exit');
+        // Do NOT remove preloader from the DOM, allowing @persist('preloader')
+        // to maintain its invisible, exited state across wire:navigate SPA routes.
+        /*
+        setTimeout(() => {
+            if (preloader.parentNode) preloader.remove();
+        }, 1500);
+        */
+    }
+};
+
+window.addEventListener('load', () => {
+    // Only trigger exit when the page finishes loading, with a short visual delay
+    setTimeout(triggerPreloaderExit, 500);
+});
+
+// Hard fallback (10s) just in case a network resource hangs the window.onload
+setTimeout(triggerPreloaderExit, 10000);
+
 Livewire.hook("commit", ({ component, commit, respond, succeed, fail }) => {
     succeed(({ snapshot, effect }) => {
         queueMicrotask(() => {
@@ -22,6 +44,8 @@ Livewire.hook("commit", ({ component, commit, respond, succeed, fail }) => {
 });
 
 document.addEventListener("livewire:navigated", function () {
+    // For SPA navigation
+    setTimeout(triggerPreloaderExit, 500);
     initFlowbite();
     initEventListener();
     initWebSocketListener();

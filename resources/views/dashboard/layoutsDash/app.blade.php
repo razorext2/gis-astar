@@ -1,3 +1,4 @@
+{{-- Goal: Main dashboard layout container, Livewire: None, Alpine: Yes --}}
 <!DOCTYPE html>
 <html class="scroll-smooth" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -58,7 +59,9 @@
     </div>
 
     {{-- preload --}}
-    <x-utils.preloader />
+    @persist('preloader')
+        <x-utils.preloader />
+    @endpersist
 
     <!-- js -->
     @include('dashboard.layoutsDash.js')

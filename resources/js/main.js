@@ -107,8 +107,7 @@ document.addEventListener("livewire:navigated", function () {
     const installAppContainer = document.getElementById("installAppContainer");
     const preloader = document.getElementById("preloader");
 
-    // preloader
-    if (preloader) preloader.remove();
+    // preloader is now handled with smooth exit transition in resources/js/app.js
 
     // atur darkmode
     const isDarkMode =

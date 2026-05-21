@@ -1,8 +1,15 @@
-<div class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white dark:bg-zinc-950 md:z-[9999]"
-    id="preloader">
-    <div class="relative">
-        <h1 class="text-4xl font-black tracking-tighter text-red-600 md:text-6xl">
-            <div class="typing-text">Indodacin.</div>
-        </h1>
+{{-- Goal: Diagonal split-screen preloader inspired by Danzan, Livewire: None, Alpine: None --}}
+<div id="preloader">
+    <!-- Left diagonal door -->
+    <div class="door door-left"></div>
+    
+    <!-- Right diagonal door -->
+    <div class="door door-right"></div>
+
+    <!-- Sliced text layer (sits above doors) -->
+    <div class="sliced-logo-wrapper">
+        <div class="part-indo">INDO</div>
+        <div class="part-line"></div>
+        <div class="part-dacin">DACIN</div>
     </div>
 </div>
