@@ -1,14 +1,57 @@
+{{-- Goal: Calendar day popover layout showing check-in/check-out and leave status, Livewire: components.pegawai.attendance-calendar-popover, Alpine: - --}}
+@php
+    $isSunday = \Carbon\Carbon::parse($date)->isSunday();
+    $hasHolidayOrSunday = !empty($holiday) || $isSunday;
+    $totalItems = $attendance->count() + $attendanceOut->count() + ($leave ? 1 : 0) + ($hasHolidayOrSunday ? 1 : 0);
+@endphp
 <div id="popover-click-{{ $date }}" data-popover role="tooltip"
     class="invisible absolute z-20 inline-block w-80 overflow-hidden rounded-xl border border-zinc-200 p-4 text-sm opacity-0 shadow-md transition-opacity duration-300 dark:border-zinc-800"
-    :class="dynamicBg ? 'bg-white/60 backdrop-blur-md dark:bg-dark-primary/60' : 'bg-white dark:bg-dark-primary'">
+    :class="dynamicBg ? 'bg-white/80 backdrop-blur-md dark:bg-dark-primary/80' : 'bg-white dark:bg-dark-primary'">
 
-    <div
-        class="{{ $attendance->count() + $attendanceOut->count() > 2 ? 'max-h-[380px] overflow-y-auto pr-2 custom-scrollbar' : '' }} space-y-4">
+    <div class="{{ $totalItems > 2 ? 'max-h-[380px] overflow-y-auto pr-2 custom-scrollbar' : '' }} space-y-4">
+
+        {{-- Holiday / Sunday (Tanggal Merah) Section --}}
+        @if ($hasHolidayOrSunday)
+            <div class="rounded-xl border border-red-200 bg-red-50/50 p-2.5 dark:border-red-900/50 dark:bg-red-950/20">
+                <div class="mb-1 flex items-center gap-2">
+                    <x-icons.calendar class="h-3.5 w-3.5 text-red-500" />
+                    <span class="text-xs font-bold text-red-800 dark:text-red-300">
+                        {{ !empty($holiday) ? 'Hari Libur Nasional' : 'Hari Minggu (Libur Pekan)' }}
+                    </span>
+                </div>
+                <div class="space-y-1 text-[11px] text-red-700 dark:text-red-400">
+                    @if (!empty($holiday))
+                        <p><strong>Nama:</strong> {{ $holiday->name }}</p>
+                    @else
+                        <p>Hari libur akhir pekan.</p>
+                    @endif
+                </div>
+            </div>
+        @endif
+
+        {{-- Leave (Cuti) Section --}}
+        @if ($leave)
+            <div
+                class="rounded-xl border border-amber-200 bg-amber-50/50 p-2.5 dark:border-amber-900/50 dark:bg-amber-950/20">
+                <div class="mb-1 flex items-center gap-2">
+                    <x-icons.clock class="h-3.5 w-3.5 text-amber-500" />
+                    <span class="text-xs font-bold text-amber-800 dark:text-amber-300">Pegawai Cuti (Disetujui)</span>
+                </div>
+                <div class="space-y-1 text-[11px] text-amber-700 dark:text-amber-400">
+                    <p><strong>Tipe Cuti:</strong> {{ $leave->leaveType->name ?? 'N/A' }}</p>
+                    <p><strong>Alasan:</strong> {{ $leave->reason }}</p>
+                    <p><strong>Durasi:</strong> {{ \Carbon\Carbon::parse($leave->start_date)->isoFormat('D MMM Y') }}
+                        s/d {{ \Carbon\Carbon::parse($leave->end_date)->isoFormat('D MMM Y') }}</p>
+                </div>
+            </div>
+        @endif
+
         {{-- Attendance In Section --}}
         <div>
             <div class="mb-2 flex items-center gap-2 border-b border-zinc-200 pb-1 dark:border-zinc-800">
                 <div class="h-2 w-2 rounded-full bg-green-500"></div>
-                <h4 class="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">Absensi Masuk
+                <h4 class="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                    Absensi Masuk
                 </h4>
             </div>
 

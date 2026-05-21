@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Log user activity details safely handling cases where REMOTE_ADDR is missing, Caller: bootstrap/app.php, Deps: DB, Auth, Log, Request */
+
 namespace App\Http\Middleware;
 
 use Closure;
@@ -147,11 +149,12 @@ class LogUserActions
         $actionDescription = "{$entity} > {$action}";
 
         // Format IP yang detail sesuai permintaan
+        $remoteAddr = $_SERVER['REMOTE_ADDR'] ?? $request->ip() ?? '127.0.0.1';
         $ipInfo = "[
                         LaravelIP: {$request->ip()},
                         X-Forwarded-For: {$request->header('X-Forwarded-For')},
                         X-Real-IP: {$request->header('X-Real-IP')},
-                        Remote-Addr: {$_SERVER['REMOTE_ADDR']},
+                        Remote-Addr: {$remoteAddr},
                         Path: {$request->path()},
                     ]";
 

@@ -1,3 +1,4 @@
+{{-- Goal: Display employee personal info and attendance/leave calendar, Livewire: components.pegawai.attendance-calendar-popover, Alpine: - --}}
 @extends('dashboard.pegawai.detail')
 @section('menus')
     <div class="grid grid-cols-1 gap-2 lg:grid-cols-3 lg:gap-4">
@@ -113,6 +114,14 @@
                                 $hasData = $attendanceData->contains(function ($attendance) use ($date) {
                                     return \Carbon\Carbon::parse($attendance->jam_masuk)->isSameDay($date);
                                 });
+                                $isSunday = \Carbon\Carbon::parse($date)->isSunday();
+                                $isHoliday = $holidays->contains(function ($holiday) use ($date) {
+                                    return \Carbon\Carbon::parse($holiday->date)->isSameDay($date);
+                                });
+                                $hasLeave = $leaveRequests->contains(function ($leave) use ($date) {
+                                    $current = \Carbon\Carbon::parse($date);
+                                    return $current->gte($leave->start_date->startOfDay()) && $current->lte($leave->end_date->endOfDay());
+                                });
                             @endphp
                             <div class="aspect-square p-0.5 sm:p-1">
                                 @if ($hasData)
@@ -123,6 +132,22 @@
                                         data-popover-trigger="click">
                                         {{ \Carbon\Carbon::parse($date)->isoFormat('D') }}
                                     </x-button.success>
+                                @elseif ($isSunday || $isHoliday)
+                                    <x-button.danger
+                                        class="!h-full !w-full !border-red-400 !bg-gradient-to-br !from-red-500 !to-rose-600 !p-0 !text-xs !shadow-lg !shadow-red-500/20"
+                                        type="button" data-date="{{ $date }}"
+                                        data-popover-target="popover-click-{{ $date }}"
+                                        data-popover-trigger="click">
+                                        {{ \Carbon\Carbon::parse($date)->isoFormat('D') }}
+                                    </x-button.danger>
+                                @elseif ($hasLeave)
+                                    <x-button.warning
+                                        class="!h-full !w-full !border-amber-400 !bg-gradient-to-br !from-amber-500 !to-yellow-600 !p-0 !text-xs !shadow-lg !shadow-amber-500/20"
+                                        type="button" data-date="{{ $date }}"
+                                        data-popover-target="popover-click-{{ $date }}"
+                                        data-popover-trigger="click">
+                                        {{ \Carbon\Carbon::parse($date)->isoFormat('D') }}
+                                    </x-button.warning>
                                 @else
                                     <x-button.secondary
                                         class="!h-full !w-full !border-zinc-200 !bg-white/50 !p-0 !text-xs !text-gray-400 hover:!border-blue-200 hover:!bg-white hover:!text-blue-600 dark:!border-zinc-800 dark:!bg-white/5 dark:!text-gray-500 dark:hover:!bg-white/10"

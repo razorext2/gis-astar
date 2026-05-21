@@ -1,10 +1,13 @@
 <?php
 
+/** Goal: Manage employee data and display detail dashboards including attendance/leave calendar, Caller: web.php, Deps: Pegawai, User, Attendance, LeaveRequest */
+
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
 use App\Models\AttendanceOut;
 use App\Models\Collector;
+use App\Models\LeaveRequest\LeaveRequest;
 use App\Models\Pegawai;
 use App\Models\Sales;
 use Carbon\Carbon;
@@ -144,7 +147,7 @@ class PegawaiController extends Controller
 
     public function detail(Request $request, $id)
     {
-        $pegawai = Pegawai::with('jabatanRelasi:id,nama_jabatan')->findOrFail($id);
+        $pegawai = Pegawai::with(['jabatanRelasi:id,nama_jabatan', 'userRelasi'])->findOrFail($id);
 
         if ($request->has('period')) {
             $currentDate = Carbon::parse($request->query('period'));
@@ -163,7 +166,24 @@ class PegawaiController extends Controller
         $attendanceData = Attendance::where('kode_pegawai', $pegawai->kode_pegawai)->get();
         $images = $this->showImages($pegawai);
 
-        return view('dashboard.pegawai.details.personal-info', compact('pegawai', 'dd', 'images', 'attendanceData'));
+        // Get leave requests
+        $leaveRequests = collect();
+        if ($pegawai->userRelasi) {
+            $leaveRequests = LeaveRequest::query()
+                ->where('user_id', $pegawai->userRelasi->id)
+                ->where('status', 'approved')
+                ->where('start_date', '<=', $endOfMonth)
+                ->where('end_date', '>=', $startOfMonth)
+                ->get();
+        }
+
+        // Get national holidays
+        $holidays = \App\Models\System\Holiday::query()
+            ->whereDate('date', '<=', $endOfMonth)
+            ->whereDate('date', '>=', $startOfMonth)
+            ->get();
+
+        return view('dashboard.pegawai.details.personal-info', compact('pegawai', 'dd', 'images', 'attendanceData', 'leaveRequests', 'holidays'));
     }
 
     public function attendance($id)
