@@ -1,3 +1,12 @@
+{{-- Goal: Dashboard head metadata, styles, and dark mode initialization script, Livewire: None, Alpine: None --}}
+<script>
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
+            '(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
+</script>
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />

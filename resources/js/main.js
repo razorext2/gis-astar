@@ -161,6 +161,9 @@ document.addEventListener("livewire:navigated", function () {
     function toggleTheme(e) {
         document.documentElement.classList.toggle("dark", e);
         localStorage.setItem("color-theme", e ? "dark" : "light");
+        // Set persistent cookie to prevent wire:navigate transition FOUC
+        document.cookie = "color-theme=" + (e ? "dark" : "light") + "; path=/; max-age=31536000; SameSite=Lax";
+        
         if (themeToggleDarkBtn) {
             themeToggleDarkBtn.classList.toggle("text-gray-300", e);
             themeToggleDarkBtn.classList.toggle("text-gray-200", !e);

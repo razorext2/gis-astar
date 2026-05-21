@@ -1,5 +1,6 @@
+{{-- Goal: Authentication page layout, Livewire: None, Alpine: Yes --}}
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html class="{{ (isset($_COOKIE['color-theme']) && $_COOKIE['color-theme'] === 'dark') ? 'dark' : '' }}" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="utf-8">

@@ -1,7 +1,8 @@
+{{-- Goal: Landing page layout wrapper, Livewire: None, Alpine: Yes --}}
 @props(['title' => ''])
 
 <!DOCTYPE html>
-<html class="scroll-smooth" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html class="scroll-smooth {{ (isset($_COOKIE['color-theme']) && $_COOKIE['color-theme'] === 'dark') ? 'dark' : '' }}" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 	<head>
 		@include('components.landing.partials.head', ['title' => $title])
