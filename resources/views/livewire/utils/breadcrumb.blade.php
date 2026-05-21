@@ -1,7 +1,8 @@
+{{-- Goal: Render dynamic breadcrumb navigation with truncated segment titles, Livewire: Utils\Breadcrumb, Alpine: None --}}
 @php
     $total = count($crumbs);
     $displayCrumbs = [];
-    if ($total >= 5) {
+    if ($total >= 4) {
         $displayCrumbs[] = $crumbs[0];
         $displayCrumbs[] = $crumbs[1];
         $displayCrumbs[] = ['is_ellipsis' => true];
@@ -33,7 +34,7 @@
 
                         @if (!$isLast)
                             <a href="{{ $crumb['url'] }}"
-                                class="group flex items-center text-[10px] font-bold uppercase tracking-[0.15em] text-zinc-500 transition-all hover:text-red-600 dark:text-zinc-400 dark:hover:text-red-500">
+                                class="group flex items-center whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.15em] text-zinc-500 transition-all hover:text-red-600 dark:text-zinc-400 dark:hover:text-red-500">
                                 @if ($isFirst)
                                     <x-icons.home class="me-2 h-3.5 w-3.5 transition-transform group-hover:scale-110" />
                                 @endif
@@ -41,7 +42,7 @@
                             </a>
                         @else
                             <span
-                                class="flex items-center text-[10px] font-black uppercase tracking-[0.15em] text-red-600 dark:text-red-500">
+                                class="flex items-center whitespace-nowrap text-[10px] font-black uppercase tracking-[0.15em] text-red-600 dark:text-red-500">
                                 @if ($isFirst)
                                     <x-icons.home class="me-2 h-3.5 w-3.5" />
                                 @endif
