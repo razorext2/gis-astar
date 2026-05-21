@@ -1,13 +1,4 @@
 {{-- Goal: GPU-accelerated lens distorted interactive background using WebGL + 2D Canvas hybrid rendering, Livewire: None, Alpine: dynamic-background --}}
-{{-- Pattern Background: Subtle Grid Lines (static, masked near cursor) --}}
-{{-- Static grid: light mode (higher opacity) --}}
-<div class="pointer-events-none absolute inset-0 dark:hidden"
-    style="will-change: transform; transform: translate3d(0, 0, 0); backface-visibility: hidden; background-image: linear-gradient(rgba(161,161,170,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(161,161,170,0.07) 1px, transparent 1px); background-size: 24px 24px; -webkit-mask-image: radial-gradient(circle at var(--mouse-x, -100vw) var(--mouse-y, -100vh), transparent 0px, transparent 130px, black 180px); mask-image: radial-gradient(circle at var(--mouse-x, -100vw) var(--mouse-y, -100vh), transparent 0px, transparent 130px, black 180px);">
-</div>
-{{-- Static grid: dark mode (subtle opacity) --}}
-<div class="pointer-events-none absolute inset-0 hidden dark:block"
-    style="will-change: transform; transform: translate3d(0, 0, 0); backface-visibility: hidden; background-image: linear-gradient(rgba(161,161,170,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(161,161,170,0.03) 1px, transparent 1px); background-size: 24px 24px; -webkit-mask-image: radial-gradient(circle at var(--mouse-x, -100vw) var(--mouse-y, -100vh), transparent 0px, transparent 130px, black 180px); mask-image: radial-gradient(circle at var(--mouse-x, -100vw) var(--mouse-y, -100vh), transparent 0px, transparent 130px, black 180px);">
-</div>
 
 {{-- Pattern Background: Interactive Lens-Distorted Grid Lines & Chart --}}
 <div id="dynamic-bg-container" class="pointer-events-none fixed inset-0 z-0 overflow-hidden" style="will-change: transform; transform: translate3d(0, 0, 0); backface-visibility: hidden;" x-data="{
@@ -33,6 +24,8 @@
     lensRadiusSq: 12100,
     oneOverLensRadius: 1/110,
     maxMagMinusOne: 1.5,
+    _abortController: null,
+    _resizeTimer: null,
 
     init() {
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -56,6 +49,10 @@
         this.canvas2d = this.$refs.canvas2d;
         this.ctx = this.canvas2d.getContext('2d');
 
+        // AbortController for centralized event listener cleanup
+        this._abortController = new AbortController();
+        const signal = this._abortController.signal;
+
         // Page Visibility API
         document.addEventListener('visibilitychange', () => {
             this.isTabVisible = !document.hidden;
@@ -63,12 +60,17 @@
                 this.lastFrameTime = 0;
                 this.draw();
             }
-        });
+        }, { signal });
+
+        // Debounced resize handler (registered once for all quality levels)
+        window.addEventListener('resize', () => {
+            clearTimeout(this._resizeTimer);
+            this._resizeTimer = setTimeout(() => this.resize(), 150);
+        }, { signal });
 
         // Skip WebGL if quality is low
         if (this.quality === 'low') {
             this.resize();
-            window.addEventListener('resize', () => this.resize());
             return;
         }
 
@@ -77,10 +79,12 @@
             console.warn('WebGL not supported, falling back to 2D');
             this.quality = 'low';
             this.resize();
-            window.addEventListener('resize', () => this.resize());
             return;
         }
         this.gl = gl;
+
+        // Set clear color to transparent
+        gl.clearColor(0, 0, 0, 0);
 
         const vsSource = `
             attribute vec2 position;
@@ -121,6 +125,9 @@
                     sample_pos = mouse + normalize(to_mouse) * (dist / bf);
                 }
 
+                // Convert sample_pos to top-left origin to perfectly match CSS static grid
+                sample_pos.y = u_resolution.y - sample_pos.y;
+
                 float grid_size = u_grid_size * u_dpr;
                 vec2 grid_fract = mod(sample_pos, grid_size);
                 float dist_x = min(grid_fract.x, grid_size - grid_fract.x);
@@ -156,7 +163,6 @@
         if (!vs || !fs) {
             this.quality = 'low';
             this.resize();
-            window.addEventListener('resize', () => this.resize());
             return;
         }
 
@@ -169,7 +175,6 @@
             console.error('WebGL Program link error:', gl.getProgramInfoLog(program));
             this.quality = 'low';
             this.resize();
-            window.addEventListener('resize', () => this.resize());
             return;
         }
         this.program = program;
@@ -202,16 +207,18 @@
         };
 
         this.resize();
-        window.addEventListener('resize', () => this.resize());
 
         window.addEventListener('mousemove', (e) => {
-            if (!this.isTabVisible || this.quality === 'low') return;
+            if (!this.isTabVisible) return;
 
             this.mouseX = e.clientX;
             this.mouseY = e.clientY;
 
+            // Always update CSS mask coordinates, even if WebGL is disabled
             this.$el.style.setProperty('--mouse-x', e.clientX + 'px');
             this.$el.style.setProperty('--mouse-y', e.clientY + 'px');
+
+            if (this.quality === 'low') return;
 
             if (!this.pendingFrame) {
                 this.pendingFrame = true;
@@ -220,7 +227,7 @@
                     this.pendingFrame = false;
                 });
             }
-        }, { passive: true });
+        }, { passive: true, signal });
 
         this.draw();
     },
@@ -255,10 +262,11 @@
         if (!this.isTabVisible) return;
         
         const now = performance.now();
-        if (this.quality !== 'low' && this.lastFrameTime > 0) {
+        // Check document.hasFocus() to prevent downgrading quality when the browser throttles unfocused windows
+        if (this.quality !== 'low' && this.lastFrameTime > 0 && document.hasFocus()) {
             const elapsed = now - this.lastFrameTime;
             if (elapsed < 200) {
-                if (elapsed > 33) {
+                if (elapsed > 50) { // Slower than 20 FPS
                     this.slowFramesCount++;
                     if (this.slowFramesCount >= 5) {
                         this.downgradeQuality();
@@ -296,6 +304,15 @@
             this.program = null;
             this.gl = null;
         }
+    },
+
+    destroy() {
+        if (this._abortController) {
+            this._abortController.abort();
+            this._abortController = null;
+        }
+        clearTimeout(this._resizeTimer);
+        this.cleanupWebGL();
     },
 
     drawWebGL() {
@@ -403,24 +420,23 @@
         fillShape(arc3pts, g3);
     }
 }">
-    {{-- Pattern Background: Subtle Grid Lines (static, masked near cursor) --}}
-    {{-- Static grid: light mode (higher opacity) --}}
+    {{-- Static grid: light mode (masked near cursor for WebGL handoff) --}}
     <div class="pointer-events-none absolute inset-0 dark:hidden"
-        style="will-change: transform; transform: translate3d(0, 0, 0); backface-visibility: hidden; background-image: linear-gradient(rgba(161,161,170,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(161,161,170,0.07) 1px, transparent 1px); background-size: 24px 24px; -webkit-mask-image: radial-gradient(circle at var(--mouse-x, -100vw) var(--mouse-y, -100vh), transparent 0px, transparent 130px, black 180px); mask-image: radial-gradient(circle at var(--mouse-x, -100vw) var(--mouse-y, -100vh), transparent 0px, transparent 130px, black 180px);">
+        style="background-image: linear-gradient(rgba(161,161,170,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(161,161,170,0.07) 1px, transparent 1px); background-size: 24px 24px; -webkit-mask-image: radial-gradient(circle at var(--mouse-x, -100vw) var(--mouse-y, -100vh), transparent 0px, transparent 130px, black 180px); mask-image: radial-gradient(circle at var(--mouse-x, -100vw) var(--mouse-y, -100vh), transparent 0px, transparent 130px, black 180px);">
     </div>
-    {{-- Static grid: dark mode (subtle opacity) --}}
+    {{-- Static grid: dark mode (masked near cursor for WebGL handoff) --}}
     <div class="pointer-events-none absolute inset-0 hidden dark:block"
-        style="will-change: transform; transform: translate3d(0, 0, 0); backface-visibility: hidden; background-image: linear-gradient(rgba(161,161,170,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(161,161,170,0.03) 1px, transparent 1px); background-size: 24px 24px; -webkit-mask-image: radial-gradient(circle at var(--mouse-x, -100vw) var(--mouse-y, -100vh), transparent 0px, transparent 130px, black 180px); mask-image: radial-gradient(circle at var(--mouse-x, -100vw) var(--mouse-y, -100vh), transparent 0px, transparent 130px, black 180px);">
+        style="background-image: linear-gradient(rgba(161,161,170,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(161,161,170,0.03) 1px, transparent 1px); background-size: 24px 24px; -webkit-mask-image: radial-gradient(circle at var(--mouse-x, -100vw) var(--mouse-y, -100vh), transparent 0px, transparent 130px, black 180px); mask-image: radial-gradient(circle at var(--mouse-x, -100vw) var(--mouse-y, -100vh), transparent 0px, transparent 130px, black 180px);">
     </div>
 
-    {{-- Pattern Background: Interactive Lens-Distorted Grid Lines & Chart --}}
-    <div class="pointer-events-none absolute inset-0" style="will-change: transform; transform: translate3d(0, 0, 0); backface-visibility: hidden;">
-        <canvas x-ref="canvasGl" class="absolute inset-0 block h-full w-full" style="will-change: transform; transform: translate3d(0, 0, 0); backface-visibility: hidden;" :class="{'hidden': quality === 'low'}"></canvas>
-        <canvas x-ref="canvas2d" class="absolute inset-0 block h-full w-full" style="will-change: transform; transform: translate3d(0, 0, 0); backface-visibility: hidden;"></canvas>
+    {{-- Canvas layers --}}
+    <div class="pointer-events-none absolute inset-0">
+        <canvas x-ref="canvasGl" class="absolute inset-0 block h-full w-full" :class="{'hidden': quality === 'low'}"></canvas>
+        <canvas x-ref="canvas2d" class="absolute inset-0 block h-full w-full"></canvas>
     </div>
 
     {{-- Interactive Cursor Glow --}}
-    <div x-show="quality !== 'low'" class="pointer-events-none absolute inset-0"
-        style="will-change: transform; transform: translate3d(0, 0, 0); backface-visibility: hidden; background: radial-gradient(150px circle at var(--mouse-x, 50vw) var(--mouse-y, 50vh), rgba(239, 68, 68, 0.06), transparent 100%);">
+    <div class="pointer-events-none absolute inset-0 transition duration-300"
+        style="background: radial-gradient(150px circle at var(--mouse-x, 50vw) var(--mouse-y, 50vh), rgba(239, 68, 68, 0.06), transparent 100%);">
     </div>
 </div>
