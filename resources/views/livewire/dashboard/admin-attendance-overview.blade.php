@@ -15,7 +15,7 @@
             </p>
         </div>
 
-        <ul class="custom-scrollbar flex-1 space-y-3 overflow-y-auto pr-2 font-sans" data-lenis-prevent>
+        <ul class="custom-scrollbar flex-1 space-y-3 overflow-y-auto pr-2 font-sans">
             @forelse ($attendance_today as $at)
                 <li class="group">
                     <div
@@ -65,7 +65,7 @@
             </p>
         </div>
 
-        <ul class="custom-scrollbar flex-1 space-y-3 overflow-y-auto pr-2 font-sans" data-lenis-prevent>
+        <ul class="custom-scrollbar flex-1 space-y-3 overflow-y-auto pr-2 font-sans">
             @forelse ($attendance_out_today as $at)
                 <li class="group">
                     <div

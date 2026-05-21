@@ -28,7 +28,7 @@
 
     <!-- Menu Grid -->
     <div
-        class="custom-scrollbar grid max-h-[60vh] grid-cols-3 gap-x-2 gap-y-6 overflow-y-auto px-4 pb-12 pt-2 md:grid-cols-4" data-lenis-prevent>
+        class="custom-scrollbar grid max-h-[60vh] grid-cols-3 gap-x-2 gap-y-6 overflow-y-auto px-4 pb-12 pt-2 md:grid-cols-4">
 
         @foreach ($drawerLinks as $item)
             @php

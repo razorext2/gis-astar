@@ -1,4 +1,3 @@
-{{-- Goal: Auth Layout, Livewire: Multiple, Alpine: None --}}
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -33,7 +32,8 @@
     </script>
 </head>
 
-<body id="container" class="relative min-h-screen overflow-x-hidden bg-white antialiased dark:bg-zinc-950">
+<body id="container" class="relative min-h-screen overflow-x-hidden bg-white antialiased dark:bg-zinc-950"
+    onmousemove="document.getElementById('container').style.setProperty('--mouse-x', event.clientX + 'px'); document.getElementById('container').style.setProperty('--mouse-y', event.clientY + 'px');">
 
     <x-utils.dynamic-background />
 
