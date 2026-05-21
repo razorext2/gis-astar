@@ -5,10 +5,15 @@
 use App\Models\LeaveRequest\LeaveRequest;
 use App\Models\LeaveRequest\LeaveRequestHistory;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 beforeEach(function () {
     $this->user = User::factory()->create();
-    $this->leaveTypeId = \App\Models\LeaveRequest\LeaveType::first()->id;
+    $leaveType = \App\Models\LeaveRequest\LeaveType::firstOrCreate(
+        ['code' => 'CT-TAHUNAN'],
+        ['name' => 'Cuti Tahunan', 'is_anual_deduction' => true, 'default_days' => 12]
+    );
+    $this->leaveTypeId = $leaveType->id;
 });
 
 it('rejects pending leave requests that exceed the deadline', function () {
@@ -28,7 +33,7 @@ it('rejects pending leave requests that exceed the deadline', function () {
     });
 
     // Manually set updated_at to 4 days ago (beyond 3-day deadline)
-    $expired->update(['updated_at' => now()->subDays(4)]);
+    DB::table('tb_leave_requests')->where('id', $expired->id)->update(['updated_at' => now()->subDays(4)]);
 
     $this->artisan('app:auto-reject-expired-leave-requests')
         ->assertExitCode(0);
@@ -61,7 +66,7 @@ it('does not reject requests still within the deadline', function () {
     });
 
     // Updated 1 day ago — within deadline
-    $pending->update(['updated_at' => now()->subDay()]);
+    DB::table('tb_leave_requests')->where('id', $pending->id)->update(['updated_at' => now()->subDay()]);
 
     $this->artisan('app:auto-reject-expired-leave-requests')
         ->assertExitCode(0);
@@ -85,7 +90,7 @@ it('skips already rejected or approved requests', function () {
         ]);
     });
 
-    $approved->update(['updated_at' => now()->subDays(10)]);
+    DB::table('tb_leave_requests')->where('id', $approved->id)->update(['updated_at' => now()->subDays(10)]);
 
     $this->artisan('app:auto-reject-expired-leave-requests')
         ->assertExitCode(0);

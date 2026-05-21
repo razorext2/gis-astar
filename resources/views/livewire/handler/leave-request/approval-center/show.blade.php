@@ -52,38 +52,30 @@
         </div>
     </div>
 
-    {{-- Reject Modal (Alpine) --}}
-    <div x-show="showRejectModal"
-        class="fixed inset-0 z-[200] flex items-center justify-center bg-zinc-900/60 p-4 backdrop-blur-sm" x-cloak>
-        <div @click.away="showRejectModal = false"
-            class="w-full max-w-md scale-100 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-2xl dark:border-zinc-800 dark:bg-dark-primary">
-            <div class="p-6">
-                <h3 class="text-center text-xl font-bold text-zinc-900 dark:text-white">Tolak Pengajuan?</h3>
-                <p class="mt-2 text-center text-sm text-zinc-500">Silakan berikan alasan penolakan agar pemohon dapat
-                    mengetahuinya.</p>
+    {{-- Reject Modal --}}
+    <x-modal.base-modal show="showRejectModal" title="Tolak Pengajuan?"
+        subtitle="Silakan berikan alasan penolakan agar pemohon dapat mengetahuinya."
+        iconContainerClass="bg-red-500 shadow-red-500/20" :isAlpine="true" maxWidth="md">
 
-                <div class="mt-6 space-y-4 text-left">
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs font-bold uppercase tracking-wider text-zinc-500">Alasan
-                            Penolakan</label>
-                        <textarea wire:model="note" rows="3"
-                            class="w-full rounded-xl border border-zinc-200 p-4 text-sm focus:ring-red-500/20 dark:border-zinc-800 dark:bg-zinc-800 dark:text-white"
-                            placeholder="Contoh: Kuota tim pada tanggal tersebut sudah penuh..."></textarea>
-                        @error('note')
-                            <span class="text-xs font-bold text-red-500">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="mt-8 grid grid-cols-2 gap-3">
-                    <x-button.danger type="button" @click="showRejectModal = false" class="justify-center !py-3">
-                        Batal
-                    </x-button.danger>
-                    <x-button.primary type="button" wire:click="reject" class="justify-center !py-3">
-                        Tolak Sekarang
-                    </x-button.primary>
-                </div>
+        <div class="space-y-4">
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-bold uppercase tracking-wider text-zinc-500">Alasan Penolakan</label>
+                <textarea wire:model="note" rows="3"
+                    class="w-full rounded-xl border border-zinc-200 p-4 text-sm focus:ring-red-500/20 dark:border-zinc-800 dark:bg-zinc-800 dark:text-white"
+                    placeholder="Contoh: Kuota tim pada tanggal tersebut sudah penuh..."></textarea>
+                @error('note')
+                    <span class="text-xs font-bold text-red-500">{{ $message }}</span>
+                @enderror
             </div>
         </div>
-    </div>
+
+        <x-slot name="footer">
+            <x-button.secondary @click="showRejectModal = false">
+                Batal
+            </x-button.secondary>
+            <x-button.danger wire:click="reject">
+                Tolak Sekarang
+            </x-button.danger>
+        </x-slot>
+    </x-modal.base-modal>
 </div>

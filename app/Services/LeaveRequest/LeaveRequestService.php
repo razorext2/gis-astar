@@ -4,6 +4,7 @@
 
 namespace App\Services\LeaveRequest;
 
+use App\Models\LeaveRequest\LeaveBalance;
 use App\Models\LeaveRequest\LeaveRequest;
 use App\Models\LeaveRequest\LeaveType;
 use App\Models\User;
@@ -70,6 +71,8 @@ class LeaveRequestService
     public function processAction(LeaveRequest $request, string $action, User $actor, ?string $note = null)
     {
         return DB::transaction(function () use ($request, $action, $actor, $note) {
+            $oldStatus = $request->status;
+
             if ($action === 'approve') {
                 $request->status = $this->calculateNextStatus($request);
             } elseif ($action === 'reject') {
@@ -85,6 +88,25 @@ class LeaveRequestService
             $request->current_note = $note;
 
             $request->save();
+
+            // Deduction Logic on FINAL APPROVAL (with pessimistic lock)
+            if ($request->status === 'approved' && $request->leaveType->is_anual_deduction) {
+                $balance = LeaveBalance::where('user_id', $request->user_id)
+                    ->where('year', date('Y'))
+                    ->lockForUpdate()
+                    ->first();
+                $balance?->increment('used_quota', $request->total_days);
+            }
+
+            // Rollback Logic: kembalikan kuota jika cuti yang sudah approved ditolak/dibatalkan
+            if (in_array($request->status, ['rejected', 'canceled']) && $oldStatus === 'approved'
+                && $request->leaveType->is_anual_deduction) {
+                $balance = LeaveBalance::where('user_id', $request->user_id)
+                    ->where('year', date('Y'))
+                    ->lockForUpdate()
+                    ->first();
+                $balance?->decrement('used_quota', $request->total_days);
+            }
 
             // Notify next actor if approved but not final
             if ($action === 'approve' && $request->status !== 'approved') {
@@ -353,21 +375,6 @@ class LeaveRequestService
             }
 
             $current->addDay();
-        }
-    }
-
-    public function checkStatus(string $status, int $userId)
-    {
-        if ($userId !== auth()->id()) {
-            session()->flash('status', 'Anda tidak memiliki akses untuk mengubah pengajuan ini.');
-
-            return redirect()->route('leave-request.my-requests.index');
-        }
-
-        if ($status !== 'pending_backup') {
-            session()->flash('status', 'Pengajuan hanya dapat diubah jika belum disetujui oleh Personel Backup.');
-
-            return redirect()->route('leave-request.my-requests.index');
         }
     }
 }

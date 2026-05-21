@@ -42,13 +42,6 @@ class LeaveRequestObserver
                 'note' => $request->current_note ?? 'Status diperbarui.',
             ]);
 
-            // Deduction Logic on FINAL APPROVAL
-            if ($newStatus === 'approved' && $request->leaveType->is_anual_deduction) {
-                $balance = $request->user->currentLeaveBalance();
-                if ($balance) {
-                    $balance->increment('used_quota', $request->total_days);
-                }
-            }
         }
     }
 
@@ -57,7 +50,7 @@ class LeaveRequestObserver
         return match ($status) {
             'approved' => 'final_approve',
             'rejected' => $actedBy === null ? 'auto_reject' : 'reject',
-            'cancelled' => 'cancel',
+            'canceled' => 'cancel',
             default => 'approve',
         };
     }

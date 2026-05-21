@@ -50,8 +50,10 @@ class Edit extends Component
     {
         $request = LeaveRequest::where('user_id', auth()->id())->findOrFail($id);
 
-        // check status
-        app(LeaveRequestService::class)->checkStatus($request->status, $request->user_id);
+        // Guard: Hanya bisa edit jika masih pending_backup
+        if ($request->status !== 'pending_backup') {
+            abort(403, 'Pengajuan tidak dalam status yang bisa diedit.');
+        }
 
         $this->requestId = $request->id;
         $this->leave_type_id = $request->leave_type_id;

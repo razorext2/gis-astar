@@ -152,5 +152,33 @@
                 </div>
             </div>
         @endif
+
+        <div class="mt-8 flex justify-end border-t border-zinc-100 pt-6 dark:border-white/5">
+            <x-button.primary id="summary-button" wire:click="summary" type="button"
+                class="!bg-zinc-800 !text-white hover:!bg-zinc-700 dark:!bg-zinc-700 dark:hover:!bg-zinc-600"
+                wire:loading.attr="disabled" wire:target="summary">
+                <x-slot name="icon">
+                    <x-icons.file-invoice wire:loading.remove wire:target="summary" class="h-5 w-5" />
+                    <x-icons.loading wire:loading wire:target="summary" class="h-4 w-4 animate-spin" />
+                </x-slot>
+
+                <span wire:loading.remove wire:target="summary">Preview PDF</span>
+                <span wire:loading wire:target="summary">Memuat...</span>
+            </x-button.primary>
+        </div>
+
+        <x-modal.base-modal show="showSummary" title="Leave Request Summary" subtitle="Preview Dokumen"
+            iconContainerClass="bg-blue-600 shadow-blue-500/20" maxWidth="7xl">
+            <x-slot name="icon">
+                <x-icons.file-invoice class="h-5 w-5" />
+            </x-slot>
+
+            <div class="-m-6 h-[70vh]" x-data="{ pdfUrl: '' }" x-on:show-pdf-modal.window="pdfUrl = $event.detail.url">
+                <template x-if="pdfUrl">
+                    <iframe x-bind:src="pdfUrl" class="h-full w-full" title="Leave Request Summary PDF"
+                        frameborder="0"></iframe>
+                </template>
+            </div>
+        </x-modal.base-modal>
     </div>
 </div>

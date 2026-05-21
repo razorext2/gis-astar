@@ -38,7 +38,7 @@ class Create extends Component
     // Search for backup person
     public $search_backup = '';
 
-    public $selected_leave_type;
+    public ?LeaveType $selected_leave_type = null;
 
     public $remaining_quota = 0;
 
