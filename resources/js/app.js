@@ -8,6 +8,7 @@ import { initEventListener } from "./utils/eventListener.js";
 import { initWebSocketListener } from "./utils/webSocketListener";
 import "./../../vendor/power-components/livewire-powergrid/dist/powergrid";
 import { zoomImage } from "./utils/zoomImage";
+import "./components/dynamic-background.js";
 
 window.flatpickr = flatpickr;
 window.$ = window.jQuery = $;
