@@ -1,23 +1,12 @@
-/** Goal: Alpine.js component for WebGL and 2D Canvas hybrid dynamic background, Caller: dynamic-background.blade.php, Deps: Alpine.js */
+/** Goal: Alpine.js component for ultra-lightweight CSS Masking and Canvas 2D hybrid background, Caller: dynamic-background.blade.php, Deps: Alpine.js */
 document.addEventListener("alpine:init", () => {
     Alpine.data("dynamicBackground", () => ({
         quality: "high",
-        canvasGl: null,
         canvas2d: null,
-        gl: null,
         ctx: null,
-        program: null,
         width: 0,
         height: 0,
-        mouseX: -1000,
-        mouseY: -1000,
-        gridSize: 24,
-        glowRadius: 170,
-        pendingFrame: false,
-        uLoc: {},
         isTabVisible: true,
-        lastFrameTime: 0,
-        slowFramesCount: 0,
         _abortController: null,
         _resizeTimer: null,
         _bgCache: null,
@@ -52,7 +41,6 @@ document.addEventListener("alpine:init", () => {
                 attributeFilter: ["class"],
             });
 
-            this.canvasGl = this.$refs.canvasGl;
             this.canvas2d = this.$refs.canvas2d;
             this.ctx = this.canvas2d.getContext("2d");
 
@@ -66,14 +54,13 @@ document.addEventListener("alpine:init", () => {
                 () => {
                     this.isTabVisible = !document.hidden;
                     if (this.isTabVisible) {
-                        this.lastFrameTime = 0;
                         this.draw();
                     }
                 },
                 { signal },
             );
 
-            // Debounced resize handler (registered once for all quality levels)
+            // Debounced resize handler
             window.addEventListener(
                 "resize",
                 () => {
@@ -83,173 +70,19 @@ document.addEventListener("alpine:init", () => {
                 { signal },
             );
 
-            // Skip WebGL if quality is low
-            if (this.quality === "low") {
-                this.resize();
-                return;
-            }
-
-            const gl = this.canvasGl.getContext("webgl", {
-                alpha: true,
-                antialias: false,
-                premultipliedAlpha: true,
-            });
-            if (!gl) {
-                console.warn("WebGL not supported, falling back to 2D");
-                this.quality = "low";
-                this.resize();
-                return;
-            }
-            this.gl = gl;
-
-            // Enable blending for correct alpha rendering (premultiplied)
-            gl.enable(gl.BLEND);
-            gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-
-            // Set clear color to transparent
-            gl.clearColor(0, 0, 0, 0);
-
-            const vsSource = `
-                attribute vec2 position;
-                void main() {
-                    gl_Position = vec4(position, 0.0, 1.0);
-                }
-            `;
-
-            const fsSource = `
-                precision mediump float;
-                uniform vec2 u_resolution;
-                uniform vec2 u_mouse;
-                uniform float u_dpr;
-                uniform float u_grid_size;
-                uniform float u_glow_radius;
-                uniform vec3 u_grid_color;
-                uniform float u_base_opacity;
-
-                void main() {
-                    vec2 st = gl_FragCoord.xy;
-                    vec2 mouse = vec2(u_mouse.x * u_dpr, u_resolution.y - (u_mouse.y * u_dpr));
-
-                    vec2 to_mouse = st - mouse;
-                    float dist = length(to_mouse);
-                    float glow_radius = u_glow_radius * u_dpr;
-
-                    // GPU optimization: discard pixel calculations outside active glow radius
-                    if (dist > glow_radius) { discard; }
-
-                    vec2 sample_pos = st;
-
-                    // Convert sample_pos to top-left origin to perfectly match CSS static grid
-                    sample_pos.y = u_resolution.y - sample_pos.y;
-
-                    float grid_size = u_grid_size * u_dpr;
-                    vec2 grid_fract = mod(sample_pos, grid_size);
-                    float dist_x = min(grid_fract.x, grid_size - grid_fract.x);
-                    float dist_y = min(grid_fract.y, grid_size - grid_fract.y);
-
-                    float line_half_width = 0.7 * u_dpr;
-                    float smooth_edge = 0.5 * u_dpr;
-
-                    float alpha_x = 1.0 - smoothstep(line_half_width - smooth_edge, line_half_width + smooth_edge, dist_x);
-                    float alpha_y = 1.0 - smoothstep(line_half_width - smooth_edge, line_half_width + smooth_edge, dist_y);
-
-                    float line_alpha = max(alpha_x, alpha_y);
-                    float glow = pow(clamp(1.0 - (dist / glow_radius), 0.0, 1.0), 1.5);
-                    float final_alpha = line_alpha * glow * u_base_opacity;
-
-                    gl_FragColor = vec4(u_grid_color * final_alpha, final_alpha);
-                }
-            `;
-
-            const compileShader = (source, type) => {
-                const shader = gl.createShader(type);
-                gl.shaderSource(shader, source);
-                gl.compileShader(shader);
-                if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-                    console.error(
-                        "Shader compile error:",
-                        gl.getShaderInfoLog(shader),
-                    );
-                    gl.deleteShader(shader);
-                    return null;
-                }
-                return shader;
-            };
-
-            const vs = compileShader(vsSource, gl.VERTEX_SHADER);
-            const fs = compileShader(fsSource, gl.FRAGMENT_SHADER);
-            if (!vs || !fs) {
-                this.quality = "low";
-                this.resize();
-                return;
-            }
-
-            const program = gl.createProgram();
-            gl.attachShader(program, vs);
-            gl.attachShader(program, fs);
-            gl.linkProgram(program);
-
-            if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-                console.error(
-                    "WebGL Program link error:",
-                    gl.getProgramInfoLog(program),
-                );
-                this.quality = "low";
-                this.resize();
-                return;
-            }
-            this.program = program;
-
-            const vertices = new Float32Array([
-                -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0, 1.0,
-            ]);
-
-            const buffer = gl.createBuffer();
-            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-            gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-
-            const posAttrib = gl.getAttribLocation(program, "position");
-            gl.enableVertexAttribArray(posAttrib);
-            gl.vertexAttribPointer(posAttrib, 2, gl.FLOAT, false, 0, 0);
-
-            this.uLoc = {
-                resolution: gl.getUniformLocation(program, "u_resolution"),
-                mouse: gl.getUniformLocation(program, "u_mouse"),
-                dpr: gl.getUniformLocation(program, "u_dpr"),
-                gridSize: gl.getUniformLocation(program, "u_grid_size"),
-                glowRadius: gl.getUniformLocation(program, "u_glow_radius"),
-                gridColor: gl.getUniformLocation(program, "u_grid_color"),
-                baseOpacity: gl.getUniformLocation(program, "u_base_opacity"),
-            };
-
-            this.resize();
-
+            // Light-weight mousemove handler to update CSS variables for CSS masking
             window.addEventListener(
                 "mousemove",
                 (e) => {
-                    if (!this.isTabVisible) return;
+                    if (!this.isTabVisible || this.quality === "low" || !this.dynamicBg) return;
 
-                    this.mouseX = e.clientX;
-                    this.mouseY = e.clientY;
-
-                    // Always update CSS mask coordinates, even if WebGL is disabled
                     this.$el.style.setProperty("--mouse-x", e.clientX + "px");
                     this.$el.style.setProperty("--mouse-y", e.clientY + "px");
-
-                    if (this.quality === "low") return;
-
-                    if (!this.pendingFrame) {
-                        this.pendingFrame = true;
-                        requestAnimationFrame(() => {
-                            this.draw();
-                            this.pendingFrame = false;
-                        });
-                    }
                 },
                 { passive: true, signal },
             );
 
-            this.draw();
+            this.resize();
         },
 
         resize() {
@@ -261,11 +94,6 @@ document.addEventListener("alpine:init", () => {
                 dpr = Math.min(dpr, 1.25);
             } else if (this.quality === "low") {
                 dpr = 1.0;
-            }
-
-            if (this.canvasGl) {
-                this.canvasGl.width = this.width * dpr;
-                this.canvasGl.height = this.height * dpr;
             }
 
             if (this.canvas2d) {
@@ -281,55 +109,7 @@ document.addEventListener("alpine:init", () => {
 
         draw() {
             if (!this.isTabVisible) return;
-
-            const now = performance.now();
-            // Check document.hasFocus() to prevent downgrading quality when the browser throttles unfocused windows
-            if (
-                this.quality !== "low" &&
-                this.lastFrameTime > 0 &&
-                document.hasFocus()
-            ) {
-                const elapsed = now - this.lastFrameTime;
-                if (elapsed < 200) {
-                    if (elapsed > 50) {
-                        // Slower than 20 FPS
-                        this.slowFramesCount++;
-                        if (this.slowFramesCount >= 5) {
-                            this.downgradeQuality();
-                            return;
-                        }
-                    } else if (this.slowFramesCount > 0) {
-                        this.slowFramesCount--;
-                    }
-                }
-            }
-            this.lastFrameTime = now;
-
-            this.drawWebGL();
             this.draw2D();
-        },
-
-        downgradeQuality() {
-            if (this.quality === "high") {
-                this.quality = "medium";
-                this.slowFramesCount = 0;
-                this.resize();
-            } else if (this.quality === "medium") {
-                this.quality = "low";
-                this.slowFramesCount = 0;
-                this.cleanupWebGL();
-                this.resize();
-            }
-        },
-
-        cleanupWebGL() {
-            if (this.gl && this.program) {
-                const gl = this.gl;
-                gl.useProgram(null);
-                gl.deleteProgram(this.program);
-                this.program = null;
-                this.gl = null;
-            }
         },
 
         destroy() {
@@ -342,49 +122,7 @@ document.addEventListener("alpine:init", () => {
                 this._themeObserver = null;
             }
             clearTimeout(this._resizeTimer);
-            this.cleanupWebGL();
             this._bgCache = null;
-        },
-
-        drawWebGL() {
-            const gl = this.gl;
-            if (!gl || this.quality === "low") return;
-
-            let dpr = window.devicePixelRatio || 1;
-            if (this.quality === "medium") {
-                dpr = Math.min(dpr, 1.25);
-            }
-
-            gl.viewport(0, 0, this.canvasGl.width, this.canvasGl.height);
-            gl.clear(gl.COLOR_BUFFER_BIT);
-
-            gl.useProgram(this.program);
-
-            gl.uniform2f(
-                this.uLoc.resolution,
-                this.canvasGl.width,
-                this.canvasGl.height,
-            );
-            gl.uniform2f(this.uLoc.mouse, this.mouseX, this.mouseY);
-            gl.uniform1f(this.uLoc.dpr, dpr);
-            gl.uniform1f(this.uLoc.gridSize, this.gridSize);
-            gl.uniform1f(this.uLoc.glowRadius, this.glowRadius);
-
-            const isDark = document.documentElement.classList.contains("dark");
-            const colorRgb = isDark
-                ? [185 / 255, 28 / 255, 28 / 255]
-                : [239 / 255, 68 / 255, 68 / 255];
-            gl.uniform3f(
-                this.uLoc.gridColor,
-                colorRgb[0],
-                colorRgb[1],
-                colorRgb[2],
-            );
-
-            const baseOpacity = isDark ? 0.22 : 0.35;
-            gl.uniform1f(this.uLoc.baseOpacity, baseOpacity);
-
-            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
         },
 
         _buildBgCache() {
