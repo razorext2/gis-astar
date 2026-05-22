@@ -29,7 +29,7 @@
                     <li>
                         <a class="{{ $item['id'] == 'delete-btn' ? 'text-red-500 hover:bg-red-500 hover:text-white' : 'hover:bg-zinc-100 dark:hover:bg-zinc-700 dark:text-white' }} block rounded-md px-4 py-2.5 transition-colors duration-300 ease-in-out"
                             id="{{ $item['id'] }}" data-id="{{ $id }}" href="{{ $item['action'] }}"
-                            @if ($item['navigate'] ?? $navigate) wire:navigate @endif
+                            {{ ($item['navigate'] ?? $navigate) ? 'wire:navigate' : '' }}
                             data-userid="{{ Crypt::encryptString(auth()->user()->id) }}">
                             {{ $item['label'] }}
                         </a>
