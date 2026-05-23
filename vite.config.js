@@ -74,13 +74,10 @@ export default defineConfig({
 
                 // attendance inquiry
                 "resources/js/pages/attendance-inquiry/create.js",
-<<<<<<< HEAD
 
                 // company profile
                 "resources/css/company.css",
                 "resources/js/company.js",
-=======
->>>>>>> bcd561e0 (initial version dari inquiry absen)
             ],
             refresh: true,
         }),
