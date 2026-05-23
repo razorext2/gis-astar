@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
+Route::get('/company', function () {
+    return view('company', ['title' => 'PT. Indodacin Presisi Utama']);
+})->name('company.profile');
+
 // turn off for a while, redirect to dashboard
 Route::middleware('throttle:high')->get('/', function () {
     // return view('home', ['title' => 'Take attendance']);
