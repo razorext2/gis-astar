@@ -75,6 +75,10 @@ export default defineConfig({
 
                 // spk
                 "resources/js/pages/spk/show.js",
+
+                // company profile
+                "resources/css/company.css",
+                "resources/js/company.js",
             ],
             refresh: true,
         }),

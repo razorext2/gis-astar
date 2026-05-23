@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
+Route::get('/company', function () {
+    return view('company', ['title' => 'PT. Indodacin Presisi Utama']);
+})->name('company.profile');
+
 // turn off for a while, redirect to dashboard
 Route::middleware('throttle:high')->get('/', function () {
     // return view('home', ['title' => 'Take attendance']);
@@ -404,5 +408,6 @@ Route::get('/offline', function () {
 // stream gambar
 Route::get('/file/{path}', function ($path) {
     abort_unless(Storage::exists($path), 404);
+
     return Storage::response($path);
 })->where('path', '.*')->name('file.show');
