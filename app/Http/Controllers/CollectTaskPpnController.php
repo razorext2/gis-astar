@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CollectTaskPpn;
 use App\Models\Collector;
+use App\Models\CollectTaskPpn;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Number;
 use Yajra\DataTables\Facades\DataTables;
-use Carbon\Carbon;
 
 class CollectTaskPpnController extends Controller
 {
-    function __construct()
+    public function __construct()
     {
         $this->middleware('permission:collect-task-ppn-list', ['only' => ['index', 'onProgress', 'pending', 'completed', 'show']]);
         $this->middleware('permission:collect-task-ppn-create', ['only' => 'create']);
@@ -86,8 +86,8 @@ class CollectTaskPpnController extends Controller
                             [
                                 'title' => 'Sisa',
                                 'data' => Number::currency($data->remaining_bill ?? 0, 'IDR', 'id'),
-                            ]
-                        ]
+                            ],
+                        ],
                     ]);
                 })
                 ->addColumn('actions', function ($data) {
@@ -95,7 +95,7 @@ class CollectTaskPpnController extends Controller
                         [
                             'id' => 'show-btn',
                             'action' => route('collect-task-ppn.show', $data->id),
-                            'label' => 'Detail'
+                            'label' => 'Detail',
                         ],
                     ];
 
@@ -103,13 +103,13 @@ class CollectTaskPpnController extends Controller
                         $actions[] = [
                             'id' => 'assign-btn',
                             'action' => 'javascript:void(0)',
-                            'label' => 'Assign to'
+                            'label' => 'Assign to',
                         ];
 
                         $actions[] = [
                             'id' => 'reschedule-btn',
                             'action' => 'javascript:void(0)',
-                            'label' => 'Ubah jadwal'
+                            'label' => 'Ubah jadwal',
                         ];
 
                         if (auth()->user()->can('collect-task-ppn-delete')) {
@@ -123,37 +123,37 @@ class CollectTaskPpnController extends Controller
 
                     return view('components.dashboard.action-buttons', [
                         'id' => $data->id,
-                        'datas' => $actions
+                        'datas' => $actions,
                     ]);
                 })
                 ->editColumn('assign_date', function ($data) {
                     return view('components.dashboard.date-w-name', [
                         'date' => Carbon::parse($data->assign_date)->locale('id')->isoFormat('DD MMM YYYY'),
-                        'name' => $data->assign_to ? 'Oleh: ' . $data->userRelasi->name : 'Belum ditentukan',
+                        'name' => $data->assign_to ? 'Oleh: '.$data->userRelasi->name : 'Belum ditentukan',
                     ]);
                 })
                 ->editColumn('customer_telp', function ($data) {
                     return view('components.dashboard.custom-tel-and-fax', [
-                        'tel' => 'Tel: ' . $data->customer_telp,
-                        'fax' => 'Fax: ' . $data->customer_fax
+                        'tel' => 'Tel: '.$data->customer_telp,
+                        'fax' => 'Fax: '.$data->customer_fax,
                     ]);
                 })
                 ->filter(function ($query) use ($request) {
-                    if ($request->filled("customer_name")) {
-                        $query->where('customer_name', "LIKE", "%{$request->customer_name}%")
-                            ->orWhere('customer_recipient', "LIKE", "%{$request->customer_name}%");
+                    if ($request->filled('customer_name')) {
+                        $query->where('customer_name', 'LIKE', "%{$request->customer_name}%")
+                            ->orWhere('customer_recipient', 'LIKE', "%{$request->customer_name}%");
                     }
 
-                    if ($request->filled("no_sr")) {
-                        $query->where('no_sr', "LIKE", "%{$request->no_sr}%")
-                            ->orWhere('tax_invoice', "LIKE", "%{$request->no_sr}%");
+                    if ($request->filled('no_sr')) {
+                        $query->where('no_sr', 'LIKE', "%{$request->no_sr}%")
+                            ->orWhere('tax_invoice', 'LIKE', "%{$request->no_sr}%");
                     }
 
-                    if ($request->filled("sr_type")) {
-                        $query->where('sr_type', "LIKE", "%{$request->sr_type}%");
+                    if ($request->filled('sr_type')) {
+                        $query->where('sr_type', 'LIKE', "%{$request->sr_type}%");
                     }
 
-                    if ($request->filled("startDate") && $request->filled("endDate")) {
+                    if ($request->filled('startDate') && $request->filled('endDate')) {
                         $query->whereBetween('created_at', [$request->startDate, $request->endDate]);
                     }
                 })

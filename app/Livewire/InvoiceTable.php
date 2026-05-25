@@ -1,5 +1,10 @@
 <?php
 
+/** Goal: Provide a reactive data table for Invoices with live search, filters, actions, and SPA navigation.
+ * Caller: resources/views/dashboard/invoice/index*.blade.php
+ * Deps: App\Models\Invoice, PowerComponents\LivewirePowerGrid\PowerGridComponent
+ */
+
 namespace App\Livewire;
 
 use App\Models\Invoice;
@@ -257,7 +262,8 @@ final class InvoiceTable extends PowerGridComponent
                 ->slot('Detail')
                 ->id($row->id)
                 ->class('dark:bg-green-800 text-sm dark:hover:bg-green-900 dark:text-white dark:border-zinc-800 rounded-lg bg-green-400 px-2 py-1.5 font-semibold text-white border border-zinc-200 hover:bg-green-700')
-                ->route($checkRoute, ['invoice' => $row->id]),
+                ->route($checkRoute, ['invoice' => $row->id])
+                ->attributes(['wire:navigate.hover' => true]),
         ];
 
         return $button;

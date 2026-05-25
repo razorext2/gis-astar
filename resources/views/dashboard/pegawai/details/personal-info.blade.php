@@ -1,9 +1,9 @@
 {{-- Goal: Display employee personal info and attendance/leave calendar, Livewire: components.pegawai.attendance-calendar-popover, Alpine: - --}}
 @extends('dashboard.pegawai.detail')
 @section('menus')
-    <div class="grid grid-cols-1 gap-2 lg:grid-cols-3 lg:gap-4">
+    <div class="grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap-4">
         <!-- Left Column: Personal Info -->
-        <div class="space-y-2 lg:col-span-1 lg:space-y-4">
+        <div class="space-y-2 lg:space-y-4">
             <div
                 class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-lg backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
 
@@ -74,7 +74,7 @@
         </div>
 
         <!-- Right Column: Calendar & Stats -->
-        <div class="space-y-2 lg:col-span-2 lg:space-y-4">
+        <div class="space-y-2 lg:space-y-4">
             <div
                 class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-lg backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
 
@@ -120,7 +120,8 @@
                                 });
                                 $hasLeave = $leaveRequests->contains(function ($leave) use ($date) {
                                     $current = \Carbon\Carbon::parse($date);
-                                    return $current->gte($leave->start_date->startOfDay()) && $current->lte($leave->end_date->endOfDay());
+                                    return $current->gte($leave->start_date->startOfDay()) &&
+                                        $current->lte($leave->end_date->endOfDay());
                                 });
                             @endphp
                             <div class="aspect-square p-0.5 sm:p-1">

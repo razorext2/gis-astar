@@ -2,21 +2,20 @@
 @section('content')
     <div class="flex h-auto items-center justify-center">
         <div
-            class="grid w-full gap-2 rounded-xl border border-zinc-200 bg-white/60 p-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none md:gap-4 md:p-6">
+            class="grid w-full gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none md:gap-4 md:p-6">
 
-            <div id="notificationHeader">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Semua Notifikasi</h2>
-                    <form id="mark-all-as-read" action="{{ route('notifications.mark-all-as-read') }}">@csrf</form>
+            <div id="notificationHeader"
+                class="flex items-center justify-between border-b border-zinc-200 p-2 pb-4 dark:border-zinc-800 lg:pb-6">
+                <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Semua Notifikasi</h2>
+                <form id="mark-all-as-read" action="{{ route('notifications.mark-all-as-read') }}">@csrf</form>
 
-                    <div class="max-w-xs">
-                        <x-button.success id="add-button" form="mark-all-as-read" type="submit">
-                            <x-slot name="icon">
-                                <x-icons.checklist-stepper class="h-6 w-6" />
-                            </x-slot>
-                            {{ __('Mark All as Read') }}
-                        </x-button.success>
-                    </div>
+                <div class="max-w-xs">
+                    <x-button.success id="add-button" form="mark-all-as-read" type="submit">
+                        <x-slot name="icon">
+                            <x-icons.checklist-stepper class="h-6 w-6" />
+                        </x-slot>
+                        {{ __('Mark All as Read') }}
+                    </x-button.success>
                 </div>
             </div>
 

@@ -1,6 +1,6 @@
 {{-- Goal: Main dashboard layout container, Livewire: None, Alpine: Yes --}}
 <!DOCTYPE html>
-<html class="{{ isset($_COOKIE['color-theme']) && $_COOKIE['color-theme'] === 'dark' ? 'dark' : '' }} scroll-smooth"
+<html class="{{ isset($_COOKIE['color-theme']) && $_COOKIE['color-theme'] === 'dark' ? 'dark' : '' }}"
     lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
@@ -8,8 +8,8 @@
 </head>
 
 <body id="container" class="relative bg-zinc-50 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100"
-    x-data="{ openSidebar: true, menuSearch: '', dynamicBg: localStorage.getItem('dynamicBg') === null ? true : localStorage.getItem('dynamicBg') === 'true' }" x-init="$watch('dynamicBg', value => localStorage.setItem('dynamicBg', value))" :class="{ 'no-blur': !dynamicBg }"
-    x-on:mousemove="if (!dynamicBg) return; $el.style.setProperty('--mouse-x', $event.clientX + 'px'); $el.style.setProperty('--mouse-y', $event.clientY + 'px')">
+    x-data="{ openSidebar: true, menuSearch: '', dynamicBg: localStorage.getItem('dynamicBg') === null ? false : localStorage.getItem('dynamicBg') === 'true' }" x-init="$watch('dynamicBg', value => localStorage.setItem('dynamicBg', value)); $watch('openSidebar', value => window.toggleLenis && window.toggleLenis(!value)); window.toggleLenis && window.toggleLenis(!openSidebar);" :class="{ 'no-blur': !dynamicBg }">
+
     <div x-show="dynamicBg" x-transition.opacity.duration.500ms>
         <x-utils.dynamic-background />
     </div>
@@ -61,7 +61,7 @@
 
     {{-- preload --}}
     @persist('preloader')
-        <x-utils.preloader />
+        <x-utils.preloader x-show="dynamicBg" />
     @endpersist
 
     <!-- js -->

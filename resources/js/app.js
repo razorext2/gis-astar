@@ -8,15 +8,53 @@ import { initEventListener } from "./utils/eventListener.js";
 import { initWebSocketListener } from "./utils/webSocketListener";
 import "./../../vendor/power-components/livewire-powergrid/dist/powergrid";
 import { zoomImage } from "./utils/zoomImage";
+import "./components/dynamic-background.js";
+import Lenis from "lenis";
+import "lenis/dist/lenis.css";
 
 window.flatpickr = flatpickr;
 window.$ = window.jQuery = $;
 window.Swal = Swal;
 
+// Initialize Lenis dynamically based on sidebar state
+let lenisInstance = null;
+
+function initLenis() {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) return;
+
+    if (!lenisInstance) {
+        lenisInstance = new Lenis({
+            lerp: 0.08,
+            orientation: "vertical",
+            gestureOrientation: "vertical",
+            smoothWheel: true,
+            autoRaf: true,
+        });
+        window.lenis = lenisInstance;
+    }
+}
+
+function destroyLenis() {
+    if (lenisInstance) {
+        lenisInstance.destroy();
+        lenisInstance = null;
+        window.lenis = null;
+    }
+}
+
+window.toggleLenis = function (shouldEnable) {
+    if (shouldEnable) {
+        initLenis();
+    } else {
+        destroyLenis();
+    }
+};
+
 const triggerPreloaderExit = () => {
-    const preloader = document.getElementById('preloader');
-    if (preloader && !preloader.classList.contains('preloader-exit')) {
-        preloader.classList.add('preloader-exit');
+    const preloader = document.getElementById("preloader");
+    if (preloader && !preloader.classList.contains("preloader-exit")) {
+        preloader.classList.add("preloader-exit");
         // Do NOT remove preloader from the DOM, allowing @persist('preloader')
         // to maintain its invisible, exited state across wire:navigate SPA routes.
         /*
@@ -27,9 +65,9 @@ const triggerPreloaderExit = () => {
     }
 };
 
-window.addEventListener('load', () => {
-    // Only trigger exit when the page finishes loading, with a short visual delay
-    setTimeout(triggerPreloaderExit, 500);
+window.addEventListener("load", () => {
+    // Only trigger exit when the page finishes loading, immediately
+    triggerPreloaderExit();
 });
 
 // Hard fallback (10s) just in case a network resource hangs the window.onload
@@ -45,10 +83,23 @@ Livewire.hook("commit", ({ component, commit, respond, succeed, fail }) => {
 
 document.addEventListener("livewire:navigated", function () {
     // For SPA navigation
-    setTimeout(triggerPreloaderExit, 500);
+    triggerPreloaderExit();
     initFlowbite();
     initEventListener();
     initWebSocketListener();
+
+    // Optimize Lenis scroll positioning and recalculation
+    if (window.lenis) {
+        window.lenis.resize();
+        if (window.location.hash) {
+            const targetEl = document.querySelector(window.location.hash);
+            if (targetEl) {
+                window.lenis.scrollTo(targetEl, { immediate: true });
+            }
+        } else {
+            window.lenis.scrollTo(0, { immediate: true });
+        }
+    }
 
     // handle announcement
     if (window.location.pathname === "/dashboard/announcement") {

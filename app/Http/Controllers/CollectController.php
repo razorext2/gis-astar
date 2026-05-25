@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Support\IdObfuscator;
 use App\Models\Collector;
 use App\Models\User;
+use App\Support\IdObfuscator;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Number;
@@ -149,7 +149,7 @@ class CollectController extends Controller
                 })
                 ->addColumn('actions', function ($data) {
                     $actions = [
-                        ['id' => 'show-btn', 'action' => route('collect.show', IdObfuscator::encode($data->id)), 'label' => 'Detail'],
+                        ['id' => 'show-btn', 'action' => route('collect.show', IdObfuscator::encode($data->id)), 'label' => 'Detail', 'navigate' => true],
                     ];
 
                     if (auth()->user()->can('collect-edit') && $data->status != 1) {

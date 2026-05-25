@@ -47,7 +47,7 @@
     align-items: center;
     justify-content: center;
     pointer-events: auto;
-    transition: opacity 0.6s ease-out 0.8s;
+    transition: opacity 0.6s ease-out;
 }
 
 #preloader.preloader-exit {
