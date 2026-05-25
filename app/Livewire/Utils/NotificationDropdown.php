@@ -2,27 +2,34 @@
 
 namespace App\Livewire\Utils;
 
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class NotificationDropdown extends Component
 {
-    public $notifications = [];
     public $unreadCount = 0;
 
     public function mount()
     {
-        $this->loadNotifications();
+        $this->loadUnreadCount();
     }
 
     #[On('notification-received')]
-    public function loadNotifications()
+    public function loadUnreadCount()
     {
         $user = auth()->user();
         if ($user) {
             $this->unreadCount = $user->unreadNotifications->count();
-            $this->notifications = $user->unreadNotifications()->take(10)->get();
         }
+    }
+
+    #[Computed]
+    public function notifications()
+    {
+        $user = auth()->user();
+
+        return $user ? $user->unreadNotifications()->take(10)->get() : collect();
     }
 
     public function markAsRead($id)
@@ -30,7 +37,7 @@ class NotificationDropdown extends Component
         $notification = auth()->user()->unreadNotifications()->where('id', $id)->first();
         if ($notification) {
             $notification->markAsRead();
-            $this->loadNotifications();
+            $this->loadUnreadCount();
             $this->dispatch('notification-updated');
         }
     }
