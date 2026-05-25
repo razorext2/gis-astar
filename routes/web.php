@@ -55,6 +55,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('point/{filename}', function (string $filename) {
             return Storage::download("export/point/$filename");
         })->name('export.point.download');
+
+        // laporan report (generic)
+        Route::get('report/{filename}', function (string $filename) {
+            return Storage::download("export/report/$filename");
+        })->name('export.report.download');
     });
 
     Route::prefix('proxy')->as('')->group(function () {
@@ -346,6 +351,9 @@ Route::middleware(['auth'])->group(function () {
 
         // route pengajuan cuti
         require __DIR__.'/features/leave-request.php';
+
+        // route laporan export
+        require __DIR__.'/features/report.php';
     });
 });
 
@@ -404,5 +412,6 @@ Route::get('/offline', function () {
 // stream gambar
 Route::get('/file/{path}', function ($path) {
     abort_unless(Storage::exists($path), 404);
+
     return Storage::response($path);
 })->where('path', '.*')->name('file.show');
