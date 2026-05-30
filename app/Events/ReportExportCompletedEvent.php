@@ -36,7 +36,7 @@ class ReportExportCompletedEvent implements ShouldBroadcast
 
     public function broadcastAs(): string
     {
-        return 'reportExportCompleted';
+        return 'exportCompleted';
     }
 
     /**
