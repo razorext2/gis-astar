@@ -24,20 +24,37 @@ class InvoiceReportExport implements FromView, ShouldAutoSize, WithEvents
         protected string $toDate,
         protected ?string $filterBy = null,
         protected ?string $filterValue = null,
+        protected ?array $additionalFilters = null,
     ) {}
 
     public function view(): View
     {
+        $dateColumn = in_array($this->additionalFilters['date_type'] ?? null, ['tgl_btt', 'tgl_invoice'])
+            ? $this->additionalFilters['date_type']
+            : 'created_at';
+
         $query = Invoice::with(['addedBy:id,name', 'latestUpdateBy:id,name'])
-            ->where('created_at', '>=', Carbon::parse($this->fromDate)->startOfDay())
-            ->where('created_at', '<=', Carbon::parse($this->toDate)->endOfDay());
+            ->where($dateColumn, '>=', Carbon::parse($this->fromDate)->startOfDay())
+            ->where($dateColumn, '<=', Carbon::parse($this->toDate)->endOfDay());
 
         if ($this->filterBy && $this->filterValue) {
             $query->where($this->filterBy, $this->filterValue);
         }
 
+        if ($this->additionalFilters) {
+            if (!empty($this->additionalFilters['tipe_tagihan'])) {
+                $query->where('tipe_tagihan', $this->additionalFilters['tipe_tagihan']);
+            }
+            if (!empty($this->additionalFilters['tipe_invoice'])) {
+                $query->where('tipe_invoice', $this->additionalFilters['tipe_invoice']);
+            }
+            if (isset($this->additionalFilters['status_pengiriman']) && $this->additionalFilters['status_pengiriman'] !== null) {
+                $query->where('status_pengiriman', $this->additionalFilters['status_pengiriman']);
+            }
+        }
+
         return view('report.export.invoice', [
-            'data' => $query->orderBy('created_at', 'asc')->get(),
+            'data' => $query->orderBy($dateColumn, 'asc')->get(),
             'fromDate' => $this->fromDate,
             'toDate' => $this->toDate,
         ]);
