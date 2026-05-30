@@ -507,3 +507,84 @@ it('ExportSpk dispatches export job with additional filters', function () {
             && ($job->additionalFilters['status'] ?? null) === '0';
     });
 });
+
+it('ExportDriver has extended filter options', function () {
+    $this->actingAs($this->adminUser);
+
+    Livewire::test(ExportDriver::class)
+        ->assertSee('Di-assign Oleh')
+        ->assertSee('Tipe Tagihan')
+        ->assertSee('Tipe Kunjungan')
+        ->assertSee('Driver')
+        ->assertSee('Status Validasi')
+        ->assertSee('Status Pengantaran');
+});
+
+it('can successfully run ExportReportJob for Driver with additional filters', function () {
+    \Illuminate\Support\Facades\Notification::fake();
+    \Illuminate\Support\Facades\Event::fake();
+    \Illuminate\Support\Facades\Storage::fake();
+
+    $this->adminUser->update(['kode_pegawai' => '999']);
+
+    $driver = \App\Models\Driver::create([
+        'kode_pegawai' => '999',
+        'title' => 'Test Driver Report',
+        'lokasi' => 'Test Location',
+        'keterangan' => 'Test Description',
+        'longitude' => '100.0',
+        'latitude' => '10.0',
+        'status' => 1,
+        'no_sr' => 'SR-123',
+        'tipe_tagihan' => 'idcppn',
+        'tipe_kunjungan' => 'ATRBRG',
+        'status_pengantaran' => 2,
+    ]);
+
+    $job = new ExportReportJob(
+        userId: $this->adminUser->id,
+        reportType: 'driver',
+        fromDate: now()->startOfMonth()->toDateString(),
+        toDate: now()->endOfMonth()->toDateString(),
+        filterBy: null,
+        filterValue: null,
+        exportFormat: 'xlsx',
+        additionalFilters: [
+            'tipe_tagihan' => 'idcppn',
+            'tipe_kunjungan' => 'ATRBRG',
+            'kode_pegawai' => '999',
+            'status' => '1',
+            'status_pengantaran' => '2',
+        ]
+    );
+
+    $job->handle();
+
+    \Illuminate\Support\Facades\Notification::assertSentTo(
+        $this->adminUser,
+        \App\Notifications\ReportExportCompleted::class
+    );
+});
+
+it('ExportDriver dispatches export job with additional filters', function () {
+    Queue::fake();
+    $this->actingAs($this->adminUser);
+
+    Livewire::test(ExportDriver::class)
+        ->set('fromDate', '2026-01-01')
+        ->set('toDate', '2026-01-31')
+        ->set('tipeTagihan', 'idcppn')
+        ->set('tipeKunjungan', 'ATRBRG')
+        ->set('kodePegawai', '999')
+        ->set('status', '1')
+        ->set('statusPengantaran', '2')
+        ->call('export');
+
+    Queue::assertPushed(ExportReportJob::class, function (ExportReportJob $job) {
+        return ($job->additionalFilters['tipe_tagihan'] ?? null) === 'idcppn'
+            && ($job->additionalFilters['tipe_kunjungan'] ?? null) === 'ATRBRG'
+            && ($job->additionalFilters['kode_pegawai'] ?? null) === '999'
+            && ($job->additionalFilters['status'] ?? null) === '1'
+            && ($job->additionalFilters['status_pengantaran'] ?? null) === '2';
+    });
+});
