@@ -24,6 +24,7 @@ class SalesReportExport implements FromView, ShouldAutoSize, WithEvents
         protected string $toDate,
         protected ?string $filterBy = null,
         protected ?string $filterValue = null,
+        protected ?array $additionalFilters = null,
     ) {}
 
     public function view(): View
@@ -32,8 +33,20 @@ class SalesReportExport implements FromView, ShouldAutoSize, WithEvents
             ->where('created_at', '>=', Carbon::parse($this->fromDate)->startOfDay())
             ->where('created_at', '<=', Carbon::parse($this->toDate)->endOfDay());
 
-        if ($this->filterBy && $this->filterValue) {
+        if ($this->filterBy && !is_null($this->filterValue) && $this->filterValue !== '') {
             $query->where($this->filterBy, $this->filterValue);
+        }
+
+        if ($this->additionalFilters) {
+            if (isset($this->additionalFilters['kode_pegawai']) && $this->additionalFilters['kode_pegawai'] !== null && $this->additionalFilters['kode_pegawai'] !== '') {
+                $query->where('kode_pegawai', $this->additionalFilters['kode_pegawai']);
+            }
+            if (isset($this->additionalFilters['status']) && $this->additionalFilters['status'] !== null && $this->additionalFilters['status'] !== '') {
+                $query->where('status', $this->additionalFilters['status']);
+            }
+            if (isset($this->additionalFilters['customer_make_order']) && $this->additionalFilters['customer_make_order'] !== null && $this->additionalFilters['customer_make_order'] !== '') {
+                $query->where('customer_make_order', $this->additionalFilters['customer_make_order']);
+            }
         }
 
         return view('report.export.sales', [

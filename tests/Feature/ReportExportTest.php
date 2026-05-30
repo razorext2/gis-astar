@@ -588,3 +588,75 @@ it('ExportDriver dispatches export job with additional filters', function () {
             && ($job->additionalFilters['status_pengantaran'] ?? null) === '2';
     });
 });
+
+it('ExportSales has extended filter options', function () {
+    $this->actingAs($this->adminUser);
+
+    Livewire::test(ExportSales::class)
+        ->assertSee('Divalidasi Oleh')
+        ->assertSee('Sales')
+        ->assertSee('Status Validasi')
+        ->assertSee('Customer Melakukan Order?');
+});
+
+it('can successfully run ExportReportJob for Sales with additional filters', function () {
+    \Illuminate\Support\Facades\Notification::fake();
+    \Illuminate\Support\Facades\Event::fake();
+    \Illuminate\Support\Facades\Storage::fake();
+
+    $this->adminUser->update(['kode_pegawai' => '999']);
+
+    $sales = \App\Models\Sales::create([
+        'kode_pegawai' => '999',
+        'title' => 'Test Sales Report',
+        'customer_name' => 'John Doe',
+        'customer_telp' => '08123456789',
+        'lokasi' => 'Test Location',
+        'keterangan' => 'Test Description',
+        'longitude' => '100.0',
+        'latitude' => '10.0',
+        'status' => 1,
+        'customer_make_order' => 1,
+    ]);
+
+    $job = new ExportReportJob(
+        userId: $this->adminUser->id,
+        reportType: 'sales',
+        fromDate: now()->startOfMonth()->toDateString(),
+        toDate: now()->endOfMonth()->toDateString(),
+        filterBy: null,
+        filterValue: null,
+        exportFormat: 'xlsx',
+        additionalFilters: [
+            'kode_pegawai' => '999',
+            'status' => '1',
+            'customer_make_order' => '1',
+        ]
+    );
+
+    $job->handle();
+
+    \Illuminate\Support\Facades\Notification::assertSentTo(
+        $this->adminUser,
+        \App\Notifications\ReportExportCompleted::class
+    );
+});
+
+it('ExportSales dispatches export job with additional filters', function () {
+    Queue::fake();
+    $this->actingAs($this->adminUser);
+
+    Livewire::test(ExportSales::class)
+        ->set('fromDate', '2026-01-01')
+        ->set('toDate', '2026-01-31')
+        ->set('kodePegawai', '999')
+        ->set('status', '1')
+        ->set('customerMakeOrder', '1')
+        ->call('export');
+
+    Queue::assertPushed(ExportReportJob::class, function (ExportReportJob $job) {
+        return ($job->additionalFilters['kode_pegawai'] ?? null) === '999'
+            && ($job->additionalFilters['status'] ?? null) === '1'
+            && ($job->additionalFilters['customer_make_order'] ?? null) === '1';
+    });
+});
