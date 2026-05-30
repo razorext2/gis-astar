@@ -37,29 +37,44 @@ Route::middleware(['auth'])->group(function () {
         Route::get('collector/', [\App\Http\Controllers\Report\CollectorReportController::class, 'export'])->name('export.collector');
 
         Route::get('collector/{filename}', function (string $filename) {
-            return Storage::download("export/$filename");
-        })->name('export.collector.download');
+            $path = "export/{$filename}";
+            abort_unless(Storage::exists($path), 404);
+
+            return Storage::download($path);
+        })->where('filename', '[a-zA-Z0-9\-_.]+')->name('export.collector.download');
         // end laporan kolektor
 
         // laporan sales
         Route::get('sales/{filename}', function (string $filename) {
-            return Storage::download("export/$filename");
-        })->name('export.sales.download');
+            $path = "export/{$filename}";
+            abort_unless(Storage::exists($path), 404);
+
+            return Storage::download($path);
+        })->where('filename', '[a-zA-Z0-9\-_.]+')->name('export.sales.download');
 
         // laporan invoice
         Route::get('invoice/{filename}', function (string $filename) {
-            return Storage::download("export/invoice/$filename");
-        })->name('export.invoice.download');
+            $path = "export/invoice/{$filename}";
+            abort_unless(Storage::exists($path), 404);
+
+            return Storage::download($path);
+        })->where('filename', '[a-zA-Z0-9\-_.]+')->name('export.invoice.download');
 
         // laporan poin teknisi
         Route::get('point/{filename}', function (string $filename) {
-            return Storage::download("export/point/$filename");
-        })->name('export.point.download');
+            $path = "export/point/{$filename}";
+            abort_unless(Storage::exists($path), 404);
+
+            return Storage::download($path);
+        })->where('filename', '[a-zA-Z0-9\-_.]+')->name('export.point.download');
 
         // laporan report (generic)
         Route::get('report/{filename}', function (string $filename) {
-            return Storage::download("export/report/$filename");
-        })->name('export.report.download');
+            $path = "export/report/{$filename}";
+            abort_unless(Storage::exists($path), 404);
+
+            return Storage::download($path);
+        })->where('filename', '[a-zA-Z0-9\-_.]+')->name('export.report.download');
     });
 
     Route::prefix('proxy')->as('')->group(function () {

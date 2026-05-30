@@ -83,6 +83,7 @@ class ExportAbsensi extends Component
     public function export(): void
     {
         $this->validate();
+        $this->sanitizeFilterBy();
 
         $verified = null;
         if ($this->verifiedStatus === '1') {
@@ -124,12 +125,18 @@ class ExportAbsensi extends Component
         );
     }
 
+    #[Computed]
+    public function roles()
+    {
+        return Role::select(['id', 'name'])->orderBy('name')->get();
+    }
+
     public function render()
     {
         return view('livewire.handler.report.export-absensi', [
             'filterOptions' => $this->getFilterOptions(),
             'users' => $this->filterUsers(),
-            'roles' => Role::select(['id', 'name'])->orderBy('name')->get(),
+            'roles' => $this->roles(),
         ]);
     }
 }

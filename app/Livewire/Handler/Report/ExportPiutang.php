@@ -40,7 +40,7 @@ class ExportPiutang extends Component
         if ($this->filterBy === 'assign_to') {
             return User::select(['id', 'kode_pegawai', 'name'])
                 ->whereHas('roles', function ($q) {
-                    $q->whereIn('name', ['Collector', 'collector', 'kasir-banj', 'Kasir']);
+                    $q->whereIn('name', ['Collector', 'collector', 'kasir-bank', 'Kasir']);
                 })
                 ->orderBy('name', 'asc')
                 ->get();
@@ -65,6 +65,7 @@ class ExportPiutang extends Component
     public function export(): void
     {
         $this->validate();
+        $this->sanitizeFilterBy();
 
         $this->additionalFilters = [
             'date_type' => $this->dateType,

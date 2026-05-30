@@ -44,6 +44,7 @@ class ExportKolektor extends Component
     public function export(): void
     {
         $this->validate();
+        $this->sanitizeFilterBy();
 
         $this->additionalFilters = [
             'bill_type' => $this->billType,

@@ -45,7 +45,7 @@ class ExportReportJob implements ShouldQueue
     {
         try {
             $exportClass = $this->resolveExportClass();
-            $rand = rand(1, 999999);
+            $rand = \Illuminate\Support\Str::random(16);
             $typeLabel = str_replace(' ', '-', strtolower($this->getReportLabel()));
 
             if ($this->exportFormat === 'pdf') {

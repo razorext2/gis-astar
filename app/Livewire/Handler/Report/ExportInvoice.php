@@ -32,6 +32,7 @@ class ExportInvoice extends Component
     public function export(): void
     {
         $this->validate();
+        $this->sanitizeFilterBy();
 
         $this->additionalFilters = [
             'date_type' => $this->dateType,

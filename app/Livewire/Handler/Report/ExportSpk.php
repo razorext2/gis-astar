@@ -33,6 +33,7 @@ class ExportSpk extends Component
     public function export(): void
     {
         $this->validate();
+        $this->sanitizeFilterBy();
 
         $this->additionalFilters = [
             'tipe_tagihan' => $this->tipeTagihan !== null && $this->tipeTagihan !== '' ? $this->tipeTagihan : null,

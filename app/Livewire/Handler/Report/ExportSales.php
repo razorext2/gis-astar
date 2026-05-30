@@ -110,6 +110,7 @@ class ExportSales extends Component
     public function export(): void
     {
         $this->validate();
+        $this->sanitizeFilterBy();
 
         $this->additionalFilters = [
             'kode_pegawai' => !empty($this->selectedSales) ? array_column($this->selectedSales, 'kode_pegawai') : null,

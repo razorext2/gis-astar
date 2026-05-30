@@ -24,6 +24,7 @@ trait HasReportExport
 
     public ?string $filterValue = null;
 
+    #[Validate('required|in:xlsx,pdf')]
     public ?string $exportFormat = 'xlsx';
 
     public function mountHasReportExport(): void
@@ -62,6 +63,19 @@ trait HasReportExport
     }
 
     /**
+     * Memastikan filterBy hanya berisi kolom yang diizinkan oleh getFilterOptions().
+     */
+    protected function sanitizeFilterBy(): void
+    {
+        $allowed = array_keys($this->getFilterOptions());
+
+        if ($this->filterBy && !in_array($this->filterBy, $allowed, true)) {
+            $this->filterBy = null;
+            $this->filterValue = null;
+        }
+    }
+
+    /**
      * Mengembalikan tipe laporan (e.g. 'absensi', 'cuti').
      */
     abstract protected function getReportType(): string;
@@ -87,6 +101,7 @@ trait HasReportExport
     public function export(): void
     {
         $this->validate();
+        $this->sanitizeFilterBy();
 
         ExportReportJob::dispatch(
             Auth::id(),
