@@ -11,6 +11,11 @@ class ExportKolektor extends Component
 {
     use HasReportExport;
 
+    public ?string $billType = null;
+    public ?int $havePaid = null;
+    public ?int $status = null;
+    public array $additionalFilters = [];
+
     protected function getReportType(): string
     {
         return 'kolektor';
@@ -22,6 +27,34 @@ class ExportKolektor extends Component
             'kode_pegawai' => ['label' => 'Kolektor (Kode Pegawai)', 'column' => 'kode_pegawai'],
             'filled_by' => ['label' => 'Diisi Oleh', 'column' => 'filled_by'],
         ];
+    }
+
+    public function export(): void
+    {
+        $this->validate();
+
+        $this->additionalFilters = [
+            'bill_type' => $this->billType,
+            'have_paid' => $this->havePaid !== null && $this->havePaid !== '' ? (int) $this->havePaid : null,
+            'status' => $this->status !== null && $this->status !== '' ? (int) $this->status : null,
+        ];
+
+        \App\Jobs\ExportReportJob::dispatch(
+            \Illuminate\Support\Facades\Auth::id(),
+            $this->getReportType(),
+            $this->fromDate,
+            $this->toDate,
+            $this->filterBy,
+            $this->filterValue,
+            $this->exportFormat,
+            $this->additionalFilters,
+        )->delay(now()->addSeconds(2));
+
+        $this->dispatch('swal',
+            title: 'Berhasil',
+            text: 'Permintaan export sedang diproses. Silahkan cek menu notifikasi nanti.',
+            icon: 'success'
+        );
     }
 
     public function render()

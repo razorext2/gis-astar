@@ -24,6 +24,7 @@ class KolektorExport implements FromView, ShouldAutoSize, WithEvents
         protected string $toDate,
         protected ?string $filterBy = null,
         protected ?string $filterValue = null,
+        protected ?array $additionalFilters = null,
     ) {}
 
     public function view(): View
@@ -34,6 +35,18 @@ class KolektorExport implements FromView, ShouldAutoSize, WithEvents
 
         if ($this->filterBy && $this->filterValue) {
             $query->where($this->filterBy, $this->filterValue);
+        }
+
+        if ($this->additionalFilters) {
+            if (!empty($this->additionalFilters['bill_type'])) {
+                $query->where('bill_type', $this->additionalFilters['bill_type']);
+            }
+            if (isset($this->additionalFilters['have_paid']) && $this->additionalFilters['have_paid'] !== null && $this->additionalFilters['have_paid'] !== '') {
+                $query->where('have_paid', $this->additionalFilters['have_paid']);
+            }
+            if (isset($this->additionalFilters['status']) && $this->additionalFilters['status'] !== null && $this->additionalFilters['status'] !== '') {
+                $query->where('status', $this->additionalFilters['status']);
+            }
         }
 
         return view('report.export.kolektor', [

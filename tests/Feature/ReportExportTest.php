@@ -389,3 +389,49 @@ it('can successfully run ExportReportJob for piutang with date_type assign_date,
         \App\Notifications\ReportExportCompleted::class
     );
 });
+
+it('can successfully run ExportReportJob for kolektor with additional filters', function () {
+    \Illuminate\Support\Facades\Notification::fake();
+    \Illuminate\Support\Facades\Event::fake();
+    \Illuminate\Support\Facades\Storage::fake();
+
+    $user = User::factory()->create(['name' => 'Collector User', 'kode_pegawai' => '777']);
+
+    $collector = \App\Models\Collector::create([
+        'no_sr' => 'SR-100',
+        'bill_type' => 'idcppn',
+        'kode_pegawai' => '777',
+        'title' => 'Test Collector Report',
+        'location' => 'Test Location',
+        'longitude' => '0',
+        'latitude' => '0',
+        'status' => 1,
+        'have_paid' => 2,
+        'payment_type' => 1,
+        'payment_amount' => 1000000,
+        'filled_by' => $user->id,
+        'assign_date' => now()->toDateString(),
+    ]);
+
+    $job = new ExportReportJob(
+        userId: $this->adminUser->id,
+        reportType: 'kolektor',
+        fromDate: now()->startOfMonth()->toDateString(),
+        toDate: now()->endOfMonth()->toDateString(),
+        filterBy: 'kode_pegawai',
+        filterValue: '777',
+        exportFormat: 'xlsx',
+        additionalFilters: [
+            'bill_type' => 'idcppn',
+            'have_paid' => 2,
+            'status' => 1,
+        ]
+    );
+
+    $job->handle();
+
+    \Illuminate\Support\Facades\Notification::assertSentTo(
+        $this->adminUser,
+        \App\Notifications\ReportExportCompleted::class
+    );
+});
