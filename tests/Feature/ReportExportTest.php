@@ -346,6 +346,26 @@ it('ExportPiutang filters users dynamically by role depending on filterBy', func
         ->assertDontSee('Collector User');
 });
 
+it('ExportKolektor filters users dynamically by role depending on filterBy', function () {
+    $this->actingAs($this->adminUser);
+
+    \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'Collector', 'guard_name' => 'web']);
+
+    $collectorUser = User::factory()->create(['name' => 'Collector User']);
+    $collectorUser->assignRole('Collector');
+
+    $otherUser = User::factory()->create(['name' => 'Other User']);
+
+    Livewire::test(ExportKolektor::class)
+        ->set('filterBy', 'kode_pegawai')
+        ->assertSee('Collector User')
+        ->assertDontSee('Other User')
+        ->set('filterBy', 'filled_by')
+        ->assertSee('Collector User')
+        ->assertSee('Other User');
+});
+
+
 it('can successfully run ExportReportJob for piutang with date_type assign_date, sr_type and bill_status', function () {
     \Illuminate\Support\Facades\Notification::fake();
     \Illuminate\Support\Facades\Event::fake();
@@ -512,10 +532,10 @@ it('ExportDriver has extended filter options', function () {
     $this->actingAs($this->adminUser);
 
     Livewire::test(ExportDriver::class)
-        ->assertSee('Di-assign Oleh')
+        ->assertSee('Filter Di-assign Oleh (Multiselect)')
         ->assertSee('Tipe Tagihan')
         ->assertSee('Tipe Kunjungan')
-        ->assertSee('Driver')
+        ->assertSee('Filter Driver (Multiselect)')
         ->assertSee('Status Validasi')
         ->assertSee('Status Pengantaran');
 });
@@ -539,6 +559,7 @@ it('can successfully run ExportReportJob for Driver with additional filters', fu
         'tipe_tagihan' => 'idcppn',
         'tipe_kunjungan' => 'ATRBRG',
         'status_pengantaran' => 2,
+        'assign_by' => $this->adminUser->id,
     ]);
 
     $job = new ExportReportJob(
@@ -552,7 +573,8 @@ it('can successfully run ExportReportJob for Driver with additional filters', fu
         additionalFilters: [
             'tipe_tagihan' => 'idcppn',
             'tipe_kunjungan' => 'ATRBRG',
-            'kode_pegawai' => '999',
+            'kode_pegawai' => ['999'],
+            'assign_by' => [$this->adminUser->id],
             'status' => '1',
             'status_pengantaran' => '2',
         ]
@@ -566,6 +588,38 @@ it('can successfully run ExportReportJob for Driver with additional filters', fu
     );
 });
 
+it('ExportDriver supports Driver search, select, and remove', function () {
+    $this->actingAs($this->adminUser);
+
+    $driverUser = User::factory()->create(['name' => 'Driver Guy', 'kode_pegawai' => '125']);
+
+    Livewire::test(ExportDriver::class)
+        ->set('driverSearchQuery', 'Guy')
+        ->assertSee('Driver Guy')
+        ->call('selectDriver', '125', 'Driver Guy')
+        ->assertSet('selectedDrivers', [
+            ['kode_pegawai' => '125', 'name' => 'Driver Guy'],
+        ])
+        ->call('removeDriver', '125')
+        ->assertSet('selectedDrivers', []);
+});
+
+it('ExportDriver supports Assigner search, select, and remove', function () {
+    $this->actingAs($this->adminUser);
+
+    $assignerUser = User::factory()->create(['name' => 'Assigner Guy', 'kode_pegawai' => '126']);
+
+    Livewire::test(ExportDriver::class)
+        ->set('assignerSearchQuery', 'Assigner')
+        ->assertSee('Assigner Guy')
+        ->call('selectAssigner', $assignerUser->id, 'Assigner Guy')
+        ->assertSet('selectedAssigners', [
+            ['id' => $assignerUser->id, 'name' => 'Assigner Guy'],
+        ])
+        ->call('removeAssigner', $assignerUser->id)
+        ->assertSet('selectedAssigners', []);
+});
+
 it('ExportDriver dispatches export job with additional filters', function () {
     Queue::fake();
     $this->actingAs($this->adminUser);
@@ -575,7 +629,8 @@ it('ExportDriver dispatches export job with additional filters', function () {
         ->set('toDate', '2026-01-31')
         ->set('tipeTagihan', 'idcppn')
         ->set('tipeKunjungan', 'ATRBRG')
-        ->set('kodePegawai', '999')
+        ->call('selectDriver', '999', 'Test Driver')
+        ->call('selectAssigner', $this->adminUser->id, 'Admin User')
         ->set('status', '1')
         ->set('statusPengantaran', '2')
         ->call('export');
@@ -583,18 +638,20 @@ it('ExportDriver dispatches export job with additional filters', function () {
     Queue::assertPushed(ExportReportJob::class, function (ExportReportJob $job) {
         return ($job->additionalFilters['tipe_tagihan'] ?? null) === 'idcppn'
             && ($job->additionalFilters['tipe_kunjungan'] ?? null) === 'ATRBRG'
-            && ($job->additionalFilters['kode_pegawai'] ?? null) === '999'
+            && ($job->additionalFilters['kode_pegawai'] ?? null) === ['999']
+            && ($job->additionalFilters['assign_by'] ?? null) === [$this->adminUser->id]
             && ($job->additionalFilters['status'] ?? null) === '1'
             && ($job->additionalFilters['status_pengantaran'] ?? null) === '2';
     });
 });
 
+
 it('ExportSales has extended filter options', function () {
     $this->actingAs($this->adminUser);
 
     Livewire::test(ExportSales::class)
-        ->assertSee('Divalidasi Oleh')
-        ->assertSee('Sales')
+        ->assertSee('Filter Divalidasi Oleh (Multiselect)')
+        ->assertSee('Filter Sales (Multiselect)')
         ->assertSee('Status Validasi')
         ->assertSee('Customer Melakukan Order?');
 });
@@ -617,6 +674,7 @@ it('can successfully run ExportReportJob for Sales with additional filters', fun
         'latitude' => '10.0',
         'status' => 1,
         'customer_make_order' => 1,
+        'validate_by' => $this->adminUser->id,
     ]);
 
     $job = new ExportReportJob(
@@ -628,7 +686,8 @@ it('can successfully run ExportReportJob for Sales with additional filters', fun
         filterValue: null,
         exportFormat: 'xlsx',
         additionalFilters: [
-            'kode_pegawai' => '999',
+            'kode_pegawai' => ['999'],
+            'validate_by' => [$this->adminUser->id],
             'status' => '1',
             'customer_make_order' => '1',
         ]
@@ -642,6 +701,38 @@ it('can successfully run ExportReportJob for Sales with additional filters', fun
     );
 });
 
+it('ExportSales supports Sales search, select, and remove', function () {
+    $this->actingAs($this->adminUser);
+
+    $salesUser = User::factory()->create(['name' => 'Sales Guy', 'kode_pegawai' => '123']);
+
+    Livewire::test(ExportSales::class)
+        ->set('salesSearchQuery', 'Guy')
+        ->assertSee('Sales Guy')
+        ->call('selectSales', '123', 'Sales Guy')
+        ->assertSet('selectedSales', [
+            ['kode_pegawai' => '123', 'name' => 'Sales Guy'],
+        ])
+        ->call('removeSales', '123')
+        ->assertSet('selectedSales', []);
+});
+
+it('ExportSales supports Validator search, select, and remove', function () {
+    $this->actingAs($this->adminUser);
+
+    $validatorUser = User::factory()->create(['name' => 'Validator Guy', 'kode_pegawai' => '124']);
+
+    Livewire::test(ExportSales::class)
+        ->set('validatorSearchQuery', 'Validator')
+        ->assertSee('Validator Guy')
+        ->call('selectValidator', $validatorUser->id, 'Validator Guy')
+        ->assertSet('selectedValidators', [
+            ['id' => $validatorUser->id, 'name' => 'Validator Guy'],
+        ])
+        ->call('removeValidator', $validatorUser->id)
+        ->assertSet('selectedValidators', []);
+});
+
 it('ExportSales dispatches export job with additional filters', function () {
     Queue::fake();
     $this->actingAs($this->adminUser);
@@ -649,14 +740,17 @@ it('ExportSales dispatches export job with additional filters', function () {
     Livewire::test(ExportSales::class)
         ->set('fromDate', '2026-01-01')
         ->set('toDate', '2026-01-31')
-        ->set('kodePegawai', '999')
+        ->call('selectSales', '999', 'Test Sales')
+        ->call('selectValidator', $this->adminUser->id, 'Admin User')
         ->set('status', '1')
         ->set('customerMakeOrder', '1')
         ->call('export');
 
     Queue::assertPushed(ExportReportJob::class, function (ExportReportJob $job) {
-        return ($job->additionalFilters['kode_pegawai'] ?? null) === '999'
+        return ($job->additionalFilters['kode_pegawai'] ?? null) === ['999']
+            && ($job->additionalFilters['validate_by'] ?? null) === [$this->adminUser->id]
             && ($job->additionalFilters['status'] ?? null) === '1'
             && ($job->additionalFilters['customer_make_order'] ?? null) === '1';
     });
 });
+

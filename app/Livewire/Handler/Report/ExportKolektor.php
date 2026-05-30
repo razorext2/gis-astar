@@ -1,10 +1,11 @@
 <?php
 
-/** Goal: Livewire export handler untuk Laporan Kolektor, Caller: dashboard.report.kolektor, Deps: HasReportExport trait */
+/** Goal: Livewire export handler untuk Laporan Kolektor, Caller: dashboard.report.kolektor, Deps: HasReportExport trait, User model */
 
 namespace App\Livewire\Handler\Report;
 
 use App\Livewire\Concerns\HasReportExport;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 class ExportKolektor extends Component
@@ -27,6 +28,17 @@ class ExportKolektor extends Component
             'kode_pegawai' => ['label' => 'Kolektor (Kode Pegawai)', 'column' => 'kode_pegawai'],
             'filled_by' => ['label' => 'Diisi Oleh', 'column' => 'filled_by'],
         ];
+    }
+
+    #[Computed]
+    public function filterUsers(): \Illuminate\Support\Collection
+    {
+        return \App\Models\User::select(['id', 'kode_pegawai', 'name'])
+            ->when($this->filterBy === 'kode_pegawai', function ($q) {
+                $q->role('Collector');
+            })
+            ->orderBy('name', 'asc')
+            ->get();
     }
 
     public function export(): void
@@ -65,3 +77,4 @@ class ExportKolektor extends Component
         ]);
     }
 }
+

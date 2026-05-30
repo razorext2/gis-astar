@@ -38,8 +38,21 @@ class SalesReportExport implements FromView, ShouldAutoSize, WithEvents
         }
 
         if ($this->additionalFilters) {
-            if (isset($this->additionalFilters['kode_pegawai']) && $this->additionalFilters['kode_pegawai'] !== null && $this->additionalFilters['kode_pegawai'] !== '') {
-                $query->where('kode_pegawai', $this->additionalFilters['kode_pegawai']);
+            if (isset($this->additionalFilters['kode_pegawai']) && !empty($this->additionalFilters['kode_pegawai'])) {
+                $val = $this->additionalFilters['kode_pegawai'];
+                if (is_array($val)) {
+                    $query->whereIn('kode_pegawai', $val);
+                } else {
+                    $query->whereIn('kode_pegawai', array_filter(explode(',', $val)));
+                }
+            }
+            if (isset($this->additionalFilters['validate_by']) && !empty($this->additionalFilters['validate_by'])) {
+                $val = $this->additionalFilters['validate_by'];
+                if (is_array($val)) {
+                    $query->whereIn('validate_by', $val);
+                } else {
+                    $query->whereIn('validate_by', array_filter(explode(',', $val)));
+                }
             }
             if (isset($this->additionalFilters['status']) && $this->additionalFilters['status'] !== null && $this->additionalFilters['status'] !== '') {
                 $query->where('status', $this->additionalFilters['status']);
