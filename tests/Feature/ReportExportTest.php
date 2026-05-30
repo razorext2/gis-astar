@@ -435,3 +435,75 @@ it('can successfully run ExportReportJob for kolektor with additional filters', 
         \App\Notifications\ReportExportCompleted::class
     );
 });
+
+it('ExportSpk has extended filter options', function () {
+    $this->actingAs($this->adminUser);
+
+    Livewire::test(ExportSpk::class)
+        ->assertSee('Dibuat Oleh')
+        ->assertSee('Assign Ke')
+        ->assertSee('Tipe Tagihan')
+        ->assertSee('Tipe Timbangan')
+        ->assertSee('Status SPK')
+        ->assertSee('Status Approval');
+});
+
+it('can successfully run ExportReportJob for SPK with tipe_tagihan and status = 0', function () {
+    \Illuminate\Support\Facades\Notification::fake();
+    \Illuminate\Support\Facades\Event::fake();
+    \Illuminate\Support\Facades\Storage::fake();
+
+    $spk = \App\Models\Spk\SpkMain::create([
+        'nomor_order' => 'ORD-TEST-001',
+        'tipe_tagihan' => 'idcppn',
+        'tipe_timbangan' => 'timbangan jembatan',
+        'tipe_bayar' => 'Bon',
+        'company_name' => 'Test Company',
+        'tgl_cetak' => now()->toDateString(),
+        'tgl_kirim' => 'SEGERA',
+        'keterangan' => 'Test Keterangan',
+        'customer' => ['nama' => 'Test Customer'],
+        'products' => [],
+        'status' => 0,
+        'status_approval' => 0,
+        'added_by' => $this->adminUser->id,
+    ]);
+
+    $job = new ExportReportJob(
+        userId: $this->adminUser->id,
+        reportType: 'spk',
+        fromDate: now()->startOfMonth()->toDateString(),
+        toDate: now()->endOfMonth()->toDateString(),
+        filterBy: null,
+        filterValue: null,
+        exportFormat: 'xlsx',
+        additionalFilters: [
+            'tipe_tagihan' => 'idcppn',
+            'status' => '0',
+        ]
+    );
+
+    $job->handle();
+
+    \Illuminate\Support\Facades\Notification::assertSentTo(
+        $this->adminUser,
+        \App\Notifications\ReportExportCompleted::class
+    );
+});
+
+it('ExportSpk dispatches export job with additional filters', function () {
+    Queue::fake();
+    $this->actingAs($this->adminUser);
+
+    Livewire::test(ExportSpk::class)
+        ->set('fromDate', '2026-01-01')
+        ->set('toDate', '2026-01-31')
+        ->set('tipeTagihan', 'idcppn')
+        ->set('status', '0')
+        ->call('export');
+
+    Queue::assertPushed(ExportReportJob::class, function (ExportReportJob $job) {
+        return ($job->additionalFilters['tipe_tagihan'] ?? null) === 'idcppn'
+            && ($job->additionalFilters['status'] ?? null) === '0';
+    });
+});

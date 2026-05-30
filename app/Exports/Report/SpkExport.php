@@ -24,6 +24,7 @@ class SpkExport implements FromView, ShouldAutoSize, WithEvents
         protected string $toDate,
         protected ?string $filterBy = null,
         protected ?string $filterValue = null,
+        protected ?array $additionalFilters = null,
     ) {}
 
     public function view(): View
@@ -32,8 +33,23 @@ class SpkExport implements FromView, ShouldAutoSize, WithEvents
             ->where('created_at', '>=', Carbon::parse($this->fromDate)->startOfDay())
             ->where('created_at', '<=', Carbon::parse($this->toDate)->endOfDay());
 
-        if ($this->filterBy && $this->filterValue) {
+        if ($this->filterBy && !is_null($this->filterValue) && $this->filterValue !== '') {
             $query->where($this->filterBy, $this->filterValue);
+        }
+
+        if ($this->additionalFilters) {
+            if (isset($this->additionalFilters['tipe_tagihan']) && $this->additionalFilters['tipe_tagihan'] !== null && $this->additionalFilters['tipe_tagihan'] !== '') {
+                $query->where('tipe_tagihan', $this->additionalFilters['tipe_tagihan']);
+            }
+            if (isset($this->additionalFilters['tipe_timbangan']) && $this->additionalFilters['tipe_timbangan'] !== null && $this->additionalFilters['tipe_timbangan'] !== '') {
+                $query->where('tipe_timbangan', $this->additionalFilters['tipe_timbangan']);
+            }
+            if (isset($this->additionalFilters['status']) && $this->additionalFilters['status'] !== null && $this->additionalFilters['status'] !== '') {
+                $query->where('status', $this->additionalFilters['status']);
+            }
+            if (isset($this->additionalFilters['status_approval']) && $this->additionalFilters['status_approval'] !== null && $this->additionalFilters['status_approval'] !== '') {
+                $query->where('status_approval', $this->additionalFilters['status_approval']);
+            }
         }
 
         return view('report.export.spk', [
