@@ -28,6 +28,13 @@ class ProxyController extends Controller
             if ($response->successful()) {
                 $result = $response->json();
 
+                if (!isset($result['data'][0]['NomorPermintaanJual'])) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => $result['message'] ?? 'No SR data found',
+                    ], 404);
+                }
+
                 $nomorPermintaanJual = $result['data'][0]['NomorPermintaanJual'];
 
                 $url = 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSisa&NomorPermintaanJual='.$nomorPermintaanJual;
@@ -78,6 +85,13 @@ class ProxyController extends Controller
             if ($response->successful()) {
                 $result = $response->json();
 
+                if (!isset($result['data'][0]['NomorFakturPajak'])) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => $result['message'] ?? 'No SR data found',
+                    ], 404);
+                }
+
                 $nomorFakturPajak = $result['data'][0]['NomorFakturPajak'];
 
                 $url = 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSisa1&NomorFakturPajak='.$nomorFakturPajak;
@@ -127,6 +141,13 @@ class ProxyController extends Controller
 
             if ($response->successful()) {
                 $result = $response->json();
+
+                if (!isset($result['data'][0]['NomorFakturPajak'])) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => $result['message'] ?? 'No SR data found',
+                    ], 404);
+                }
 
                 $nomorFakturPajak = $result['data'][0]['NomorFakturPajak'];
 
