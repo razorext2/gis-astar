@@ -270,7 +270,7 @@ class Edit extends Component
                 $history_message = Auth::user()->name.' telah mengubah data SPK.';
 
                 // jika bukan user dengan permission spk-validate dan checkbox revisi diaktifkan, reset approval
-                if (auth()->user()->cannot('spk-validate') && $this->is_changed && $this->data->status_approval == 1) {
+                if (auth()->user()->cannot('spk-approve') && $this->is_changed && $this->data->status_approval == 1) {
                     $data['status_approval'] = 0;
                     $data['approved_by'] = null;
                     $data['approved_at'] = null;

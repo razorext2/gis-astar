@@ -12,7 +12,7 @@
             $showQuickActions =
                 auth()->user()->can('spk-create') ||
                 auth()->user()->can('invoice-list') ||
-                auth()->user()->can('spk-validate') ||
+                auth()->user()->can('spk-approve') ||
                 auth()->user()->can('point-redeem');
             $showRecentSpk = auth()->user()->can('spk-list');
             $showRightColumn =

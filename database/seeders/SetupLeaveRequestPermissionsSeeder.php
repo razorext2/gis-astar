@@ -22,11 +22,11 @@ class SetupLeaveRequestPermissionsSeeder extends Seeder
 
         // Daftar semua permission baru dengan prefix leave-
         $permissions = [
-            'leave-view-own',
+            'leave-list-own',
             'leave-create',
             'leave-cancel',
             'leave-approval-center',
-            'leave-view-all',
+            'leave-list-all',
             'leave-balance-manage',
             'leave-type-manage',
             'leave-approve-hrd',
@@ -46,13 +46,13 @@ class SetupLeaveRequestPermissionsSeeder extends Seeder
             // 2. Definisi mapping Role ke Permission
             $roleAssignments = [
                 'Employee' => [
-                    'leave-view-own',
+                    'leave-list-own',
                     'leave-create',
                     'leave-cancel',
                 ],
                 'HRD' => [
                     'leave-approval-center',
-                    'leave-view-all',
+                    'leave-list-all',
                     'leave-balance-manage',
                     'leave-type-manage',
                     'leave-approve-hrd',

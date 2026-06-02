@@ -18,14 +18,14 @@ class GiveLaporanHarianPermissionsToAdminManagementSeeder extends Seeder
         $permissions = [
             'laporan-harian-list',
             'laporan-harian-spk-list',
-            'assign-laporan-harian',
-            'unassign-laporan-harian',
-            'assign-laporan-harian-spk',
-            'unassign-laporan-harian-spk',
+            'laporan-harian-assign',
+            'laporan-harian-unassign',
+            'laporan-harian-spk-assign',
+            'laporan-harian-spk-unassign',
             'laporan-harian-create',
             'laporan-harian-edit',
             'laporan-harian-delete',
-            'laporan-harian-validate',
+            'laporan-harian-approve',
         ];
 
         $roles = Role::whereIn('name', ['Admin', 'Management'])->get();

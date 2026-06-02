@@ -16,7 +16,7 @@
         </div>
 
         <div class="flex flex-col justify-between gap-2 lg:flex-row lg:items-center">
-            @can(['invoice-list', 'invoice-add'])
+            @can(['invoice-list', 'invoice-create'])
                 @php
                     $routeName = match (request()->route()->getName()) {
                         'invoice.all.index' => 'invoice.all.create',

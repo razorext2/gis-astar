@@ -99,7 +99,7 @@ class Show extends Component
             ->findOrFail($this->requestId);
 
         // Guard: Hanya approver terkait atau yang punya permission
-        if (! $this->isAuthorizedApprover($request) && ! $user->can('leave-view-all')) {
+        if (! $this->isAuthorizedApprover($request) && ! $user->can('leave-list-all')) {
             abort(403, 'Anda tidak memiliki akses untuk melihat pengajuan ini.');
         }
 

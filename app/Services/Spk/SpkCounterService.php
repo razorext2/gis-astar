@@ -14,7 +14,7 @@ class SpkCounterService
 
     public function countNeedsValidation()
     {
-        if ($this->user()->can('spk-validate')) {
+        if ($this->user()->can('spk-approve')) {
             return SpkMain::where('status_approval', 0)->count();
         } else {
             return SpkMain::where('status_approval', 0)
@@ -36,7 +36,7 @@ class SpkCounterService
 
     public function countSpkDoesNotHaveProductionProgress()
     {
-        if ($this->user()->can('produksi-validate')) {
+        if ($this->user()->can('produksi-approve')) {
             return Production::whereHas('productionHistories', function ($history) {
                 $history->where('status_produksi', 0);
             })->orWhereDoesntHave('productionHistories')
@@ -57,7 +57,7 @@ class SpkCounterService
                 $history->latest()->where('status_produksi', 10);
             });
 
-            if ($this->user()->cannot('spk-validate')) {
+            if ($this->user()->cannot('spk-approve')) {
                 $production->where(function ($q) {
                     $q->whereRaw('COALESCE(JSON_LENGTH(packing_list), 0) > 0')
                         ->orWhere('is_using_company_driver', true)
@@ -67,7 +67,7 @@ class SpkCounterService
         })
             ->whereDoesntHave('deliveries');
 
-        if ($this->user()->cannot('spk-validate')) {
+        if ($this->user()->cannot('spk-approve')) {
             $query->where('added_by', $this->user()->id);
         }
 

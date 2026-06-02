@@ -17,7 +17,7 @@
         </div>
 
         <div class="flex flex-col justify-between gap-2 lg:flex-row lg:items-center">
-            @can(['invoice-list', 'invoice-add'])
+            @can(['invoice-list', 'invoice-create'])
                 <div class="flex flex-row gap-2">
                     <x-button.success wire:navigate href="{{ route('invoice.pku.create', ['tipe_tagihan' => 'idcppn']) }}">
                         <x-slot name="icon">

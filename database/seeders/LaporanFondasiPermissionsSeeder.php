@@ -39,7 +39,7 @@ class LaporanFondasiPermissionsSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'spk-history',
+                'name' => 'spk-history-view',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

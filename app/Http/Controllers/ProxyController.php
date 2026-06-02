@@ -183,7 +183,7 @@ class ProxyController extends Controller
 
                 $no_identitas = $result['data'][0]['NomorIdentitasTeknisi'];
 
-                if (! auth()->user()->can('vt-view-all')) {
+                if (! auth()->user()->can('vt-list-all')) {
                     if ($no_identitas != auth()->user()->kode_pegawai) {
                         return new ApiResource(false, 'Anda tidak memiliki akses untuk mengambil data ini', null);
                     }

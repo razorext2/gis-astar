@@ -138,9 +138,9 @@ final class BillingTable extends PowerGridComponent
         return [
             Rule::button('edit')
                 ->when(fn () => ! auth()->user()->canAny([
-                    'spk-update-no-tagihan-idcppn',
-                    'spk-update-no-tagihan-idcnonppn',
-                    'spk-update-no-tagihan-idyppn',
+                    'spk-no-tagihan-idcppn-edit',
+                    'spk-no-tagihan-idcnonppn-edit',
+                    'spk-no-tagihan-idyppn-edit',
                 ]))
                 ->hide(),
         ];

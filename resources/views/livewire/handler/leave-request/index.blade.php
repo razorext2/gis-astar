@@ -21,7 +21,7 @@
     <div
         class="flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
         {{-- Tabs Section --}}
-        @if (auth()->user()->can('leave-view-all'))
+        @if (auth()->user()->can('leave-list-all'))
             <div class="flex items-center gap-2 overflow-x-auto border-b border-zinc-100 dark:border-zinc-800">
                 <button wire:click="setTab('own')"
                     class="{{ $activeTab === 'own' ? 'text-primary' : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300' }} group relative px-4 py-3 text-sm font-bold transition-all duration-200">
@@ -46,7 +46,7 @@
 
         {{-- Search and Filter Bar --}}
         <div class="flex flex-col gap-4 md:flex-row md:items-center">
-            @if (auth()->user()->can('leave-view-all') && $activeTab == 'all')
+            @if (auth()->user()->can('leave-list-all') && $activeTab == 'all')
                 <div class="relative flex-1">
                     <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                         <x-icons.search-alt class="h-5 w-5 text-zinc-400" />

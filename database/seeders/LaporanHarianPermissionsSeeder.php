@@ -26,25 +26,25 @@ class LaporanHarianPermissionsSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'assign-laporan-harian',
+                'name' => 'laporan-harian-assign',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'unassign-laporan-harian',
+                'name' => 'laporan-harian-unassign',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'assign-laporan-harian-spk',
+                'name' => 'laporan-harian-spk-assign',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'unassign-laporan-harian-spk',
+                'name' => 'laporan-harian-spk-unassign',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -68,7 +68,7 @@ class LaporanHarianPermissionsSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'laporan-harian-validate',
+                'name' => 'laporan-harian-approve',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

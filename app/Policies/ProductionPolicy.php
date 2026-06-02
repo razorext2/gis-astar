@@ -53,6 +53,6 @@ class ProductionPolicy
 
     public function validate(User $user)
     {
-        return $user->can('produksi-validate');
+        return $user->can('produksi-approve');
     }
 }

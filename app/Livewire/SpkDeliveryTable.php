@@ -19,7 +19,7 @@ final class SpkDeliveryTable extends PowerGridComponent
 
     public function setUp(): array
     {
-        // if (auth()->user()->can('spk-validate')) {
+        // if (auth()->user()->can('spk-approve')) {
         //     $this->showCheckBox();
         // }
 
@@ -37,7 +37,7 @@ final class SpkDeliveryTable extends PowerGridComponent
         $query = SpkMain::query()
             ->whereHas('production', function ($production) {
 
-                if (auth()->user()->cannot('spk-validate')) {
+                if (auth()->user()->cannot('spk-approve')) {
                     // tampilkan data hanya packing_list not null atau is_using_company_driver = true atau is_picked_up_by_customer = true
                     $production->where(function ($p) {
                         $p->whereRaw('COALESCE(JSON_LENGTH(packing_list), 0) > 0')

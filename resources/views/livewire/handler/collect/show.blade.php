@@ -124,7 +124,7 @@
             </div>
         </div>
 
-        @if ($data->status === 2)
+        @if ($data->status === 2 && auth()->user()->can('collect-approve'))
             <hr class="my-6 border-zinc-200 dark:border-zinc-800">
             <div class="flex flex-col items-center justify-between gap-4 sm:flex-row">
                 <div class="hidden sm:block">

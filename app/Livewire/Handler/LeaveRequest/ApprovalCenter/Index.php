@@ -27,7 +27,7 @@ class Index extends Component
 
     public function setTab($tab)
     {
-        if ($tab === 'all' && ! auth()->user()->can('leave-view-all')) {
+        if ($tab === 'all' && ! auth()->user()->can('leave-list-all')) {
             return;
         }
 
@@ -84,7 +84,7 @@ class Index extends Component
             });
         } else {
             // Tab ALL - No default role-based status filter if they have leave-view-all
-            if (! $user->can('leave-view-all')) {
+            if (! $user->can('leave-list-all')) {
                 // Fallback to what they can see if somehow accessed
                 $query->where('user_id', $user->id);
             }

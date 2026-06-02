@@ -26,7 +26,7 @@
                         <div class="w-full">
                             <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="name">Nama
                                 Pegawai</label>
-                            @if (Auth::user()->hasPermissionTo('dayoff-confirm'))
+                            @if (auth()->user()->can('dayoff-approve'))
                                 <input
                                     class="block w-full rounded-lg border border-zinc-200 bg-white p-2.5 text-sm text-gray-900"
                                     id="name" name="name" type="text" placeholder="Cari nama karyawan.."
@@ -44,7 +44,7 @@
                             <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                                 for="kode_pegawai">Kode
                                 Pegawai</label>
-                            @if (Auth::user()->hasPermissionTo('dayoff-confirm'))
+                            @if (Auth::user()->hasPermissionTo('dayoff-approve'))
                                 <input
                                     class="block w-full cursor-not-allowed rounded-lg border border-zinc-200 p-2.5 text-sm text-gray-900 dark:border-zinc-800 dark:bg-gray-700 dark:text-gray-400 dark:placeholder-gray-400"
                                     id="kode_pegawai" name="kode_pegawai" type="text" placeholder="Kode pegawai" required

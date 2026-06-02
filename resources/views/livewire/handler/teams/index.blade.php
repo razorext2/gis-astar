@@ -33,7 +33,7 @@
                 </div>
 
                 <!-- Tombol Aksi Kanan -->
-                @can('team-member-add')
+                @can('team-member-create')
                     <div class="flex shrink-0">
                         <x-button.primary wire:click="addMemberDialog('{{ $row->team_code }}')"
                             class="transition-all hover:shadow-md">
@@ -66,7 +66,7 @@
         </div>
     @endforelse
 
-    @can('team-member-add')
+    @can('team-member-create')
         {{-- modal add member --}}
         <x-modal.base-modal show="showModal" title="Tambah Anggota"
             subtitle="Masukkan pegawai ke dalam tim {{ $team_code }}" iconContainerClass="bg-blue-600 shadow-blue-500/20"
@@ -139,7 +139,7 @@
         {{-- end modal add member --}}
     @endcan
 
-    @can('team-member-remove')
+    @can('team-member-delete')
         {{-- modal remove member --}}
         <x-modal.base-modal show="showRemoveMemberModal" title="Keluarkan Anggota?"
             subtitle="Tindakan ini akan mengeluarkan teknisi dari tim" iconContainerClass="bg-red-600 shadow-red-500/20"

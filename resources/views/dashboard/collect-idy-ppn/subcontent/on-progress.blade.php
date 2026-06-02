@@ -7,7 +7,7 @@
             {{-- filter --}}
             <div class="col-span-2 mb-4">
                 <x-filter.filter-bar>
-                    @can('collect-idy-ppn-validate')
+                    @can('collect-idy-ppn-approve')
                         <div class="col-span-2 mx-auto flex w-full items-center lg:col-span-1">
                             <x-filter.filter-input-text id="no_sr" name="no_sr" :text="'no SR'">
                                 <x-icons.fingerprint class="h-4 w-4 text-gray-500 dark:text-gray-400" />

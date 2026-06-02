@@ -29,7 +29,7 @@
                 <p class="text-sm text-zinc-500 dark:text-zinc-400">Informasi lengkap rincian dan riwayat invoice</p>
             </div>
 
-            @can('invoice-add')
+            @can('invoice-create')
                 <x-button.primary wire:navigate href="{{ route($routePrefix . '.addDetails', $id) }}" class="w-fit">
                     <x-slot name="icon">
                         <x-icons.plus class="h-4 w-4" />

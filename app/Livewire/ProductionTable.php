@@ -263,7 +263,7 @@ final class ProductionTable extends PowerGridComponent
     {
         $button = [];
 
-        if ($this->user->can('spk-detail')) {
+        if ($this->user->can('spk-view')) {
             $button[] = Button::make('detail', 'Detail')
                 ->slot('👁 SPK')
                 ->id($row->spk->id)

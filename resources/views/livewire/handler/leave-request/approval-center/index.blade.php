@@ -29,7 +29,7 @@
                     </div>
                 @endif
             </button>
-            @if (auth()->user()->can('leave-view-all'))
+            @if (auth()->user()->can('leave-list-all'))
                 <button wire:click="setTab('all')"
                     class="{{ $activeTab === 'all' ? 'text-primary' : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300' }} group relative px-4 py-3 text-sm font-bold transition-all duration-200">
                     <span>Semua Data</span>

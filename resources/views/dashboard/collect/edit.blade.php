@@ -7,8 +7,7 @@
             <div class="w-full">
                 <header class="flex items-center">
 
-                    <x-button.danger class="my-auto me-4 max-h-10" href="{{ route('collect.show', $data->id) }}"
-                        wire:navigate>
+                    <x-button.danger class="my-auto me-4 max-h-10" href="{{ route('collect.index') }}" wire:navigate>
                         <x-icons.angle-left class="h-5 w-5" />
                     </x-button.danger>
 

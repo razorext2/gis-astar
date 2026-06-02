@@ -73,7 +73,7 @@ final class TechnicianTable extends PowerGridComponent
         }
 
         if (auth()->user()->can('technician-approve')) {
-            if (! auth()->user()->can('technician-all')) {
+            if (! auth()->user()->can('technician-list-all')) {
                 $query->where('tb_technician.status', '!=', 4);
             }
         } else {
