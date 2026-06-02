@@ -63,7 +63,7 @@ final class SpkDeliveryTable extends PowerGridComponent
             });
         }
 
-        if (auth()->user()->can('spk-view-own-only')) {
+        if (auth()->user()->can('spk-list-own-only')) {
             $query->where('added_by', auth()->id());
         }
 

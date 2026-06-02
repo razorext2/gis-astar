@@ -11,7 +11,7 @@ return new class extends Migration
     private const NEW_PERMISSIONS = [
         'spk-edit-all' => ['Admin', 'Management'],
         'vt-view-all' => ['Admin', 'Management'],
-        'spk-view-own-only' => ['Marketing', 'Marketing-IDY', 'Marketing-JKT', 'Marketing-PKU'],
+        'spk-list-own-only' => ['Marketing', 'Marketing-IDY', 'Marketing-JKT', 'Marketing-PKU'],
     ];
 
     public function up(): void

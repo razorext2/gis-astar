@@ -17,7 +17,7 @@ class HardcodeRemovalPermissionSeeder extends Seeder
     private const PERMISSION_ROLE_MAP = [
         'spk-edit-all' => ['Admin', 'Management'],
         'vt-view-all' => ['Admin', 'Management'],
-        'spk-view-own-only' => ['Marketing', 'Marketing-IDY', 'Marketing-JKT', 'Marketing-PKU'],
+        'spk-list-own-only' => ['Marketing', 'Marketing-IDY', 'Marketing-JKT', 'Marketing-PKU'],
     ];
 
     public function run(): void

@@ -34,7 +34,7 @@ final class BillingTable extends PowerGridComponent
 
         $query->orderBy('status_nomor_tagihan', 'asc');
 
-        if (auth()->user()->can('spk-create') && auth()->user()->can('spk-view-own-only')) {
+        if (auth()->user()->can('spk-create') && auth()->user()->can('spk-list-own-only')) {
             $query->where('added_by', auth()->user()->id);
         }
 
