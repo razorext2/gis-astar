@@ -37,7 +37,7 @@ class SpkMainPolicy
      */
     public function update(User $user, SpkMain $spk): bool
     {
-        if ($user->hasAnyRole(['Admin', 'Management'])) {
+        if ($user->can('spk-edit-all')) {
             return $user->hasPermissionTo('spk-edit');
         }
 

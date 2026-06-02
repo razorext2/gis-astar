@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ApiResource;
 use App\Models\ServerMonitor;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
@@ -184,9 +183,8 @@ class ProxyController extends Controller
 
                 $no_identitas = $result['data'][0]['NomorIdentitasTeknisi'];
 
-                // untuk saat ini filter data pakai hasRole = admin, kdepannya harus ubah jadi permission
-                if (! Auth::user()->hasRole('Admin')) {
-                    if ($no_identitas != Auth::user()->kode_pegawai) {
+                if (! auth()->user()->can('vt-view-all')) {
+                    if ($no_identitas != auth()->user()->kode_pegawai) {
                         return new ApiResource(false, 'Anda tidak memiliki akses untuk mengambil data ini', null);
                     }
                 }
