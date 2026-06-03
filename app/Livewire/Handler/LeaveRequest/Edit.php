@@ -238,12 +238,12 @@ class Edit extends Component
         $leaveType = LeaveType::findOrFail($this->leave_type_id);
 
         $rules = [
-            'leave_type_id' => 'required|exists:tb_leave_types,id',
+            'leave_type_id'  => 'required|exists:tb_leave_types,id',
             'backup_person_id' => 'nullable|exists:users,id',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'reason' => 'required|min:10',
-            'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:3072',
+            'start_date'     => 'required|date',
+            'end_date'       => 'required|date|after_or_equal:start_date',
+            'reason'         => 'required|min:10',
+            'attachments.*'  => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:3072',
         ];
 
         if ($leaveType->requires_attachment && empty($this->attachments) && empty($this->existingAttachments)) {
@@ -261,6 +261,9 @@ class Edit extends Component
 
             return;
         }
+
+        // Re-fetch quota fresh dari DB agar tidak stale
+        $this->updateQuota();
 
         // Re-validate Total Days & Quota Limit
         $maxAllowed = $this->remaining_quota;

@@ -65,7 +65,7 @@ class Borrow extends Component
         }
 
         // Load Approvers
-        $placement = $user->pegawai->jabatanRelasi->placementRelasi ?? null;
+        $placement = $user->pegawai?->jabatanRelasi?->placementRelasi ?? null;
         if ($placement) {
             $this->hrd_approvers = $placement->hrds->pluck('name')->toArray();
             $this->management_approvers = $placement->managements->pluck('name')->toArray();
@@ -219,7 +219,7 @@ class Borrow extends Component
             return;
         }
 
-        $maxAllowed = min($this->remaining_quota, 6);
+        $maxAllowed = $this->remaining_quota; // batas dari config max_borrow_leave_days, bukan 6
         if ($this->total_days <= 0 || $this->total_days > $maxAllowed) {
             $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Hari cuti tidak valid atau melebihi kuota pinjaman Anda.');
 

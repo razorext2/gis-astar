@@ -16,10 +16,11 @@ class LeaveRequestObserver
     {
         LeaveRequestHistory::create([
             'leave_request_id' => $request->id,
-            'acted_by' => auth()->id() ?? $request->user_id,
-            'action' => 'submit',
-            'status_to' => $request->status,
-            'note' => 'Pengajuan diajukan.',
+            'acted_by'         => auth()->id() ?? $request->user_id,
+            'action'           => 'submit',
+            'status_from'      => null, // nullable: tidak ada status sebelumnya saat submit pertama
+            'status_to'        => $request->status,
+            'note'             => 'Pengajuan diajukan.',
         ]);
     }
 

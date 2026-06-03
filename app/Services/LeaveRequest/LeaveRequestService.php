@@ -76,14 +76,15 @@ class LeaveRequestService
 
             if ($action === 'approve') {
                 $request->status = $this->calculateNextStatus($request);
-            } elseif ($action === 'reject') {
+            } elseif (in_array($action, ['reject', 'auto_reject'])) {
                 $request->status = 'rejected';
             } elseif ($action === 'cancel') {
                 $request->status = 'canceled';
             }
 
             // Attach metadata for the observer
-            $request->acted_by = $actor->id;
+            // acted_by null untuk auto_reject agar observer mencatat action 'auto_reject'
+            $request->acted_by = $action === 'auto_reject' ? null : $actor->id;
 
             // definisikan current_note
             $request->current_note = $note;
@@ -91,7 +92,7 @@ class LeaveRequestService
             $request->save();
 
             // Deduction Logic on FINAL APPROVAL (with pessimistic lock)
-            if ($request->status === 'approved' && $request->leaveType->is_anual_deduction) {
+            if ($request->status === 'approved' && $request->leaveType?->is_anual_deduction) {
                 $balance = LeaveBalance::where('user_id', $request->user_id)
                     ->where('year', date('Y'))
                     ->lockForUpdate()
@@ -113,7 +114,7 @@ class LeaveRequestService
 
             // Rollback Logic: kembalikan kuota jika cuti yang sudah approved ditolak/dibatalkan
             if (in_array($request->status, ['rejected', 'canceled']) && $oldStatus === 'approved'
-                && $request->leaveType->is_anual_deduction) {
+                && $request->leaveType?->is_anual_deduction) {
                 $balance = LeaveBalance::where('user_id', $request->user_id)
                     ->where('year', date('Y'))
                     ->lockForUpdate()
@@ -145,7 +146,7 @@ class LeaveRequestService
                 );
             }
 
-            // Notify applicant when rejected
+            // Notify applicant when rejected (manual reject only, bukan auto_reject)
             if ($action === 'reject') {
                 $request->user->notify(
                     new \App\Notifications\LeaveRequestRejectedNotification($request, $actor->name, $note)

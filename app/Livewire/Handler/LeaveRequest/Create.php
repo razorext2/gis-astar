@@ -67,7 +67,7 @@ class Create extends Component
         }
 
         // Load Approvers
-        $placement = $user->pegawai->jabatanRelasi->placementRelasi ?? null;
+        $placement = $user->pegawai?->jabatanRelasi?->placementRelasi ?? null;
         if ($placement) {
             $this->hrd_approvers = $placement->hrds->pluck('name')->toArray();
             $this->management_approvers = $placement->managements->pluck('name')->toArray();
