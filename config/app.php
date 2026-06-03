@@ -137,4 +137,7 @@ return [
 
     'max_borrow_leave_days' => (int) env('MAX_BORROW_LEAVE_DAYS', 3),
 
+    // Minimum hari sebelum tanggal mulai cuti dari tanggal pengajuan.
+    'leave_min_advance_days' => (int) env('LEAVE_MIN_ADVANCE_DAYS', 7),
+
 ];

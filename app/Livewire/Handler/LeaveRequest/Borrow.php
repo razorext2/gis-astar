@@ -111,6 +111,14 @@ class Borrow extends Component
         }
 
         if (in_array($propertyName, ['start_date', 'end_date'])) {
+            if ($propertyName === 'start_date' && ! $this->checkMinAdvanceDays()) {
+                $this->start_date = null;
+                $this->total_days = 0;
+                $this->return_date = null;
+                $this->reset(['intersected_holidays', 'intersected_sundays']);
+                return;
+            }
+
             $this->checkDateOverlap();
             if (! $this->dateOverlapError) {
                 $this->calculateDays();
@@ -208,6 +216,11 @@ class Borrow extends Component
 
         // Bypass the 1-year tenure validation because this is Pinjam Cuti.
         // We only check if they have enough borrow quota, which is handled in calculateDays and remaining_quota.
+
+        // Validasi: tanggal mulai cuti minimal 7 hari dari hari pengajuan
+        if (! $this->checkMinAdvanceDays()) {
+            return;
+        }
 
         // Re-validate Overlap
         $this->checkDateOverlap();

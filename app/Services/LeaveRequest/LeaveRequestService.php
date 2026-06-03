@@ -37,6 +37,13 @@ class LeaveRequestService
 
             $isBorrowed = $data['is_borrowed'] ?? false;
 
+            // Validasi: tanggal mulai cuti minimal sesuai config LEAVE_MIN_ADVANCE_DAYS dari hari pengajuan
+            $minDays = config('app.leave_min_advance_days', 7);
+            $minStartDate = \Carbon\Carbon::today()->addDays($minDays);
+            if (\Carbon\Carbon::parse($data['start_date'])->lessThan($minStartDate)) {
+                throw new Exception("Tanggal mulai cuti minimal {$minDays} hari dari tanggal pengajuan.");
+            }
+
             // 1. Validasi saldo jika tipe cuti memotong saldo tahunan (Lewati jika pinjam)
             $this->validateRequest($user, $data['leave_type_id'], $totalDays, $isBorrowed);
 

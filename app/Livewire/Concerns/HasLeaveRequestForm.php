@@ -53,4 +53,24 @@ trait HasLeaveRequestForm
             $this->dateOverlapError = "Tanggal bertabrakan dengan pengajuan cuti yang sudah ada ({$from} s/d {$to}).";
         }
     }
+
+    /**
+     * Validasi bahwa tanggal mulai cuti minimal 7 hari dari hari ini.
+     * Return true jika valid, false jika tidak (swal error sudah di-dispatch).
+     */
+    protected function checkMinAdvanceDays(): bool
+    {
+        $minDays = config('app.leave_min_advance_days', 7);
+        $minStartDate = \Carbon\Carbon::today()->addDays($minDays);
+
+        if ($this->start_date && \Carbon\Carbon::parse($this->start_date)->lessThan($minStartDate)) {
+            $formattedMin = $minStartDate->locale('id')->isoFormat('D MMMM YYYY');
+            $this->dispatch('swal', icon: 'error', title: 'Tanggal Tidak Valid',
+                text: "Cuti tidak dapat diajukan kurang dari {$minDays} hari ke depan. Tanggal mulai cuti paling cepat adalah {$formattedMin}.");
+
+            return false;
+        }
+
+        return true;
+    }
 }

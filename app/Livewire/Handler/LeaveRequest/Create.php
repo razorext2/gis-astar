@@ -81,7 +81,7 @@ class Create extends Component
     protected $rules = [
         'leave_type_id' => 'required|exists:tb_leave_types,id',
         'backup_person_id' => 'nullable|exists:users,id',
-        'start_date' => 'required|date|after_or_equal:today',
+        'start_date' => 'required|date|after_or_equal:today', // min-advance check handled by checkMinAdvanceDays()
         'end_date' => 'required|date|after_or_equal:start_date',
         'reason' => 'required|min:10',
         'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:3072',
@@ -94,6 +94,14 @@ class Create extends Component
         }
 
         if (in_array($propertyName, ['start_date', 'end_date'])) {
+            if ($propertyName === 'start_date' && ! $this->checkMinAdvanceDays()) {
+                $this->start_date = null;
+                $this->total_days = 0;
+                $this->return_date = null;
+                $this->reset(['intersected_holidays', 'intersected_sundays']);
+                return;
+            }
+
             $this->checkDateOverlap();
             if (! $this->dateOverlapError) {
                 $this->calculateDays();
@@ -108,8 +116,6 @@ class Create extends Component
             $this->reset('backup_person_id');
         }
     }
-
-
 
     protected function loadLeaveTypeInfo()
     {
@@ -214,6 +220,11 @@ class Create extends Component
                 }
             }
         }
+        // Validasi: tanggal mulai cuti minimal 7 hari dari hari pengajuan
+        if (! $this->checkMinAdvanceDays()) {
+            return;
+        }
+
         // Re-validate Overlap
         $this->checkDateOverlap();
         if ($this->dateOverlapError) {
@@ -260,8 +271,6 @@ class Create extends Component
             return redirect()->route('leave-request.my-requests.show', $request->id);
         });
     }
-
-
 
     public function render()
     {

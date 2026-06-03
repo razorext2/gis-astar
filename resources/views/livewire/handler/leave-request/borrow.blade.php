@@ -126,6 +126,7 @@
             <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
                 <div class="flex flex-col">
                     <x-input.basic type="date" id="start_date" name="start_date" wire:model.live="start_date"
+                        min="{{ \Carbon\Carbon::today()->addDays(config('app.leave_min_advance_days', 7))->toDateString() }}"
                         :labels="true" required>
                         Tanggal Mulai*
                     </x-input.basic>
@@ -135,6 +136,7 @@
                 </div>
                 <div class="flex flex-col">
                     <x-input.basic type="date" id="end_date" name="end_date" wire:model.live="end_date"
+                        min="{{ $start_date ?? \Carbon\Carbon::today()->addDays(config('app.leave_min_advance_days', 7))->toDateString() }}"
                         :labels="true" required>
                         Tanggal Berakhir*
                     </x-input.basic>
