@@ -63,7 +63,7 @@ final class ProjectAssignmentTable extends PowerGridComponent
             '))
             ->orderBy('created_at', 'desc');
 
-        if ($this->user->cannot('laporan-harian-validate')) {
+        if ($this->user->cannot('laporan-harian-approve')) {
             $query->where('assign_to', $this->user->id);
         }
 

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ApiResource;
 use App\Models\ServerMonitor;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
@@ -28,6 +27,13 @@ class ProxyController extends Controller
 
             if ($response->successful()) {
                 $result = $response->json();
+
+                if (!isset($result['data'][0]['NomorPermintaanJual'])) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => $result['message'] ?? 'No SR data found',
+                    ], 404);
+                }
 
                 $nomorPermintaanJual = $result['data'][0]['NomorPermintaanJual'];
 
@@ -79,6 +85,13 @@ class ProxyController extends Controller
             if ($response->successful()) {
                 $result = $response->json();
 
+                if (!isset($result['data'][0]['NomorFakturPajak'])) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => $result['message'] ?? 'No SR data found',
+                    ], 404);
+                }
+
                 $nomorFakturPajak = $result['data'][0]['NomorFakturPajak'];
 
                 $url = 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSisa1&NomorFakturPajak='.$nomorFakturPajak;
@@ -128,6 +141,13 @@ class ProxyController extends Controller
 
             if ($response->successful()) {
                 $result = $response->json();
+
+                if (!isset($result['data'][0]['NomorFakturPajak'])) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => $result['message'] ?? 'No SR data found',
+                    ], 404);
+                }
 
                 $nomorFakturPajak = $result['data'][0]['NomorFakturPajak'];
 
@@ -184,9 +204,8 @@ class ProxyController extends Controller
 
                 $no_identitas = $result['data'][0]['NomorIdentitasTeknisi'];
 
-                // untuk saat ini filter data pakai hasRole = admin, kdepannya harus ubah jadi permission
-                if (! Auth::user()->hasRole('Admin')) {
-                    if ($no_identitas != Auth::user()->kode_pegawai) {
+                if (! auth()->user()->can('vt-list-all')) {
+                    if ($no_identitas != auth()->user()->kode_pegawai) {
                         return new ApiResource(false, 'Anda tidak memiliki akses untuk mengambil data ini', null);
                     }
                 }

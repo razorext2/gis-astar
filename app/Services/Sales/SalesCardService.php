@@ -14,21 +14,7 @@ class SalesCardService
         if ($user->cannot('sales-approve')) {
             $baseQuery->where('kode_pegawai', $user->kode_pegawai);
         } else {
-            // Map: role Sales -> closure pemeriksa akses user
-            // Tambah region baru = cukup tambah 1 baris di sini
-            $regionMap = [
-                'Sales-IDY'     => fn () => $user->hasAnyRole(['HRD-IDY', 'Marketing-IDY']) || $user->can('sales-export-idy'),
-                'Kurir-Bank'    => fn () => $user->hasAnyRole(['Kasir', 'Piutang']) || $user->can('sales-export-kurir-bank'),
-                'Sales'         => fn () => $user->hasRole('Marketing') || $user->can('sales-export-medan'),
-                'Sales-JKT'     => fn () => $user->hasAnyRole(['Marketing-JKT', 'Management-JKT']) || $user->can('sales-export-jkt'),
-                'Sales-PKU'     => fn () => $user->hasAnyRole(['Marketing-PKU', 'Management-PKU']) || $user->can('sales-export-pku'),
-                'Sales-Agrotec' => fn () => $user->can('sales-export-agrotec') || $user->hasRole('Service-Agrotec'),
-            ];
-
-            $allowedRoles = collect($regionMap)
-                ->filter(fn ($check) => $check())
-                ->keys()
-                ->toArray();
+            $allowedRoles = SalesRegionResolver::resolveForUser($user);
 
             if (! empty($allowedRoles)) {
                 $baseQuery->whereHas('userRelasi.roles', fn ($q) => $q->whereIn('name', $allowedRoles));

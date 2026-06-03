@@ -159,7 +159,7 @@ class Card extends Component
             [
                 'permission' => 'collect-edit',
                 'label' => 'Kolektor',
-                'count' => auth()->user()->hasRole('Collector')
+                'count' => auth()->user()->cannot('collect-approve')
                     ? Collector::needApprove()
                         ->where('kode_pegawai', auth()->user()->kode_pegawai)
                         ->count()
@@ -172,7 +172,7 @@ class Card extends Component
             [
                 'permission' => 'sales-edit',
                 'label' => 'Sales',
-                'count' => auth()->user()->hasRole('Sales')
+                'count' => auth()->user()->cannot('sales-approve')
                     ? Sales::needApprove()
                         ->where('kode_pegawai', auth()->user()->kode_pegawai)
                         ->count()

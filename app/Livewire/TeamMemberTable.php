@@ -144,7 +144,7 @@ final class TeamMemberTable extends PowerGridComponent
     {
         return [
             Rule::button('removeMember')
-                ->when(fn () => Auth::user()->cannot('team-member-remove'))
+                ->when(fn () => Auth::user()->cannot('team-member-delete'))
                 ->hide(),
         ];
     }

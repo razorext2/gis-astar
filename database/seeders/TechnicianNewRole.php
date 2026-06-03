@@ -20,13 +20,13 @@ class TechnicianNewRole extends Seeder
         ]);
 
         DB::table('permissions')->insert([
-            ['name' => 'all-team', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'team-list-all', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'team-list', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'team-create', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'team-edit', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'team-delete', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'team-member-add', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'team-member-remove', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'team-member-create', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'team-member-delete', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 }

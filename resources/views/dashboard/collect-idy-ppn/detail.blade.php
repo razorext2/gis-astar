@@ -113,23 +113,21 @@
                     </p>
                 </div>
 
-                @can('collect-idy-ppn-validate')
-                    @if ($data->bill_status == 1)
-                        <div class="col-span-2 mt-2 flex flex-col justify-end" id="action">
-                            <div class="text-right">
+                @if ($data->bill_status == 1 && auth()->user()->can('collect-idy-ppn-approve'))
+                    <div class="col-span-2 mt-2 flex flex-col justify-end" id="action">
+                        <div class="text-right">
 
-                                <x-button.success class="confirm-btn float-right" id="confirm-btn"
-                                    data-id="{{ $data->id }}" type="button">
-                                    <x-slot name="icon">
-                                        <x-icons.angle-right class="h-5 w-5" />
-                                    </x-slot>
-                                    Tutup Tagihan
-                                </x-button.success>
+                            <x-button.success class="confirm-btn float-right" id="confirm-btn"
+                                data-id="{{ $data->id }}" type="button">
+                                <x-slot name="icon">
+                                    <x-icons.angle-right class="h-5 w-5" />
+                                </x-slot>
+                                Tutup Tagihan
+                            </x-button.success>
 
-                            </div>
                         </div>
-                    @endif
-                @endcan
+                    </div>
+                @endif
             </div>
         </div>
 

@@ -83,7 +83,7 @@
                             wire:navigate>
                             Detail
                         </x-button.link>
-                        @can('unassign-laporan-harian-spk')
+                        @can('laporan-harian-spk-unassign')
                             <x-button.danger id="unassign-button" wire:click="unassign('{{ $row->id }}')"
                                 wire:confirm.prompt="Anda yakin ingin menghapus staf ini dari projek?\nKetik YA jika ingin menghapus|YA">
                                 Unassign

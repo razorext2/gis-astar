@@ -96,7 +96,7 @@
                         </span>
 
                         <div class="flex items-center gap-4">
-                            @if ($row->status_validasi == 0 && auth()->user()->hasPermissionTo('produksi-validate'))
+                            @if ($row->status_validasi == 0 && auth()->user()->hasPermissionTo('produksi-approve'))
                                 <button wire:click="confirmProductionHistory('{{ $row->id }}')" 
                                     wire:confirm="Konfirmasi laporan ini?"
                                     class="text-xs font-bold text-green-600 hover:text-green-700 dark:text-green-400">

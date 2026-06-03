@@ -169,7 +169,7 @@ class Daily extends Component
 
     public function acceptExtendRequest()
     {
-        if (auth()->user()->cannot('laporan-harian-validate')) {
+        if (auth()->user()->cannot('laporan-harian-approve')) {
             abort(403);
         }
 
@@ -200,7 +200,7 @@ class Daily extends Component
 
     public function rejectExtendRequestProcess()
     {
-        if (auth()->user()->cannot('laporan-harian-validate')) {
+        if (auth()->user()->cannot('laporan-harian-approve')) {
             abort(403);
         }
 
@@ -231,7 +231,7 @@ class Daily extends Component
     public function markAsComplete()
     {
         // cek otoritas
-        if (auth()->user()->cannot('laporan-harian-validate')) {
+        if (auth()->user()->cannot('laporan-harian-approve')) {
             return abort(403);
         }
 

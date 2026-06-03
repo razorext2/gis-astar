@@ -69,7 +69,7 @@ class Show extends Component
         $user = auth()->user();
         $isOwner = $request->user_id === $user->id;
         $isBackup = $request->backup_person_id === $user->id;
-        $canViewAll = $user->can('leave-view-all') || $user->can('leave-approval-center');
+        $canViewAll = $user->can('leave-list-all') || $user->can('leave-approval-center');
 
         if (! $isOwner && ! $isBackup && ! $canViewAll) {
             abort(403, 'Anda tidak memiliki akses untuk melihat pengajuan ini.');

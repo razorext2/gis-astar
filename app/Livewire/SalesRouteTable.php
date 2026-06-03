@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\User;
+use App\Services\Sales\SalesRegionResolver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use PowerComponents\LivewirePowerGrid\Button;
@@ -37,32 +38,7 @@ final class SalesRouteTable extends PowerGridComponent
     {
         $this->user = auth()->user();
 
-        // Resolve visible roles using first-match-wins priority.
-        // Admin/full-access is checked first so it can never be overridden.
-        $roles = match (true) {
-            $this->user->hasAnyRole(['Admin', 'Management', 'Management-Special', 'HRD'])
-                || $this->user->can('sales-export-all') => ['Sales', 'Sales-PKU', 'Sales-IDY', 'Sales-JKT', 'Sales-Agrotec', 'Kurir-Bank'],
-
-            $this->user->hasAnyRole(['Marketing-JKT', 'Management-JKT'])
-                || $this->user->can('sales-export-jkt') => ['Sales-JKT'],
-
-            $this->user->hasAnyRole(['Marketing-PKU', 'Management-PKU'])
-                || $this->user->can('sales-export-pku') => ['Sales-PKU'],
-
-            $this->user->hasRole('Service-Agrotec')
-                || $this->user->can('sales-export-agrotec') => ['Sales-Agrotec'],
-
-            $this->user->hasRole('Marketing')
-                || $this->user->can('sales-export-medan') => ['Sales'],
-
-            $this->user->hasAnyRole(['HRD-IDY', 'Marketing-IDY'])
-                || $this->user->can('sales-export-idy') => ['Sales-IDY'],
-
-            $this->user->hasRole('Kasir')
-                || $this->user->can('sales-export-kurir-bank') => ['Kurir-Bank'],
-
-            default => [],
-        };
+        $roles = SalesRegionResolver::resolveForUser($this->user);
 
         $query = User::query()->with(['pegawai', 'roles']);
 

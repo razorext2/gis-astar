@@ -52,6 +52,6 @@ class LeaveRequestPolicy
         return $user->id === $leaveRequest->user_id
             || $user->id === $leaveRequest->backup_person_id
             || optional($leaveRequest->user->direct_supervisor)->id === $user->id
-            || $user->hasAnyPermission(['leave-view-all', 'leave-approval-center']);
+            || $user->hasAnyPermission(['leave-list-all', 'leave-approval-center']);
     }
 }

@@ -32,7 +32,7 @@ class Index extends Component
 
     public function setTab($tab)
     {
-        if ($tab === 'all' && !auth()->user()->can('leave-view-all')) {
+        if ($tab === 'all' && !auth()->user()->can('leave-list-all')) {
             return;
         }
 
@@ -59,7 +59,7 @@ class Index extends Component
 
         if ($this->activeTab === 'own') {
             $query->where('user_id', auth()->id());
-        } elseif ($this->activeTab === 'all' && auth()->user()->can('leave-view-all')) {
+        } elseif ($this->activeTab === 'all' && auth()->user()->can('leave-list-all')) {
             // No user filter
         } else {
             $query->where('user_id', auth()->id());

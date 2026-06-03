@@ -21,7 +21,7 @@
                 {{-- filter --}}
                 <div class="col-span-2">
                     <x-filter.filter-bar>
-                        @can('dayoff-confirm')
+                        @can('dayoff-approve')
                             <div class="col-span-2 mx-auto flex w-full items-center lg:col-span-1">
                                 <x-filter.filter-input-text id="kode-pegawai" name="kode-pegawai" :text="'kode pegawai'">
                                     <x-icons.fingerprint class="h-4 w-4 text-gray-500 dark:text-gray-400" />

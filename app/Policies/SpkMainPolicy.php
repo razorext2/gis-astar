@@ -21,7 +21,7 @@ class SpkMainPolicy
     public function view(User $user, SpkMain $spkMain): bool
     {
         return $user->hasPermissionTo('spk-create')
-            || ($user->hasPermissionTo('spk-detail') && ($user->id === $spkMain->assign_to || $user->id === $spkMain->reassign_to));
+            || ($user->hasPermissionTo('spk-view') && ($user->id === $spkMain->assign_to || $user->id === $spkMain->reassign_to));
     }
 
     /**
@@ -37,7 +37,7 @@ class SpkMainPolicy
      */
     public function update(User $user, SpkMain $spk): bool
     {
-        if ($user->hasAnyRole(['Admin', 'Management'])) {
+        if ($user->can('spk-edit-all')) {
             return $user->hasPermissionTo('spk-edit');
         }
 
@@ -71,12 +71,12 @@ class SpkMainPolicy
 
     public function billingIndex(User $user)
     {
-        return $user->hasPermissionTo('spk-billing-index');
+        return $user->hasPermissionTo('spk-billing-list');
     }
 
     public function billingUpdate(User $user)
     {
-        return $user->hasPermissionTo('spk-billing-update');
+        return $user->hasPermissionTo('spk-billing-edit');
     }
 
     /**
@@ -84,7 +84,7 @@ class SpkMainPolicy
      */
     public function updateNoTagihanIdcPpn(User $user)
     {
-        return $user->hasPermissionTo('spk-update-no-tagihan-idcppn');
+        return $user->hasPermissionTo('spk-no-tagihan-idcppn-edit');
     }
 
     /**
@@ -92,7 +92,7 @@ class SpkMainPolicy
      */
     public function updateNoTagihanIdcNonPpn(User $user)
     {
-        return $user->hasPermissionTo('spk-update-no-tagihan-idcnonppn');
+        return $user->hasPermissionTo('spk-no-tagihan-idcnonppn-edit');
     }
 
     /**
@@ -100,7 +100,7 @@ class SpkMainPolicy
      */
     public function updateInformasiPengiriman(User $user)
     {
-        return $user->hasPermissionTo('spk-update-informasi-pengiriman');
+        return $user->hasPermissionTo('spk-informasi-pengiriman-edit');
     }
 
     /**
@@ -108,7 +108,7 @@ class SpkMainPolicy
      */
     public function validatePengiriman(User $user)
     {
-        return $user->hasPermissionTo('spk-validate-pengiriman');
+        return $user->hasPermissionTo('spk-pengiriman-approve');
     }
 
     /**
@@ -116,7 +116,7 @@ class SpkMainPolicy
      */
     public function updateKontrakPengiriman(User $user)
     {
-        return $user->hasPermissionTo('spk-update-kontrak-pengiriman');
+        return $user->hasPermissionTo('spk-no-kontrak-pengiriman-edit');
     }
 
     /**
@@ -124,6 +124,6 @@ class SpkMainPolicy
      */
     public function validate(User $user)
     {
-        return $user->hasPermissionTo('spk-validate');
+        return $user->hasPermissionTo('spk-approve');
     }
 }

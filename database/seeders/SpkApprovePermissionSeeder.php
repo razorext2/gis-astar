@@ -14,7 +14,7 @@ class SpkApprovePermissionSeeder extends Seeder
     {
         DB::table('permissions')->insert([
             [
-                'name' => 'spk-validate',
+                'name' => 'spk-approve',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

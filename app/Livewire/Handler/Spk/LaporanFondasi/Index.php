@@ -270,7 +270,7 @@ class Index extends Component
     public function openCreateLaporanFondasiModal()
     {
         // cek addedby
-        if (auth()->user()->cannot('spk-validate') && (auth()->id() != $this->spk->added_by) && ! auth()->user()->can('laporan-fondasi-create')) {
+        if (auth()->user()->cannot('spk-approve') && (auth()->id() != $this->spk->added_by) && ! auth()->user()->can('laporan-fondasi-create')) {
             return $this->dispatch(
                 event: 'swal',
                 icon: 'warning',

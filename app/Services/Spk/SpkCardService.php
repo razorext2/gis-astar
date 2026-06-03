@@ -10,7 +10,7 @@ class SpkCardService
     public function getSpkCards()
     {
         $user = auth()->user();
-        $canValidate = $user->can('spk-validate');
+        $canValidate = $user->can('spk-approve');
 
         // Jika user bisa validasi, tampilkan semua, jika tidak tampilkan milik dia saja
         $baseQuery = SpkMain::query();
@@ -143,7 +143,7 @@ class SpkCardService
     public function getSpkDeliveryCards()
     {
         $user = auth()->user();
-        $canValidate = $user->can('spk-validate');
+        $canValidate = $user->can('spk-approve');
 
         $baseQuery = SpkMain::query()->whereHas('production',
             function ($production) use ($canValidate, $user) {
@@ -199,7 +199,7 @@ class SpkCardService
     {
         $baseQuery = SpkMain::query();
         $user = auth()->user();
-        $canValidate = $user->can('spk-validate');
+        $canValidate = $user->can('spk-approve');
 
         if (! $canValidate) {
             $baseQuery->where('added_by', $user->id);

@@ -64,7 +64,7 @@
             <div class="flex shrink-0 gap-2">
                 @if (
                     $data->status_approval === 0 &&
-                        auth()->user()->can('spk-validate') &&
+                        auth()->user()->can('spk-approve') &&
                         ($data->is_booked == false && $data->is_cancelled == false))
                     <x-button.primary id="btn-validate-spk" wire:click="validateSpk" wire:loading.attr="disabled"
                         wire:target="validateSpk">
@@ -94,7 +94,7 @@
                     </x-button.secondary>
                 @endif
 
-                @if ($data->is_cancelled && auth()->user()->can('spk-validate') && $data->cancel_request_validated_by === null)
+                @if ($data->is_cancelled && auth()->user()->can('spk-approve') && $data->cancel_request_validated_by === null)
                     <x-button.danger
                         wire:confirm.prompt="Apakah anda yakin ingin membatalkan SPK ini? SPK yang dibatalkan tidak dapat diproses lagi.\n\nKetik BATAL untuk mengkonfirmasi.|BATAL"
                         id="btn-cancel-spk" wire:click="cancelSpk" wire:loading.attr="disabled" wire:target="cancelSpk">
@@ -114,7 +114,7 @@
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 
             {{-- download button --}}
-            @if ($data->status_approval === 1 || auth()->user()->can('spk-validate'))
+            @if ($data->status_approval === 1 || auth()->user()->can('spk-approve'))
                 <div class="flex justify-between gap-2 md:col-span-2 lg:justify-end">
                     @can('spk-create')
                         <x-button.primary id="spk-pdf-export" wire:click="export" wire:loading.attr="disabled"
@@ -159,7 +159,7 @@
                         </span>
                     </div>
 
-                    @if (auth()->user()->can('spk-create') || auth()->user()->can('spk-validate'))
+                    @if (auth()->user()->can('spk-create') || auth()->user()->can('spk-approve'))
                         <div class="flex flex-col">
                             <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Tipe Tagihan</span>
                             <span
@@ -418,7 +418,7 @@
                         </div>
                     </div>
 
-                    @if (auth()->user()->can('spk-validate') || auth()->user()->can('spk-create') || auth()->user()->can('spk-lampiran'))
+                    @if (auth()->user()->can('spk-approve') || auth()->user()->can('spk-create') || auth()->user()->can('spk-lampiran-view'))
                         <div class="flex flex-col gap-2">
                             <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Lampiran Lainnya</span>
                             <div
@@ -453,7 +453,7 @@
     @livewire('utils.progres-spk', ['id' => $data->id])
     {{-- end progress spk --}}
 
-    @can('spk-history')
+    @can('spk-history-view')
         @livewire('handler.spk.spk-histories', ['id' => $data->id])
     @endcan
 

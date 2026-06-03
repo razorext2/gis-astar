@@ -107,7 +107,7 @@ class Index extends Component
 
     public function render()
     {
-        if (Auth::user()->hasPermissionTo('all-team')) {
+        if (Auth::user()->hasPermissionTo('team-list-all')) {
             $teams = Team::all();
         } else {
             $teams = Team::where('team_leader', Auth::user()->kode_pegawai)->get();

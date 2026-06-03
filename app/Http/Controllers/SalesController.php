@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ApiResource;
-use App\Models\Pegawai;
 use App\Models\Sales;
-use App\Models\User;
+use App\Services\Sales\SalesRegionResolver;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -34,19 +33,7 @@ class SalesController extends Controller
                 if (! $user->can('sales-approve')) {
                     $query->where('kode_pegawai', $user->kode_pegawai);
                 } else {
-                    $regionMap = [
-                        'Sales-IDY'     => fn () => $user->hasAnyRole(['HRD-IDY', 'Marketing-IDY']) || $user->can('sales-export-idy'),
-                        'Kurir-Bank'    => fn () => $user->hasAnyRole(['Kasir', 'Piutang']) || $user->can('sales-export-kurir-bank'),
-                        'Sales'         => fn () => $user->hasRole('Marketing') || $user->can('sales-export-medan'),
-                        'Sales-JKT'     => fn () => $user->hasAnyRole(['Marketing-JKT', 'Management-JKT']) || $user->can('sales-export-jkt'),
-                        'Sales-PKU'     => fn () => $user->hasAnyRole(['Marketing-PKU', 'Management-PKU']) || $user->can('sales-export-pku'),
-                        'Sales-Agrotec' => fn () => $user->can('sales-export-agrotec') || $user->hasRole('Service-Agrotec'),
-                    ];
-
-                    $allowedRoles = collect($regionMap)
-                        ->filter(fn ($check) => $check())
-                        ->keys()
-                        ->toArray();
+                    $allowedRoles = SalesRegionResolver::resolveForUser($user);
 
                     if (! empty($allowedRoles)) {
                         $query->whereHas('userRelasi.roles', fn ($q) => $q->whereIn('name', $allowedRoles));

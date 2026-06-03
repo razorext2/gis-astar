@@ -21,7 +21,7 @@
         </a>
     @endcan
 
-    @can('spk-validate')
+    @can('spk-approve')
         <a href="{{ route('spk.index') }}"
             class="group flex flex-col items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white/60 p-4 text-center shadow-sm backdrop-blur-md transition-all hover:-translate-y-1 hover:border-emerald-200 hover:bg-emerald-50/50 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/60 dark:hover:border-emerald-900/30 dark:hover:bg-emerald-900/10">
             <div

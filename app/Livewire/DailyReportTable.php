@@ -239,7 +239,7 @@ final class DailyReportTable extends PowerGridComponent
         $button = [];
         $user = auth()->user();
 
-        if ($user->can('assign-laporan-harian-spk')) {
+        if ($user->can('laporan-harian-spk-assign')) {
             $button[] = Button::make('assign')
                 ->slot('Assign')
                 ->id($row->id)
