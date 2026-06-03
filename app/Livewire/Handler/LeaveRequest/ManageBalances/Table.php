@@ -150,29 +150,28 @@ class Table extends Component
                 ->pluck('user_id')
                 ->toArray();
 
-            // Ambil semua User yang memiliki relasi Pegawai
-            $users = User::whereHas('pegawai')->get();
-
             $reset = 0;
             $skipped = 0;
 
-            foreach ($users as $user) {
-                // Jika user ada di daftar locked, tambahkan ke hitungan skipped dan lewati
-                if (in_array($user->id, $lockedUserIds)) {
-                    $skipped++;
+            User::whereHas('pegawai')->chunk(100, function ($users) use ($lockedUserIds, &$reset, &$skipped) {
+                foreach ($users as $user) {
+                    // Jika user ada di daftar locked, tambahkan ke hitungan skipped dan lewati
+                    if (in_array($user->id, $lockedUserIds)) {
+                        $skipped++;
 
-                    continue;
+                        continue;
+                    }
+
+                    $quota = $this->calculateDefaultQuota($user);
+
+                    LeaveBalance::updateOrCreate(
+                        ['user_id' => $user->id, 'year' => $this->year],
+                        ['total_quota' => $quota, 'used_quota' => 0]
+                    );
+
+                    $reset++;
                 }
-
-                $quota = $this->calculateDefaultQuota($user);
-
-                LeaveBalance::updateOrCreate(
-                    ['user_id' => $user->id, 'year' => $this->year],
-                    ['total_quota' => $quota, 'used_quota' => 0]
-                );
-
-                $reset++;
-            }
+            });
 
             $text = "{$reset} saldo pegawai berhasil direset.";
             if ($skipped > 0) {

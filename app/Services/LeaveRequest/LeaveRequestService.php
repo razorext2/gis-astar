@@ -6,6 +6,7 @@ namespace App\Services\LeaveRequest;
 
 use App\Models\LeaveRequest\LeaveBalance;
 use App\Models\LeaveRequest\LeaveRequest;
+use App\Models\LeaveRequest\LeaveRequestHistory;
 use App\Models\LeaveRequest\LeaveType;
 use App\Models\User;
 use Exception;
@@ -96,6 +97,16 @@ class LeaveRequestService
                     ->lockForUpdate()
                     ->first();
                 $balance?->increment('used_quota', $request->total_days);
+
+                // Audit log: catat pemotongan kuota
+                if ($balance) {
+                    LeaveRequestHistory::create([
+                        'leave_request_id' => $request->id,
+                        'acted_by' => $actor->id,
+                        'action' => 'quota_deducted',
+                        'note' => "Kuota dipotong: {$request->total_days} hari (sisa: {$balance->remaining_quota})",
+                    ]);
+                }
             }
 
             // Rollback Logic: kembalikan kuota jika cuti yang sudah approved ditolak/dibatalkan
@@ -106,6 +117,16 @@ class LeaveRequestService
                     ->lockForUpdate()
                     ->first();
                 $balance?->decrement('used_quota', $request->total_days);
+
+                // Audit log: catat pengembalian kuota
+                if ($balance) {
+                    LeaveRequestHistory::create([
+                        'leave_request_id' => $request->id,
+                        'acted_by' => $actor->id,
+                        'action' => 'quota_restored',
+                        'note' => "Kuota dikembalikan: {$request->total_days} hari (sisa: {$balance->remaining_quota})",
+                    ]);
+                }
             }
 
             // Notify next actor if approved but not final
@@ -328,8 +349,14 @@ class LeaveRequestService
     {
         $current = \Carbon\Carbon::parse($endDate)->addDay();
 
+        // Pre-fetch holidays 30 hari ke depan agar tidak query per iterasi
+        $holidays = \App\Models\System\Holiday::whereBetween('date', [
+            $current->toDateString(),
+            $current->copy()->addDays(30)->toDateString(),
+        ])->pluck('date')->map(fn ($d) => $d->format('Y-m-d'))->toArray();
+
         while (true) {
-            $isHoliday = \App\Models\System\Holiday::where('date', $current->toDateString())->exists();
+            $isHoliday = in_array($current->toDateString(), $holidays);
 
             if (! $current->isSunday() && ! $isHoliday) {
                 return $current->toDateString();

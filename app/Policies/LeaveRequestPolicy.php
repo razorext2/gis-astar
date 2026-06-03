@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-/** Goal: Encapsulate approval logic for Leave Requests, Caller: Controller/Livewire, Deps: User, LeaveRequest */
+/** Goal: Encapsulate authorization logic for Leave Requests (relasi-based), Caller: Controller/Livewire, Deps: User, LeaveRequest */
 
 use App\Models\LeaveRequest\LeaveRequest;
 use App\Models\User;
@@ -11,36 +11,19 @@ use Illuminate\Auth\Access\Response;
 class LeaveRequestPolicy
 {
     /**
-     * Determine whether the user can approve the leave request.
+     * Determine whether the user can view the approval center index.
      */
-    public function approve(User $user, LeaveRequest $leaveRequest): Response
+    public function viewAny(User $user): bool
     {
-        return match ($leaveRequest->status) {
-            // 1. Jika status pending_backup, yang boleh approve hanya user backup
-            'pending_backup' => $user->id === $leaveRequest->backup_person_id
-                ? Response::allow()
-                : Response::deny('Hanya orang yang ditunjuk sebagai backup yang dapat menyetujui tahap ini.'),
+        return $user->hasAnyPermission(['leave-approval-center', 'leave-list-all']);
+    }
 
-            // 2. Jika status pending_spv, yang boleh approve hanya atasan langsungnya.
-            // Jika pemohon tidak memiliki atasan langsung (level Kepala), maka otoritas persetujuan ada di Manajemen.
-            'pending_spv' => ($leaveRequest->user->direct_supervisors->isNotEmpty()
-                ? $leaveRequest->user->direct_supervisors->contains('id', $user->id)
-                : $user->can('leave-approve-management'))
-                ? Response::allow()
-                : Response::deny('Hanya atasan langsung atau Manajemen yang dapat menyetujui tahap ini.'),
-
-            // 3. Jika status pending_hrd, yang boleh approve hanya user yang punya permission HRD
-            'pending_hrd' => $user->can('leave-approve-hrd')
-                ? Response::allow()
-                : Response::deny('Anda tidak memiliki izin (HRD) untuk menyetujui tahap ini.'),
-
-            // 4. Jika status pending_management, yang boleh approve hanya user yang punya permission Management
-            'pending_management' => $user->can('leave-approve-management')
-                ? Response::allow()
-                : Response::deny('Anda tidak memiliki izin (Management) untuk menyetujui tahap ini.'),
-
-            default => Response::deny('Pengajuan ini sedang tidak dalam tahap yang memerlukan persetujuan Anda atau sudah diproses.'),
-        };
+    /**
+     * Determine whether the user can manage leave types and balances.
+     */
+    public function manage(User $user): bool
+    {
+        return $user->hasAnyPermission(['leave-balance-manage', 'leave-type-manage']);
     }
 
     /**
@@ -48,10 +31,57 @@ class LeaveRequestPolicy
      */
     public function view(User $user, LeaveRequest $leaveRequest): bool
     {
-        // Pemohon, Backup, Atasan, atau HRD/Management bisa melihat
-        return $user->id === $leaveRequest->user_id
-            || $user->id === $leaveRequest->backup_person_id
-            || ($leaveRequest->user->direct_supervisors->isNotEmpty() && $leaveRequest->user->direct_supervisors->contains('id', $user->id))
-            || $user->hasAnyPermission(['leave-list-all', 'leave-approval-center']);
+        // Pemohon sendiri
+        if ($user->id === $leaveRequest->user_id) {
+            return true;
+        }
+
+        // Backup person
+        if ($user->id === $leaveRequest->backup_person_id) {
+            return true;
+        }
+
+        // Atasan langsung (via jabatan supervisors)
+        $jabatan = $leaveRequest->user->pegawai?->jabatanRelasi;
+        if ($jabatan && $jabatan->supervisors->contains('id', $user->id)) {
+            return true;
+        }
+
+        // HRD atau Management di placement pemohon
+        $placement = $jabatan?->placementRelasi;
+        if ($placement) {
+            if ($placement->hrds->contains('id', $user->id) || $placement->managements->contains('id', $user->id)) {
+                return true;
+            }
+        }
+
+        // Global permission
+        return $user->hasAnyPermission(['leave-list-all', 'leave-approval-center']);
+    }
+
+    /**
+     * Determine whether the user can approve the leave request.
+     */
+    public function approve(User $user, LeaveRequest $leaveRequest): Response
+    {
+        return match ($leaveRequest->status) {
+            'pending_backup' => $user->id === $leaveRequest->backup_person_id
+                ? Response::allow()
+                : Response::deny('Hanya orang yang ditunjuk sebagai backup yang dapat menyetujui tahap ini.'),
+
+            'pending_spv' => (bool) $leaveRequest->user->pegawai?->jabatanRelasi?->supervisors->contains('id', $user->id)
+                ? Response::allow()
+                : Response::deny('Hanya atasan langsung yang dapat menyetujui tahap ini.'),
+
+            'pending_hrd' => (bool) $leaveRequest->user->pegawai?->jabatanRelasi?->placementRelasi?->hrds->contains('id', $user->id)
+                ? Response::allow()
+                : Response::deny('Anda tidak terdaftar sebagai HRD untuk placement pemohon ini.'),
+
+            'pending_management' => (bool) $leaveRequest->user->pegawai?->jabatanRelasi?->placementRelasi?->managements->contains('id', $user->id)
+                ? Response::allow()
+                : Response::deny('Anda tidak terdaftar sebagai Manajemen untuk placement pemohon ini.'),
+
+            default => Response::deny('Pengajuan ini sedang tidak dalam tahap yang memerlukan persetujuan Anda atau sudah diproses.'),
+        };
     }
 }

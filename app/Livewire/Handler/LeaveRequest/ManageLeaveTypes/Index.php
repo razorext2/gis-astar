@@ -82,7 +82,7 @@ class Index extends Component
         $this->runSafely(function () use ($id) {
             $type = LeaveType::findOrFail($id);
             if ($type->leaveRequests()->exists()) {
-                throw new \Exception('Tidak dapat menghapus tipe cuti yang sudah memiliki data pengajuan.');
+                throw new \App\Exceptions\BusinessException('Tidak dapat menghapus tipe cuti yang sudah memiliki data pengajuan.');
             }
             $type->delete();
             $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Tipe cuti berhasil dihapus.');
