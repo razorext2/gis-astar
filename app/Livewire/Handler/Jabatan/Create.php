@@ -21,9 +21,7 @@ class Create extends Component
 
     public $penempatan;
 
-    public $supervisor_id;
-
-    public $search_supervisor = '';
+    public array $supervisor_ids = [];
 
     public function save()
     {
@@ -31,16 +29,20 @@ class Create extends Component
             'nama_jabatan' => 'required|string|max:255',
             'divisi' => 'nullable|exists:tb_division,id',
             'penempatan' => 'nullable|exists:tb_placement,id',
-            'supervisor_id' => 'nullable|exists:users,id',
+            'supervisor_ids' => 'nullable|array',
+            'supervisor_ids.*' => 'exists:users,id',
         ]);
 
         $this->runSafely(function () {
-            Jabatan::create([
+            $jabatan = Jabatan::create([
                 'nama_jabatan' => $this->nama_jabatan,
                 'divisi' => $this->divisi,
                 'penempatan' => $this->penempatan,
-                'supervisor_id' => $this->supervisor_id,
             ]);
+
+            if (!empty($this->supervisor_ids)) {
+                $jabatan->supervisors()->sync($this->supervisor_ids);
+            }
 
             session()->flash('status', 'Berhasil menambah data Jabatan');
 
@@ -53,23 +55,17 @@ class Create extends Component
 
     public function render()
     {
-        $users = User::query()
+        $allUsers = User::query()
             ->select(['id', 'name', 'kode_pegawai', 'is_active'])
             ->where('is_active', true)
-            ->when($this->search_supervisor, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('name', 'like', '%'.$this->search_supervisor.'%')
-                        ->orWhere('kode_pegawai', 'like', '%'.$this->search_supervisor.'%');
-                });
-            })
+            ->with('pegawai')
             ->orderBy('name')
-            ->limit(10)
             ->get();
 
         return view('livewire.handler.jabatan.create', [
             'divisions' => Division::select(['id', 'nama_divisi'])->get(),
             'placements' => Placement::select(['id', 'penempatan'])->get(),
-            'users' => $users,
+            'allUsers' => $allUsers,
         ]);
     }
 }

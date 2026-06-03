@@ -55,8 +55,8 @@
                         {{ $request->user->pegawai->jabatanRelasi->nama_jabatan ?? 'Staf' }}
                         <span class="mx-1 text-zinc-300">•</span>
                         Penanggung Jawab:
-                        @if ($request->user->pegawai->jabatanRelasi->supervisor)
-                            {{ $request->user->pegawai->jabatanRelasi->supervisor->name }}
+                        @if ($request->user->pegawai->jabatanRelasi?->supervisors->isNotEmpty())
+                            {{ $request->user->pegawai->jabatanRelasi->supervisors->pluck('name')->implode(', ') }}
                         @else
                             <a href="{{ route('jabatan.edit', $request->user->pegawai->jabatanRelasi->id) }}"
                                 class="font-black italic text-red-500 hover:underline">

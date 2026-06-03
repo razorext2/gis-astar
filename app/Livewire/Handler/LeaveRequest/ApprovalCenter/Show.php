@@ -39,7 +39,7 @@ class Show extends Component
 
         return match ($request->status) {
             'pending_backup' => $request->backup_person_id === $user->id,
-            'pending_spv' => ($request->user->pegawai->jabatanRelasi->supervisor_id ?? null) === $user->id,
+            'pending_spv' => (bool) $request->user->pegawai->jabatanRelasi?->supervisors->contains('id', $user->id),
             'pending_hrd' => (bool) $request->user->pegawai->jabatanRelasi->placementRelasi?->hrds->contains('id', $user->id),
             'pending_management' => (bool) $request->user->pegawai->jabatanRelasi->placementRelasi?->managements->contains('id', $user->id),
             default => false,
@@ -95,7 +95,7 @@ class Show extends Component
     public function render()
     {
         $user = auth()->user();
-        $request = LeaveRequest::with(['user.pegawai.jabatanRelasi.divisionRelasi', 'user.pegawai.jabatanRelasi.placementRelasi', 'user.pegawai.jabatanRelasi.supervisor', 'leaveType', 'backupPerson', 'histories.actedByUser'])
+        $request = LeaveRequest::with(['user.pegawai.jabatanRelasi.divisionRelasi', 'user.pegawai.jabatanRelasi.placementRelasi', 'user.pegawai.jabatanRelasi.supervisors', 'leaveType', 'backupPerson', 'histories.actedByUser'])
             ->findOrFail($this->requestId);
 
         // Guard: Hanya approver terkait atau yang punya permission

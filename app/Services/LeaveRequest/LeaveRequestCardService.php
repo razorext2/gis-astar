@@ -107,7 +107,7 @@ class LeaveRequestCardService
 
             $q->orWhere(function ($sq) use ($user) {
                 $sq->where('status', 'pending_spv')
-                    ->whereHas('user.pegawai.jabatanRelasi', fn ($jq) => $jq->where('supervisor_id', $user->id));
+                    ->whereHas('user.pegawai.jabatanRelasi.supervisors', fn ($jq) => $jq->where('users.id', $user->id));
             });
 
             $q->orWhere(function ($sq) use ($user) {

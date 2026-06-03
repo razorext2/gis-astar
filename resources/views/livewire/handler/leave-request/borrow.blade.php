@@ -1,3 +1,4 @@
+{{-- Goal: Render form to borrow leave quota, Livewire: Handler.LeaveRequest.Borrow, Alpine: UI state / dropdown select --}}
 <div
     class="mt-4 flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
 
@@ -251,7 +252,7 @@
                                     <div class="h-1.5 w-1.5 rounded-full bg-zinc-300 dark:bg-zinc-600"></div>
                                     <span class="italic text-gray-600 dark:text-gray-400">Atasan:</span>
                                     <span
-                                        class="font-bold text-gray-700 dark:text-gray-200">{{ auth()->user()->pegawai->jabatanRelasi->supervisor->name ?? 'Belum Diatur' }}</span>
+                                        class="font-bold text-gray-700 dark:text-gray-200">{{ auth()->user()->pegawai->jabatanRelasi?->supervisors->pluck('name')->implode(', ') ?: 'Belum Diatur' }}</span>
                                 </div>
                                 <div class="flex items-start gap-2 text-[11px]">
                                     <div class="mt-1 h-1.5 w-1.5 rounded-full bg-zinc-300 dark:bg-zinc-600"></div>

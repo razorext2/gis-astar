@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\LeaveRequest;
 
+/** Goal: Handle routing or streaming of Leave Request PDFs, Caller: web.php, Deps: LeaveRequest, Pdf */
+
 use App\Http\Controllers\Controller;
 
 class LeaveRequestController extends Controller
@@ -38,7 +40,7 @@ class LeaveRequestController extends Controller
         $request->load([
             'user.pegawai.jabatanRelasi.divisionRelasi',
             'user.pegawai.jabatanRelasi.placementRelasi',
-            'user.pegawai.jabatanRelasi.supervisor',
+            'user.pegawai.jabatanRelasi.supervisors',
             'user.signature',
             'leaveType',
             'backupPerson',

@@ -15,6 +15,8 @@ use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 
+/** Goal: Display Jabatan table with multiple supervisors column formatted, Caller: Livewire, Deps: Jabatan */
+
 final class JabatanTable extends PowerGridComponent
 {
     use WithExport;
@@ -53,7 +55,7 @@ final class JabatanTable extends PowerGridComponent
     public function datasource(): Builder
     {
         return Jabatan::query()
-            ->with(['divisionRelasi', 'placementRelasi', 'supervisor'])
+            ->with(['divisionRelasi', 'placementRelasi', 'supervisors'])
             ->orderBy('nama_jabatan', 'asc');
     }
 
@@ -66,7 +68,7 @@ final class JabatanTable extends PowerGridComponent
             'divisionRelasi' => [
                 'nama_divisi',
             ],
-            'supervisor' => [
+            'supervisors' => [
                 'name',
             ],
         ];
@@ -78,10 +80,11 @@ final class JabatanTable extends PowerGridComponent
             ->add('id')
             ->add('nama_jabatan')
             ->add('nama_jabatan_formatted', function ($query) {
+                $supervisorsList = $query->supervisors->pluck('name')->implode(', ') ?: 'Belum diatur.';
                 return view('components.dashboard.name-w-code', [
                     'code' => '',
                     'name' => $query->nama_jabatan,
-                    'item3' => $query->supervisor?->name ?? 'Belum diatur.',
+                    'item3' => $supervisorsList,
                 ]);
             })
             ->add('divisi', fn ($query) => $query->divisionRelasi->nama_divisi)

@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/** Goal: Represent Placement model and remove unused manager_id, Caller: Models, Deps: User */
+
 class Placement extends Model
 {
     use HasFactory;
@@ -13,7 +15,6 @@ class Placement extends Model
 
     protected $fillable = [
         'kode_penempatan',
-        'manager_id',
         'penempatan',
         'alamat',
         'longitude',
@@ -21,11 +22,6 @@ class Placement extends Model
         'radius',
         'restrict_app',
     ];
-
-    public function manager()
-    {
-        return $this->belongsTo(User::class, 'manager_id');
-    }
 
     public function hrds()
     {

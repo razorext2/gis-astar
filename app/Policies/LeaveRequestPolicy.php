@@ -23,8 +23,8 @@ class LeaveRequestPolicy
 
             // 2. Jika status pending_spv, yang boleh approve hanya atasan langsungnya.
             // Jika pemohon tidak memiliki atasan langsung (level Kepala), maka otoritas persetujuan ada di Manajemen.
-            'pending_spv' => ($leaveRequest->user->direct_supervisor
-                ? $user->id === $leaveRequest->user->direct_supervisor->id
+            'pending_spv' => ($leaveRequest->user->direct_supervisors->isNotEmpty()
+                ? $leaveRequest->user->direct_supervisors->contains('id', $user->id)
                 : $user->can('leave-approve-management'))
                 ? Response::allow()
                 : Response::deny('Hanya atasan langsung atau Manajemen yang dapat menyetujui tahap ini.'),
@@ -51,7 +51,7 @@ class LeaveRequestPolicy
         // Pemohon, Backup, Atasan, atau HRD/Management bisa melihat
         return $user->id === $leaveRequest->user_id
             || $user->id === $leaveRequest->backup_person_id
-            || optional($leaveRequest->user->direct_supervisor)->id === $user->id
+            || ($leaveRequest->user->direct_supervisors->isNotEmpty() && $leaveRequest->user->direct_supervisors->contains('id', $user->id))
             || $user->hasAnyPermission(['leave-list-all', 'leave-approval-center']);
     }
 }

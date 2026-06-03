@@ -190,9 +190,7 @@ class LeaveRequestService
                 return $request->backupPerson ? collect([$request->backupPerson]) : collect();
 
             case 'pending_spv':
-                $spvUser = $jabatan->supervisor;
-
-                return $spvUser ? collect([$spvUser]) : collect();
+                return $jabatan->supervisors;
 
             case 'pending_hrd':
                 return $placement ? $placement->hrds : collect();

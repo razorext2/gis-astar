@@ -59,7 +59,7 @@ class Show extends Component
         $request = LeaveRequest::with([
             'user.pegawai.jabatanRelasi.divisionRelasi',
             'user.pegawai.jabatanRelasi.placementRelasi',
-            'user.pegawai.jabatanRelasi.supervisor',
+            'user.pegawai.jabatanRelasi.supervisors',
             'leaveType',
             'backupPerson',
             'histories.actedByUser',

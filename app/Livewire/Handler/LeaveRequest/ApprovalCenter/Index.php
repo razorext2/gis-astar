@@ -67,7 +67,7 @@ class Index extends Component
                 // 2. As Supervisor (Check if applicant's supervisor is me)
                 $q->orWhere(function ($sq) use ($user) {
                     $sq->where('status', 'pending_spv')
-                        ->whereHas('user.pegawai.jabatanRelasi', fn ($jq) => $jq->where('supervisor_id', $user->id));
+                        ->whereHas('user.pegawai.jabatanRelasi.supervisors', fn ($jq) => $jq->where('users.id', $user->id));
                 });
 
                 // 3. As HRD (User is assigned as HRD in applicant's placement)
