@@ -104,6 +104,8 @@ class LeaveRequestService
                         'leave_request_id' => $request->id,
                         'acted_by' => $actor->id,
                         'action' => 'quota_deducted',
+                        'status_from' => $oldStatus,
+                        'status_to' => $request->status,
                         'note' => "Kuota dipotong: {$request->total_days} hari (sisa: {$balance->remaining_quota})",
                     ]);
                 }
@@ -124,6 +126,8 @@ class LeaveRequestService
                         'leave_request_id' => $request->id,
                         'acted_by' => $actor->id,
                         'action' => 'quota_restored',
+                        'status_from' => $oldStatus,
+                        'status_to' => $request->status,
                         'note' => "Kuota dikembalikan: {$request->total_days} hari (sisa: {$balance->remaining_quota})",
                     ]);
                 }
