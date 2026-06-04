@@ -66,7 +66,13 @@ final class AttendanceOutTable extends PowerGridComponent
     public function datasource(): Builder
     {
         return AttendanceOut::query()
-            ->with(['pegawaiRelasi', 'user'])
+            ->with([
+                'pegawaiRelasi' => fn ($q) => $q
+                    ->with([
+                        'userRelasi' => fn ($uq) => $uq->with('roles'),
+                    ]),
+                'verifiedBy',
+            ])
             ->join('tb_pegawai', 'tb_attendance_out.kode_pegawai', '=', 'tb_pegawai.kode_pegawai')
             ->leftJoin('users', 'tb_pegawai.kode_pegawai', '=', 'users.kode_pegawai')
             ->leftJoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')

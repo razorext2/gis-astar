@@ -46,7 +46,7 @@
                         <span>Timeline</span>
                     </a>
 
-                    @if ($pegawai->userRelasi->hasRole('Collector'))
+                    @if ($pegawai->userRelasi?->hasRole('Collector'))
                         <a href="{{ route('pegawai.collectors', $pegawai->kode_pegawai) }}"
                             class="{{ $tabClasses }} {{ Route::is('pegawai.collectors') ? $activeClasses : $inactiveClasses }}">
                             <x-icons.info class="h-4 w-4" />
@@ -54,7 +54,7 @@
                         </a>
                     @endif
 
-                    @if ($pegawai->userRelasi->hasRole(['Sales', 'Sales-JKT', 'Sales-PKU', 'Sales-IDY', 'Sales-Agrotec', 'Kurir-Bank']))
+                    @if ($pegawai->userRelasi?->hasRole(['Sales', 'Sales-JKT', 'Sales-PKU', 'Sales-IDY', 'Sales-Agrotec', 'Kurir-Bank']))
                         <a href="{{ route('pegawai.sales', $pegawai->kode_pegawai) }}"
                             class="{{ $tabClasses }} {{ Route::is('pegawai.sales') ? $activeClasses : $inactiveClasses }}">
                             <x-icons.info class="h-4 w-4" />

@@ -39,7 +39,8 @@ final class PegawaiTable extends PowerGridComponent
         return [
             PowerGrid::header()
                 ->showSoftDeletes()
-                ->showToggleColumns(),
+                ->showToggleColumns()
+                ->showSearchInput(),
             PowerGrid::footer()
                 ->showPerPage(25)
                 ->showRecordCount(),
@@ -54,11 +55,12 @@ final class PegawaiTable extends PowerGridComponent
     {
         return Pegawai::query()
             ->leftJoin('users', 'tb_pegawai.kode_pegawai', '=', 'users.kode_pegawai')
-            ->leftJoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-            ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
-            ->select('tb_pegawai.*', 'users.is_active', 'users.deactivation_reason')
-            ->groupBy('tb_pegawai.id', 'users.is_active', 'users.deactivation_reason')
-            ->with(['userRelasi', 'userRelasi.roles', 'userRelasi.currentLeave', 'jabatanRelasi', 'golonganRelasi'])
+            ->select(['tb_pegawai.*', 'users.is_active', 'users.deactivation_reason'])
+            ->with([
+                'userRelasi' => fn ($q) => $q->with(['roles', 'currentLeave']),
+                'jabatanRelasi',
+                'golonganRelasi',
+            ])
             ->orderBy('users.is_active', 'desc')
             ->orderBy('full_name', 'asc');
     }
@@ -71,6 +73,11 @@ final class PegawaiTable extends PowerGridComponent
             ],
             'golonganRelasi' => [
                 'nama_golongan',
+            ],
+            'userRelasi' => [
+                'name',
+                'email',
+                'kode_pegawai',
             ],
         ];
     }
@@ -86,7 +93,7 @@ final class PegawaiTable extends PowerGridComponent
                     'capitalize' => false,
                     'code' => $query->kode_pegawai ?? '',
                     'name' => $query->full_name,
-                    'item3' => collect($query->userRelasi->roles->pluck('name'))->implode(', '),
+                    'item3' => collect($query->userRelasi?->roles?->pluck('name'))->implode(', '),
                 ])->render();
             })
             ->add('email_formatted', function ($query) {
@@ -100,6 +107,7 @@ final class PegawaiTable extends PowerGridComponent
                 if ($query->userRelasi && $query->userRelasi->join_date) {
                     return Carbon::parse($query->userRelasi->join_date)->locale('id')->isoFormat('DD MMM YYYY');
                 }
+
                 return '-';
             })
             ->add('created_at_formatted', fn ($query) => Carbon::parse($query->created_at)->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss'))
@@ -110,7 +118,7 @@ final class PegawaiTable extends PowerGridComponent
                 ])->render();
             })
             ->add('roles_formatted', function ($query) {
-                return collect($query->userRelasi->roles->pluck('name'))->implode(', ');
+                return collect($query->userRelasi?->roles?->pluck('name'))->implode(', ');
             })
             ->add('status_formatted', function ($query) {
                 if (! $query->userRelasi) {
