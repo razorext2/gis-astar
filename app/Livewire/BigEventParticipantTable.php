@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: PowerGrid table representing Big Event participants and rankings, Caller: Big Event dashboard, Deps: App\Models\BigEventParticipant */
+
 namespace App\Livewire;
 
 use App\Models\BigEventParticipant;
@@ -45,7 +47,8 @@ final class BigEventParticipantTable extends PowerGridComponent
             ->fromSub($base, 'p')
             ->select('p.*')
             ->selectRaw('DENSE_RANK() OVER (ORDER BY p.visitors_count DESC) AS rank_pos')
-            ->whereNull('p.deleted_at');
+            ->whereNull('p.deleted_at')
+            ->with(['userId', 'bigEventId']);
 
         $query->orderBy('rank_pos', 'asc');
 
@@ -64,7 +67,10 @@ final class BigEventParticipantTable extends PowerGridComponent
             ->add('id_formatted', fn() => $this->nextRowNumber())
             ->add('big_event_id')
             ->add('user_id')
-            ->add('user_id_formatted', fn($query) => $query->userId->name)
+            ->add('user_id_formatted', fn($query) => view('components.dashboard.name-w-badge', [
+                'name' => $query->userId->name,
+                'is_active' => (bool) ($query->userId?->is_active ?? true),
+            ]))
             ->add('visitor_api')
             ->add('counter_formatted', fn($row) => number_format($row->visitors_count) . ' Orang')
             ->add('ranking_formatted', fn($row) => '#' . $row->rank_pos)

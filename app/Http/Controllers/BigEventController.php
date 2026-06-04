@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Controller for Big Event and participant management operations, Caller: Routes web.php, Deps: App\Models\BigEvent, App\Models\BigEventParticipant */
+
 namespace App\Http\Controllers;
 
 use App\Models\BigEvent;

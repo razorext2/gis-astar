@@ -69,7 +69,7 @@
                         <option value="">Semua Sales</option>
                         @foreach ($salesData as $row)
                             <option value="{{ $row->kode_pegawai }}">
-                                [{{ $row->kode_pegawai }}] {{ $row->name }}
+                                [{{ $row->kode_pegawai }}] {{ $row->name }} {{ !$row->is_active ? '(Nonaktif)' : '' }}
                             </option>
                         @endforeach
                     </select>

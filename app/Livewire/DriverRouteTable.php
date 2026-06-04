@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Display driver route overview table with active status support, Caller: routes/web.php, Deps: User */
+
 namespace App\Livewire;
 
 use App\Models\User;
@@ -50,7 +52,10 @@ final class DriverRouteTable extends PowerGridComponent
             }
         }
 
-        return User::query()->role($roles);
+        $query = User::query()->role($roles);
+        $query->orderBy('is_active', 'desc');
+
+        return $query;
     }
 
     public function relationSearch(): array
@@ -62,8 +67,14 @@ final class DriverRouteTable extends PowerGridComponent
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('kode_pegawai')
-            ->add('name')
+            ->add('kode_pegawai', fn ($row) => view('components.dashboard.date-w-name', [
+                'date' => $row->kode_pegawai,
+                'name' => 'ID: '.$row->id,
+            ]))
+            ->add('name', fn ($row) => view('components.dashboard.name-w-badge', [
+                'name' => $row->name,
+                'is_active' => (bool) $row->is_active,
+            ]))
             ->add('email');
     }
 
@@ -73,9 +84,7 @@ final class DriverRouteTable extends PowerGridComponent
             Column::action('Action')
                 ->bodyAttribute('text-center'),
 
-            Column::make('UserID', 'id'),
-            Column::make('Kode Pegawai', 'kode_pegawai')
-                ->sortable()
+            Column::make('Kode / ID', 'kode_pegawai')
                 ->searchable(),
 
             Column::make('Nama Lengkap', 'name')

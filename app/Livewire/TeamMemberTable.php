@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Manage team members and track their finger logs/points, Caller: routes/web.php (teams.edit), Deps: TeamMember, User */
+
 namespace App\Livewire;
 
 use App\Models\TeamMember;
@@ -44,7 +46,8 @@ final class TeamMemberTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('kode_pegawai')
             ->add('nama_pegawai', function ($query) {
-                return '['.$query->kode_pegawai.'] '.$query->userId->name;
+                $statusSuffix = ($query->userId && !$query->userId->is_active) ? ' (Nonaktif)' : '';
+                return '['.$query->kode_pegawai.'] '.$query->userId->name . $statusSuffix;
             })
             ->add('role', fn ($query) => ucfirst($query->role))
             ->add('total_poin', fn ($query) => $query->userId->technicianPoint->sum('point').' Total poin')

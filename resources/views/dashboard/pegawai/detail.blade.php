@@ -1,3 +1,4 @@
+{{-- Goal: Wrapper layout for employee detail tabs, Livewire: -, Alpine: - --}}
 @extends('dashboard.layoutsDash.app')
 @section('content')
     <div class="space-y-4">
@@ -13,7 +14,10 @@
                     </x-button.danger>
 
                     <div>
-                        <h2 class="text-xl font-bold tracking-tight text-gray-800 dark:text-white">Detail Pegawai</h2>
+                        <h2 class="text-xl font-bold tracking-tight text-gray-800 dark:text-white flex items-center gap-2">
+                            Detail Pegawai
+                            <x-dashboard.badge-inactive :is_active="$pegawai->userRelasi?->is_active ?? true" />
+                        </h2>
                         <p class="text-xs text-gray-500 dark:text-gray-400">Manajemen informasi dan riwayat staf.</p>
                     </div>
                 </div>

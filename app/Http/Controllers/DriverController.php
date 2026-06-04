@@ -22,7 +22,7 @@ class DriverController extends Controller
 
     public function show($id)
     {
-        $data = Driver::with(['validateBy', 'pegawai'])->find($id);
+        $data = Driver::with(['validateBy', 'pegawai.userRelasi'])->find($id);
 
         if (!$data) {
             return abort(404);

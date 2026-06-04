@@ -1,3 +1,4 @@
+{{-- Goal: Display today's check-out grid with status filters, Livewire: Handler\Attendance\TodayOut, Alpine: - --}}
 <div class="grid w-full grid-cols-1 gap-y-6">
 
     {{-- Filter Bar --}}
@@ -43,8 +44,9 @@
                     <div class="flex flex-1 flex-col justify-between gap-3 p-4">
                         <div>
                             <div class="mb-1 flex items-start justify-between gap-2">
-                                <h5 class="text-base font-black tracking-tight text-zinc-900 dark:text-white">
+                                <h5 class="text-base font-black tracking-tight text-zinc-900 dark:text-white flex items-center gap-1.5">
                                     {{ $row->pegawaiRelasi->full_name }}
+                                    <x-dashboard.badge-inactive :is_active="$row->user?->is_active ?? true" />
                                 </h5>
                                 <span
                                     class="rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] font-bold text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
@@ -121,6 +123,7 @@
                         <a href="{{ route('pegawai.detail', $attendance->pegawaiRelasi->id) }}" target="_blank"
                             class="group flex items-center gap-1.5 text-lg font-bold text-zinc-900 hover:text-red-600 dark:text-white dark:hover:text-red-400">
                             {{ $attendance->pegawaiRelasi->full_name }}
+                            <x-dashboard.badge-inactive :is_active="$attendance->user?->is_active ?? true" />
                             <x-icons.arrow-right
                                 class="h-4 w-4 -rotate-45 opacity-0 transition-all group-hover:opacity-100" />
                         </a>

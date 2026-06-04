@@ -1,3 +1,4 @@
+{{-- Goal: Render technician leaderboard with deactivation status support, Livewire: Dashboard\TechnicianLeaderboard, Alpine: - --}}
 <div>
     @if(auth()->user()->can('technician-list') || auth()->user()->can('point-approve'))
     <div class="flex flex-col rounded-xl border border-zinc-200 bg-white/60 p-5 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 md:p-6">
@@ -22,8 +23,11 @@
                                     {{ $index + 1 }}
                                 </div>
                                 <div class="flex flex-col">
-                                    <span class="text-sm font-bold text-zinc-800 dark:text-white line-clamp-1">
+                                    <span class="text-sm font-bold text-zinc-800 dark:text-white line-clamp-1 inline-flex items-center gap-1.5">
                                         {{ $tech->pegawai->full_name ?? 'Teknisi N/A' }}
+                                        @if ($tech->pegawai)
+                                            <x-dashboard.badge-inactive :is_active="$tech->pegawai->userRelasi?->is_active ?? true" />
+                                        @endif
                                     </span>
                                 </div>
                             </div>

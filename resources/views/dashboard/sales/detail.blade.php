@@ -1,3 +1,4 @@
+{{-- Goal: Display details of a sales report, Livewire: None, Alpine: None --}}
 @extends('dashboard.layoutsDash.app')
 @section('content')
     <div class="w-full space-y-6">
@@ -31,9 +32,14 @@
                     <div
                         class="col-span-2 flex flex-col items-start justify-center rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-gray-700 lg:col-span-1">
                         <p class="text-sm text-gray-600 dark:text-gray-300">Nama Pegawai</p>
-                        <p class="text-navy-700 text-base font-medium dark:text-white">
-                            {{ $data->pegawaiRelasi->full_name ?? 'N/A' }}
-                        </p>
+                        <div class="flex items-center gap-x-2">
+                            <p class="text-navy-700 text-base font-medium dark:text-white">
+                                {{ $data->pegawaiRelasi->full_name ?? 'N/A' }}
+                            </p>
+                            @if ($data->pegawaiRelasi?->userRelasi)
+                                <x-dashboard.badge-inactive :is_active="$data->pegawaiRelasi->userRelasi->is_active ?? true" />
+                            @endif
+                        </div>
                     </div>
 
                     <div
@@ -154,12 +160,18 @@
                                     Sedang diajukan.
                                 </span>
                             @elseif ($status == 1)
-                                <span class="text-sm font-semibold text-green-400">
-                                    Disetujui. (divalidasi oleh: {{ $data->validateBy->name ?? 'N/A' }})
+                                <span class="flex items-center gap-x-2 text-sm font-semibold text-green-400">
+                                    <span>Disetujui. (divalidasi oleh: {{ $data->validateBy->name ?? 'N/A' }})</span>
+                                    @if ($data->validateBy)
+                                        <x-dashboard.badge-inactive :is_active="$data->validateBy->is_active ?? true" />
+                                    @endif
                                 </span>
                             @else
-                                <span class="text-sm font-semibold text-red-400">
-                                    Laporan di Tolak! (divalidasi oleh: {{ $data->validateBy->name ?? 'N/A' }})
+                                <span class="flex items-center gap-x-2 text-sm font-semibold text-red-400">
+                                    <span>Laporan di Tolak! (divalidasi oleh: {{ $data->validateBy->name ?? 'N/A' }})</span>
+                                    @if ($data->validateBy)
+                                        <x-dashboard.badge-inactive :is_active="$data->validateBy->is_active ?? true" />
+                                    @endif
                                 </span>
                             @endif
 

@@ -77,6 +77,7 @@ final class UserTable extends PowerGridComponent
             ->add('name', fn ($row) => view('components.dashboard.date-w-name', [
                 'date' => $row->name,
                 'name' => $row->email,
+                'is_active' => (bool) $row->is_active,
             ]))
             ->add('email')
             ->add('roles_formatted', fn ($row) => $row->roles->pluck('name')->implode(', ') ?: '-')

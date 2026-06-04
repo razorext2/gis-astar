@@ -177,6 +177,8 @@ final class InvoiceTable extends PowerGridComponent
                     'code' => 'Ditambah oleh: '.$query->addedBy->name,
                     'name' => 'Terakhir update: '.$query->latestUpdateBy->name,
                     'item3' => 'Dibuat Tanggal: '.Carbon::parse($query->created_at)->locale('id')->isoFormat('DD MMMM YYYY'),
+                    'is_active_code' => $query->addedBy?->is_active ?? true,
+                    'is_active' => $query->latestUpdateBy?->is_active ?? true,
                 ]);
             });
     }

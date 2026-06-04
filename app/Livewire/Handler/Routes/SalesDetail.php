@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Display map and timeline of route waypoints for sales, Caller: detail.blade.php, Deps: Pegawai, User */
+
 namespace App\Livewire\Handler\Routes;
 
 use App\Models\Pegawai;
@@ -24,7 +26,7 @@ class SalesDetail extends Component
     #[Computed]
     public function pegawai(): Pegawai
     {
-        return Pegawai::where('kode_pegawai', $this->kodePegawai)->firstOrFail();
+        return Pegawai::with('userRelasi')->where('kode_pegawai', $this->kodePegawai)->firstOrFail();
     }
 
     #[Computed]

@@ -56,9 +56,12 @@
                         <x-icons.user class="h-5 w-5" />
                     </div>
                     <div>
-                        <p class="font-semibold text-zinc-900 dark:text-white">
-                            {{ $data->pegawaiRelasi?->full_name ?? 'N/A' }}
-                        </p>
+                        <div class="flex items-center gap-x-2">
+                            <p class="font-semibold text-zinc-900 dark:text-white">
+                                {{ $data->pegawaiRelasi?->full_name ?? 'N/A' }}
+                            </p>
+                            <x-dashboard.badge-inactive :is_active="$data->pegawaiRelasi?->userRelasi?->is_active ?? true" />
+                        </div>
                         <p class="text-xs text-zinc-500 dark:text-zinc-400">{{ $data->kode_pegawai }}</p>
                     </div>
                 </div>

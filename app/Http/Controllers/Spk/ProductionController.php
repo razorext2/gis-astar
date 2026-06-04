@@ -64,7 +64,12 @@ class ProductionController extends Controller
 
     private function getData($id)
     {
-        return Production::with(['spk', 'productionHistories'])
-            ->findOrFail($id);
+        return Production::with([
+            'spk.addedBy',
+            'spk.assignTo',
+            'spk.approvedBy',
+            'reassignTo',
+            'productionHistories',
+        ])->findOrFail($id);
     }
 }

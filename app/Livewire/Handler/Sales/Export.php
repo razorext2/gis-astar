@@ -153,7 +153,7 @@ class Export extends Component
 
     public function render()
     {
-        $sales = User::select(['id', 'kode_pegawai', 'name'])
+        $sales = User::select(['id', 'kode_pegawai', 'name', 'is_active'])
             ->whereHas('roles', fn ($query) => $query->whereIn('name', $this->allowedRoleNames()))
             ->orderBy('kode_pegawai', 'asc')
             ->get();

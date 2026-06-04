@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Manage and display technician list with points and team assignment, Caller: routes/web.php (technician.index), Deps: Technician, Team, Pegawai */
+
 namespace App\Livewire;
 
 use App\Models\Team;
@@ -58,7 +60,7 @@ final class TechnicianTable extends PowerGridComponent
     {
         $query = Technician::query()
             ->select('tb_technician.*', 'tb_team_members.team_code', 'tb_teams.team_name')
-            ->with('pegawai', 'point')
+            ->with(['pegawai.userRelasi', 'point'])
             ->leftJoin('tb_team_members', 'tb_team_members.kode_pegawai', '=', 'tb_technician.kode_pegawai')
             ->leftJoin('tb_teams', 'tb_teams.team_code', '=', 'tb_team_members.team_code')
             ->orderBy('tb_technician.visit_date', 'desc');
@@ -133,6 +135,7 @@ final class TechnicianTable extends PowerGridComponent
                 'code' => $query->kode_pegawai,
                 'name' => $query->pegawai->full_name ?? 'Teknisi belum terdaftar di sistem',
                 'item3' => $query->team_code,
+                'is_active' => $query->pegawai?->userRelasi ? (bool) $query->pegawai->userRelasi->is_active : null,
             ]))
             ->add('customer_info', fn ($query) => view('components.dashboard.name-w-code', [
                 'code' => $query->customer_address,
@@ -161,14 +164,16 @@ final class TechnicianTable extends PowerGridComponent
 
             Column::make('Teknisi', 'pegawai_info', 'kode_pegawai')
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->bodyAttribute('w-full'),
 
             Column::make('Tim', 'team_code', 'team_code')
                 ->hidden(true),
 
             Column::make('Customer', 'customer_info', 'customer_contact')
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->bodyAttribute('w-full'),
 
             Column::make('Tanggal Kunjungan', 'tanggal_kunjungan_formatted', 'visit_date')
                 ->sortable()

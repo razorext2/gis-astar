@@ -39,6 +39,7 @@ final class DailyReportTable extends PowerGridComponent
     {
         $query = SpkMain::query()
             ->select($this->datasourceTableColumns())
+            ->with(['addedBy'])
             ->addSelect([
                 'customer_contact_person' => DB::raw("JSON_UNQUOTE(JSON_EXTRACT(customer, '$.contact_person'))"),
                 'products_name' => DB::raw("JSON_UNQUOTE(JSON_EXTRACT(products, '$.nama_barang'))"),
@@ -76,7 +77,10 @@ final class DailyReportTable extends PowerGridComponent
             ->add('status')
             ->add('created_at')
             ->add('tipe_timbangan')
-            ->add('added_by', fn ($query): mixed => $query->addedBy->name)
+            ->add('added_by', fn ($query) => view('components.dashboard.name-w-badge', [
+                'name' => $query->addedBy->name,
+                'is_active' => (bool) ($query->addedBy?->is_active ?? true),
+            ]))
             ->add('nomor_order_formatted', function ($query) {
                 return view('components.dashboard.name-w-code', [
                     'text_color' => match ($query->tipe_tagihan) {

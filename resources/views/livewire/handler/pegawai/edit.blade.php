@@ -1,3 +1,4 @@
+{{-- Goal: Edit form for employee data, Livewire: Handler\Pegawai\Edit, Alpine: - --}}
 <div class="w-full space-y-6">
     <!-- Top Header Navigation -->
     <div
@@ -9,7 +10,10 @@
                     <x-icons.angle-left class="h-5 w-5" />
                 </x-button.link>
                 <div>
-                    <h2 class="text-2xl font-bold tracking-tight text-gray-800 dark:text-white">Edit Data Pegawai</h2>
+                    <h2 class="flex items-center gap-2 text-2xl font-bold tracking-tight text-gray-800 dark:text-white">
+                        Edit Data Pegawai
+                        <x-dashboard.badge-inactive :is_active="$pegawai->userRelasi?->is_active ?? true" />
+                    </h2>
                     <p class="text-sm text-gray-500 dark:text-gray-400">Pembaruan informasi data pegawai
                         <span class="font-bold text-blue-600 dark:text-blue-400">{{ $full_name }}</span>
                     </p>
@@ -233,7 +237,7 @@
                         </div>
 
                         {{-- Join Date --}}
-                        <div class="space-y-2 mt-4">
+                        <div class="mt-4 space-y-2">
                             <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                                 for="join_date">Tanggal Bergabung (Join Date)</label>
                             <input wire:model="join_date" type="date" id="join_date"

@@ -370,6 +370,7 @@ class Edit extends Component
     {
         // ambil user dengan role Produksi
         $teamProduksi = \App\Models\User::whereHas('roles', fn ($role) => $role->where('name', 'Produksi'))
+            ->where('is_active', true)
             ->get();
 
         return view('livewire.handler.spk.edit', ['users' => $teamProduksi]);

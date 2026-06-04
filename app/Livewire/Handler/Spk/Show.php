@@ -26,8 +26,19 @@ class Show extends Component
 
     public function mount($id): void
     {
-        $this->data = SpkMain::with('addedBy', 'assignTo', 'reassignTo', 'updateBy', 'pengirimanUpdatedBy', 'noTagihanUpdatedBy', 'production')
-            ->findOrFail($id);
+        $this->data = SpkMain::with([
+            'addedBy',
+            'assignTo',
+            'reassignTo',
+            'updateBy',
+            'pengirimanUpdatedBy',
+            'noTagihanUpdatedBy',
+            'production',
+            'bookedBy',
+            'approvedBy',
+            'cancelRequestBy',
+            'cancelRequestValidatedBy',
+        ])->findOrFail($id);
     }
 
     public function validateSpk()

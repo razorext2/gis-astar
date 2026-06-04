@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Display system audit log table with user actions, Caller: routes/web.php (log.index), Deps: LogHistory, User */
+
 namespace App\Livewire;
 
 use App\Models\LogHistory;
@@ -62,7 +64,7 @@ final class LogTable extends PowerGridComponent
     public function datasource(): Builder
     {
         return LogHistory::query()
-            ->with('userRelasi:id,name,kode_pegawai')
+            ->with('userRelasi:id,name,kode_pegawai,is_active')
             ->latest();
     }
 
@@ -80,7 +82,12 @@ final class LogTable extends PowerGridComponent
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('user_name', fn ($query) => e($query->userRelasi->name))
+            ->add('user_name', function ($query) {
+                return view('components.dashboard.name-w-badge', [
+                    'name' => $query->userRelasi->name,
+                    'is_active' => (bool) $query->userRelasi->is_active,
+                ]);
+            })
             ->add('employee_code', fn ($query) => e($query->userRelasi->kode_pegawai ?? '-'))
             ->add('user_action')
             ->add('ip_address')
@@ -156,7 +163,7 @@ final class LogTable extends PowerGridComponent
     #[\Livewire\Attributes\On('confirmDeleteAction')]
     public function confirmDelete($id): void
     {
-        $data = Loghistory::find($id);
+        $data = LogHistory::find($id);
 
         if (! $data) {
             $this->dispatch(

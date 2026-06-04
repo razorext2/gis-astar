@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Manage and display employee list, Caller: routes/web.php (pegawai.index), Deps: Pegawai, User */
+
 namespace App\Livewire;
 
 use App\Models\Pegawai;
@@ -94,6 +96,7 @@ final class PegawaiTable extends PowerGridComponent
                     'code' => $query->kode_pegawai ?? '',
                     'name' => $query->full_name,
                     'item3' => collect($query->userRelasi?->roles?->pluck('name'))->implode(', '),
+                    'is_active' => $query->userRelasi ? (bool) $query->userRelasi->is_active : null,
                 ])->render();
             })
             ->add('email_formatted', function ($query) {

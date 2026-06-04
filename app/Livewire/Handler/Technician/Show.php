@@ -39,10 +39,11 @@ class Show extends Component
     {
         $this->report = Technician::query()
             ->with([
-                'pegawai:kode_pegawai,full_name,no_telp',
+                'pegawai:id,kode_pegawai,full_name,no_telp',
+                'pegawai.userRelasi:id,kode_pegawai,is_active',
                 'photo_collects:id,no_vt,photourl',
-                'user:id,name',
-                'revised_by:id,name',
+                'user:id,name,is_active',
+                'revised_by:id,name,is_active',
             ])
             ->findOrFail($this->id);
     }

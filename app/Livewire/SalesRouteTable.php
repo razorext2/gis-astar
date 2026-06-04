@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Display sales route overview table with active status support, Caller: routes/web.php, Deps: User, SalesRegionResolver */
+
 namespace App\Livewire;
 
 use App\Models\User;
@@ -46,6 +48,8 @@ final class SalesRouteTable extends PowerGridComponent
             $query->role($roles);
         }
 
+        $query->orderBy('is_active', 'desc');
+
         return $query;
     }
 
@@ -62,8 +66,14 @@ final class SalesRouteTable extends PowerGridComponent
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('kode_pegawai')
-            ->add('name')
+            ->add('kode_pegawai', fn ($row) => view('components.dashboard.date-w-name', [
+                'date' => $row->kode_pegawai,
+                'name' => 'ID: '.$row->id,
+            ]))
+            ->add('name', fn ($row) => view('components.dashboard.name-w-badge', [
+                'name' => $row->name,
+                'is_active' => (bool) $row->is_active,
+            ]))
             ->add('email')
             ->add('role', fn ($query) => collect($query->roles->pluck('name'))->implode(', '));
     }
@@ -74,10 +84,7 @@ final class SalesRouteTable extends PowerGridComponent
             Column::action('Action')
                 ->bodyAttribute('text-center'),
 
-            Column::make('UserID', 'id'),
-
-            Column::make('Kode Pegawai', 'kode_pegawai')
-                ->sortable()
+            Column::make('Kode / ID', 'kode_pegawai')
                 ->searchable(),
 
             Column::make('Nama Lengkap', 'name')

@@ -55,7 +55,9 @@ class Table extends Component
 
     public function openEdit(int $userId): void
     {
-        $user = User::with(['leaveBalances' => fn ($q) => $q->where('year', $this->year)])->findOrFail($userId);
+        $user = User::with(['leaveBalances' => fn ($q) => $q->where('year', $this->year)])
+            ->where('is_active', true)
+            ->findOrFail($userId);
         $balance = $user->leaveBalances->first();
 
         $this->editUserId = $userId;
@@ -71,7 +73,9 @@ class Table extends Component
             $q->whereYear('start_date', $this->year)
                 ->with('leaveType')
                 ->latest();
-        }])->findOrFail($userId);
+        }])
+            ->where('is_active', true)
+            ->findOrFail($userId);
 
         $this->historyUserName = $user->name;
         $this->historyData = $user->leaveRequests->toArray();
@@ -81,6 +85,8 @@ class Table extends Component
     public function saveBalance(): void
     {
         abort_unless(auth()->user()->can('leave-balance-manage'), 403);
+
+        $user = User::where('is_active', true)->findOrFail($this->editUserId);
 
         $this->validate([
             'editTotalQuota' => 'required|integer|min:0',
@@ -126,7 +132,7 @@ class Table extends Component
         abort_unless(auth()->user()->can('leave-balance-manage'), 403);
 
         $this->runSafely(function () use ($userId) {
-            $user = User::findOrFail($userId);
+            $user = User::where('is_active', true)->findOrFail($userId);
             $quota = $this->calculateDefaultQuota($user);
             LeaveBalance::updateOrCreate(
                 ['user_id' => $userId, 'year' => $this->year],
@@ -146,14 +152,14 @@ class Table extends Component
             // Ambil ID User Pegawai yang sudah memiliki used_quota > 0 (untuk dilewati)
             $lockedUserIds = LeaveBalance::where('year', $this->year)
                 ->where('used_quota', '>', 0)
-                ->whereHas('user', fn ($q) => $q->whereHas('pegawai'))
+                ->whereHas('user', fn ($q) => $q->whereHas('pegawai')->where('is_active', true))
                 ->pluck('user_id')
                 ->toArray();
 
             $reset = 0;
             $skipped = 0;
 
-            User::whereHas('pegawai')->chunk(100, function ($users) use ($lockedUserIds, &$reset, &$skipped) {
+            User::whereHas('pegawai')->where('is_active', true)->chunk(100, function ($users) use ($lockedUserIds, &$reset, &$skipped) {
                 foreach ($users as $user) {
                     // Jika user ada di daftar locked, tambahkan ke hitungan skipped dan lewati
                     if (in_array($user->id, $lockedUserIds)) {
@@ -192,6 +198,7 @@ class Table extends Component
                     ->orWhere('kode_pegawai', 'like', '%'.$this->search.'%');
             })
             ->whereHas('pegawai')
+            ->where('is_active', true)
             ->orderBy('name')
             ->paginate(10)
             ->onEachSide(1); // max 5 page numbers: 1 ... prev current next ... last

@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Display invoice detail and audit trail logs, Caller: invoice.show, Deps: Invoice, InvoiceDetail */
+
 namespace App\Livewire\Handler\Invoice;
 
 use App\Models\Invoice;
@@ -25,7 +27,11 @@ class Show extends Component
     public function render()
     {
         $invoice = Invoice::where('id', $this->id)
-            ->with(['details' => fn($query) => $query->orderBy('created_at', $this->sort)])
+            ->with([
+                'details' => fn($query) => $query->with('addedBy')->orderBy('created_at', $this->sort),
+                'addedBy',
+                'latestUpdateBy',
+            ])
             ->first();
 
         return view('livewire.handler.invoice.show', ['invoice' => $invoice]);

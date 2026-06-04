@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Display collector route overview table with active status support, Caller: routes/web.php, Deps: User */
+
 namespace App\Livewire;
 
 use \App\Models\User;
@@ -42,8 +44,14 @@ final class CollectorRouteTable extends PowerGridComponent
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('kode_pegawai')
-            ->add('name')
+            ->add('kode_pegawai', fn ($row) => view('components.dashboard.date-w-name', [
+                'date' => $row->kode_pegawai,
+                'name' => 'ID: '.$row->id,
+            ]))
+            ->add('name', fn ($row) => view('components.dashboard.name-w-badge', [
+                'name' => $row->name,
+                'is_active' => (bool) $row->is_active,
+            ]))
             ->add('email');
     }
 
@@ -52,9 +60,7 @@ final class CollectorRouteTable extends PowerGridComponent
         return [
             Column::action('Action')
                 ->bodyAttribute('text-center'),
-            Column::make('UserID', 'id'),
-            Column::make('Kode Pegawai', 'kode_pegawai')
-                ->sortable()
+            Column::make('Kode / ID', 'kode_pegawai')
                 ->searchable(),
 
             Column::make('Nama Lengkap', 'name')

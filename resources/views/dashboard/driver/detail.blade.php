@@ -81,8 +81,12 @@
                             <x-icons.user class="h-5 w-5" />
                         </div>
                         <div>
-                            <p class="font-semibold text-zinc-900 dark:text-white">{{ $data->pegawai->full_name ?? 'N/A' }}
-                            </p>
+                            <div class="flex items-center gap-x-2">
+                                <p class="font-semibold text-zinc-900 dark:text-white">{{ $data->pegawai->full_name ?? 'N/A' }}</p>
+                                @if ($data->pegawai?->userRelasi)
+                                    <x-dashboard.badge-inactive :is_active="$data->pegawai->userRelasi->is_active ?? true" />
+                                @endif
+                            </div>
                             <p class="text-xs text-zinc-500 dark:text-zinc-400">{{ $data->kode_pegawai }}</p>
                         </div>
                     </div>
@@ -97,9 +101,10 @@
                             {{ $statusLabels[$data->status] ?? 'Unknown' }}
                         </span>
                         @if (in_array($data->status, [1, 2, 3]) && $data->validateBy)
-                            <p class="mt-1 text-[10px] text-zinc-500 dark:text-zinc-400">
-                                Oleh: {{ $data->validateBy->name }}
-                            </p>
+                            <div class="mt-1 flex items-center gap-x-2 text-[10px] text-zinc-500 dark:text-zinc-400">
+                                <span>Oleh: {{ $data->validateBy->name }}</span>
+                                <x-dashboard.badge-inactive :is_active="$data->validateBy?->is_active ?? true" />
+                            </div>
                         @endif
                     </div>
                 </div>

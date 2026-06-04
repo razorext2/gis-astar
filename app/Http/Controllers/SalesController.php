@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Controller for sales report operations and validation, Caller: Routes web.php, Deps: App\Models\Sales, App\Models\Pegawai */
+
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ApiResource;
@@ -179,7 +181,12 @@ class SalesController extends Controller
      */
     public function show($id)
     {
-        $data = Sales::with(['pegawaiRelasi:kode_pegawai,full_name', 'photoCollectRelasi', 'validateBy'])->findOrFail($id);
+        $data = Sales::with([
+            'pegawaiRelasi:id,kode_pegawai,full_name',
+            'pegawaiRelasi.userRelasi:id,kode_pegawai,is_active',
+            'photoCollectRelasi',
+            'validateBy:id,name,is_active'
+        ])->findOrFail($id);
 
         if ($data->kode_pegawai != auth()->user()->kode_pegawai && ! auth()->user()->can('sales-approve')) {
             return abort(403);

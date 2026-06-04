@@ -18,7 +18,7 @@ class TechnicianLeaderboard extends Component
         }
 
         return TechnicianPoints::query()
-            ->with(['pegawai' => fn ($q) => $q->select(['kode_pegawai', 'full_name', 'nick_name'])])
+            ->with(['pegawai' => fn ($q) => $q->select(['kode_pegawai', 'full_name', 'nick_name'])->with('userRelasi')])
             ->selectRaw('kode_pegawai, SUM(point) as total_points')
             ->where('is_redeemable', true)
             ->where('is_redeemed', false)

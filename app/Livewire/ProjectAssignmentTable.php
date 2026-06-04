@@ -105,6 +105,7 @@ final class ProjectAssignmentTable extends PowerGridComponent
                     'code' => $query->laporan_type,
                     'name' => $query->nomor_vt,
                     'item3' => $query->assignTo->name,
+                    'is_active_item3' => $query->assignTo?->is_active ?? true,
                 ]);
             })
             ->add('deadline_priority')

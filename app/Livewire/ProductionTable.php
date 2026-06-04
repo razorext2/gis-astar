@@ -116,6 +116,7 @@ final class ProductionTable extends PowerGridComponent
                 return view('components.dashboard.name-w-code', [
                     'code' => 'Kode Pegawai: '.($query->assignTo->kode_pegawai ?? '-'),
                     'name' => $query->assignTo->name ?? '-',
+                    'is_active' => $query->assignTo?->is_active ?? true,
                 ]);
             })
             ->add('products_formatted', function ($query) {

@@ -91,9 +91,12 @@
 
                     {{-- Footer: Meta & Actions --}}
                     <div class="mt-2 flex items-center justify-between border-t border-zinc-100 pt-3 dark:border-zinc-800">
-                        <span class="text-[10px] text-zinc-400 italic">
-                            Oleh: <span class="font-medium text-zinc-600 dark:text-zinc-400">{{ $row->addedBy->name ?? 'Sistem' }}</span>
-                        </span>
+                        <div class="flex items-center gap-x-2 text-[10px] text-zinc-400 italic">
+                            <span>Oleh: <span class="font-medium text-zinc-600 dark:text-zinc-400">{{ $row->addedBy->name ?? 'Sistem' }}</span></span>
+                            @if ($row->addedBy)
+                                <x-dashboard.badge-inactive :is_active="$row->addedBy?->is_active ?? true" />
+                            @endif
+                        </div>
 
                         <div class="flex items-center gap-4">
                             @if ($row->status_validasi == 0 && auth()->user()->hasPermissionTo('produksi-approve'))

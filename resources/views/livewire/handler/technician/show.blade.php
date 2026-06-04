@@ -125,9 +125,14 @@
                     </div>
                     <div class="flex flex-col">
                         <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Nama Teknisi</span>
-                        <span class="text-sm font-semibold text-zinc-900 dark:text-white">
-                            {{ $report->pegawai->full_name ?? 'Belum terdaftar di sistem.' }}
-                        </span>
+                        <div class="flex items-center gap-x-2">
+                            <span class="text-sm font-semibold text-zinc-900 dark:text-white">
+                                {{ $report->pegawai->full_name ?? 'Belum terdaftar di sistem.' }}
+                            </span>
+                            @if ($report->pegawai?->userRelasi)
+                                <x-dashboard.badge-inactive :is_active="$report->pegawai->userRelasi->is_active ?? true" />
+                            @endif
+                        </div>
                     </div>
                     <div class="col-span-2 flex flex-col">
                         <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Nomor Telepon</span>
@@ -298,8 +303,14 @@
                     </div>
                     <div class="flex flex-col">
                         <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Divalidasi Oleh</span>
-                        <span
-                            class="text-sm font-semibold text-zinc-900 dark:text-white">{{ $report->user->name ?? '-' }}</span>
+                        <div class="flex items-center gap-x-2">
+                            <span class="text-sm font-semibold text-zinc-900 dark:text-white">
+                                {{ $report->user->name ?? '-' }}
+                            </span>
+                            @if ($report->user)
+                                <x-dashboard.badge-inactive :is_active="$report->user?->is_active ?? true" />
+                            @endif
+                        </div>
                     </div>
                     <div class="flex flex-col">
                         <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Tanggal Validasi</span>
@@ -321,8 +332,14 @@
                     </div>
                     <div class="flex flex-col">
                         <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Direvisi Oleh</span>
-                        <span
-                            class="text-sm font-semibold text-zinc-900 dark:text-white">{{ $report->revised_by->name ?? '-' }}</span>
+                        <div class="flex items-center gap-x-2">
+                            <span class="text-sm font-semibold text-zinc-900 dark:text-white">
+                                {{ $report->revised_by->name ?? '-' }}
+                            </span>
+                            @if ($report->revised_by)
+                                <x-dashboard.badge-inactive :is_active="$report->revised_by?->is_active ?? true" />
+                            @endif
+                        </div>
                     </div>
                     <div class="flex flex-col">
                         <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Tanggal Revisi</span>

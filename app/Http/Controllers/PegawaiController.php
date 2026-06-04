@@ -188,7 +188,7 @@ class PegawaiController extends Controller
 
     public function attendance($id)
     {
-        $pegawai = Pegawai::findOrFail($id);
+        $pegawai = Pegawai::with('userRelasi')->findOrFail($id);
 
         return view('dashboard.pegawai.details.attendance', compact('pegawai'));
     }
@@ -228,7 +228,7 @@ class PegawaiController extends Controller
         }
 
         // Mendapatkan informasi pegawai
-        $pegawai = Pegawai::select('id', 'kode_pegawai', 'full_name')->where('kode_pegawai', $id)->firstOrFail();
+        $pegawai = Pegawai::with('userRelasi')->where('kode_pegawai', $id)->firstOrFail();
 
         return view('dashboard.pegawai.details.timeline', compact('attendances', 'pegawai'));
     }
@@ -237,7 +237,7 @@ class PegawaiController extends Controller
     {
         $date = $request->query('date') ?? Carbon::today()->format('Y-m-d');
 
-        $pegawai = Pegawai::where('kode_pegawai', $id)->firstOrFail();
+        $pegawai = Pegawai::with('userRelasi')->where('kode_pegawai', $id)->firstOrFail();
         $report = Collector::with('pegawaiRelasi')->where('kode_pegawai', $id)
             ->whereDate('assign_date', $date)
             ->get();
@@ -255,7 +255,7 @@ class PegawaiController extends Controller
 
         }
 
-        $pegawai = Pegawai::where('kode_pegawai', $id)->firstOrFail();
+        $pegawai = Pegawai::with('userRelasi')->where('kode_pegawai', $id)->firstOrFail();
 
         $report = Sales::where('kode_pegawai', $id)
             ->whereDate('created_at', $date)

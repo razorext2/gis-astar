@@ -297,6 +297,7 @@ class Index extends Component
     public function render()
     {
         $data = $this->spk->laporanFondasi()
+            ->with(['addedBy'])
             ->paginate(perPage: 5, pageName: 'fondasi-page');
 
         return view('livewire.handler.spk.laporan-fondasi.index',
