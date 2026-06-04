@@ -239,6 +239,10 @@
                 <textarea wire:model="reason" rows="4"
                     class="w-full rounded-xl border border-zinc-200 bg-white/50 p-4 text-gray-700 placeholder-gray-400 transition-all focus:ring-primary/50 dark:border-zinc-800 dark:bg-gray-800/50 dark:text-gray-200"
                     placeholder="Berikan alasan yang jelas untuk pengajuan cuti Anda..."></textarea>
+
+                @error('reason')
+                    <span class="mt-1 text-xs text-red-600">{{ $message }}</span>
+                @enderror
             </div>
 
             {{-- </div> --}}

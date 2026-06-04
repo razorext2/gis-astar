@@ -14,7 +14,7 @@
         </div>
         <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-500">
             <span class="flex h-2 w-2 animate-pulse rounded-full bg-emerald-500"></span>
-            Live Updates: {{ now()->format('d M Y') }}
+            Per Tanggal: {{ now()->format('d M Y') }}
         </div>
     </div>
 
@@ -48,7 +48,7 @@
                             {{-- From --}}
                             <div class="flex flex-col">
                                 <span
-                                    class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Departure</span>
+                                    class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Mulai</span>
                                 <span class="text-lg font-black text-zinc-700 dark:text-zinc-300">
                                     {{ $leave->start_date->format('d M Y') }}
                                 </span>
@@ -57,7 +57,7 @@
                             {{-- Journey Line --}}
                             <div class="relative flex flex-1 flex-col items-center gap-1">
                                 <div class="text-[10px] font-black uppercase tracking-tighter text-red-600">
-                                    {{ $leave->total_days }} DAYS
+                                    {{ $leave->total_days }} Hari
                                 </div>
                                 <div class="flex w-full items-center gap-2">
                                     <div class="h-0.5 flex-1 bg-zinc-200 dark:bg-zinc-800"></div>
@@ -74,7 +74,7 @@
                             {{-- To --}}
                             <div class="flex flex-col text-right">
                                 <span
-                                    class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Arrival</span>
+                                    class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Selesai</span>
                                 <span class="text-lg font-black text-zinc-700 dark:text-zinc-300">
                                     {{ $leave->end_date->format('d M Y') }}
                                 </span>
@@ -85,11 +85,25 @@
                     {{-- Right Section: Status --}}
                     <div class="flex items-center justify-center bg-zinc-50/50 p-5 dark:bg-white/5 md:w-48">
                         <div class="flex flex-col items-center gap-1">
-                            <span
-                                class="rounded-lg bg-emerald-100 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">
-                                On Schedule
-                            </span>
-                            <span class="text-[9px] font-bold uppercase text-zinc-400">Status: Active</span>
+                            @php
+                                $isUpcoming = \Carbon\Carbon::parse($leave->start_date)
+                                    ->startOfDay()
+                                    ->gt(\Carbon\Carbon::today());
+                            @endphp
+
+                            @if ($isUpcoming)
+                                <span
+                                    class="rounded-lg bg-amber-100 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">
+                                    Upcoming
+                                </span>
+                                <span class="text-[9px] font-bold uppercase text-zinc-400">Status: Akan Cuti</span>
+                            @else
+                                <span
+                                    class="rounded-lg bg-emerald-100 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">
+                                    Sedang Cuti
+                                </span>
+                                <span class="text-[9px] font-bold uppercase text-zinc-400">Status: Aktif</span>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -97,7 +111,7 @@
                 {{-- Bottom Description --}}
                 <div
                     class="border-t border-zinc-100 bg-zinc-50/30 px-5 py-3 text-[11px] italic text-zinc-500 dark:border-zinc-800 dark:bg-dark-primary/30">
-                    <span class="mr-2 font-bold uppercase not-italic tracking-tighter text-zinc-400">Reason:</span>
+                    <span class="mr-2 font-bold uppercase not-italic tracking-tighter text-zinc-400">Alasan:</span>
                     "{{ $leave->reason ?? 'No description provided' }}"
                 </div>
             </div>
