@@ -65,7 +65,7 @@ class Show extends Component
             'histories.actedByUser',
         ])->findOrFail($this->requestId);
 
-        // C1: Guard — hanya pemilik, backup person, atau user dengan permission leave-view-all
+        // C1: Guard — hanya pemilik, backup person, atau user dengan permission leave-list-all
         $user = auth()->user();
         $isOwner = $request->user_id === $user->id;
         $isBackup = $request->backup_person_id === $user->id;

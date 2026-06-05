@@ -557,11 +557,11 @@ return [
     // ─── Laporan Export ───────────────────────────────────────────────────────
     [
         'type' => 'group',
-        'label' => 'Laporan',
+        'label' => 'Ekspor Laporan',
         'icon' => 'clipboard-list',
         'guard' => ['any_permission', [
-            'attendance-approve', 'leave-view-all', 'collect-approve',
-            'invoice-add', 'spk-create', 'driver-approve', 'sales-approve',
+            'attendance-approve', 'leave-list-all', 'collect-approve',
+            'invoice-create', 'spk-create', 'spk-approve', 'driver-approve', 'sales-approve',
         ]],
         'submenu' => [
             [
@@ -579,7 +579,7 @@ return [
                 'route' => 'report.export.cuti',
                 'check' => ['report.export.cuti'],
                 'icon' => 'envelope',
-                'permission' => 'leave-view-all',
+                'permission' => 'leave-list-all',
                 'navigate' => true,
             ],
             [
@@ -606,7 +606,7 @@ return [
                 'route' => 'report.export.invoice',
                 'check' => ['report.export.invoice'],
                 'icon' => 'file-invoice',
-                'permission' => 'invoice-add',
+                'permission' => 'invoice-export-all',
                 'navigate' => true,
             ],
             [
@@ -615,7 +615,7 @@ return [
                 'route' => 'report.export.spk',
                 'check' => ['report.export.spk'],
                 'icon' => 'clipboard-check',
-                'permission' => 'spk-create',
+                'permission' => ['spk-create', 'spk-approve'],
                 'navigate' => true,
             ],
             [

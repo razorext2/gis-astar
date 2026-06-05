@@ -13,7 +13,7 @@ Route::prefix('report')
             ->name('absensi');
 
         Route::get('cuti', [ReportExportController::class, 'cuti'])
-            ->middleware('permission:leave-view-all')
+            ->middleware('permission:leave-list-all')
             ->name('cuti');
 
         Route::get('piutang', [ReportExportController::class, 'piutang'])
@@ -25,11 +25,11 @@ Route::prefix('report')
             ->name('kolektor');
 
         Route::get('invoice', [ReportExportController::class, 'invoice'])
-            ->middleware('permission:invoice-add')
+            ->middleware('permission:invoice-create')
             ->name('invoice');
 
         Route::get('spk', [ReportExportController::class, 'spk'])
-            ->middleware('permission:spk-create')
+            ->middleware('permission:spk-create|spk-approve')
             ->name('spk');
 
         Route::get('driver', [ReportExportController::class, 'driver'])

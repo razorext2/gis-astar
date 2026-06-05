@@ -22,9 +22,6 @@ return new class extends Migration
         'technician-update' => 'technician-edit',
         'team-member-add' => 'team-member-create',
         'team-member-remove' => 'team-member-delete',
-        'dayoff-detail' => 'dayoff-view',
-
-        'dayoff-confirm' => 'dayoff-approve',
         'spk-validate' => 'spk-approve',
         'spk-validate-pengiriman' => 'spk-pengiriman-approve',
         'laporan-harian-validate' => 'laporan-harian-approve',
@@ -32,12 +29,10 @@ return new class extends Migration
         'collect-task-validate' => 'collect-task-approve',
         'collect-idy-ppn-validate' => 'collect-idy-ppn-approve',
         'collect-task-ppn-validate' => 'collect-task-ppn-approve',
-
         'assign-laporan-harian' => 'laporan-harian-assign',
         'unassign-laporan-harian' => 'laporan-harian-unassign',
         'assign-laporan-harian-spk' => 'laporan-harian-spk-assign',
         'unassign-laporan-harian-spk' => 'laporan-harian-spk-unassign',
-        
         'all-team' => 'team-list-all',
         'technician-all' => 'technician-list-all',
         'leave-view-all' => 'leave-list-all',
