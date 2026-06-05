@@ -83,6 +83,13 @@ class SpkMain extends Model
         'is_booked' => 'boolean',
         'is_using_old_stock' => 'boolean',
         'is_using_company_driver' => 'boolean',
+        'approved_at' => 'date',
+        'cancel_request_at' => 'date',
+        'cancel_request_validated_at' => 'date',
+        'reassign_at' => 'date',
+        'booked_at' => 'date',
+        'production_has_download_spk_pdf_at' => 'date',
+        'on_delay_at' => 'date',
     ];
 
     protected $appends = [

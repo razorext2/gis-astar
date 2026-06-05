@@ -75,6 +75,23 @@ class SpkExport implements FromView, ShouldAutoSize, WithEvents
                 for ($row = 1; $row <= $highestRow; $row++) {
                     $sheet->getRowDimension($row)->setRowHeight(-1);
                 }
+
+                // Highlight cancelled rows (kolom I = "SPK Dibatalkan?", nilai "Ya")
+                for ($row = 3; $row <= $highestRow; $row++) {
+                    $cancelledValue = $sheet->getCell("I{$row}")->getValue();
+                    if ($cancelledValue === 'Ya') {
+                        $sheet->getStyle("A{$row}:{$highestColumn}{$row}")->applyFromArray([
+                            'fill' => [
+                                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                                'startColor' => ['argb' => 'FFFCA5A5'],
+                            ],
+                            'font' => [
+                                'color' => ['argb' => 'FF7F1D1D'],
+                                'bold' => true,
+                            ],
+                        ]);
+                    }
+                }
             },
         ];
     }
