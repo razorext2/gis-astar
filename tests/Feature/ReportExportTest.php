@@ -19,8 +19,8 @@ use Spatie\Permission\Models\Permission;
 
 beforeEach(function () {
     $allPermissions = [
-        'attendance-approve', 'leave-view-all', 'collect-approve',
-        'invoice-add', 'spk-create', 'driver-approve', 'sales-approve',
+        'attendance-approve', 'leave-list-all', 'collect-approve',
+        'invoice-create', 'spk-create', 'driver-approve', 'sales-approve',
     ];
 
     foreach ($allPermissions as $perm) {
@@ -39,10 +39,10 @@ beforeEach(function () {
 
 $reportRoutes = [
     ['report.export.absensi', 'attendance-approve'],
-    ['report.export.cuti', 'leave-view-all'],
+    ['report.export.cuti', 'leave-list-all'],
     ['report.export.piutang', 'collect-approve'],
     ['report.export.kolektor', 'collect-approve'],
-    ['report.export.invoice', 'invoice-add'],
+    ['report.export.invoice', 'invoice-create'],
     ['report.export.spk', 'spk-create'],
     ['report.export.driver', 'driver-approve'],
     ['report.export.sales', 'sales-approve'],
@@ -365,7 +365,6 @@ it('ExportKolektor filters users dynamically by role depending on filterBy', fun
         ->assertSee('Other User');
 });
 
-
 it('can successfully run ExportReportJob for piutang with date_type assign_date, sr_type and bill_status', function () {
     \Illuminate\Support\Facades\Notification::fake();
     \Illuminate\Support\Facades\Event::fake();
@@ -645,7 +644,6 @@ it('ExportDriver dispatches export job with additional filters', function () {
     });
 });
 
-
 it('ExportSales has extended filter options', function () {
     $this->actingAs($this->adminUser);
 
@@ -753,4 +751,3 @@ it('ExportSales dispatches export job with additional filters', function () {
             && ($job->additionalFilters['customer_make_order'] ?? null) === '1';
     });
 });
-
