@@ -47,7 +47,7 @@ class ExportCuti extends Component
 
         $selectedIds = array_column($this->selectedUsers, 'id');
 
-        return User::select(['id', 'kode_pegawai', 'name'])
+        return User::select(['id', 'kode_pegawai', 'name', 'is_active'])
             ->where(function ($q) {
                 $q->where('kode_pegawai', 'like', '%'.$this->userSearchQuery.'%')
                     ->orWhere('name', 'like', '%'.$this->userSearchQuery.'%');
@@ -58,12 +58,13 @@ class ExportCuti extends Component
             ->get();
     }
 
-    public function selectUser(int $id, string $name, ?string $kodePegawai = null): void
+    public function selectUser(int $id, string $name, ?string $kodePegawai = null, bool $isActive = true): void
     {
         $this->selectedUsers[] = [
             'id' => $id,
             'name' => $name,
             'kode_pegawai' => $kodePegawai,
+            'is_active' => $isActive,
         ];
 
         $this->userSearchQuery = '';

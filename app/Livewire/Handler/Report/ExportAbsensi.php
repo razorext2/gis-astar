@@ -52,6 +52,11 @@ class ExportAbsensi extends Component
         $selectedCodes = array_column($this->selectedPegawai, 'kode_pegawai');
 
         return Pegawai::select(['kode_pegawai', 'full_name'])
+            ->addSelect([
+                'is_active' => \App\Models\User::select('is_active')
+                    ->whereColumn('kode_pegawai', 'tb_pegawai.kode_pegawai')
+                    ->limit(1),
+            ])
             ->where(function ($q) {
                 $q->where('kode_pegawai', 'like', '%'.$this->pegawaiSearchQuery.'%')
                     ->orWhere('full_name', 'like', '%'.$this->pegawaiSearchQuery.'%');
@@ -62,11 +67,12 @@ class ExportAbsensi extends Component
             ->get();
     }
 
-    public function selectPegawai(int $kodePegawai, string $fullName): void
+    public function selectPegawai(int $kodePegawai, string $fullName, bool $isActive = true): void
     {
         $this->selectedPegawai[] = [
             'kode_pegawai' => $kodePegawai,
             'full_name' => $fullName,
+            'is_active' => $isActive,
         ];
 
         $this->pegawaiSearchQuery = '';

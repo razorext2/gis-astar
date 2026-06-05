@@ -38,7 +38,7 @@ class ExportPiutang extends Component
     public function filterUsers()
     {
         if ($this->filterBy === 'assign_to') {
-            return User::select(['id', 'kode_pegawai', 'name'])
+            return User::select(['id', 'kode_pegawai', 'name', 'is_active'])
                 ->whereHas('roles', function ($q) {
                     $q->whereIn('name', ['Collector', 'collector', 'kasir-bank', 'Kasir']);
                 })
@@ -47,7 +47,7 @@ class ExportPiutang extends Component
         }
 
         if ($this->filterBy === 'assign_by') {
-            return User::select(['id', 'kode_pegawai', 'name'])
+            return User::select(['id', 'kode_pegawai', 'name', 'is_active'])
                 ->whereHas('roles', function ($q) {
                     $q->whereIn('name', [
                         'Piutang', 'piutang',

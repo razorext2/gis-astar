@@ -115,11 +115,14 @@
                     class="absolute left-0 right-0 z-[150] mt-1 max-h-60 overflow-y-auto rounded-xl border border-zinc-200 bg-white py-1 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
                     @foreach ($this->salesSearchResults as $s)
                         <button type="button"
-                            wire:click="selectSales('{{ $s->kode_pegawai }}', '{{ addslashes($s->name) }}')"
+                            wire:click="selectSales('{{ $s->kode_pegawai }}', '{{ addslashes($s->name) }}', {{ $s->is_active ? 'true' : 'false' }})"
                             @click="open = false"
                             class="flex w-full items-center px-4 py-2 text-left text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-100 dark:text-white dark:hover:bg-zinc-800">
                             <span class="mr-2 font-bold text-blue-600 dark:text-blue-400">#{{ $s->kode_pegawai }}</span>
                             <span>{{ $s->name }}</span>
+                            @if (!$s->is_active)
+                                <span class="ml-1.5 text-xs font-medium text-red-500 dark:text-red-400">(nonaktif)</span>
+                            @endif
                         </button>
                     @endforeach
                 </div>
@@ -131,7 +134,7 @@
                     @foreach ($selectedSales as $s)
                         <span
                             class="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700 dark:border-blue-800/60 dark:bg-blue-900/30 dark:text-blue-300">
-                            <span>#{{ $s['kode_pegawai'] }} - {{ $s['name'] }}</span>
+                            <span>#{{ $s['kode_pegawai'] }} - {{ $s['name'] }}@if (!($s['is_active'] ?? true))<span class="ml-1 font-medium text-red-500 dark:text-red-400">(nonaktif)</span>@endif</span>
                             <button type="button" wire:click="removeSales('{{ $s['kode_pegawai'] }}')"
                                 class="text-blue-500 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-200">
                                 <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -167,13 +170,16 @@
                     class="absolute left-0 right-0 z-[150] mt-1 max-h-60 overflow-y-auto rounded-xl border border-zinc-200 bg-white py-1 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
                     @foreach ($this->validatorSearchResults as $v)
                         <button type="button"
-                            wire:click="selectValidator({{ $v->id }}, '{{ addslashes($v->name) }}')"
+                            wire:click="selectValidator({{ $v->id }}, '{{ addslashes($v->name) }}', {{ $v->is_active ? 'true' : 'false' }})"
                             @click="open = false"
                             class="flex w-full items-center px-4 py-2 text-left text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-100 dark:text-white dark:hover:bg-zinc-800">
                             @if($v->kode_pegawai)
                                 <span class="mr-2 font-bold text-blue-600 dark:text-blue-400">#{{ $v->kode_pegawai }}</span>
                             @endif
                             <span>{{ $v->name }}</span>
+                            @if (!$v->is_active)
+                                <span class="ml-1.5 text-xs font-medium text-red-500 dark:text-red-400">(nonaktif)</span>
+                            @endif
                         </button>
                     @endforeach
                 </div>
@@ -185,7 +191,7 @@
                     @foreach ($selectedValidators as $v)
                         <span
                             class="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700 dark:border-blue-800/60 dark:bg-blue-900/30 dark:text-blue-300">
-                            <span>{{ $v['name'] }}</span>
+                            <span>{{ $v['name'] }}@if (!($v['is_active'] ?? true))<span class="ml-1 font-medium text-red-500 dark:text-red-400">(nonaktif)</span>@endif</span>
                             <button type="button" wire:click="removeValidator({{ $v['id'] }})"
                                 class="text-blue-500 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-200">
                                 <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

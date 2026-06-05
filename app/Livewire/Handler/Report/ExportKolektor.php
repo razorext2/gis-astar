@@ -33,7 +33,7 @@ class ExportKolektor extends Component
     #[Computed]
     public function filterUsers(): \Illuminate\Support\Collection
     {
-        return \App\Models\User::select(['id', 'kode_pegawai', 'name'])
+        return \App\Models\User::select(['id', 'kode_pegawai', 'name', 'is_active'])
             ->when($this->filterBy === 'kode_pegawai', function ($q) {
                 $q->role('Collector');
             })

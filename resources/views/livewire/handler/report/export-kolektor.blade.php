@@ -148,7 +148,7 @@
                                     $optionValue = $useKode ? $user->kode_pegawai : $user->id;
                                 @endphp
                                 <option value="{{ $optionValue }}">
-                                    {{ $user->name }} {{ $user->kode_pegawai ? "($user->kode_pegawai)" : '' }}
+                                    {{ $user->name }} {{ $user->kode_pegawai ? "($user->kode_pegawai)" : '' }}{{ !$user->is_active ? ' (nonaktif)' : '' }}
                                 </option>
                             @endforeach
                         </select>
