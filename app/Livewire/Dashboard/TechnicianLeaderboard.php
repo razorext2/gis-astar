@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Dashboard;
 
-/** Goal: Render technician leaderboard, Caller: Dashboard view, Deps: TechnicianPoints, Pegawai */
+/** Goal: Render technician leaderboard with active filter toggle, Caller: Dashboard view, Deps: TechnicianPoints, Pegawai */
 
 use App\Models\TechnicianPoints;
 use Livewire\Attributes\Computed;
@@ -10,6 +10,8 @@ use Livewire\Component;
 
 class TechnicianLeaderboard extends Component
 {
+    public bool $onlyActive = true;
+
     #[Computed]
     public function leaderboard(): \Illuminate\Support\Collection
     {
@@ -22,6 +24,10 @@ class TechnicianLeaderboard extends Component
             ->selectRaw('kode_pegawai, SUM(point) as total_points')
             ->where('is_redeemable', true)
             ->where('is_redeemed', false)
+            ->when($this->onlyActive, fn ($q) => $q->whereHas(
+                'pegawai.userRelasi',
+                fn ($uq) => $uq->where('is_active', true)
+            ))
             ->groupBy('kode_pegawai')
             ->orderByDesc('total_points')
             ->limit(5)
