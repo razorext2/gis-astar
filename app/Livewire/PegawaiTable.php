@@ -190,30 +190,30 @@ final class PegawaiTable extends PowerGridComponent
     public function filters(): array
     {
         return [
-            Filter::boolean('is_active')
+            Filter::boolean('is_active', 'users.is_active')
                 ->label('Aktif', 'Non-aktif'),
 
-            Filter::inputText('kode_pegawai', 'kode_pegawai')
+            Filter::inputText('kode_pegawai', 'tb_pegawai.kode_pegawai')
                 ->placeholder('Kode Jari'),
-            Filter::inputText('full_name', 'full_name')
+            Filter::inputText('full_name', 'tb_pegawai.full_name')
                 ->placeholder('Nama lengkap'),
 
-            Filter::select('golongan_formatted', 'golongan')
+            Filter::select('golongan_formatted', 'tb_pegawai.golongan')
                 ->dataSource(collect($this->golongan))
                 ->optionLabel('nama_golongan')
                 ->optionValue('id'),
 
-            Filter::select('jabatan', 'jabatan')
+            Filter::select('jabatan', 'tb_pegawai.jabatan')
                 ->dataSource(collect($this->jabatan))
                 ->optionLabel('nama_jabatan')
                 ->optionValue('id'),
 
-            Filter::datetimepicker('created_at', 'created_at')
+            Filter::datetimepicker('created_at', 'tb_pegawai.created_at')
                 ->params([
                     'timezone' => 'Asia/Jakarta',
                 ]),
 
-            Filter::inputText('no_telp', 'no_telp')
+            Filter::inputText('no_telp', 'tb_pegawai.no_telp')
                 ->placeholder('No telp'),
 
             Filter::select('roles_formatted', 'roles.id')
@@ -228,7 +228,7 @@ final class PegawaiTable extends PowerGridComponent
         return [];
     }
 
-    public function actionsFromView(Pegawai $row)
+    public function actionsFromView(Pegawai $row): \Illuminate\Contracts\View\View
     {
         return view(
             'components.dashboard.single-button',
@@ -242,7 +242,7 @@ final class PegawaiTable extends PowerGridComponent
         );
     }
 
-    public function queryString()
+    public function queryString(): array
     {
         return $this->powerGridQueryString();
     }
