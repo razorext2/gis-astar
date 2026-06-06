@@ -34,4 +34,7 @@
         </div>
 
     </div>
+
+    {{-- Leave Approval Popup --}}
+    <livewire:dashboard.leave-approval-popup />
 @endsection
