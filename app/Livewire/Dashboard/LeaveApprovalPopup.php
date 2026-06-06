@@ -80,7 +80,7 @@ class LeaveApprovalPopup extends Component
             'user.pegawai.jabatanRelasi.divisionRelasi',
             'leaveType',
         ])
-            ->select(['id', 'user_id', 'leave_type_id', 'backup_person_id', 'start_date', 'end_date', 'total_days', 'reason', 'status'])
+            ->select(['id', 'user_id', 'leave_type_id', 'backup_person_id', 'start_date', 'end_date', 'total_days', 'reason', 'status', 'updated_at'])
             ->whereIn('status', ['pending_backup', 'pending_spv', 'pending_hrd', 'pending_management'])
             ->where(function ($q) use ($user) {
                 // 1. Sebagai Backup Person

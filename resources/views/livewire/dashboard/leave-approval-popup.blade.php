@@ -63,7 +63,7 @@
             @endif
 
             {{-- Approval Role Badge --}}
-            <div class="mb-5 flex items-center gap-2">
+            <div class="mb-4 flex items-center gap-2">
                 <div class="h-2 w-2 animate-pulse rounded-full bg-amber-500"></div>
                 <span class="text-xs font-black uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
                     Peran Anda:
@@ -73,6 +73,9 @@
                     {{ $currentRequest->approval_role_label }}
                 </span>
             </div>
+
+            {{-- Approval Deadline Countdown --}}
+            <x-leave-request.deadline-timer :updatedAt="$currentRequest->updated_at" :compact="true" class="mb-4" />
 
             {{-- Applicant Info --}}
             <div
