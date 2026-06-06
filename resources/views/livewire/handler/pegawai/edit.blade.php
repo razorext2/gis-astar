@@ -52,12 +52,46 @@
                     <div class="space-y-2">
                         <div class="relative w-full">
                             <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-                                Kode Pegawai
+                                Kode Pegawai Saat Ini
                             </label>
                             <input type="text" value="{{ $kode_pegawai }}" disabled
                                 class="block w-full cursor-not-allowed rounded-xl border-zinc-200 bg-gray-100 p-2.5 text-sm dark:border-zinc-800 dark:bg-zinc-800 dark:text-gray-400">
-                            <p class="mt-1 text-xs italic text-gray-500">* Kode pegawai tidak dapat diubah</p>
                         </div>
+                    </div>
+
+                    <!-- Centang Ubah Kode Pegawai -->
+                    <div class="md:col-span-2 space-y-4 rounded-2xl border border-zinc-200 p-5 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/20">
+                        <label class="flex cursor-pointer items-center gap-3">
+                            <input wire:model.live="ubah_kode_pegawai" type="checkbox" id="ubah_kode_pegawai"
+                                class="h-5 w-5 rounded-lg border-zinc-200 text-blue-600 focus:ring-blue-500">
+                            <span class="text-sm font-semibold text-gray-800 dark:text-white">Ubah Kode Pegawai (Sistemik)</span>
+                        </label>
+                        <p class="text-xs text-zinc-500 dark:text-zinc-400">
+                            Mengubah kode pegawai akan memperbarui seluruh referensi kode jari pada tabel absensi, transaksi, dan data log terkait secara aman.
+                        </p>
+
+                        @if ($ubah_kode_pegawai)
+                            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 pt-2" x-transition>
+                                <div class="space-y-2">
+                                    <x-input.basic wire:model="kode_pegawai_baru" id="kode_pegawai_baru" name="kode_pegawai_baru" type="text"
+                                        placeholder="Masukkan kode pegawai baru">
+                                        Kode Pegawai Baru
+                                    </x-input.basic>
+                                    @error('kode_pegawai_baru')
+                                        <span class="text-xs text-red-500">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="space-y-2">
+                                    <x-input.basic wire:model="alasan_ubah_kode" id="alasan_ubah_kode" name="alasan_ubah_kode" type="text"
+                                        placeholder="Alasan perubahan kode pegawai">
+                                        Alasan Kode Pegawai Diubah
+                                    </x-input.basic>
+                                    @error('alasan_ubah_kode')
+                                        <span class="text-xs text-red-500">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                        @endif
                     </div>
 
                     <div class="space-y-2">
