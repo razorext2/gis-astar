@@ -1,7 +1,13 @@
+{{-- Goal: Modal interface for validating sales reports, Livewire: App\Livewire\Handler\Sales\ValidateSales, Alpine: None --}}
 <div>
-    <x-button.success class="float-right" wire:click="$set('showModal', true)">
-        <x-icons.angle-right class="h-4 w-4" />
-    </x-button.success>
+    @if ($label)
+        <x-button.success class="float-right" wire:click="openModal({{ $id }})">
+            <x-slot name="icon">
+                <x-icons.angle-right class="h-4 w-4" />
+            </x-slot>
+            {{ $label }}
+        </x-button.success>
+    @endif
 
     <x-modal.base-modal show="showModal" maxWidth="3xl" :title="$step == 1 ? 'Konfirmasi Laporan' : ($step == 2 ? 'Konfirmasi Detail' : 'Alasan Penolakan')" :subtitle="$step == 1
         ? 'Review detail laporan di bawah ini'
@@ -253,6 +259,11 @@
                     <x-button.secondary class="w-full justify-center sm:w-auto" wire:click="resetModal">
                         Batal
                     </x-button.secondary>
+                    @if ($label)
+                        <x-button.danger class="w-full justify-center sm:w-auto" wire:click="toRejection">
+                            Tolak
+                        </x-button.danger>
+                    @endif
                     <x-button.success class="w-full justify-center sm:w-auto" type="submit" form="form-validation"
                         wire:loading.attr="disabled" wire:target="proof_pic, confirmValidation">
                         <x-slot name="icon">
