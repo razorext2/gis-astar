@@ -145,11 +145,14 @@
                     class="absolute left-0 right-0 z-[150] mt-1 max-h-60 overflow-y-auto rounded-xl border border-zinc-200 bg-white py-1 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
                     @foreach ($this->pegawaiSearchResults as $p)
                         <button type="button"
-                            wire:click="selectPegawai({{ $p->kode_pegawai }}, '{{ addslashes($p->full_name) }}')"
+                            wire:click="selectPegawai({{ $p->kode_pegawai }}, '{{ addslashes($p->full_name) }}', {{ $p->is_active ? 'true' : 'false' }})"
                             @click="open = false"
                             class="flex w-full items-center px-4 py-2 text-left text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-100 dark:text-white dark:hover:bg-zinc-800">
                             <span class="mr-2 font-bold text-blue-600 dark:text-blue-400">#{{ $p->kode_pegawai }}</span>
                             <span>{{ $p->full_name }}</span>
+                            @if (!$p->is_active)
+                                <span class="ml-1.5 text-xs font-medium text-red-500 dark:text-red-400">(nonaktif)</span>
+                            @endif
                         </button>
                     @endforeach
                 </div>
@@ -161,7 +164,7 @@
                     @foreach ($selectedPegawai as $p)
                         <span
                             class="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700 dark:border-blue-800/60 dark:bg-blue-900/30 dark:text-blue-300">
-                            <span>#{{ $p['kode_pegawai'] }} - {{ $p['full_name'] }}</span>
+                            <span>#{{ $p['kode_pegawai'] }} - {{ $p['full_name'] }}@if (!($p['is_active'] ?? true))<span class="ml-1 font-medium text-red-500 dark:text-red-400">(nonaktif)</span>@endif</span>
                             <button type="button" wire:click="removePegawai({{ $p['kode_pegawai'] }})"
                                 class="text-blue-500 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-200">
                                 <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

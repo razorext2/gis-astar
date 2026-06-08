@@ -139,7 +139,7 @@
                             <option value="">Pilih...</option>
                             @foreach ($users as $user)
                                 <option value="{{ $user->kode_pegawai }}">
-                                    {{ $user->name }} {{ $user->kode_pegawai ? "($user->kode_pegawai)" : '' }}
+                                    {{ $user->name }} {{ $user->kode_pegawai ? "($user->kode_pegawai)" : '' }}{{ !$user->is_active ? ' (nonaktif)' : '' }}
                                 </option>
                             @endforeach
                         </select>

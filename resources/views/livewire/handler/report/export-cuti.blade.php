@@ -132,13 +132,16 @@
                     class="absolute left-0 right-0 z-[150] mt-1 max-h-60 overflow-y-auto rounded-xl border border-zinc-200 bg-white py-1 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
                     @foreach ($this->userSearchResults as $u)
                         <button type="button"
-                            wire:click="selectUser({{ $u->id }}, '{{ addslashes($u->name) }}', '{{ $u->kode_pegawai }}')"
+                            wire:click="selectUser({{ $u->id }}, '{{ addslashes($u->name) }}', '{{ $u->kode_pegawai }}', {{ $u->is_active ? 'true' : 'false' }})"
                             @click="open = false"
                             class="flex w-full items-center px-4 py-2 text-left text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-100 dark:text-white dark:hover:bg-zinc-800">
                             @if ($u->kode_pegawai)
                                 <span class="mr-2 font-bold text-blue-600 dark:text-blue-400">#{{ $u->kode_pegawai }}</span>
                             @endif
                             <span>{{ $u->name }}</span>
+                            @if (!$u->is_active)
+                                <span class="ml-1.5 text-xs font-medium text-red-500 dark:text-red-400">(nonaktif)</span>
+                            @endif
                         </button>
                     @endforeach
                 </div>
@@ -154,7 +157,7 @@
                                 @if ($u['kode_pegawai'])
                                     #{{ $u['kode_pegawai'] }} - 
                                 @endif
-                                {{ $u['name'] }}
+                                {{ $u['name'] }}@if (!($u['is_active'] ?? true))<span class="ml-1 font-medium text-red-500 dark:text-red-400">(nonaktif)</span>@endif
                             </span>
                             <button type="button" wire:click="removeUser({{ $u['id'] }})"
                                 class="text-blue-500 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-200">

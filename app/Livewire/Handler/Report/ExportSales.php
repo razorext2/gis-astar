@@ -41,7 +41,7 @@ class ExportSales extends Component
 
         $selectedCodes = array_column($this->selectedSales, 'kode_pegawai');
 
-        return \App\Models\User::select(['id', 'kode_pegawai', 'name'])
+        return \App\Models\User::select(['id', 'kode_pegawai', 'name', 'is_active'])
             ->whereNotNull('kode_pegawai')
             ->where(function ($q) {
                 $q->where('kode_pegawai', 'like', '%'.$this->salesSearchQuery.'%')
@@ -62,7 +62,7 @@ class ExportSales extends Component
 
         $selectedIds = array_column($this->selectedValidators, 'id');
 
-        return \App\Models\User::select(['id', 'kode_pegawai', 'name'])
+        return \App\Models\User::select(['id', 'kode_pegawai', 'name', 'is_active'])
             ->where(function ($q) {
                 $q->where('kode_pegawai', 'like', '%'.$this->validatorSearchQuery.'%')
                     ->orWhere('name', 'like', '%'.$this->validatorSearchQuery.'%');
@@ -73,11 +73,12 @@ class ExportSales extends Component
             ->get();
     }
 
-    public function selectSales(string $kodePegawai, string $name): void
+    public function selectSales(string $kodePegawai, string $name, bool $isActive = true): void
     {
         $this->selectedSales[] = [
             'kode_pegawai' => $kodePegawai,
             'name' => $name,
+            'is_active' => $isActive,
         ];
         $this->salesSearchQuery = '';
     }
@@ -90,11 +91,12 @@ class ExportSales extends Component
         $this->selectedSales = array_values($this->selectedSales);
     }
 
-    public function selectValidator(int $id, string $name): void
+    public function selectValidator(int $id, string $name, bool $isActive = true): void
     {
         $this->selectedValidators[] = [
             'id' => $id,
             'name' => $name,
+            'is_active' => $isActive,
         ];
         $this->validatorSearchQuery = '';
     }

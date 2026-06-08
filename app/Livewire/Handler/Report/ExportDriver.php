@@ -44,7 +44,7 @@ class ExportDriver extends Component
 
         $selectedCodes = array_column($this->selectedDrivers, 'kode_pegawai');
 
-        return \App\Models\User::select(['id', 'kode_pegawai', 'name'])
+        return \App\Models\User::select(['id', 'kode_pegawai', 'name', 'is_active'])
             ->whereNotNull('kode_pegawai')
             ->where(function ($q) {
                 $q->where('kode_pegawai', 'like', '%'.$this->driverSearchQuery.'%')
@@ -65,7 +65,7 @@ class ExportDriver extends Component
 
         $selectedIds = array_column($this->selectedAssigners, 'id');
 
-        return \App\Models\User::select(['id', 'kode_pegawai', 'name'])
+        return \App\Models\User::select(['id', 'kode_pegawai', 'name', 'is_active'])
             ->where(function ($q) {
                 $q->where('kode_pegawai', 'like', '%'.$this->assignerSearchQuery.'%')
                     ->orWhere('name', 'like', '%'.$this->assignerSearchQuery.'%');
@@ -76,11 +76,12 @@ class ExportDriver extends Component
             ->get();
     }
 
-    public function selectDriver(string $kodePegawai, string $name): void
+    public function selectDriver(string $kodePegawai, string $name, bool $isActive = true): void
     {
         $this->selectedDrivers[] = [
             'kode_pegawai' => $kodePegawai,
             'name' => $name,
+            'is_active' => $isActive,
         ];
         $this->driverSearchQuery = '';
     }
@@ -93,11 +94,12 @@ class ExportDriver extends Component
         $this->selectedDrivers = array_values($this->selectedDrivers);
     }
 
-    public function selectAssigner(int $id, string $name): void
+    public function selectAssigner(int $id, string $name, bool $isActive = true): void
     {
         $this->selectedAssigners[] = [
             'id' => $id,
             'name' => $name,
+            'is_active' => $isActive,
         ];
         $this->assignerSearchQuery = '';
     }

@@ -150,11 +150,14 @@
                     class="absolute left-0 right-0 z-[150] mt-1 max-h-60 overflow-y-auto rounded-xl border border-zinc-200 bg-white py-1 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
                     @foreach ($this->driverSearchResults as $d)
                         <button type="button"
-                            wire:click="selectDriver('{{ $d->kode_pegawai }}', '{{ addslashes($d->name) }}')"
+                            wire:click="selectDriver('{{ $d->kode_pegawai }}', '{{ addslashes($d->name) }}', {{ $d->is_active ? 'true' : 'false' }})"
                             @click="open = false"
                             class="flex w-full items-center px-4 py-2 text-left text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-100 dark:text-white dark:hover:bg-zinc-800">
                             <span class="mr-2 font-bold text-blue-600 dark:text-blue-400">#{{ $d->kode_pegawai }}</span>
                             <span>{{ $d->name }}</span>
+                            @if (!$d->is_active)
+                                <span class="ml-1.5 text-xs font-medium text-red-500 dark:text-red-400">(nonaktif)</span>
+                            @endif
                         </button>
                     @endforeach
                 </div>
@@ -166,7 +169,7 @@
                     @foreach ($selectedDrivers as $d)
                         <span
                             class="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700 dark:border-blue-800/60 dark:bg-blue-900/30 dark:text-blue-300">
-                            <span>#{{ $d['kode_pegawai'] }} - {{ $d['name'] }}</span>
+                        <span>#{{ $d['kode_pegawai'] }} - {{ $d['name'] }}@if (!($d['is_active'] ?? true))<span class="ml-1 font-medium text-red-500 dark:text-red-400">(nonaktif)</span>@endif</span>
                             <button type="button" wire:click="removeDriver('{{ $d['kode_pegawai'] }}')"
                                 class="text-blue-500 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-200">
                                 <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -202,13 +205,16 @@
                     class="absolute left-0 right-0 z-[150] mt-1 max-h-60 overflow-y-auto rounded-xl border border-zinc-200 bg-white py-1 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
                     @foreach ($this->assignerSearchResults as $a)
                         <button type="button"
-                            wire:click="selectAssigner({{ $a->id }}, '{{ addslashes($a->name) }}')"
+                            wire:click="selectAssigner({{ $a->id }}, '{{ addslashes($a->name) }}', {{ $a->is_active ? 'true' : 'false' }})"
                             @click="open = false"
                             class="flex w-full items-center px-4 py-2 text-left text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-100 dark:text-white dark:hover:bg-zinc-800">
                             @if($a->kode_pegawai)
                                 <span class="mr-2 font-bold text-blue-600 dark:text-blue-400">#{{ $a->kode_pegawai }}</span>
                             @endif
                             <span>{{ $a->name }}</span>
+                            @if (!$a->is_active)
+                                <span class="ml-1.5 text-xs font-medium text-red-500 dark:text-red-400">(nonaktif)</span>
+                            @endif
                         </button>
                     @endforeach
                 </div>
@@ -220,7 +226,7 @@
                     @foreach ($selectedAssigners as $a)
                         <span
                             class="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700 dark:border-blue-800/60 dark:bg-blue-900/30 dark:text-blue-300">
-                            <span>{{ $a['name'] }}</span>
+                            <span>{{ $a['name'] }}@if (!($a['is_active'] ?? true))<span class="ml-1 font-medium text-red-500 dark:text-red-400">(nonaktif)</span>@endif</span>
                             <button type="button" wire:click="removeAssigner({{ $a['id'] }})"
                                 class="text-blue-500 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-200">
                                 <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
