@@ -1,18 +1,29 @@
-{{-- Goal: Popup notifikasi approval cuti di dashboard, Livewire: Dashboard.LeaveApprovalPopup, Alpine: localStorage dismiss per sesi --}}
+{{-- Goal: Popup notifikasi approval cuti di dashboard, Livewire: Dashboard.LeaveApprovalPopup, Alpine: localStorage dismiss per sesi & minimize UI state --}}
 
 <div x-data="{
     dismissedForSession: false,
+    minimized: false,
     sessionKey: 'leave_popup_dismissed_{{ auth()->id() }}_{{ session()->getId() }}',
     init() {
         this.dismissedForSession = localStorage.getItem(this.sessionKey) === '1';
         if (this.dismissedForSession || !$wire.hasPending) {
             return;
         }
+
+        this.$watch('$wire.showPopup', value => {
+            if (!value && !this.dismissedForSession) {
+                this.minimized = true;
+            } else if (value) {
+                this.minimized = false;
+            }
+        });
+
         setTimeout(() => { $wire.set('showPopup', true); }, 800);
     },
     dismissForSession() {
         localStorage.setItem(this.sessionKey, '1');
         this.dismissedForSession = true;
+        this.minimized = false;
         $wire.dismiss();
     }
 }">
@@ -26,36 +37,34 @@
 
             {{-- Navigation bar: counter + arrow prev/next --}}
             @if ($totalPending > 1)
-                <div class="mb-4 flex items-center justify-between rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 dark:border-amber-500/20 dark:bg-amber-500/10">
+                <div
+                    class="mb-4 flex items-center justify-between rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 dark:border-amber-500/20 dark:bg-amber-500/10">
                     <div class="flex items-center gap-2">
                         <x-icons.info-circle class="h-4 w-4 shrink-0 text-amber-500" />
                         <span class="text-xs font-bold text-amber-700 dark:text-amber-400">
-                            Pengajuan <span class="font-black">{{ $currentIndex + 1 }}</span> dari <span class="font-black">{{ $totalPending }}</span>
+                            Pengajuan <span class="font-black">{{ $currentIndex + 1 }}</span> dari <span
+                                class="font-black">{{ $totalPending }}</span>
                         </span>
                     </div>
                     <div class="flex items-center gap-1">
-                        <button
-                            wire:click="previous"
-                            @class([
-                                'flex h-7 w-7 items-center justify-center rounded-lg border transition-all',
-                                'border-zinc-200 text-zinc-400 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-500 dark:hover:bg-zinc-800' => $currentIndex > 0,
-                                'cursor-not-allowed border-zinc-100 text-zinc-300 dark:border-zinc-800 dark:text-zinc-700' => $currentIndex === 0,
-                            ])
-                            @disabled($currentIndex === 0)
-                            wire:loading.attr="disabled"
-                        >
+                        <button wire:click="previous" @class([
+                            'flex h-7 w-7 items-center justify-center rounded-lg border transition-all',
+                            'border-zinc-200 text-zinc-400 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-500 dark:hover:bg-zinc-800' =>
+                                $currentIndex > 0,
+                            'cursor-not-allowed border-zinc-100 text-zinc-300 dark:border-zinc-800 dark:text-zinc-700' =>
+                                $currentIndex === 0,
+                        ]) @disabled($currentIndex === 0)
+                            wire:loading.attr="disabled">
                             <x-icons.chevron-left class="h-4 w-4" />
                         </button>
-                        <button
-                            wire:click="next"
-                            @class([
-                                'flex h-7 w-7 items-center justify-center rounded-lg border transition-all',
-                                'border-zinc-200 text-zinc-400 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-500 dark:hover:bg-zinc-800' => $currentIndex < $totalPending - 1,
-                                'cursor-not-allowed border-zinc-100 text-zinc-300 dark:border-zinc-800 dark:text-zinc-700' => $currentIndex >= $totalPending - 1,
-                            ])
-                            @disabled($currentIndex >= $totalPending - 1)
-                            wire:loading.attr="disabled"
-                        >
+                        <button wire:click="next" @class([
+                            'flex h-7 w-7 items-center justify-center rounded-lg border transition-all',
+                            'border-zinc-200 text-zinc-400 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-500 dark:hover:bg-zinc-800' =>
+                                $currentIndex < $totalPending - 1,
+                            'cursor-not-allowed border-zinc-100 text-zinc-300 dark:border-zinc-800 dark:text-zinc-700' =>
+                                $currentIndex >= $totalPending - 1,
+                        ]) @disabled($currentIndex >= $totalPending - 1)
+                            wire:loading.attr="disabled">
                             <x-icons.chevron-right class="h-4 w-4" />
                         </button>
                     </div>
@@ -147,5 +156,20 @@
                 </x-button.primary>
             </x-slot>
         </x-modal.base-modal>
+
+        <div x-show="minimized" x-transition:enter="transition ease-out duration-300 transform"
+            x-transition:enter-start="translate-y-10 opacity-0 scale-95"
+            x-transition:enter-end="translate-y-0 opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-200 transform"
+            x-transition:leave-start="translate-y-0 opacity-100 scale-100"
+            x-transition:leave-end="translate-y-10 opacity-0 scale-95"
+            class="fixed bottom-[9.5rem] right-4 z-50 flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl bg-amber-500 shadow-lg shadow-amber-500/20 transition-all duration-200 hover:scale-105 md:bottom-24 md:right-8"
+            @click="$wire.set('showPopup', true)" style="display: none;">
+            <x-icons.clipboard-check class="h-5 w-5 text-white" />
+            <span
+                class="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full border border-white bg-amber-100 text-[10px] font-black text-amber-800 shadow dark:border-zinc-900 dark:bg-amber-900 dark:text-amber-400">
+                {{ $totalPending }}
+            </span>
+        </div>
     @endif
 </div>
