@@ -112,13 +112,13 @@ class CollectIdyPpnController extends Controller
                             'label' => 'Ubah jadwal',
                         ];
 
-                        if (auth()->user()->can('collect-idy-ppn-delete')) {
-                            $actions[] = [
-                                'id' => 'delete-btn',
-                                'action' => 'javascript:void(0)',
-                                'label' => 'Hapus',
-                            ];
-                        }
+                        // if (auth()->user()->can('collect-idy-ppn-delete')) {
+                        //     $actions[] = [
+                        //         'id' => 'delete-btn',
+                        //         'action' => 'javascript:void(0)',
+                        //         'label' => 'Hapus',
+                        //     ];
+                        // }
                     }
 
                     return view('components.dashboard.action-buttons', [
