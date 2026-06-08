@@ -136,46 +136,6 @@ class Edit extends Component
             $alasanLog = $this->ubah_kode_pegawai ? $this->alasan_ubah_kode : 'Pembaruan data pegawai';
 
             DB::transaction(function () use ($old_code, $new_code, $alasanLog) {
-                if ($this->ubah_kode_pegawai && $old_code !== $new_code) {
-                    // Update related tables
-                    $tables = [
-                        'tb_attendance',
-                        'tb_attendance_out',
-                        'tb_collect',
-                        'tb_drivers',
-                        'tb_overtime',
-                        'tb_point_transactions',
-                        'tb_sales',
-                        'tb_team_members',
-                        'tb_technician',
-                        'tb_technician_points',
-                        'users',
-                    ];
-
-                    foreach ($tables as $table) {
-                        DB::table($table)
-                            ->where('kode_pegawai', $old_code)
-                            ->update(['kode_pegawai' => $new_code]);
-                    }
-
-                    // Rename Storage label directory if exists
-                    $oldFolder = "public/labels/{$old_code}";
-                    $newFolder = "public/labels/{$new_code}";
-                    if (Storage::exists($oldFolder)) {
-                        Storage::move($oldFolder, $newFolder);
-                    }
-
-                    // Record history log
-                    PegawaiChangesHistory::create([
-                        'pegawai_id' => $this->pegawai->id,
-                        'field_name' => 'kode_pegawai',
-                        'old_value' => $old_code,
-                        'new_value' => $new_code,
-                        'alasan' => $this->alasan_ubah_kode,
-                        'changed_by' => auth()->id(),
-                    ]);
-                }
-
                 // Detect dirty changes on other Pegawai fields
                 foreach (['nik_pegawai', 'full_name', 'nick_name', 'no_telp', 'alamat', 'jabatan', 'golongan', 'tgl_lahir'] as $field) {
                     if ($this->pegawai->$field != $this->$field) {
@@ -190,7 +150,19 @@ class Edit extends Component
                     }
                 }
 
-                // Update Employee details
+                if ($this->ubah_kode_pegawai && $old_code !== $new_code) {
+                    // Record history log for code change
+                    PegawaiChangesHistory::create([
+                        'pegawai_id' => $this->pegawai->id,
+                        'field_name' => 'kode_pegawai',
+                        'old_value' => $old_code,
+                        'new_value' => $new_code,
+                        'alasan' => $this->alasan_ubah_kode,
+                        'changed_by' => auth()->id(),
+                    ]);
+                }
+
+                // Update Employee details first so that foreign key cascading updates related tables automatically
                 $this->pegawai->update([
                     'kode_pegawai' => $new_code,
                     'nik_pegawai' => $this->nik_pegawai,
@@ -202,6 +174,15 @@ class Edit extends Component
                     'golongan' => $this->golongan,
                     'tgl_lahir' => $this->tgl_lahir,
                 ]);
+
+                if ($this->ubah_kode_pegawai && $old_code !== $new_code) {
+                    // Rename Storage label directory if exists
+                    $oldFolder = "public/labels/{$old_code}";
+                    $newFolder = "public/labels/{$new_code}";
+                    if (Storage::exists($oldFolder)) {
+                        Storage::move($oldFolder, $newFolder);
+                    }
+                }
 
                 // Sync Roles & User params if account exists
                 if ($this->has_account) {

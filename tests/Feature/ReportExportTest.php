@@ -3,6 +3,7 @@
 /** Goal: Feature tests untuk fitur Laporan Export, Caller: pest, Deps: User, Permission, ReportExportJob */
 
 use App\Jobs\ExportReportJob;
+use App\Models\Pegawai;
 use App\Livewire\Handler\Report\ExportAbsensi;
 use App\Livewire\Handler\Report\ExportCuti;
 use App\Livewire\Handler\Report\ExportDriver;
@@ -266,6 +267,7 @@ it('can successfully run ExportReportJob for combined check-in and check-out', f
 it('ExportCuti supports user search, select, and remove user', function () {
     $this->actingAs($this->adminUser);
 
+    Pegawai::create(['kode_pegawai' => '12345', 'nik_pegawai' => '0', 'full_name' => 'John Doe']);
     $user = User::factory()->create(['name' => 'John Doe', 'kode_pegawai' => '12345']);
 
     Livewire::test(ExportCuti::class)
@@ -289,6 +291,7 @@ it('can successfully run ExportReportJob for cuti with date_type leave_date and 
         ['name' => 'Cuti Tahunan', 'is_anual_deduction' => true, 'default_days' => 12]
     );
 
+    Pegawai::create(['kode_pegawai' => '67890', 'nik_pegawai' => '0', 'full_name' => 'Jane Doe']);
     $user = User::factory()->create(['name' => 'Jane Doe', 'kode_pegawai' => '67890']);
 
     $leave = \App\Models\LeaveRequest\LeaveRequest::create([
@@ -370,6 +373,7 @@ it('can successfully run ExportReportJob for piutang with date_type assign_date,
     \Illuminate\Support\Facades\Event::fake();
     \Illuminate\Support\Facades\Storage::fake();
 
+    Pegawai::create(['kode_pegawai' => '555', 'nik_pegawai' => '0', 'full_name' => 'Collector Person']);
     $user = User::factory()->create(['name' => 'Collector Person', 'kode_pegawai' => '555']);
 
     $task = CollectTask::create([
@@ -414,6 +418,7 @@ it('can successfully run ExportReportJob for kolektor with additional filters', 
     \Illuminate\Support\Facades\Event::fake();
     \Illuminate\Support\Facades\Storage::fake();
 
+    Pegawai::create(['kode_pegawai' => '777', 'nik_pegawai' => '0', 'full_name' => 'Collector User']);
     $user = User::factory()->create(['name' => 'Collector User', 'kode_pegawai' => '777']);
 
     $collector = \App\Models\Collector::create([
@@ -544,6 +549,7 @@ it('can successfully run ExportReportJob for Driver with additional filters', fu
     \Illuminate\Support\Facades\Event::fake();
     \Illuminate\Support\Facades\Storage::fake();
 
+    Pegawai::create(['kode_pegawai' => '999', 'nik_pegawai' => '0', 'full_name' => 'Admin Pegawai']);
     $this->adminUser->update(['kode_pegawai' => '999']);
 
     $driver = \App\Models\Driver::create([
@@ -590,6 +596,7 @@ it('can successfully run ExportReportJob for Driver with additional filters', fu
 it('ExportDriver supports Driver search, select, and remove', function () {
     $this->actingAs($this->adminUser);
 
+    Pegawai::create(['kode_pegawai' => '125', 'nik_pegawai' => '0', 'full_name' => 'Driver Guy']);
     $driverUser = User::factory()->create(['name' => 'Driver Guy', 'kode_pegawai' => '125']);
 
     Livewire::test(ExportDriver::class)
@@ -606,6 +613,7 @@ it('ExportDriver supports Driver search, select, and remove', function () {
 it('ExportDriver supports Assigner search, select, and remove', function () {
     $this->actingAs($this->adminUser);
 
+    Pegawai::create(['kode_pegawai' => '126', 'nik_pegawai' => '0', 'full_name' => 'Assigner Guy']);
     $assignerUser = User::factory()->create(['name' => 'Assigner Guy', 'kode_pegawai' => '126']);
 
     Livewire::test(ExportDriver::class)
@@ -659,6 +667,7 @@ it('can successfully run ExportReportJob for Sales with additional filters', fun
     \Illuminate\Support\Facades\Event::fake();
     \Illuminate\Support\Facades\Storage::fake();
 
+    Pegawai::create(['kode_pegawai' => '999', 'nik_pegawai' => '0', 'full_name' => 'Admin Pegawai']);
     $this->adminUser->update(['kode_pegawai' => '999']);
 
     $sales = \App\Models\Sales::create([
@@ -702,6 +711,7 @@ it('can successfully run ExportReportJob for Sales with additional filters', fun
 it('ExportSales supports Sales search, select, and remove', function () {
     $this->actingAs($this->adminUser);
 
+    Pegawai::create(['kode_pegawai' => '123', 'nik_pegawai' => '0', 'full_name' => 'Sales Guy']);
     $salesUser = User::factory()->create(['name' => 'Sales Guy', 'kode_pegawai' => '123']);
 
     Livewire::test(ExportSales::class)
@@ -718,6 +728,7 @@ it('ExportSales supports Sales search, select, and remove', function () {
 it('ExportSales supports Validator search, select, and remove', function () {
     $this->actingAs($this->adminUser);
 
+    Pegawai::create(['kode_pegawai' => '124', 'nik_pegawai' => '0', 'full_name' => 'Validator Guy']);
     $validatorUser = User::factory()->create(['name' => 'Validator Guy', 'kode_pegawai' => '124']);
 
     Livewire::test(ExportSales::class)
