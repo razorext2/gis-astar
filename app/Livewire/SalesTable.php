@@ -44,10 +44,8 @@ final class SalesTable extends PowerGridComponent
     {
         $query = Sales::query()
             ->leftJoin('tb_pegawai', 'tb_sales.kode_pegawai', '=', 'tb_pegawai.kode_pegawai')
-            ->leftJoin('users', 'tb_sales.kode_pegawai', '=', 'users.kode_pegawai')
-            ->leftJoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-            ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
-            ->select('tb_sales.*', 'tb_pegawai.full_name', 'roles.name as role_name');
+            ->select('tb_sales.*', 'tb_pegawai.full_name')
+            ->with(['userRelasi.roles']);
 
         if (! $this->user->can('sales-approve')) {
             $query->where('tb_sales.kode_pegawai', $this->user->kode_pegawai);
@@ -55,7 +53,9 @@ final class SalesTable extends PowerGridComponent
             $allowedRoles = SalesRegionResolver::resolveForUser($this->user);
 
             if (! empty($allowedRoles)) {
-                $query->whereIn('roles.name', $allowedRoles);
+                $query->whereHas('userRelasi.roles', function ($q) use ($allowedRoles) {
+                    $q->whereIn('name', $allowedRoles);
+                });
             }
         }
 
@@ -112,7 +112,7 @@ final class SalesTable extends PowerGridComponent
             ->add('customer_name')
             ->add('status')
             ->add('created_at')
-            ->add('role_name');
+            ->add('role_name', fn ($data) => $data->userRelasi?->roles?->pluck('name')->implode(', ') ?: '');
     }
 
     public function columns(): array
@@ -167,7 +167,7 @@ final class SalesTable extends PowerGridComponent
         }
 
         if ($this->user->can('sales-export-all')) {
-            $filters[] = Filter::select('role_name', 'roles.name')
+            $filters[] = Filter::select('role_name', 'role_name')
                 ->dataSource([
                     ['name' => 'Sales Medan',    'value' => 'Sales'],
                     ['name' => 'Sales Jakarta',  'value' => 'Sales-JKT'],
@@ -177,7 +177,10 @@ final class SalesTable extends PowerGridComponent
                     ['name' => 'Sales Agrotec',  'value' => 'Sales-Agrotec'],
                 ])
                 ->optionLabel('name')
-                ->optionValue('value');
+                ->optionValue('value')
+                ->builder(function (Builder $query, $value) {
+                    $query->whereHas('userRelasi.roles', fn ($q) => $q->where('name', $value));
+                });
         }
 
         return $filters;
