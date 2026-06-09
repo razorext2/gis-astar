@@ -762,3 +762,46 @@ it('ExportSales dispatches export job with additional filters', function () {
             && ($job->additionalFilters['customer_make_order'] ?? null) === '1';
     });
 });
+it('ExportReportJob sends failure notification and broadcasts event when failed() is called', function () {
+    \Illuminate\Support\Facades\Notification::fake();
+    \Illuminate\Support\Facades\Event::fake();
+
+    $job = new ExportReportJob(
+        userId: $this->adminUser->id,
+        reportType: 'absensi',
+        fromDate: now()->startOfMonth()->toDateString(),
+        toDate: now()->endOfMonth()->toDateString(),
+        filterBy: null,
+        filterValue: null,
+        exportFormat: 'xlsx',
+    );
+
+    $job->failed(new \RuntimeException('Simulated export failure'));
+
+    \Illuminate\Support\Facades\Notification::assertSentTo(
+        $this->adminUser,
+        \App\Notifications\ReportExportFailed::class
+    );
+
+    \Illuminate\Support\Facades\Event::assertDispatched(\App\Events\ReportExportFailedEvent::class);
+});
+
+it('ExportReportJob failed() does nothing when user is not found', function () {
+    \Illuminate\Support\Facades\Notification::fake();
+    \Illuminate\Support\Facades\Event::fake();
+
+    $job = new ExportReportJob(
+        userId: 999999,
+        reportType: 'absensi',
+        fromDate: now()->startOfMonth()->toDateString(),
+        toDate: now()->endOfMonth()->toDateString(),
+        filterBy: null,
+        filterValue: null,
+        exportFormat: 'xlsx',
+    );
+
+    $job->failed(new \RuntimeException('Simulated export failure'));
+
+    \Illuminate\Support\Facades\Notification::assertNothingSent();
+    \Illuminate\Support\Facades\Event::assertNotDispatched(\App\Events\ReportExportFailedEvent::class);
+});

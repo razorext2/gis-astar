@@ -5,6 +5,7 @@
 namespace App\Jobs;
 
 use App\Events\ReportExportCompletedEvent;
+use App\Events\ReportExportFailedEvent;
 use App\Exports\Report\AbsensiExport;
 use App\Exports\Report\CutiExport;
 use App\Exports\Report\DriverExport;
@@ -15,11 +16,13 @@ use App\Exports\Report\SalesReportExport;
 use App\Exports\Report\SpkExport;
 use App\Models\User;
 use App\Notifications\ReportExportCompleted;
+use App\Notifications\ReportExportFailed;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ExportReportJob implements ShouldQueue
 {
@@ -88,6 +91,34 @@ class ExportReportJob implements ShouldQueue
             Log::error("Export report [{$this->reportType}] failed for user: {$this->userId} - Error: {$e->getMessage()}");
             throw $e;
         }
+    }
+
+    public function failed(\Throwable $exception): void
+    {
+        Log::error("Export report [{$this->reportType}] permanently failed for user: {$this->userId} - Error: {$exception->getMessage()}");
+
+        $user = User::find($this->userId);
+
+        if (! $user) {
+            return;
+        }
+
+        $user->notify(new ReportExportFailed(
+            $this->getReportLabel(),
+            $this->fromDate,
+            $this->toDate,
+        ));
+
+        $notification = $user->notifications()->latest()->first();
+        $notificationId = $notification ? $notification->id : (string) Str::uuid();
+
+        broadcast(new ReportExportFailedEvent(
+            $notificationId,
+            $this->userId,
+            $this->getReportLabel(),
+            $this->fromDate,
+            $this->toDate,
+        ));
     }
 
     /**
