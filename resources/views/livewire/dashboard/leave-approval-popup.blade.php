@@ -6,25 +6,34 @@
     sessionKey: 'leave_popup_dismissed_{{ auth()->id() }}_{{ session()->getId() }}',
     init() {
         this.dismissedForSession = localStorage.getItem(this.sessionKey) === '1';
-        if (this.dismissedForSession || !$wire.hasPending) {
+        if (!$wire.hasPending) {
             return;
         }
 
         this.$watch('$wire.showPopup', value => {
-            if (!value && !this.dismissedForSession) {
+            if (!value) {
                 this.minimized = true;
             } else if (value) {
                 this.minimized = false;
             }
         });
 
-        setTimeout(() => { $wire.set('showPopup', true); }, 800);
+        if (this.dismissedForSession) {
+            this.minimized = true;
+        } else {
+            setTimeout(() => { $wire.set('showPopup', true); }, 800);
+        }
     },
-    dismissForSession() {
-        localStorage.setItem(this.sessionKey, '1');
-        this.dismissedForSession = true;
-        this.minimized = false;
-        $wire.dismiss();
+    toggleDismissSession(checked) {
+        if (checked) {
+            localStorage.setItem(this.sessionKey, '1');
+            this.dismissedForSession = true;
+            this.minimized = true;
+            $wire.dismiss();
+        } else {
+            localStorage.removeItem(this.sessionKey);
+            this.dismissedForSession = false;
+        }
     }
 }">
     @if ($currentRequest)
@@ -139,7 +148,8 @@
             <div class="flex items-center gap-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
                 <input type="checkbox" id="dismiss-popup-session"
                     class="h-4 w-4 cursor-pointer rounded border-zinc-300 text-red-600 dark:border-zinc-700"
-                    @change="if ($event.target.checked) dismissForSession()">
+                    :checked="dismissedForSession"
+                    @change="toggleDismissSession($event.target.checked)">
                 <label for="dismiss-popup-session" class="cursor-pointer text-xs text-zinc-500 dark:text-zinc-400">
                     Jangan tampilkan lagi untuk sesi ini
                 </label>
