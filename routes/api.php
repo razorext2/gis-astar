@@ -26,8 +26,15 @@ Route::get('event/{event}/{participant}/visitor', [BigEventController::class, 's
 
 // public API post attendance ke server utama
 Route::post('proxy/server/attendance', function (Request $request) {
-    $response = Http::post('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendance', [
-        'kode_jari' => $request->input('kode_jari'),
+    $kodeJari = $request->input('kode_jari');
+    $user = \App\Models\User::where('kode_pegawai', $kodeJari)->first();
+
+    $url = ($user && $user->hasRole('Employee-Agrotec'))
+        ? 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendanceAgrotec'
+        : 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendance';
+
+    $response = Http::post($url, [
+        'kode_jari' => $kodeJari,
     ]);
 
     return $response->json();

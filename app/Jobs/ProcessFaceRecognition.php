@@ -108,7 +108,12 @@ class ProcessFaceRecognition implements ShouldQueue
                 'distance' => $responseData['distance'],
             ]);
 
-            Http::withoutVerifying()->post('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendance', [
+            $user = User::where('id', $this->userId)->first();
+            $url = ($user && $user->hasRole('Employee-Agrotec'))
+                ? 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendanceAgrotec'
+                : 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendance';
+
+            Http::withoutVerifying()->post($url, [
                 'kode_jari' => $this->kodePegawai,
                 'waktu' => $data->waktuori,
                 'kodebarcode' => $this->sanitize($this->noVt),
