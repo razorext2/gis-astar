@@ -33,33 +33,6 @@ Route::middleware(['auth'])->group(function () {
 
     // export
     Route::prefix('export')->as('')->group(function () {
-        // laporan kolektor
-        Route::get('collector/', [\App\Http\Controllers\Report\CollectorReportController::class, 'export'])->name('export.collector');
-
-        Route::get('collector/{filename}', function (string $filename) {
-            $path = "export/{$filename}";
-            abort_unless(Storage::exists($path), 404);
-
-            return Storage::download($path);
-        })->where('filename', '[a-zA-Z0-9\-_.]+')->name('export.collector.download');
-        // end laporan kolektor
-
-        // laporan sales
-        Route::get('sales/{filename}', function (string $filename) {
-            $path = "export/{$filename}";
-            abort_unless(Storage::exists($path), 404);
-
-            return Storage::download($path);
-        })->where('filename', '[a-zA-Z0-9\-_.]+')->name('export.sales.download');
-
-        // laporan invoice
-        Route::get('invoice/{filename}', function (string $filename) {
-            $path = "export/invoice/{$filename}";
-            abort_unless(Storage::exists($path), 404);
-
-            return Storage::download($path);
-        })->where('filename', '[a-zA-Z0-9\-_.]+')->name('export.invoice.download');
-
         // laporan poin teknisi
         Route::get('point/{filename}', function (string $filename) {
             $path = "export/point/{$filename}";

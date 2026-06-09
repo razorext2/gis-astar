@@ -34,12 +34,6 @@
                     </x-button.success>
                 </div>
             @endcan
-
-            @canany(['invoice-export-all', 'invoice-export-pku'])
-                <div class="max-w-xs">
-                    <livewire:handler.invoice.export />
-                </div>
-            @endcanany
         </div>
 
         <div

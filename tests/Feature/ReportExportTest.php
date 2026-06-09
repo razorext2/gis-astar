@@ -275,7 +275,7 @@ it('ExportCuti supports user search, select, and remove user', function () {
         ->assertSee('John Doe')
         ->call('selectUser', $user->id, 'John Doe', '12345')
         ->assertSet('selectedUsers', [
-            ['id' => $user->id, 'name' => 'John Doe', 'kode_pegawai' => '12345'],
+            ['id' => $user->id, 'name' => 'John Doe', 'kode_pegawai' => '12345', 'is_active' => true],
         ])
         ->call('removeUser', $user->id)
         ->assertSet('selectedUsers', []);
@@ -604,7 +604,7 @@ it('ExportDriver supports Driver search, select, and remove', function () {
         ->assertSee('Driver Guy')
         ->call('selectDriver', '125', 'Driver Guy')
         ->assertSet('selectedDrivers', [
-            ['kode_pegawai' => '125', 'name' => 'Driver Guy'],
+            ['kode_pegawai' => '125', 'name' => 'Driver Guy', 'is_active' => true],
         ])
         ->call('removeDriver', '125')
         ->assertSet('selectedDrivers', []);
@@ -621,7 +621,7 @@ it('ExportDriver supports Assigner search, select, and remove', function () {
         ->assertSee('Assigner Guy')
         ->call('selectAssigner', $assignerUser->id, 'Assigner Guy')
         ->assertSet('selectedAssigners', [
-            ['id' => $assignerUser->id, 'name' => 'Assigner Guy'],
+            ['id' => $assignerUser->id, 'name' => 'Assigner Guy', 'is_active' => true],
         ])
         ->call('removeAssigner', $assignerUser->id)
         ->assertSet('selectedAssigners', []);
@@ -719,7 +719,7 @@ it('ExportSales supports Sales search, select, and remove', function () {
         ->assertSee('Sales Guy')
         ->call('selectSales', '123', 'Sales Guy')
         ->assertSet('selectedSales', [
-            ['kode_pegawai' => '123', 'name' => 'Sales Guy'],
+            ['kode_pegawai' => '123', 'name' => 'Sales Guy', 'is_active' => true],
         ])
         ->call('removeSales', '123')
         ->assertSet('selectedSales', []);
@@ -736,7 +736,7 @@ it('ExportSales supports Validator search, select, and remove', function () {
         ->assertSee('Validator Guy')
         ->call('selectValidator', $validatorUser->id, 'Validator Guy')
         ->assertSet('selectedValidators', [
-            ['id' => $validatorUser->id, 'name' => 'Validator Guy'],
+            ['id' => $validatorUser->id, 'name' => 'Validator Guy', 'is_active' => true],
         ])
         ->call('removeValidator', $validatorUser->id)
         ->assertSet('selectedValidators', []);
