@@ -3,20 +3,18 @@
 namespace App\Events;
 
 use Carbon\Carbon;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class DriverNewReportEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     protected $created_at;
+
     protected $user_id;
 
     /**
@@ -24,7 +22,7 @@ class DriverNewReportEvent implements ShouldBroadcast
      */
     public function __construct($created_at, $user_id)
     {
-        $this->created_at = $created_at;
+        $this->created_at = $created_at instanceof Carbon ? $created_at : Carbon::parse($created_at);
         $this->user_id = $user_id;
     }
 

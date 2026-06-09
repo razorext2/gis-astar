@@ -22,7 +22,7 @@ class SalesNewReport extends Notification implements ShouldQueue
     public function __construct($report_id, $created_at)
     {
         $this->report_id = $report_id;
-        $this->created_at = $created_at;
+        $this->created_at = $created_at instanceof Carbon ? $created_at : Carbon::parse($created_at);
     }
 
     /**
@@ -57,9 +57,11 @@ class SalesNewReport extends Notification implements ShouldQueue
 
     public function toWebPush($notifiable, $notification)
     {
+        $date = $this->created_at->locale('id')->isoFormat('DD MMMM YYYY');
+
         return (new WebPushMessage)
             ->title("PT. Indodacin Presisi Utama")
-            ->body("Sales telah membuat laporan baru pada tanggal $this->created_at, silahkan diperiksa dan lakukan konfirmasi.")
+            ->body("Sales telah membuat laporan baru pada tanggal $date, silahkan diperiksa dan lakukan konfirmasi.")
             ->icon(asset("/assets/img/logo.ico"))
             ->badge(asset("/assets/img/logo.ico"))
             ->action("Periksa Laporan", route("sales.show", $this->report_id))

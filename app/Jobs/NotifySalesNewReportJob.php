@@ -1,59 +1,71 @@
 <?php
 
+/** Goal: Notify semua user berpermission sales-approve saat ada laporan sales baru, Caller: SalesController/Api, Deps: SalesNewReport, SalesNewReportEvent, User */
+
 namespace App\Jobs;
 
 use App\Events\SalesNewReportEvent;
+use App\Helpers\ErrorLogger;
 use App\Models\User;
 use App\Notifications\SalesNewReport;
-use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Support\Facades\Log;
 
 class NotifySalesNewReportJob implements ShouldQueue
 {
     use Queueable;
 
-    protected $report_id;
-    protected $created_at;
+    public int $tries = 3;
+
+    public int $timeout = 60;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($report_id, $created_at)
-    {
-        $this->report_id = $report_id;
-        $this->created_at = $created_at;
-    }
+    public function __construct(
+        public readonly int $reportId,
+        public readonly string $createdAt,
+    ) {}
 
     /**
      * Execute the job.
      */
     public function handle(): void
     {
-        // cari user yang memiliki permission sales-approve
         $users = User::select('id')
             ->permission('sales-approve')
             ->get();
 
         foreach ($users as $user) {
-            try {
-                // berikan notifikasi saat ada laporan baru
-                $user->notify(new SalesNewReport($this->report_id, $this->created_at));
+            $user->notify(new SalesNewReport($this->reportId, $this->createdAt));
 
-                // ambil data notifikasi terakhir
-                $notification = $user->notifications()->latest()->first();
+            $notification = $user->notifications()->latest()->first();
 
-                // lakukan broadcast
-                broadcast(new SalesNewReportEvent(
-                    $this->report_id,
-                    $notification->id,
-                    $this->created_at,
-                    $user->id
-                ));
-            } catch (Exception $e) {
-                Log::error($e->getMessage());
-            }
+            broadcast(new SalesNewReportEvent(
+                $this->reportId,
+                $notification->id,
+                $this->createdAt,
+                $user->id,
+            ));
         }
+    }
+
+    /**
+     * Handle a job failure — dipanggil setelah semua retry habis.
+     */
+    public function failed(\Throwable $exception): void
+    {
+        ErrorLogger::log($exception, 'NotifySalesNewReportJob permanently failed', [
+            'report_id' => $this->reportId,
+            'created_at' => $this->createdAt,
+        ]);
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    public function backoff(): array
+    {
+        return [10, 30, 60];
     }
 }

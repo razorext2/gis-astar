@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Generate PDF dari model tertentu lalu notify user via notifikasi + broadcast, Caller: SpkController/Generate, Deps: BaseFileDownload, BasicMakePdfCompletedEvent, DomPDF, User */
+
 namespace App\Jobs;
 
 use App\Events\BasicMakePdfCompletedEvent;
@@ -9,89 +11,86 @@ use App\Notifications\BaseFileDownload;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use Throwable;
 
 class ExportPdfJob implements ShouldQueue
 {
     use Queueable;
 
-    protected int $user_id;
+    public int $tries = 3;
 
-    protected string $data_model;
-
-    protected string $data_id;
-
-    protected string $paper_type;
-
-    protected string $paper_orientation;
-
-    protected string $view_template;
-
-    protected string $message;
-
-    protected string $route;
+    public int $timeout = 120;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(int $user_id, string $data_model, string $data_id, string $paper_type, string $paper_orientation, string $view_template, string $message, string $route)
-    {
-        $this->user_id = $user_id;
-        $this->data_model = $data_model;
-        $this->data_id = $data_id;
-        $this->paper_type = $paper_type;
-        $this->paper_orientation = $paper_orientation;
-        $this->view_template = $view_template;
-        $this->message = $message;
-        $this->route = $route;
-    }
+    public function __construct(
+        public readonly int $userId,
+        public readonly string $dataModel,
+        public readonly string $dataId,
+        public readonly string $paperType,
+        public readonly string $paperOrientation,
+        public readonly string $viewTemplate,
+        public readonly string $message,
+        public readonly string $route,
+    ) {}
 
     /**
      * Execute the job.
      */
     public function handle(): void
     {
-        $data = $this->data_model::find($this->data_id);
+        $user = User::find($this->userId);
 
-        $user = User::find($this->user_id);
-
-        try {
-            // buat pdf
-            $pdf = Pdf::loadView($this->view_template, [
-                'data' => $data,
-            ]);
-
-            // options nya
-            $pdf->setPaper($this->paper_type, $this->paper_orientation);
-
-            // simpan kemari
-            $pdf->save($this->data_id.'.pdf', 'pdf');
-
-            // berikan notifikasi ke user yang memiliki permission spk-create
-            $user->notify(new BaseFileDownload(
-                route: $this->route,
-                parameters: [$this->data_id],
-                message: $this->message,
-                label: 'Download PDF'
-            ));
-
-            // ambil id notifikasi terakhir
-            $latest_notification_id = $user->notifications()->latest()->first()->id;
-
-            // broadcast pesan
-            broadcast(new BasicMakePdfCompletedEvent(
-                notification_id: $latest_notification_id,
-                user_id: $user->id,
-                message: $this->message,
-                route: $this->route,
-                parameters: [$this->data_id],
-                label: 'Download PDF',
-            ));
-        } catch (Throwable $e) {
-            ErrorLogger::log($e, 'Gagal menjalankan ExportPdfJob', [
-                'model' => $this->data_model,
-                'id' => $this->data_id,
-            ]);
+        if (! $user) {
+            throw new \RuntimeException("User [{$this->userId}] tidak ditemukan.");
         }
+
+        $data = $this->dataModel::find($this->dataId);
+
+        if (! $data) {
+            throw new \RuntimeException("Model [{$this->dataModel}] dengan ID [{$this->dataId}] tidak ditemukan.");
+        }
+
+        $pdf = Pdf::loadView($this->viewTemplate, ['data' => $data]);
+        $pdf->setPaper($this->paperType, $this->paperOrientation);
+        $pdf->save($this->dataId.'.pdf', 'pdf');
+
+        $user->notify(new BaseFileDownload(
+            route: $this->route,
+            parameters: [$this->dataId],
+            message: $this->message,
+            label: 'Download PDF',
+        ));
+
+        $latestNotificationId = $user->notifications()->latest()->first()->id;
+
+        broadcast(new BasicMakePdfCompletedEvent(
+            notification_id: $latestNotificationId,
+            user_id: $user->id,
+            message: $this->message,
+            route: $this->route,
+            parameters: [$this->dataId],
+            label: 'Download PDF',
+        ));
+    }
+
+    /**
+     * Handle a job failure — dipanggil setelah semua retry habis.
+     */
+    public function failed(\Throwable $exception): void
+    {
+        ErrorLogger::log($exception, 'ExportPdfJob permanently failed', [
+            'user_id' => $this->userId,
+            'model' => $this->dataModel,
+            'id' => $this->dataId,
+        ]);
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    public function backoff(): array
+    {
+        return [10, 30, 60];
     }
 }
