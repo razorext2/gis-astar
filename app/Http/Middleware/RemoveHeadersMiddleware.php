@@ -26,7 +26,8 @@ class RemoveHeadersMiddleware
             $response->header('X-Content-Type-Options', 'nosniff');
             $response->header('X-XSS-Protection', '1; mode=block');
             $response->header('Referrer-Policy', 'no-referrer-when-downgrade');
-            $response->header('Content-Security-Policy', "upgrade-insecure-requests");
+            $response->header('Content-Security-Policy', 'upgrade-insecure-requests');
+            $response->header('Permissions-Policy', 'unload=*');
         }
 
         return $response;
