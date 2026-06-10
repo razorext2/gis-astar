@@ -70,3 +70,37 @@ test('proxy route uses standard insertAttendance for regular employee', function
                $request['kode_jari'] === '888';
     });
 });
+
+test('SyncAttendanceToExternalServerJob routes correctly and syncs to external server', function () {
+    Http::fake([
+        'https://indodacin.nusa.net.id/*' => Http::response(['status' => 'success'], 200),
+    ]);
+
+    Pegawai::create([
+        'kode_pegawai' => '999',
+        'nik_pegawai' => '999-NIK',
+        'full_name' => 'Agrotec User',
+    ]);
+    $user = User::factory()->create([
+        'kode_pegawai' => '999',
+        'is_active' => true,
+    ]);
+    $user->assignRole('Employee-Agrotec');
+
+    $job = new \App\Jobs\SyncAttendanceToExternalServerJob(
+        userId: $user->id,
+        kodePegawai: '999',
+        waktuOri: '2026-06-09 10:00:00',
+        noVt: 'VT123',
+        keterangan: 'None',
+        lokasi: 'Medan',
+    );
+    $job->handle();
+
+    Http::assertSent(function (\Illuminate\Http\Client\Request $request) {
+        return str_contains($request->url(), 'tipe=insertAttendanceAgrotec') &&
+               $request['kode_jari'] === '999' &&
+               $request['waktu'] === '2026-06-09 10:00:00' &&
+               $request['kodebarcode'] === 'VT123';
+    });
+});

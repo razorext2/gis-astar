@@ -29,15 +29,20 @@ Route::post('proxy/server/attendance', function (Request $request) {
     $kodeJari = $request->input('kode_jari');
     $user = \App\Models\User::where('kode_pegawai', $kodeJari)->first();
 
-    $url = ($user && $user->hasRole('Employee-Agrotec'))
-        ? 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendanceAgrotec'
-        : 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendance';
+    if (! $user) {
+        return response()->json(['error' => 'User tidak ditemukan'], 404);
+    }
 
-    $response = Http::post($url, [
-        'kode_jari' => $kodeJari,
-    ]);
+    \App\Jobs\SyncAttendanceToExternalServerJob::dispatch(
+        $user->id,
+        $kodeJari,
+        now()->format('Y-m-d H:i:s'),
+        null,
+        null,
+        null,
+    );
 
-    return $response->json();
+    return response()->json(['message' => 'Absensi sedang diproses']);
 });
 
 Route::middleware(['auth:sanctum', 'throttle:high'])->group(function () {

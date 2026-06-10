@@ -4,18 +4,31 @@
 
 namespace App\Jobs;
 
+use App\Enums\AttendanceStatus;
 use App\Events\RecognitionEvent;
 use App\Helpers\ErrorLogger;
+use App\Models\Attendance;
+use App\Models\AttendanceOut;
 use App\Models\User;
 use App\Notifications\SendNotifAttendance;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ProcessFaceRecognition implements ShouldQueue
 {
     use Queueable;
+
+    /** @var array<string, class-string> Whitelist model yang diizinkan */
+    private const MODEL_MAP = [
+        'Attendance' => Attendance::class,
+        'AttendanceOut' => AttendanceOut::class,
+    ];
+
+    /** @var float Batas maksimal cosine distance agar dianggap cocok */
+    private const DISTANCE_THRESHOLD = 0.65;
 
     public int $tries = 1;
 
@@ -34,17 +47,20 @@ class ProcessFaceRecognition implements ShouldQueue
         public readonly ?string $noVt,
         public readonly ?string $keterangan,
         public readonly ?string $lokasi,
-    ) {
-        // Sanitize dilakukan di constructor agar data bersih sebelum di-serialize ke queue
-    }
+    ) {}
 
     /**
      * Execute the job.
      */
     public function handle(): void
     {
-        $modelClass = "\\App\\Models\\{$this->model}";
-        $data = $modelClass::where('id', $this->id)->first();
+        $modelClass = self::MODEL_MAP[$this->model] ?? null;
+
+        if (! $modelClass) {
+            throw new \RuntimeException("Model [{$this->model}] tidak terdaftar di whitelist.");
+        }
+
+        $data = $modelClass::find($this->id);
         $type = $this->model === 'Attendance' ? 'Masuk' : 'Keluar';
         $fullPath = storage_path('app/'.$this->imgPath.'/'.$this->filename);
 
@@ -56,21 +72,7 @@ class ProcessFaceRecognition implements ShouldQueue
             throw new \RuntimeException("File capture tidak ditemukan: {$fullPath}");
         }
 
-        $file = fopen($fullPath, 'r');
-        $response = Http::withoutVerifying()
-            ->attach('file', $file)
-            ->post('https://verify.indodacin.com/recognize', [
-                'kode_pegawai' => $this->kodePegawai,
-                'no_vt' => $this->sanitize($this->noVt),
-            ]);
-
-        fclose($file);
-
-        $responseData = $response->json();
-
-        if (! is_array($responseData) || ! isset($responseData['error'])) {
-            throw new \RuntimeException('Respons dari API face recognition tidak valid.');
-        }
+        $responseData = $this->callRecognitionApi($fullPath);
 
         // Pindahkan file ke lokasi permanen
         $targetPath = "public/labels/{$this->kodePegawai}/capturedImg/{$this->filename}";
@@ -82,53 +84,47 @@ class ProcessFaceRecognition implements ShouldQueue
         // Wajah tidak dikenali / error dari API
         if ($responseData['error']) {
             $data->update([
-                'status' => 2,
+                'status' => AttendanceStatus::Failed->value,
                 'verified' => true,
                 'verified_by' => 'System',
             ]);
 
-            $this->sendNotif("Absensi {$type} gagal: ".$responseData['error_message']);
-
-            broadcast(new RecognitionEvent(
-                $this->userId,
+            $this->notifyAndBroadcast(
+                $type,
                 'error',
                 'Gagal',
                 $responseData['error_message'] ?? 'Terjadi kesalahan',
-            ));
+                "Absensi {$type} gagal: ".$responseData['error_message']
+            );
 
             return;
         }
 
         // Wajah dikenali dan confidence cukup
-        if ($responseData['verified'] && $responseData['distance'] < 0.65) {
+        if ($responseData['verified'] && $responseData['distance'] < self::DISTANCE_THRESHOLD) {
             $data->update([
-                'status' => 1,
+                'status' => AttendanceStatus::Verified->value,
                 'verified' => true,
                 'verified_by' => 'System',
                 'distance' => $responseData['distance'],
             ]);
 
-            $user = User::where('id', $this->userId)->first();
-            $url = ($user && $user->hasRole('Employee-Agrotec'))
-                ? 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendanceAgrotec'
-                : 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendance';
-
-            Http::withoutVerifying()->post($url, [
-                'kode_jari' => $this->kodePegawai,
-                'waktu' => $data->waktuori,
-                'kodebarcode' => $this->sanitize($this->noVt),
-                'keterangan' => $this->sanitize($this->keterangan),
-                'lokasi' => $this->sanitize($this->lokasi),
-            ]);
-
-            $this->sendNotif("Absensi {$type} berhasil diverifikasi, lihat hasilnya di halaman absensi.");
-
-            broadcast(new RecognitionEvent(
+            SyncAttendanceToExternalServerJob::dispatch(
                 $this->userId,
+                $this->kodePegawai,
+                $data->waktuori,
+                $this->sanitize($this->noVt),
+                $this->sanitize($this->keterangan),
+                $this->sanitize($this->lokasi)
+            );
+
+            $this->notifyAndBroadcast(
+                $type,
                 'success',
                 'Berhasil',
                 'Absensi berhasil diverifikasi, lihat hasilnya di halaman absensi.',
-            ));
+                "Absensi {$type} berhasil diverifikasi, lihat hasilnya di halaman absensi."
+            );
 
             return;
         }
@@ -137,17 +133,16 @@ class ProcessFaceRecognition implements ShouldQueue
         $data->update([
             'verified' => false,
             'distance' => $responseData['distance'],
-            'status' => 0,
+            'status' => AttendanceStatus::Pending->value,
         ]);
 
-        $this->sendNotif("Absensi {$type} berhasil, namun wajah tidak dikenali. Silahkan menunggu hingga HRD memverifikasi.");
-
-        broadcast(new RecognitionEvent(
-            $this->userId,
+        $this->notifyAndBroadcast(
+            $type,
             'error',
             'Menunggu persetujuan',
             'Absensi berhasil, namun wajah tidak dikenali. Silahkan menunggu hingga HRD memverifikasi.',
-        ));
+            "Absensi {$type} berhasil, namun wajah tidak dikenali. Silahkan menunggu hingga HRD memverifikasi."
+        );
     }
 
     /**
@@ -161,23 +156,86 @@ class ProcessFaceRecognition implements ShouldQueue
             'kode_pegawai' => $this->kodePegawai,
         ]);
 
+        $this->log()->error('Job permanently failed', [
+            'model' => $this->model,
+            'id' => $this->id,
+            'kode_pegawai' => $this->kodePegawai,
+            'error' => $exception->getMessage(),
+        ]);
+
         $type = $this->model === 'Attendance' ? 'Masuk' : 'Keluar';
 
         // Mark absensi sebagai gagal (status=2) tanpa menghapus record
-        $modelClass = "\\App\\Models\\{$this->model}";
-        $data = $modelClass::find($this->id);
+        $modelClass = self::MODEL_MAP[$this->model] ?? null;
+        $data = $modelClass ? $modelClass::find($this->id) : null;
 
         if ($data) {
-            $data->update(['status' => 2, 'verified' => true, 'verified_by' => 'System']);
+            $data->update([
+                'status' => AttendanceStatus::Failed->value,
+                'verified' => true,
+                'verified_by' => 'System',
+            ]);
         }
 
-        $this->sendNotif("Absensi {$type} gagal diproses: {$exception->getMessage()}. Silahkan coba kembali.");
-
-        broadcast(new RecognitionEvent(
-            $this->userId,
+        $this->notifyAndBroadcast(
+            $type,
             'error',
             'Gagal',
             $exception->getMessage(),
+            "Absensi {$type} gagal diproses: {$exception->getMessage()}. Silahkan coba kembali."
+        );
+    }
+
+    /**
+     * Panggil API face recognition dengan file handling yang aman.
+     *
+     * @return array<string, mixed>
+     */
+    private function callRecognitionApi(string $fullPath): array
+    {
+        $file = fopen($fullPath, 'r');
+
+        try {
+            $response = Http::withoutVerifying()
+                ->attach('file', $file)
+                ->post(config('services.face_recognition.url'), [
+                    'kode_pegawai' => $this->kodePegawai,
+                    'no_vt' => $this->sanitize($this->noVt),
+                ]);
+        } finally {
+            if (is_resource($file)) {
+                fclose($file);
+            }
+        }
+
+        $responseData = $response->json();
+
+        if (! is_array($responseData) || ! isset($responseData['error'])) {
+            throw new \RuntimeException('Respons dari API face recognition tidak valid.');
+        }
+
+        $this->log()->info('API response received', [
+            'kode_pegawai' => $this->kodePegawai,
+            'verified' => $responseData['verified'] ?? null,
+            'distance' => $responseData['distance'] ?? null,
+            'error' => $responseData['error'],
+        ]);
+
+        return $responseData;
+    }
+
+    /**
+     * Kirim notifikasi dan broadcast event sekaligus.
+     */
+    private function notifyAndBroadcast(string $type, string $eventType, string $title, string $broadcastMessage, string $notifMessage): void
+    {
+        $this->sendNotif($notifMessage);
+
+        broadcast(new RecognitionEvent(
+            $this->userId,
+            $eventType,
+            $title,
+            $broadcastMessage,
         ));
     }
 
@@ -202,6 +260,14 @@ class ProcessFaceRecognition implements ShouldQueue
             return null;
         }
 
-        return preg_replace("/['\"]/", '', $value);
+        return preg_replace('/[\'"]/', '', $value);
+    }
+
+    /**
+     * Shortcut ke log channel khusus face recognition.
+     */
+    private function log(): \Psr\Log\LoggerInterface
+    {
+        return Log::channel('face_recognition');
     }
 }
