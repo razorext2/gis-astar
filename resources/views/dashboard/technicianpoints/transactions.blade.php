@@ -9,6 +9,6 @@
             </h1>
         </header>
 
-        <livewire:table-refresher table-name="PointTransactionsTable" />
+        <livewire:powergrid-tables.point-transactions-table />
     </div>
 @endsection

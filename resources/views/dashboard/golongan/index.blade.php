@@ -29,7 +29,7 @@
 
             </div>
 
-            <livewire:table-refresher table-name="GolonganTable" />
+            <livewire:powergrid-tables.golongan-table />
 
         </div>
     </div>

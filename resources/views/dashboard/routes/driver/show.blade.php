@@ -18,7 +18,7 @@
 
             </div>
 
-            <livewire:table-refresher table-name="DriverRouteTable" />
+            <livewire:powergrid-tables.driver-route-table />
 
         </div>
     </div>

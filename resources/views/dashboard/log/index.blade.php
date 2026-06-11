@@ -15,6 +15,6 @@
             </div>
         </div>
 
-        <livewire:table-refresher table-name="LogTable" />
+        <livewire:powergrid-tables.log-table />
     </div>
 @endsection

@@ -29,7 +29,7 @@
 
             </div>
 
-            <livewire:table-refresher table-name="DivisionTable" />
+            <livewire:powergrid-tables.division-table />
 
         </div>
     </div>

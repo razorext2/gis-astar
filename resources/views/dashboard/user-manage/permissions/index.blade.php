@@ -29,7 +29,7 @@
 
             </div>
 
-            <livewire:table-refresher table-name="PermissionsTable" />
+            <livewire:powergrid-tables.permissions-table />
 
         </div>
     </div>

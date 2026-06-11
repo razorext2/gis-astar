@@ -29,7 +29,7 @@
 
             </div>
 
-            <livewire:table-refresher table-name="JabatanTable" />
+            <livewire:powergrid-tables.jabatan-table />
 
         </div>
     </div>

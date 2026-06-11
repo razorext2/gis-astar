@@ -46,7 +46,7 @@
 
         <div
             class="rounded-xl border border-zinc-200 bg-white/60 px-2 py-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
-            <livewire:table-refresher table-name="InvoiceTable" />
+            <livewire:powergrid-tables.invoice-table />
         </div>
     </div>
 @endsection

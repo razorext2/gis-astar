@@ -29,7 +29,7 @@
 
             </div>
 
-            <livewire:table-refresher table-name="UserTable" />
+            <livewire:powergrid-tables.user-table />
 
         </div>
     </div>

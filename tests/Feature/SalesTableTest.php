@@ -2,7 +2,7 @@
 
 /** Goal: Test query data in SalesTable and ensure no duplication, Caller: pest, Deps: SalesTable, User, Role, Sales */
 
-use App\Livewire\SalesTable;
+use App\Livewire\PowergridTables\SalesTable;
 use App\Models\Pegawai;
 use App\Models\Sales;
 use App\Models\User;

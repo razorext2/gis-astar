@@ -107,7 +107,7 @@
         <div
             class="relative grid grid-cols-1 rounded-xl bg-white/60 py-2 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 lg:p-6">
 
-            <livewire:table-refresher table-name="DriverTable" />
+            <livewire:powergrid-tables.driver-table />
 
         </div>
     </div>

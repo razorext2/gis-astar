@@ -29,7 +29,7 @@
 
             </div>
 
-            <livewire:table-refresher table-name="PegawaiTable" />
+            <livewire:powergrid-tables.pegawai-table />
 
         </div>
     </div>

@@ -66,5 +66,19 @@ class AppServiceProvider extends ServiceProvider
 
         // force root url
         $this->app['url']->forceRootUrl($this->app['config']->get('app.url'));
+
+        // Auto-register moved PowerGrid tables under their short/kebab/stud names
+        if (is_dir(app_path('Livewire/PowergridTables'))) {
+            $files = glob(app_path('Livewire/PowergridTables/*Table.php'));
+            foreach ($files as $file) {
+                $className = basename($file, '.php');
+                $classPath = 'App\\Livewire\\PowergridTables\\' . $className;
+                if (class_exists($classPath)) {
+                    \Livewire\Livewire::component($className, $classPath);
+                    $kebabName = \Illuminate\Support\Str::kebab($className);
+                    \Livewire\Livewire::component($kebabName, $classPath);
+                }
+            }
+        }
     }
 }
