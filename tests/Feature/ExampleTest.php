@@ -1,7 +1,9 @@
 <?php
 
-it('returns a successful response', function () {
+/** Goal: Verify home page redirects, Caller: Pest, Deps: None */
+
+it('returns a redirect to login', function () {
     $response = $this->get('/');
 
-    $response->assertStatus(200);
+    $response->assertRedirect('/login');
 });

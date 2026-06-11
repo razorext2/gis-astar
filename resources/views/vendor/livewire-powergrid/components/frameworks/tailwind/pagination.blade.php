@@ -1,3 +1,4 @@
+{{-- Goal: Powergrid table pagination, Livewire: N/A, Alpine: N/A --}}
 <div class="items-center justify-between gap-2 sm:flex" wire:loading.class="blur-[2px]" wire:target="loadMore">
 	<div class="w-full items-center justify-between sm:flex sm:flex-1">
 		@if ($recordCount === 'full')
@@ -117,7 +118,7 @@
 									@lang('Previous')
 								</button>
 							@else
-								@if (method_exists($paginator, 'getCursorName'))
+								@if (is_object($paginator) && method_exists($paginator, 'getCursorName'))
 									<button
 										wire:click="setPage('{{ $paginator->previousCursor()->encode() }}','{{ $paginator->getCursorName() }}')"
 										wire:loading.attr="disabled"
@@ -139,7 +140,7 @@
 						<span>
 							{{-- Next Page Link --}}
 							@if ($paginator->hasMorePages())
-								@if (method_exists($paginator, 'getCursorName'))
+								@if (is_object($paginator) && method_exists($paginator, 'getCursorName'))
 									<button wire:click="setPage('{{ $paginator->nextCursor()->encode() }}','{{ $paginator->getCursorName() }}')"
 										wire:loading.attr="disabled"
 										class="border-1 m-1 cursor-pointer select-none rounded border-pg-primary-400 bg-pg-primary-600 p-2 text-center text-white hover:border-pg-primary-800 hover:bg-pg-primary-600 dark:text-pg-primary-300">
