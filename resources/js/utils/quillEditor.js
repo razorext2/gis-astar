@@ -43,8 +43,7 @@ export function quillEditor(data = null, editable = true) {
   // Kirim data dari editor ke input hidden saat form disubmit
   if (editable) {
     // Penyesuaian tampilan editor
-    document.querySelector('.ql-toolbar').classList.add('dark:bg-white', 'rounded-t-lg');
-    document.querySelector('.ql-picker').classList.add('dark:bg-white');
+    document.querySelector('.ql-toolbar').classList.add('rounded-t-lg');
     document.getElementById('editor').classList.add('!h-96', 'rounded-b-lg');
     document.getElementById("keterangan").classList.add("mt-2");
 

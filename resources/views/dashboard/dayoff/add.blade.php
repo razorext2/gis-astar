@@ -118,7 +118,7 @@
                         <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
                             Keterangan
                         </label>
-                        <div class="h-32 w-full dark:bg-white" id="editor"></div>
+                        <div class="h-32 w-full" id="editor"></div>
                         <input id="keterangan" name="keterangan" type="hidden">
                         <div class="mt-2 text-sm text-red-500" id="alert-keterangan"></div>
                         <div class="mt-2 text-sm text-red-500" id="alert-image"></div>
