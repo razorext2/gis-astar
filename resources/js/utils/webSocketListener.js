@@ -34,5 +34,13 @@ export async function initWebSocketListener() {
                 showToast("success", data.message);
                 Livewire.dispatch("pg:eventRefresh-BackupTable");
             });
+
+        // Listen for generic PowerGrid table refreshes
+        window.Echo.channel('powergrid-updates')
+            .listen('.TableRefreshed', (data) => {
+                if (typeof Livewire !== 'undefined') {
+                    Livewire.dispatch('pg:eventRefresh-' + data.tableName);
+                }
+            });
     }
 }
