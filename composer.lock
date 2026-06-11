@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "883b363caac87d4950f22023b8ed1792",
+    "content-hash": "ec15ee33a7310cd50e9eb68d21ce38ec",
     "packages": [
         {
             "name": "asantibanez/livewire-charts",
@@ -521,16 +521,16 @@
         },
         {
             "name": "creagia/laravel-sign-pad",
-            "version": "3.0.1",
+            "version": "dev-main",
             "source": {
                 "type": "git",
-                "url": "https://github.com/creagia/laravel-sign-pad.git",
-                "reference": "7d4006372766099e9e5e5a950c73aaf8cda5f7e8"
+                "url": "https://github.com/razorext2/laravel-sign-pad.git",
+                "reference": "e14adb445e152a494e8d10b2b0732a1a68add831"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/creagia/laravel-sign-pad/zipball/7d4006372766099e9e5e5a950c73aaf8cda5f7e8",
-                "reference": "7d4006372766099e9e5e5a950c73aaf8cda5f7e8",
+                "url": "https://api.github.com/repos/razorext2/laravel-sign-pad/zipball/e14adb445e152a494e8d10b2b0732a1a68add831",
+                "reference": "e14adb445e152a494e8d10b2b0732a1a68add831",
                 "shasum": ""
             },
             "require": {
@@ -552,6 +552,7 @@
                 "phpstan/phpstan-phpunit": "^1.0|^2.0",
                 "phpunit/phpunit": "^10.5|^11.5.3|^12.5"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -565,7 +566,25 @@
                     "Creagia\\LaravelSignPad\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Creagia\\LaravelSignPad\\Tests\\": "tests"
+                }
+            },
+            "scripts": {
+                "analyse": [
+                    "vendor/bin/phpstan analyse"
+                ],
+                "test": [
+                    "vendor/bin/pest"
+                ],
+                "test-coverage": [
+                    "vendor/bin/pest coverage"
+                ],
+                "format": [
+                    "vendor/bin/pint"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -577,16 +596,15 @@
             ],
             "description": "Laravel package for of E-Signature with Signature Pad and Digital Certified Sign with TCPDF",
             "support": {
-                "issues": "https://github.com/creagia/laravel-sign-pad/issues",
-                "source": "https://github.com/creagia/laravel-sign-pad/tree/3.0.1"
+                "source": "https://github.com/razorext2/laravel-sign-pad/tree/main"
             },
             "funding": [
                 {
-                    "url": "https://github.com/creagia",
-                    "type": "github"
+                    "type": "github",
+                    "url": "https://github.com/creagia"
                 }
             ],
-            "time": "2026-03-15T18:53:59+00:00"
+            "time": "2026-05-11T09:10:07+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -13311,12 +13329,14 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "creagia/laravel-sign-pad": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.2"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }

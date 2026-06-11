@@ -6,13 +6,18 @@
         "laravel",
         "framework"
     ],
-    "license": "MIT",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/razorext2/laravel-sign-pad.git"
+        }
+    ],
     "require": {
         "php": "^8.2",
         "asantibanez/livewire-charts": "^4.1",
         "barryvdh/laravel-debugbar": "^3.14",
         "barryvdh/laravel-dompdf": "^3.1",
-        "creagia/laravel-sign-pad": "^3.0",
+        "creagia/laravel-sign-pad": "dev-main",
         "intervention/image": "^3.11",
         "jfcherng/php-diff": "^6.16",
         "laravel-notification-channels/webpush": "^10.2",

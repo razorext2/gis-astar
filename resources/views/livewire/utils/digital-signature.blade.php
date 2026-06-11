@@ -1,3 +1,4 @@
+{{-- Goal: Tanda tangan digital untuk template approval laporan di profil, Livewire: App\Livewire\Utils\DigitalSignature, Alpine: N/A --}}
 <div
     class="col-span-2 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
 
@@ -25,7 +26,7 @@
                 <div style="text-align: center">
                     <x-creagia-signature-pad border-color="#eaeaea" pad-classes="rounded-xl border-2"
                         button-classes="bg-zinc-100 dark:text-gray-800 mt-2.5 px-4 py-2 rounded-xl hover:bg-zinc-200 transition-colors"
-                        clear-name="Hapus" submit-name="Simpan" />
+                        clear-name="Hapus" submit-name="Simpan" redirect-url="{{ route('profile.edit') }}" />
                 </div>
 
                 @push('script')
