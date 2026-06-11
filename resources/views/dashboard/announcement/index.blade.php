@@ -30,7 +30,7 @@
 
             </div>
 
-            <livewire:table-refresher table-name="AnnouncementTable" />
+            <livewire:powergrid-tables.announcement-table />
 
         </div>
     </div>
