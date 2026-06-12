@@ -53,7 +53,6 @@ export default defineConfig({
                 "resources/js/pages/collect-idy-ppn/detail.js",
 
                 // sales
-                "resources/js/pages/sales/index.js",
                 "resources/js/pages/sales/add.js",
                 "resources/js/pages/sales/edit.js",
                 "resources/js/pages/sales/detail.js",
