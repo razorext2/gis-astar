@@ -20,7 +20,9 @@ window.Swal = Swal;
 let lenisInstance = null;
 
 function initLenis() {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+    ).matches;
     if (prefersReducedMotion) return;
 
     if (!lenisInstance) {
@@ -105,10 +107,6 @@ document.addEventListener("livewire:navigated", function () {
     if (window.location.pathname === "/dashboard/announcement") {
         import("./pages/announcement/index.js").then((module) => {
             module.initAnnouncement();
-        });
-    } else if (window.location.pathname === "/dashboard/sales") {
-        import("./pages/sales/index.js").then((module) => {
-            module.initSales();
         });
     } else if (
         window.location.pathname === "/dashboard/attendanceIn" ||
