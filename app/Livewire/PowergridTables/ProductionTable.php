@@ -93,11 +93,13 @@ final class ProductionTable extends PowerGridComponent
         ];
     }
 
+    protected int $rowNumber = 0;
+
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('no', fn ($query, int $index) => $index + 1)
+            ->add('no', fn () => ++$this->rowNumber)
             ->add('customer_info', function ($query) {
                 return view('components.dashboard.name-w-code', [
                     'code' => '',

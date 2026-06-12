@@ -58,11 +58,13 @@ final class PurchasingRequestTable extends PowerGridComponent
         return [];
     }
 
+    protected int $rowNumber = 0;
+
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('no', fn ($query, int $index) => $index + 1)
+            ->add('no', fn () => ++$this->rowNumber)
             ->add('nomor_order')
             ->add('is_using_old_stock')
             ->add('company_name')

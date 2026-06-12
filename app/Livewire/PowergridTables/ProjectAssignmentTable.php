@@ -84,11 +84,13 @@ final class ProjectAssignmentTable extends PowerGridComponent
         ];
     }
 
+    protected int $rowNumber = 0;
+
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('no', fn ($query, int $index) => $index + 1)
+            ->add('no', fn () => ++$this->rowNumber)
             ->add('project_id')
             ->add('project_formatted', function ($query) {
                 return view('components.dashboard.name-w-code', [

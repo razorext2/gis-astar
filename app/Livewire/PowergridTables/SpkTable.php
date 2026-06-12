@@ -76,11 +76,13 @@ final class SpkTable extends PowerGridComponent
         return [];
     }
 
+    protected int $rowNumber = 0;
+
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('no', fn ($query, int $index) => $index + 1)
+            ->add('no', fn () => ++$this->rowNumber)
             ->add('nomor_order')
             ->add('tipe_tagihan')
             ->add('nomor_tagihan')
