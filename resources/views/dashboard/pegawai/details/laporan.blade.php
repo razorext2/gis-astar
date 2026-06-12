@@ -1,3 +1,4 @@
+{{-- Goal: Display employee collector report history and map location, Livewire: none, Alpine: none --}}
 @extends('dashboard.pegawai.detail')
 @section('menus')
     <div class="space-y-4 lg:space-y-6" id="collectors" role="tabpanel">
@@ -51,7 +52,7 @@
                                         <h3
                                             class="flex flex-wrap items-center gap-2 text-sm font-bold text-gray-900 dark:text-white">
                                             <a class="group flex items-center gap-1"
-                                                href="{{ route('collect.show', $data->id) }}" target="_blank">
+                                                href="{{ route('collect.show', \App\Support\IdObfuscator::encode($data->id)) }}" target="_blank">
                                                 <span>{{ $data->title }}</span>
                                                 <x-icons.eye
                                                     class="h-3.5 w-3.5 text-blue-500 opacity-50 transition-opacity group-hover:opacity-100" />

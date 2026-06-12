@@ -1,5 +1,9 @@
 <?php
 
+if (in_array(config('database.connections.mysql.database'), ['faceid_dev', 'faceid_staging_v2', 'faceid'])) {
+    exit('Batal menjalankan test! Database yang aktif adalah database development/staging ('.config('database.connections.mysql.database').") untuk mencegah reset.\n");
+}
+
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

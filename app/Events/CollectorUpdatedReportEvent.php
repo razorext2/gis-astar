@@ -1,7 +1,10 @@
 <?php
-
+ 
+/** Goal: Real-time broadcast for collector updated reports, Caller: NotifyCollectorHasUpdatedReportJob, Deps: PrivateChannel */
+ 
 namespace App\Events;
 
+use App\Support\IdObfuscator;
 use Carbon\Carbon;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -56,7 +59,7 @@ class CollectorUpdatedReportEvent implements ShouldBroadcast
             "id" => $this->notification_id,
             "message" => "Laporan dengan kode: $this->no_sr telah diperbarui pada tanggal: $date. Silahkan diperiksa!",
             "button" => [
-                "url" => route("collect.show", $this->collect_id),
+                "url" => route("collect.show", IdObfuscator::encode($this->collect_id)),
                 "label" => "Periksa Laporan",
             ],
             "mark_as_read" => route("notification.mark-as-read", $this->notification_id),

@@ -1,3 +1,4 @@
+{{-- Goal: Display PPN bill details and list of approved collector reports, Livewire: none, Alpine: none --}}
 @extends('dashboard.layoutsDash.app')
 @section('content')
     <div class="grid gap-4">
@@ -147,7 +148,7 @@
                         $total += $item->payment_amount;
                     @endphp
                     <a class="group col-span-2 transition-all duration-200 ease-in-out hover:scale-105"
-                        href="{{ route('collect.show', $item->id) }}" target="_blank">
+                        href="{{ route('collect.show', \App\Support\IdObfuscator::encode($item->id)) }}" target="_blank">
                         <div
                             class="relative flex flex-col rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-gray-700">
 
