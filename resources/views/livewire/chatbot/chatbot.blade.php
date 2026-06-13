@@ -229,6 +229,13 @@
         <div class="border-t border-zinc-200 bg-white/40 p-4 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/20">
             <form wire:submit="sendMessage" class="mx-auto max-w-3xl"
                 x-data="{ message: '' }"
+                x-init="
+                    $watch('$wire.isProcessing', value => {
+                        if (!value) {
+                            $nextTick(() => { $refs.chatInput.focus(); });
+                        }
+                    });
+                "
                 @submit="$nextTick(() => { message = ''; $refs.chatInput.style.height = 'auto'; })">
                 <div class="flex items-end gap-3">
                     <div class="flex-1">
