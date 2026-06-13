@@ -1,7 +1,9 @@
 <?php
 
-if (in_array(config('database.connections.mysql.database'), ['faceid_dev', 'faceid_staging_v2', 'faceid'])) {
-    exit('Batal menjalankan test! Database yang aktif adalah database development/staging ('.config('database.connections.mysql.database').") untuk mencegah reset.\n");
+/** Goal: Pest test configuration and database safety guard, Caller: Pest runner, Deps: TestCase, env('DB_DATABASE') */
+
+if (in_array(env('DB_DATABASE'), ['faceid_dev', 'faceid_staging_v2', 'faceid'])) {
+    exit('Batal menjalankan test! Database yang aktif adalah database development/staging ('.env('DB_DATABASE').") untuk mencegah reset.\n");
 }
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
