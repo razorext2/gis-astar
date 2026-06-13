@@ -105,17 +105,18 @@ class ProcessChatMessage implements ShouldQueue
     }
 
     /**
-     * @return array{id: int, name: string, roles: array<string>, permissions: array<string>}
+     * @return array{id: int, name: string, kode_pegawai: string|null, roles: array<string>, permissions: array<string>}
      */
     private function buildUserContext(?User $user): array
     {
         if (! $user) {
-            return ['id' => 0, 'name' => 'Unknown', 'roles' => [], 'permissions' => []];
+            return ['id' => 0, 'name' => 'Unknown', 'kode_pegawai' => null, 'roles' => [], 'permissions' => []];
         }
 
         return [
             'id' => $user->id,
             'name' => $user->name,
+            'kode_pegawai' => $user->kode_pegawai,
             'roles' => $user->roles->pluck('name')->toArray(),
             'permissions' => $user->getAllPermissions()->pluck('name')->toArray(),
         ];
