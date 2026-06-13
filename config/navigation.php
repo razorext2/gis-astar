@@ -743,6 +743,18 @@ return [
         'label' => 'Other Features',
     ],
 
+    // ─── AI Chatbot ──────────────────────────────────────────────────────────
+    [
+        'type' => 'link',
+        'label' => 'AI Chatbot',
+        'mobile_label' => 'AI Chatbot',
+        'route' => 'chatbot.index',
+        'check' => ['chatbot.*'],
+        'icon' => 'chat',
+        'guard' => null,
+        'navigate' => false,
+    ],
+
     // ─── Event ────────────────────────────────────────────────────────────────
     [
         'type' => 'link',

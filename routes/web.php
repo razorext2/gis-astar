@@ -85,6 +85,7 @@ Route::middleware(['auth'])->group(function () {
     // group ke rute dashboard.
     Route::prefix('dashboard')->as('')->group(function () {
         Route::get('/', [\App\Http\Controllers\AdminController::class, 'index'])->name('dashboard');
+        Route::get('chatbot', \App\Livewire\Chatbot\Chatbot::class)->name('chatbot.index');
         Route::get('me', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.me');
         Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
