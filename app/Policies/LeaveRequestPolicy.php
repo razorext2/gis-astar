@@ -56,7 +56,7 @@ class LeaveRequestPolicy
         }
 
         // Global permission
-        return $user->hasAnyPermission(['leave-list-all', 'leave-approval-center']);
+        return $user->hasPermissionTo('leave-list-all');
     }
 
     /**

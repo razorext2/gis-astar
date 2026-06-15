@@ -65,13 +65,8 @@ class Show extends Component
             'histories.actedByUser',
         ])->findOrFail($this->requestId);
 
-        // C1: Guard — hanya pemilik, backup person, atau user dengan permission leave-list-all
-        $user = auth()->user();
-        $isOwner = $request->user_id === $user->id;
-        $isBackup = $request->backup_person_id === $user->id;
-        $canViewAll = $user->can('leave-list-all') || $user->can('leave-approval-center');
-
-        if (! $isOwner && ! $isBackup && ! $canViewAll) {
+        // Guard using standard policy
+        if (! auth()->user()->can('view', $request)) {
             abort(403, 'Anda tidak memiliki akses untuk melihat pengajuan ini.');
         }
 

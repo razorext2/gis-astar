@@ -49,6 +49,7 @@ class SetupLeaveRequestPermissionsSeeder extends Seeder
                     'leave-list-own',
                     'leave-create',
                     'leave-cancel',
+                    'leave-approval-center',
                 ],
                 'HRD' => [
                     'leave-approval-center',
@@ -61,6 +62,8 @@ class SetupLeaveRequestPermissionsSeeder extends Seeder
                 'Management' => [
                     'leave-approve-management',
                     'leave-report-export',
+                    'leave-list-all',
+                    'leave-approval-center',
                 ],
             ];
 
