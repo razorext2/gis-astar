@@ -36,14 +36,14 @@ class LeaveRequestPolicy
             return true;
         }
 
-        // Backup person
-        if ($user->id === $leaveRequest->backup_person_id) {
+        // Backup person (hanya boleh melihat jika status masih pending_backup)
+        if ($user->id === $leaveRequest->backup_person_id && $leaveRequest->status === 'pending_backup') {
             return true;
         }
 
         // Atasan langsung (via jabatan supervisors)
         $jabatan = $leaveRequest->user->pegawai?->jabatanRelasi;
-        if ($jabatan && $jabatan->supervisors->contains('id', $user->id)) {
+        if ($jabatan && $jabatan->supervisors->contains('id', $user->id) && $leaveRequest->status === 'pending_spv') {
             return true;
         }
 
