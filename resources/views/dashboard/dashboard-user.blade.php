@@ -5,6 +5,8 @@
         {{-- Greetings --}}
         <livewire:utils.greetings />
 
+        <x-signature-reminder />
+
         {{-- Schedule Card --}}
         <livewire:dashboard.user-schedule-overview />
 
