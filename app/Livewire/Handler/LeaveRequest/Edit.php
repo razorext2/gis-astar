@@ -5,6 +5,7 @@
 namespace App\Livewire\Handler\LeaveRequest;
 
 use App\Livewire\Concerns\HandlesErrors;
+use App\Livewire\Concerns\HasLeaveRequestForm;
 use App\Models\LeaveRequest\LeaveRequest;
 use App\Models\LeaveRequest\LeaveType;
 use App\Models\User;
@@ -14,7 +15,7 @@ use Livewire\WithFileUploads;
 
 class Edit extends Component
 {
-    use HandlesErrors, WithFileUploads;
+    use HandlesErrors, HasLeaveRequestForm, WithFileUploads;
 
     public $requestId;
 
@@ -48,6 +49,7 @@ class Edit extends Component
 
     public function mount($id)
     {
+        $id = is_object($id) ? $id->id : $id;
         $request = LeaveRequest::where('user_id', auth()->id())->findOrFail($id);
 
         // Guard: Hanya bisa edit jika masih pending_backup
@@ -85,6 +87,15 @@ class Edit extends Component
         }
 
         if (in_array($propertyName, ['start_date', 'end_date'])) {
+            if ($propertyName === 'start_date' && ! $this->checkMinAdvanceDays()) {
+                $this->start_date = null;
+                $this->total_days = 0;
+                $this->return_date = null;
+                $this->intersectedHolidays = [];
+                $this->intersected_sundays = [];
+                return;
+            }
+
             $this->checkDateOverlap();
             if (! $this->dateOverlapError) {
                 $this->calculateDays();
@@ -117,7 +128,7 @@ class Edit extends Component
 
         $overlap = auth()->user()->leaveRequests()
             ->where('id', '!=', $this->requestId)
-            ->whereNotIn('status', ['rejected', 'auto_reject', 'canceled'])
+            ->whereNotIn('status', ['rejected', 'auto_reject', 'cancelled'])
             ->where(function ($query) {
                 $query->where('start_date', '<=', $this->end_date)
                     ->where('end_date', '>=', $this->start_date);
@@ -222,6 +233,9 @@ class Edit extends Component
         }
     }
 
+    /**
+     * Override removeAttachment karena Edit punya dua jenis attachment (existing + new)
+     */
     public function removeAttachment($index, $isExisting = false)
     {
         if ($isExisting) {
@@ -259,6 +273,11 @@ class Edit extends Component
             $this->addError('end_date', $this->dateOverlapError);
             $this->dispatch('swal', icon: 'error', title: 'Tanggal Tidak Valid', text: $this->dateOverlapError);
 
+            return;
+        }
+
+        // Validasi: tanggal mulai cuti minimal 7 hari dari hari pengajuan
+        if (! $this->checkMinAdvanceDays()) {
             return;
         }
 

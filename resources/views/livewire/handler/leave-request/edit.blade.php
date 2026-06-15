@@ -59,7 +59,8 @@
 
                                 @forelse ($employees as $emp)
                                     <button type="button"
-                                        wire:click="$set('backup_person_id', {{ $emp->id }}); search_backup = '{{ $emp->name }}'; open = false"
+                                        wire:click="selectBackupPerson({{ $emp->id }}, '{{ $emp->name }}')"
+                                        @click="open = false"
                                         class="{{ $backup_person_id == $emp->id ? 'bg-red-50 dark:bg-red-900/20' : '' }} flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-zinc-50 dark:hover:bg-white/5">
                                         <div class="flex flex-col">
                                             <span
@@ -87,6 +88,7 @@
                 <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
                     <div class="flex flex-col">
                         <x-input.basic type="date" id="start_date" name="start_date" wire:model.live="start_date"
+                            min="{{ \Carbon\Carbon::today()->addDays(config('app.leave_min_advance_days', 7))->toDateString() }}"
                             :labels="true" required>
                             Tanggal Mulai
                         </x-input.basic>
@@ -96,6 +98,7 @@
                     </div>
                     <div class="flex flex-col">
                         <x-input.basic type="date" id="end_date" name="end_date" wire:model.live="end_date"
+                            min="{{ $start_date ?? \Carbon\Carbon::today()->addDays(config('app.leave_min_advance_days', 7))->toDateString() }}"
                             :labels="true" required>
                             Tanggal Berakhir
                         </x-input.basic>

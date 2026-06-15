@@ -99,7 +99,7 @@
                         <option value="">Semua Status</option>
                         <option value="approved">Diterima / Disetujui</option>
                         <option value="rejected">Ditolak</option>
-                        <option value="canceled">Dibatalkan</option>
+                        <option value="cancelled">Dibatalkan</option>
                         <option value="pending_backup">Menunggu Personel Backup</option>
                         <option value="pending_spv">Menunggu Atasan Langsung</option>
                         <option value="pending_hrd">Menunggu HRD Department</option>

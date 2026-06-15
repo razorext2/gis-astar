@@ -41,7 +41,7 @@ class LeaveRequestRejectedNotification extends Notification implements ShouldQue
         return [
             'message' => $msg,
             'button' => [
-                'url' => url("/dashboard/leave-request/my-requests/{$this->leaveRequest->id}"),
+                'url' => route('leave-request.my-requests.show', $this->leaveRequest->id),
                 'label' => 'Lihat Detail',
             ],
             'created_at' => Carbon::now()->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss'),
@@ -57,10 +57,10 @@ class LeaveRequestRejectedNotification extends Notification implements ShouldQue
             ->body("Pengajuan {$leaveType} Anda ditolak oleh {$this->rejectedBy}.")
             ->icon(asset('/assets/img/logo.ico'))
             ->badge(asset('/assets/img/logo.ico'))
-            ->action('Lihat Detail', url("/dashboard/leave-request/my-requests/{$this->leaveRequest->id}"))
+            ->action('Lihat Detail', route('leave-request.my-requests.show', $this->leaveRequest->id))
             ->tag('LeaveRequestRejected')
             ->data([
-                'url' => url("/dashboard/leave-request/my-requests/{$this->leaveRequest->id}"),
+                'url' => route('leave-request.my-requests.show', $this->leaveRequest->id),
             ]);
     }
 }

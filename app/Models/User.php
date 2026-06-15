@@ -148,7 +148,7 @@ class User extends Authenticatable implements CanBeSigned
     {
         return (int) $this->leaveRequests()
             ->whereHas('leaveType', fn ($q) => $q->where('code', $leaveCode))
-            ->whereNotIn('status', ['rejected', 'auto_reject', 'canceled'])
+            ->whereNotIn('status', ['rejected', 'auto_reject', 'cancelled'])
             ->sum('total_days');
     }
 
@@ -159,7 +159,7 @@ class User extends Authenticatable implements CanBeSigned
     {
         return $this->leaveRequests()
             ->whereHas('leaveType', fn ($q) => $q->where('code', $leaveCode))
-            ->whereNotIn('status', ['rejected', 'auto_reject', 'canceled'])
+            ->whereNotIn('status', ['rejected', 'auto_reject', 'cancelled'])
             ->exists();
     }
 }

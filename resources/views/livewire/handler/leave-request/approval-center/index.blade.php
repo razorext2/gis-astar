@@ -70,8 +70,10 @@
                     </option>
                     <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="rejected">Ditolak
                     </option>
-                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="canceled">Dibatalkan
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="cancelled">Dibatalkan
                     </option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="auto_reject">Ditolak
+                        Otomatis</option>
                 </select>
 
                 <select wire:model.live="filterLeaveType"
@@ -164,13 +166,14 @@
                                             'label' => 'Ditolak',
                                             'class' => 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
                                         ],
-                                        'canceled' => [
-                                            'label' => 'Dibatalkan',
-                                            'class' => 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
-                                        ],
                                         'cancelled' => [
                                             'label' => 'Dibatalkan',
                                             'class' => 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
+                                        ],
+                                        'auto_reject' => [
+                                            'label' => 'Ditolak Otomatis',
+                                            'class' =>
+                                                'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300',
                                         ],
                                     ][$request->status] ?? [
                                         'label' => $request->status,

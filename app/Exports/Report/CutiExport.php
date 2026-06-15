@@ -63,7 +63,7 @@ class CutiExport implements FromView, ShouldAutoSize, WithEvents
                 });
             }
 
-            // 2. Status Cuti Filter (e.g. approved, rejected, canceled, pending_spv, pending_backup, pending_hrd, pending_management)
+            // 2. Status Cuti Filter (e.g. approved, rejected, cancelled, pending_spv, pending_backup, pending_hrd, pending_management)
             if (! empty($this->additionalFilters['status'])) {
                 $query->where('status', $this->additionalFilters['status']);
             }

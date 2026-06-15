@@ -8,6 +8,8 @@
             @livewire('utils.greetings')
         </div>
 
+        <x-signature-reminder />
+
         @php
             $showQuickActions =
                 auth()->user()->can('spk-create') ||
