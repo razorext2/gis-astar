@@ -1,3 +1,4 @@
+{{-- Goal: Display list of leave requests and filter options, Livewire: handler.leave-request.index, Alpine: none --}}
 <div class="mt-4 flex flex-col gap-6">
 
     {{-- Header Section --}}
@@ -201,7 +202,7 @@
                                 class="!px-3 !py-1 text-sm font-semibold">
                                 Detail
                             </x-button.link>
-                            @if (in_array($request->status, ['pending_backup', 'pending_spv']))
+                            @if ($request->status === 'pending_backup')
                                 <x-button.link wire:navigate
                                     href="{{ route('leave-request.my-requests.edit', $request->id) }}"
                                     class="!px-3 !py-1 text-sm font-semibold">
