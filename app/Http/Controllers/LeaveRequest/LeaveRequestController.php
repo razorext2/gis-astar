@@ -18,13 +18,17 @@ class LeaveRequestController extends Controller
         return view('dashboard.leave-request.create');
     }
 
-    public function edit()
+    public function edit(\App\Models\LeaveRequest\LeaveRequest $my_request)
     {
+        $this->authorize('view', $my_request);
+
         return view('dashboard.leave-request.edit');
     }
 
-    public function show()
+    public function show(\App\Models\LeaveRequest\LeaveRequest $my_request)
     {
+        $this->authorize('view', $my_request);
+
         return view('dashboard.leave-request.show');
     }
 

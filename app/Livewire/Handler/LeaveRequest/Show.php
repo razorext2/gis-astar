@@ -24,7 +24,7 @@ class Show extends Component
 
     public function mount($id)
     {
-        $this->requestId = $id;
+        $this->requestId = is_object($id) ? $id->id : $id;
     }
 
     public function cancelRequest(\App\Services\LeaveRequest\LeaveRequestService $service)

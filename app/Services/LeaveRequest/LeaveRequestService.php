@@ -86,7 +86,7 @@ class LeaveRequestService
             } elseif (in_array($action, ['reject', 'auto_reject'])) {
                 $request->status = 'rejected';
             } elseif ($action === 'cancel') {
-                $request->status = 'canceled';
+                $request->status = 'cancelled';
             }
 
             // Attach metadata for the observer
@@ -96,12 +96,24 @@ class LeaveRequestService
             // definisikan current_note
             $request->current_note = $note;
 
-            $request->save();
+            $request->saveQuietly();
+
+            // History logging (manually, karena saveQuietly bypass observer)
+            if ($request->isDirty('status') || $request->wasChanged('status')) {
+                \App\Models\LeaveRequest\LeaveRequestHistory::create([
+                    'leave_request_id' => $request->id,
+                    'acted_by' => $request->acted_by ?? auth()->id() ?? $request->user_id,
+                    'action' => $this->resolveActionName($request->status, $request->acted_by ?? auth()->id()),
+                    'status_from' => $oldStatus,
+                    'status_to' => $request->status,
+                    'note' => $request->current_note ?? 'Status diperbarui.',
+                ]);
+            }
 
             // Deduction Logic on FINAL APPROVAL (with pessimistic lock)
             if ($request->status === 'approved' && $request->leaveType?->is_anual_deduction) {
                 $balance = LeaveBalance::where('user_id', $request->user_id)
-                    ->where('year', date('Y'))
+                    ->where('year', $request->start_date->year)
                     ->lockForUpdate()
                     ->first();
                 $balance?->increment('used_quota', $request->total_days);
@@ -119,27 +131,7 @@ class LeaveRequestService
                 }
             }
 
-            // Rollback Logic: kembalikan kuota jika cuti yang sudah approved ditolak/dibatalkan
-            if (in_array($request->status, ['rejected', 'canceled']) && $oldStatus === 'approved'
-                && $request->leaveType?->is_anual_deduction) {
-                $balance = LeaveBalance::where('user_id', $request->user_id)
-                    ->where('year', date('Y'))
-                    ->lockForUpdate()
-                    ->first();
-                $balance?->decrement('used_quota', $request->total_days);
-
-                // Audit log: catat pengembalian kuota
-                if ($balance) {
-                    LeaveRequestHistory::create([
-                        'leave_request_id' => $request->id,
-                        'acted_by' => $actor->id,
-                        'action' => 'quota_restored',
-                        'status_from' => $oldStatus,
-                        'status_to' => $request->status,
-                        'note' => "Kuota dikembalikan: {$request->total_days} hari (sisa: {$balance->remaining_quota})",
-                    ]);
-                }
-            }
+            // Note: Tidak ada rollback kuota karena tidak ada jalur approved → rejected/cancelled
 
             // Notify next actor if approved but not final
             if ($action === 'approve' && $request->status !== 'approved') {
@@ -413,5 +405,18 @@ class LeaveRequestService
 
             $current->addDay();
         }
+    }
+
+    /**
+     * Resolve action name for history logging.
+     */
+    protected function resolveActionName(string $status, mixed $actedBy = null): string
+    {
+        return match ($status) {
+            'approved' => 'final_approve',
+            'rejected' => $actedBy === null ? 'auto_reject' : 'reject',
+            'cancelled' => 'cancel',
+            default => 'approve',
+        };
     }
 }

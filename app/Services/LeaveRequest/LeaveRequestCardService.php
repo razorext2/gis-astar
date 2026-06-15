@@ -63,7 +63,7 @@ class LeaveRequestCardService
         return [
             [
                 'label' => 'Total Masuk',
-                'count' => (clone $baseQuery())->whereYear('created_at', date('Y'))->count(),
+                'count' => $baseQuery()->whereYear('created_at', date('Y'))->count(),
                 'indicator' => 'Pengajuan',
                 'icon' => 'icons.envelope',
                 'color' => 'blue',
@@ -83,7 +83,7 @@ class LeaveRequestCardService
             ],
             [
                 'label' => 'Selesai Diproses',
-                'count' => (clone $baseQuery())->whereIn('status', ['approved', 'rejected'])->whereYear('created_at', date('Y'))->count(),
+                'count' => $baseQuery()->whereIn('status', ['approved', 'rejected'])->whereYear('created_at', date('Y'))->count(),
                 'indicator' => 'Pengajuan',
                 'icon' => 'icons.badge-check',
                 'color' => 'green',
@@ -129,10 +129,17 @@ class LeaveRequestCardService
     {
         $year = date('Y');
 
+        $stats = LeaveBalance::where('year', $year)
+            ->selectRaw('SUM(total_quota) as total_quota, SUM(used_quota) as used_quota')
+            ->first();
+
+        $totalQuota = $stats->total_quota ?? 0;
+        $usedQuota = $stats->used_quota ?? 0;
+
         return [
             [
                 'label' => 'Kuota Terdistribusi',
-                'count' => LeaveBalance::where('year', $year)->sum('total_quota'),
+                'count' => $totalQuota,
                 'indicator' => 'Hari',
                 'icon' => 'icons.users',
                 'color' => 'blue',
@@ -140,7 +147,7 @@ class LeaveRequestCardService
             ],
             [
                 'label' => 'Total Cuti Terpakai',
-                'count' => LeaveBalance::where('year', $year)->sum('used_quota'),
+                'count' => $usedQuota,
                 'indicator' => 'Hari',
                 'icon' => 'icons.clock',
                 'color' => 'red',
@@ -148,7 +155,7 @@ class LeaveRequestCardService
             ],
             [
                 'label' => 'Sisa Kuota Aktif',
-                'count' => LeaveBalance::where('year', $year)->sum('total_quota') - LeaveBalance::where('year', $year)->sum('used_quota'),
+                'count' => $totalQuota - $usedQuota,
                 'indicator' => 'Hari',
                 'icon' => 'icons.calendar',
                 'color' => 'green',

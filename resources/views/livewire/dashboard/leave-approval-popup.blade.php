@@ -93,11 +93,11 @@
             </div>
 
             {{-- Approval Deadline Countdown --}}
-            <x-leave-request.deadline-timer :updatedAt="$currentRequest->updated_at" :compact="true" class="mb-4" />
+            <x-leave-request.deadline-timer :updatedAt="$currentRequest->updated_at" :compact="true" />
 
             {{-- Applicant Info --}}
             <div
-                class="mb-4 flex items-center gap-4 rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-white/5">
+                class="my-4 flex items-center gap-4 rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-white/5">
                 <div
                     class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-red-100 text-xl font-black text-red-600 dark:bg-red-900/30 dark:text-red-400">
                     {{ collect(explode(' ', $currentRequest->user->name))->map(fn($n) => \Str::substr($n, 0, 1))->take(2)->implode('') }}
@@ -148,8 +148,7 @@
             <div class="flex items-center gap-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
                 <input type="checkbox" id="dismiss-popup-session"
                     class="h-4 w-4 cursor-pointer rounded border-zinc-300 text-red-600 dark:border-zinc-700"
-                    :checked="dismissedForSession"
-                    @change="toggleDismissSession($event.target.checked)">
+                    :checked="dismissedForSession" @change="toggleDismissSession($event.target.checked)">
                 <label for="dismiss-popup-session" class="cursor-pointer text-xs text-zinc-500 dark:text-zinc-400">
                     Jangan tampilkan lagi untuk sesi ini
                 </label>

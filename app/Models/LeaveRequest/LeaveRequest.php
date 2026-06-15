@@ -9,8 +9,6 @@ class LeaveRequest extends Model
 {
     protected $table = 'tb_leave_requests';
 
-    protected $guarded = ['id'];
-
     // Transient properties for Observer
     public $current_note;
 

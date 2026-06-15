@@ -33,7 +33,7 @@ class LeaveRequestApprovalNotification extends Notification implements ShouldQue
         return [
             'message' => $msg,
             'button' => [
-                'url' => url("/dashboard/leave-request/approval-center/{$this->leaveRequest->id}"),
+                'url' => route('leave-request.approval-center.show', $this->leaveRequest->id),
                 'label' => 'Lihat Detail',
             ],
             'created_at' => Carbon::now()->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss'),
@@ -50,10 +50,10 @@ class LeaveRequestApprovalNotification extends Notification implements ShouldQue
             ->body("Permohonan $type dari $requesterName menunggu persetujuan Anda.")
             ->icon(asset('/assets/img/logo.ico'))
             ->badge(asset('/assets/img/logo.ico'))
-            ->action('Lihat Detail', url("/dashboard/leave-request/approval-center/{$this->leaveRequest->id}"))
+            ->action('Lihat Detail', route('leave-request.approval-center.show', $this->leaveRequest->id))
             ->tag('LeaveRequest')
             ->data([
-                'url' => url("/dashboard/leave-request/approval-center/{$this->leaveRequest->id}"),
+                'url' => route('leave-request.approval-center.show', $this->leaveRequest->id),
             ]);
     }
 }

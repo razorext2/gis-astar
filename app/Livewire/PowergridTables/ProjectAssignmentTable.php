@@ -145,7 +145,7 @@ final class ProjectAssignmentTable extends PowerGridComponent
                 // status project
                 $statusMap = [
                     'completed' => ['Selesai', 'bg-green-500', 'text-green-800'],
-                    'canceled' => ['Dibatalkan', 'bg-red-500', 'text-red-100'],
+                    'cancelled' => ['Dibatalkan', 'bg-red-500', 'text-red-100'],
                     'in_progress' => ['Proses', 'bg-yellow-500', 'text-yellow-800'],
                     'assigned' => ['Diassign', 'bg-yellow-500', 'text-yellow-800'],
                 ];

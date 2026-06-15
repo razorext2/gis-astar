@@ -1,4 +1,4 @@
-{{-- Goal: Reusable timeline component for leave request history and status tracking, Deps: LeaveRequest --}}
+{{-- Goal: Reusable timeline component for leave request history and status tracking, Deps: LeaveRequest (requires eager: user.pegawai.jabatanRelasi.supervisors, user.pegawai.jabatanRelasi.placementRelasi.hrds, user.pegawai.jabatanRelasi.placementRelasi.managements, backupPerson, histories.actedByUser) --}}
 @props(['request'])
 
 <div
@@ -19,12 +19,12 @@
                     'relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2',
                     'border-green-500 bg-green-50 text-green-600 dark:bg-green-900' => !in_array(
                         $history->status_to,
-                        ['rejected', 'canceled', 'cancelled']),
+                        ['rejected', 'cancelled']),
                     'border-red-500 bg-red-50 text-red-600 dark:bg-red-900' => in_array(
                         $history->status_to,
-                        ['rejected', 'canceled', 'cancelled']),
+                        ['rejected', 'cancelled']),
                 ])>
-                    @if (in_array($history->status_to, ['rejected', 'canceled', 'cancelled']))
+                    @if (in_array($history->status_to, ['rejected', 'cancelled']))
                         <x-icons.close class="h-4 w-4" />
                     @else
                         <x-icons.check class="h-4 w-4" />

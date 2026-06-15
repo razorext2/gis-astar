@@ -41,7 +41,7 @@
         </div>
     @endif
 
-    {{-- CANCELED OVERLAY --}}
+    {{-- CANCELLED OVERLAY --}}
     @if ($data->status_approval === 4)
         <div
             class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-red-50/90 p-4 backdrop-blur-md dark:bg-red-950/80">

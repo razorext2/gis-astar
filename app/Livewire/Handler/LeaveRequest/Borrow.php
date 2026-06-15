@@ -9,6 +9,7 @@ use App\Livewire\Concerns\HasLeaveRequestForm;
 use App\Models\LeaveRequest\LeaveType;
 use App\Models\User;
 use App\Services\LeaveRequest\LeaveRequestService;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -79,7 +80,7 @@ class Borrow extends Component
 
         // Cek apakah masa kerjanya sudah > 1 tahun
         if ($user->join_date) {
-            $anniversary = \Carbon\Carbon::parse($user->join_date)->addYear();
+            $anniversary = Carbon::parse($user->join_date)->addYear();
             if (now()->greaterThanOrEqualTo($anniversary)) {
                 return redirect()->route('leave-request.my-requests.index')
                     ->with('status', 'Anda sudah berhak menggunakan Cuti Tahunan biasa. Silakan gunakan menu Pengajuan Cuti.');
@@ -116,6 +117,7 @@ class Borrow extends Component
                 $this->total_days = 0;
                 $this->return_date = null;
                 $this->reset(['intersected_holidays', 'intersected_sundays']);
+
                 return;
             }
 
@@ -134,8 +136,6 @@ class Borrow extends Component
         }
     }
 
-
-
     protected function loadLeaveTypeInfo()
     {
         if (! $this->leave_type_id) {
@@ -153,7 +153,7 @@ class Borrow extends Component
         $borrowedThisYear = auth()->user()->leaveRequests()
             ->where('is_borrowed', true)
             ->whereYear('created_at', now()->year)
-            ->whereNotIn('status', ['rejected', 'canceled'])
+            ->whereNotIn('status', ['rejected', 'cancelled'])
             ->sum('total_days');
 
         $this->remaining_quota = max(0, $maxBorrowDays - $borrowedThisYear);
@@ -263,8 +263,6 @@ class Borrow extends Component
             return redirect()->route('leave-request.my-requests.show', $request->id);
         });
     }
-
-
 
     public function render()
     {

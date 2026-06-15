@@ -109,7 +109,7 @@
 </head>
 
 <body>
-    @if (in_array($data->status, ['rejected', 'auto_reject', 'canceled']))
+    @if (in_array($data->status, ['rejected', 'auto_reject', 'cancelled']))
         <div class="watermark">DITOLAK</div>
     @endif
     <h3 class="mb-8 text-center font-bold" style="padding-top:0; margin-top: 0;">PERMOHONAN CUTI TAHUNAN</h3>
