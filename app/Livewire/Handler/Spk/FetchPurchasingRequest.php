@@ -1,6 +1,6 @@
 <?php
 
-/** Goal: Handle fetch & assign PR by nomor PR or nomor order, Caller: fetch-purchasing-request.blade.php, Deps: SpkMain, PurchasingRequest, ProductionHistory */
+/** Goal: Handle fetch & assign PR by nomor PR, nomor order or nomor PO, Caller: fetch-purchasing-request.blade.php, Deps: SpkMain, PurchasingRequest, ProductionHistory */
 
 namespace App\Livewire\Handler\Spk;
 
@@ -37,6 +37,9 @@ class FetchPurchasingRequest extends Component
 
     /** Nomor order untuk fetch PR by KeteranganDetail */
     public ?string $nomor_order = null;
+
+    /** Nomor PO untuk fetch PR by NomorPesananBeli */
+    public ?string $nomor_po = null;
 
     /** Preview data hasil fetch by nomor order */
     public array $orderPreviewData = [];
@@ -369,6 +372,46 @@ class FetchPurchasingRequest extends Component
     {
         $this->orderPreviewData = [];
         $this->showOrderPreview = false;
+    }
+
+    /**
+     * Fetch data PR dari API berdasarkan NomorPesananBeli = nomor_po lalu tampilkan preview.
+     */
+    public function fetchByNomorPO(): void
+    {
+        $this->validate(['nomor_po' => 'required|min:3'], [
+            'nomor_po.required' => 'Nomor PO wajib diisi.',
+            'nomor_po.min' => 'Nomor PO minimal 3 karakter.',
+        ]);
+
+        $this->runSafely(function () {
+            // [KOMENTAR PENTING UNTUK DIGANTI NANTINYA]
+            // API saat ini menggunakan tipe=fetchPermintaanBeli dan parameter query NomorPesananBeli
+            $url = 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchPermintaanBeli&NomorPesananBeli='.urlencode($this->nomor_po);
+
+            $response = Http::timeout(10)->get($url);
+
+            if (! $response->successful()) {
+                $this->orderPreviewData = [];
+                $this->showOrderPreview = false;
+                $this->dispatch('swal', icon: 'error', text: 'Gagal memuat data dari API.', title: 'Gagal');
+
+                return;
+            }
+
+            $json = $response->json();
+
+            if (($json['status'] ?? '') !== 'success' || empty($json['data'])) {
+                $this->orderPreviewData = [];
+                $this->showOrderPreview = false;
+                $this->dispatch('swal', icon: 'error', text: 'Data PR tidak ditemukan di BSI untuk nomor PO ini.', title: 'Gagal');
+
+                return;
+            }
+
+            $this->orderPreviewData = $json['data'];
+            $this->showOrderPreview = true;
+        }, 'Gagal fetch data PR dari API.');
     }
 
     public function render()

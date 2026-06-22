@@ -1,4 +1,4 @@
-{{-- Goal: Fetch & assign PR by nomor PR or nomor order, Livewire: FetchPurchasingRequest, Alpine: accordion per section --}}
+{{-- Goal: Fetch & assign PR by nomor PR, nomor order or nomor PO, Livewire: FetchPurchasingRequest, Alpine: accordion per section --}}
 <div
     class="space-y-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none lg:p-6">
 
@@ -301,6 +301,56 @@
                 </div>
 
                 @error('nomor_order')
+                    <span class="text-xs text-red-500">{{ $message }}</span>
+                @enderror
+            </div>
+        </div>
+
+        {{-- ── Panel 3 : Fetch by Nomor PO ───────────────────────────────────── --}}
+        <div x-data="{ open: false }">
+            {{-- Header --}}
+            <button type="button" @click="open = !open"
+                class="flex w-full items-center gap-3 bg-zinc-50/80 px-5 py-4 text-left transition-colors hover:bg-zinc-100/80 dark:bg-zinc-800/50 dark:hover:bg-zinc-800">
+                <span
+                    class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
+                    <x-icons.receipt class="h-4 w-4" />
+                </span>
+                <div class="flex-1">
+                    <p class="text-sm font-semibold text-zinc-900 dark:text-white">Fetch via Nomor PO</p>
+                    <p class="text-xs text-zinc-500 dark:text-zinc-400">Cari item PR berdasarkan nomor PO (purchasing order) dari BSI</p>
+                </div>
+                <svg class="h-4 w-4 shrink-0 text-zinc-400 transition-transform duration-200"
+                    :class="open ? 'rotate-180' : ''" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                    fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                        clip-rule="evenodd" />
+                </svg>
+            </button>
+
+            {{-- Body --}}
+            <div x-show="open" x-collapse class="space-y-4 bg-white/60 p-5 dark:bg-zinc-900/30">
+                <div class="flex w-full flex-col gap-3 sm:flex-row sm:items-end">
+                    <div class="w-full flex-1">
+                        <x-input.basic id="nomor_po" name="nomor_po" :labels="true"
+                            placeholder="Masukkan nomor PO" wire:model.live="nomor_po">
+                            Nomor PO
+                        </x-input.basic>
+                    </div>
+
+                    <x-button.primary class="w-full sm:w-auto" wire:click="fetchByNomorPO"
+                        wire:loading.attr="disabled" wire:target="fetchByNomorPO">
+                        <x-slot name="icon">
+                            <x-icons.search wire:loading.remove wire:target="fetchByNomorPO" class="h-4 w-4" />
+                            <x-icons.loading wire:loading wire:target="fetchByNomorPO"
+                                class="h-4 w-4 animate-spin" />
+                        </x-slot>
+                        <span wire:loading.remove wire:target="fetchByNomorPO">Fetch by PO</span>
+                        <span wire:loading wire:target="fetchByNomorPO">Mencari...</span>
+                    </x-button.primary>
+                </div>
+
+                @error('nomor_po')
                     <span class="text-xs text-red-500">{{ $message }}</span>
                 @enderror
             </div>
