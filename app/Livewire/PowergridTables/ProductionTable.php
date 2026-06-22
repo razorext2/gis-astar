@@ -47,7 +47,7 @@ final class ProductionTable extends PowerGridComponent
     {
         $query = Production::query()
             ->join('tb_spk', 'tb_spk.id', '=', 'tb_produksi.id_spk')
-            ->addSelect(['tb_produksi.*'])
+            ->addSelect(['tb_produksi.*', 'tb_spk.company_name', 'tb_spk.nomor_order'])
             ->with(['spk', 'assignTo', 'productionHistories'])
             ->whereHas('spk', function (Builder $q) {
                 // filter tipe timbangan
@@ -81,16 +81,7 @@ final class ProductionTable extends PowerGridComponent
 
     public function relationSearch(): array
     {
-        return [
-            'spk' => [
-                'nomor_order',
-                'tipe_timbangan',
-                'company_name',
-            ],
-            'productionHistories' => [
-                'status_produksi',
-            ],
-        ];
+        return [];
     }
 
     protected int $rowNumber = 0;
@@ -225,13 +216,13 @@ final class ProductionTable extends PowerGridComponent
         return [
             Column::make('No', 'no'),
             Column::action('Action'),
-            Column::make('Nomor SPK', 'nomor_order_formatted', 'nomor_order')
+            Column::make('Nomor SPK', 'nomor_order_formatted', 'tb_spk.nomor_order')
                 ->searchable(),
             Column::make('Status SPK', 'status_spk', 'status_spk'),
             Column::make('Supir perusahaan', 'is_using_company_driver')->hidden(),
             Column::make('Dijemput Customer', 'is_picked_up_by_customer')->hidden(),
             Column::make('Old Stock', 'is_using_old_stock')->hidden(),
-            Column::make('Customer', 'customer_info', 'company_name')
+            Column::make('Customer', 'customer_info', 'tb_spk.company_name')
                 ->searchable(),
             Column::make('Assign to', 'assign_to_formatted', 'assign_to'),
             Column::make('Tipe Timbangan', 'tipe_timbangan_formatted', 'tipe_timbangan'),
