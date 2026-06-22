@@ -3,12 +3,12 @@
     @livewire('components.card', ['type' => 'dashboard'])
 
     <div class="flex flex-col">
+        <x-signature-reminder class="mb-4 mt-2" />
+
         {{-- Greetings Section --}}
         <div class="mb-4">
             @livewire('utils.greetings')
         </div>
-
-        <x-signature-reminder />
 
         @php
             $showQuickActions =
