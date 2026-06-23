@@ -5,8 +5,8 @@
 namespace App\Livewire\PowergridTables;
 
 use App\Models\Sales;
-use App\Services\Sales\SalesRegionResolver;
 use App\Models\User;
+use App\Services\Sales\SalesRegionResolver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -84,7 +84,7 @@ final class SalesTable extends PowerGridComponent
             ->add('title_view', function ($data) {
                 return view('components.dashboard.title-w-status-two', [
                     'status' => $data->status,
-                    'title'  => $data->short_title,
+                    'title' => $data->short_title,
                 ])->render();
             })
             ->add('customer_view', function ($data) {
@@ -96,8 +96,8 @@ final class SalesTable extends PowerGridComponent
             ->add('lokasi_view', function ($data) {
                 return view('components.dashboard.location-w-coordinate', [
                     'location' => $data->lokasi ?? 'N/A',
-                    'long'     => $data->longitude ?? 'N/A',
-                    'lat'      => $data->latitude ?? 'N/A',
+                    'long' => $data->longitude ?? 'N/A',
+                    'lat' => $data->latitude ?? 'N/A',
                 ])->render();
             })
             ->add('created_at_view', function ($data) {
@@ -186,7 +186,7 @@ final class SalesTable extends PowerGridComponent
                 ->dataSource([
                     ['name' => 'Sales Medan',    'value' => 'Sales'],
                     ['name' => 'Sales Jakarta',  'value' => 'Sales-JKT'],
-                    ['name' => 'Sales Pekanbaru','value' => 'Sales-PKU'],
+                    ['name' => 'Sales Pekanbaru', 'value' => 'Sales-PKU'],
                     ['name' => 'Sales Indodaya', 'value' => 'Sales-IDY'],
                     ['name' => 'Kurir Bank',     'value' => 'Kurir-Bank'],
                     ['name' => 'Sales Agrotec',  'value' => 'Sales-Agrotec'],
@@ -205,35 +205,35 @@ final class SalesTable extends PowerGridComponent
     {
         $actions = [
             [
-                'id'     => 'show-btn',
+                'id' => 'show-btn',
                 'action' => route('sales.show', $data->id),
-                'label'  => 'Detail',
+                'label' => 'Detail',
             ],
         ];
 
         if ($this->user->can('sales-approve')) {
             if ($this->user->can('sales-delete')) {
                 $actions[] = [
-                    'id'     => 'edit-btn',
+                    'id' => 'edit-btn',
                     'action' => route('sales.edit', $data->id),
-                    'label'  => 'Edit',
+                    'label' => 'Edit',
                 ];
             }
 
             return view('components.dashboard.action-buttons', [
-                'id'     => $data->id,
-                'datas'  => $actions,
+                'id' => $data->id,
+                'datas' => $actions,
                 'detail' => $data->status == 0,
-                'delete' => $this->user->can('sales-delete'),
+                // 'delete' => $this->user->can('sales-delete'),
             ]);
         }
 
         return view('components.dashboard.single-button', [
-            'id'   => $data->id,
+            'id' => $data->id,
             'data' => [
-                'id'     => 'detailBtn'.$data->id,
+                'id' => 'detailBtn'.$data->id,
                 'action' => route('sales.show', $data->id),
-                'label'  => 'Detail',
+                'label' => 'Detail',
             ],
         ]);
     }
@@ -268,7 +268,7 @@ final class SalesTable extends PowerGridComponent
 
             Log::info($this->user->kode_pegawai." : Menghapus sales data {$id}");
         } catch (\Exception $e) {
-            $this->swal('Gagal!', "Terjadi kesalahan saat menghapus data.", 'error');
+            $this->swal('Gagal!', 'Terjadi kesalahan saat menghapus data.', 'error');
 
             Log::error($this->user->kode_pegawai." : Gagal menghapus sales {$id}. {$e->getMessage()}");
         }
@@ -279,4 +279,3 @@ final class SalesTable extends PowerGridComponent
         $this->dispatch('swal', title: $title, text: $text, icon: $icon);
     }
 }
-

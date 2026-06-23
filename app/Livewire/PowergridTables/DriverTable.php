@@ -5,12 +5,14 @@
 namespace App\Livewire\PowergridTables;
 
 use App\Models\Driver;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\View\View;
+use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
@@ -31,7 +33,7 @@ final class DriverTable extends PowerGridComponent
 
     public bool $showFilters = false;
 
-    public ?\App\Models\User $user = null;
+    public ?User $user = null;
 
     // Label status Driver — single source of truth untuk fields() dan filters()
     private const STATUS_LABELS = [
@@ -228,17 +230,17 @@ final class DriverTable extends PowerGridComponent
             'id' => $row->id,
             'datas' => $actions,
             'detail' => $row->status == 0 && $this->user->can('driver-approve'),
-            'delete' => $this->user->can('driver-delete'),
+            // 'delete' => $this->user->can('driver-delete'),
         ]);
     }
 
-    #[\Livewire\Attributes\On('delete')]
+    #[On('delete')]
     public function delete($id): void
     {
         $this->dispatch('confirmDelete', id: $id);
     }
 
-    #[\Livewire\Attributes\On('confirmDeleteAction')]
+    #[On('confirmDeleteAction')]
     public function confirmDelete($id): void
     {
         $data = Driver::find($id);
@@ -262,7 +264,7 @@ final class DriverTable extends PowerGridComponent
         }
     }
 
-    #[\Livewire\Attributes\On('detail')]
+    #[On('detail')]
     public function detail($id): void
     {
         // Gunakan find() langsung — lebih ringkas dari where()->first()
@@ -277,19 +279,19 @@ final class DriverTable extends PowerGridComponent
         $this->dispatch('detailDriverModal', data: $data);
     }
 
-    #[\Livewire\Attributes\On('confirmAction')]
+    #[On('confirmAction')]
     public function confirmAction($id): void
     {
         $this->updateDriverStatus($id, ['status' => 1], 'Dikonfirmasi!', 'Data yang dipilih berhasil dikonfirmasi.');
     }
 
-    #[\Livewire\Attributes\On('declineAction')]
+    #[On('declineAction')]
     public function declineAction($id, $note): void
     {
         $this->updateDriverStatus($id, ['status' => 2, 'notes' => $note], 'Ditolak!', 'Laporan yang dipilih berhasil ditolak.');
     }
 
-    #[\Livewire\Attributes\On('revisionAction')]
+    #[On('revisionAction')]
     public function revisionAction($id, $note): void
     {
         $this->updateDriverStatus($id, ['status' => 3, 'notes' => $note], 'Direvisi!', 'Laporan yang dipilih berhasil direvisi.');
@@ -318,7 +320,7 @@ final class DriverTable extends PowerGridComponent
         }
     }
 
-    #[\Livewire\Attributes\On('assign')]
+    #[On('assign')]
     public function assign(int $id): void
     {
         $this->redirect(route('driver.assign.to', $id));
@@ -334,4 +336,3 @@ final class DriverTable extends PowerGridComponent
         return $this->powerGridQueryString();
     }
 }
-

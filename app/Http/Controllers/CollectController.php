@@ -156,9 +156,9 @@ class CollectController extends Controller
                         $actions[] = ['id' => 'edit-btn', 'action' => route('collect.edit', $data->id), 'label' => 'Edit'];
                     }
 
-                    if (auth()->user()->can('collect-delete') && $data->status == 0) {
-                        $actions[] = ['id' => 'delete-btn', 'action' => 'javascript:void(0)', 'label' => 'Hapus'];
-                    }
+                    // if (auth()->user()->can('collect-delete') && $data->status == 0) {
+                    //     $actions[] = ['id' => 'delete-btn', 'action' => 'javascript:void(0)', 'label' => 'Hapus'];
+                    // }
 
                     if (auth()->user()->can('collect-approve')) {
                         return view('components.dashboard.action-buttons', [
