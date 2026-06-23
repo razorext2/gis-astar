@@ -2,7 +2,7 @@
 	<thead>
 		<tr>
 			<th style="font-weight: bold;" colspan="2">Laporan Cuti</th>
-			<th style="font-weight: bold;" colspan="8">{{ $fromDate . ' s/d ' . $toDate }}</th>
+			<th style="font-weight: bold;" colspan="9">{{ $fromDate . ' s/d ' . $toDate }}</th>
 		</tr>
 		<tr style="height: 50px;">
 			<th style="width: 55px; border: 1px solid black; text-align: center; font-weight: bold;">#</th>
@@ -11,6 +11,7 @@
 			<th style="width: 100px; border: 1px solid black; text-align: center; font-weight: bold;">Tgl Mulai</th>
 			<th style="width: 100px; border: 1px solid black; text-align: center; font-weight: bold;">Tgl Selesai</th>
 			<th style="width: 80px; border: 1px solid black; text-align: center; font-weight: bold;">Total Hari</th>
+			<th style="width: 80px; border: 1px solid black; text-align: center; font-weight: bold;">Sisa Kuota</th>
 			<th style="width: 200px; border: 1px solid black; text-align: center; font-weight: bold;">Alasan</th>
 			<th style="width: 100px; border: 1px solid black; text-align: center; font-weight: bold;">Status</th>
 			<th style="width: 150px; border: 1px solid black; text-align: center; font-weight: bold;">Personel Backup</th>
@@ -26,6 +27,7 @@
 				<td style="border: 1px solid black; text-align: center;">{{ $item->start_date?->format('d/m/Y') ?? '-' }}</td>
 				<td style="border: 1px solid black; text-align: center;">{{ $item->end_date?->format('d/m/Y') ?? '-' }}</td>
 				<td style="border: 1px solid black; text-align: center;">{{ $item->total_days ?? '-' }}</td>
+				<td style="border: 1px solid black; text-align: center;">{{ $item->status === 'approved' ? ($item->user?->leaveBalances?->first()?->remaining_quota ?? '-') : '-' }}</td>
 				<td style="border: 1px solid black;">{{ $item->reason ?? '-' }}</td>
 				<td style="border: 1px solid black; text-align: center;">{{ ucfirst(str_replace('_', ' ', $item->status)) }}</td>
 				<td style="border: 1px solid black;">{{ $item->backupPerson->name ?? '-' }}</td>
