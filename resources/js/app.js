@@ -12,9 +12,13 @@ import "./components/dynamic-background.js";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 
+import Quill from "quill";
+import "quill/dist/quill.snow.css";
+
 window.flatpickr = flatpickr;
 window.$ = window.jQuery = $;
 window.Swal = Swal;
+window.Quill = Quill;
 
 // Initialize Lenis dynamically based on sidebar state
 let lenisInstance = null;
@@ -103,12 +107,8 @@ document.addEventListener("livewire:navigated", function () {
         }
     }
 
-    // handle announcement
-    if (window.location.pathname === "/dashboard/announcement") {
-        import("./pages/announcement/index.js").then((module) => {
-            module.initAnnouncement();
-        });
-    } else if (
+    // handle other pages
+    if (
         window.location.pathname === "/dashboard/attendanceIn" ||
         window.location.pathname === "/dashboard/attendanceOut"
     ) {

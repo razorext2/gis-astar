@@ -3,6 +3,18 @@
     @livewire('components.card', ['type' => 'dashboard'])
 
     <div class="flex flex-col">
+        <div x-data="{ offline: !navigator.onLine }" class="my-2" @offline.window="offline = true" @online.window="offline = false"
+            x-show="offline" style="display: none;" x-transition>
+            <x-notification-alert :id="'offline-alert'" type="offline">
+                <x-slot name="title">
+                    KONEKSI TERPUTUS
+                </x-slot>
+                <x-slot name="desc">
+                    Kamu sedang dalam kondisi offline. Periksa koneksi internetmu untuk melanjutkan aktivitas.
+                </x-slot>
+            </x-notification-alert>
+        </div>
+
         <x-signature-reminder class="mb-4 mt-2" />
 
         {{-- Greetings Section --}}

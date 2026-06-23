@@ -167,7 +167,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('collect-idy-ppn', \App\Http\Controllers\CollectIdyPpnController::class)->except(['store', 'update', 'destroy']);
 
         // route announcement
-        Route::resource('announcement', \App\Http\Controllers\AnnouncementController::class)->only(['index']);
+        Route::resource('announcement', \App\Http\Controllers\AnnouncementController::class)->only(['index', 'create', 'edit']);
 
         // route permission
         Route::resource('permissions', \App\Http\Controllers\PermissionController::class)
