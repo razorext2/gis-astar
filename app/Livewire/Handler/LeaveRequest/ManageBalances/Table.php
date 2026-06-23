@@ -242,7 +242,8 @@ class Table extends Component
             $query = User::whereHas('pegawai')->where('is_active', true);
 
             if ($this->resetMode === 'role') {
-                $query->whereHas('roles', fn ($q) => $q->whereIn('id', $this->resetSelectedRoleIds));
+                $query->whereHas('roles', fn ($q) => $q->whereIn('id', $this->resetSelectedRoleIds))
+                    ->whereDoesntHave('roles', fn ($q) => $q->whereNotIn('id', $this->resetSelectedRoleIds));
             } elseif ($this->resetMode === 'users') {
                 $query->whereIn('id', array_column($this->resetSelectedUsers, 'id'));
             }
