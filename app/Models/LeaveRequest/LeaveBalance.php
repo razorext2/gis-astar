@@ -16,16 +16,24 @@ class LeaveBalance extends Model
         'year',
         'total_quota',
         'used_quota',
+        'reset_at',
+        'reset_by',
     ];
 
     protected $casts = [
         'total_quota' => 'integer',
         'used_quota' => 'integer',
+        'reset_at' => 'datetime',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function resetByUser()
+    {
+        return $this->belongsTo(User::class, 'reset_by');
     }
 
     public function getRemainingQuotaAttribute()
