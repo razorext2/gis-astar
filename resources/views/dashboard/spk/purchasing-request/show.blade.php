@@ -51,7 +51,7 @@
                 @php
                     $groupedData = $is_multiple 
                         ? $data 
-                        : ($data->isEmpty() ? [] : [$spk->nomor_purchasing_request ?? '-' => $data]);
+                        : (empty($data) ? [] : [$spk->nomor_purchasing_request ?? '-' => $data]);
                 @endphp
 
                 <div class="space-y-6">

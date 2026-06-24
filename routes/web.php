@@ -295,6 +295,7 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('spk')->as('')->group(function () {
             // 1. spk purchasing request
             Route::resource('purchasing-request', \App\Http\Controllers\Spk\PurchasingRequestController::class)->only('index', 'edit', 'show');
+            Route::get('purchasing-request/{id}/edit-pr', [\App\Http\Controllers\Spk\PurchasingRequestController::class, 'editPr'])->name('purchasing-request.edit-pr');
 
             // 2. spk spk
             Route::get('generate/pdf/{id}', [\App\Http\Controllers\Spk\SpkController::class, 'generatePdf'])->name('spk.generate.pdf');
