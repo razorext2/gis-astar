@@ -14,18 +14,20 @@ class AnnouncementContainer extends Component
     public ?Announcement $announcement = null;
     public bool $hasRead = false;
     public bool $showModal = false;
+    public ?int $announcementId = null;
 
-    public function mount()
+    public function mount(): void
     {
         $this->loadNextAnnouncement();
     }
 
-    public function loadNextAnnouncement()
+    public function loadNextAnnouncement(): void
     {
         $user = Auth::user();
 
         if (!$user) {
             $this->announcement = null;
+            $this->announcementId = null;
             return;
         }
 
@@ -57,6 +59,7 @@ class AnnouncementContainer extends Component
             })
             ->first();
 
+        $this->announcementId = $this->announcement?->id;
         $this->hasRead = false;
         
         if ($this->announcement) {
@@ -66,7 +69,7 @@ class AnnouncementContainer extends Component
         }
     }
 
-    public function markAsRead()
+    public function markAsRead(): void
     {
         if ($this->hasRead && $this->announcement) {
             AnnouncementRead::create([
@@ -79,7 +82,7 @@ class AnnouncementContainer extends Component
         }
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.utils.announcement-container');
     }
