@@ -47,14 +47,18 @@ class AnnouncementContainer extends Component
                         } else {
                             $q->where(function ($q2) use ($roles) {
                                 foreach ($roles as $role) {
-                                    $q2->orWhereJsonContains('target_roles', (string)$role);
+                                    $q2->orWhereJsonContains('target_roles', (int)$role)
+                                        ->orWhereJsonContains('target_roles', (string)$role);
                                 }
                             });
                         }
                     })
                     ->orWhere(function ($q) use ($userId) {
                         $q->where('target_type', 'user')
-                            ->whereJsonContains('target_users', (string)$userId);
+                            ->where(function ($sub) use ($userId) {
+                                $sub->whereJsonContains('target_users', (int)$userId)
+                                    ->orWhereJsonContains('target_users', (string)$userId);
+                            });
                     });
             })
             ->first();

@@ -2,7 +2,7 @@
 <div class="w-full space-y-6">
     <!-- Top Header Navigation -->
     <div
-        class="rounded-3xl border border-zinc-200 bg-white/60 p-6 shadow-2xl backdrop-blur-md transition-all duration-500 ease-in-out dark:border-zinc-800 dark:bg-dark-primary/60">
+        class="rounded-xl border border-zinc-200 bg-white/60 p-6 shadow-2xl backdrop-blur-md transition-all duration-500 ease-in-out dark:border-zinc-800 dark:bg-dark-primary/60">
         <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div class="flex items-center">
                 <x-button.danger class="my-auto me-4 max-h-10" href="{{ route('announcement.index') }}" wire:navigate>
@@ -33,7 +33,7 @@
         <div class="space-y-2 lg:col-span-2 lg:space-y-4">
             <!-- Informasi Pengumuman -->
             <div
-                class="group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
+                class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-blue-500/5 blur-3xl transition-colors group-hover:bg-blue-500/10">
                 </div>
@@ -77,9 +77,9 @@
                                     ]
                                 }
                             });
-                    
+
                             this.quill.root.innerHTML = $wire.get('description') || '';
-                    
+
                             this.quill.on('text-change', () => {
                                 $wire.set('description', this.quill.root.innerHTML);
                             });
@@ -99,9 +99,11 @@
 
             <!-- Target Pengumuman -->
             <div
-                class="group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
-                <div
-                    class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-purple-500/5 blur-3xl transition-colors group-hover:bg-purple-500/10">
+                class="group relative rounded-xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
+                <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-xl">
+                    <div
+                        class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-purple-500/5 blur-3xl transition-colors group-hover:bg-purple-500/10">
+                    </div>
                 </div>
 
                 <div class="mb-8 flex items-center gap-3">
@@ -214,7 +216,7 @@
 
                                 {{-- Dropdown --}}
                                 <div x-show="open && filteredUsers.length > 0" x-transition style="display: none;"
-                                    class="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-lg bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-gray-800 dark:ring-white dark:ring-opacity-10">
+                                    class="absolute bottom-full z-10 mb-1 max-h-48 w-full overflow-y-auto rounded-lg bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-gray-800 dark:ring-white dark:ring-opacity-10">
                                     <template x-for="user in filteredUsers" :key="user.id">
                                         <button type="button" @click="add(user.id)"
                                             class="flex w-full flex-col items-start px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -227,7 +229,7 @@
                                 </div>
                                 <div x-show="open && search !== '' && filteredUsers.length === 0"
                                     style="display: none;"
-                                    class="absolute z-10 mt-1 w-full rounded-lg bg-white px-4 py-3 text-sm text-gray-500 shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-gray-800 dark:text-gray-400 dark:ring-white dark:ring-opacity-10">
+                                    class="absolute bottom-full z-10 mb-1 w-full rounded-lg bg-white px-4 py-3 text-sm text-gray-500 shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-gray-800 dark:text-gray-400 dark:ring-white dark:ring-opacity-10">
                                     Tidak ada data ditemukan.
                                 </div>
                             </div>
@@ -244,7 +246,7 @@
         <!-- Right Column: Lampiran -->
         <div class="space-y-2 lg:space-y-4">
             <div
-                class="group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
+                class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-orange-500/5 blur-3xl transition-colors group-hover:bg-orange-500/10">
                 </div>
