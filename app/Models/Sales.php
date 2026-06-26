@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Represent sales report data in DB, Caller: ValidateSales, Deps: PhotoCollect, Pegawai, User */
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,6 +29,7 @@ class Sales extends Model
         'validate_by',
         'id_session',
         'customer_make_order',
+        'gives_phone_number',
         'order_notes',
         'proof_picture',
     ];
