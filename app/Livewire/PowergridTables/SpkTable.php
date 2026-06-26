@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Render and filter SPK list by user permissions, Caller: SpkController, Deps: SpkMain */
+
 namespace App\Livewire\PowergridTables;
 
 use App\Models\Spk\SpkMain;
@@ -52,11 +54,21 @@ final class SpkTable extends PowerGridComponent
                 'products_name' => DB::raw("JSON_UNQUOTE(JSON_EXTRACT(products, '$.nama_barang'))"),
             ]);
 
-        if (! $this->user->can('spk-create')) {
+        if ($this->user->can('spk-list')) {
+            // No additional filters, view all
+        } elseif ($this->user->can('spk-list-own-only')) {
             $query->where(function ($q) {
-                $q->where('assign_to', $this->user->id)
+                $q->where('added_by', $this->user->id)
+                    ->orWhere('assign_to', $this->user->id)
                     ->orWhere('reassign_to', $this->user->id);
-            })->where('status_approval', 1);
+            });
+        } else {
+            if (! $this->user->can('spk-create')) {
+                $query->where(function ($q) {
+                    $q->where('assign_to', $this->user->id)
+                        ->orWhere('reassign_to', $this->user->id);
+                })->where('status_approval', 1);
+            }
         }
 
         if (! is_null($this->tipe_timbangan)) {
@@ -321,7 +333,7 @@ final class SpkTable extends PowerGridComponent
                 ->route('spk.edit', ['spk' => $row->id]);
         }
 
-        if ($this->user->can('spk-view')) {
+        if ($this->user->can('view', $row)) {
             $button[] = Button::make('detail')
                 ->slot('Detail')
                 ->id($row->id)
