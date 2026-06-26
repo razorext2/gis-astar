@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ApiCollectTaskPpnController;
 use App\Http\Controllers\Api\ApiDriverController;
 use App\Http\Controllers\Api\ApiPegawaiController;
 use App\Http\Controllers\Api\ApiSalesController;
+use App\Http\Controllers\Api\ApiDataTimbangIndodayaController;
 use App\Http\Controllers\BigEventController;
 use App\Http\Controllers\TechnicianController;
 use Illuminate\Http\Request;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 // public API
+Route::apiResource('data-timbang', ApiDataTimbangIndodayaController::class);
 Route::post('photo-regist-process', [ApiAttendanceController::class, 'photoRegistProcess'])->name('photo.registProcess');
 Route::post('check-attendance', [ApiAttendanceController::class, 'checkAttendance']);
 Route::get('pegawai-images/{id}', [ApiPegawaiController::class, 'getPegawaiImages']);

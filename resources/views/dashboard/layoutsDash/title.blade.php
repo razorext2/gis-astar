@@ -52,6 +52,7 @@
         'leave-request.*' => 'Pengajuan Cuti',
         'server.overview' => 'Manajemen Server',
         'system.holidays.*' => 'Manajemen Hari Libur',
+        'chatbot.*' => 'AI Chatbot',
     ];
 
     // Temukan judul berdasarkan rute dengan wildcard
