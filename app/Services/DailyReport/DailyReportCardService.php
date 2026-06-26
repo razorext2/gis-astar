@@ -10,7 +10,7 @@ class DailyReportCardService
     {
         $baseQuery = ProjectAssignment::query();
         $user = auth()->user();
-        $canValidate = $user->can('laporan-harian-validate');
+        $canValidate = $user->can('laporan-harian-approve');
 
         if (! $canValidate) {
             $baseQuery->where('assign_to', $user->id);

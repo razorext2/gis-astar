@@ -39,6 +39,9 @@ class LeaveRequestHistory extends Model
             'reject' => 'Pengajuan Ditolak',
             'auto_reject' => 'Ditolak Otomatis (Expired)',
             'cancel' => 'Pengajuan Dibatalkan',
+            'quota_deducted' => 'Kuota Cuti Dipotong',
+            'quota_restored' => 'Kuota Cuti Dikembalikan',
+            'import' => 'Data Cuti Diimport',
             default => 'Status diperbarui'
         };
     }

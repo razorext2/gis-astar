@@ -23,7 +23,7 @@
             <div class="flex items-center space-x-2">
                 @if (
                     $spk->added_by == auth()->id() ||
-                        auth()->user()->can('spk-validate') ||
+                        auth()->user()->can('spk-approve') ||
                         auth()->user()->can('laporan-fondasi-create'))
                     <x-button.success wire:click.stop="openCreateLaporanFondasiModal" class="z-10 w-fit !p-2">
                         <x-icons.plus class="h-5 w-5 dark:text-white" />
@@ -74,8 +74,10 @@
                                 class="rounded-md border border-green-200 bg-green-500/20 px-2 py-0.5 font-medium text-green-700 dark:border-green-800/50 dark:text-green-400">
                                 {{ $row->status_pengerjaan_description }}
                             </p>
-                            <p class="text-right italic text-zinc-500 dark:text-zinc-400">Oleh:
-                                {{ $row->addedBy->name }}</p>
+                            <div class="flex items-center justify-end gap-x-2 italic text-zinc-500 dark:text-zinc-400">
+                                <span>Oleh: {{ $row->addedBy->name }}</span>
+                                <x-dashboard.badge-inactive :is_active="$row->addedBy?->is_active ?? true" />
+                            </div>
                         </div>
 
                         <div class="flex flex-row justify-end gap-3 text-xs">

@@ -2,6 +2,11 @@
 @section('content')
     @livewire('components.card', ['type' => 'salesreport'])
 
+    {{-- Handler: validate sales modal — dipasang sekali di luar tabel, diaktifkan via event --}}
+    @can('sales-approve')
+        <livewire:handler.sales.validate-sales wire:key="sales-validate-modal" />
+    @endcan
+
     <form id="add-form" action="{{ route('sales.create') }}"></form>
     <div class="relative grid grid-cols-1 gap-4">
 
@@ -16,79 +21,14 @@
                     </x-button.success>
                 </div>
             @endcan
-
-            @can(['sales-export'])
-                <div class="max-w-xs">
-                    <livewire:handler.sales.export />
-                </div>
-            @endcan
         </div>
 
         <div class="flex h-auto items-center justify-center">
             <div
-                class="grid w-full grid-cols-2 gap-2 rounded-xl bg-white/60 p-2 shadow-md border border-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:border-zinc-800 md:gap-4 md:p-6">
+                class="grid w-full grid-cols-2 gap-2 rounded-xl border border-zinc-200 bg-white/60 p-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none md:gap-4 md:p-6">
 
-                {{-- filter --}}
-                <div class="col-span-2 mb-4">
-                    <x-filter.filter-bar>
-                        @can('sales-approve')
-                            <div class="col-span-2 mx-auto flex w-full items-center lg:col-span-1">
-                                <x-filter.filter-input-text id="kode_pegawai" name="kode_pegawai" :text="'nama sales'">
-                                    <x-icons.fingerprint class="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                                </x-filter.filter-input-text>
-                            </div>
-                        @endcan
-
-                        <div class="col-span-2 mx-auto flex w-full items-center lg:col-span-1">
-                            <x-filter.filter-input-text id="title" name="title" :text="'judul laporan'">
-                                <x-icons.font-case class="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                            </x-filter.filter-input-text>
-                        </div>
-
-                        <div class="col-span-2 mx-auto flex w-full items-center lg:col-span-1">
-                            <x-filter.filter-input-text id="customer_name" name="customer_name" :text="'nama customer'">
-                                <x-icons.font-case class="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                            </x-filter.filter-input-text>
-                        </div>
-
-                        <div class="col-span-2 mx-auto w-full items-center lg:col-span-1">
-                            <x-filter.filter-input-select id="status" name="status" :options="['0' => 'Belum divalidasi', '1' => 'Disetujui', '2' => 'Ditolak']"
-                                default-option="Filter by status" />
-                        </div>
-
-                        <div class="col-span-2 mx-auto w-full items-center lg:col-span-1">
-                            <x-filter.date-range />
-                        </div>
-
-                        @can('sales-export-all')
-                            <div class="col-span-2 mx-auto w-full items-center lg:col-span-1">
-                                <x-filter.filter-input-select id="roles" name="roles" :options="[
-                                    'Sales' => 'Sales Medan',
-                                    'Sales-JKT' => 'Sales Jakarta',
-                                    'Sales-PKU' => 'Sales Pekanbaru',
-                                    'Sales-IDY' => 'Sales Indodaya',
-                                    'Kurir-Bank' => 'Kurir Bank',
-                                    'Sales-Agrotec' => 'Sales Agrotec',
-                                ]"
-                                    default-option="Filter by roles" />
-                            </div>
-                        @endcan
-
-                    </x-filter.filter-bar>
-                </div>
-                {{-- end filter --}}
-
-                {{-- subcontent --}}
-                <div class="col-span-2" x-data="{ openRow: null }">
-                    <x-dashboard.table id="dataTable" :tablename="[
-                        '0' => '#',
-                        '1' => 'Aksi',
-                        '2' => 'Pegawai',
-                        '3' => 'Judul Laporan',
-                        '4' => 'Customer',
-                        '5' => 'Lokasi',
-                        '6' => 'Waktu Dibuat',
-                    ]" />
+                <div class="col-span-2">
+                    <livewire:sales-table />
                 </div>
 
             </div>

@@ -1,3 +1,4 @@
+{{-- Goal: Edit form for user account data, Livewire: Handler\User\Edit, Alpine: - --}}
 <div class="w-full space-y-6">
     <!-- Top Header Navigation -->
     <div
@@ -9,7 +10,10 @@
                     <x-icons.angle-left class="h-5 w-5" />
                 </x-button.link>
                 <div>
-                    <h2 class="text-2xl font-bold tracking-tight text-gray-800 dark:text-white">Edit Data User</h2>
+                    <h2 class="text-2xl font-bold tracking-tight text-gray-800 dark:text-white flex items-center gap-2">
+                        Edit Data User
+                        <x-dashboard.badge-inactive :is_active="$is_active ?? true" />
+                    </h2>
                     <p class="text-sm text-gray-500 dark:text-gray-400">Pembaruan informasi profil dan hak akses untuk
                         <span class="font-bold text-blue-600 dark:text-blue-400">{{ $name }}</span>
                     </p>

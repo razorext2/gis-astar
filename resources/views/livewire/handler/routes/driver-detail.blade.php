@@ -1,3 +1,4 @@
+{{-- Goal: Display map and list of route waypoints for driver, Livewire: Handler\Routes\DriverDetail, Alpine: map, markers, waypoints --}}
 <div x-data="{
     map: null,
     markers: {},
@@ -80,9 +81,13 @@
             </x-button.danger>
 
             <div>
-                <h2 class="text-xl font-black tracking-tight text-zinc-900 dark:text-white">
-                    {{ $this->pegawai->full_name ?? 'N/A' }}
-                </h2>
+                <div class="flex items-center gap-x-2">
+                    <h2 class="flex items-center gap-2 text-xl font-black tracking-tight text-zinc-900 dark:text-white">
+                        {{ $this->pegawai->full_name ?? 'N/A' }}
+                    </h2>
+                    <x-dashboard.badge-inactive :is_active="$this->pegawai->userRelasi?->is_active ?? true" />
+                </div>
+
                 <p class="text-xs font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
                     Laporan Rute &mdash; {{ \Carbon\Carbon::parse($date)->locale('id')->isoFormat('D MMMM YYYY') }}
                 </p>

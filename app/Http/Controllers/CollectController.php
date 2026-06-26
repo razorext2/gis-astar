@@ -57,8 +57,8 @@ class CollectController extends Controller
 
         $user = auth()->user();
 
-        // 2. Base Restriction
-        if ($user->hasRole('Collector')) {
+        // 2. Base Restriction — user tanpa izin approve hanya lihat data sendiri
+        if ($user->cannot('collect-approve')) {
             $query->where('kode_pegawai', $user->kode_pegawai);
         }
 
@@ -156,11 +156,11 @@ class CollectController extends Controller
                         $actions[] = ['id' => 'edit-btn', 'action' => route('collect.edit', $data->id), 'label' => 'Edit'];
                     }
 
-                    if (auth()->user()->can('collect-delete') && $data->status == 0) {
-                        $actions[] = ['id' => 'delete-btn', 'action' => 'javascript:void(0)', 'label' => 'Hapus'];
-                    }
+                    // if (auth()->user()->can('collect-delete') && $data->status == 0) {
+                    //     $actions[] = ['id' => 'delete-btn', 'action' => 'javascript:void(0)', 'label' => 'Hapus'];
+                    // }
 
-                    if (! auth()->user()->hasRole('Collector')) {
+                    if (auth()->user()->can('collect-approve')) {
                         return view('components.dashboard.action-buttons', [
                             'id' => $data->id,
                             'datas' => $actions,
@@ -219,7 +219,7 @@ class CollectController extends Controller
         $decodedId = IdObfuscator::decode($id);
         $data = Collector::with('photoCollectRelasi', 'pegawaiRelasi')->findOrFail($decodedId);
 
-        if (auth()->user()->hasRole('Collector') && auth()->user()->kode_pegawai != $data->kode_pegawai) {
+        if (auth()->user()->cannot('collect-approve') && auth()->user()->kode_pegawai != $data->kode_pegawai) {
             return abort(403);
         }
 
@@ -232,7 +232,7 @@ class CollectController extends Controller
     {
         $data = Collector::with('photoCollectRelasi', 'pegawaiRelasi', 'collectTaskRelasi', 'collectTaskPpnRelasi')->findOrFail($id);
 
-        if (auth()->user()->hasRole('Collector') && auth()->user()->kode_pegawai != $data->kode_pegawai) {
+        if (auth()->user()->cannot('collect-approve') && auth()->user()->kode_pegawai != $data->kode_pegawai) {
             return abort(403);
         }
 

@@ -23,7 +23,7 @@ class DriverNewReport extends Notification implements ShouldQueue
     public function __construct($driver_id, $created_at)
     {
         $this->driver_id = $driver_id;
-        $this->created_at = $created_at;
+        $this->created_at = $created_at instanceof Carbon ? $created_at : Carbon::parse($created_at);
     }
 
     /**
@@ -52,9 +52,11 @@ class DriverNewReport extends Notification implements ShouldQueue
 
     public function toWebPush($notifiable, $notification)
     {
+        $date = $this->created_at->locale('id')->isoFormat('DD MMMM YYYY');
+
         return (new WebPushMessage)
             ->title("PT. Indodacin Presisi Utama")
-            ->body("Driver telah membuat laporan baru pada tanggal $this->created_at, silahkan diperiksa dan lakukan konfirmasi.")
+            ->body("Driver telah membuat laporan baru pada tanggal $date, silahkan diperiksa dan lakukan konfirmasi.")
             ->icon(asset("/assets/img/logo.ico"))
             ->badge(asset("/assets/img/logo.ico"))
             ->action("Periksa Laporan", route("driver.show", $this->driver_id))

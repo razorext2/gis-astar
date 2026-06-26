@@ -18,7 +18,7 @@
 
             </div>
 
-            <livewire:table-refresher table-name="CollectorRouteTable" />
+            <livewire:powergrid-tables.collector-route-table />
 
         </div>
     </div>

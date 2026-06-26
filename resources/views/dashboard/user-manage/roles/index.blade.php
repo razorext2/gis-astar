@@ -29,7 +29,7 @@
 
             </div>
 
-            <livewire:table-refresher table-name="RolesTable" />
+            <livewire:powergrid-tables.roles-table />
 
         </div>
     </div>

@@ -5,6 +5,7 @@
 namespace App\Console\Commands;
 
 use App\Models\LeaveRequest\LeaveRequest;
+use App\Services\LeaveRequest\LeaveRequestService;
 use Illuminate\Console\Command;
 
 class AutoRejectExpiredLeaveRequests extends Command
@@ -26,7 +27,7 @@ class AutoRejectExpiredLeaveRequests extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): int
+    public function handle(LeaveRequestService $service): int
     {
         $deadlineDays = config('app.leave_approval_deadline_days', 3);
         $cutoff = now()->subDays($deadlineDays);
@@ -38,7 +39,8 @@ class AutoRejectExpiredLeaveRequests extends Command
             'pending_management',
         ];
 
-        $expiredRequests = LeaveRequest::whereIn('status', $pendingStatuses)
+        $expiredRequests = LeaveRequest::with(['user', 'leaveType'])
+            ->whereIn('status', $pendingStatuses)
             ->where('updated_at', '<', $cutoff)
             ->get();
 
@@ -51,14 +53,17 @@ class AutoRejectExpiredLeaveRequests extends Command
         $rejectedCount = 0;
 
         foreach ($expiredRequests as $request) {
-            $request->acted_by = null;  // null signals auto-reject → observer falls back to user_id
-            $request->current_note = "Pengajuan ditolak otomatis karena melebihi batas waktu approval ({$deadlineDays} hari).";
-            $request->update(['status' => 'rejected']);
+            // Simpan status original sebelum diubah
+            $originalStatus = $request->status;
+
+            $note = "Pengajuan ditolak otomatis karena melebihi batas waktu approval ({$deadlineDays} hari).";
+
+            // Gunakan service agar notifikasi ke pemohon terkirim dan history tercatat konsisten
+            $service->processAction($request, 'auto_reject', $request->user, $note);
 
             $rejectedCount++;
 
             $userName = $request->user->name ?? 'N/A';
-            $originalStatus = $request->getOriginal('status');
             $this->line("  ✗ Request #{$request->id} ({$userName}) — status: {$originalStatus} → rejected");
         }
 

@@ -61,49 +61,74 @@
                         @enderror
                     </div>
 
-                    <div class="sm:col-span-2">
+                    <div class="sm:col-span-2" x-data="{
+                        open: false,
+                        search: '',
+                        selectedIds: $wire.entangle('supervisor_ids'),
+                        users: {{ Js::from($allUsers->map(fn($u) => ['id' => $u->id, 'name' => $u->name, 'kode' => $u->pegawai ? $u->pegawai->kode_pegawai : ''])) }},
+                        get filteredUsers() {
+                            if (this.search === '') return this.users.filter(u => !this.selectedIds.includes(u.id)).slice(0, 5);
+                            return this.users.filter(u => 
+                                (u.name.toLowerCase().includes(this.search.toLowerCase()) || 
+                                 u.kode.toLowerCase().includes(this.search.toLowerCase())) &&
+                                !this.selectedIds.includes(u.id)
+                            ).slice(0, 5);
+                        },
+                        get selectedUsers() {
+                            return this.selectedIds.map(id => this.users.find(u => u.id === id)).filter(Boolean);
+                        },
+                        add(id) {
+                            if (!this.selectedIds.includes(id)) {
+                                this.selectedIds.push(id);
+                            }
+                            this.search = '';
+                            this.open = false;
+                        },
+                        remove(id) {
+                            this.selectedIds = this.selectedIds.filter(i => i !== id);
+                        }
+                    }" @click.away="open = false">
                         <label class="mb-2 block text-sm font-bold text-gray-900 dark:text-white">
                             {{ __('Penanggung Jawab (Supervisor)') }}
                         </label>
-                        <div class="relative" x-data="{ open: false }" @click.away="open = false">
-                            {{-- Search Input --}}
-                            <div class="relative">
-                                <input type="text" wire:model.live.debounce.300ms="search_supervisor"
-                                    @focus="open = true" @input="$wire.set('supervisor_id', null)"
-                                    placeholder="Cari Nama atau Kode Pegawai..."
-                                    class="block w-full rounded-lg border border-zinc-200 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-red-500 focus:ring-red-500 dark:border-zinc-800 dark:bg-gray-700/50 dark:text-white dark:placeholder-gray-400">
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                    <x-icons.search class="h-4 w-4 text-gray-400" />
-                                </div>
-                            </div>
-
-                            {{-- Dropdown Results --}}
-                            <div x-show="open && $wire.search_supervisor.length > 0"
-                                x-transition:enter="transition ease-out duration-100"
-                                x-transition:enter-start="opacity-0 scale-95"
-                                x-transition:enter-end="opacity-100 scale-100"
-                                class="absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white shadow-xl backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-900">
-                                @forelse ($users as $user)
-                                    <button type="button"
-                                        @click="$wire.set('supervisor_id', {{ $user->id }}); $wire.set('search_supervisor', '{{ addslashes($user->name) }}'); open = false"
-                                        class="{{ $supervisor_id == $user->id ? 'bg-red-50 dark:bg-red-900/20' : '' }} flex w-full flex-col px-4 py-2.5 text-left transition-colors hover:bg-zinc-50 dark:hover:bg-white/5">
-                                        <span
-                                            class="text-sm font-bold text-zinc-900 dark:text-white">{{ $user->name }}</span>
-                                        <span
-                                            class="text-[10px] uppercase tracking-wider text-zinc-500">{{ $user->kode_pegawai }}</span>
+                        
+                        {{-- Selected Chips --}}
+                        <div class="mb-2 flex flex-wrap gap-2" x-show="selectedUsers.length > 0" style="display: none;">
+                            <template x-for="user in selectedUsers" :key="user.id">
+                                <span class="inline-flex items-center gap-1 rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
+                                    <span x-text="user.name"></span>
+                                    <button type="button" @click="remove(user.id)" class="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-red-600 hover:bg-red-200 hover:text-red-900 dark:hover:bg-red-800 dark:hover:text-red-200">
+                                        <svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8"><path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"/></svg>
                                     </button>
-                                @empty
-                                    <div class="px-4 py-4 text-center text-sm text-zinc-500">
-                                        {{ __('Tidak ada data ditemukan.') }}
-                                    </div>
-                                @endforelse
+                                </span>
+                            </template>
+                        </div>
+
+                        {{-- Search Input --}}
+                        <div class="relative">
+                            <input type="text" x-model="search" @focus="open = true" 
+                                class="{{ $errors->has('supervisor_ids') ? 'border-red-500 bg-red-50' : 'border-zinc-200 bg-white' }} block w-full rounded-lg border p-2.5 text-sm text-gray-900 focus:border-red-500 focus:ring-red-500 dark:border-zinc-800 dark:bg-gray-700/50 dark:text-white" 
+                                placeholder="Cari nama atau NIP Supervisor...">
+                            
+                            {{-- Dropdown --}}
+                            <div x-show="open && filteredUsers.length > 0" x-transition style="display: none;"
+                                class="absolute z-50 mt-1 max-h-48 w-full overflow-y-auto rounded-lg bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-zinc-800">
+                                <template x-for="user in filteredUsers" :key="user.id">
+                                    <button type="button" @click="add(user.id)" 
+                                        class="flex w-full flex-col items-start px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <span class="text-sm font-medium text-gray-900 dark:text-white" x-text="user.name"></span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400" x-text="user.kode"></span>
+                                    </button>
+                                </template>
+                            </div>
+                            <div x-show="open && search !== '' && filteredUsers.length === 0" style="display: none;"
+                                class="absolute z-50 mt-1 w-full rounded-lg bg-white px-4 py-3 text-sm text-gray-500 shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-zinc-800 dark:text-gray-400">
+                                Tidak ada data ditemukan.
                             </div>
                         </div>
-                        <p class="mt-1 text-[10px] italic text-zinc-500">
-                            {{ __('Atasan yang akan muncul sebagai pemberi persetujuan pertama untuk jabatan ini.') }}
-                        </p>
-                        @error('supervisor_id')
-                            <span class="mt-1 text-xs italic text-red-500">{{ $message }}</span>
+                        
+                        @error('supervisor_ids')
+                            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>

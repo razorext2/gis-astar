@@ -17,6 +17,6 @@
             </div>
         </div>
 
-        <livewire:table-refresher table-name="AttendanceInTable" />
+        <livewire:powergrid-tables.attendance-in-table />
     </div>
 @endsection

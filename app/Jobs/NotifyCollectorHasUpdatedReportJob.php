@@ -1,59 +1,73 @@
 <?php
 
+/** Goal: Notify semua user berpermission collect-approve saat kolektor update laporan, Caller: CollectController, Deps: CollectorUpdatedReport, CollectorUpdatedReportEvent, User */
+
 namespace App\Jobs;
 
 use App\Events\CollectorUpdatedReportEvent;
+use App\Helpers\ErrorLogger;
 use App\Models\User;
 use App\Notifications\CollectorUpdatedReport;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Support\Facades\Log;
 
 class NotifyCollectorHasUpdatedReportJob implements ShouldQueue
 {
     use Queueable;
 
-    protected $no_sr;
-    protected $date;
-    protected $collect_id;
+    public int $tries = 3;
+
+    public int $timeout = 60;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($no_sr, $collect_id, $date)
-    {
-        $this->no_sr = $no_sr;
-        $this->collect_id = $collect_id;
-        $this->date = $date;
-    }
+    public function __construct(
+        public readonly string $noSr,
+        public readonly int $collectId,
+        public readonly string $date,
+    ) {}
 
     /**
      * Execute the job.
      */
     public function handle(): void
     {
-        // cari user yang memiliki permission collect-approve
         $users = User::select('id')
             ->permission('collect-approve')
             ->get();
 
-        foreach ($users as $user) { // loop through user
-            try {
-                // berikan notifikasi disaat ada laporan baru
-                $user->notify(new CollectorUpdatedReport($this->no_sr, $this->collect_id, $this->date));
+        foreach ($users as $user) {
+            $user->notify(new CollectorUpdatedReport($this->noSr, $this->collectId, $this->date));
 
-                $notification = $user->notifications()->latest()->first();
+            $notification = $user->notifications()->latest()->first();
 
-                broadcast(new CollectorUpdatedReportEvent(
-                    $notification->id,
-                    $this->no_sr,
-                    $user->id,
-                    $this->collect_id,
-                    $this->date
-                ));
-            } catch (\Exception $e) {
-                Log::error('Notify new assign job failed for user: ' . $user->id . ' - Error: ' . $e->getMessage());
-            }
+            broadcast(new CollectorUpdatedReportEvent(
+                $notification->id,
+                $this->noSr,
+                $user->id,
+                $this->collectId,
+                $this->date,
+            ));
         }
+    }
+
+    /**
+     * Handle a job failure — dipanggil setelah semua retry habis.
+     */
+    public function failed(\Throwable $exception): void
+    {
+        ErrorLogger::log($exception, 'NotifyCollectorHasUpdatedReportJob permanently failed', [
+            'no_sr' => $this->noSr,
+            'collect_id' => $this->collectId,
+        ]);
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    public function backoff(): array
+    {
+        return [10, 30, 60];
     }
 }

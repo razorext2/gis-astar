@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Display map and timeline of route waypoints for driver, Caller: detail.blade.php, Deps: Pegawai, User */
+
 namespace App\Livewire\Handler\Routes;
 
 use App\Models\Pegawai;
@@ -24,7 +26,7 @@ class DriverDetail extends Component
     #[Computed]
     public function pegawai(): Pegawai
     {
-        return Pegawai::whereHas('userRelasi', fn ($query) => $query->where('id', $this->userId))->firstOrFail();
+        return Pegawai::with('userRelasi')->whereHas('userRelasi', fn ($query) => $query->where('id', $this->userId))->firstOrFail();
     }
 
     #[Computed]

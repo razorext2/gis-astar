@@ -29,7 +29,7 @@
 
         <div
             class="rounded-xl border border-zinc-200 bg-white/60 p-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
-            <livewire:table-refresher table-name="BigEventTable" />
+            <livewire:powergrid-tables.big-event-table />
         </div>
     </div>
 @endsection

@@ -26,11 +26,23 @@ Route::get('event/{event}/{participant}/visitor', [BigEventController::class, 's
 
 // public API post attendance ke server utama
 Route::post('proxy/server/attendance', function (Request $request) {
-    $response = Http::post('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendance', [
-        'kode_jari' => $request->input('kode_jari'),
-    ]);
+    $kodeJari = $request->input('kode_jari');
+    $user = \App\Models\User::where('kode_pegawai', $kodeJari)->first();
 
-    return $response->json();
+    if (! $user) {
+        return response()->json(['error' => 'User tidak ditemukan'], 404);
+    }
+
+    \App\Jobs\SyncAttendanceToExternalServerJob::dispatch(
+        $user->id,
+        $kodeJari,
+        now()->format('Y-m-d H:i:s'),
+        null,
+        null,
+        null,
+    );
+
+    return response()->json(['message' => 'Absensi sedang diproses']);
 });
 
 Route::middleware(['auth:sanctum', 'throttle:high'])->group(function () {

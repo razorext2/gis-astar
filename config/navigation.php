@@ -66,7 +66,7 @@ return [
                 'route' => 'today.attendance',
                 'check' => ['today.attendance'],
                 'icon' => 'map-pin-alt',
-                'permission' => 'pegawai-attendance',
+                'permission' => 'attendance-view',
                 'navigate' => true,
             ],
             [
@@ -95,7 +95,7 @@ return [
         'type' => 'group',
         'label' => 'Rekam Absensi',
         'icon' => 'camera',
-        'guard' => ['any_permission', ['capture', 'capture-route']],
+        'guard' => ['any_permission', ['capture-view', 'capture-route-view']],
         'submenu' => [
             [
                 'label' => 'Rekam Absensi Realtime',
@@ -103,7 +103,7 @@ return [
                 'route' => 'capture.index',
                 'check' => ['capture.index'],
                 'icon' => 'video-camera',
-                'permission' => 'capture',
+                'permission' => 'capture-view',
                 'navigate' => false,
             ],
             [
@@ -112,7 +112,7 @@ return [
                 'route' => 'capture.route',
                 'check' => ['capture.route'],
                 'icon' => 'camera',
-                'permission' => 'capture-route',
+                'permission' => 'capture-route-view',
                 'navigate' => false,
             ],
         ],
@@ -123,7 +123,7 @@ return [
         'type' => 'group',
         'label' => 'Pengajuan Cuti',
         'icon' => 'envelope',
-        'guard' => ['any_permission', ['leave-view-own', 'leave-create', 'leave-approval-center', 'leave-balance-manage']],
+        'guard' => ['any_permission', ['leave-list-own', 'leave-create', 'leave-approval-center', 'leave-balance-manage']],
         'submenu' => [
             [
                 'label' => 'Pengajuan Cuti',
@@ -131,7 +131,7 @@ return [
                 'route' => 'leave-request.my-requests.index',
                 'check' => ['leave-request.my-requests.*'],
                 'icon' => 'envelope',
-                'permission' => 'leave-view-own',
+                'permission' => 'leave-list-own',
                 'navigate' => true,
             ],
             [
@@ -314,7 +314,7 @@ return [
         'type' => 'group',
         'label' => 'Manajemen SPK',
         'icon' => 'clipboard-check',
-        'guard' => ['any_permission', ['spk-list', 'purchasing-request-list', 'produksi-list', 'spk-update-informasi-pengiriman', 'spk-billing-index', 'laporan-harian-spk-list']],
+        'guard' => ['any_permission', ['spk-list', 'purchasing-request-list', 'produksi-list', 'spk-informasi-pengiriman-edit', 'spk-billing-list', 'laporan-harian-spk-list']],
         'submenu' => [
             [
                 'label' => 'Data SPK',
@@ -352,7 +352,7 @@ return [
                 'route' => 'delivery.index',
                 'check' => ['delivery.*'],
                 'icon' => 'truck',
-                'permission' => 'spk-update-informasi-pengiriman',
+                'permission' => 'spk-informasi-pengiriman-edit',
                 'navigate' => true,
                 'counter' => 'utils.counter.spk-delivery-counter',
             ],
@@ -362,7 +362,7 @@ return [
                 'route' => 'billing.index',
                 'check' => ['billing.*'],
                 'icon' => 'cash-register',
-                'permission' => ['spk-update-no-tagihan-idcppn', 'spk-update-no-tagihan-idcnonppn', 'spk-update-no-tagihan-idyppn', 'billing-index'],
+                'permission' => ['spk-no-tagihan-idcppn-edit', 'spk-no-tagihan-idcnonppn-edit', 'spk-no-tagihan-idyppn-edit', 'spk-billing-list'],
                 'navigate' => true,
             ],
             [
@@ -382,7 +382,7 @@ return [
         'type' => 'group',
         'label' => 'Manajemen Teknisi',
         'icon' => 'person-chalkboard',
-        'guard' => ['any_permission', ['laporan-harian-list', 'team-list', 'technician-list', 'assign-laporan-harian']],
+        'guard' => ['any_permission', ['laporan-harian-list', 'team-list', 'technician-list', 'laporan-harian-assign']],
         'submenu' => [
             [
                 'label' => 'Assign Laporan Harian (VT)',
@@ -390,7 +390,7 @@ return [
                 'route' => 'report.general.assign',
                 'check' => ['report.general.assign'],
                 'icon' => 'chalkboard-user',
-                'permission' => 'assign-laporan-harian',
+                'permission' => 'laporan-harian-assign',
                 'navigate' => true,
             ],
             [
@@ -402,7 +402,7 @@ return [
                 'permission' => 'laporan-harian-list',
                 'navigate' => true,
                 'counter' => 'utils.counter.daily-report-counter',
-                'counter_permission' => 'laporan-harian-validate',
+                'counter_permission' => 'laporan-harian-approve',
             ],
             [
                 'label' => 'Tim Teknisi',
@@ -549,6 +549,91 @@ return [
                 'check' => ['placement.*'],
                 'icon' => 'landmark',
                 'permission' => 'placement-list',
+                'navigate' => true,
+            ],
+        ],
+    ],
+
+    // ─── Laporan Export ───────────────────────────────────────────────────────
+    [
+        'type' => 'group',
+        'label' => 'Ekspor Laporan',
+        'icon' => 'clipboard-list',
+        'guard' => ['any_permission', [
+            'attendance-approve', 'leave-list-all', 'collect-approve',
+            'invoice-create', 'spk-create', 'spk-approve', 'driver-approve', 'sales-approve',
+        ]],
+        'submenu' => [
+            [
+                'label' => 'Laporan Absensi',
+                'mobile_label' => 'Laporan Absensi',
+                'route' => 'report.export.absensi',
+                'check' => ['report.export.absensi'],
+                'icon' => 'badge-check',
+                'permission' => 'attendance-approve',
+                'navigate' => true,
+            ],
+            [
+                'label' => 'Laporan Cuti',
+                'mobile_label' => 'Laporan Cuti',
+                'route' => 'report.export.cuti',
+                'check' => ['report.export.cuti'],
+                'icon' => 'envelope',
+                'permission' => 'leave-list-all',
+                'navigate' => true,
+            ],
+            [
+                'label' => 'Laporan Piutang',
+                'mobile_label' => 'Laporan Piutang',
+                'route' => 'report.export.piutang',
+                'check' => ['report.export.piutang'],
+                'icon' => 'wallet',
+                'permission' => 'collect-approve',
+                'navigate' => true,
+            ],
+            [
+                'label' => 'Laporan Kolektor',
+                'mobile_label' => 'Laporan Kolektor',
+                'route' => 'report.export.kolektor',
+                'check' => ['report.export.kolektor'],
+                'icon' => 'cash-register',
+                'permission' => 'collect-approve',
+                'navigate' => true,
+            ],
+            [
+                'label' => 'Laporan Invoice',
+                'mobile_label' => 'Laporan Invoice',
+                'route' => 'report.export.invoice',
+                'check' => ['report.export.invoice'],
+                'icon' => 'file-invoice',
+                'permission' => 'invoice-export-all',
+                'navigate' => true,
+            ],
+            [
+                'label' => 'Laporan SPK',
+                'mobile_label' => 'Laporan SPK',
+                'route' => 'report.export.spk',
+                'check' => ['report.export.spk'],
+                'icon' => 'clipboard-check',
+                'permission' => ['spk-create', 'spk-approve'],
+                'navigate' => true,
+            ],
+            [
+                'label' => 'Laporan Driver',
+                'mobile_label' => 'Laporan Driver',
+                'route' => 'report.export.driver',
+                'check' => ['report.export.driver'],
+                'icon' => 'truck',
+                'permission' => 'driver-approve',
+                'navigate' => true,
+            ],
+            [
+                'label' => 'Laporan Sales',
+                'mobile_label' => 'Laporan Sales',
+                'route' => 'report.export.sales',
+                'check' => ['report.export.sales'],
+                'icon' => 'receipt',
+                'permission' => 'sales-approve',
                 'navigate' => true,
             ],
         ],

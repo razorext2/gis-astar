@@ -1,3 +1,23 @@
+{{-- Goal: PDF template for Leave Request printout, Livewire: -, Alpine: - --}}
+@php
+    $getSignatureBase64 = function($user) {
+        if (!$user || !$user->signature) {
+            return null;
+        }
+        try {
+            $disk = config('sign-pad.disk_name', 'local');
+            $path = $user->signature->getSignatureImagePath();
+            if (\Illuminate\Support\Facades\Storage::disk($disk)->exists($path)) {
+                $content = \Illuminate\Support\Facades\Storage::disk($disk)->get($path);
+                $mime = \Illuminate\Support\Facades\Storage::disk($disk)->mimeType($path) ?? 'image/png';
+                return 'data:' . $mime . ';base64,' . base64_encode($content);
+            }
+        } catch (\Exception $e) {
+            // Fallback
+        }
+        return null;
+    };
+@endphp
 <!doctype html>
 <html lang="id">
 
@@ -109,7 +129,7 @@
 </head>
 
 <body>
-    @if (in_array($data->status, ['rejected', 'auto_reject', 'canceled']))
+    @if (in_array($data->status, ['rejected', 'auto_reject', 'cancelled']))
         <div class="watermark">DITOLAK</div>
     @endif
     <h3 class="mb-8 text-center font-bold" style="padding-top:0; margin-top: 0;">PERMOHONAN CUTI TAHUNAN</h3>
@@ -268,32 +288,32 @@
         </tr>
         <tr>
             <td style="height: 85px">
-                @if ($pemohon && $pemohon->signature)
-                    <img src="{{ public_path('storage/' . $pemohon->signature->getSignatureImagePath()) }}"
+                @if ($pemohonSignature = $getSignatureBase64($pemohon))
+                    <img src="{{ $pemohonSignature }}"
                         style="max-height: 80px; max-width: 100%;">
                 @endif
             </td>
             <td style="height: 85px">
-                @if ($backup && $backup->signature)
-                    <img src="{{ public_path('storage/' . $backup->signature->getSignatureImagePath()) }}"
+                @if ($backupSignature = $getSignatureBase64($backup))
+                    <img src="{{ $backupSignature }}"
                         style="max-height: 80px; max-width: 100%;">
                 @endif
             </td>
             <td style="height: 85px">
-                @if ($hrd && $hrd->signature)
-                    <img src="{{ public_path('storage/' . $hrd->signature->getSignatureImagePath()) }}"
+                @if ($hrdSignature = $getSignatureBase64($hrd))
+                    <img src="{{ $hrdSignature }}"
                         style="max-height: 80px; max-width: 100%;">
                 @endif
             </td>
             <td style="height: 85px">
-                @if ($spv && $spv->signature)
-                    <img src="{{ public_path('storage/' . $spv->signature->getSignatureImagePath()) }}"
+                @if ($spvSignature = $getSignatureBase64($spv))
+                    <img src="{{ $spvSignature }}"
                         style="max-height: 80px; max-width: 100%;">
                 @endif
             </td>
             <td style="height: 85px">
-                @if ($mgmt && $mgmt->signature)
-                    <img src="{{ public_path('storage/' . $mgmt->signature->getSignatureImagePath()) }}"
+                @if ($mgmtSignature = $getSignatureBase64($mgmt))
+                    <img src="{{ $mgmtSignature }}"
                         style="max-height: 80px; max-width: 100%;">
                 @endif
             </td>
@@ -360,8 +380,8 @@
             </td>
             <td width="50%" style="vertical-align: bottom; padding: 0; text-align: right;">
                 T. Tangan :
-                @if ($mgmt && $mgmt->signature)
-                    <img src="{{ public_path('storage/' . $mgmt->signature->getSignatureImagePath()) }}"
+                @if ($mgmtSignature = $getSignatureBase64($mgmt))
+                    <img src="{{ $mgmtSignature }}"
                         style="max-height: 80px; vertical-align: bottom;">
                 @else
                     <span class="border-bottom" style="min-width: 150px">&nbsp;</span>

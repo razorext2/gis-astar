@@ -6,6 +6,7 @@ namespace App\Services\LeaveRequest;
 
 use App\Models\LeaveRequest\LeaveBalance;
 use App\Models\LeaveRequest\LeaveRequest;
+use App\Models\LeaveRequest\LeaveRequestHistory;
 use App\Models\LeaveRequest\LeaveType;
 use App\Models\User;
 use Exception;
@@ -35,6 +36,13 @@ class LeaveRequestService
             $totalDays = $data['total_days'] ?? $this->calculateTotalDays($data['start_date'], $data['end_date'], $useBusinessDays);
 
             $isBorrowed = $data['is_borrowed'] ?? false;
+
+            // Validasi: tanggal mulai cuti minimal sesuai config LEAVE_MIN_ADVANCE_DAYS dari hari pengajuan
+            $minDays = config('app.leave_min_advance_days', 7);
+            $minStartDate = \Carbon\Carbon::today()->addDays($minDays);
+            if (\Carbon\Carbon::parse($data['start_date'])->lessThan($minStartDate)) {
+                throw new Exception("Tanggal mulai cuti minimal {$minDays} hari dari tanggal pengajuan.");
+            }
 
             // 1. Validasi saldo jika tipe cuti memotong saldo tahunan (Lewati jika pinjam)
             $this->validateRequest($user, $data['leave_type_id'], $totalDays, $isBorrowed);
@@ -76,52 +84,114 @@ class LeaveRequestService
             if ($action === 'approve') {
                 $request->status = $this->calculateNextStatus($request);
             } elseif ($action === 'reject') {
+                if ($oldStatus === 'pending_cancel') {
+                    $request->status = 'approved';
+                } else {
+                    $request->status = 'rejected';
+                }
+            } elseif ($action === 'auto_reject') {
                 $request->status = 'rejected';
             } elseif ($action === 'cancel') {
-                $request->status = 'canceled';
+                $request->status = 'cancelled';
             }
 
             // Attach metadata for the observer
-            $request->acted_by = $actor->id;
+            // acted_by null untuk auto_reject agar observer mencatat action 'auto_reject'
+            $request->acted_by = $action === 'auto_reject' ? null : $actor->id;
 
             // definisikan current_note
             $request->current_note = $note;
 
-            $request->save();
+            $request->saveQuietly();
+
+            // History logging (manually, karena saveQuietly bypass observer)
+            if ($request->isDirty('status') || $request->wasChanged('status')) {
+                \App\Models\LeaveRequest\LeaveRequestHistory::create([
+                    'leave_request_id' => $request->id,
+                    'acted_by' => $request->acted_by ?? auth()->id() ?? $request->user_id,
+                    'action' => $this->resolveActionName($request->status, $request->acted_by ?? auth()->id(), $oldStatus),
+                    'status_from' => $oldStatus,
+                    'status_to' => $request->status,
+                    'note' => $request->current_note ?? 'Status diperbarui.',
+                ]);
+            }
 
             // Deduction Logic on FINAL APPROVAL (with pessimistic lock)
-            if ($request->status === 'approved' && $request->leaveType->is_anual_deduction) {
+            // Guard: Jangan potong kuota jika ini adalah reject pembatalan (pending_cancel → approved)
+            if ($request->status === 'approved' && $oldStatus !== 'pending_cancel' && $request->leaveType?->is_anual_deduction) {
                 $balance = LeaveBalance::where('user_id', $request->user_id)
-                    ->where('year', date('Y'))
+                    ->where('year', $request->start_date->year)
                     ->lockForUpdate()
                     ->first();
                 $balance?->increment('used_quota', $request->total_days);
+
+                // Audit log: catat pemotongan kuota
+                if ($balance) {
+                    LeaveRequestHistory::create([
+                        'leave_request_id' => $request->id,
+                        'acted_by' => $actor->id,
+                        'action' => 'quota_deducted',
+                        'status_from' => $oldStatus,
+                        'status_to' => $request->status,
+                        'note' => "Kuota dipotong: {$request->total_days} hari (sisa: {$balance->remaining_quota})",
+                    ]);
+                }
             }
 
-            // Rollback Logic: kembalikan kuota jika cuti yang sudah approved ditolak/dibatalkan
-            if (in_array($request->status, ['rejected', 'canceled']) && $oldStatus === 'approved'
-                && $request->leaveType->is_anual_deduction) {
-                $balance = LeaveBalance::where('user_id', $request->user_id)
-                    ->where('year', date('Y'))
-                    ->lockForUpdate()
-                    ->first();
-                $balance?->decrement('used_quota', $request->total_days);
+            // Note: Tidak ada rollback kuota karena tidak ada jalur approved → rejected/cancelled (selain pembatalan khusus di bawah)
+            
+            // Logic for Cancel After Approval (HRD approves cancellation)
+            if ($oldStatus === 'pending_cancel' && $request->status === 'cancelled') {
+                if ($request->leaveType?->is_anual_deduction) {
+                    $balance = LeaveBalance::where('user_id', $request->user_id)
+                        ->where('year', $request->start_date->year)
+                        ->lockForUpdate()
+                        ->first();
+                    $balance?->decrement('used_quota', $request->total_days);
+
+                    // Audit log: catat pengembalian kuota
+                    if ($balance) {
+                        LeaveRequestHistory::create([
+                            'leave_request_id' => $request->id,
+                            'acted_by' => $actor->id,
+                            'action' => 'quota_refunded',
+                            'status_from' => $oldStatus,
+                            'status_to' => $request->status,
+                            'note' => "Kuota dikembalikan (pembatalan disetujui): {$request->total_days} hari (sisa: {$balance->remaining_quota})",
+                        ]);
+                    }
+                }
+                
+                // Notify applicant that cancel is approved
+                $request->user->notify(
+                    new \App\Notifications\LeaveRequestCancelStatusNotification($request, 'approved')
+                );
+            }
+            
+            // Logic for Cancel After Approval Rejected (HRD rejects cancellation)
+            if ($oldStatus === 'pending_cancel' && $request->status === 'approved') {
+                 // Notify applicant that cancel is rejected
+                $request->user->notify(
+                    new \App\Notifications\LeaveRequestCancelStatusNotification($request, 'rejected')
+                );
             }
 
             // Notify next actor if approved but not final
-            if ($action === 'approve' && $request->status !== 'approved') {
+            if ($action === 'approve' && !in_array($request->status, ['approved', 'cancelled'])) {
                 $this->notifyNextApprover($request);
             }
 
             // Notify applicant when fully approved (final stage)
-            if ($action === 'approve' && $request->status === 'approved') {
+            // Guard: Jangan kirim notifikasi approved jika ini reject pembatalan
+            if ($action === 'approve' && $request->status === 'approved' && $oldStatus !== 'pending_cancel') {
                 $request->user->notify(
                     new \App\Notifications\LeaveRequestApprovedNotification($request)
                 );
             }
 
-            // Notify applicant when rejected
-            if ($action === 'reject') {
+            // Notify applicant when rejected (manual reject only, bukan auto_reject)
+            // Guard: Jangan kirim notifikasi rejection biasa jika ini reject pembatalan
+            if ($action === 'reject' && $oldStatus !== 'pending_cancel') {
                 $request->user->notify(
                     new \App\Notifications\LeaveRequestRejectedNotification($request, $actor->name, $note)
                 );
@@ -131,6 +201,44 @@ class LeaveRequestService
             if ($action === 'cancel' && $request->backupPerson) {
                 $request->backupPerson->notify(
                     new \App\Notifications\LeaveRequestCancelledNotification($request)
+                );
+            }
+
+            return $request;
+        });
+    }
+
+    /**
+     * Request a cancellation after final approval.
+     */
+    public function requestCancel(LeaveRequest $request, User $user, string $reason): LeaveRequest
+    {
+        return DB::transaction(function () use ($request, $user, $reason) {
+            $oldStatus = $request->status;
+
+            if ($oldStatus !== 'approved') {
+                throw new Exception('Hanya pengajuan yang sudah disetujui yang dapat diajukan pembatalan.');
+            }
+
+            $request->status = 'pending_cancel';
+            $request->current_note = $reason;
+            $request->saveQuietly();
+
+            LeaveRequestHistory::create([
+                'leave_request_id' => $request->id,
+                'acted_by' => $user->id,
+                'action' => 'request_cancel',
+                'status_from' => $oldStatus,
+                'status_to' => $request->status,
+                'note' => $reason,
+            ]);
+
+            // Notify HRD
+            $approvers = $this->getApproversForStatus($request, 'pending_cancel');
+            if ($approvers->isNotEmpty()) {
+                \Illuminate\Support\Facades\Notification::send(
+                    $approvers,
+                    new \App\Notifications\LeaveRequestCancellationApprovalNotification($request)
                 );
             }
 
@@ -150,11 +258,12 @@ class LeaveRequestService
             'pending_spv' => 'pending_hrd',
             'pending_hrd' => 'pending_management',
             'pending_management' => 'approved',
+            'pending_cancel' => 'cancelled',
             default => 'approved'
         };
 
-        if ($next === 'approved') {
-            return 'approved';
+        if (in_array($next, ['approved', 'cancelled'])) {
+            return $next;
         }
 
         // Check if next status has any actors
@@ -190,11 +299,10 @@ class LeaveRequestService
                 return $request->backupPerson ? collect([$request->backupPerson]) : collect();
 
             case 'pending_spv':
-                $spvUser = $jabatan->supervisor;
-
-                return $spvUser ? collect([$spvUser]) : collect();
+                return $jabatan->supervisors;
 
             case 'pending_hrd':
+            case 'pending_cancel':
                 return $placement ? $placement->hrds : collect();
 
             case 'pending_management':
@@ -330,8 +438,14 @@ class LeaveRequestService
     {
         $current = \Carbon\Carbon::parse($endDate)->addDay();
 
+        // Pre-fetch holidays 30 hari ke depan agar tidak query per iterasi
+        $holidays = \App\Models\System\Holiday::whereBetween('date', [
+            $current->toDateString(),
+            $current->copy()->addDays(30)->toDateString(),
+        ])->pluck('date')->map(fn ($d) => $d->format('Y-m-d'))->toArray();
+
         while (true) {
-            $isHoliday = \App\Models\System\Holiday::where('date', $current->toDateString())->exists();
+            $isHoliday = in_array($current->toDateString(), $holidays);
 
             if (! $current->isSunday() && ! $isHoliday) {
                 return $current->toDateString();
@@ -376,5 +490,29 @@ class LeaveRequestService
 
             $current->addDay();
         }
+    }
+
+    /**
+     * Resolve action name for history logging.
+     */
+    protected function resolveActionName(string $status, mixed $actedBy = null, ?string $oldStatus = null): string
+    {
+        // Jika dari pending_cancel → approved, ini berarti HRD menolak pembatalan
+        if ($oldStatus === 'pending_cancel' && $status === 'approved') {
+            return 'reject_cancel';
+        }
+
+        // Jika dari pending_cancel → cancelled, ini berarti HRD menyetujui pembatalan
+        if ($oldStatus === 'pending_cancel' && $status === 'cancelled') {
+            return 'approve_cancel';
+        }
+
+        return match ($status) {
+            'approved' => 'final_approve',
+            'rejected' => $actedBy === null ? 'auto_reject' : 'reject',
+            'cancelled' => 'cancel',
+            'pending_cancel' => 'request_cancel',
+            default => 'approve',
+        };
     }
 }

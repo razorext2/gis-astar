@@ -11,12 +11,12 @@ use App\Models\User;
 use Livewire\Livewire;
 
 beforeEach(function () {
-    $this->user = User::factory()->create(['kode_pegawai' => '12345678', 'is_active' => true]);
     $this->pegawai = Pegawai::create([
         'kode_pegawai' => '12345678',
         'nik_pegawai' => '123456789012',
         'full_name' => 'Test Employee',
     ]);
+    $this->user = User::factory()->create(['kode_pegawai' => '12345678', 'is_active' => true]);
 
     $this->leaveType = LeaveType::firstOrCreate(
         ['code' => 'CT-TAHUNAN'],

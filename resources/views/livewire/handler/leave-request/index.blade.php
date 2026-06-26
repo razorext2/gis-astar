@@ -1,3 +1,4 @@
+{{-- Goal: Display list of leave requests and filter options, Livewire: handler.leave-request.index, Alpine: none --}}
 <div class="mt-4 flex flex-col gap-6">
 
     {{-- Header Section --}}
@@ -21,7 +22,7 @@
     <div
         class="flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
         {{-- Tabs Section --}}
-        @if (auth()->user()->can('leave-view-all'))
+        @if (auth()->user()->can('leave-list-all'))
             <div class="flex items-center gap-2 overflow-x-auto border-b border-zinc-100 dark:border-zinc-800">
                 <button wire:click="setTab('own')"
                     class="{{ $activeTab === 'own' ? 'text-primary' : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300' }} group relative px-4 py-3 text-sm font-bold transition-all duration-200">
@@ -46,7 +47,7 @@
 
         {{-- Search and Filter Bar --}}
         <div class="flex flex-col gap-4 md:flex-row md:items-center">
-            @if (auth()->user()->can('leave-view-all') && $activeTab == 'all')
+            @if (auth()->user()->can('leave-list-all') && $activeTab == 'all')
                 <div class="relative flex-1">
                     <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                         <x-icons.search-alt class="h-5 w-5 text-zinc-400" />
@@ -74,8 +75,10 @@
                     </option>
                     <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="rejected">Ditolak
                     </option>
-                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="canceled">Dibatalkan
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="cancelled">Dibatalkan
                     </option>
+                    <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="auto_reject">Ditolak
+                        Otomatis</option>
                 </select>
 
                 <select wire:model.live="filterLeaveType"
@@ -167,6 +170,10 @@
                                     'class' =>
                                         'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
                                 ],
+                                'pending_cancel' => [
+                                    'label' => 'Menunggu Pembatalan HRD',
+                                    'class' => 'bg-gray-100 text-gray-700',
+                                ],
                                 'approved' => [
                                     'label' => 'Disetujui',
                                     'class' => 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
@@ -179,9 +186,9 @@
                                     'label' => 'Dibatalkan',
                                     'class' => 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
                                 ],
-                                'canceled' => [
-                                    'label' => 'Dibatalkan',
-                                    'class' => 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
+                                'auto_reject' => [
+                                    'label' => 'Ditolak Otomatis',
+                                    'class' => 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300',
                                 ],
                             ][$request->status] ?? [
                                 'label' => $request->status,
@@ -201,7 +208,7 @@
                                 class="!px-3 !py-1 text-sm font-semibold">
                                 Detail
                             </x-button.link>
-                            @if (in_array($request->status, ['pending_backup', 'pending_spv']))
+                            @if ($request->status === 'pending_backup')
                                 <x-button.link wire:navigate
                                     href="{{ route('leave-request.my-requests.edit', $request->id) }}"
                                     class="!px-3 !py-1 text-sm font-semibold">

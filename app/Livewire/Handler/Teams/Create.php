@@ -78,6 +78,7 @@ class Create extends Component
     {
         $users = User::where('kode_pegawai', 'like', '%'.$this->search_user.'%')
             ->orWhere('name', 'like', '%'.$this->search_user.'%')
+            ->where('is_active', true)
             ->limit(5)
             ->get();
 

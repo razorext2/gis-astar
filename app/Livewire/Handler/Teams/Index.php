@@ -107,20 +107,22 @@ class Index extends Component
 
     public function render()
     {
-        if (Auth::user()->hasPermissionTo('all-team')) {
-            $teams = Team::all();
+        if (Auth::user()->hasPermissionTo('team-list-all')) {
+            $teams = Team::with('leader')->get();
         } else {
-            $teams = Team::where('team_leader', Auth::user()->kode_pegawai)->get();
+            $teams = Team::with('leader')->where('team_leader', Auth::user()->kode_pegawai)->get();
         }
 
-        $technicians = User::whereHas('roles', function ($role) {
-            $role->where('name', 'Teknisi');
-        })
+        $technicians = User::select(['id', 'name', 'kode_pegawai', 'is_active'])
+            ->whereHas('roles', function ($role) {
+                $role->where('name', 'Teknisi');
+            })
             ->whereDoesntHave('teamMember')
             ->where(function ($query) {
                 $query->where('kode_pegawai', 'like', '%'.$this->kode_pegawai.'%')
                     ->orWhere('name', 'like', '%'.$this->kode_pegawai.'%');
             })
+            ->where('is_active', true)
             ->limit(5)
             ->get();
 

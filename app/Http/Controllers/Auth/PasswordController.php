@@ -1,8 +1,11 @@
 <?php
 
+/** Goal: Handle user password updates, Caller: routes/auth.php, Deps: Hash, Password, PegawaiChangesHistory */
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\PegawaiChangesHistory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -20,7 +23,21 @@ class PasswordController extends Controller
             'password' => ['required', Password::defaults(), 'confirmed'],
         ]);
 
-        $request->user()->update([
+        $user = $request->user();
+        $pegawai = $user->pegawai;
+
+        if ($pegawai) {
+            PegawaiChangesHistory::create([
+                'pegawai_id' => $pegawai->id,
+                'field_name' => 'password',
+                'old_value' => null,
+                'new_value' => '[updated]',
+                'alasan' => 'Perubahan password oleh user',
+                'changed_by' => $user->id,
+            ]);
+        }
+
+        $user->update([
             'password' => Hash::make($validated['password']),
         ]);
 

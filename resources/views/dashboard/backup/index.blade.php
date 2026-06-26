@@ -19,6 +19,6 @@
             </div>
         </div>
 
-        <livewire:table-refresher table-name="BackupTable" />
+        <livewire:powergrid-tables.backup-table />
     </div>
 @endsection

@@ -1,3 +1,4 @@
+{{-- Goal: Form tambah riwayat produksi dengan dokumentasi, Livewire: App\Livewire\Handler\ProductionHistories\Create, Alpine: N/A --}}
 <form class="grid grid-cols-2 gap-2 lg:gap-4" wire:submit.prevent="store" method="POST" type="multipart/form-data">
 
     {{-- judul --}}
@@ -91,7 +92,7 @@
                                         $src =
                                             $isStoredDoc && !empty($doc['path_file'])
                                                 ? asset('storage/' . $doc['path_file'])
-                                                : (method_exists($doc, 'temporaryUrl')
+                                                : (is_object($doc) && method_exists($doc, 'temporaryUrl')
                                                     ? $doc->temporaryUrl()
                                                     : '');
                                     @endphp
@@ -104,7 +105,7 @@
                                     @php
                                         $name = $isStoredDoc
                                             ? $doc['nama_file'] ?? ''
-                                            : (method_exists($doc, 'getClientOriginalName')
+                                            : (is_object($doc) && method_exists($doc, 'getClientOriginalName')
                                                 ? $doc->getClientOriginalName()
                                                 : '');
                                         $label =

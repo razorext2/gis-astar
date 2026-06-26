@@ -1,7 +1,10 @@
 <?php
-
+ 
+/** Goal: Notify users with permission collect-approve when collector updates report, Caller: NotifyCollectorHasUpdatedReportJob, Deps: WebPush, Database */
+ 
 namespace App\Notifications;
 
+use App\Support\IdObfuscator;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -50,7 +53,7 @@ class CollectorUpdatedReport extends Notification implements ShouldQueue
         return [
             "message" => "Laporan dengan kode: $this->no_sr telah diperbarui pada tanggal $date. Silahkan diperiksa!",
             "button" => [
-                'url' => route('collect.show', $this->collect_id),
+                'url' => route('collect.show', IdObfuscator::encode($this->collect_id)),
                 'label' => 'Periksa Laporan',
             ],
             "created_at" => Carbon::now()->locale("id")->isoFormat("DD MMM YYYY HH:mm:ss"),
@@ -64,10 +67,10 @@ class CollectorUpdatedReport extends Notification implements ShouldQueue
             ->body("Laporan dengan kode: $this->no_sr telah diperbarui pada tanggal $this->date. Silahkan diperiksa!")
             ->icon(asset("/assets/img/logo.ico"))
             ->badge(asset("/assets/img/logo.ico"))
-            ->action("Periksa Laporan", route("collect.show", $this->collect_id))
+            ->action("Periksa Laporan", route("collect.show", IdObfuscator::encode($this->collect_id)))
             ->tag("Indodacin")
             ->data([
-                "url" => route("collect.show", $this->collect_id),
+                "url" => route("collect.show", IdObfuscator::encode($this->collect_id)),
             ]);
     }
 }

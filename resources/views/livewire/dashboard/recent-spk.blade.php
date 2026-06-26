@@ -1,3 +1,4 @@
+{{-- Goal: Display a table of the 5 most recent SPKs, Livewire: RecentSpk, Alpine: None --}}
 <div>
     @can('spk-list')
         <div
@@ -51,7 +52,12 @@
                                                 alt="{{ $spk->addedBy->name ?? 'User' }}" class="h-full w-full object-cover"
                                                 onerror="this.src = '{{ asset('assets/img/noImage.webp') }}'">
                                         </div>
-                                        <span>{{ $spk->addedBy->name ?? 'System' }}</span>
+                                        <div class="flex items-center gap-x-2">
+                                            <span>{{ $spk->addedBy->name ?? 'System' }}</span>
+                                            @if ($spk->addedBy)
+                                                <x-dashboard.badge-inactive :is_active="$spk->addedBy->is_active ?? true" />
+                                            @endif
+                                        </div>
                                     </div>
                                 </td>
                             </tr>

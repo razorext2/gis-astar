@@ -64,7 +64,7 @@
             <div class="flex shrink-0 gap-2">
                 @if (
                     $data->status_approval === 0 &&
-                        auth()->user()->can('spk-validate') &&
+                        auth()->user()->can('spk-approve') &&
                         ($data->is_booked == false && $data->is_cancelled == false))
                     <x-button.primary id="btn-validate-spk" wire:click="validateSpk" wire:loading.attr="disabled"
                         wire:target="validateSpk">
@@ -94,7 +94,7 @@
                     </x-button.secondary>
                 @endif
 
-                @if ($data->is_cancelled && auth()->user()->can('spk-validate') && $data->cancel_request_validated_by === null)
+                @if ($data->is_cancelled && auth()->user()->can('spk-approve') && $data->cancel_request_validated_by === null)
                     <x-button.danger
                         wire:confirm.prompt="Apakah anda yakin ingin membatalkan SPK ini? SPK yang dibatalkan tidak dapat diproses lagi.\n\nKetik BATAL untuk mengkonfirmasi.|BATAL"
                         id="btn-cancel-spk" wire:click="cancelSpk" wire:loading.attr="disabled" wire:target="cancelSpk">
@@ -114,7 +114,7 @@
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 
             {{-- download button --}}
-            @if ($data->status_approval === 1 || auth()->user()->can('spk-validate'))
+            @if ($data->status_approval === 1 || auth()->user()->can('spk-approve'))
                 <div class="flex justify-between gap-2 md:col-span-2 lg:justify-end">
                     @can('spk-create')
                         <x-button.primary id="spk-pdf-export" wire:click="export" wire:loading.attr="disabled"
@@ -159,7 +159,7 @@
                         </span>
                     </div>
 
-                    @if (auth()->user()->can('spk-create') || auth()->user()->can('spk-validate'))
+                    @if (auth()->user()->can('spk-create') || auth()->user()->can('spk-approve'))
                         <div class="flex flex-col">
                             <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Tipe Tagihan</span>
                             <span
@@ -314,15 +314,22 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div class="col-span-2 flex flex-col">
                         <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Dibuat Oleh</span>
-                        <span
-                            class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->addedBy->name }}</span>
+                        <div class="flex items-center gap-x-2">
+                            <span class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->addedBy->name }}</span>
+                            <x-dashboard.badge-inactive :is_active="$data->addedBy?->is_active ?? true" />
+                        </div>
                     </div>
 
                     <div class="flex flex-col">
                         <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Diproduksi Oleh</span>
-                        <span class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">
-                            {{ $data->assignTo?->name ?? 'Belum di assign.' }}
-                        </span>
+                        <div class="flex items-center gap-x-2">
+                            <span class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">
+                                {{ $data->assignTo?->name ?? 'Belum di assign.' }}
+                            </span>
+                            @if ($data->assignTo)
+                                <x-dashboard.badge-inactive :is_active="$data->assignTo?->is_active ?? true" />
+                            @endif
+                        </div>
                         @if ($data->assignTo)
                             <span class="text-xs text-zinc-500 dark:text-zinc-400">
                                 {{ $data->assignTo?->pegawai?->jabatanRelasi?->nama_jabatan ?? '' }}
@@ -334,9 +341,14 @@
                     @if ($data->reassign_to)
                         <div class="flex flex-col">
                             <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Reassign Ke</span>
-                            <span class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">
-                                {{ $data->reassignTo?->name ?? '-' }}
-                            </span>
+                            <div class="flex items-center gap-x-2">
+                                <span class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">
+                                    {{ $data->reassignTo?->name ?? '-' }}
+                                </span>
+                                @if ($data->reassignTo)
+                                    <x-dashboard.badge-inactive :is_active="$data->reassignTo?->is_active ?? true" />
+                                @endif
+                            </div>
                             @if ($data->reassignTo?->pegawai?->jabatanRelasi)
                                 <span class="text-xs text-zinc-500 dark:text-zinc-400">
                                     {{ $data->reassignTo->pegawai->jabatanRelasi->nama_jabatan ?? '' }}
@@ -349,15 +361,27 @@
                     @if ($data->is_booked)
                         <div class="flex flex-col">
                             <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Dibooking Oleh</span>
-                            <span
-                                class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->bookedBy->name ?? '-' }}</span>
+                            <div class="flex items-center gap-x-2">
+                                <span class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">
+                                    {{ $data->bookedBy->name ?? '-' }}
+                                </span>
+                                @if ($data->bookedBy)
+                                    <x-dashboard.badge-inactive :is_active="$data->bookedBy?->is_active ?? true" />
+                                @endif
+                            </div>
                         </div>
                     @endif
 
                     <div class="flex flex-col">
                         <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Divalidasi Oleh</span>
-                        <span
-                            class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->approvedBy->name ?? '-' }}</span>
+                        <div class="flex items-center gap-x-2">
+                            <span class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">
+                                {{ $data->approvedBy->name ?? '-' }}
+                            </span>
+                            @if ($data->approvedBy)
+                                <x-dashboard.badge-inactive :is_active="$data->approvedBy?->is_active ?? true" />
+                            @endif
+                        </div>
                     </div>
 
                     <div class="flex flex-col">
@@ -372,14 +396,25 @@
                             class="col-span-2 mt-2 flex flex-col gap-2 rounded-lg border border-red-100 bg-red-50 p-3 dark:border-red-900/30 dark:bg-red-900/20">
                             <div class="flex flex-col">
                                 <span class="text-xs font-medium text-red-600 dark:text-red-400">Dibatalkan Oleh</span>
-                                <span
-                                    class="text-sm font-semibold capitalize text-red-700 dark:text-red-300">{{ $data->cancelRequestBy->name ?? '-' }}</span>
+                                <div class="flex items-center gap-x-2">
+                                    <span class="text-sm font-semibold capitalize text-red-700 dark:text-red-300">
+                                        {{ $data->cancelRequestBy->name ?? '-' }}
+                                    </span>
+                                    @if ($data->cancelRequestBy)
+                                        <x-dashboard.badge-inactive :is_active="$data->cancelRequestBy?->is_active ?? true" />
+                                    @endif
+                                </div>
                             </div>
                             <div class="mt-1 flex flex-col">
-                                <span class="text-xs font-medium text-red-600 dark:text-red-400">Pembatalan Divalidasi
-                                    Oleh</span>
-                                <span
-                                    class="text-sm font-semibold capitalize text-red-700 dark:text-red-300">{{ $data->cancelRequestValidatedBy->name ?? '-' }}</span>
+                                <span class="text-xs font-medium text-red-600 dark:text-red-400">Pembatalan Divalidasi Oleh</span>
+                                <div class="flex items-center gap-x-2">
+                                    <span class="text-sm font-semibold capitalize text-red-700 dark:text-red-300">
+                                        {{ $data->cancelRequestValidatedBy->name ?? '-' }}
+                                    </span>
+                                    @if ($data->cancelRequestValidatedBy)
+                                        <x-dashboard.badge-inactive :is_active="$data->cancelRequestValidatedBy?->is_active ?? true" />
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     @endif
@@ -418,7 +453,7 @@
                         </div>
                     </div>
 
-                    @if (auth()->user()->can('spk-validate') || auth()->user()->can('spk-create') || auth()->user()->can('spk-lampiran'))
+                    @if (auth()->user()->can('spk-approve') || auth()->user()->can('spk-create') || auth()->user()->can('spk-lampiran-view'))
                         <div class="flex flex-col gap-2">
                             <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Lampiran Lainnya</span>
                             <div
@@ -453,7 +488,7 @@
     @livewire('utils.progres-spk', ['id' => $data->id])
     {{-- end progress spk --}}
 
-    @can('spk-history')
+    @can('spk-history-view')
         @livewire('handler.spk.spk-histories', ['id' => $data->id])
     @endcan
 

@@ -109,6 +109,7 @@ class HistoriesList extends Component
     public function render()
     {
         $data = ProductionHistory::where('id_produksi', $this->id)
+            ->with(['addedBy'])
             ->when($this->status_validasi === null, fn ($query) => $query->whereIn('status_validasi', [0, 1]))
             ->when($this->status_validasi !== null, function ($query) {
                 if ($this->status_validasi === 3) {

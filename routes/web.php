@@ -37,28 +37,21 @@ Route::middleware(['auth'])->group(function () {
 
     // export
     Route::prefix('export')->as('')->group(function () {
-        // laporan kolektor
-        Route::get('collector/', [\App\Http\Controllers\Report\CollectorReportController::class, 'export'])->name('export.collector');
-
-        Route::get('collector/{filename}', function (string $filename) {
-            return Storage::download("export/$filename");
-        })->name('export.collector.download');
-        // end laporan kolektor
-
-        // laporan sales
-        Route::get('sales/{filename}', function (string $filename) {
-            return Storage::download("export/$filename");
-        })->name('export.sales.download');
-
-        // laporan invoice
-        Route::get('invoice/{filename}', function (string $filename) {
-            return Storage::download("export/invoice/$filename");
-        })->name('export.invoice.download');
-
         // laporan poin teknisi
         Route::get('point/{filename}', function (string $filename) {
-            return Storage::download("export/point/$filename");
-        })->name('export.point.download');
+            $path = "export/point/{$filename}";
+            abort_unless(Storage::exists($path), 404);
+
+            return Storage::download($path);
+        })->where('filename', '[a-zA-Z0-9\-_.]+')->name('export.point.download');
+
+        // laporan report (generic)
+        Route::get('report/{filename}', function (string $filename) {
+            $path = "export/report/{$filename}";
+            abort_unless(Storage::exists($path), 404);
+
+            return Storage::download($path);
+        })->where('filename', '[a-zA-Z0-9\-_.]+')->name('export.report.download');
     });
 
     Route::prefix('proxy')->as('')->group(function () {
@@ -178,7 +171,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('collect-idy-ppn', \App\Http\Controllers\CollectIdyPpnController::class)->except(['store', 'update', 'destroy']);
 
         // route announcement
-        Route::resource('announcement', \App\Http\Controllers\AnnouncementController::class)->only(['index']);
+        Route::resource('announcement', \App\Http\Controllers\AnnouncementController::class)->only(['index', 'create', 'edit']);
 
         // route permission
         Route::resource('permissions', \App\Http\Controllers\PermissionController::class)
@@ -306,6 +299,7 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('spk')->as('')->group(function () {
             // 1. spk purchasing request
             Route::resource('purchasing-request', \App\Http\Controllers\Spk\PurchasingRequestController::class)->only('index', 'edit', 'show');
+            Route::get('purchasing-request/{id}/edit-pr', [\App\Http\Controllers\Spk\PurchasingRequestController::class, 'editPr'])->name('purchasing-request.edit-pr');
 
             // 2. spk spk
             Route::get('generate/pdf/{id}', [\App\Http\Controllers\Spk\SpkController::class, 'generatePdf'])->name('spk.generate.pdf');
@@ -350,6 +344,9 @@ Route::middleware(['auth'])->group(function () {
 
         // route pengajuan cuti
         require __DIR__.'/features/leave-request.php';
+
+        // route laporan export
+        require __DIR__.'/features/report.php';
     });
 });
 

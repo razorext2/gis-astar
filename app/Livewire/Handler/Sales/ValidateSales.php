@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Validate and approve/reject sales reports, Caller: Index (SalesTable) / Detail View, Deps: App\Models\Sales, App\Livewire\Concerns\HandlesErrors */
+
 namespace App\Livewire\Handler\Sales;
 
 use App\Livewire\Concerns\HandlesErrors;
@@ -7,6 +9,7 @@ use App\Models\Sales;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -46,9 +49,43 @@ class ValidateSales extends Component
     #[Validate('required|image|max:2048')]
     public $proof_pic;
 
-    public function mount($id)
+    public function mount(?int $id = null): void
     {
-        $this->data = Sales::find($id);
+        if ($id !== null) {
+            $this->loadData($id);
+        }
+    }
+
+    #[On('openSalesValidateModal')]
+    public function openModal(int $id): void
+    {
+        $this->reset([
+            'customer_name',
+            'customer_address',
+            'customer_make_order',
+            'order_notes',
+            'proof_pic',
+            'rejectionReason',
+            'step',
+            'customer_telp',
+        ]);
+        $this->resetValidation();
+        $this->loadData($id);
+        
+        if ($this->label !== null) {
+            $this->step = 2;
+            $this->showDetail = false;
+        } else {
+            $this->showDetail = true;
+        }
+        
+        $this->showModal = true;
+    }
+
+    private function loadData(int $id): void
+    {
+        $this->id = $id;
+        $this->data = Sales::with(['pegawaiRelasi', 'photoCollectRelasi'])->find($id);
 
         $this->checkData($this->data);
 
@@ -60,17 +97,17 @@ class ValidateSales extends Component
             : $this->data->customer_telp;
     }
 
-    public function toValidation()
+    public function toValidation(): void
     {
         $this->step = 2;
     }
 
-    public function toRejection()
+    public function toRejection(): void
     {
         $this->step = 3;
     }
 
-    public function confirmValidation()
+    public function confirmValidation(): mixed
     {
         $this->validate();
 
@@ -102,7 +139,11 @@ class ValidateSales extends Component
             $this->resetModal();
             $this->dispatch('swal', title: 'Berhasil', text: 'Data telah dikonfirmasi', icon: 'success');
 
-            return $this->dispatch('redirectRoute', route('sales.index'));
+            if ($this->label !== null) {
+                return $this->redirectRoute('sales.show', ['sale' => $this->id], navigate: true);
+            }
+
+            return $this->dispatch('pg:eventRefresh-SalesTable');
         }, 'Terjadi kesalahan saat mengonfirmasi data sales.', [
             'action' => 'confirm sales validation',
             'sales_id' => $this->id,
@@ -110,7 +151,7 @@ class ValidateSales extends Component
         ]);
     }
 
-    public function confirmRejection()
+    public function confirmRejection(): mixed
     {
         $this->checkPermission();
 
@@ -128,7 +169,11 @@ class ValidateSales extends Component
             $this->resetModal();
             $this->dispatch('swal', title: 'Sukses!', text: 'Data berhasil ditolak', icon: 'success');
 
-            return $this->dispatch('redirectRoute', route('sales.index'));
+            if ($this->label !== null) {
+                return $this->redirectRoute('sales.show', ['sale' => $this->id], navigate: true);
+            }
+
+            return $this->dispatch('pg:eventRefresh-SalesTable');
         }, 'Terjadi kesalahan saat menolak data sales.', [
             'action' => 'reject sales validation',
             'sales_id' => $this->id,
@@ -136,27 +181,38 @@ class ValidateSales extends Component
         ]);
     }
 
-    public function resetModal()
+    public function resetModal(): void
     {
         $this->showModal = false;
-        $this->step = 1;
+        $this->reset([
+            'customer_name',
+            'customer_address',
+            'customer_make_order',
+            'order_notes',
+            'proof_pic',
+            'rejectionReason',
+            'step',
+            'customer_telp',
+            'showDetail',
+        ]);
+        $this->resetValidation();
     }
 
-    public function checkPermission()
+    public function checkPermission(): void
     {
         if (Auth::user()->cannot('sales-approve')) {
-            return abort(403);
+            abort(403);
         }
     }
 
-    public function checkData($query)
+    public function checkData($query): void
     {
         if (! $query) {
-            return $this->dispatch('swal', title: 'Data tidak ditemukan', text: 'Data tidak ditemukan', icon: 'error');
+            $this->dispatch('swal', title: 'Data tidak ditemukan', text: 'Data tidak ditemukan', icon: 'error');
         }
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.handler.sales.validate-sales');
     }

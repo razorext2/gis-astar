@@ -1,4 +1,4 @@
-{{-- Goal: Reusable timeline component for leave request history and status tracking, Deps: LeaveRequest --}}
+{{-- Goal: Reusable timeline component for leave request history and status tracking, Deps: LeaveRequest (requires eager: user.pegawai.jabatanRelasi.supervisors, user.pegawai.jabatanRelasi.placementRelasi.hrds, user.pegawai.jabatanRelasi.placementRelasi.managements, backupPerson, histories.actedByUser) --}}
 @props(['request'])
 
 <div
@@ -19,12 +19,12 @@
                     'relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2',
                     'border-green-500 bg-green-50 text-green-600 dark:bg-green-900' => !in_array(
                         $history->status_to,
-                        ['rejected', 'canceled', 'cancelled']),
+                        ['rejected', 'cancelled']),
                     'border-red-500 bg-red-50 text-red-600 dark:bg-red-900' => in_array(
                         $history->status_to,
-                        ['rejected', 'canceled', 'cancelled']),
+                        ['rejected', 'cancelled']),
                 ])>
-                    @if (in_array($history->status_to, ['rejected', 'canceled', 'cancelled']))
+                    @if (in_array($history->status_to, ['rejected', 'cancelled']))
                         <x-icons.close class="h-4 w-4" />
                     @else
                         <x-icons.check class="h-4 w-4" />
@@ -64,13 +64,12 @@
                     ],
                     'pending_spv' => [
                         'title' => 'Tahap Saat Ini: Validasi Atasan Langsung',
-                        'description' => $request->user->pegawai->jabatanRelasi->supervisor_id
+                        'description' => $request->user->pegawai->jabatanRelasi?->supervisors->isNotEmpty()
                             ? 'Menunggu persetujuan dari Atasan Langsung.'
                             : 'PERINGATAN: Konfigurasi atasan untuk jabatan ini belum diset.',
-                        'user_id' => $request->user->pegawai->jabatanRelasi->supervisor_id,
+                        'supervisors' => $request->user->pegawai->jabatanRelasi?->supervisors ?? collect(),
                         'person' =>
-                            $request->user->pegawai->jabatanRelasi->supervisor->name ?? 'Atasan (Belum Terkonfigurasi)',
-                        'phone' => $request->user->pegawai->jabatanRelasi->supervisor->pegawai->no_telp ?? null,
+                            $request->user->pegawai->jabatanRelasi?->supervisors->pluck('name')->implode(', ') ?: 'Atasan (Belum Terkonfigurasi)',
                         'wa_text' =>
                             'Halo Bapak/Ibu, ada pengajuan cuti dari saya yang menunggu approval Bapak/Ibu di https://attendance.indodacin.com. Mohon dicek ya!',
                     ],
@@ -118,7 +117,7 @@
                             <span>{{ $nextStep['description'] }}</span>
                         </div>
 
-                        @if (in_array($request->status, ['pending_backup', 'pending_spv']))
+                        @if ($request->status === 'pending_backup')
                             @if ($nextStep['phone'] && $request->user->id == auth()->id())
                                 <div class="mt-1">
                                     <a href="https://web.whatsapp.com/send/?phone={{ $nextStep['phone'] }}&text={{ urlencode($nextStep['wa_text']) }}&type=phone_number&app_absent=0"
@@ -128,9 +127,37 @@
                                         Hubungi via WhatsApp
                                     </a>
                                 </div>
-                            @else
+                            @elseif ($request->user->id == auth()->id())
                                 <div class="mt-1 text-[10px] italic text-zinc-400 dark:text-zinc-500">
                                     Nomor telepon belum diatur
+                                </div>
+                            @endif
+                        @elseif ($request->status === 'pending_spv')
+                            @if ($request->user->id == auth()->id() && isset($nextStep['supervisors']) && $nextStep['supervisors']->isNotEmpty())
+                                <div class="mt-1 flex flex-col gap-1.5 font-bold">
+                                    @php $hasPhone = false; @endphp
+                                    @foreach ($nextStep['supervisors'] as $spv)
+                                        @if ($spv->pegawai?->no_telp)
+                                            @php $hasPhone = true; @endphp
+                                            <div>
+                                                <a href="https://web.whatsapp.com/send/?phone={{ $spv->pegawai->no_telp }}&text={{ urlencode($nextStep['wa_text']) }}&type=phone_number&app_absent=0"
+                                                    target="_blank" rel="noopener noreferrer"
+                                                    class="flex w-fit items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 text-[10px] font-bold text-green-600 transition-colors hover:bg-green-100 dark:bg-green-500/10 dark:text-green-400 dark:hover:bg-green-500/20">
+                                                    <x-icons.phone class="h-3 w-3" />
+                                                    Hubungi {{ $spv->name }} via WhatsApp
+                                                </a>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                    @if (!$hasPhone)
+                                        <div class="text-[10px] italic text-zinc-400 dark:text-zinc-500 font-normal">
+                                            Nomor telepon belum diatur
+                                        </div>
+                                    @endif
+                                </div>
+                            @elseif ($request->user->id == auth()->id())
+                                <div class="mt-1 text-[10px] italic text-zinc-400 dark:text-zinc-500">
+                                    Atasan belum dikonfigurasi
                                 </div>
                             @endif
                         @endif

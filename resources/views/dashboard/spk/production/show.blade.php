@@ -195,23 +195,37 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div class="col-span-2 flex flex-col">
                             <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Ditambah Oleh</span>
-                            <span
-                                class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->spk->addedBy->name }}</span>
+                            <div class="flex items-center gap-x-2">
+                                <span class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->spk->addedBy->name }}</span>
+                                <x-dashboard.badge-inactive :is_active="$data->spk->addedBy?->is_active ?? true" />
+                            </div>
                         </div>
                         <div class="flex flex-col">
                             <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Diproduksi Oleh</span>
-                            <span
-                                class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->spk->assignTo->name ?? '-' }}</span>
+                            <div class="flex items-center gap-x-2">
+                                <span class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->spk->assignTo->name ?? '-' }}</span>
+                                @if ($data->spk->assignTo)
+                                    <x-dashboard.badge-inactive :is_active="$data->spk->assignTo?->is_active ?? true" />
+                                @endif
+                            </div>
                         </div>
                         <div class="flex flex-col">
                             <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Reassign Ke</span>
-                            <span
-                                class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->reassignTo->name ?? '-' }}</span>
+                            <div class="flex items-center gap-x-2">
+                                <span class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->reassignTo->name ?? '-' }}</span>
+                                @if ($data->reassignTo)
+                                    <x-dashboard.badge-inactive :is_active="$data->reassignTo?->is_active ?? true" />
+                                @endif
+                            </div>
                         </div>
                         <div class="flex flex-col">
                             <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Divalidasi Oleh</span>
-                            <span
-                                class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->spk->approvedBy->name ?? '-' }}</span>
+                            <div class="flex items-center gap-x-2">
+                                <span class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->spk->approvedBy->name ?? '-' }}</span>
+                                @if ($data->spk->approvedBy)
+                                    <x-dashboard.badge-inactive :is_active="$data->spk->approvedBy?->is_active ?? true" />
+                                @endif
+                            </div>
                         </div>
                         <div class="flex flex-col">
                             <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Divalidasi Pada</span>

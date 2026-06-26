@@ -27,7 +27,7 @@ class Index extends Component
 
     public function setTab($tab)
     {
-        if ($tab === 'all' && ! auth()->user()->can('leave-view-all')) {
+        if ($tab === 'all' && ! auth()->user()->can('leave-list-all')) {
             return;
         }
 
@@ -55,7 +55,7 @@ class Index extends Component
         $query = LeaveRequest::with(['user.pegawai.jabatanRelasi', 'leaveType']);
 
         if ($this->activeTab === 'pending') {
-            $query->whereIn('status', ['pending_backup', 'pending_spv', 'pending_hrd', 'pending_management']);
+            $query->whereIn('status', ['pending_backup', 'pending_spv', 'pending_hrd', 'pending_management', 'pending_cancel']);
 
             // Complex Role Filter
             $query->where(function ($q) use ($user) {
@@ -67,12 +67,12 @@ class Index extends Component
                 // 2. As Supervisor (Check if applicant's supervisor is me)
                 $q->orWhere(function ($sq) use ($user) {
                     $sq->where('status', 'pending_spv')
-                        ->whereHas('user.pegawai.jabatanRelasi', fn ($jq) => $jq->where('supervisor_id', $user->id));
+                        ->whereHas('user.pegawai.jabatanRelasi.supervisors', fn ($jq) => $jq->where('users.id', $user->id));
                 });
 
                 // 3. As HRD (User is assigned as HRD in applicant's placement)
                 $q->orWhere(function ($sq) use ($user) {
-                    $sq->where('status', 'pending_hrd')
+                    $sq->whereIn('status', ['pending_hrd', 'pending_cancel'])
                         ->whereHas('user.pegawai.jabatanRelasi.placementRelasi.hrds', fn ($jq) => $jq->where('users.id', $user->id));
                 });
 
@@ -83,8 +83,8 @@ class Index extends Component
                 });
             });
         } else {
-            // Tab ALL - No default role-based status filter if they have leave-view-all
-            if (! $user->can('leave-view-all')) {
+            // Tab ALL - No default role-based status filter if they have leave-list-all
+            if (! $user->can('leave-list-all')) {
                 // Fallback to what they can see if somehow accessed
                 $query->where('user_id', $user->id);
             }

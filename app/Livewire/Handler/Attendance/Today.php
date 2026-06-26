@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Display check-in records for today, Caller: Dashboard, Deps: Attendance, Pegawai, User */
+
 namespace App\Livewire\Handler\Attendance;
 
 use App\Models\Attendance;
@@ -120,7 +122,7 @@ class Today extends Component
             return $this->showModal = false;
         }
 
-        $data = Attendance::with('pegawaiRelasi')->find($id);
+        $data = Attendance::with(['pegawaiRelasi', 'user'])->find($id);
 
         if (! $data) {
             return;

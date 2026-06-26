@@ -228,7 +228,7 @@
             </div>
         @endif
 
-        @can('spk-validate-pengiriman')
+        @can('spk-pengiriman-approve')
             @if ($showDetailModal && $modalData && ($modalData->status_kirim == 0 || $modalData->status_kirim == 2))
                 <x-slot name="footer">
                     <x-button.secondary @click="open = false">Tutup</x-button.secondary>

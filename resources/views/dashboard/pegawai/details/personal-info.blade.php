@@ -50,7 +50,7 @@
                                 ['label' => 'Alamat', 'value' => $pegawai->alamat, 'full' => true],
                                 [
                                     'label' => 'Tanggal Bergabung',
-                                    'value' => $pegawai->userRelasi->join_date
+                                    'value' => $pegawai->userRelasi?->join_date
                                         ? \Carbon\Carbon::parse($pegawai->userRelasi->join_date)
                                             ->locale('id')
                                             ->isoFormat('DD MMMM YYYY')

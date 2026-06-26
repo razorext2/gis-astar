@@ -32,14 +32,14 @@
                     </li>
                 </ul>
 
-                <div class="absolute right-6 float-right">
+                {{-- <div class="absolute right-6 float-right">
                     <x-button.success class="getCollectorExcel" id="getCollectorExcel">
                         <x-slot name="icon">
                             <x-icons.file-excel class="h-5 w-5" />
                         </x-slot>
                         Tarik Laporan
                     </x-button.success>
-                </div>
+                </div> --}}
             </div>
 
             {{-- mobile view --}}
@@ -76,12 +76,12 @@
                                 href="{{ route('collect.rejected') }}">Ditolak</a>
                         </li>
                     </ul>
-                    <x-button.success class="getCollectorExcel flex w-full items-center !p-3">
+                    {{-- <x-button.success class="getCollectorExcel flex w-full items-center !p-3">
                         <x-slot name="icon">
                             <x-icons.file-excel class="h-5 w-5" />
                         </x-slot>
                         Tarik Laporan
-                    </x-button.success>
+                    </x-button.success> --}}
                 </div>
             </div>
         </div>

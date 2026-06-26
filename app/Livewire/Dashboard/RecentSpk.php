@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Render a list of the 5 most recent SPKs, Caller: Dashboard, Deps: App\Models\Spk\SpkMain */
+
 namespace App\Livewire\Dashboard;
 
 use App\Models\Spk\SpkMain;

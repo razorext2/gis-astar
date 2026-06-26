@@ -1,12 +1,16 @@
 <?php
 
+/** Goal: Edit form for employee data, Caller: routes/web.php (pegawai.edit), Deps: Pegawai, User, Spatie Roles, HandlesErrors, PegawaiChangesHistory */
+
 namespace App\Livewire\Handler\Pegawai;
 
 use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Golongan;
 use App\Models\Jabatan;
 use App\Models\Pegawai;
+use App\Models\PegawaiChangesHistory;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -36,6 +40,13 @@ class Edit extends Component
     public $golongan;
 
     public $tgl_lahir;
+
+    // Systemic Employee Code Change Fields
+    public bool $ubah_kode_pegawai = false;
+
+    public ?string $kode_pegawai_baru = null;
+
+    public ?string $alasan_ubah_kode = null;
 
     // User Account Fields (Existing User)
     public $has_account = false;
@@ -91,7 +102,7 @@ class Edit extends Component
 
     protected function rules()
     {
-        return [
+        $rules = [
             'nik_pegawai' => 'required',
             'full_name' => 'required',
             'nick_name' => 'required',
@@ -104,7 +115,15 @@ class Edit extends Component
             'photo2' => 'nullable|image|max:2048',
             'selected_roles' => 'nullable|array',
             'join_date' => 'nullable|date',
+            'ubah_kode_pegawai' => 'boolean',
         ];
+
+        if ($this->ubah_kode_pegawai) {
+            $rules['kode_pegawai_baru'] = 'required|alpha_num|different:kode_pegawai|unique:tb_pegawai,kode_pegawai';
+            $rules['alasan_ubah_kode'] = 'required|string|min:5';
+        }
+
+        return $rules;
     }
 
     public function save()
@@ -112,50 +131,109 @@ class Edit extends Component
         $this->validate();
 
         $this->runSafely(function () {
-            $this->pegawai->update([
-                'nik_pegawai' => $this->nik_pegawai,
-                'full_name' => $this->full_name,
-                'nick_name' => $this->nick_name,
-                'no_telp' => $this->no_telp,
-                'alamat' => $this->alamat,
-                'jabatan' => $this->jabatan,
-                'golongan' => $this->golongan,
-                'tgl_lahir' => $this->tgl_lahir,
-            ]);
+            $old_code = $this->kode_pegawai;
+            $new_code = $this->ubah_kode_pegawai ? $this->kode_pegawai_baru : $old_code;
+            $alasanLog = $this->ubah_kode_pegawai ? $this->alasan_ubah_kode : 'Pembaruan data pegawai';
 
-            // Sync Roles if account exists
-            if ($this->has_account) {
-                $user = User::where('kode_pegawai', $this->kode_pegawai)->first();
-                if ($user) {
-                    $user->syncRoles($this->selected_roles);
-                    $user->update([
-                        'name' => $this->full_name,
-                        'join_date' => $this->join_date,
+            DB::transaction(function () use ($old_code, $new_code, $alasanLog) {
+                // Detect dirty changes on other Pegawai fields
+                foreach (['nik_pegawai', 'full_name', 'nick_name', 'no_telp', 'alamat', 'jabatan', 'golongan', 'tgl_lahir'] as $field) {
+                    if ($this->pegawai->$field != $this->$field) {
+                        PegawaiChangesHistory::create([
+                            'pegawai_id' => $this->pegawai->id,
+                            'field_name' => $field,
+                            'old_value' => $this->pegawai->$field,
+                            'new_value' => $this->$field,
+                            'alasan' => $alasanLog,
+                            'changed_by' => auth()->id(),
+                        ]);
+                    }
+                }
+
+                if ($this->ubah_kode_pegawai && $old_code !== $new_code) {
+                    // Record history log for code change
+                    PegawaiChangesHistory::create([
+                        'pegawai_id' => $this->pegawai->id,
+                        'field_name' => 'kode_pegawai',
+                        'old_value' => $old_code,
+                        'new_value' => $new_code,
+                        'alasan' => $this->alasan_ubah_kode,
+                        'changed_by' => auth()->id(),
                     ]);
                 }
-            }
 
-            // Handle File Uploads
-            if ($this->photo1 || $this->photo2) {
-                $folderPath = "public/labels/{$this->kode_pegawai}";
-                $folderToDB = "labels/{$this->kode_pegawai}/";
-
-                if (! Storage::exists($folderPath)) {
-                    Storage::makeDirectory($folderPath);
-                }
-
-                if ($this->photo1) {
-                    $this->photo1->storeAs($folderPath, 'photo1.png');
-                }
-
-                if ($this->photo2) {
-                    $this->photo2->storeAs($folderPath, 'photo2.png');
-                }
-
+                // Update Employee details first so that foreign key cascading updates related tables automatically
                 $this->pegawai->update([
-                    'storage' => $folderToDB,
+                    'kode_pegawai' => $new_code,
+                    'nik_pegawai' => $this->nik_pegawai,
+                    'full_name' => $this->full_name,
+                    'nick_name' => $this->nick_name,
+                    'no_telp' => $this->no_telp,
+                    'alamat' => $this->alamat,
+                    'jabatan' => $this->jabatan,
+                    'golongan' => $this->golongan,
+                    'tgl_lahir' => $this->tgl_lahir,
                 ]);
-            }
+
+                if ($this->ubah_kode_pegawai && $old_code !== $new_code) {
+                    // Rename Storage label directory if exists
+                    $oldFolder = "public/labels/{$old_code}";
+                    $newFolder = "public/labels/{$new_code}";
+                    if (Storage::exists($oldFolder)) {
+                        Storage::move($oldFolder, $newFolder);
+                    }
+                }
+
+                // Sync Roles & User params if account exists
+                if ($this->has_account) {
+                    $user = User::where('kode_pegawai', $new_code)->first();
+                    if ($user) {
+                        $user->syncRoles($this->selected_roles);
+
+                        if ($user->join_date != $this->join_date) {
+                            PegawaiChangesHistory::create([
+                                'pegawai_id' => $this->pegawai->id,
+                                'field_name' => 'join_date',
+                                'old_value' => $user->join_date ? $user->join_date->format('Y-m-d') : null,
+                                'new_value' => $this->join_date,
+                                'alasan' => $alasanLog,
+                                'changed_by' => auth()->id(),
+                            ]);
+                        }
+
+                        $user->update([
+                            'name' => $this->full_name,
+                            'join_date' => $this->join_date,
+                        ]);
+                    }
+                }
+
+                // Handle File Uploads
+                if ($this->photo1 || $this->photo2) {
+                    $folderPath = "public/labels/{$new_code}";
+                    $folderToDB = "labels/{$new_code}/";
+
+                    if (! Storage::exists($folderPath)) {
+                        Storage::makeDirectory($folderPath);
+                    }
+
+                    if ($this->photo1) {
+                        $this->photo1->storeAs($folderPath, 'photo1.png');
+                    }
+
+                    if ($this->photo2) {
+                        $this->photo2->storeAs($folderPath, 'photo2.png');
+                    }
+
+                    $this->pegawai->update([
+                        'storage' => $folderToDB,
+                    ]);
+                } elseif ($this->ubah_kode_pegawai && $this->pegawai->storage) {
+                    $this->pegawai->update([
+                        'storage' => "labels/{$new_code}/",
+                    ]);
+                }
+            });
 
             session()->flash('status', 'Berhasil memperbarui data Pegawai');
             $this->redirect(route('pegawai.index'), navigate: true);

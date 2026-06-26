@@ -143,6 +143,20 @@ return [
             'days' => 7,
         ],
 
+        'attendance_sync' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/attendance-sync.log'),
+            'level' => 'debug',
+            'days' => 30,
+        ],
+
+        'face_recognition' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/face-recognition.log'),
+            'level' => 'debug',
+            'days' => 30,
+        ],
+
     ],
 
 ];

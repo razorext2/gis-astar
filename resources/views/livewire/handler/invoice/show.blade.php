@@ -29,7 +29,7 @@
                 <p class="text-sm text-zinc-500 dark:text-zinc-400">Informasi lengkap rincian dan riwayat invoice</p>
             </div>
 
-            @can('invoice-add')
+            @can('invoice-create')
                 <x-button.primary wire:navigate href="{{ route($routePrefix . '.addDetails', $id) }}" class="w-fit">
                     <x-slot name="icon">
                         <x-icons.plus class="h-4 w-4" />
@@ -109,7 +109,10 @@
                 </div>
                 <div>
                     <p class="text-xs text-zinc-500 dark:text-zinc-400">Ditambah Oleh</p>
-                    <p class="font-semibold text-zinc-900 dark:text-white">{{ $invoice->addedBy->name }}</p>
+                    <div class="flex items-center gap-x-2">
+                        <p class="font-semibold text-zinc-900 dark:text-white">{{ $invoice->addedBy->name }}</p>
+                        <x-dashboard.badge-inactive :is_active="$invoice->addedBy?->is_active ?? true" />
+                    </div>
                     <p class="text-[10px] text-zinc-400">
                         {{ \Carbon\Carbon::parse($invoice->created_at)->format('d M Y H:i') }}</p>
                 </div>
@@ -122,7 +125,10 @@
                 </div>
                 <div>
                     <p class="text-xs text-zinc-500 dark:text-zinc-400">Update Terakhir</p>
-                    <p class="font-semibold text-zinc-900 dark:text-white">{{ $invoice->latestUpdateBy->name }}</p>
+                    <div class="flex items-center gap-x-2">
+                        <p class="font-semibold text-zinc-900 dark:text-white">{{ $invoice->latestUpdateBy->name }}</p>
+                        <x-dashboard.badge-inactive :is_active="$invoice->latestUpdateBy?->is_active ?? true" />
+                    </div>
                     <p class="text-[10px] text-zinc-400">
                         {{ \Carbon\Carbon::parse($invoice->updated_at)->format('d M Y H:i') }}</p>
                 </div>
@@ -233,10 +239,13 @@
                         </div>
 
                         <div class="mt-4 flex items-center justify-end text-xs text-zinc-400">
-                            <span class="flex items-center gap-1">
-                                <x-icons.user class="h-3 w-3" />
-                                {{ $detail->addedBy->name }}
-                            </span>
+                            <div class="flex items-center gap-x-2">
+                                <span class="flex items-center gap-1">
+                                    <x-icons.user class="h-3 w-3" />
+                                    {{ $detail->addedBy->name }}
+                                </span>
+                                <x-dashboard.badge-inactive :is_active="$detail->addedBy?->is_active ?? true" />
+                            </div>
                         </div>
                     </div>
                 </div>

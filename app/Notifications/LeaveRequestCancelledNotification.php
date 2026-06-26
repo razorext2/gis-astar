@@ -35,7 +35,7 @@ class LeaveRequestCancelledNotification extends Notification implements ShouldQu
         return [
             'message' => "Pengajuan {$leaveType} dari {$requesterName} ({$startDate} s/d {$endDate}) telah dibatalkan oleh pemohon.",
             'button' => [
-                'url' => url('/dashboard/leave-request/approval-center'),
+                'url' => route('leave-request.approval-center.index'),
                 'label' => 'Pusat Approval',
             ],
             'created_at' => Carbon::now()->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss'),
@@ -52,10 +52,10 @@ class LeaveRequestCancelledNotification extends Notification implements ShouldQu
             ->body("Pengajuan {$leaveType} dari {$requesterName} telah dibatalkan.")
             ->icon(asset('/assets/img/logo.ico'))
             ->badge(asset('/assets/img/logo.ico'))
-            ->action('Pusat Approval', url('/dashboard/leave-request/approval-center'))
+            ->action('Pusat Approval', route('leave-request.approval-center.index'))
             ->tag('LeaveRequestCancelled')
             ->data([
-                'url' => url('/dashboard/leave-request/approval-center'),
+                'url' => route('leave-request.approval-center.index'),
             ]);
     }
 }

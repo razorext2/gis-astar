@@ -109,7 +109,10 @@
     </div>
 
     {{-- Navigation Links --}}
-    <div class="overflow-x-hidden overflow-y-scroll p-5" wire:scroll>
+    <div id="sidebar-scroll" class="overflow-x-hidden overflow-y-scroll p-5" style="overflow-anchor: none" x-data x-init="const saved = sessionStorage.getItem('sidebar-scroll');
+    if (saved) $el.scrollTop = parseInt(saved);
+    $el.addEventListener('scroll', () => sessionStorage.setItem('sidebar-scroll', $el.scrollTop), { passive: true });
+    document.addEventListener('livewire:navigating', () => sessionStorage.setItem('sidebar-scroll', $el.scrollTop));">
         <ul class="space-y-2 font-medium">
             @foreach ($menu as $item)
                 @if (($item['type'] ?? '') === 'header')

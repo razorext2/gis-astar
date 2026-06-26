@@ -55,7 +55,7 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
 
             {{-- Notification --}}
             <div id="notifications" class="relative" x-data="{ open: false }">
-                <button @click="open = !open"
+                <button @click="open = !open; if(open) { Livewire.dispatch('notification-received'); }"
                     class="relative rounded-xl p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-300 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white dark:focus:ring-zinc-700"
                     id="notificationButton" type="button" wire:ignore>
                     <span class="sr-only">View notifications</span>
@@ -67,7 +67,7 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
                     x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95"
                     x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75"
                     x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
-                    class="fixed left-0 right-0 top-14 z-50 px-4 origin-top sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-3 sm:w-[384px] sm:px-0 sm:origin-top-right"
+                    class="fixed left-0 right-0 top-14 z-50 origin-top px-4 sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-3 sm:w-[384px] sm:origin-top-right sm:px-0"
                     id="notification-dropdown" wire:ignore.self>
                     <div
                         class="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-dark-primary">

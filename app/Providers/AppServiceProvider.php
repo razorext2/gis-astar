@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Mengatur service provider utama aplikasi termasuk registrasi dynamic components dan model events untuk WebSocket table refresh, Caller: bootstrap/app.php, Deps: ServiceProvider, Livewire, Models, TableRefreshed */
+
 namespace App\Providers;
 
 use App\Models\LeaveRequest\LeaveRequest;
@@ -66,5 +68,66 @@ class AppServiceProvider extends ServiceProvider
 
         // force root url
         $this->app['url']->forceRootUrl($this->app['config']->get('app.url'));
+
+        // Auto-register moved PowerGrid tables under their short/kebab/stud names
+        if (is_dir(app_path('Livewire/PowergridTables'))) {
+            $files = glob(app_path('Livewire/PowergridTables/*Table.php'));
+            foreach ($files as $file) {
+                $className = basename($file, '.php');
+                $classPath = 'App\\Livewire\\PowergridTables\\' . $className;
+                if (class_exists($classPath)) {
+                    \Livewire\Livewire::component($className, $classPath);
+                    $kebabName = \Illuminate\Support\Str::kebab($className);
+                    \Livewire\Livewire::component($kebabName, $classPath);
+                }
+            }
+        }
+
+        // Register model observers for real-time PowerGrid table refreshes
+        $modelToTablesMap = [
+            'App\Models\Announcement' => ['AnnouncementTable'],
+            'App\Models\Attendance' => ['AttendanceTable'],
+            'App\Models\AttendanceOut' => ['AttendanceOutTable'],
+            'App\Models\Backup' => ['BackupTable'],
+            'App\Models\BigEventParticipant' => ['BigEventParticipantTable'],
+            'App\Models\BigEvent' => ['BigEventTable'],
+            'App\Models\Spk\SpkMain' => ['SpkTable', 'SpkDeliveryTable', 'PurchasingRequestTable', 'DailyReportTable', 'BillingTable'],
+            'App\Models\User' => ['UserTable', 'SalesRouteTable', 'DriverRouteTable', 'CollectorRouteTable'],
+            'App\Models\Division' => ['DivisionTable'],
+            'App\Models\Driver' => ['DriverTable'],
+            'App\Models\Golongan' => ['GolonganTable'],
+            'App\Models\System\Holiday' => ['HolidayTable'],
+            'App\Models\Invoice' => ['InvoiceTable'],
+            'App\Models\Jabatan' => ['JabatanTable'],
+            'App\Models\LogHistory' => ['LogTable'],
+            'App\Models\Spk\PackingListKit' => ['PackingListKitTable'],
+            'App\Models\Spk\Production' => ['ProductionTable', 'PackingListTable'],
+            'App\Models\Pegawai' => ['PegawaiTable'],
+            'App\Models\Placement' => ['PlacementTable'],
+            'App\Models\PointTransactions' => ['PointTransactionsTable'],
+            'App\Models\Spk\ProjectAssignment' => ['ProjectAssignmentTable'],
+            'App\Models\Question' => ['QuestionsTable'],
+            'App\Models\Sales' => ['SalesTable'],
+            'App\Models\TeamMember' => ['TeamMemberTable'],
+            'App\Models\Technician' => ['TechnicianTable'],
+            'Spatie\Permission\Models\Role' => ['RolesTable'],
+            'Spatie\Permission\Models\Permission' => ['PermissionsTable'],
+        ];
+
+        foreach ($modelToTablesMap as $modelClass => $tableNames) {
+            if (class_exists($modelClass)) {
+                $modelClass::saved(function ($model) use ($tableNames) {
+                    foreach ($tableNames as $tableName) {
+                        event(new \App\Events\TableRefreshed($tableName));
+                    }
+                });
+                $modelClass::deleted(function ($model) use ($tableNames) {
+                    foreach ($tableNames as $tableName) {
+                        event(new \App\Events\TableRefreshed($tableName));
+                    }
+                });
+            }
+        }
     }
 }
+

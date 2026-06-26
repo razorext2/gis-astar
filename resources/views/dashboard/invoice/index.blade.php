@@ -16,7 +16,7 @@
         </div>
 
         <div class="flex flex-col justify-between gap-2 lg:flex-row lg:items-center">
-            @can(['invoice-list', 'invoice-add'])
+            @can(['invoice-list', 'invoice-create'])
                 @php
                     $routeName = match (request()->route()->getName()) {
                         'invoice.all.index' => 'invoice.all.create',
@@ -42,18 +42,11 @@
                     </x-button.success>
                 </div>
             @endcan
-
-            @canany(['invoice-export-all', 'invoice-export-cust', 'invoice-export-medan', 'invoice-export-pku',
-                'invoice-export-jkt'])
-                <div class="max-w-xs">
-                    <livewire:handler.invoice.export />
-                </div>
-            @endcanany
         </div>
 
         <div
             class="rounded-xl border border-zinc-200 bg-white/60 px-2 py-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
-            <livewire:table-refresher table-name="InvoiceTable" />
+            <livewire:powergrid-tables.invoice-table />
         </div>
     </div>
 @endsection

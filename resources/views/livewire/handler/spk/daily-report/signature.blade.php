@@ -1,3 +1,4 @@
+{{-- Goal: Tanda tangan customer untuk SPK Daily Report, Livewire: App\Livewire\Handler\Spk\DailyReport\Signature, Alpine: N/A --}}
 <div class="w-full">
     <div
         class="mb-2 w-full rounded-xl border border-zinc-200 bg-white/60 p-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:mb-4 lg:p-4">
@@ -198,11 +199,18 @@
                 </h2>
 
                 @if (!$model->hasBeenSigned())
+                    @php
+                        $currentRoute = request()->route()->getName();
+                        $redirectUrl = route('daily-report.daily', ['id' => $model->id]);
+                        if ($currentRoute === 'report.general.customer-assignment') {
+                            $redirectUrl = route('report.general.daily', ['id' => $model->id]);
+                        }
+                    @endphp
                     <form action="{{ $model->getSignatureRoute() }}" method="POST">
                         @csrf
                         <x-creagia-signature-pad border-color="#eaeaea" pad-classes="rounded-xl border-2"
                             button-classes="bg-gray-100 mt-2.5 px-4 py-2 rounded-xl" clear-name="Hapus"
-                            submit-name="Simpan" />
+                            submit-name="Simpan" redirect-url="{{ $redirectUrl }}" />
                     </form>
 
                     @push('script')

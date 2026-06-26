@@ -9,8 +9,6 @@ class LeaveRequest extends Model
 {
     protected $table = 'tb_leave_requests';
 
-    protected $guarded = ['id'];
-
     // Transient properties for Observer
     public $current_note;
 
@@ -67,8 +65,9 @@ class LeaveRequest extends Model
         return match ($this->status) {
             'pending_backup' => 'Personel Backup',
             'pending_spv' => 'Atasan Langsung',
-            'pending_hrd' => 'HRD Department',
-            'pending_management' => 'Management',
+            'pending_hrd' => 'HRD',
+            'pending_management' => 'Manajemen',
+            'pending_cancel' => 'HRD (Pembatalan)',
             default => '',
         };
     }

@@ -1,3 +1,4 @@
+{{-- Goal: Handle route tracing and details for collectors, Livewire: App\Livewire\Handler\Route\Collector, Alpine: none --}}
 <div class="flex flex-col gap-2 lg:gap-4">
 
     <div class="z-10 h-96 w-full rounded-lg p-6" id="map"></div>
@@ -32,7 +33,7 @@
                 </span>
 
                 <div class="flex items-center text-sm text-gray-900 dark:text-white">
-                    <a class="group" href="{{ route('collect.show', $row->id) }}" target="_blank">
+                    <a class="group" href="{{ route('collect.show', \App\Support\IdObfuscator::encode($row->id)) }}" target="_blank">
                         {{ $row->title }}
                         <span class="text-blue-500 group-hover:underline">
                             [ 👁 ]

@@ -53,16 +53,12 @@ export default defineConfig({
                 "resources/js/pages/collect-idy-ppn/detail.js",
 
                 // sales
-                "resources/js/pages/sales/index.js",
                 "resources/js/pages/sales/add.js",
                 "resources/js/pages/sales/edit.js",
                 "resources/js/pages/sales/detail.js",
 
                 // technician
                 "resources/js/pages/technician/add.js",
-
-                // announcement
-                "resources/js/pages/announcement/index.js",
 
                 // pegawai
                 "resources/js/pages/pegawai/personalInfo.js",

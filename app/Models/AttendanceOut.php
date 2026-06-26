@@ -50,6 +50,11 @@ class AttendanceOut extends Model
         return $this->belongsTo(User::class, 'kode_pegawai', 'kode_pegawai');
     }
 
+    public function verifiedBy()
+    {
+        return $this->belongsTo(User::class, 'verified_by', 'id');
+    }
+
     public function scopeNotVerified($query)
     {
         return $query->where('verified', 0)

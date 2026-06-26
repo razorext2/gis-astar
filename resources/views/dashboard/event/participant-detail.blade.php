@@ -1,3 +1,4 @@
+{{-- Goal: Display details of a big event participant and visitor history, Livewire: None, Alpine: None --}}
 @extends('dashboard.layoutsDash.app')
 @section('content')
     <div class="mb-16 flex flex-col text-gray-800 dark:text-white">
@@ -22,8 +23,13 @@
                 <div
                     class="col-span-2 rounded-t-xl border border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:p-4">
                     <p class="text-xs italic"> Nama Partisipan </p>
-                    <p class="break-words font-semibold"> {{ ucwords($participant->userId->name) }}
-                        [{{ $participant->userId->kode_pegawai ?? '-' }}]</p>
+                    <div class="flex items-center gap-x-2">
+                        <p class="break-words font-semibold"> {{ ucwords($participant->userId->name) }}
+                            [{{ $participant->userId->kode_pegawai ?? '-' }}]</p>
+                        @if ($participant->userId)
+                            <x-dashboard.badge-inactive :is_active="$participant->userId->is_active ?? true" />
+                        @endif
+                    </div>
                 </div>
                 <div
                     class="col-span-2 flex flex-col border border-zinc-200 bg-gray-50 p-2.5 text-gray-800 dark:border-zinc-800 dark:bg-gray-700 dark:text-white lg:p-4">

@@ -1,3 +1,4 @@
+{{-- Goal: Render form to borrow leave quota, Livewire: Handler.LeaveRequest.Borrow, Alpine: UI state / dropdown select --}}
 <div
     class="mt-4 flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
 
@@ -125,6 +126,7 @@
             <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
                 <div class="flex flex-col">
                     <x-input.basic type="date" id="start_date" name="start_date" wire:model.live="start_date"
+                        min="{{ \Carbon\Carbon::today()->addDays(config('app.leave_min_advance_days', 7))->toDateString() }}"
                         :labels="true" required>
                         Tanggal Mulai*
                     </x-input.basic>
@@ -134,6 +136,7 @@
                 </div>
                 <div class="flex flex-col">
                     <x-input.basic type="date" id="end_date" name="end_date" wire:model.live="end_date"
+                        min="{{ $start_date ?? \Carbon\Carbon::today()->addDays(config('app.leave_min_advance_days', 7))->toDateString() }}"
                         :labels="true" required>
                         Tanggal Berakhir*
                     </x-input.basic>
@@ -251,7 +254,7 @@
                                     <div class="h-1.5 w-1.5 rounded-full bg-zinc-300 dark:bg-zinc-600"></div>
                                     <span class="italic text-gray-600 dark:text-gray-400">Atasan:</span>
                                     <span
-                                        class="font-bold text-gray-700 dark:text-gray-200">{{ auth()->user()->pegawai->jabatanRelasi->supervisor->name ?? 'Belum Diatur' }}</span>
+                                        class="font-bold text-gray-700 dark:text-gray-200">{{ auth()->user()->pegawai->jabatanRelasi?->supervisors->pluck('name')->implode(', ') ?: 'Belum Diatur' }}</span>
                                 </div>
                                 <div class="flex items-start gap-2 text-[11px]">
                                     <div class="mt-1 h-1.5 w-1.5 rounded-full bg-zinc-300 dark:bg-zinc-600"></div>

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\LeaveRequest;
 
+/** Goal: Handle routing or streaming of Leave Request PDFs, Caller: web.php, Deps: LeaveRequest, Pdf */
+
 use App\Http\Controllers\Controller;
 
 class LeaveRequestController extends Controller
@@ -16,13 +18,17 @@ class LeaveRequestController extends Controller
         return view('dashboard.leave-request.create');
     }
 
-    public function edit()
+    public function edit(\App\Models\LeaveRequest\LeaveRequest $my_request)
     {
+        $this->authorize('view', $my_request);
+
         return view('dashboard.leave-request.edit');
     }
 
-    public function show()
+    public function show(\App\Models\LeaveRequest\LeaveRequest $my_request)
     {
+        $this->authorize('view', $my_request);
+
         return view('dashboard.leave-request.show');
     }
 
@@ -38,7 +44,7 @@ class LeaveRequestController extends Controller
         $request->load([
             'user.pegawai.jabatanRelasi.divisionRelasi',
             'user.pegawai.jabatanRelasi.placementRelasi',
-            'user.pegawai.jabatanRelasi.supervisor',
+            'user.pegawai.jabatanRelasi.supervisors',
             'user.signature',
             'leaveType',
             'backupPerson',

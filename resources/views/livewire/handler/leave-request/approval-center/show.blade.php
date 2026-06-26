@@ -14,6 +14,11 @@
         </div>
     </div>
 
+    {{-- Approval Deadline Countdown --}}
+    @if (in_array($request->status, ['pending_backup', 'pending_spv', 'pending_hrd', 'pending_management']))
+        <x-leave-request.deadline-timer :updatedAt="$request->updated_at" />
+    @endif
+
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {{-- Left Column: Request Details --}}
         <div class="flex flex-col gap-6 lg:col-span-2">

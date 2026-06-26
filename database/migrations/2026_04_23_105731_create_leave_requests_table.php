@@ -35,7 +35,7 @@ return new class extends Migration
                 'rejected',
                 'auto_reject',
                 'delayed',
-                'canceled',
+                'cancelled',
             ])->default('draft');
 
             $table->timestamps();

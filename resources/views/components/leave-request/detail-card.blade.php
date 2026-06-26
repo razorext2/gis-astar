@@ -22,7 +22,7 @@
                     <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-zinc-500">
                         <span class="flex items-center gap-1.5">
                             <span
-                                class="font-mono font-bold text-zinc-700 dark:text-zinc-300">({{ $request->user->kode_pegawai }})</span>
+                            class="font-mono font-bold text-zinc-700 dark:text-zinc-300">{{ $request->user->kode_pegawai ? '(' . $request->user->kode_pegawai . ')' : '' }}</span>
                         </span>
                         <span class="flex items-center gap-1.5">
                             <x-icons.briefcase class="h-4 w-4" />
@@ -55,8 +55,8 @@
                         {{ $request->user->pegawai->jabatanRelasi->nama_jabatan ?? 'Staf' }}
                         <span class="mx-1 text-zinc-300">•</span>
                         Penanggung Jawab:
-                        @if ($request->user->pegawai->jabatanRelasi->supervisor)
-                            {{ $request->user->pegawai->jabatanRelasi->supervisor->name }}
+                        @if ($request->user->pegawai->jabatanRelasi?->supervisors->isNotEmpty())
+                            {{ $request->user->pegawai->jabatanRelasi->supervisors->pluck('name')->implode(', ') }}
                         @else
                             <a href="{{ route('jabatan.edit', $request->user->pegawai->jabatanRelasi->id) }}"
                                 class="font-black italic text-red-500 hover:underline">

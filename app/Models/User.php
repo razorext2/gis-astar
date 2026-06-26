@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+/** Goal: Represent User model, Caller: Authentication and Relationships, Deps: Spatie Permission, SignPad, LeaveRequest */
+
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Models\LeaveRequest\LeaveBalance;
@@ -93,16 +95,9 @@ class User extends Authenticatable implements CanBeSigned
     }
 
     // aksesor routing persetujuan cuti
-    public function getDirectSupervisorAttribute()
+    public function getDirectSupervisorsAttribute()
     {
-        return $this->pegawai->jabatanRelasi && $this->pegawai->jabatanRelasi->supervisor_id ?
-        self::find($this->pegawai->jabatanRelasi->supervisor_id) : null;
-    }
-
-    public function getBranchManagerAttribute()
-    {
-        return $this->pegawai->jabatanRelasi->placementRelasi && $this->pegawai->jabatanRelasi->placementRelasi->manager_id ?
-        self::find($this->pegawai->jabatanRelasi->placementRelasi->manager_id) : null;
+        return $this->pegawai?->jabatanRelasi?->supervisors ?? collect();
     }
 
     // relasi pengajuan cuti
@@ -153,7 +148,7 @@ class User extends Authenticatable implements CanBeSigned
     {
         return (int) $this->leaveRequests()
             ->whereHas('leaveType', fn ($q) => $q->where('code', $leaveCode))
-            ->whereNotIn('status', ['rejected', 'auto_reject', 'canceled'])
+            ->whereNotIn('status', ['rejected', 'auto_reject', 'cancelled'])
             ->sum('total_days');
     }
 
@@ -164,7 +159,7 @@ class User extends Authenticatable implements CanBeSigned
     {
         return $this->leaveRequests()
             ->whereHas('leaveType', fn ($q) => $q->where('code', $leaveCode))
-            ->whereNotIn('status', ['rejected', 'auto_reject', 'canceled'])
+            ->whereNotIn('status', ['rejected', 'auto_reject', 'cancelled'])
             ->exists();
     }
 }

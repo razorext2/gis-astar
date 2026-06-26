@@ -1,5 +1,5 @@
 <div class="w-full">
-    @forelse($notifications as $item)
+    @forelse($this->notifications as $item)
         <div class="flex border-b hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800" wire:key="notif-{{ $item->id }}">
             <div class="w-full px-3.5 py-3 md:p-4">
                 <div class="grid gap-1 text-sm text-zinc-500 dark:text-zinc-400">

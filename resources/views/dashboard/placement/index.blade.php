@@ -30,7 +30,7 @@
 
             </div>
 
-            <livewire:table-refresher table-name="PlacementTable" />
+            <livewire:powergrid-tables.placement-table />
 
         </div>
     </div>

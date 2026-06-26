@@ -22,7 +22,7 @@
         </div>
 
         <div class="flex flex-col gap-2 lg:gap-4">
-            @can('assign-laporan-harian-spk')
+            @can('laporan-harian-spk-assign')
                 @livewire('handler.spk.daily-report.assign')
             @endcan
 

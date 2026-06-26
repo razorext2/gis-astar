@@ -1,3 +1,4 @@
+{{-- Goal: Wrapper layout for employee detail tabs, Livewire: -, Alpine: - --}}
 @extends('dashboard.layoutsDash.app')
 @section('content')
     <div class="space-y-4">
@@ -13,7 +14,10 @@
                     </x-button.danger>
 
                     <div>
-                        <h2 class="text-xl font-bold tracking-tight text-gray-800 dark:text-white">Detail Pegawai</h2>
+                        <h2 class="text-xl font-bold tracking-tight text-gray-800 dark:text-white flex items-center gap-2">
+                            Detail Pegawai
+                            <x-dashboard.badge-inactive :is_active="$pegawai->userRelasi?->is_active ?? true" />
+                        </h2>
                         <p class="text-xs text-gray-500 dark:text-gray-400">Manajemen informasi dan riwayat staf.</p>
                     </div>
                 </div>
@@ -46,7 +50,7 @@
                         <span>Timeline</span>
                     </a>
 
-                    @if ($pegawai->userRelasi->hasRole('Collector'))
+                    @if ($pegawai->userRelasi?->hasRole('Collector'))
                         <a href="{{ route('pegawai.collectors', $pegawai->kode_pegawai) }}"
                             class="{{ $tabClasses }} {{ Route::is('pegawai.collectors') ? $activeClasses : $inactiveClasses }}">
                             <x-icons.info class="h-4 w-4" />
@@ -54,7 +58,7 @@
                         </a>
                     @endif
 
-                    @if ($pegawai->userRelasi->hasRole(['Sales', 'Sales-JKT', 'Sales-PKU', 'Sales-IDY', 'Sales-Agrotec', 'Kurir-Bank']))
+                    @if ($pegawai->userRelasi?->hasRole(['Sales', 'Sales-JKT', 'Sales-PKU', 'Sales-IDY', 'Sales-Agrotec', 'Kurir-Bank']))
                         <a href="{{ route('pegawai.sales', $pegawai->kode_pegawai) }}"
                             class="{{ $tabClasses }} {{ Route::is('pegawai.sales') ? $activeClasses : $inactiveClasses }}">
                             <x-icons.info class="h-4 w-4" />

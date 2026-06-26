@@ -7,8 +7,7 @@
             <div class="w-full">
                 <header class="flex items-center">
 
-                    <x-button.danger class="my-auto me-4 max-h-10" href="{{ route('collect.show', $data->id) }}"
-                        wire:navigate>
+                    <x-button.danger class="my-auto me-4 max-h-10" href="{{ route('collect.index') }}" wire:navigate>
                         <x-icons.angle-left class="h-5 w-5" />
                     </x-button.danger>
 
@@ -172,7 +171,7 @@
                     <div class="col-span-2 w-full">
                         <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                             for="keterangan">Keterangan</label>
-                        <div class="h-32 w-full dark:bg-white" id="editor"></div>
+                        <div class="h-32 w-full" id="editor"></div>
                         <input id="keterangan" name="keterangan" type="hidden">
 
                         <input type="hidden" id="data" value="{{ $data->keterangan }}">

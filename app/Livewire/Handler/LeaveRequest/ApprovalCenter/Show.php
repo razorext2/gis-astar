@@ -1,17 +1,18 @@
 <?php
 
-/** Goal: Handle Leave Request detailed review and processing for approvers, Livewire: Handler.LeaveRequest.ApprovalCenter.Show, Deps: LeaveRequest, LeaveRequestService */
+/** Goal: Handle Leave Request detailed review and processing for approvers, Livewire: Handler.LeaveRequest.ApprovalCenter.Show, Deps: LeaveRequest, LeaveRequestService, LeaveRequestPolicy */
 
 namespace App\Livewire\Handler\LeaveRequest\ApprovalCenter;
 
 use App\Livewire\Concerns\HandlesErrors;
 use App\Models\LeaveRequest\LeaveRequest;
 use App\Services\LeaveRequest\LeaveRequestService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
 class Show extends Component
 {
-    use HandlesErrors;
+    use AuthorizesRequests, HandlesErrors;
 
     public $requestId;
 
@@ -27,46 +28,29 @@ class Show extends Component
 
     public function mount($id)
     {
-        $this->requestId = $id;
+        $this->requestId = is_object($id) ? $id->id : $id;
     }
 
-    /**
-     * Cek apakah user saat ini berhak approve/reject request ini.
-     */
-    private function isAuthorizedApprover(LeaveRequest $request): bool
-    {
-        $user = auth()->user();
-
-        return match ($request->status) {
-            'pending_backup' => $request->backup_person_id === $user->id,
-            'pending_spv' => ($request->user->pegawai->jabatanRelasi->supervisor_id ?? null) === $user->id,
-            'pending_hrd' => (bool) $request->user->pegawai->jabatanRelasi->placementRelasi?->hrds->contains('id', $user->id),
-            'pending_management' => (bool) $request->user->pegawai->jabatanRelasi->placementRelasi?->managements->contains('id', $user->id),
-            default => false,
-        };
-    }
-
-    public function approve(LeaveRequestService $service)
+    public function approve(LeaveRequestService $service): void
     {
         $this->runSafely(function () use ($service) {
-            $request = LeaveRequest::findOrFail($this->requestId);
+            $request = LeaveRequest::with([
+                'user.pegawai.jabatanRelasi.supervisors',
+                'user.pegawai.jabatanRelasi.placementRelasi.hrds',
+                'user.pegawai.jabatanRelasi.placementRelasi.managements',
+            ])->findOrFail($this->requestId);
 
-            // C2: Guard — pastikan user berhak approve
-            if (! $this->isAuthorizedApprover($request)) {
-                $this->dispatch('swal', icon: 'error', title: 'Akses Ditolak', text: 'Anda tidak memiliki otorisasi untuk menyetujui pengajuan ini.');
-
-                return;
-            }
+            $this->authorize('approve', $request);
 
             $service->processAction($request, 'approve', auth()->user(), $this->note);
 
             $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Pengajuan telah disetujui.');
 
-            return redirect()->route('leave-request.approval-center.index');
+            return redirect()->route($this->resolveRedirectRoute());
         });
     }
 
-    public function reject(LeaveRequestService $service)
+    public function reject(LeaveRequestService $service): void
     {
         $this->validate([
             'note' => 'required|min:5',
@@ -75,36 +59,49 @@ class Show extends Component
         ]);
 
         $this->runSafely(function () use ($service) {
-            $request = LeaveRequest::findOrFail($this->requestId);
+            $request = LeaveRequest::with([
+                'user.pegawai.jabatanRelasi.supervisors',
+                'user.pegawai.jabatanRelasi.placementRelasi.hrds',
+                'user.pegawai.jabatanRelasi.placementRelasi.managements',
+            ])->findOrFail($this->requestId);
 
-            // C2: Guard — pastikan user berhak reject
-            if (! $this->isAuthorizedApprover($request)) {
-                $this->dispatch('swal', icon: 'error', title: 'Akses Ditolak', text: 'Anda tidak memiliki otorisasi untuk menolak pengajuan ini.');
-
-                return;
-            }
+            $this->authorize('approve', $request);
 
             $service->processAction($request, 'reject', auth()->user(), $this->note);
 
             $this->dispatch('swal', icon: 'info', title: 'Ditolak', text: 'Pengajuan telah ditolak.');
 
-            return redirect()->route('leave-request.approval-center.index');
+            return redirect()->route($this->resolveRedirectRoute());
         });
     }
 
-    public function render()
+    /**
+     * Resolve redirect route based on user permissions.
+     * Users without approval-center access are sent to dashboard.
+     */
+    private function resolveRedirectRoute(): string
     {
-        $user = auth()->user();
-        $request = LeaveRequest::with(['user.pegawai.jabatanRelasi.divisionRelasi', 'user.pegawai.jabatanRelasi.placementRelasi', 'user.pegawai.jabatanRelasi.supervisor', 'leaveType', 'backupPerson', 'histories.actedByUser'])
-            ->findOrFail($this->requestId);
+        return auth()->user()->hasAnyPermission(['leave-approval-center', 'leave-list-all'])
+            ? 'leave-request.approval-center.index'
+            : 'dashboard';
+    }
 
-        // Guard: Hanya approver terkait atau yang punya permission
-        if (! $this->isAuthorizedApprover($request) && ! $user->can('leave-view-all')) {
-            abort(403, 'Anda tidak memiliki akses untuk melihat pengajuan ini.');
-        }
+    public function render(): \Illuminate\Contracts\View\View
+    {
+        $request = LeaveRequest::with([
+            'user.pegawai.jabatanRelasi.divisionRelasi',
+            'user.pegawai.jabatanRelasi.placementRelasi.hrds',
+            'user.pegawai.jabatanRelasi.placementRelasi.managements',
+            'user.pegawai.jabatanRelasi.supervisors',
+            'leaveType',
+            'backupPerson',
+            'histories.actedByUser',
+        ])->findOrFail($this->requestId);
 
-        // Otoritas validasi
-        $canApprove = $this->isAuthorizedApprover($request);
+        $this->authorize('view', $request);
+
+        // Cek apakah user berhak approve pada tahap ini
+        $canApprove = auth()->user()->can('approve', $request);
 
         return view('livewire.handler.leave-request.approval-center.show', [
             'request' => $request,

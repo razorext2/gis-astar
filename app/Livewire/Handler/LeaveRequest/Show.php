@@ -16,6 +16,8 @@ class Show extends Component
 
     public bool $showSummary = false;
 
+    public string $cancelReason = '';
+
     public function summary()
     {
         $this->showSummary = true;
@@ -24,7 +26,7 @@ class Show extends Component
 
     public function mount($id)
     {
-        $this->requestId = $id;
+        $this->requestId = is_object($id) ? $id->id : $id;
     }
 
     public function cancelRequest(\App\Services\LeaveRequest\LeaveRequestService $service)
@@ -54,24 +56,45 @@ class Show extends Component
         });
     }
 
+    public function requestCancellation(\App\Services\LeaveRequest\LeaveRequestService $service)
+    {
+        $this->validate([
+            'cancelReason' => 'required|min:5',
+        ], [
+            'cancelReason.required' => 'Mohon berikan alasan pembatalan.',
+            'cancelReason.min' => 'Alasan pembatalan minimal 5 karakter.',
+        ]);
+
+        $this->runSafely(function () use ($service) {
+            $request = LeaveRequest::findOrFail($this->requestId);
+
+            // Security check: Only owner
+            if ($request->user_id !== auth()->id()) {
+                $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Anda tidak memiliki akses untuk membatalkan pengajuan ini.');
+                return;
+            }
+
+            $service->requestCancel($request, auth()->user(), $this->cancelReason);
+
+            $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Permintaan pembatalan cuti telah diajukan ke HRD.');
+            $this->reset('cancelReason');
+            $this->dispatch('close-modal', 'cancel-request-modal');
+        });
+    }
+
     public function render()
     {
         $request = LeaveRequest::with([
             'user.pegawai.jabatanRelasi.divisionRelasi',
             'user.pegawai.jabatanRelasi.placementRelasi',
-            'user.pegawai.jabatanRelasi.supervisor',
+            'user.pegawai.jabatanRelasi.supervisors',
             'leaveType',
             'backupPerson',
             'histories.actedByUser',
         ])->findOrFail($this->requestId);
 
-        // C1: Guard — hanya pemilik, backup person, atau user dengan permission leave-view-all
-        $user = auth()->user();
-        $isOwner = $request->user_id === $user->id;
-        $isBackup = $request->backup_person_id === $user->id;
-        $canViewAll = $user->can('leave-view-all') || $user->can('leave-approval-center');
-
-        if (! $isOwner && ! $isBackup && ! $canViewAll) {
+        // Guard using standard policy
+        if (! auth()->user()->can('view', $request)) {
             abort(403, 'Anda tidak memiliki akses untuk melihat pengajuan ini.');
         }
 

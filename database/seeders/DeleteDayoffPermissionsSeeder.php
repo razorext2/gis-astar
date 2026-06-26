@@ -17,10 +17,10 @@ class DeleteDayoffPermissionsSeeder extends Seeder
     public function run(): void
     {
         $permissionsToDelete = [
-            'dayoff-confirm',
+            'dayoff-approve',
             'dayoff-create',
             'dayoff-delete',
-            'dayoff-detail',
+            'dayoff-view',
             'dayoff-edit',
             'dayoff-list',
         ];

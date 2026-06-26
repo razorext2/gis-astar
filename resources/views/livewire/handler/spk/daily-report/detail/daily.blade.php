@@ -135,7 +135,7 @@
                             </div>
                         @endif
 
-                        @can('laporan-harian-validate')
+                        @can('laporan-harian-approve')
                             <div class="mt-4 flex flex-wrap gap-2">
                                 {{-- tombol terima --}}
                                 <x-button.success wire:show="showAcceptButton" class="text-sm"
@@ -202,7 +202,7 @@
             @endif
 
             {{-- tandai sebagai selesai --}}
-            @if ($assignment->status != 'completed' && auth()->user()->can('laporan-harian-validate'))
+            @if ($assignment->status != 'completed' && auth()->user()->can('laporan-harian-approve'))
                 <div class="mt-4 border-t border-zinc-200 pt-4 dark:border-zinc-800 sm:col-span-2 lg:col-span-4"
                     id="mark-as-complete-container">
                     <x-button.success id="btn-mark-as-complete" type="button" wire:click.prevent="markAsComplete"
@@ -339,7 +339,7 @@
                                     Detail Aktivitas
                                 </x-button.link>
 
-                                @can('laporan-harian-validate')
+                                @can('laporan-harian-approve')
                                     <x-button.success id="summary" class="text-sm" type="button"
                                         wire:click.prevent="summary('{{ $row->id }}')" wire:loading.attr="disabled"
                                         wire:target="summary">
@@ -377,7 +377,7 @@
     </div>
 
     {{-- summary modal --}}
-    @can('laporan-harian-validate')
+    @can('laporan-harian-approve')
         <x-modal.base-modal show="showSummaryModal" title="Rekap Aktivitas"
             subtitle="{{ $showSummaryModal && $modalData ? \Carbon\Carbon::parse($modalData->report_date)->locale('id')->isoFormat('dddd, DD MMMM YYYY') : '' }}"
             iconContainerClass="bg-emerald-600 shadow-emerald-500/20" maxWidth="2xl">
@@ -428,7 +428,7 @@
                 </div>
             @endif
 
-            @can('laporan-harian-validate')
+            @can('laporan-harian-approve')
                 @if ($modalData && $modalData->status === 'submitted')
                     <x-slot name="footer">
                         <x-button.secondary @click="open = false">Tutup</x-button.secondary>

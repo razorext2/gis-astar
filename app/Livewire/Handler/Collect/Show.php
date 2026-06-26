@@ -38,7 +38,7 @@ class Show extends Component
     public function loadData(): void
     {
         $this->data = Collector::with([
-            'pegawaiRelasi',
+            'pegawaiRelasi.userRelasi',
             'photoCollectRelasi',
             'collectTaskRelasi',
             'collectTaskPpnRelasi',

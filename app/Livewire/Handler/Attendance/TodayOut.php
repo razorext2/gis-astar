@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Display check-out records for today, Caller: Dashboard, Deps: AttendanceOut, Pegawai, User */
+
 namespace App\Livewire\Handler\Attendance;
 
 use App\Models\AttendanceOut;
@@ -121,7 +123,7 @@ class TodayOut extends Component
             return $this->showModalOut = false;
         }
 
-        $data = AttendanceOut::with('pegawaiRelasi')->find($id);
+        $data = AttendanceOut::with(['pegawaiRelasi', 'user'])->find($id);
 
         if (! $data) {
             return;

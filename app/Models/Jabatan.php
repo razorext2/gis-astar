@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/** Goal: Represent Jabatan model with multiple supervisors, Caller: Models, Deps: User, Pegawai, Division, Placement */
+
 class Jabatan extends Model
 {
     use HasFactory;
@@ -15,7 +17,6 @@ class Jabatan extends Model
         'nama_jabatan',
         'divisi',
         'penempatan',
-        'supervisor_id',
     ];
 
     public function divisionRelasi()
@@ -28,9 +29,9 @@ class Jabatan extends Model
         return $this->belongsTo(Placement::class, 'penempatan', 'id');
     }
 
-    public function supervisor()
+    public function supervisors()
     {
-        return $this->belongsTo(User::class, 'supervisor_id');
+        return $this->belongsToMany(User::class, 'jabatan_supervisors', 'jabatan_id', 'user_id')->withTimestamps();
     }
 
     public function pegawai()

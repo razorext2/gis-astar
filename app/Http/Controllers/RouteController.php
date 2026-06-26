@@ -22,6 +22,7 @@ class RouteController extends Controller
         }
 
         $report = Pegawai::with([
+            'userRelasi',
             'driverReport' => function ($query) use ($date) {
                 $query->whereDate('created_at', $date)
                     ->orderBy('created_at', 'asc');
@@ -43,7 +44,7 @@ class RouteController extends Controller
 
     public function detailCollector($id)
     {
-        $pegawai = Pegawai::select('kode_pegawai', 'full_name')
+        $pegawai = Pegawai::with('userRelasi')
             ->where('kode_pegawai', $id)
             ->firstOrFail();
 
@@ -67,6 +68,7 @@ class RouteController extends Controller
         }
 
         $pegawai = Pegawai::with([
+            'userRelasi',
             'salesReport' => function ($query) use ($date) {
                 $query->with('pegawaiRelasi')
                     ->whereDate('created_at', $date)

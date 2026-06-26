@@ -5,6 +5,7 @@
 namespace App\Livewire\Handler\LeaveRequest;
 
 use App\Livewire\Concerns\HandlesErrors;
+use App\Livewire\Concerns\HasLeaveRequestForm;
 use App\Models\LeaveRequest\LeaveType;
 use App\Models\User;
 use App\Services\LeaveRequest\LeaveRequestService;
@@ -13,7 +14,7 @@ use Livewire\WithFileUploads;
 
 class Create extends Component
 {
-    use HandlesErrors, WithFileUploads;
+    use HandlesErrors, HasLeaveRequestForm, WithFileUploads;
 
     public $leave_type_id;
 
@@ -66,7 +67,7 @@ class Create extends Component
         }
 
         // Load Approvers
-        $placement = $user->pegawai->jabatanRelasi->placementRelasi ?? null;
+        $placement = $user->pegawai?->jabatanRelasi?->placementRelasi ?? null;
         if ($placement) {
             $this->hrd_approvers = $placement->hrds->pluck('name')->toArray();
             $this->management_approvers = $placement->managements->pluck('name')->toArray();
@@ -80,7 +81,7 @@ class Create extends Component
     protected $rules = [
         'leave_type_id' => 'required|exists:tb_leave_types,id',
         'backup_person_id' => 'nullable|exists:users,id',
-        'start_date' => 'required|date|after_or_equal:today',
+        'start_date' => 'required|date|after_or_equal:today', // min-advance check handled by checkMinAdvanceDays()
         'end_date' => 'required|date|after_or_equal:start_date',
         'reason' => 'required|min:10',
         'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:3072',
@@ -93,6 +94,14 @@ class Create extends Component
         }
 
         if (in_array($propertyName, ['start_date', 'end_date'])) {
+            if ($propertyName === 'start_date' && ! $this->checkMinAdvanceDays()) {
+                $this->start_date = null;
+                $this->total_days = 0;
+                $this->return_date = null;
+                $this->reset(['intersected_holidays', 'intersected_sundays']);
+                return;
+            }
+
             $this->checkDateOverlap();
             if (! $this->dateOverlapError) {
                 $this->calculateDays();
@@ -105,35 +114,6 @@ class Create extends Component
 
         if ($propertyName === 'search_backup') {
             $this->reset('backup_person_id');
-        }
-    }
-
-    protected function checkDateOverlap(): void
-    {
-        $this->dateOverlapError = null;
-
-        if (! $this->start_date || ! $this->end_date) {
-            return;
-        }
-
-        if (\Carbon\Carbon::parse($this->start_date)->greaterThan(\Carbon\Carbon::parse($this->end_date))) {
-            $this->dateOverlapError = 'Tanggal mulai tidak boleh lebih besar dari tanggal berakhir.';
-
-            return;
-        }
-
-        $overlap = auth()->user()->leaveRequests()
-            ->whereNotIn('status', ['rejected', 'auto_reject', 'canceled'])
-            ->where(function ($query) {
-                $query->where('start_date', '<=', $this->end_date)
-                    ->where('end_date', '>=', $this->start_date);
-            })
-            ->first();
-
-        if ($overlap) {
-            $from = \Carbon\Carbon::parse($overlap->start_date)->locale('id')->isoFormat('D MMM YYYY');
-            $to = \Carbon\Carbon::parse($overlap->end_date)->locale('id')->isoFormat('D MMM YYYY');
-            $this->dateOverlapError = "Tanggal bertabrakan dengan pengajuan cuti yang sudah ada ({$from} s/d {$to}).";
         }
     }
 
@@ -240,6 +220,11 @@ class Create extends Component
                 }
             }
         }
+        // Validasi: tanggal mulai cuti minimal 7 hari dari hari pengajuan
+        if (! $this->checkMinAdvanceDays()) {
+            return;
+        }
+
         // Re-validate Overlap
         $this->checkDateOverlap();
         if ($this->dateOverlapError) {
@@ -285,25 +270,6 @@ class Create extends Component
 
             return redirect()->route('leave-request.my-requests.show', $request->id);
         });
-    }
-
-    public function selectBackupPerson($id, $name)
-    {
-        $this->backup_person_id = $id;
-        $this->search_backup = $name;
-    }
-
-    public function showOnLeaveError($name)
-    {
-        $this->dispatch('swal', icon: 'error', title: 'Tidak Dapat Dipilih', text: "{$name} saat ini sedang dalam masa cuti dan tidak dapat dijadikan personel backup.");
-    }
-
-    public function removeAttachment($index)
-    {
-        if (isset($this->attachments[$index])) {
-            unset($this->attachments[$index]);
-            $this->attachments = array_values($this->attachments);
-        }
     }
 
     public function render()

@@ -38,79 +38,52 @@
                     Edit
                 </x-button.primary>
             @endif
+
+            @if ($request->status === 'approved')
+                <div x-data="{ openCancelModal: false }" @close-modal.window="if($event.detail === 'cancel-request-modal') openCancelModal = false">
+                    <x-button.danger @click="openCancelModal = true" class="shadow-lg shadow-red-500/10">
+                        <x-slot name="icon"><x-icons.close class="h-4 w-4" /></x-slot>
+                        Ajukan Pembatalan Cuti
+                    </x-button.danger>
+
+                    <!-- Modal -->
+                    <x-modal.base-modal 
+                        show="openCancelModal" 
+                        isAlpine="true" 
+                        title="Ajukan Pembatalan Cuti"
+                        subtitle="PERMINTAAN PEMBATALAN"
+                        iconContainerClass="bg-red-600 shadow-red-500/20"
+                    >
+                        <x-slot name="icon">
+                            <x-icons.close class="h-5 w-5" />
+                        </x-slot>
+
+                        <p class="mb-4 text-sm text-zinc-500 dark:text-zinc-400">Silakan masukkan alasan pembatalan cuti yang sudah disetujui. Permintaan ini akan dikirim ke HRD untuk persetujuan.</p>
+                        
+                        <form wire:submit="requestCancellation" id="cancelRequestForm">
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Alasan Pembatalan</label>
+                                <textarea wire:model="cancelReason" class="mt-1 w-full rounded-md border-zinc-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white" rows="3" required></textarea>
+                                @error('cancelReason') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
+                            </div>
+                        </form>
+
+                        <x-slot name="footer">
+                            <button type="button" @click="openCancelModal = false" class="rounded-md px-4 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800">Batal</button>
+                            <x-button.primary form="cancelRequestForm" type="submit" wire:loading.attr="disabled" wire:target="requestCancellation">
+                                <span wire:loading.remove wire:target="requestCancellation">Kirim Permintaan</span>
+                                <span wire:loading wire:target="requestCancellation">Memproses...</span>
+                            </x-button.primary>
+                        </x-slot>
+                    </x-modal.base-modal>
+                </div>
+            @endif
         </div>
     </div>
 
     {{-- Approval Deadline Countdown --}}
     @if (in_array($request->status, ['pending_backup', 'pending_spv', 'pending_hrd', 'pending_management']))
-        @php
-            $deadlineDays = config('app.leave_approval_deadline_days', 3);
-            $deadlineAt = $request->updated_at->copy()->addDays($deadlineDays);
-            $hoursRemaining = (int) now()->diffInHours($deadlineAt, false);
-            $minutesRemaining = (int) now()->diffInMinutes($deadlineAt, false);
-            $isExpired = $hoursRemaining <= 0 && $minutesRemaining <= 0;
-            $isUrgent = !$isExpired && $hoursRemaining < 24;
-        @endphp
-
-        <div @class([
-            'flex items-center gap-3 rounded-xl border px-4 py-3',
-            'border-red-200 bg-red-50 dark:border-red-900/30 dark:bg-red-900/10' => $isExpired,
-            'border-amber-200 bg-amber-50 dark:border-amber-900/30 dark:bg-amber-900/10' => $isUrgent,
-            'border-blue-200 bg-blue-50 dark:border-blue-900/30 dark:bg-blue-900/10' =>
-                !$isExpired && !$isUrgent,
-        ])>
-            <div @class([
-                'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg',
-                'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' => $isExpired,
-                'bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400' => $isUrgent,
-                'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' =>
-                    !$isExpired && !$isUrgent,
-            ])>
-                <x-icons.clock class="h-5 w-5" />
-            </div>
-
-            <div class="flex-1">
-                <p @class([
-                    'text-sm font-bold',
-                    'text-red-800 dark:text-red-300' => $isExpired,
-                    'text-amber-800 dark:text-amber-300' => $isUrgent,
-                    'text-blue-800 dark:text-blue-300' => !$isExpired && !$isUrgent,
-                ])>
-                    @if ($isExpired)
-                        Batas waktu approval telah habis
-                    @else
-                        Sisa Waktu Approval
-                    @endif
-                </p>
-                <p @class([
-                    'text-xs',
-                    'text-red-600 dark:text-red-400' => $isExpired,
-                    'text-amber-600 dark:text-amber-400' => $isUrgent,
-                    'text-blue-600 dark:text-blue-400' => !$isExpired && !$isUrgent,
-                ])>
-                    @if ($isExpired)
-                        Pengajuan ini akan ditolak otomatis oleh sistem.
-                    @elseif ($hoursRemaining < 1)
-                        {{ $minutesRemaining }} menit lagi — Deadline: {{ $deadlineAt->translatedFormat('d M Y, H:i') }}
-                    @elseif ($hoursRemaining < 24)
-                        {{ $hoursRemaining }} jam lagi — Deadline: {{ $deadlineAt->translatedFormat('d M Y, H:i') }}
-                    @else
-                        {{ floor($hoursRemaining / 24) }} hari {{ $hoursRemaining % 24 }} jam lagi — Deadline:
-                        {{ $deadlineAt->translatedFormat('d M Y, H:i') }}
-                    @endif
-                </p>
-            </div>
-
-            <span @class([
-                'rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider',
-                'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300' => $isExpired,
-                'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300' => $isUrgent,
-                'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300' =>
-                    !$isExpired && !$isUrgent,
-            ])>
-                {{ $deadlineDays }} hari
-            </span>
-        </div>
+        <x-leave-request.deadline-timer :updatedAt="$request->updated_at" />
     @endif
 
     <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">

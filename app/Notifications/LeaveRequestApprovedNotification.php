@@ -34,7 +34,7 @@ class LeaveRequestApprovedNotification extends Notification implements ShouldQue
         return [
             'message' => "Pengajuan {$leaveType} Anda ({$startDate} s/d {$endDate}) telah disetujui sepenuhnya. Selamat menikmati cuti!",
             'button' => [
-                'url' => url("/dashboard/leave-request/my-requests/{$this->leaveRequest->id}"),
+                'url' => route('leave-request.my-requests.show', $this->leaveRequest->id),
                 'label' => 'Lihat Detail',
             ],
             'created_at' => Carbon::now()->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss'),
@@ -52,10 +52,10 @@ class LeaveRequestApprovedNotification extends Notification implements ShouldQue
             ->body("Pengajuan {$leaveType} Anda ({$startDate} s/d {$endDate}) telah disetujui sepenuhnya.")
             ->icon(asset('/assets/img/logo.ico'))
             ->badge(asset('/assets/img/logo.ico'))
-            ->action('Lihat Detail', url("/dashboard/leave-request/my-requests/{$this->leaveRequest->id}"))
+            ->action('Lihat Detail', route('leave-request.my-requests.show', $this->leaveRequest->id))
             ->tag('LeaveRequestApproved')
             ->data([
-                'url' => url("/dashboard/leave-request/my-requests/{$this->leaveRequest->id}"),
+                'url' => route('leave-request.my-requests.show', $this->leaveRequest->id),
             ]);
     }
 }

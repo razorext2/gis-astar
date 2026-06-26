@@ -269,8 +269,8 @@ class Edit extends Component
                 $title = 'SPK mengalami perubahan.';
                 $history_message = Auth::user()->name.' telah mengubah data SPK.';
 
-                // jika bukan user dengan permission spk-validate dan checkbox revisi diaktifkan, reset approval
-                if (auth()->user()->cannot('spk-validate') && $this->is_changed && $this->data->status_approval == 1) {
+                // jika bukan user dengan permission spk-approve dan checkbox revisi diaktifkan, reset approval
+                if (auth()->user()->cannot('spk-approve') && $this->is_changed && $this->data->status_approval == 1) {
                     $data['status_approval'] = 0;
                     $data['approved_by'] = null;
                     $data['approved_at'] = null;
@@ -370,6 +370,7 @@ class Edit extends Component
     {
         // ambil user dengan role Produksi
         $teamProduksi = \App\Models\User::whereHas('roles', fn ($role) => $role->where('name', 'Produksi'))
+            ->where('is_active', true)
             ->get();
 
         return view('livewire.handler.spk.edit', ['users' => $teamProduksi]);

@@ -270,7 +270,7 @@ class Index extends Component
     public function openCreateLaporanFondasiModal()
     {
         // cek addedby
-        if (auth()->user()->cannot('spk-validate') && (auth()->id() != $this->spk->added_by) && ! auth()->user()->can('laporan-fondasi-create')) {
+        if (auth()->user()->cannot('spk-approve') && (auth()->id() != $this->spk->added_by) && ! auth()->user()->can('laporan-fondasi-create')) {
             return $this->dispatch(
                 event: 'swal',
                 icon: 'warning',
@@ -297,6 +297,7 @@ class Index extends Component
     public function render()
     {
         $data = $this->spk->laporanFondasi()
+            ->with(['addedBy'])
             ->paginate(perPage: 5, pageName: 'fondasi-page');
 
         return view('livewire.handler.spk.laporan-fondasi.index',

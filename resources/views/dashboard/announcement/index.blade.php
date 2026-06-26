@@ -9,7 +9,6 @@
                 <div class="mb-2">
                     <span class="text-xl font-semibold text-gray-900 dark:text-white">
                         Manajemen Pengumuman
-                        <script></script>
                     </span>
 
                     <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
@@ -19,7 +18,7 @@
 
                 @can('announcement-create')
                     <div class="max-w-xs">
-                        <x-button.success id="add-button" type="button">
+                        <x-button.success id="add-button" href="{{ route('announcement.create') }}" wire:navigate>
                             <x-slot name="icon">
                                 <x-icons.angle-right class="h-6 w-6 text-green-500 dark:text-white" />
                             </x-slot>
@@ -30,7 +29,7 @@
 
             </div>
 
-            <livewire:table-refresher table-name="AnnouncementTable" />
+            <livewire:powergrid-tables.announcement-table />
 
         </div>
     </div>
