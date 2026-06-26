@@ -47,10 +47,11 @@ final class TeamMemberTable extends PowerGridComponent
             ->add('kode_pegawai')
             ->add('nama_pegawai', function ($query) {
                 $statusSuffix = ($query->userId && !$query->userId->is_active) ? ' (Nonaktif)' : '';
-                return '['.$query->kode_pegawai.'] '.$query->userId->name . $statusSuffix;
+                $name = $query->userId ? $query->userId->name : 'User tidak ditemukan';
+                return '['.$query->kode_pegawai.'] '.$name . $statusSuffix;
             })
             ->add('role', fn ($query) => ucfirst($query->role))
-            ->add('total_poin', fn ($query) => $query->userId->technicianPoint->sum('point').' Total poin')
+            ->add('total_poin', fn ($query) => ($query->userId ? $query->userId->technicianPoint->sum('point') : 0).' Total poin')
             ->add('progress', function ($query) {
                 $progress = [];
                 $progress[$query->kode_pegawai] = $this->getApi($query->kode_pegawai);
