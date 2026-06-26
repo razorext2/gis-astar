@@ -55,7 +55,7 @@ class Index extends Component
         $query = LeaveRequest::with(['user.pegawai.jabatanRelasi', 'leaveType']);
 
         if ($this->activeTab === 'pending') {
-            $query->whereIn('status', ['pending_backup', 'pending_spv', 'pending_hrd', 'pending_management']);
+            $query->whereIn('status', ['pending_backup', 'pending_spv', 'pending_hrd', 'pending_management', 'pending_cancel']);
 
             // Complex Role Filter
             $query->where(function ($q) use ($user) {
@@ -72,7 +72,7 @@ class Index extends Component
 
                 // 3. As HRD (User is assigned as HRD in applicant's placement)
                 $q->orWhere(function ($sq) use ($user) {
-                    $sq->where('status', 'pending_hrd')
+                    $sq->whereIn('status', ['pending_hrd', 'pending_cancel'])
                         ->whereHas('user.pegawai.jabatanRelasi.placementRelasi.hrds', fn ($jq) => $jq->where('users.id', $user->id));
                 });
 

@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: PowerGrid table for announcement management, Caller: dashboard/announcement/index.blade.php, Deps: Announcement model */
+
 namespace App\Livewire\PowergridTables;
 
 use App\Models\Announcement;
@@ -111,25 +113,44 @@ final class AnnouncementTable extends PowerGridComponent
         $actions = [
             [
                 'id' => 'state-btn',
-                'action' => 'javascript:void(0)',
+                'action' => "javascript:Livewire.dispatch('changeStatus', { id: $row->id })",
                 'label' => 'Ubah Status',
             ],
             [
                 'id' => 'edit-btn',
-                'action' => 'javascript:void(0)',
+                'action' => route('announcement.edit', $row->id),
                 'label' => 'Edit',
-            ],
-            [
-                'id' => 'delete-btn',
-                'action' => 'javascript:void(0)',
-                'label' => 'Hapus',
+                'navigate' => true,
             ],
         ];
 
         return view('components.dashboard.action-buttons', [
             'id' => $row->id,
             'datas' => $actions,
+            'delete' => true,
         ]);
+    }
+
+    #[\Livewire\Attributes\On('changeStatus')]
+    public function changeStatus($id)
+    {
+        $announcement = Announcement::find($id);
+        if ($announcement) {
+            $announcement->update([
+                'status' => $announcement->status == 1 ? 0 : 1
+            ]);
+            $this->dispatch('pg:eventRefresh-AnnouncementTable');
+        }
+    }
+
+    #[\Livewire\Attributes\On('delete')]
+    public function delete($id)
+    {
+        $announcement = Announcement::find($id);
+        if ($announcement) {
+            $announcement->delete();
+            $this->dispatch('pg:eventRefresh-AnnouncementTable');
+        }
     }
 }
 

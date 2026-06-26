@@ -1,14 +1,17 @@
 <?php
 
-/** Goal: Leave balance table with search, year filter, edit quota & reset, Caller: manage-balances.index, Deps: User, LeaveBalance */
+/** Goal: Leave balance table with search, year filter, edit quota & reset, Caller: manage-balances.index, Deps: User, LeaveBalance, Spatie Role */
 
 namespace App\Livewire\Handler\LeaveRequest\ManageBalances;
 
 use App\Livewire\Concerns\HandlesErrors;
 use App\Models\LeaveRequest\LeaveBalance;
 use App\Models\User;
+use Carbon\Carbon;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Spatie\Permission\Models\Role;
 
 class Table extends Component
 {
@@ -35,6 +38,19 @@ class Table extends Component
     public ?string $historyUserName = '';
 
     public array $historyData = [];
+
+    // Reset Filter State
+    public bool $isResetFilterOpen = false;
+
+    public string $resetMode = 'all';
+
+    public ?int $resetRoleId = null;
+
+    public array $resetSelectedRoleIds = [];
+
+    public array $resetSelectedUsers = [];
+
+    public string $resetUserSearchQuery = '';
 
     public function mount(): void
     {
@@ -112,7 +128,7 @@ class Table extends Component
             return 12; // Jika join_date kosong, berikan default 12
         }
 
-        $joinDate = \Carbon\Carbon::parse($user->join_date);
+        $joinDate = Carbon::parse($user->join_date);
         $joinYear = $joinDate->year;
         $joinMonth = $joinDate->month;
 
@@ -136,20 +152,84 @@ class Table extends Component
             $quota = $this->calculateDefaultQuota($user);
             LeaveBalance::updateOrCreate(
                 ['user_id' => $userId, 'year' => $this->year],
-                ['total_quota' => $quota, 'used_quota' => 0]
+                ['total_quota' => $quota, 'used_quota' => 0, 'reset_at' => now(), 'reset_by' => auth()->id()]
             );
             $this->dispatch('swal', icon: 'success', title: 'Reset', text: "Saldo {$user->name} berhasil direset menjadi {$quota} hari.");
         });
     }
 
-    // --- Reset all (bulk) ---
+    // --- Reset Filter Modal ---
 
-    public function resetAll(): void
+    public function openResetModal(): void
+    {
+        $this->resetMode = 'all';
+        $this->resetRoleId = null;
+        $this->resetSelectedRoleIds = [];
+        $this->resetSelectedUsers = [];
+        $this->resetUserSearchQuery = '';
+        $this->isResetFilterOpen = true;
+    }
+
+    #[Computed]
+    public function resetUserSearchResults(): mixed
+    {
+        if (strlen($this->resetUserSearchQuery) < 1) {
+            return [];
+        }
+
+        $selectedIds = array_column($this->resetSelectedUsers, 'id');
+
+        return User::select(['id', 'kode_pegawai', 'name'])
+            ->whereHas('pegawai')
+            ->where('is_active', true)
+            ->where(function ($q) {
+                $q->where('name', 'like', '%'.$this->resetUserSearchQuery.'%')
+                    ->orWhere('kode_pegawai', 'like', '%'.$this->resetUserSearchQuery.'%');
+            })
+            ->when(! empty($selectedIds), fn ($q) => $q->whereNotIn('id', $selectedIds))
+            ->orderBy('name')
+            ->limit(8)
+            ->get();
+    }
+
+    public function selectResetUser(int $id, string $name, ?string $kodePegawai = null): void
+    {
+        $this->resetSelectedUsers[] = ['id' => $id, 'name' => $name, 'kode_pegawai' => $kodePegawai];
+        $this->resetUserSearchQuery = '';
+    }
+
+    public function removeResetUser(int $id): void
+    {
+        $this->resetSelectedUsers = array_values(
+            array_filter($this->resetSelectedUsers, fn ($item) => $item['id'] !== $id)
+        );
+    }
+
+    #[Computed]
+    public function roles(): mixed
+    {
+        return Role::select(['id', 'name'])->orderBy('name')->get();
+    }
+
+    // --- Reset (bulk with filter) ---
+
+    public function resetByFilter(): void
     {
         abort_unless(auth()->user()->can('leave-balance-manage'), 403);
 
+        if ($this->resetMode === 'role' && empty($this->resetSelectedRoleIds)) {
+            $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Pilih minimal satu role.');
+
+            return;
+        }
+
+        if ($this->resetMode === 'users' && empty($this->resetSelectedUsers)) {
+            $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Pilih minimal satu user.');
+
+            return;
+        }
+
         $this->runSafely(function () {
-            // Ambil ID User Pegawai yang sudah memiliki used_quota > 0 (untuk dilewati)
             $lockedUserIds = LeaveBalance::where('year', $this->year)
                 ->where('used_quota', '>', 0)
                 ->whereHas('user', fn ($q) => $q->whereHas('pegawai')->where('is_active', true))
@@ -159,9 +239,17 @@ class Table extends Component
             $reset = 0;
             $skipped = 0;
 
-            User::whereHas('pegawai')->where('is_active', true)->chunk(100, function ($users) use ($lockedUserIds, &$reset, &$skipped) {
+            $query = User::whereHas('pegawai')->where('is_active', true);
+
+            if ($this->resetMode === 'role') {
+                $query->whereHas('roles', fn ($q) => $q->whereIn('id', $this->resetSelectedRoleIds))
+                    ->whereDoesntHave('roles', fn ($q) => $q->whereNotIn('id', $this->resetSelectedRoleIds));
+            } elseif ($this->resetMode === 'users') {
+                $query->whereIn('id', array_column($this->resetSelectedUsers, 'id'));
+            }
+
+            $query->chunk(100, function ($users) use ($lockedUserIds, &$reset, &$skipped) {
                 foreach ($users as $user) {
-                    // Jika user ada di daftar locked, tambahkan ke hitungan skipped dan lewati
                     if (in_array($user->id, $lockedUserIds)) {
                         $skipped++;
 
@@ -172,7 +260,7 @@ class Table extends Component
 
                     LeaveBalance::updateOrCreate(
                         ['user_id' => $user->id, 'year' => $this->year],
-                        ['total_quota' => $quota, 'used_quota' => 0]
+                        ['total_quota' => $quota, 'used_quota' => 0, 'reset_at' => now(), 'reset_by' => auth()->id()]
                     );
 
                     $reset++;
@@ -184,8 +272,15 @@ class Table extends Component
                 $text .= " {$skipped} pegawai dilewati karena sudah memiliki riwayat pemakaian cuti.";
             }
 
-            $this->dispatch('swal', icon: 'success', title: 'Reset Massal', text: $text);
+            $this->isResetFilterOpen = false;
+            $this->dispatch('swal', icon: 'success', title: 'Reset Saldo', text: $text);
         });
+    }
+
+    public function resetAll(): void
+    {
+        $this->resetMode = 'all';
+        $this->resetByFilter();
     }
 
     public function render()

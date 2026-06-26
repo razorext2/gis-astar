@@ -60,9 +60,6 @@ export default defineConfig({
                 // technician
                 "resources/js/pages/technician/add.js",
 
-                // announcement
-                "resources/js/pages/announcement/index.js",
-
                 // pegawai
                 "resources/js/pages/pegawai/personalInfo.js",
 

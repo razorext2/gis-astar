@@ -31,7 +31,7 @@ class CutiExport implements FromView, ShouldAutoSize, WithEvents
     {
         $dateType = $this->additionalFilters['date_type'] ?? 'created_at';
 
-        $query = LeaveRequest::with(['user:id,name,kode_pegawai', 'leaveType:id,name', 'backupPerson:id,name']);
+        $query = LeaveRequest::with(['user:id,name,kode_pegawai', 'user.leaveBalances' => fn ($q) => $q->where('year', date('Y')), 'leaveType:id,name', 'backupPerson:id,name']);
 
         if ($dateType === 'leave_date') {
             // Overlapping date range filter: start_date <= toDate AND end_date >= fromDate
