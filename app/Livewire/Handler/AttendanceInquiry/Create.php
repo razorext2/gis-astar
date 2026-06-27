@@ -25,6 +25,8 @@ class Create extends Component
 
     public $bukti = [];
 
+    public $newBukti = [];
+
     public $longitude;
 
     public $latitude;
@@ -45,6 +47,32 @@ class Create extends Component
         'longitude' => 'nullable|string',
         'latitude' => 'nullable|string',
     ];
+
+    public function updatedNewBukti()
+    {
+        $this->validate([
+            'newBukti.*' => 'required|file|image|mimes:jpg,jpeg,png|max:3072',
+        ]);
+
+        $this->bukti = array_values(array_merge($this->bukti, $this->newBukti));
+        $this->newBukti = [];
+    }
+
+    public function removeBukti($index)
+    {
+        if (isset($this->bukti[$index])) {
+            $file = $this->bukti[$index];
+            if (method_exists($file, 'delete')) {
+                try {
+                    $file->delete();
+                } catch (\Exception $e) {
+                    // ignore if delete fails
+                }
+            }
+            unset($this->bukti[$index]);
+            $this->bukti = array_values($this->bukti);
+        }
+    }
 
     public function save()
     {

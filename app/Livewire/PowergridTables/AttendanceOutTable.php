@@ -43,13 +43,7 @@ final class AttendanceOutTable extends PowerGridComponent
     {
         if (auth()->user()?->can('attendance-approve')) {
             $this->checkbox = true;
-            $this->jabatan = Jabatan::select('id', 'nama_jabatan')->get();
-            $this->roles = Role::select('id', 'name')->get();
         }
-
-        $this->pegawai = Pegawai::orderBy('full_name')
-            ->whereHas('attendanceOutRelasi')
-            ->get();
 
         return [
             PowerGrid::header()
@@ -116,7 +110,7 @@ final class AttendanceOutTable extends PowerGridComponent
                 'status' => $query->status,
                 'verified' => $query->verified ? 'verified' : 'unverified',
                 'similarity' => (1 - round($query->distance ?? 1, 2)) * 100 .'%',
-                'verified_by' => $query->verifiedBy ? $query->verifiedBy->name : $query->verified_by,
+                'verified_by' => $query->verified_by ? explode(' ', trim($query->verifiedBy ? $query->verifiedBy->name : $query->verified_by))[0] : '-',
             ]))
             ->add('photo_url', fn ($query) => Blade::render('components.table-component.image-column', ['data' => $query]))
             ->add('created_at')
@@ -192,6 +186,9 @@ final class AttendanceOutTable extends PowerGridComponent
         ];
 
         if (Auth::user()->can('attendance-approve')) {
+            $this->jabatan = Jabatan::select(['id', 'nama_jabatan'])->get();
+            $this->roles = Role::select(['id', 'name'])->get();
+
             $filters = array_merge($filters, [
                 Filter::inputText('full_name', 'tb_pegawai.full_name')
                     ->placeholder('Nama Pegawai'),
@@ -200,12 +197,12 @@ final class AttendanceOutTable extends PowerGridComponent
                     ->placeholder('Kode Jari'),
 
                 Filter::select('jabatan', 'tb_pegawai.jabatan')
-                    ->dataSource(collect($this->jabatan))
+                    ->dataSource($this->jabatan)
                     ->optionLabel('nama_jabatan')
                     ->optionValue('id'),
 
                 Filter::select('roles_formatted', 'roles.id')
-                    ->dataSource(collect($this->roles))
+                    ->dataSource($this->roles)
                     ->optionLabel('name')
                     ->optionValue('id'),
 
@@ -213,6 +210,10 @@ final class AttendanceOutTable extends PowerGridComponent
                     ->label('Aktif', 'Non-aktif'),
             ]);
         } else {
+            $this->pegawai = Pegawai::orderBy('full_name', 'asc')
+                ->whereHas('attendanceOutRelasi')
+                ->get();
+
             $filters[] = Filter::select('kode_pegawai', 'kode_pegawai')
                 ->dataSource($this->pegawai)
                 ->optionLabel('full_name')
