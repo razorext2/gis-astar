@@ -79,7 +79,7 @@ final class PackingListTable extends PowerGridComponent
             Column::action('Aksi'),
             Column::make('Nama Ekspedisi', 'nama_ekspedisi')
                 ->hidden(),
-            Column::make('Nama Ekspedisi', 'nama_ekspedisi_formatted'),
+            Column::make('Nama Ekspsedisi', 'nama_ekspedisi_formatted'),
             Column::make('Nama Barang', 'nama_barang'),
             Column::make('Jumlah', 'qty_barang'),
             Column::make('Satuan', 'satuan_barang'),

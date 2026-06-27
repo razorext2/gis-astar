@@ -10,7 +10,6 @@ use App\Models\Pegawai;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
@@ -29,18 +28,8 @@ final class PegawaiTable extends PowerGridComponent
 
     public bool $showFilters = false;
 
-    public ?Collection $golongan = null;
-
-    public ?Collection $jabatan = null;
-
-    public ?Collection $roles = null;
-
     public function setUp(): array
     {
-        $this->golongan = Golongan::select('id', 'nama_golongan')->get();
-        $this->jabatan = Jabatan::select('id', 'nama_jabatan')->get();
-        $this->roles = Role::select('id', 'name')->get();
-
         return [
             PowerGrid::header()
                 ->showSoftDeletes()
@@ -189,6 +178,10 @@ final class PegawaiTable extends PowerGridComponent
 
     public function filters(): array
     {
+        $golongan = Golongan::select(['id', 'nama_golongan'])->get();
+        $jabatan = Jabatan::select(['id', 'nama_jabatan'])->get();
+        $roles = Role::select(['id', 'name'])->get();
+
         return [
             Filter::boolean('is_active', 'users.is_active')
                 ->label('Aktif', 'Non-aktif'),
@@ -199,12 +192,12 @@ final class PegawaiTable extends PowerGridComponent
                 ->placeholder('Nama lengkap'),
 
             Filter::select('golongan_formatted', 'tb_pegawai.golongan')
-                ->dataSource(collect($this->golongan))
+                ->dataSource(collect($golongan))
                 ->optionLabel('nama_golongan')
                 ->optionValue('id'),
 
             Filter::select('jabatan', 'tb_pegawai.jabatan')
-                ->dataSource(collect($this->jabatan))
+                ->dataSource(collect($jabatan))
                 ->optionLabel('nama_jabatan')
                 ->optionValue('id'),
 
@@ -217,7 +210,7 @@ final class PegawaiTable extends PowerGridComponent
                 ->placeholder('No telp'),
 
             Filter::select('roles_formatted', 'roles.id')
-                ->dataSource(collect($this->roles))
+                ->dataSource(collect($roles))
                 ->optionLabel('name')
                 ->optionValue('id'),
         ];

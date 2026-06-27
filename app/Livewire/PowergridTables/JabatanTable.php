@@ -8,7 +8,6 @@ use App\Models\Placement;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Column;
@@ -29,15 +28,8 @@ final class JabatanTable extends PowerGridComponent
 
     public bool $showFilters = true;
 
-    public ?Collection $penempatan = null;
-
-    public ?Collection $divisi = null;
-
     public function setUp(): array
     {
-        $this->penempatan = Placement::select('id', 'penempatan')->get();
-        $this->divisi = Division::select('id', 'nama_divisi')->get();
-
         return [
             PowerGrid::header()
                 ->showSoftDeletes()
@@ -115,17 +107,20 @@ final class JabatanTable extends PowerGridComponent
 
     public function filters(): array
     {
+        $penempatan = Placement::select(['id', 'penempatan'])->get();
+        $divisi = Division::select(['id', 'nama_divisi'])->get();
+
         return [
             Filter::inputText('nama_jabatan', 'nama_jabatan')
                 ->placeholder('Nama Jabatan'),
 
             Filter::select('penempatan', 'penempatan')
-                ->dataSource(collect($this->penempatan))
+                ->dataSource(collect($penempatan))
                 ->optionLabel('penempatan')
                 ->optionValue('id'),
 
             Filter::select('divisi', 'divisi')
-                ->dataSource(collect($this->divisi))
+                ->dataSource(collect($divisi))
                 ->optionLabel('nama_divisi')
                 ->optionValue('id'),
         ];

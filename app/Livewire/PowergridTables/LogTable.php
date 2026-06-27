@@ -8,7 +8,6 @@ use App\Models\LogHistory;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
 use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Button;
@@ -26,15 +25,9 @@ final class LogTable extends PowerGridComponent
 
     public bool $showFilters = true;
 
-    public ?Collection $users = null;
-
     public function setUp(): array
     {
         $this->showCheckBox();
-        $this->users = User::select('id', 'name')
-            ->whereHas('logs')
-            ->orderBy('name', 'asc')
-            ->get();
 
         return [
             PowerGrid::header()
@@ -124,9 +117,14 @@ final class LogTable extends PowerGridComponent
 
     public function filters(): array
     {
+        $users = User::select(['id', 'name'])
+            ->whereHas('logs')
+            ->orderBy('name', 'asc')
+            ->get();
+
         return [
             Filter::select('user_name', 'user_id')
-                ->dataSource(collect($this->users))
+                ->dataSource(collect($users))
                 ->optionLabel('name')
                 ->optionValue('id'),
             Filter::select('user_action', 'user_action')
