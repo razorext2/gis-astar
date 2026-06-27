@@ -4,21 +4,23 @@
 
 namespace App\Livewire\PowergridTables;
 
-use \App\Models\PointTransactions;
+use App\Models\PointTransactions;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
-use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
-use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 
 final class PointTransactionsTable extends PowerGridComponent
 {
     use WithExport;
+
     public string $tableName = 'PointTransactionsTable';
+
     public bool $deferLoading = true;
+
     public bool $showFilters = false;
 
     public function setUp(): array
@@ -31,9 +33,6 @@ final class PointTransactionsTable extends PowerGridComponent
                 ->showPerPage()
                 ->showRecordCount(),
             PowerGrid::responsive(),
-            PowerGrid::exportable(now()->format('ymdhis') . '-PointTransactionsTable.xlsx')
-                ->type(Exportable::TYPE_XLS)
-                ->stripTags(true)
         ];
     }
 
@@ -64,8 +63,8 @@ final class PointTransactionsTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             ->add('transaction_id')
-            ->add('year', fn($query) => $query->year . '-' . $query->quartal)
-            ->add('redeemed_by', fn($query) => $query->redeemedby->name)
+            ->add('year', fn ($query) => $query->year.'-'.$query->quartal)
+            ->add('redeemed_by', fn ($query) => $query->redeemedby->name)
             ->add('created_at');
     }
 
@@ -88,7 +87,6 @@ final class PointTransactionsTable extends PowerGridComponent
             Column::make('Created at', 'created_at', 'created_at')
                 ->sortable(),
 
-
         ];
     }
 
@@ -110,5 +108,9 @@ final class PointTransactionsTable extends PowerGridComponent
                 ->route('technicianpoints.transactionDetail', ['transaction_id' => $row->transaction_id]),
         ];
     }
-}
 
+    public function queryString(): array
+    {
+        return $this->powerGridQueryString();
+    }
+}

@@ -4,6 +4,7 @@
 
 namespace App\Livewire\PowergridTables;
 
+use App\Models\Spk\PackingListKit;
 use Illuminate\Support\Collection;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
@@ -16,11 +17,11 @@ final class PackingListKitTable extends PowerGridComponent
 {
     public string $tableName = 'PackingListKitTable';
 
-    public $idbarang;
+    public ?string $idbarang;
 
     public function datasource(): Collection
     {
-        $data = \App\Models\Spk\PackingListKit::where('id_barang_produksi', $this->idbarang)->get()->toArray();
+        $data = PackingListKit::where('id_barang_produksi', $this->idbarang)->get()->toArray();
 
         return collect($data);
     }
@@ -103,7 +104,7 @@ final class PackingListKitTable extends PowerGridComponent
         ];
     }
 
-    public function actions($row): array
+    public function actions(PackingListKit $row): array
     {
         return [
             Button::add('remove')
@@ -112,5 +113,9 @@ final class PackingListKitTable extends PowerGridComponent
                 ->dispatch('deletePackingListKit', ['id' => $row->id]),
         ];
     }
-}
 
+    public function queryString(): array
+    {
+        return $this->powerGridQueryString();
+    }
+}

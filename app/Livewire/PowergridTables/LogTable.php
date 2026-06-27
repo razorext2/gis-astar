@@ -5,9 +5,12 @@
 namespace App\Livewire\PowergridTables;
 
 use App\Models\LogHistory;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
+use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
@@ -23,12 +26,12 @@ final class LogTable extends PowerGridComponent
 
     public bool $showFilters = true;
 
-    public $users;
+    public ?Collection $users = null;
 
     public function setUp(): array
     {
         $this->showCheckBox();
-        $this->users = \App\Models\User::select('id', 'name')
+        $this->users = User::select('id', 'name')
             ->whereHas('logs')
             ->orderBy('name', 'asc')
             ->get();
@@ -154,14 +157,14 @@ final class LogTable extends PowerGridComponent
         ];
     }
 
-    #[\Livewire\Attributes\On('delete')]
-    public function delete($id): void
+    #[On('delete')]
+    public function delete(int $id): void
     {
         $this->dispatch('confirmDelete', id: $id);
     }
 
-    #[\Livewire\Attributes\On('confirmDeleteAction')]
-    public function confirmDelete($id): void
+    #[On('confirmDeleteAction')]
+    public function confirmDelete(int $id): void
     {
         $data = LogHistory::find($id);
 
@@ -186,7 +189,7 @@ final class LogTable extends PowerGridComponent
         );
     }
 
-    #[\Livewire\Attributes\On('bulkDelete.{tableName}')]
+    #[On('bulkDelete.{tableName}')]
     public function bulkDelete(): void
     {
         if (! $this->checkboxValues) {
@@ -203,7 +206,7 @@ final class LogTable extends PowerGridComponent
         $this->dispatch('confirmBulkDelete', id: $this->checkboxValues, tableName: $this->tableName);
     }
 
-    #[\Livewire\Attributes\On('confirmBulkDeleteAction.{tableName}')]
+    #[On('confirmBulkDeleteAction.{tableName}')]
     public function confirmBulkDelete(): void
     {
         LogHistory::destroy($this->checkboxValues);
@@ -222,4 +225,3 @@ final class LogTable extends PowerGridComponent
         return $this->powerGridQueryString();
     }
 }
-

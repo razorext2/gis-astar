@@ -153,4 +153,3 @@ final class BillingTable extends PowerGridComponent
         return $this->powerGridQueryString();
     }
 }
-

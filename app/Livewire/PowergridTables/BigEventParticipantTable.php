@@ -5,31 +5,31 @@
 namespace App\Livewire\PowergridTables;
 
 use App\Models\BigEventParticipant;
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
-use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use PowerComponents\LivewirePowerGrid\PowerGridFields;
 
 final class BigEventParticipantTable extends PowerGridComponent
 {
     public string $tableName = 'BigEventParticipantTable';
+
     public bool $deferLoading = true;
+
     public bool $showFilters = false;
+
     public ?string $id;
+
     protected int $rowNumber = 0;
 
     public function setUp(): array
     {
         return [
             PowerGrid::header(),
-            // PowerGrid::responsive(),
             PowerGrid::footer()
                 ->showPerPage()
                 ->showRecordCount(),
@@ -64,16 +64,16 @@ final class BigEventParticipantTable extends PowerGridComponent
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('id_formatted', fn() => $this->nextRowNumber())
+            ->add('id_formatted', fn () => $this->nextRowNumber())
             ->add('big_event_id')
             ->add('user_id')
-            ->add('user_id_formatted', fn($query) => view('components.dashboard.name-w-badge', [
+            ->add('user_id_formatted', fn ($query) => view('components.dashboard.name-w-badge', [
                 'name' => $query->userId->name,
                 'is_active' => (bool) ($query->userId?->is_active ?? true),
             ]))
             ->add('visitor_api')
-            ->add('counter_formatted', fn($row) => number_format($row->visitors_count) . ' Orang')
-            ->add('ranking_formatted', fn($row) => '#' . $row->rank_pos)
+            ->add('counter_formatted', fn ($row) => number_format($row->visitors_count).' Orang')
+            ->add('ranking_formatted', fn ($row) => '#'.$row->rank_pos)
             ->add('created_at');
     }
 
@@ -118,12 +118,12 @@ final class BigEventParticipantTable extends PowerGridComponent
                 ->slot('Hapus')
                 ->id($row->id)
                 ->class('dark:bg-red-800 text-sm dark:hover:bg-red-900 dark:text-white dark:border-zinc-800 rounded-lg bg-red-400 px-2 py-1.5 font-semibold text-white border border-zinc-200 hover:bg-red-700')
-                ->dispatch('participantDelete', ['id' => $row->id])
+                ->dispatch('participantDelete', ['id' => $row->id]),
         ];
     }
 
     #[On('participantDelete')]
-    public function participantDelete($id)
+    public function participantDelete(string $id)
     {
         $participant = BigEventParticipant::findOrFail($id);
 
@@ -131,5 +131,9 @@ final class BigEventParticipantTable extends PowerGridComponent
 
         $this->refresh();
     }
-}
 
+    public function queryString(): array
+    {
+        return $this->powerGridQueryString();
+    }
+}

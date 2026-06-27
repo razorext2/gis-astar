@@ -10,9 +10,9 @@ namespace App\Livewire\PowergridTables;
 use App\Models\Invoice;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
-use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
@@ -35,14 +35,16 @@ final class InvoiceTable extends PowerGridComponent
 
     public bool $multiSort = true;
 
-    public $user;
-
     public string $currentRoute;
+
+    public function booted(): void
+    {
+        $this->currentRoute = request()->route()?->getName() ?? '';
+    }
 
     public function setUp(): array
     {
-        $this->user = auth()->user();
-        $this->currentRoute = request()->route()->getName();
+        $this->currentRoute = request()->route()?->getName() ?? '';
 
         if (auth()->user()->can('invoice-delete')) {
             $this->showCheckBox();
@@ -56,22 +58,17 @@ final class InvoiceTable extends PowerGridComponent
             PowerGrid::footer()
                 ->showPerPage()
                 ->showRecordCount(),
-            // PowerGrid::responsive(),
-            PowerGrid::exportable(now()->format('ymdhis').'-InvoiceTable.xlsx')
-                ->type(Exportable::TYPE_XLS)
-                ->stripTags(true),
         ];
     }
 
     public function datasource(): Builder
     {
-        $user = $this->user;
         $route = $this->currentRoute;
 
         $query = Invoice::query()
             ->with(['addedBy', 'latestUpdateBy', 'details']);
 
-        if ($user->can('invoice-list')) {
+        if (auth()->user()->can('invoice-list')) {
             if ($route === 'invoice.all.index') {
                 return $query;
             }
@@ -87,13 +84,13 @@ final class InvoiceTable extends PowerGridComponent
             }
         }
 
-        if ($user->can('invoice-list-pku') && $route === 'invoice.pku.index') {
+        if (auth()->user()->can('invoice-list-pku') && $route === 'invoice.pku.index') {
             return $query->whereHas('details', function ($details) {
                 $details->where('informasi_pengiriman->tujuan', 'pku');
             });
         }
 
-        if ($user->can('invoice-list-jkt') && $route === 'invoice.jkt.index') {
+        if (auth()->user()->can('invoice-list-jkt') && $route === 'invoice.jkt.index') {
             return $query->whereHas('details', function ($details) {
                 $details->where('informasi_pengiriman->tujuan', 'jkt');
             });
@@ -148,7 +145,7 @@ final class InvoiceTable extends PowerGridComponent
                 return view('components.dashboard.name-w-code', [
                     'code' => $query->tgl_btt,
                     'name' => $query->nomor_btt,
-                    'item3' => \Illuminate\Support\Str::upper($query->tipe_tagihan) ?? '-',
+                    'item3' => Str::upper($query->tipe_tagihan) ?? '-',
                 ]);
             })
             ->add('no_penjualan_formatted', function ($query) {
@@ -276,4 +273,3 @@ final class InvoiceTable extends PowerGridComponent
         return $this->powerGridQueryString();
     }
 }
-

@@ -27,14 +27,10 @@ final class SpkTable extends PowerGridComponent
 
     public string $sortDirection = 'desc';
 
-    public $user;
-
     public ?string $tipe_timbangan = null;
 
     public function setUp(): array
     {
-        $this->user = auth()->user();
-
         return [
             PowerGrid::header()
                 ->showSearchInput(),
@@ -54,19 +50,19 @@ final class SpkTable extends PowerGridComponent
                 'products_name' => DB::raw("JSON_UNQUOTE(JSON_EXTRACT(products, '$.nama_barang'))"),
             ]);
 
-        if ($this->user->can('spk-list')) {
+        if (auth()->user()->can('spk-list')) {
             // No additional filters, view all
-        } elseif ($this->user->can('spk-list-own-only')) {
+        } elseif (auth()->user()->can('spk-list-own-only')) {
             $query->where(function ($q) {
-                $q->where('added_by', $this->user->id)
-                    ->orWhere('assign_to', $this->user->id)
-                    ->orWhere('reassign_to', $this->user->id);
+                $q->where('added_by', auth()->user()->id)
+                    ->orWhere('assign_to', auth()->user()->id)
+                    ->orWhere('reassign_to', auth()->user()->id);
             });
         } else {
-            if (! $this->user->can('spk-create')) {
+            if (! auth()->user()->can('spk-create')) {
                 $query->where(function ($q) {
-                    $q->where('assign_to', $this->user->id)
-                        ->orWhere('reassign_to', $this->user->id);
+                    $q->where('assign_to', auth()->user()->id)
+                        ->orWhere('reassign_to', auth()->user()->id);
                 })->where('status_approval', 1);
             }
         }
@@ -130,9 +126,9 @@ final class SpkTable extends PowerGridComponent
             })
             ->add('customer_formatted', function ($query) {
                 return view('components.dashboard.name-w-code', [
-                    'code' => $this->user->can('spk-create') ? $query->customer_contact_person ?? data_get($query->customer, 'contact_person', '-') : '',
+                    'code' => auth()->user()->can('spk-create') ? $query->customer_contact_person ?? data_get($query->customer, 'contact_person', '-') : '',
                     'name' => $query->customer_nama_perusahaan ?? data_get($query->customer, 'nama_perusahaan', '-'),
-                    'item3' => $this->user->can('spk-create') ? $query->customer['no_hp'] ?? '-' : '',
+                    'item3' => auth()->user()->can('spk-create') ? $query->customer['no_hp'] ?? '-' : '',
                 ]);
             })
             ->add('company_name')
@@ -325,7 +321,7 @@ final class SpkTable extends PowerGridComponent
     {
         $button = [];
 
-        if ($this->user->can('spk-edit') && ($this->user->can('spk-edit-all') || $this->user->id === $row->added_by) && ($this->user->can('spk-approve') || $row->status_approval !== 4)) {
+        if (auth()->user()->can('spk-edit') && (auth()->user()->can('spk-edit-all') || auth()->user()->id === $row->added_by) && (auth()->user()->can('spk-approve') || $row->status_approval !== 4)) {
             $button[] = Button::make('edit')
                 ->slot('Edit')
                 ->id($row->id)
@@ -333,7 +329,7 @@ final class SpkTable extends PowerGridComponent
                 ->route('spk.edit', ['spk' => $row->id]);
         }
 
-        if ($this->user->can('view', $row)) {
+        if (auth()->user()->can('view', $row)) {
             $button[] = Button::make('detail')
                 ->slot('Detail')
                 ->id($row->id)
@@ -349,4 +345,3 @@ final class SpkTable extends PowerGridComponent
         return $this->powerGridQueryString();
     }
 }
-

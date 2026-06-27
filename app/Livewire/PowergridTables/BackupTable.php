@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
@@ -55,7 +56,7 @@ final class BackupTable extends PowerGridComponent
             ->add('id')
             ->add('name')
             ->add('type')
-            ->add('status', fn ($query) => \Illuminate\Support\Facades\Blade::render('components.table-component.state', ['status' => $query->status == 'success' ? 1 : 0]))
+            ->add('status', fn ($query) => Blade::render('components.table-component.state', ['status' => $query->status == 'success' ? 1 : 0]))
             ->add('user_id', fn ($query) => e($query->user->name))
             ->add('created_at')
             ->add('created_at_formatted', fn ($query) => e(Carbon::parse($query->created_at)->locale('id')->diffForHumans()));
@@ -121,14 +122,14 @@ final class BackupTable extends PowerGridComponent
         return $actions;
     }
 
-    #[\Livewire\Attributes\On('delete')]
-    public function delete($id): void
+    #[On('delete')]
+    public function delete(int $id): void
     {
         $this->dispatch('confirmDelete', id: $id);
     }
 
-    #[\Livewire\Attributes\On('confirmDeleteAction')]
-    public function confirmDelete($id)
+    #[On('confirmDeleteAction')]
+    public function confirmDelete(int $id)
     {
         // ganti jadi backup-delete
         if (! auth()->user()->can('backup-list')) {
@@ -156,8 +157,8 @@ final class BackupTable extends PowerGridComponent
         }
     }
 
-    #[\Livewire\Attributes\On('download')]
-    public function download($id)
+    #[On('download')]
+    public function download(int $id)
     {
         return $this->redirect(route('backup.download', $id));
     }
@@ -167,4 +168,3 @@ final class BackupTable extends PowerGridComponent
         return $this->powerGridQueryString();
     }
 }
-

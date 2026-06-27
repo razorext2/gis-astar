@@ -9,10 +9,10 @@ use App\Models\Technician;
 use App\Support\IdObfuscator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Request;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
-use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
@@ -31,8 +31,6 @@ final class TechnicianTable extends PowerGridComponent
 
     public string $status;
 
-    public $teams = [];
-
     public function setUp(): array
     {
         if (auth()->user()->can('technician-approve')) {
@@ -40,7 +38,6 @@ final class TechnicianTable extends PowerGridComponent
         }
 
         $this->status = Request::query('status') ?? '';
-        $this->teams = Team::all();
 
         return [
             PowerGrid::header()
@@ -50,9 +47,6 @@ final class TechnicianTable extends PowerGridComponent
                 ->showPerPage()
                 ->showRecordCount(),
             PowerGrid::responsive(),
-            PowerGrid::exportable(now()->format('ymdhis').'-TechnicianTable.xlsx')
-                ->type(Exportable::TYPE_XLS)
-                ->stripTags(true),
         ];
     }
 
@@ -211,7 +205,7 @@ final class TechnicianTable extends PowerGridComponent
         if (auth()->user()->can('technician-approve')) {
             $filters = array_merge($filters, [
                 Filter::select('team_code', 'tb_team_members.team_code')
-                    ->dataSource($this->teams)
+                    ->dataSource(Team::all())
                     ->optionLabel('team_name')
                     ->optionValue('team_code'),
                 // Filter::inputText('kode_pegawai', 'tb_technician.kode_pegawai')
@@ -248,4 +242,3 @@ final class TechnicianTable extends PowerGridComponent
         return $this->powerGridQueryString();
     }
 }
-

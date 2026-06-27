@@ -2,24 +2,25 @@
 
 namespace App\Livewire\PowergridTables;
 
-use Illuminate\Support\Facades\Blade;
-use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
-use PowerComponents\LivewirePowerGrid\Traits\WithExport;
-use \Spatie\Permission\Models\Permission;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use PowerComponents\LivewirePowerGrid\Button;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Blade;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
-use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use PowerComponents\LivewirePowerGrid\PowerGridFields;
+use PowerComponents\LivewirePowerGrid\Traits\WithExport;
+use Spatie\Permission\Models\Permission;
 
 final class PermissionsTable extends PowerGridComponent
 {
     use WithExport;
+
     public string $tableName = 'PermissionsTable';
+
     public bool $deferLoading = true;
+
     public bool $showFilters = true;
 
     public function setUp(): array
@@ -34,9 +35,6 @@ final class PermissionsTable extends PowerGridComponent
                 ->showPerPage(25, [0, 10, 25, 50, 500])
                 ->showRecordCount(),
             PowerGrid::responsive(),
-            PowerGrid::exportable(fileName: 'permissionReport-' . now()->format('Ymdhis'))
-                ->type(Exportable::TYPE_XLS)
-                ->stripTags(true),
         ];
     }
 
@@ -93,7 +91,7 @@ final class PermissionsTable extends PowerGridComponent
     {
         return [
             Filter::inputText('name', 'name'),
-            Filter::datetimepicker('created_at', 'created_at')
+            Filter::datetimepicker('created_at', 'created_at'),
         ];
     }
 
@@ -111,4 +109,3 @@ final class PermissionsTable extends PowerGridComponent
         return $this->powerGridQueryString();
     }
 }
-

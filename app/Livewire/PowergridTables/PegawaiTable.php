@@ -4,11 +4,14 @@
 
 namespace App\Livewire\PowergridTables;
 
+use App\Models\Golongan;
+use App\Models\Jabatan;
 use App\Models\Pegawai;
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use PowerComponents\LivewirePowerGrid\Column;
-use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
@@ -26,16 +29,16 @@ final class PegawaiTable extends PowerGridComponent
 
     public bool $showFilters = false;
 
-    public $golongan;
+    public ?Collection $golongan = null;
 
-    public $jabatan;
+    public ?Collection $jabatan = null;
 
-    public $roles;
+    public ?Collection $roles = null;
 
     public function setUp(): array
     {
-        $this->golongan = \App\Models\Golongan::select('id', 'nama_golongan')->get();
-        $this->jabatan = \App\Models\Jabatan::select('id', 'nama_jabatan')->get();
+        $this->golongan = Golongan::select('id', 'nama_golongan')->get();
+        $this->jabatan = Jabatan::select('id', 'nama_jabatan')->get();
         $this->roles = Role::select('id', 'name')->get();
 
         return [
@@ -47,9 +50,6 @@ final class PegawaiTable extends PowerGridComponent
                 ->showPerPage(25)
                 ->showRecordCount(),
             PowerGrid::responsive(),
-            PowerGrid::exportable(fileName: 'userAccount-'.now()->format('YmdHis'))
-                ->type(Exportable::TYPE_XLS)
-                ->stripTags(true),
         ];
     }
 
@@ -223,12 +223,7 @@ final class PegawaiTable extends PowerGridComponent
         ];
     }
 
-    public function actions(Pegawai $row): array
-    {
-        return [];
-    }
-
-    public function actionsFromView(Pegawai $row): \Illuminate\Contracts\View\View
+    public function actionsFromView(Pegawai $row): View
     {
         return view(
             'components.dashboard.single-button',
@@ -247,4 +242,3 @@ final class PegawaiTable extends PowerGridComponent
         return $this->powerGridQueryString();
     }
 }
-

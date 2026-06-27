@@ -2,13 +2,16 @@
 
 namespace App\Livewire\PowergridTables;
 
+use App\Models\Division;
 use App\Models\Jabatan;
+use App\Models\Placement;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Column;
-use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
@@ -16,7 +19,6 @@ use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 
 /** Goal: Display Jabatan table with multiple supervisors column formatted, Caller: Livewire, Deps: Jabatan */
-
 final class JabatanTable extends PowerGridComponent
 {
     use WithExport;
@@ -27,27 +29,22 @@ final class JabatanTable extends PowerGridComponent
 
     public bool $showFilters = true;
 
-    public $penempatan;
+    public ?Collection $penempatan = null;
 
-    public $divisi;
+    public ?Collection $divisi = null;
 
     public function setUp(): array
     {
-        $this->penempatan = \App\Models\Placement::select('id', 'penempatan')->get();
-        $this->divisi = \App\Models\Division::select('id', 'nama_divisi')->get();
+        $this->penempatan = Placement::select('id', 'penempatan')->get();
+        $this->divisi = Division::select('id', 'nama_divisi')->get();
 
         return [
             PowerGrid::header()
                 ->showSoftDeletes()
                 ->showToggleColumns(),
-
             PowerGrid::footer()
                 ->showPerPage()
                 ->showRecordCount(),
-
-            PowerGrid::exportable(fileName: 'jabatanReport-'.now()->format('YmdHis'))
-                ->type(Exportable::TYPE_XLS),
-
             PowerGrid::responsive(),
         ];
     }
@@ -81,6 +78,7 @@ final class JabatanTable extends PowerGridComponent
             ->add('nama_jabatan')
             ->add('nama_jabatan_formatted', function ($query) {
                 $supervisorsList = $query->supervisors->pluck('name')->implode(', ') ?: 'Belum diatur.';
+
                 return view('components.dashboard.name-w-code', [
                     'code' => '',
                     'name' => $query->nama_jabatan,
@@ -150,14 +148,14 @@ final class JabatanTable extends PowerGridComponent
         ]);
     }
 
-    #[\Livewire\Attributes\On('delete')]
-    public function delete($id): void
+    #[On('delete')]
+    public function delete(int $id): void
     {
         $this->dispatch('confirmDelete', id: $id);
     }
 
-    #[\Livewire\Attributes\On('confirmDeleteAction')]
-    public function confirmDelete($id, Request $request): void
+    #[On('confirmDeleteAction')]
+    public function confirmDelete(int $id, Request $request): void
     {
         $data = Jabatan::find($id);
 
@@ -180,7 +178,7 @@ final class JabatanTable extends PowerGridComponent
         }
     }
 
-    public function swal($title, $text, $icon)
+    public function swal(string $title, string $text, string $icon)
     {
         return $this->dispatch(
             'swal',
@@ -189,5 +187,9 @@ final class JabatanTable extends PowerGridComponent
             icon: $icon
         );
     }
-}
 
+    public function queryString(): array
+    {
+        return $this->powerGridQueryString();
+    }
+}

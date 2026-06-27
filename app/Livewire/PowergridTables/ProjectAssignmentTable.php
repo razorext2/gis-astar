@@ -22,12 +22,8 @@ final class ProjectAssignmentTable extends PowerGridComponent
 
     public bool $multiSort = true;
 
-    public $user;
-
     public function setUp(): array
     {
-        $this->user = auth()->user();
-
         return [
             PowerGrid::header()
                 ->showSearchInput(),
@@ -63,8 +59,8 @@ final class ProjectAssignmentTable extends PowerGridComponent
             '))
             ->orderBy('created_at', 'desc');
 
-        if ($this->user->cannot('laporan-harian-approve')) {
-            $query->where('assign_to', $this->user->id);
+        if (auth()->user()->cannot('laporan-harian-approve')) {
+            $query->where('assign_to', auth()->user()->id);
         }
 
         return $query;
@@ -255,4 +251,3 @@ final class ProjectAssignmentTable extends PowerGridComponent
         return $this->powerGridQueryString();
     }
 }
-

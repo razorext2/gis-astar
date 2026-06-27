@@ -1,21 +1,25 @@
 <?php
 
+/** Goal: PowerGrid table representing Big Events, Caller: Big Event dashboard, Deps: BigEvent model */
+
 namespace App\Livewire\PowergridTables;
 
 use App\Models\BigEvent;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
-use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use PowerComponents\LivewirePowerGrid\PowerGridFields;
 
 final class BigEventTable extends PowerGridComponent
 {
     public string $tableName = 'BigEventTable';
+
     public bool $deferLoading = true;
+
     public bool $showFilters = true;
 
     public function setUp(): array
@@ -27,7 +31,7 @@ final class BigEventTable extends PowerGridComponent
             PowerGrid::footer()
                 ->showPerPage()
                 ->showRecordCount(),
-            PowerGrid::responsive()
+            PowerGrid::responsive(),
         ];
     }
 
@@ -48,8 +52,8 @@ final class BigEventTable extends PowerGridComponent
             ->add('name')
             ->add('description')
             ->add('location')
-            ->add('start_date_formatted', fn(BigEvent $model) => Carbon::parse($model->start_date)->format('d/m/Y'))
-            ->add('end_date_formatted', fn(BigEvent $model) => Carbon::parse($model->end_date)->format('d/m/Y'))
+            ->add('start_date_formatted', fn (BigEvent $model) => Carbon::parse($model->start_date)->format('d/m/Y'))
+            ->add('end_date_formatted', fn (BigEvent $model) => Carbon::parse($model->end_date)->format('d/m/Y'))
             ->add('status')
             ->add('created_at');
     }
@@ -118,5 +122,9 @@ final class BigEventTable extends PowerGridComponent
 
         return $button;
     }
-}
 
+    public function queryString(): array
+    {
+        return $this->powerGridQueryString();
+    }
+}
