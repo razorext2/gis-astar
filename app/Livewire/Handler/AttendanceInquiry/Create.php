@@ -77,17 +77,18 @@ class Create extends Component
     public function save()
     {
         // Auto-extract VT number if VT is in keterangan and no_vt is empty
-        if (empty($this->no_vt) && !empty($this->keterangan)) {
+        if (empty($this->no_vt) && ! empty($this->keterangan)) {
             if (preg_match('/\bVT\s*-?\s*(\d+)\b/i', $this->keterangan, $m)) {
-                $this->no_vt = 'VT-' . $m[1];
+                $this->no_vt = 'VT-'.$m[1];
             }
         }
 
         $this->validate();
 
         $user = auth()->user();
-        if (!$user->kode_pegawai) {
+        if (! $user->kode_pegawai) {
             $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Anda tidak memiliki akun pegawai.');
+
             return;
         }
 
