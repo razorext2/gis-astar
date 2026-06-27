@@ -10,13 +10,13 @@
      @gps-loading.window="gpsStatus = 'loading'">
      
     {{-- Header --}}
-    <div class="flex items-center gap-4 border-b border-zinc-200 pb-4 dark:border-zinc-800">
-        <a href="{{ route('attendance-inquiry.my-inquiries.index') }}" wire:navigate class="rounded-lg border border-zinc-200 p-2 text-zinc-600 hover:bg-zinc-50 dark:border-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-800">
-            <x-icons.arrow-left class="h-5 w-5" />
-        </a>
+    <div class="flex items-center gap-3 border-b border-zinc-200 pb-4 dark:border-zinc-800">
+        <x-button.danger wire:navigate href="{{ route('attendance-inquiry.my-inquiries.index') }}" class="max-h-10 max-w-fit">
+            <x-icons.angle-left class="h-5 w-5" />
+        </x-button.danger>
         <div>
-            <h2 class="text-xl font-bold text-zinc-900 dark:text-white lg:text-2xl">Buat Laporan Absensi Baru</h2>
-            <p class="text-sm text-zinc-500 dark:text-zinc-400">Silakan isi formulir di bawah ini beserta bukti pendukung untuk diverifikasi HRD.</p>
+            <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Buat Laporan Absensi Baru</h1>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Silakan isi formulir di bawah ini beserta bukti pendukung untuk diverifikasi HRD.</p>
         </div>
     </div>
 
@@ -25,40 +25,38 @@
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
             {{-- Tipe Absen --}}
             <div>
-                <label for="type_absen" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">Tipe Absen <span class="text-red-500">*</span></label>
-                <select id="type_absen" wire:model.live="type_absen"
-                    class="mt-1.5 block w-full rounded-lg border-zinc-200 bg-white/50 text-sm text-zinc-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-white">
+                <x-input.select id="type_absen" name="type_absen" wire:model.live="type_absen">
+                    <x-slot name="label">Tipe Absen <span class="text-red-500">*</span></x-slot>
                     <option value="in">Masuk (Clock In)</option>
                     <option value="out">Keluar (Clock Out)</option>
-                </select>
+                </x-input.select>
                 @error('type_absen') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
             </div>
 
             {{-- Status Rute --}}
             <div>
-                <label for="position_status" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">Status Kehadiran <span class="text-red-500">*</span></label>
-                <select id="position_status" wire:model.live="position_status"
-                    class="mt-1.5 block w-full rounded-lg border-zinc-200 bg-white/50 text-sm text-zinc-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-white">
+                <x-input.select id="position_status" name="position_status" wire:model.live="position_status">
+                    <x-slot name="label">Status Kehadiran <span class="text-red-500">*</span></x-slot>
                     <option value="1">Dalam Perjalanan (On route)</option>
                     <option value="2">Standby</option>
                     <option value="3">Onsite (Di Kantor/Lokasi Kerja)</option>
-                </select>
+                </x-input.select>
                 @error('position_status') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
             </div>
 
             {{-- Tanggal dan Waktu --}}
             <div>
-                <label for="waktu_absen" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">Tanggal dan Waktu Absen <span class="text-red-500">*</span></label>
-                <input type="datetime-local" id="waktu_absen" wire:model.live="waktu_absen"
-                    class="mt-1.5 block w-full rounded-lg border-zinc-200 bg-white/50 text-sm text-zinc-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-white" />
+                <x-input.basic type="datetime-local" id="waktu_absen" name="waktu_absen" wire:model.live="waktu_absen">
+                    Tanggal dan Waktu Absen <span class="text-red-500">*</span>
+                </x-input.basic>
                 @error('waktu_absen') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
             </div>
 
             {{-- Nomor VT --}}
             <div>
-                <label for="no_vt" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">No. VT <span class="text-zinc-400 font-normal">(Opsional)</span></label>
-                <input type="text" id="no_vt" wire:model.live="no_vt" placeholder="Contoh: VT-12345"
-                    class="mt-1.5 block w-full rounded-lg border-zinc-200 bg-white/50 text-sm text-zinc-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-white" />
+                <x-input.basic type="text" id="no_vt" name="no_vt" wire:model.live="no_vt" placeholder="Contoh: VT-12345">
+                    No. VT <span class="text-zinc-400 font-normal">(Opsional)</span>
+                </x-input.basic>
                 @error('no_vt') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
             </div>
         </div>
@@ -98,9 +96,7 @@
 
         {{-- Keterangan --}}
         <div>
-            <label for="keterangan" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">Keterangan <span class="text-red-500">*</span></label>
-            <textarea id="keterangan" wire:model.live="keterangan" rows="4" placeholder="Tulis alasan keterlambatan atau kegagalan absensi..."
-                class="mt-1.5 block w-full rounded-lg border-zinc-200 bg-white/50 text-sm text-zinc-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-white"></textarea>
+            <x-input.textarea id="keterangan" name="keterangan" wire:model.live="keterangan" rows="4" placeholder="Tulis alasan keterlambatan atau kegagalan absensi..." :textLabel="'Keterangan *'" />
             @error('keterangan') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
         </div>
 
@@ -114,7 +110,7 @@
                     <div class="mt-4 flex text-sm text-zinc-600 dark:text-zinc-400">
                         <label for="bukti_files" class="relative cursor-pointer rounded-md font-semibold text-blue-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 hover:text-blue-500 dark:text-blue-400">
                             <span>Pilih beberapa file foto</span>
-                            <input id="bukti_files" type="file" class="sr-only" wire:model="bukti" multiple accept="image/*">
+                            <input id="bukti_files" type="file" class="sr-only" wire:model.live="newBukti" multiple accept="image/*">
                         </label>
                         <p class="pl-1">atau seret ke sini</p>
                     </div>
@@ -122,23 +118,40 @@
                 </div>
             </div>
             
-            <div wire:loading wire:target="bukti" class="text-xs text-blue-600 mt-2">
+            <div wire:loading wire:target="newBukti" class="text-xs text-blue-600 mt-2">
                 <x-icons.loading-circle class="inline h-4 w-4 animate-spin mr-1" /> Mengunggah & memproses gambar...
             </div>
             
             @error('bukti') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
             @error('bukti.*') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+            @error('newBukti') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+            @error('newBukti.*') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
 
             {{-- Preview section --}}
             @if (!empty($this->bukti))
-                <div class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-6">
-                    @foreach ($this->bukti as $index => $photo)
-                        <div class="group relative rounded-lg border border-zinc-200 bg-white p-1 dark:border-zinc-800 dark:bg-zinc-900">
-                            @if (method_exists($photo, 'temporaryUrl'))
-                                <img src="{{ $photo->temporaryUrl() }}" class="h-24 w-full rounded object-cover">
-                            @endif
+                <div class="mt-4 flex flex-col gap-2">
+                    <div class="scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-800 overflow-x-auto rounded-xl border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-900/50">
+                        <div class="flex gap-4">
+                            @foreach ($this->bukti as $index => $photo)
+                                <div class="relative shrink-0">
+                                    @if (method_exists($photo, 'temporaryUrl'))
+                                        <img class="h-24 w-24 rounded-lg border border-zinc-200 object-cover dark:border-zinc-800"
+                                            src="{{ $photo->temporaryUrl() }}">
+                                    @endif
+                                    <x-button.danger type="button"
+                                        class="absolute -end-2 -top-2 !rounded-full !p-1 shadow-md"
+                                        wire:click="removeBukti({{ $index }})">
+                                        <x-slot name="icon">
+                                            <x-icons.close class="h-3 w-3" />
+                                        </x-slot>
+                                    </x-button.danger>
+                                </div>
+                            @endforeach
                         </div>
-                    @endforeach
+                    </div>
+                    <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                        Total {{ count($this->bukti) }} file dipilih.
+                    </p>
                 </div>
             @endif
         </div>
