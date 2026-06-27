@@ -21,7 +21,7 @@ final class PackingListKitTable extends PowerGridComponent
 
     public function datasource(): Collection
     {
-        $data = PackingListKit::where('id_barang_produksi', $this->idbarang)->get()->toArray();
+        $data = PackingListKit::query()->where('id_barang_produksi', $this->idbarang)->get()->toArray();
 
         return collect($data);
     }
@@ -104,7 +104,7 @@ final class PackingListKitTable extends PowerGridComponent
         ];
     }
 
-    public function actions(PackingListKit $row): array
+    public function actions($row): array
     {
         return [
             Button::add('remove')
