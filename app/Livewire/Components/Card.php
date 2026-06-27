@@ -20,6 +20,7 @@ use App\Services\Sales\SalesCardService;
 use App\Services\Spk\SpkCardService;
 use App\Services\System\ServerCardService;
 use App\Services\Technician\TechnicianCardService;
+use App\Models\AttendanceInquiry\AttendanceInquiry;
 use Livewire\Component;
 
 class Card extends Component
@@ -71,6 +72,8 @@ class Card extends Component
             'my-leave-request' => $this->getMyLeaveRequestCards(),
             'approval-center-leave' => $this->getApprovalCenterLeaveCards(),
             'manage-leave-balance' => $this->getManageLeaveBalanceCards(),
+            'my-attendance-inquiry' => $this->getMyAttendanceInquiryCards(),
+            'attendance-inquiry-approval-center' => $this->getAttendanceInquiryApprovalCards(),
             default => [],
         };
     }
@@ -228,5 +231,67 @@ class Card extends Component
     protected function getManageLeaveBalanceCards(): array
     {
         return app(LeaveRequestCardService::class)->getManageBalanceCards();
+    }
+
+    protected function getMyAttendanceInquiryCards(): array
+    {
+        $kodePegawai = auth()->user()->kode_pegawai;
+
+        return [
+            [
+                'label' => 'Total Pengajuan',
+                'count' => AttendanceInquiry::where('kode_pegawai', $kodePegawai)->count(),
+                'indicator' => 'Pengajuan',
+                'icon' => 'icons.envelope',
+                'color' => 'blue',
+                'permission' => 'all',
+            ],
+            [
+                'label' => 'Menunggu Approval',
+                'count' => AttendanceInquiry::where('kode_pegawai', $kodePegawai)->where('status', 'pending')->count(),
+                'indicator' => 'Pengajuan',
+                'icon' => 'icons.clock',
+                'color' => 'yellow',
+                'permission' => 'all',
+            ],
+            [
+                'label' => 'Disetujui',
+                'count' => AttendanceInquiry::where('kode_pegawai', $kodePegawai)->where('status', 'approved')->count(),
+                'indicator' => 'Pengajuan',
+                'icon' => 'icons.badge-check',
+                'color' => 'green',
+                'permission' => 'all',
+            ],
+        ];
+    }
+
+    protected function getAttendanceInquiryApprovalCards(): array
+    {
+        return [
+            [
+                'label' => 'Total Masuk (YTD)',
+                'count' => AttendanceInquiry::whereYear('created_at', date('Y'))->count(),
+                'indicator' => 'Pengajuan',
+                'icon' => 'icons.envelope',
+                'color' => 'blue',
+                'permission' => 'all',
+            ],
+            [
+                'label' => 'Butuh Review',
+                'count' => AttendanceInquiry::where('status', 'pending')->count(),
+                'indicator' => 'Pengajuan',
+                'icon' => 'icons.clock',
+                'color' => 'yellow',
+                'permission' => 'all',
+            ],
+            [
+                'label' => 'Selesai Diproses',
+                'count' => AttendanceInquiry::whereIn('status', ['approved', 'rejected'])->count(),
+                'indicator' => 'Pengajuan',
+                'icon' => 'icons.badge-check',
+                'color' => 'green',
+                'permission' => 'all',
+            ],
+        ];
     }
 }
