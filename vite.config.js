@@ -71,6 +71,9 @@ export default defineConfig({
 
                 // spk
                 "resources/js/pages/spk/show.js",
+
+                // attendance inquiry
+                "resources/js/pages/attendance-inquiry/create.js",
             ],
             refresh: true,
         }),

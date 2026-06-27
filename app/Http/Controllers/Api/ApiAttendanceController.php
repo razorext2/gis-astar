@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: API controller for employee attendance verification, Caller: API routes, Deps: Attendance, ProcessFaceRecognition, AttendanceService */
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -9,6 +11,7 @@ use App\Models\Attendance;
 use App\Models\AttendanceOut;
 use App\Models\Pegawai;
 use App\Models\User;
+use App\Services\Attendance\AttendanceService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -201,7 +204,7 @@ class ApiAttendanceController extends Controller
                 $filename.'.png',
                 $no_vt,
                 $request->keterangan,
-                $this->isInMedan($request->latitude, $request->longitude) ? 'MEDAN' : 'NON MEDAN',
+                AttendanceService::isInMedan($request->latitude, $request->longitude) ? 'MEDAN' : 'NON MEDAN',
             );
 
             return new ApiResource(true, 'Verifikasi absensi sedang diproses...', 'Silahkan menunggu beberapa saat.');
@@ -214,10 +217,5 @@ class ApiAttendanceController extends Controller
 
             return new ApiResource(false, 'Terjadi kegagalan.', $e->getMessage());
         }
-    }
-
-    protected function isInMedan($latitude, $longitude)
-    {
-        return $latitude >= 3.50 && $latitude <= 3.78 && $longitude >= 98.58 && $longitude <= 98.75;
     }
 }
