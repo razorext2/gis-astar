@@ -342,6 +342,9 @@ Route::middleware(['auth'])->group(function () {
         // route pengajuan cuti
         require __DIR__.'/features/leave-request.php';
 
+        // route inquiry absensi
+        require __DIR__.'/features/attendance-inquiry.php';
+
         // route laporan export
         require __DIR__.'/features/report.php';
     });
