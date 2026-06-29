@@ -1,3 +1,4 @@
+{{-- Goal: Base modal component with customizable header, footer, close button, and minimizeable state, Livewire: N/A, Alpine: open/close state management --}}
 @props([
     'show' => null,
     'id' => 'modal-' . uniqid(),
@@ -6,6 +7,8 @@
     'maxWidth' => 'md',
     'iconContainerClass' => 'bg-blue-600 shadow-blue-500/20',
     'isAlpine' => false,
+    'showCloseButton' => true,
+    'minimizeable' => true,
 ])
 
 @php
@@ -29,10 +32,11 @@
     <div x-data="{ open: @if ($isAlpine) {{ $show }} @else @entangle($show) @endif }"
         @if ($isAlpine) x-init="$watch('open', val => {{ $show }} = val); $watch('{{ $show }}', val => open = val)" @endif
         x-show="open" x-cloak
-        class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-900/60 p-4 backdrop-blur-md"
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-900/60 p-4 backdrop-blur-md lg:p-6"
         x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" @click.self="open = false">
+        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+        @click.self="{{ $minimizeable ? 'open = false' : '' }}">
 
         <div x-show="open" x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0 scale-95 translate-y-4"
@@ -40,7 +44,8 @@
             class="{{ $maxWidthClass }} relative flex max-h-[calc(75vh-2rem)] w-full flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-xl dark:border-zinc-800 dark:bg-zinc-900 lg:max-h-[calc(95vh-2rem)]">
 
             {{-- Header --}}
-            <div class="flex shrink-0 items-center justify-between border-b border-zinc-200 p-5 dark:border-zinc-800">
+            <div
+                class="flex shrink-0 items-center justify-between border-b border-zinc-200 p-4 dark:border-zinc-800 lg:p-6">
                 <div class="flex items-center gap-3">
                     @isset($icon)
                         <div
@@ -59,23 +64,26 @@
                         @endif
                     </div>
                 </div>
-                <x-button.secondary @click="open = false"
-                    class="!rounded-full !border-none !bg-transparent !p-2 !shadow-none !ring-0">
-                    <x-slot name="icon">
-                        <x-icons.close class="h-5 w-5" />
-                    </x-slot>
-                </x-button.secondary>
+
+                @if ($showCloseButton)
+                    <x-button.secondary @click="open = false"
+                        class="!rounded-full !border-none !bg-transparent !p-2 !shadow-none !ring-0">
+                        <x-slot name="icon">
+                            <x-icons.close class="h-5 w-5" />
+                        </x-slot>
+                    </x-button.secondary>
+                @endif
             </div>
 
             {{-- Body --}}
-            <div class="min-h-0 flex-1 overflow-y-auto p-6">
+            <div class="min-h-0 flex-1 overflow-y-auto p-4 lg:p-6">
                 {{ $slot }}
             </div>
 
             {{-- Footer --}}
             @isset($footer)
                 <div
-                    class="flex shrink-0 justify-end gap-3 border-t border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-800/50">
+                    class="flex shrink-0 justify-end gap-3 border-t border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-800/50 lg:p-6">
                     {{ $footer }}
                 </div>
             @endisset

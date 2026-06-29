@@ -16,16 +16,20 @@
                     </p>
                 </div>
 
-                @can('pegawai-create')
-                    <div class="max-w-xs">
+                <div class="flex flex-wrap items-center gap-3">
+                    @can('pegawai-create')
                         <x-button.success href="{{ route('pegawai.create') }}">
                             <x-slot name="icon">
                                 <x-icons.plus class="h-5 w-5" />
                             </x-slot>
                             {{ __('Tambah Pegawai') }}
                         </x-button.success>
-                    </div>
-                @endcan
+                    @endcan
+
+                    @can('pegawai-edit')
+                        <livewire:import-pegawai />
+                    @endcan
+                </div>
 
             </div>
 

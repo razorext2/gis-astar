@@ -1,4 +1,4 @@
-{{-- Goal: Fetch & assign PR by nomor PR or nomor order, Livewire: FetchPurchasingRequest, Alpine: accordion per section --}}
+{{-- Goal: Fetch & assign PR by nomor PR, nomor order or nomor PO, Livewire: FetchPurchasingRequest, Alpine: accordion per section --}}
 <div
     class="space-y-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none lg:p-6">
 
@@ -11,11 +11,17 @@
 
         @if (!empty($orderPreviewData))
             <div class="space-y-4">
-                <div class="flex items-center gap-2">
+                <div class="flex items-center justify-between gap-2 border-b border-zinc-200 pb-3 dark:border-zinc-800">
                     <span
                         class="rounded-full bg-blue-100 px-2.5 py-1 text-xs font-bold text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
                         {{ count($orderPreviewData) }} item ditemukan
                     </span>
+                    <label class="flex items-center gap-2 text-xs font-semibold text-zinc-700 dark:text-zinc-300 cursor-pointer">
+                        <input type="checkbox" wire:click="toggleSelectAllOrder" 
+                            class="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800"
+                            {{ count($selectedOrderItems) === count($orderPreviewData) && count($orderPreviewData) > 0 ? 'checked' : '' }}>
+                        Pilih Semua
+                    </label>
                 </div>
 
                 @php $grouped = collect($orderPreviewData)->groupBy('NomorPermintaanBeli'); @endphp
@@ -35,6 +41,7 @@
                                 <thead
                                     class="border-b border-zinc-200 bg-zinc-50 text-xs uppercase text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-zinc-400">
                                     <tr>
+                                        <th scope="col" class="px-3 py-2 text-center w-10">Pilih</th>
                                         <th scope="col" class="px-3 py-2 text-center">#</th>
                                         <th scope="col" class="px-3 py-2 text-center">Kode Item</th>
                                         <th scope="col" class="px-3 py-2">Nama Item</th>
@@ -47,6 +54,10 @@
                                     @foreach ($items as $index => $item)
                                         <tr
                                             class="bg-white/40 transition-colors hover:bg-zinc-50 dark:bg-transparent dark:hover:bg-zinc-800/50">
+                                            <td class="px-3 py-2 text-center">
+                                                <input type="checkbox" wire:model.live="selectedOrderItems" value="{{ $item['original_index'] }}"
+                                                    class="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800">
+                                            </td>
                                             <td class="px-3 py-2 text-center text-xs font-medium text-zinc-500">
                                                 {{ $index + 1 }}</td>
                                             <td class="px-3 py-2 text-center">
@@ -82,6 +93,8 @@
                                     <div
                                         class="mb-2 flex items-center justify-between border-b border-zinc-100 pb-2 dark:border-zinc-800">
                                         <div class="flex items-center gap-2">
+                                            <input type="checkbox" wire:model.live="selectedOrderItems" value="{{ $item['original_index'] }}"
+                                                class="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800">
                                             <span class="text-xs font-bold text-zinc-400">#{{ $index + 1 }}</span>
                                             <span
                                                 class="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[10px] font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
@@ -196,6 +209,11 @@
                         <thead
                             class="border-b border-zinc-200 bg-zinc-50 text-xs uppercase text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-zinc-400">
                             <tr>
+                                <th scope="col" class="whitespace-nowrap px-6 py-3 text-center w-10">
+                                    <input type="checkbox" wire:click="toggleSelectAllPr" 
+                                        class="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800"
+                                        {{ count($selectedPrItems) === count($data) && count($data) > 0 ? 'checked' : '' }}>
+                                </th>
                                 <th scope="col" class="whitespace-nowrap px-6 py-3 text-center">#</th>
                                 <th scope="col" class="whitespace-nowrap px-6 py-3 text-center">Kode Item</th>
                                 <th scope="col" class="whitespace-nowrap px-6 py-3 text-center">Nama Item</th>
@@ -209,6 +227,10 @@
                         <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
                             @forelse ($data as $index => $row)
                                 <tr class="transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-700/50">
+                                    <td class="whitespace-nowrap px-6 py-4 text-center">
+                                        <input type="checkbox" wire:model.live="selectedPrItems" value="{{ $index }}"
+                                            class="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800">
+                                    </td>
                                     <td class="whitespace-nowrap px-6 py-4 text-center">
                                         <span>{{ $index + 1 }}</span>
                                     </td>
@@ -235,7 +257,7 @@
                                 </tr>
                             @empty
                                 <tr class="bg-white dark:bg-transparent">
-                                    <td colspan="7" class="px-6 py-8 text-center text-zinc-500 dark:text-zinc-400">
+                                    <td colspan="8" class="px-6 py-8 text-center text-zinc-500 dark:text-zinc-400">
                                         Silahkan cari nomor PR terlebih dahulu.
                                     </td>
                                 </tr>
@@ -305,6 +327,56 @@
                 @enderror
             </div>
         </div>
+
+        {{-- ── Panel 3 : Fetch by Nomor PO ───────────────────────────────────── --}}
+        <div x-data="{ open: false }">
+            {{-- Header --}}
+            <button type="button" @click="open = !open"
+                class="flex w-full items-center gap-3 bg-zinc-50/80 px-5 py-4 text-left transition-colors hover:bg-zinc-100/80 dark:bg-zinc-800/50 dark:hover:bg-zinc-800">
+                <span
+                    class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
+                    <x-icons.receipt class="h-4 w-4" />
+                </span>
+                <div class="flex-1">
+                    <p class="text-sm font-semibold text-zinc-900 dark:text-white">Fetch via Nomor PO</p>
+                    <p class="text-xs text-zinc-500 dark:text-zinc-400">Cari item PR berdasarkan nomor PO (purchasing order) dari BSI</p>
+                </div>
+                <svg class="h-4 w-4 shrink-0 text-zinc-400 transition-transform duration-200"
+                    :class="open ? 'rotate-180' : ''" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                    fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                        clip-rule="evenodd" />
+                </svg>
+            </button>
+
+            {{-- Body --}}
+            <div x-show="open" x-collapse class="space-y-4 bg-white/60 p-5 dark:bg-zinc-900/30">
+                <div class="flex w-full flex-col gap-3 sm:flex-row sm:items-end">
+                    <div class="w-full flex-1">
+                        <x-input.basic id="nomor_po" name="nomor_po" :labels="true"
+                            placeholder="Masukkan nomor PO" wire:model.live="nomor_po">
+                            Nomor PO
+                        </x-input.basic>
+                    </div>
+
+                    <x-button.primary class="w-full sm:w-auto" wire:click="fetchByNomorPO"
+                        wire:loading.attr="disabled" wire:target="fetchByNomorPO">
+                        <x-slot name="icon">
+                            <x-icons.search wire:loading.remove wire:target="fetchByNomorPO" class="h-4 w-4" />
+                            <x-icons.loading wire:loading wire:target="fetchByNomorPO"
+                                class="h-4 w-4 animate-spin" />
+                        </x-slot>
+                        <span wire:loading.remove wire:target="fetchByNomorPO">Fetch by PO</span>
+                        <span wire:loading wire:target="fetchByNomorPO">Mencari...</span>
+                    </x-button.primary>
+                </div>
+
+                @error('nomor_po')
+                    <span class="text-xs text-red-500">{{ $message }}</span>
+                @enderror
+            </div>
+        </div>
     </div>
 
     {{-- ─── Daftar PR yang akan di Assign ──────────────────────────────────── --}}
@@ -364,7 +436,9 @@
                                                     class="font-medium text-zinc-900 dark:text-white">{{ $itemRow['NamaItem'] ?? '-' }}</span>
                                             </td>
                                             <td class="whitespace-nowrap px-6 py-4 text-center">
-                                                <span>{{ $itemRow['JumlahBarang'] ?? '-' }}</span>
+                                                <input type="number" min="0" step="1"
+                                                    wire:model.live="data_pr.{{ $index }}.data.{{ $itemIndex }}.JumlahBarang"
+                                                    class="w-20 rounded-md border border-zinc-300 bg-white px-2 py-1 text-center text-sm text-zinc-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white">
                                             </td>
                                             <td class="whitespace-nowrap px-6 py-4 text-center">
                                                 <span>{{ $itemRow['Satuan'] ?? '-' }}</span>

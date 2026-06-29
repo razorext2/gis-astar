@@ -1,24 +1,28 @@
 <?php
+
 /** Goal: Display national holidays in a searchable table. Caller: Livewire Components, Deps: Holiday model, PowerGrid */
 
 namespace App\Livewire\PowergridTables;
 
-use App\Models\System\Holiday;
 use App\Livewire\Concerns\HandlesErrors;
-use Illuminate\Support\Carbon;
+use App\Models\System\Holiday;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
+use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
-use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use PowerComponents\LivewirePowerGrid\PowerGridFields;
 
 final class HolidayTable extends PowerGridComponent
 {
     use HandlesErrors;
 
     public string $tableName = 'HolidayTable';
+
     public bool $deferLoading = true;
+
     public bool $showFilters = true;
 
     public function setUp(): array
@@ -31,7 +35,7 @@ final class HolidayTable extends PowerGridComponent
                 ->showPerPage()
                 ->showRecordCount(),
 
-            PowerGrid::responsive()
+            PowerGrid::responsive(),
         ];
     }
 
@@ -45,7 +49,7 @@ final class HolidayTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             ->add('name')
-            ->add('date_formatted', fn($query) => Carbon::parse($query->date)->locale('id')->isoFormat('DD MMMM YYYY'));
+            ->add('date_formatted', fn ($query) => Carbon::parse($query->date)->locale('id')->isoFormat('DD MMMM YYYY'));
     }
 
     public function columns(): array
@@ -53,7 +57,7 @@ final class HolidayTable extends PowerGridComponent
         return [
             Column::action('Action')
                 ->bodyAttribute('text-center'),
-            
+
             Column::make('Tanggal', 'date_formatted', 'date')
                 ->sortable(),
 
@@ -82,18 +86,19 @@ final class HolidayTable extends PowerGridComponent
         ]);
     }
 
-    #[\Livewire\Attributes\On('delete')]
-    public function delete($id): void
+    #[On('delete')]
+    public function delete(int $id): void
     {
         if (auth()->user()->cannot('holiday-delete')) {
             $this->dispatch('swal', title: 'Akses Ditolak', text: 'Anda tidak memiliki izin untuk menghapus data.', icon: 'error');
+
             return;
         }
         $this->dispatch('confirmDelete', id: $id);
     }
 
-    #[\Livewire\Attributes\On('confirmDeleteAction')]
-    public function confirmDelete($id): void
+    #[On('confirmDeleteAction')]
+    public function confirmDelete(int $id): void
     {
         $this->runSafely(function () use ($id) {
             $data = Holiday::findOrFail($id);
@@ -101,5 +106,9 @@ final class HolidayTable extends PowerGridComponent
             $this->dispatch('swal', title: 'Terhapus!', text: 'Data libur berhasil dihapus.', icon: 'success');
         }, 'Gagal menghapus data libur.');
     }
-}
 
+    public function queryString(): array
+    {
+        return $this->powerGridQueryString();
+    }
+}

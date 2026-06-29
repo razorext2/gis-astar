@@ -168,7 +168,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('collect-idy-ppn', \App\Http\Controllers\CollectIdyPpnController::class)->except(['store', 'update', 'destroy']);
 
         // route announcement
-        Route::resource('announcement', \App\Http\Controllers\AnnouncementController::class)->only(['index']);
+        Route::resource('announcement', \App\Http\Controllers\AnnouncementController::class)->only(['index', 'create', 'edit']);
 
         // route permission
         Route::resource('permissions', \App\Http\Controllers\PermissionController::class)
@@ -296,6 +296,7 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('spk')->as('')->group(function () {
             // 1. spk purchasing request
             Route::resource('purchasing-request', \App\Http\Controllers\Spk\PurchasingRequestController::class)->only('index', 'edit', 'show');
+            Route::get('purchasing-request/{id}/edit-pr', [\App\Http\Controllers\Spk\PurchasingRequestController::class, 'editPr'])->name('purchasing-request.edit-pr');
 
             // 2. spk spk
             Route::get('generate/pdf/{id}', [\App\Http\Controllers\Spk\SpkController::class, 'generatePdf'])->name('spk.generate.pdf');

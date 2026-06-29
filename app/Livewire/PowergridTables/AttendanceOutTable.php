@@ -1,16 +1,19 @@
 <?php
 
+/** Goal: Manage check-out attendance records and verification, Caller: Web Router, Deps: AttendanceOut, Pegawai */
+
 namespace App\Livewire\PowergridTables;
 
 use App\Models\AttendanceOut;
+use App\Models\Jabatan;
 use App\Models\Pegawai;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Column;
-use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
@@ -28,21 +31,19 @@ final class AttendanceOutTable extends PowerGridComponent
 
     public bool $showFilters = false;
 
-    public $pegawai;
+    public ?Collection $pegawai = null;
 
-    public $jabatan;
+    public ?Collection $jabatan = null;
 
-    public $roles;
+    public ?Collection $roles = null;
 
     public ?int $kodePegawai = null;
 
     public function setUp(): array
     {
-        $auth = Auth::user();
-
-        if ($auth->can('attendance-approve')) {
+        if (auth()->user()?->can('attendance-approve')) {
             $this->checkbox = true;
-            $this->jabatan = \App\Models\Jabatan::select('id', 'nama_jabatan')->get();
+            $this->jabatan = Jabatan::select('id', 'nama_jabatan')->get();
             $this->roles = Role::select('id', 'name')->get();
         }
 
@@ -57,9 +58,6 @@ final class AttendanceOutTable extends PowerGridComponent
             PowerGrid::footer()
                 ->showPerPage()
                 ->showRecordCount(),
-            PowerGrid::exportable(fileName: 'absensi-keluar-'.now()->format('YmdHis'))
-                ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV)
-                ->stripTags(true),
         ];
     }
 
@@ -224,7 +222,7 @@ final class AttendanceOutTable extends PowerGridComponent
         return $filters;
     }
 
-    public function actionsFromView($data)
+    public function actionsFromView(AttendanceOut $data)
     {
         if (Auth::user()->can('attendance-approve') && $data->verified == false && $data->status == 0) {
             return view('components.table-component.confirm-button', [
@@ -234,7 +232,7 @@ final class AttendanceOutTable extends PowerGridComponent
     }
 
     #[On('verifikasi')]
-    public function verifikasi($id)
+    public function verifikasi(int $id)
     {
         $this->dispatch(
             'confirmation',
@@ -245,7 +243,7 @@ final class AttendanceOutTable extends PowerGridComponent
     }
 
     #[On('attendanceVerificationAction.{tableName}')]
-    public function verificationProcess($id, $tableName)
+    public function verificationProcess(int $id, string $tableName)
     {
         if ($tableName == $this->tableName) {
             try {
@@ -266,7 +264,7 @@ final class AttendanceOutTable extends PowerGridComponent
         }
     }
 
-    public function swal($title, $text, $icon)
+    public function swal(string $title, string $text, string $icon)
     {
         return $this->dispatch(
             'swal',
@@ -275,5 +273,9 @@ final class AttendanceOutTable extends PowerGridComponent
             icon: $icon
         );
     }
-}
 
+    public function queryString(): array
+    {
+        return $this->powerGridQueryString();
+    }
+}

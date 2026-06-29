@@ -1,11 +1,14 @@
 <?php
 
+/** Goal: PowerGrid table for announcement management, Caller: dashboard/announcement/index.blade.php, Deps: Announcement model */
+
 namespace App\Livewire\PowergridTables;
 
 use App\Models\Announcement;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
@@ -28,7 +31,7 @@ final class AnnouncementTable extends PowerGridComponent
             PowerGrid::header()
                 ->showSearchInput()
                 ->showToggleColumns(),
-            Powergrid::responsive(),
+            PowerGrid::responsive(),
             PowerGrid::footer()
                 ->showPerPage(perPage: 10, perPageValues: [10, 25, 50, 100, 500, 0])
                 ->showRecordCount(),
@@ -111,25 +114,48 @@ final class AnnouncementTable extends PowerGridComponent
         $actions = [
             [
                 'id' => 'state-btn',
-                'action' => 'javascript:void(0)',
+                'action' => "javascript:Livewire.dispatch('changeStatus', { id: $row->id })",
                 'label' => 'Ubah Status',
             ],
             [
                 'id' => 'edit-btn',
-                'action' => 'javascript:void(0)',
+                'action' => route('announcement.edit', $row->id),
                 'label' => 'Edit',
-            ],
-            [
-                'id' => 'delete-btn',
-                'action' => 'javascript:void(0)',
-                'label' => 'Hapus',
+                'navigate' => true,
             ],
         ];
 
         return view('components.dashboard.action-buttons', [
             'id' => $row->id,
             'datas' => $actions,
+            'delete' => true,
         ]);
     }
-}
 
+    #[On('changeStatus')]
+    public function changeStatus(int $id)
+    {
+        $announcement = Announcement::find($id);
+        if ($announcement) {
+            $announcement->update([
+                'status' => $announcement->status == 1 ? 0 : 1,
+            ]);
+            $this->dispatch('pg:eventRefresh-AnnouncementTable');
+        }
+    }
+
+    #[On('delete')]
+    public function delete(int $id)
+    {
+        $announcement = Announcement::find($id);
+        if ($announcement) {
+            $announcement->delete();
+            $this->dispatch('pg:eventRefresh-AnnouncementTable');
+        }
+    }
+
+    public function queryString(): array
+    {
+        return $this->powerGridQueryString();
+    }
+}

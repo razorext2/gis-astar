@@ -4,12 +4,14 @@
 
 namespace App\Providers;
 
+use App\Events\TableRefreshed;
 use App\Models\LeaveRequest\LeaveRequest;
 use App\Observers\LeaveRequestObserver;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Livewire\Livewire;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -74,11 +76,11 @@ class AppServiceProvider extends ServiceProvider
             $files = glob(app_path('Livewire/PowergridTables/*Table.php'));
             foreach ($files as $file) {
                 $className = basename($file, '.php');
-                $classPath = 'App\\Livewire\\PowergridTables\\' . $className;
+                $classPath = 'App\\Livewire\\PowergridTables\\'.$className;
                 if (class_exists($classPath)) {
-                    \Livewire\Livewire::component($className, $classPath);
-                    $kebabName = \Illuminate\Support\Str::kebab($className);
-                    \Livewire\Livewire::component($kebabName, $classPath);
+                    Livewire::component($className, $classPath);
+                    $kebabName = Str::kebab($className);
+                    Livewire::component($kebabName, $classPath);
                 }
             }
         }
@@ -106,7 +108,6 @@ class AppServiceProvider extends ServiceProvider
             'App\Models\Placement' => ['PlacementTable'],
             'App\Models\PointTransactions' => ['PointTransactionsTable'],
             'App\Models\Spk\ProjectAssignment' => ['ProjectAssignmentTable'],
-            'App\Models\Question' => ['QuestionsTable'],
             'App\Models\Sales' => ['SalesTable'],
             'App\Models\TeamMember' => ['TeamMemberTable'],
             'App\Models\Technician' => ['TechnicianTable'],
@@ -118,16 +119,15 @@ class AppServiceProvider extends ServiceProvider
             if (class_exists($modelClass)) {
                 $modelClass::saved(function ($model) use ($tableNames) {
                     foreach ($tableNames as $tableName) {
-                        event(new \App\Events\TableRefreshed($tableName));
+                        event(new TableRefreshed($tableName));
                     }
                 });
                 $modelClass::deleted(function ($model) use ($tableNames) {
                     foreach ($tableNames as $tableName) {
-                        event(new \App\Events\TableRefreshed($tableName));
+                        event(new TableRefreshed($tableName));
                     }
                 });
             }
         }
     }
 }
-

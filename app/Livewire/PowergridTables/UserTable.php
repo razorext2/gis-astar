@@ -8,6 +8,7 @@ use App\Models\Jabatan;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
@@ -22,9 +23,9 @@ final class UserTable extends PowerGridComponent
 
     public bool $deferLoading = true;
 
-    public $roles;
+    public ?Collection $roles = null;
 
-    public $jabatans;
+    public ?Collection $jabatans = null;
 
     public function setUp(): array
     {
@@ -177,4 +178,3 @@ final class UserTable extends PowerGridComponent
         return $this->powerGridQueryString();
     }
 }
-

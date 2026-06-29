@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Authorize SPK actions based on roles and permissions, Caller: SpkController, Deps: SpkMain */
+
 namespace App\Policies;
 
 use App\Models\Spk\SpkMain;
@@ -12,7 +14,8 @@ class SpkMainPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermissionTo('spk-list');
+        return $user->hasPermissionTo('spk-list')
+            || $user->hasPermissionTo('spk-list-own-only');
     }
 
     /**
@@ -21,6 +24,8 @@ class SpkMainPolicy
     public function view(User $user, SpkMain $spkMain): bool
     {
         return $user->hasPermissionTo('spk-create')
+            || $user->hasPermissionTo('spk-list')
+            || ($user->hasPermissionTo('spk-list-own-only') && ($user->id === $spkMain->added_by || $user->id === $spkMain->assign_to || $user->id === $spkMain->reassign_to))
             || ($user->hasPermissionTo('spk-view') && ($user->id === $spkMain->assign_to || $user->id === $spkMain->reassign_to));
     }
 

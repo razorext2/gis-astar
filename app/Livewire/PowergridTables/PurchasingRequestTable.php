@@ -20,12 +20,8 @@ final class PurchasingRequestTable extends PowerGridComponent
 
     public bool $showFilters = false;
 
-    public $user;
-
     public function setUp(): array
     {
-        $this->user = auth()->user();
-
         return [
             PowerGrid::header()
                 ->showSearchInput(),
@@ -143,7 +139,7 @@ final class PurchasingRequestTable extends PowerGridComponent
     {
         $button = [];
 
-        if ($this->user->can('purchasing-request-update') && empty($row->nomor_purchasing_request || $row->nomor_purchasing_request_json) && ($row->is_using_old_stock == false)) {
+        if (auth()->user()->can('purchasing-request-update') && empty($row->nomor_purchasing_request || $row->nomor_purchasing_request_json) && ($row->is_using_old_stock == false)) {
             $button[] = Button::make('edit')
                 ->slot('Update PR')
                 ->id($row->id)
@@ -151,7 +147,7 @@ final class PurchasingRequestTable extends PowerGridComponent
                 ->route('purchasing-request.edit', ['purchasing_request' => $row->id]);
         }
 
-        if ($this->user->can('purchasing-request-detail')) {
+        if (auth()->user()->can('purchasing-request-detail')) {
             $button[] = Button::make('detail')
                 ->slot('Detail')
                 ->id($row->id)
@@ -167,4 +163,3 @@ final class PurchasingRequestTable extends PowerGridComponent
         return $this->powerGridQueryString();
     }
 }
-

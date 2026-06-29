@@ -16,6 +16,8 @@ class Show extends Component
 
     public bool $showSummary = false;
 
+    public string $cancelReason = '';
+
     public function summary()
     {
         $this->showSummary = true;
@@ -51,6 +53,32 @@ class Show extends Component
             session()->flash('success', 'Pengajuan cuti berhasil dibatalkan.');
 
             return redirect()->route('leave-request.my-requests.index');
+        });
+    }
+
+    public function requestCancellation(\App\Services\LeaveRequest\LeaveRequestService $service)
+    {
+        $this->validate([
+            'cancelReason' => 'required|min:5',
+        ], [
+            'cancelReason.required' => 'Mohon berikan alasan pembatalan.',
+            'cancelReason.min' => 'Alasan pembatalan minimal 5 karakter.',
+        ]);
+
+        $this->runSafely(function () use ($service) {
+            $request = LeaveRequest::findOrFail($this->requestId);
+
+            // Security check: Only owner
+            if ($request->user_id !== auth()->id()) {
+                $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Anda tidak memiliki akses untuk membatalkan pengajuan ini.');
+                return;
+            }
+
+            $service->requestCancel($request, auth()->user(), $this->cancelReason);
+
+            $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Permintaan pembatalan cuti telah diajukan ke HRD.');
+            $this->reset('cancelReason');
+            $this->dispatch('close-modal', 'cancel-request-modal');
         });
     }
 

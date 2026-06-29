@@ -34,20 +34,29 @@ class ValidateSales extends Component
 
     public $customer_telp;
 
-    #[Validate('required|string|max:100')]
     public $customer_name;
 
-    #[Validate('required|string|max:255')]
     public $customer_address;
 
-    #[Validate('required|boolean')]
     public $customer_make_order;
 
-    #[Validate('required|string')]
+    public $gives_phone_number;
+
     public $order_notes;
 
-    #[Validate('required|image|max:2048')]
     public $proof_pic;
+
+    public function rules(): array
+    {
+        return [
+            'customer_name' => 'required|string|max:100',
+            'customer_address' => 'required|string|max:255',
+            'customer_make_order' => 'required|boolean',
+            'gives_phone_number' => 'required|boolean',
+            'order_notes' => 'required|string',
+            'proof_pic' => $this->gives_phone_number ? 'required|image|max:2048' : 'nullable|image|max:2048',
+        ];
+    }
 
     public function mount(?int $id = null): void
     {
@@ -63,6 +72,7 @@ class ValidateSales extends Component
             'customer_name',
             'customer_address',
             'customer_make_order',
+            'gives_phone_number',
             'order_notes',
             'proof_pic',
             'rejectionReason',
@@ -91,6 +101,7 @@ class ValidateSales extends Component
 
         $this->customer_name = $this->data->customer_name;
         $this->customer_address = $this->data->lokasi;
+        $this->gives_phone_number = $this->data->gives_phone_number;
 
         $this->customer_telp = str_starts_with($this->data->customer_telp, '08')
             ? '628'.substr($this->data->customer_telp, 2)
@@ -119,10 +130,12 @@ class ValidateSales extends Component
 
         return $this->runSafely(function () use ($query) {
             DB::transaction(function () use ($query) {
-                // upload file
-                $fileName = 'bukti_followup'.Str::random(10).'.'.$this->proof_pic->extension();
-
-                $this->proof_pic->storeAs('public/sales/proof', $fileName);
+                // upload file if exists
+                $fileName = $query->proof_picture;
+                if ($this->proof_pic) {
+                    $fileName = 'bukti_followup'.Str::random(10).'.'.$this->proof_pic->extension();
+                    $this->proof_pic->storeAs('public/sales/proof', $fileName);
+                }
 
                 // update status laporan
                 $query->update([
@@ -131,6 +144,7 @@ class ValidateSales extends Component
                     'customer_name' => $this->customer_name,
                     'customer_address' => $this->customer_address,
                     'customer_make_order' => $this->customer_make_order,
+                    'gives_phone_number' => $this->gives_phone_number,
                     'order_notes' => $this->order_notes,
                     'proof_picture' => $fileName,
                 ]);
@@ -188,6 +202,7 @@ class ValidateSales extends Component
             'customer_name',
             'customer_address',
             'customer_make_order',
+            'gives_phone_number',
             'order_notes',
             'proof_pic',
             'rejectionReason',

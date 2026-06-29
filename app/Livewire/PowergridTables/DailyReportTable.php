@@ -24,8 +24,6 @@ final class DailyReportTable extends PowerGridComponent
 
     public function setUp(): array
     {
-        // $this->showCheckBox();
-
         return [
             PowerGrid::header()
                 ->showSearchInput(),
@@ -243,9 +241,8 @@ final class DailyReportTable extends PowerGridComponent
     public function actions(SpkMain $row): array
     {
         $button = [];
-        $user = auth()->user();
 
-        if ($user->can('laporan-harian-spk-assign')) {
+        if (auth()->user()->can('laporan-harian-spk-assign')) {
             $button[] = Button::make('assign')
                 ->slot('Assign')
                 ->id($row->id)
@@ -261,4 +258,3 @@ final class DailyReportTable extends PowerGridComponent
         return $this->powerGridQueryString();
     }
 }
-

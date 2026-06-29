@@ -6,9 +6,7 @@ namespace App\Livewire\PowergridTables;
 
 use App\Models\Sales;
 use App\Services\Sales\SalesRegionResolver;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Livewire\Attributes\On;
@@ -24,12 +22,8 @@ final class SalesTable extends PowerGridComponent
 
     public bool $showFilters = true;
 
-    public ?User $user = null;
-
     public function setUp(): array
     {
-        $this->user = Auth::user();
-
         return [
             PowerGrid::header()
                 ->showSearchInput()
@@ -47,10 +41,10 @@ final class SalesTable extends PowerGridComponent
             ->select('tb_sales.*', 'tb_pegawai.full_name')
             ->with(['userRelasi.roles']);
 
-        if (! $this->user->can('sales-approve')) {
-            $query->where('tb_sales.kode_pegawai', $this->user->kode_pegawai);
+        if (! auth()->user()->can('sales-approve')) {
+            $query->where('tb_sales.kode_pegawai', auth()->user()->kode_pegawai);
         } else {
-            $allowedRoles = SalesRegionResolver::resolveForUser($this->user);
+            $allowedRoles = SalesRegionResolver::resolveForUser(auth()->user());
 
             if (! empty($allowedRoles)) {
                 $query->whereHas('userRelasi.roles', function ($q) use ($allowedRoles) {
@@ -84,7 +78,7 @@ final class SalesTable extends PowerGridComponent
             ->add('title_view', function ($data) {
                 return view('components.dashboard.title-w-status-two', [
                     'status' => $data->status,
-                    'title'  => $data->short_title,
+                    'title' => $data->short_title,
                 ])->render();
             })
             ->add('customer_view', function ($data) {
@@ -96,8 +90,8 @@ final class SalesTable extends PowerGridComponent
             ->add('lokasi_view', function ($data) {
                 return view('components.dashboard.location-w-coordinate', [
                     'location' => $data->lokasi ?? 'N/A',
-                    'long'     => $data->longitude ?? 'N/A',
-                    'lat'      => $data->latitude ?? 'N/A',
+                    'long' => $data->longitude ?? 'N/A',
+                    'lat' => $data->latitude ?? 'N/A',
                 ])->render();
             })
             ->add('created_at_view', function ($data) {
@@ -177,16 +171,16 @@ final class SalesTable extends PowerGridComponent
                 ->params(['timezone' => 'Asia/Jakarta']),
         ];
 
-        if ($this->user->can('sales-approve')) {
+        if (auth()->user()->can('sales-approve')) {
             $filters[] = Filter::inputText('full_name', 'tb_pegawai.full_name')->placeholder('Nama sales');
         }
 
-        if ($this->user->can('sales-export-all')) {
+        if (auth()->user()->can('sales-export-all')) {
             $filters[] = Filter::select('role_name', 'role_name')
                 ->dataSource([
                     ['name' => 'Sales Medan',    'value' => 'Sales'],
                     ['name' => 'Sales Jakarta',  'value' => 'Sales-JKT'],
-                    ['name' => 'Sales Pekanbaru','value' => 'Sales-PKU'],
+                    ['name' => 'Sales Pekanbaru', 'value' => 'Sales-PKU'],
                     ['name' => 'Sales Indodaya', 'value' => 'Sales-IDY'],
                     ['name' => 'Kurir Bank',     'value' => 'Kurir-Bank'],
                     ['name' => 'Sales Agrotec',  'value' => 'Sales-Agrotec'],
@@ -201,39 +195,38 @@ final class SalesTable extends PowerGridComponent
         return $filters;
     }
 
-    public function actionsFromView($data): View
+    public function actionsFromView(Sales $data): View
     {
         $actions = [
             [
-                'id'     => 'show-btn',
+                'id' => 'show-btn',
                 'action' => route('sales.show', $data->id),
-                'label'  => 'Detail',
+                'label' => 'Detail',
             ],
         ];
 
-        if ($this->user->can('sales-approve')) {
-            if ($this->user->can('sales-delete')) {
+        if (auth()->user()?->can('sales-approve')) {
+            if (auth()->user()?->can('sales-delete')) {
                 $actions[] = [
-                    'id'     => 'edit-btn',
+                    'id' => 'edit-btn',
                     'action' => route('sales.edit', $data->id),
-                    'label'  => 'Edit',
+                    'label' => 'Edit',
                 ];
             }
 
             return view('components.dashboard.action-buttons', [
-                'id'     => $data->id,
-                'datas'  => $actions,
+                'id' => $data->id,
+                'datas' => $actions,
                 'detail' => $data->status == 0,
-                'delete' => $this->user->can('sales-delete'),
             ]);
         }
 
         return view('components.dashboard.single-button', [
-            'id'   => $data->id,
+            'id' => $data->id,
             'data' => [
-                'id'     => 'detailBtn'.$data->id,
+                'id' => 'detailBtn'.$data->id,
                 'action' => route('sales.show', $data->id),
-                'label'  => 'Detail',
+                'label' => 'Detail',
             ],
         ]);
     }
@@ -268,7 +261,7 @@ final class SalesTable extends PowerGridComponent
 
             Log::info($this->user->kode_pegawai." : Menghapus sales data {$id}");
         } catch (\Exception $e) {
-            $this->swal('Gagal!', "Terjadi kesalahan saat menghapus data.", 'error');
+            $this->swal('Gagal!', 'Terjadi kesalahan saat menghapus data.', 'error');
 
             Log::error($this->user->kode_pegawai." : Gagal menghapus sales {$id}. {$e->getMessage()}");
         }
@@ -278,5 +271,9 @@ final class SalesTable extends PowerGridComponent
     {
         $this->dispatch('swal', title: $title, text: $text, icon: $icon);
     }
-}
 
+    public function queryString()
+    {
+        return $this->powerGridQueryString();
+    }
+}

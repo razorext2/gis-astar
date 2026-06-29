@@ -5,6 +5,7 @@
 namespace App\Livewire\PowergridTables;
 
 use App\Models\TeamMember;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -46,11 +47,13 @@ final class TeamMemberTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('kode_pegawai')
             ->add('nama_pegawai', function ($query) {
-                $statusSuffix = ($query->userId && !$query->userId->is_active) ? ' (Nonaktif)' : '';
-                return '['.$query->kode_pegawai.'] '.$query->userId->name . $statusSuffix;
+                $statusSuffix = ($query->userId && ! $query->userId->is_active) ? ' (Nonaktif)' : '';
+                $name = $query->userId ? $query->userId->name : 'User tidak ditemukan';
+
+                return '['.$query->kode_pegawai.'] '.$name.$statusSuffix;
             })
             ->add('role', fn ($query) => ucfirst($query->role))
-            ->add('total_poin', fn ($query) => $query->userId->technicianPoint->sum('point').' Total poin')
+            ->add('total_poin', fn ($query) => ($query->userId ? $query->userId->technicianPoint->sum('point') : 0).' Total poin')
             ->add('progress', function ($query) {
                 $progress = [];
                 $progress[$query->kode_pegawai] = $this->getApi($query->kode_pegawai);
@@ -74,7 +77,7 @@ final class TeamMemberTable extends PowerGridComponent
 
                     $html .= '
                         <p class="mb-1 text-sm text-gray-800 dark:text-white">'
-                        .\Carbon\Carbon::parse($month)->locale('id')->isoFormat('MMMM Y').
+                        .Carbon::parse($month)->locale('id')->isoFormat('MMMM Y').
                         '</p>
                         <div class="w-full rounded-full bg-gray-200 dark:bg-gray-600">
                             <div class="'.$colorClass.' rounded-full p-0.5 text-center text-xs font-medium leading-none"
@@ -117,7 +120,7 @@ final class TeamMemberTable extends PowerGridComponent
         ];
     }
 
-    public function getApi($kode_pegawai)
+    public function getApi(int $kode_pegawai)
     {
         return Cache::remember('team_progress_api_'.$kode_pegawai, now()->addHours(2), function () use ($kode_pegawai) {
             try {
@@ -151,5 +154,9 @@ final class TeamMemberTable extends PowerGridComponent
                 ->hide(),
         ];
     }
-}
 
+    public function queryString(): array
+    {
+        return $this->powerGridQueryString();
+    }
+}

@@ -5,7 +5,6 @@
 namespace App\Livewire\PowergridTables;
 
 use App\Models\Spk\Production;
-use App\Models\Spk\SpkMain;
 use Illuminate\Database\Eloquent\Builder;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
@@ -22,15 +21,11 @@ final class ProductionTable extends PowerGridComponent
 
     public bool $showFilters = false;
 
-    public $user;
-
     public ?string $tipe_timbangan = null;
 
     public function setUp(): array
     {
-        $this->user = auth()->user();
-
-        if ($this->user->can('production-delete')) {
+        if (auth()->user()->can('production-delete')) {
             $this->showCheckBox();
         }
 
@@ -47,7 +42,7 @@ final class ProductionTable extends PowerGridComponent
     {
         $query = Production::query()
             ->join('tb_spk', 'tb_spk.id', '=', 'tb_produksi.id_spk')
-            ->addSelect(['tb_produksi.*'])
+            ->addSelect(['tb_produksi.*', 'tb_spk.company_name', 'tb_spk.nomor_order'])
             ->with(['spk', 'assignTo', 'productionHistories'])
             ->whereHas('spk', function (Builder $q) {
                 // filter tipe timbangan
@@ -56,7 +51,7 @@ final class ProductionTable extends PowerGridComponent
                 }
 
                 // auth rule
-                if ($this->user->cannot('spk-create')) {
+                if (auth()->user()->cannot('spk-create')) {
                     $q->where('status_approval', 1) // spk udh disetujui
                         ->where('on_delay', 0) // ga delay
                         ->where('is_booked', 0) // ga lg booking
@@ -66,11 +61,11 @@ final class ProductionTable extends PowerGridComponent
             });
 
         // filter diluar spk
-        if ($this->user->cannot('spk-create')) {
+        if (auth()->user()->cannot('spk-create')) {
             $query->whereHas('productionHistories', fn ($history) => $history->where('status_produksi', '>', 0))
                 ->where(function ($q) {
-                    $q->where('tb_produksi.assign_to', $this->user->id)
-                        ->orWhere('tb_produksi.reassign_to', $this->user->id);
+                    $q->where('tb_produksi.assign_to', auth()->user()->id)
+                        ->orWhere('tb_produksi.reassign_to', auth()->user()->id);
                 });
         }
 
@@ -81,16 +76,7 @@ final class ProductionTable extends PowerGridComponent
 
     public function relationSearch(): array
     {
-        return [
-            'spk' => [
-                'nomor_order',
-                'tipe_timbangan',
-                'company_name',
-            ],
-            'productionHistories' => [
-                'status_produksi',
-            ],
-        ];
+        return [];
     }
 
     protected int $rowNumber = 0;
@@ -220,18 +206,16 @@ final class ProductionTable extends PowerGridComponent
 
     public function columns(): array
     {
-        $table = (new SpkMain)->getTable();
-
         return [
             Column::make('No', 'no'),
             Column::action('Action'),
-            Column::make('Nomor SPK', 'nomor_order_formatted', 'nomor_order')
+            Column::make('Nomor SPK', 'nomor_order_formatted', 'tb_spk.nomor_order')
                 ->searchable(),
             Column::make('Status SPK', 'status_spk', 'status_spk'),
             Column::make('Supir perusahaan', 'is_using_company_driver')->hidden(),
             Column::make('Dijemput Customer', 'is_picked_up_by_customer')->hidden(),
             Column::make('Old Stock', 'is_using_old_stock')->hidden(),
-            Column::make('Customer', 'customer_info', 'company_name')
+            Column::make('Customer', 'customer_info', 'tb_spk.company_name')
                 ->searchable(),
             Column::make('Assign to', 'assign_to_formatted', 'assign_to'),
             Column::make('Tipe Timbangan', 'tipe_timbangan_formatted', 'tipe_timbangan'),
@@ -268,7 +252,7 @@ final class ProductionTable extends PowerGridComponent
     {
         $button = [];
 
-        if ($this->user->can('spk-view')) {
+        if (auth()->user()->can('spk-view')) {
             $button[] = Button::make('detail', 'Detail')
                 ->slot('👁 SPK')
                 ->id($row->spk->id)
@@ -276,7 +260,7 @@ final class ProductionTable extends PowerGridComponent
                 ->route('spk.show', ['spk' => $row->spk->id]);
         }
 
-        if ($this->user->can('produksi-detail')) {
+        if (auth()->user()->can('produksi-detail')) {
             $button[] = Button::make('detail', 'Detail')
                 ->slot('+ Produksi')
                 ->id($row->id)
@@ -284,7 +268,7 @@ final class ProductionTable extends PowerGridComponent
                 ->route('production.show', ['production' => $row->id]);
         }
 
-        if ($row->productionHistories?->last()?->status_produksi === 10 && $this->user->can('produksi-update-packing-list') && $row->spk->is_using_company_driver == false) {
+        if ($row->productionHistories?->last()?->status_produksi === 10 && auth()->user()->can('produksi-update-packing-list') && $row->spk->is_using_company_driver == false) {
             $button[] = Button::make('packinglist', 'Packing List')
                 ->slot('+ Packing List')
                 ->id($row->id)
@@ -300,4 +284,3 @@ final class ProductionTable extends PowerGridComponent
         return $this->powerGridQueryString();
     }
 }
-

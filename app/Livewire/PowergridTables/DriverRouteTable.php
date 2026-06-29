@@ -6,7 +6,6 @@ namespace App\Livewire\PowergridTables;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
@@ -19,12 +18,8 @@ final class DriverRouteTable extends PowerGridComponent
 
     public bool $deferLoading = true;
 
-    public $user;
-
     public function setUp(): array
     {
-        $this->user = Auth::user();
-
         return [
             PowerGrid::header()
                 ->showSearchInput()
@@ -43,11 +38,11 @@ final class DriverRouteTable extends PowerGridComponent
         if (auth()->user()->hasAnyRole(['Admin', 'Management'])) {
             $roles[] = 'Driver';
         } else {
-            if ($this->user->can('driver-list-medan')) {
+            if (auth()->user()->can('driver-list-medan')) {
                 $roles[] = 'Driver-Medan';
             }
 
-            if ($this->user->can('driver-list-jkt')) {
+            if (auth()->user()->can('driver-list-jkt')) {
                 $roles[] = 'Driver-Jkt';
             }
         }
@@ -114,5 +109,9 @@ final class DriverRouteTable extends PowerGridComponent
 
         return $buttons;
     }
-}
 
+    public function queryString(): array
+    {
+        return $this->powerGridQueryString();
+    }
+}

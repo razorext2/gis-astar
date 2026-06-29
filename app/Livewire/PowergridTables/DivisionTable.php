@@ -1,24 +1,27 @@
 <?php
 
+/** Goal: PowerGrid table representing divisions, Caller: Division dashboard, Deps: Division model */
+
 namespace App\Livewire\PowergridTables;
 
-use \App\Models\Division;
+use App\Models\Division;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
-use PowerComponents\LivewirePowerGrid\Button;
+use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
-use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
-use PowerComponents\LivewirePowerGrid\Traits\WithExport;
+use PowerComponents\LivewirePowerGrid\PowerGridFields;
 
 final class DivisionTable extends PowerGridComponent
 {
     public string $tableName = 'DivisionTable';
+
     public bool $deferLoading = true;
+
     public bool $showFilters = true;
 
     public function setUp(): array
@@ -52,7 +55,7 @@ final class DivisionTable extends PowerGridComponent
             ->add('kode_divisi')
             ->add('nama_divisi')
             ->add('created_at')
-            ->add('created_at_formatted', fn($query) => Carbon::parse($query->created_at)->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss'));
+            ->add('created_at_formatted', fn ($query) => Carbon::parse($query->created_at)->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss'));
     }
 
     public function columns(): array
@@ -97,8 +100,8 @@ final class DivisionTable extends PowerGridComponent
             [
                 'id' => 'edit-btn',
                 'action' => route('division.edit', $row->id),
-                'label' => 'Edit'
-            ]
+                'label' => 'Edit',
+            ],
         ];
 
         return view('components.dashboard.action-buttons', [
@@ -108,19 +111,20 @@ final class DivisionTable extends PowerGridComponent
         ]);
     }
 
-    #[\Livewire\Attributes\On('delete')]
-    public function delete($id): void
+    #[On('delete')]
+    public function delete(int $id): void
     {
         $this->dispatch('confirmDelete', id: $id);
     }
 
-    #[\Livewire\Attributes\On('confirmDeleteAction')]
-    public function confirmDelete($id, Request $request): void
+    #[On('confirmDeleteAction')]
+    public function confirmDelete(int $id, Request $request): void
     {
         $data = Division::find($id);
 
-        if (!$data) {
+        if (! $data) {
             $this->swal('Gagal!', "Terjadi kesalahan saat menghapus data dengan ID <b>$id</b>", 'error');
+
             return;
         }
 
@@ -129,15 +133,15 @@ final class DivisionTable extends PowerGridComponent
 
             $this->swal('Terhapus!', 'Data yang dipilih berhasil dihapus.', 'success');
 
-            Log::info($request->user() . " : Menghapus data {$id}");
+            Log::info($request->user()." : Menghapus data {$id}");
         } catch (\Exception $e) {
             $this->swal('Gagal!', "Terjadi kesalahan saat menghapus data dengan ID <b>$id</b>", 'error');
 
-            Log::info($request->user()->kode_pegawai . " : Gagal menghapus data {$id}. {$e->getMessage()}");
+            Log::info($request->user()->kode_pegawai." : Gagal menghapus data {$id}. {$e->getMessage()}");
         }
     }
 
-    public function swal($title, $text, $icon)
+    public function swal(string $title, string $text, string $icon)
     {
         return $this->dispatch(
             'swal',
@@ -146,5 +150,9 @@ final class DivisionTable extends PowerGridComponent
             icon: $icon
         );
     }
-}
 
+    public function queryString(): array
+    {
+        return $this->powerGridQueryString();
+    }
+}
