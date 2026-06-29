@@ -17,5 +17,10 @@ class ChatMessage extends Model
         'content',
         'status',
     ];
+
+    public function conversation(): BelongsTo
+    {
+        return $this->belongsTo(ChatConversation::class, 'conversation_id');
+    }
 }
 

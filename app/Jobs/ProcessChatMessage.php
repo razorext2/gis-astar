@@ -61,7 +61,7 @@ class ProcessChatMessage implements ShouldQueue
         }
 
         // Send to Gemini with user context — pass pinned key index to maintain conversation continuity
-        $result = $service->sendMessage($history, $this->userMessage, $conversation->interaction_id, $userContext, $conversation->api_key_index);
+        $result = $service->sendMessage($history, $this->userMessage, $conversation->interaction_id, $userContext, $conversation->api_key_index, $conversation->persona ?? 'professional');
 
         $status = 'done';
         if ($result['error']) {

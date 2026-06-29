@@ -26,6 +26,8 @@ class Chatbot extends Component
 
     public string $searchConversation = '';
 
+    public string $persona = 'professional';
+
     public function mount(): void
     {
         $latest = ChatConversation::query()
@@ -35,6 +37,7 @@ class Chatbot extends Component
 
         if ($latest) {
             $this->activeConversationId = $latest->id;
+            $this->persona = $latest->persona ?? 'professional';
         }
     }
 
@@ -57,8 +60,8 @@ class Chatbot extends Component
             return;
         }
 
-        // Timeout check (30 seconds)
-        if ($this->processingStartedAt && (time() - $this->processingStartedAt) > 30) {
+        // Timeout check (90 seconds — aligned with job $timeout = 120)
+        if ($this->processingStartedAt && (time() - $this->processingStartedAt) > 90) {
             $this->isProcessing = false;
             $this->processingStartedAt = null;
 
@@ -80,11 +83,31 @@ class Chatbot extends Component
         $conversation = ChatConversation::create([
             'user_id' => Auth::id(),
             'title' => null,
+            'persona' => $this->persona,
         ]);
 
         $this->activeConversationId = $conversation->id;
         $this->newMessage = '';
         $this->isProcessing = false;
+    }
+
+    public function setPersona(string $persona): void
+    {
+        $this->authorizeAccess();
+
+        $validPersonas = ['professional', 'cheerful', 'strict'];
+        if (! in_array($persona, $validPersonas, true)) {
+            return;
+        }
+
+        $this->persona = $persona;
+
+        if ($this->activeConversationId) {
+            ChatConversation::query()
+                ->where('user_id', Auth::id())
+                ->where('id', $this->activeConversationId)
+                ->update(['persona' => $persona]);
+        }
     }
 
     public function selectConversation(int $id): void
@@ -100,6 +123,7 @@ class Chatbot extends Component
         }
 
         $this->activeConversationId = $conversation->id;
+        $this->persona = $conversation->persona ?? 'professional';
         $this->newMessage = '';
         $this->isProcessing = false;
     }
@@ -125,6 +149,7 @@ class Chatbot extends Component
                 ->first();
 
             $this->activeConversationId = $next?->id;
+            $this->persona = $next?->persona ?? 'professional';
             $this->isProcessing = false;
         }
     }
@@ -146,13 +171,14 @@ class Chatbot extends Component
             $conversation = ChatConversation::create([
                 'user_id' => Auth::id(),
                 'title' => null,
+                'persona' => $this->persona,
             ]);
             $this->activeConversationId = $conversation->id;
+        } else {
+            $conversation = ChatConversation::query()
+                ->where('user_id', Auth::id())
+                ->findOrFail($this->activeConversationId);
         }
-
-        $conversation = ChatConversation::query()
-            ->where('user_id', Auth::id())
-            ->findOrFail($this->activeConversationId);
 
         // Save user message immediately so it shows in the UI
         $userMessage = ChatMessage::create([
@@ -219,7 +245,8 @@ class Chatbot extends Component
         );
     }
 
-    public function getConversationsProperty()
+    /** @return \Illuminate\Database\Eloquent\Collection<int, ChatConversation> */
+    public function getConversationsProperty(): \Illuminate\Database\Eloquent\Collection
     {
         $query = ChatConversation::query()
             ->where('user_id', Auth::id())
@@ -232,10 +259,11 @@ class Chatbot extends Component
         return $query->get();
     }
 
-    public function getMessagesProperty()
+    /** @return \Illuminate\Database\Eloquent\Collection<int, ChatMessage> */
+    public function getMessagesProperty(): \Illuminate\Database\Eloquent\Collection
     {
         if (! $this->activeConversationId) {
-            return collect();
+            return new \Illuminate\Database\Eloquent\Collection;
         }
 
         return ChatMessage::query()
@@ -249,7 +277,7 @@ class Chatbot extends Component
         abort_unless(auth()->user()->can('ai-chatbot'), 403);
     }
 
-    public function render()
+    public function render(): \Illuminate\View\View
     {
         return view('livewire.chatbot.chatbot');
     }

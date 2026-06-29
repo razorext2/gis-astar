@@ -103,6 +103,25 @@
                 @endif
             </div>
 
+            {{-- Persona Switcher --}}
+            <div class="hidden items-center gap-1 rounded-xl border border-zinc-200 bg-zinc-50/50 p-1 dark:border-zinc-800 dark:bg-zinc-900/40 sm:flex">
+                <button wire:click="setPersona('professional')"
+                    title="Profesional — sopan, to-the-point"
+                    class="{{ $persona === 'professional' ? 'bg-white shadow-sm text-zinc-900 dark:bg-zinc-800 dark:text-white' : 'text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300' }} rounded-lg px-2.5 py-1 text-xs font-medium transition-all duration-200">
+                    💼 Profesional
+                </button>
+                <button wire:click="setPersona('cheerful')"
+                    title="Ceria — ramah, penuh semangat"
+                    class="{{ $persona === 'cheerful' ? 'bg-white shadow-sm text-zinc-900 dark:bg-zinc-800 dark:text-white' : 'text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300' }} rounded-lg px-2.5 py-1 text-xs font-medium transition-all duration-200">
+                    😊 Ceria
+                </button>
+                <button wire:click="setPersona('strict')"
+                    title="Tegas — lugas, formal"
+                    class="{{ $persona === 'strict' ? 'bg-white shadow-sm text-zinc-900 dark:bg-zinc-800 dark:text-white' : 'text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300' }} rounded-lg px-2.5 py-1 text-xs font-medium transition-all duration-200">
+                    🔒 Tegas
+                </button>
+            </div>
+
             {{-- Powered by badge --}}
             <div
                 class="hidden items-center gap-1.5 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-1.5 dark:from-blue-900/20 dark:to-indigo-900/20 sm:flex">
