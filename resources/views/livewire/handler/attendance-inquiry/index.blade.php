@@ -1,13 +1,17 @@
 {{-- Goal: List own attendance inquiries, Livewire: App\Livewire\Handler\AttendanceInquiry\Index, Alpine: - --}}
-<div class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 md:p-6 lg:p-8">
+<div
+    class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 md:p-6 lg:p-8">
     {{-- Header --}}
-    <div class="flex flex-col justify-between gap-4 border-b border-zinc-200 pb-4 dark:border-zinc-800 sm:flex-row sm:items-center">
+    <div
+        class="flex flex-col justify-between gap-4 border-b border-zinc-200 pb-4 dark:border-zinc-800 sm:flex-row sm:items-center">
         <div>
             <h2 class="text-xl font-bold text-zinc-900 dark:text-white lg:text-2xl">Laporan Absensi Saya</h2>
-            <p class="text-sm text-zinc-500 dark:text-zinc-400">Pengajuan perbaikan atau input manual absensi yang terlewat.</p>
+            <p class="text-sm text-zinc-500 dark:text-zinc-400">Pengajuan perbaikan atau input manual absensi yang
+                terlewat.</p>
         </div>
         <div>
-            <x-button.primary href="{{ route('attendance-inquiry.my-inquiries.create') }}" wire:navigate class="px-5 transition-all hover:shadow-lg">
+            <x-button.primary href="{{ route('attendance-inquiry.my-inquiries.create') }}"
+                class="px-5 transition-all hover:shadow-lg">
                 <x-slot name="icon">
                     <x-icons.plus class="mr-2 h-4 w-4" />
                 </x-slot>
@@ -37,18 +41,20 @@
                 <option value="rejected">Ditolak</option>
             </select>
         </div>
-        @if($search || $filterStatus)
-            <button wire:click="resetFilters" class="text-sm font-semibold text-red-600 hover:text-red-500 dark:text-red-400">
+        @if ($search || $filterStatus)
+            <button wire:click="resetFilters"
+                class="text-sm font-semibold text-red-600 hover:text-red-500 dark:text-red-400">
                 Reset Filter
             </button>
         @endif
     </div>
 
     {{-- Table / Cards list --}}
-    <div class="mt-6 overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
+    <div class="mt-6 overflow-hidden rounded-xl border border-zinc-200 shadow-sm dark:border-zinc-800">
         <div class="overflow-x-auto">
             <table class="w-full text-left text-sm text-zinc-500 dark:text-zinc-400">
-                <thead class="bg-zinc-50 text-xs font-bold uppercase tracking-wider text-zinc-700 dark:bg-zinc-800/50 dark:text-zinc-300">
+                <thead
+                    class="bg-zinc-50 text-xs font-bold uppercase tracking-wider text-zinc-700 dark:bg-zinc-800/50 dark:text-zinc-300">
                     <tr>
                         <th class="px-6 py-4">Waktu Absen</th>
                         <th class="px-6 py-4">Tipe</th>
@@ -59,14 +65,16 @@
                         <th class="px-6 py-4 text-right">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800 bg-white/40 dark:bg-zinc-900/40">
+                <tbody class="divide-y divide-zinc-200 bg-white/40 dark:divide-zinc-800 dark:bg-zinc-900/40">
                     @forelse ($inquiries as $inquiry)
-                        <tr wire:key="inquiry-{{ $inquiry->id }}" class="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors">
+                        <tr wire:key="inquiry-{{ $inquiry->id }}"
+                            class="transition-colors hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30">
                             <td class="whitespace-nowrap px-6 py-4 font-semibold text-zinc-900 dark:text-white">
                                 {{ $inquiry->waktu_absen->locale('id')->isoFormat('DD MMMM YYYY HH:mm') }}
                             </td>
                             <td class="whitespace-nowrap px-6 py-4">
-                                <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-bold {{ $inquiry->type_absen === 'in' ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400' : 'bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400' }}">
+                                <span
+                                    class="{{ $inquiry->type_absen === 'in' ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400' : 'bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400' }} inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-bold">
                                     {{ $inquiry->type_absen === 'in' ? 'Masuk' : 'Keluar' }}
                                 </span>
                             </td>
@@ -81,18 +89,23 @@
                             </td>
                             <td class="whitespace-nowrap px-6 py-4">
                                 @php
-                                    $statusColor = match($inquiry->status) {
-                                        'approved' => 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800',
-                                        'rejected' => 'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800',
-                                        default => 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800',
+                                    $statusColor = match ($inquiry->status) {
+                                        'approved'
+                                            => 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800',
+                                        'rejected'
+                                            => 'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800',
+                                        default
+                                            => 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800',
                                     };
                                 @endphp
-                                <span class="inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-bold {{ $statusColor }}">
+                                <span
+                                    class="{{ $statusColor }} inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-bold">
                                     {{ $inquiry->status_label }}
                                 </span>
                             </td>
                             <td class="whitespace-nowrap px-6 py-4 text-right">
-                                <a href="{{ route('attendance-inquiry.my-inquiries.show', $inquiry->id) }}" wire:navigate
+                                <a href="{{ route('attendance-inquiry.my-inquiries.show', $inquiry->id) }}"
+                                    wire:navigate
                                     class="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400">
                                     <x-icons.eye class="mr-1 h-4 w-4" /> Detail
                                 </a>

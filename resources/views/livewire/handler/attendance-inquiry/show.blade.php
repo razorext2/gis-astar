@@ -2,7 +2,7 @@
 <div class="space-y-6">
     {{-- Header --}}
     <div
-        class="flex items-center gap-3 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60">
+        class="flex items-center gap-3 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
         <x-button.danger wire:navigate href="{{ route('attendance-inquiry.my-inquiries.index') }}"
             class="max-h-10 max-w-fit">
             <x-icons.angle-left class="h-5 w-5" />
@@ -32,7 +32,7 @@
     {{-- Rejection Warning Card --}}
     @if ($inquiry->status === 'rejected')
         <div
-            class="rounded-xl border border-red-200 bg-red-50/50 p-4 text-red-800 dark:border-red-800 dark:bg-red-900/10 dark:text-red-400">
+            class="rounded-xl border border-red-200 bg-red-50/50 p-4 text-red-800 backdrop-blur-md dark:border-red-800 dark:bg-red-900/10 dark:text-red-400">
             <div class="flex gap-3">
                 <x-icons.exclamation-circle class="h-5 w-5 flex-shrink-0" />
                 <div>
@@ -49,7 +49,7 @@
     {{-- Approval Info Card --}}
     @if ($inquiry->status === 'approved')
         <div
-            class="rounded-xl border border-green-200 bg-green-50/50 p-4 text-green-800 dark:border-green-800 dark:bg-green-900/10 dark:text-green-400">
+            class="rounded-xl border border-green-200 bg-green-50/50 p-4 text-green-800 backdrop-blur-md dark:border-green-800 dark:bg-green-900/10 dark:text-green-400">
             <div class="flex gap-3">
                 <x-icons.check-circle class="h-5 w-5 flex-shrink-0" />
                 <div>
@@ -67,7 +67,7 @@
         <div class="space-y-6 lg:col-span-2">
             {{-- Detail Fields --}}
             <div
-                class="space-y-4 rounded-xl border border-zinc-200 bg-white/60 p-5 dark:border-zinc-800 dark:bg-zinc-900/60">
+                class="space-y-4 rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
                 <h3 class="text-base font-bold text-zinc-900 dark:text-white">Rincian Pengajuan</h3>
 
                 <div class="grid grid-cols-2 gap-4 border-t border-zinc-100 pt-4 dark:border-zinc-800">
@@ -107,7 +107,8 @@
             </div>
 
             {{-- Bukti Foto --}}
-            <div class="rounded-xl border border-zinc-200 bg-white/60 p-5 dark:border-zinc-800 dark:bg-zinc-900/60">
+            <div
+                class="rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
                 <h3 class="mb-4 text-base font-bold text-zinc-900 dark:text-white">Lampiran Bukti Foto</h3>
                 @if (!empty($inquiry->bukti))
                     <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
@@ -116,7 +117,8 @@
                                 class="group relative overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
                                 <img src="{{ asset('storage/' . $path) }}"
                                     class="h-32 w-full object-cover transition-transform duration-300 hover:scale-105"
-                                    alt="Bukti Absensi">
+                                    alt="Bukti Absensi"
+                                    onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}';">
                                 <div
                                     class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
                                     <a href="{{ asset('storage/' . $path) }}" target="_blank"
@@ -135,7 +137,8 @@
 
         {{-- Geolocation Card --}}
         <div class="space-y-6">
-            <div class="rounded-xl border border-zinc-200 bg-white/60 p-5 dark:border-zinc-800 dark:bg-zinc-900/60">
+            <div
+                class="rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
                 <h3 class="mb-4 text-base font-bold text-zinc-900 dark:text-white">Lokasi</h3>
 
                 @if ($inquiry->latitude && $inquiry->longitude)

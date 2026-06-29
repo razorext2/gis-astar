@@ -166,7 +166,8 @@
                                 <div class="relative shrink-0">
                                     @if (method_exists($photo, 'temporaryUrl'))
                                         <img class="h-24 w-24 rounded-lg border border-zinc-200 object-cover dark:border-zinc-800"
-                                            src="{{ $photo->temporaryUrl() }}">
+                                            src="{{ $photo->temporaryUrl() }}"
+                                            onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}';">
                                     @endif
                                     <x-button.danger type="button"
                                         class="absolute -end-2 -top-2 !rounded-full !p-1 shadow-md"
