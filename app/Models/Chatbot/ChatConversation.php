@@ -20,6 +20,7 @@ class ChatConversation extends Model
         'user_id',
         'title',
         'interaction_id',
+        'api_key_index',
     ];
 
     public function user(): BelongsTo

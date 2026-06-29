@@ -54,14 +54,14 @@ class ProcessChatMessage implements ShouldQueue
             ->toArray();
 
         // Auto-generate title from first user message if none
+        $service = new GeminiService;
+
         if (! $conversation->title) {
-            $service = new GeminiService;
             $conversation->update(['title' => $service->generateTitle($this->userMessage)]);
         }
 
-        // Send to Gemini with user context
-        $service = new GeminiService;
-        $result = $service->sendMessage($history, $this->userMessage, $conversation->interaction_id, $userContext);
+        // Send to Gemini with user context — pass pinned key index to maintain conversation continuity
+        $result = $service->sendMessage($history, $this->userMessage, $conversation->interaction_id, $userContext, $conversation->api_key_index);
 
         $status = 'done';
         if ($result['error']) {
@@ -69,8 +69,19 @@ class ProcessChatMessage implements ShouldQueue
             $status = 'failed';
         } else {
             $aiContent = $result['content'];
+            $updates = [];
+
             if (! empty($result['interaction_id'])) {
-                $conversation->update(['interaction_id' => $result['interaction_id']]);
+                $updates['interaction_id'] = $result['interaction_id'];
+            }
+
+            // Simpan key index yang dipakai jika conversation belum punya (pesan pertama)
+            if ($conversation->api_key_index === null && $result['api_key_index'] !== null) {
+                $updates['api_key_index'] = $result['api_key_index'];
+            }
+
+            if (! empty($updates)) {
+                $conversation->update($updates);
             }
         }
 

@@ -51,7 +51,10 @@ return [
         'url' => env('FACE_RECOGNITION_API_URL', 'https://verify.indodacin.com/recognize'),
     ],
     'gemini' => [
-        'api_key' => env('GEMINI_API_KEY'),
+        'api_keys' => array_values(array_filter(array_map(
+            'trim',
+            explode(',', env('GEMINI_API_KEYS', env('GEMINI_API_KEY', '')))
+        ))),
         'model' => env('GEMINI_MODEL', 'gemini-2.0-flash'),
     ],
 ];

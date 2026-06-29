@@ -4,13 +4,15 @@
 
 namespace App\Services\Chatbot;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class GeminiService
 {
-    private string $apiKey;
+    /** @var array<int, string> */
+    private array $apiKeys;
 
     private string $model;
 
@@ -18,8 +20,44 @@ class GeminiService
 
     public function __construct()
     {
-        $this->apiKey = config('services.gemini.api_key', '');
-        $this->model = config('services.gemini.model', 'gemini-3.1-flash');
+        $this->apiKeys = config('services.gemini.api_keys', []);
+        $this->model = config('services.gemini.model', 'gemini-2.0-flash');
+    }
+
+    /**
+     * Pilih API key secara round-robin menggunakan Cache atomic counter.
+     * Jika $pinnedIndex diberikan, gunakan key tersebut langsung (conversation lama).
+     * Jika $skipIndexes diberikan, key pada index tersebut akan dilewati (fallback 429).
+     *
+     * @param  array<int, int>  $skipIndexes
+     * @return array{key: string, index: int}|null
+     */
+    private function resolveApiKey(?int $pinnedIndex = null, array $skipIndexes = []): ?array
+    {
+        $total = count($this->apiKeys);
+
+        if ($total === 0) {
+            return null;
+        }
+
+        // Jika conversation sudah ada pinned key, gunakan itu (tidak increment counter)
+        if ($pinnedIndex !== null && isset($this->apiKeys[$pinnedIndex]) && ! in_array($pinnedIndex, $skipIndexes, true)) {
+            return ['key' => $this->apiKeys[$pinnedIndex], 'index' => $pinnedIndex];
+        }
+
+        // Conversation baru — round-robin via atomic increment
+        $counter = Cache::increment('gemini.key_index');
+        $startIndex = ($counter - 1) % $total;
+
+        // Cari key yang belum di-skip (untuk fallback 429)
+        for ($i = 0; $i < $total; $i++) {
+            $index = ($startIndex + $i) % $total;
+            if (! in_array($index, $skipIndexes, true)) {
+                return ['key' => $this->apiKeys[$index], 'index' => $index];
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -27,15 +65,16 @@ class GeminiService
      *
      * @param  array<int, array{role: string, content: string}>  $history
      * @param  array{id: int, name: string, kode_pegawai: string|null, roles: array<string>, permissions: array<string>}  $userContext
-     * @return array{content: string, interaction_id: string|null, error: string|null}
+     * @return array{content: string, interaction_id: string|null, api_key_index: int|null, error: string|null}
      */
-    public function sendMessage(array $history, string $userMessage, ?string $previousInteractionId = null, array $userContext = []): array
+    public function sendMessage(array $history, string $userMessage, ?string $previousInteractionId = null, array $userContext = [], ?int $pinnedKeyIndex = null): array
     {
-        if (empty($this->apiKey)) {
+        if (empty($this->apiKeys)) {
             return [
                 'content' => '',
                 'interaction_id' => $previousInteractionId,
-                'error' => 'GEMINI_API_KEY belum dikonfigurasi. Silakan tambahkan di file .env',
+                'api_key_index' => null,
+                'error' => 'GEMINI_API_KEYS belum dikonfigurasi. Silakan tambahkan di file .env',
             ];
         }
 
@@ -62,18 +101,61 @@ class GeminiService
         $interactionId = $previousInteractionId;
         $maxRounds = 5;
 
+        // Resolve key awal via round-robin (atau pinned jika conversation lama)
+        $skippedKeyIndexes = [];
+        $resolved = $this->resolveApiKey($pinnedKeyIndex, $skippedKeyIndexes);
+
+        if (! $resolved) {
+            return [
+                'content' => '',
+                'interaction_id' => $interactionId,
+                'api_key_index' => null,
+                'error' => 'Tidak ada API key Gemini yang tersedia.',
+            ];
+        }
+
+        $activeKey = $resolved['key'];
+        $activeKeyIndex = $resolved['index'];
+
         for ($round = 0; $round < $maxRounds; $round++) {
             $response = Http::timeout(60)
-                ->post("{$this->baseUrl}/interactions?key={$this->apiKey}", $payload);
+                ->post("{$this->baseUrl}/interactions?key={$activeKey}", $payload);
 
             if (! $response->successful()) {
                 $errorBody = $response->json();
                 $errorMsg = $errorBody['error']['message'] ?? 'API request failed';
-                Log::error('Gemini Interactions API error', ['status' => $response->status(), 'body' => $errorBody]);
+                $status = $response->status();
+
+                // Fallback ke key berikutnya jika 429 Rate Limit
+                if ($status === 429) {
+                    Log::warning('Gemini API 429 Rate Limit, rotating key', [
+                        'key_index' => $activeKeyIndex,
+                        'round' => $round,
+                    ]);
+
+                    $skippedKeyIndexes[] = $activeKeyIndex;
+                    $fallback = $this->resolveApiKey(null, $skippedKeyIndexes);
+
+                    if ($fallback) {
+                        $activeKey = $fallback['key'];
+                        $activeKeyIndex = $fallback['index'];
+                        continue;
+                    }
+
+                    return [
+                        'content' => '',
+                        'interaction_id' => $interactionId,
+                        'api_key_index' => null,
+                        'error' => 'Semua API key Gemini sedang terkena rate limit (429). Coba beberapa saat lagi.',
+                    ];
+                }
+
+                Log::error('Gemini Interactions API error', ['status' => $status, 'body' => $errorBody]);
 
                 return [
                     'content' => '',
                     'interaction_id' => $interactionId,
+                    'api_key_index' => null,
                     'error' => "Gemini API Error: {$errorMsg}",
                 ];
             }
@@ -134,6 +216,7 @@ class GeminiService
                 return [
                     'content' => $text ?: 'Tidak ada respons teks dari AI.',
                     'interaction_id' => $interactionId,
+                    'api_key_index' => $activeKeyIndex,
                     'error' => null,
                 ];
             }
@@ -141,6 +224,7 @@ class GeminiService
             return [
                 'content' => 'Tidak ada output dari AI.',
                 'interaction_id' => $interactionId,
+                'api_key_index' => $activeKeyIndex,
                 'error' => null,
             ];
         }
@@ -148,6 +232,7 @@ class GeminiService
         return [
             'content' => '',
             'interaction_id' => $interactionId,
+            'api_key_index' => null,
             'error' => 'Terlalu banyak function call rounds',
         ];
     }
