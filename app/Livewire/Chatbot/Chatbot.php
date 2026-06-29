@@ -75,6 +75,8 @@ class Chatbot extends Component
 
     public function createConversation(): void
     {
+        $this->authorizeAccess();
+
         $conversation = ChatConversation::create([
             'user_id' => Auth::id(),
             'title' => null,
@@ -87,6 +89,8 @@ class Chatbot extends Component
 
     public function selectConversation(int $id): void
     {
+        $this->authorizeAccess();
+
         $conversation = ChatConversation::query()
             ->where('user_id', Auth::id())
             ->find($id);
@@ -102,6 +106,8 @@ class Chatbot extends Component
 
     public function deleteConversation(int $id): void
     {
+        $this->authorizeAccess();
+
         $conversation = ChatConversation::query()
             ->where('user_id', Auth::id())
             ->find($id);
@@ -125,6 +131,8 @@ class Chatbot extends Component
 
     public function sendMessage(): void
     {
+        $this->authorizeAccess();
+
         $message = trim($this->newMessage);
         if (empty($message) || $this->isProcessing) {
             return;
@@ -169,6 +177,8 @@ class Chatbot extends Component
 
     public function retryMessage(int $modelMessageId): void
     {
+        $this->authorizeAccess();
+
         if ($this->isProcessing) {
             return;
         }
@@ -232,6 +242,11 @@ class Chatbot extends Component
             ->where('conversation_id', $this->activeConversationId)
             ->orderBy('created_at')
             ->get();
+    }
+
+    private function authorizeAccess(): void
+    {
+        abort_unless(auth()->user()->can('ai-chatbot'), 403);
     }
 
     public function render()

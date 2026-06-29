@@ -770,7 +770,7 @@ return [
         'route' => 'chatbot.index',
         'check' => ['chatbot.*'],
         'icon' => 'chat',
-        'guard' => null,
+        'guard' => ['can', 'ai-chatbot'],
         'navigate' => false,
     ],
 
