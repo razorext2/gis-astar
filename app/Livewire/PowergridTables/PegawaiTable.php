@@ -4,11 +4,13 @@
 
 namespace App\Livewire\PowergridTables;
 
+use App\Models\Golongan;
+use App\Models\Jabatan;
 use App\Models\Pegawai;
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use PowerComponents\LivewirePowerGrid\Column;
-use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
@@ -26,18 +28,8 @@ final class PegawaiTable extends PowerGridComponent
 
     public bool $showFilters = false;
 
-    public $golongan;
-
-    public $jabatan;
-
-    public $roles;
-
     public function setUp(): array
     {
-        $this->golongan = \App\Models\Golongan::select('id', 'nama_golongan')->get();
-        $this->jabatan = \App\Models\Jabatan::select('id', 'nama_jabatan')->get();
-        $this->roles = Role::select('id', 'name')->get();
-
         return [
             PowerGrid::header()
                 ->showSoftDeletes()
@@ -47,9 +39,6 @@ final class PegawaiTable extends PowerGridComponent
                 ->showPerPage(25)
                 ->showRecordCount(),
             PowerGrid::responsive(),
-            PowerGrid::exportable(fileName: 'userAccount-'.now()->format('YmdHis'))
-                ->type(Exportable::TYPE_XLS)
-                ->stripTags(true),
         ];
     }
 
@@ -189,6 +178,10 @@ final class PegawaiTable extends PowerGridComponent
 
     public function filters(): array
     {
+        $golongan = Golongan::select(['id', 'nama_golongan'])->get();
+        $jabatan = Jabatan::select(['id', 'nama_jabatan'])->get();
+        $roles = Role::select(['id', 'name'])->get();
+
         return [
             Filter::boolean('is_active', 'users.is_active')
                 ->label('Aktif', 'Non-aktif'),
@@ -199,12 +192,12 @@ final class PegawaiTable extends PowerGridComponent
                 ->placeholder('Nama lengkap'),
 
             Filter::select('golongan_formatted', 'tb_pegawai.golongan')
-                ->dataSource(collect($this->golongan))
+                ->dataSource(collect($golongan))
                 ->optionLabel('nama_golongan')
                 ->optionValue('id'),
 
             Filter::select('jabatan', 'tb_pegawai.jabatan')
-                ->dataSource(collect($this->jabatan))
+                ->dataSource(collect($jabatan))
                 ->optionLabel('nama_jabatan')
                 ->optionValue('id'),
 
@@ -217,18 +210,13 @@ final class PegawaiTable extends PowerGridComponent
                 ->placeholder('No telp'),
 
             Filter::select('roles_formatted', 'roles.id')
-                ->dataSource(collect($this->roles))
+                ->dataSource(collect($roles))
                 ->optionLabel('name')
                 ->optionValue('id'),
         ];
     }
 
-    public function actions(Pegawai $row): array
-    {
-        return [];
-    }
-
-    public function actionsFromView(Pegawai $row): \Illuminate\Contracts\View\View
+    public function actionsFromView(Pegawai $row): View
     {
         return view(
             'components.dashboard.single-button',
@@ -247,4 +235,3 @@ final class PegawaiTable extends PowerGridComponent
         return $this->powerGridQueryString();
     }
 }
-

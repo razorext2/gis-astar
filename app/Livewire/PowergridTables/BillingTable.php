@@ -16,6 +16,8 @@ final class BillingTable extends PowerGridComponent
 {
     public string $tableName = 'BillingTable';
 
+    public bool $showFilters = true;
+
     public function setUp(): array
     {
         return [
@@ -103,13 +105,39 @@ final class BillingTable extends PowerGridComponent
                 ->searchable(),
 
             Column::make('No tagihan updated by', 'no_tagihan_updated_by_formatted', 'no_tagihan_updated_by'),
+
+            Column::make('Status Nomor Tagihan', 'status_nomor_tagihan')
+                ->hidden(),
+
+            Column::make('Tanggal Cetak', 'tgl_cetak')
+                ->hidden(),
         ];
     }
 
     public function filters(): array
     {
         return [
-            Filter::datepicker('tgl_cetak'),
+            Filter::inputText('nomor_order', 'nomor_order')
+                ->placeholder('Nomor SPK'),
+
+            Filter::select('tipe_tagihan', 'tipe_tagihan')
+                ->dataSource([
+                    ['value' => 'idcnon', 'label' => 'IDC Non PPN'],
+                    ['value' => 'idcppn', 'label' => 'IDC PPN'],
+                    ['value' => 'idyppn', 'label' => 'IDY PPN'],
+                ])
+                ->optionLabel('label')
+                ->optionValue('value'),
+
+            Filter::select('status_nomor_tagihan', 'status_nomor_tagihan')
+                ->dataSource([
+                    ['value' => 0, 'label' => 'Belum Diupdate'],
+                    ['value' => 1, 'label' => 'Sudah Diupdate (Riwayat)'],
+                ])
+                ->optionLabel('label')
+                ->optionValue('value'),
+
+            Filter::datepicker('tgl_cetak', 'tgl_cetak'),
         ];
     }
 
@@ -153,4 +181,3 @@ final class BillingTable extends PowerGridComponent
         return $this->powerGridQueryString();
     }
 }
-

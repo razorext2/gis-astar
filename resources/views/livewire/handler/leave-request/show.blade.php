@@ -38,6 +38,46 @@
                     Edit
                 </x-button.primary>
             @endif
+
+            @if ($request->status === 'approved')
+                <div x-data="{ openCancelModal: false }" @close-modal.window="if($event.detail === 'cancel-request-modal') openCancelModal = false">
+                    <x-button.danger @click="openCancelModal = true" class="shadow-lg shadow-red-500/10">
+                        <x-slot name="icon"><x-icons.close class="h-4 w-4" /></x-slot>
+                        Ajukan Pembatalan Cuti
+                    </x-button.danger>
+
+                    <!-- Modal -->
+                    <x-modal.base-modal 
+                        show="openCancelModal" 
+                        isAlpine="true" 
+                        title="Ajukan Pembatalan Cuti"
+                        subtitle="PERMINTAAN PEMBATALAN"
+                        iconContainerClass="bg-red-600 shadow-red-500/20"
+                    >
+                        <x-slot name="icon">
+                            <x-icons.close class="h-5 w-5" />
+                        </x-slot>
+
+                        <p class="mb-4 text-sm text-zinc-500 dark:text-zinc-400">Silakan masukkan alasan pembatalan cuti yang sudah disetujui. Permintaan ini akan dikirim ke HRD untuk persetujuan.</p>
+                        
+                        <form wire:submit="requestCancellation" id="cancelRequestForm">
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Alasan Pembatalan</label>
+                                <textarea wire:model="cancelReason" class="mt-1 w-full rounded-md border-zinc-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white" rows="3" required></textarea>
+                                @error('cancelReason') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
+                            </div>
+                        </form>
+
+                        <x-slot name="footer">
+                            <button type="button" @click="openCancelModal = false" class="rounded-md px-4 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800">Batal</button>
+                            <x-button.primary form="cancelRequestForm" type="submit" wire:loading.attr="disabled" wire:target="requestCancellation">
+                                <span wire:loading.remove wire:target="requestCancellation">Kirim Permintaan</span>
+                                <span wire:loading wire:target="requestCancellation">Memproses...</span>
+                            </x-button.primary>
+                        </x-slot>
+                    </x-modal.base-modal>
+                </div>
+            @endif
         </div>
     </div>
 

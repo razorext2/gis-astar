@@ -77,6 +77,10 @@ class LeaveRequestPolicy
                 ? Response::allow()
                 : Response::deny('Anda tidak terdaftar sebagai HRD untuk placement pemohon ini.'),
 
+            'pending_cancel' => (bool) $leaveRequest->user->pegawai?->jabatanRelasi?->placementRelasi?->hrds->contains('id', $user->id)
+                ? Response::allow()
+                : Response::deny('Anda tidak terdaftar sebagai HRD untuk placement pemohon ini.'),
+
             'pending_management' => (bool) $leaveRequest->user->pegawai?->jabatanRelasi?->placementRelasi?->managements->contains('id', $user->id)
                 ? Response::allow()
                 : Response::deny('Anda tidak terdaftar sebagai Manajemen untuk placement pemohon ini.'),

@@ -31,7 +31,7 @@ class Show extends Component
         $this->requestId = is_object($id) ? $id->id : $id;
     }
 
-    public function approve(LeaveRequestService $service)
+    public function approve(LeaveRequestService $service): void
     {
         $this->runSafely(function () use ($service) {
             $request = LeaveRequest::with([
@@ -46,11 +46,11 @@ class Show extends Component
 
             $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Pengajuan telah disetujui.');
 
-            return redirect()->route('leave-request.approval-center.index');
+            return redirect()->route($this->resolveRedirectRoute());
         });
     }
 
-    public function reject(LeaveRequestService $service)
+    public function reject(LeaveRequestService $service): void
     {
         $this->validate([
             'note' => 'required|min:5',
@@ -71,11 +71,22 @@ class Show extends Component
 
             $this->dispatch('swal', icon: 'info', title: 'Ditolak', text: 'Pengajuan telah ditolak.');
 
-            return redirect()->route('leave-request.approval-center.index');
+            return redirect()->route($this->resolveRedirectRoute());
         });
     }
 
-    public function render()
+    /**
+     * Resolve redirect route based on user permissions.
+     * Users without approval-center access are sent to dashboard.
+     */
+    private function resolveRedirectRoute(): string
+    {
+        return auth()->user()->hasAnyPermission(['leave-approval-center', 'leave-list-all'])
+            ? 'leave-request.approval-center.index'
+            : 'dashboard';
+    }
+
+    public function render(): \Illuminate\Contracts\View\View
     {
         $request = LeaveRequest::with([
             'user.pegawai.jabatanRelasi.divisionRelasi',

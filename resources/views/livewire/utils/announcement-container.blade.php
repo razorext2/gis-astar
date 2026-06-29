@@ -2,6 +2,7 @@
 <div>
     @if ($announcement)
         <div x-data="{
+            announcementId: @entangle('announcementId'),
             hasScrolledToEnd: false,
             checkScroll(e) {
                 const el = e.target;
@@ -12,15 +13,35 @@
                 if (Math.ceil(el.scrollTop + el.clientHeight) >= el.scrollHeight - 10) {
                     this.hasScrolledToEnd = true;
                 }
+            },
+            resetScroll() {
+                this.hasScrolledToEnd = false;
+                this.$nextTick(() => {
+                    const anchor = document.querySelector('.announcement-scroll-anchor');
+                    if (anchor) {
+                        const el = anchor.closest('.overflow-y-auto');
+                        if (el) {
+                            el.scrollTop = 0;
+                            if (el.scrollHeight <= el.clientHeight) {
+                                this.hasScrolledToEnd = true;
+                            }
+                        }
+                    }
+                });
             }
-        }">
+        }"
+        x-init="$watch('announcementId', value => {
+            if (value) {
+                resetScroll();
+            }
+        })">
             <x-modal.base-modal show="showModal" maxWidth="3xl" :title="$announcement->title" subtitle="PENGUMUMAN PENTING"
-                :showCloseButton="false">
+                :showCloseButton="false" :minimizeable="false">
                 <x-slot name="icon">
                     <x-icons.bullhorn class="h-6 w-6" />
                 </x-slot>
 
-                <div x-init="$nextTick(() => {
+                <div x-ref="announcementContent" class="announcement-scroll-anchor" x-init="$nextTick(() => {
                     const el = $el.closest('.overflow-y-auto');
                     if (el) {
                         el.addEventListener('scroll', checkScroll.bind($data));

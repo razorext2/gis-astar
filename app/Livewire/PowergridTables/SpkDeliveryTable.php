@@ -19,10 +19,6 @@ final class SpkDeliveryTable extends PowerGridComponent
 
     public function setUp(): array
     {
-        // if (auth()->user()->can('spk-approve')) {
-        //     $this->showCheckBox();
-        // }
-
         return [
             PowerGrid::header()
                 ->showSearchInput(),
@@ -206,4 +202,3 @@ final class SpkDeliveryTable extends PowerGridComponent
         return $this->powerGridQueryString();
     }
 }
-

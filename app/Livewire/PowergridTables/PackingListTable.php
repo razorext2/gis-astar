@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: PowerGrid table representing SPK Packing Lists, Caller: Production packing list view, Deps: Production model */
+
 namespace App\Livewire\PowergridTables;
 
 use App\Models\Spk\Production;
@@ -15,7 +17,7 @@ final class PackingListTable extends PowerGridComponent
 
     public ?string $id;
 
-    public $production;
+    public ?Production $production = null;
 
     public function setUp(): array
     {
@@ -77,13 +79,16 @@ final class PackingListTable extends PowerGridComponent
             Column::action('Aksi'),
             Column::make('Nama Ekspedisi', 'nama_ekspedisi')
                 ->hidden(),
-            Column::make('Nama Ekspedisi', 'nama_ekspedisi_formatted'),
+            Column::make('Nama Ekspsedisi', 'nama_ekspedisi_formatted'),
             Column::make('Nama Barang', 'nama_barang'),
             Column::make('Jumlah', 'qty_barang'),
             Column::make('Satuan', 'satuan_barang'),
         ];
     }
 
+    /**
+     * @param  object|array  $row
+     */
     public function actions($row): array
     {
         $buttons = [
@@ -114,5 +119,9 @@ final class PackingListTable extends PowerGridComponent
 
         return $buttons;
     }
-}
 
+    public function queryString(): array
+    {
+        return $this->powerGridQueryString();
+    }
+}

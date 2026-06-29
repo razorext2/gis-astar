@@ -5,7 +5,6 @@
 namespace App\Livewire\PowergridTables;
 
 use App\Models\Driver;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -14,17 +13,13 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\View\View;
 use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Column;
-use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
-use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 
 final class DriverTable extends PowerGridComponent
 {
-    use WithExport;
-
     public string $tableName = 'DriverTable';
 
     public string $status = '';
@@ -32,8 +27,6 @@ final class DriverTable extends PowerGridComponent
     public bool $deferLoading = true;
 
     public bool $showFilters = false;
-
-    public ?User $user = null;
 
     // Label status Driver — single source of truth untuk fields() dan filters()
     private const STATUS_LABELS = [
@@ -47,8 +40,6 @@ final class DriverTable extends PowerGridComponent
 
     public function setUp(): array
     {
-        // Inisialisasi state di setUp() — hook resmi PowerGrid, tidak override mount() parent
-        $this->user = Auth::user();
         $this->status = Request::query('status', '');
 
         return [
@@ -59,9 +50,6 @@ final class DriverTable extends PowerGridComponent
             PowerGrid::footer()
                 ->showPerPage()
                 ->showRecordCount(),
-            PowerGrid::exportable(fileName: 'driverReport-'.now()->format('YmdHis'))
-                ->type(Exportable::TYPE_XLS)
-                ->stripTags(true),
         ];
     }
 
@@ -70,12 +58,12 @@ final class DriverTable extends PowerGridComponent
         return Driver::query()
             ->with(['user', 'photoCollect'])
             ->when(
-                $this->user->can('driver-approve'),
+                auth()->user()->can('driver-approve'),
                 function (Builder $query) {
                     $roles = collect([
                         'Driver-Jkt' => 'driver-list-jkt',
                         'Driver-Medan' => 'driver-list-medan',
-                    ])->filter(fn ($permission) => $this->user->can($permission))->keys()->toArray();
+                    ])->filter(fn ($permission) => auth()->user()->can($permission))->keys()->toArray();
 
                     $query->where(function (Builder $q) use ($roles) {
                         $q->when(! empty($roles), fn ($q) => $q->where(fn ($q) => $q
@@ -83,11 +71,11 @@ final class DriverTable extends PowerGridComponent
                             ->whereHas('user.roles', fn ($role) => $role->whereIn('name', $roles))
                         ))->orWhere(fn ($q) => $q
                             ->whereNull('kode_pegawai')
-                            ->where('assign_by', $this->user->id)
+                            ->where('assign_by', auth()->user()->id)
                         );
                     });
                 },
-                fn (Builder $query) => $query->where('kode_pegawai', $this->user->kode_pegawai)
+                fn (Builder $query) => $query->where('kode_pegawai', auth()->user()->kode_pegawai)
             )
             ->when($this->status !== '', function (Builder $query) {
                 $statusMap = [
@@ -217,8 +205,7 @@ final class DriverTable extends PowerGridComponent
             ],
         ];
 
-        // Gunakan $this->user (di-cache di mount()) — bukan auth() berulang kali
-        if ($row->status == 3 || $this->user->can('driver-approve')) {
+        if ($row->status == 3 || auth()->user()->can('driver-approve')) {
             $actions[] = [
                 'id' => 'edit-btn',
                 'action' => route('driver.edit', $row->id),
@@ -229,19 +216,18 @@ final class DriverTable extends PowerGridComponent
         return view('components.dashboard.action-buttons', [
             'id' => $row->id,
             'datas' => $actions,
-            'detail' => $row->status == 0 && $this->user->can('driver-approve'),
-            // 'delete' => $this->user->can('driver-delete'),
+            'detail' => $row->status == 0 && auth()->user()->can('driver-approve'),
         ]);
     }
 
     #[On('delete')]
-    public function delete($id): void
+    public function delete(int $id): void
     {
         $this->dispatch('confirmDelete', id: $id);
     }
 
     #[On('confirmDeleteAction')]
-    public function confirmDelete($id): void
+    public function confirmDelete(int $id): void
     {
         $data = Driver::find($id);
 
@@ -256,16 +242,16 @@ final class DriverTable extends PowerGridComponent
 
             $this->swal('Terhapus!', 'Data yang dipilih berhasil dihapus.', 'success');
 
-            Log::info($this->user->kode_pegawai." : Menghapus data {$id}");
+            Log::info(auth()->user()->kode_pegawai." : Menghapus data {$id}");
         } catch (\Exception $e) {
             $this->swal('Gagal!', "Terjadi kesalahan saat menghapus data dengan ID <b>$id</b>", 'error');
 
-            Log::info($this->user->kode_pegawai." : Gagal menghapus data {$id}. {$e->getMessage()}");
+            Log::info(auth()->user()->kode_pegawai." : Gagal menghapus data {$id}. {$e->getMessage()}");
         }
     }
 
     #[On('detail')]
-    public function detail($id): void
+    public function detail(int $id): void
     {
         // Gunakan find() langsung — lebih ringkas dari where()->first()
         $data = Driver::with(['pegawai', 'photoCollect'])->find($id);
@@ -280,19 +266,19 @@ final class DriverTable extends PowerGridComponent
     }
 
     #[On('confirmAction')]
-    public function confirmAction($id): void
+    public function confirmAction(int $id): void
     {
         $this->updateDriverStatus($id, ['status' => 1], 'Dikonfirmasi!', 'Data yang dipilih berhasil dikonfirmasi.');
     }
 
     #[On('declineAction')]
-    public function declineAction($id, $note): void
+    public function declineAction(int $id, string $note): void
     {
         $this->updateDriverStatus($id, ['status' => 2, 'notes' => $note], 'Ditolak!', 'Laporan yang dipilih berhasil ditolak.');
     }
 
     #[On('revisionAction')]
-    public function revisionAction($id, $note): void
+    public function revisionAction(int $id, string $note): void
     {
         $this->updateDriverStatus($id, ['status' => 3, 'notes' => $note], 'Direvisi!', 'Laporan yang dipilih berhasil direvisi.');
     }

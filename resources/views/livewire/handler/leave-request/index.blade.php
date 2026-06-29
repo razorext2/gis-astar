@@ -170,6 +170,10 @@
                                     'class' =>
                                         'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
                                 ],
+                                'pending_cancel' => [
+                                    'label' => 'Menunggu Pembatalan HRD',
+                                    'class' => 'bg-gray-100 text-gray-700',
+                                ],
                                 'approved' => [
                                     'label' => 'Disetujui',
                                     'class' => 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
@@ -184,8 +188,7 @@
                                 ],
                                 'auto_reject' => [
                                     'label' => 'Ditolak Otomatis',
-                                    'class' =>
-                                        'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300',
+                                    'class' => 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300',
                                 ],
                             ][$request->status] ?? [
                                 'label' => $request->status,

@@ -99,9 +99,11 @@
 
             <!-- Target Pengumuman -->
             <div
-                class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-6 shadow-xl backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
-                <div
-                    class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-purple-500/5 blur-3xl transition-colors group-hover:bg-purple-500/10">
+                class="group relative rounded-xl border border-zinc-200 bg-white/60 p-6 shadow-xl backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
+                <div class="absolute inset-0 overflow-hidden rounded-xl pointer-events-none">
+                    <div
+                        class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-purple-500/5 blur-3xl transition-colors group-hover:bg-purple-500/10">
+                    </div>
                 </div>
 
                 <div class="mb-8 flex items-center gap-3">
@@ -214,7 +216,7 @@
 
                                 {{-- Dropdown --}}
                                 <div x-show="open && filteredUsers.length > 0" x-transition style="display: none;"
-                                    class="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-lg bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-gray-800 dark:ring-white dark:ring-opacity-10">
+                                    class="absolute z-10 bottom-full mb-1 max-h-48 w-full overflow-y-auto rounded-lg bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-gray-800 dark:ring-white dark:ring-opacity-10">
                                     <template x-for="user in filteredUsers" :key="user.id">
                                         <button type="button" @click="add(user.id)"
                                             class="flex w-full flex-col items-start px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -227,7 +229,7 @@
                                 </div>
                                 <div x-show="open && search !== '' && filteredUsers.length === 0"
                                     style="display: none;"
-                                    class="absolute z-10 mt-1 w-full rounded-lg bg-white px-4 py-3 text-sm text-gray-500 shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-gray-800 dark:text-gray-400 dark:ring-white dark:ring-opacity-10">
+                                    class="absolute z-10 bottom-full mb-1 w-full rounded-lg bg-white px-4 py-3 text-sm text-gray-500 shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-gray-800 dark:text-gray-400 dark:ring-white dark:ring-opacity-10">
                                     Tidak ada data ditemukan.
                                 </div>
                             </div>

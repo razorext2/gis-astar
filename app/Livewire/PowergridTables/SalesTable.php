@@ -5,10 +5,8 @@
 namespace App\Livewire\PowergridTables;
 
 use App\Models\Sales;
-use App\Models\User;
 use App\Services\Sales\SalesRegionResolver;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Livewire\Attributes\On;
@@ -24,12 +22,8 @@ final class SalesTable extends PowerGridComponent
 
     public bool $showFilters = true;
 
-    public ?User $user = null;
-
     public function setUp(): array
     {
-        $this->user = Auth::user();
-
         return [
             PowerGrid::header()
                 ->showSearchInput()
@@ -47,10 +41,10 @@ final class SalesTable extends PowerGridComponent
             ->select('tb_sales.*', 'tb_pegawai.full_name')
             ->with(['userRelasi.roles']);
 
-        if (! $this->user->can('sales-approve')) {
-            $query->where('tb_sales.kode_pegawai', $this->user->kode_pegawai);
+        if (! auth()->user()->can('sales-approve')) {
+            $query->where('tb_sales.kode_pegawai', auth()->user()->kode_pegawai);
         } else {
-            $allowedRoles = SalesRegionResolver::resolveForUser($this->user);
+            $allowedRoles = SalesRegionResolver::resolveForUser(auth()->user());
 
             if (! empty($allowedRoles)) {
                 $query->whereHas('userRelasi.roles', function ($q) use ($allowedRoles) {
@@ -177,11 +171,11 @@ final class SalesTable extends PowerGridComponent
                 ->params(['timezone' => 'Asia/Jakarta']),
         ];
 
-        if ($this->user->can('sales-approve')) {
+        if (auth()->user()->can('sales-approve')) {
             $filters[] = Filter::inputText('full_name', 'tb_pegawai.full_name')->placeholder('Nama sales');
         }
 
-        if ($this->user->can('sales-export-all')) {
+        if (auth()->user()->can('sales-export-all')) {
             $filters[] = Filter::select('role_name', 'role_name')
                 ->dataSource([
                     ['name' => 'Sales Medan',    'value' => 'Sales'],
@@ -201,7 +195,7 @@ final class SalesTable extends PowerGridComponent
         return $filters;
     }
 
-    public function actionsFromView($data): View
+    public function actionsFromView(Sales $data): View
     {
         $actions = [
             [
@@ -211,8 +205,8 @@ final class SalesTable extends PowerGridComponent
             ],
         ];
 
-        if ($this->user->can('sales-approve')) {
-            if ($this->user->can('sales-delete')) {
+        if (auth()->user()?->can('sales-approve')) {
+            if (auth()->user()?->can('sales-delete')) {
                 $actions[] = [
                     'id' => 'edit-btn',
                     'action' => route('sales.edit', $data->id),
@@ -224,7 +218,6 @@ final class SalesTable extends PowerGridComponent
                 'id' => $data->id,
                 'datas' => $actions,
                 'detail' => $data->status == 0,
-                // 'delete' => $this->user->can('sales-delete'),
             ]);
         }
 
@@ -277,5 +270,10 @@ final class SalesTable extends PowerGridComponent
     public function swal(string $title, string $text, string $icon): void
     {
         $this->dispatch('swal', title: $title, text: $text, icon: $icon);
+    }
+
+    public function queryString()
+    {
+        return $this->powerGridQueryString();
     }
 }

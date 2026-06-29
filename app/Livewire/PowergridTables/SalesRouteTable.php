@@ -7,7 +7,6 @@ namespace App\Livewire\PowergridTables;
 use App\Models\User;
 use App\Services\Sales\SalesRegionResolver;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
@@ -20,8 +19,6 @@ final class SalesRouteTable extends PowerGridComponent
     public string $tableName = 'SalesRouteTable';
 
     public bool $deferLoading = true;
-
-    public $user;
 
     public function setUp(): array
     {
@@ -38,9 +35,7 @@ final class SalesRouteTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        $this->user = auth()->user();
-
-        $roles = SalesRegionResolver::resolveForUser($this->user);
+        $roles = SalesRegionResolver::resolveForUser(auth()->user());
 
         $query = User::query()->with(['pegawai', 'roles']);
 
@@ -103,7 +98,7 @@ final class SalesRouteTable extends PowerGridComponent
     {
         $filters = [];
 
-        if (Auth::user()->can('sales-export-all')) {
+        if (auth()->user()->can('sales-export-all')) {
             $filters[] = Filter::select('role', 'role')
                 ->dataSource([
                     ['name' => 'Sales Medan', 'value' => 'Sales'],
@@ -141,5 +136,9 @@ final class SalesRouteTable extends PowerGridComponent
                 ->route('routes.sales.detail', ['pegawai' => $row->kode_pegawai ?? 'N/A']),
         ];
     }
-}
 
+    public function queryString(): array
+    {
+        return $this->powerGridQueryString();
+    }
+}

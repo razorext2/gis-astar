@@ -186,6 +186,34 @@
                     </div>
 
                     <div>
+                        <span class="mb-2 block text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                            Apakah customer memberikan nomor telepon?
+                        </span>
+                        <div class="mb-2 ms-1 flex items-center">
+                            <input id="phone-option-1" type="radio" name="gives_phone_number"
+                                wire:model.live="gives_phone_number" value="1"
+                                class="h-4 w-4 border-zinc-200 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:focus:ring-blue-600">
+                            <label for="phone-option-1"
+                                class="ms-2 block text-sm font-medium text-zinc-900 dark:text-zinc-300">
+                                Ya
+                            </label>
+                        </div>
+
+                        <div class="ms-1 flex items-center">
+                            <input id="phone-option-2" type="radio" name="gives_phone_number"
+                                wire:model.live="gives_phone_number" value="0"
+                                class="h-4 w-4 border-zinc-200 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:focus:ring-blue-600">
+                            <label for="phone-option-2"
+                                class="ms-2 block text-sm font-medium text-zinc-900 dark:text-zinc-300">
+                                Tidak
+                            </label>
+                        </div>
+                        @error('gives_phone_number')
+                            <span class="mt-1 block text-xs text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div>
                         <span class="block text-sm font-medium text-zinc-900 dark:text-zinc-100">
                             Catatan
                         </span>
@@ -205,8 +233,13 @@
                         x-on:livewire-upload-cancel="uploading = false" x-on:livewire-upload-error="uploading = false"
                         x-on:livewire-upload-progress="progress = $event.detail.progress">
                         <label class="mb-2 block text-sm font-medium text-zinc-900 dark:text-zinc-100"
-                            for="user_avatar">
+                            for="proof_pic">
                             Bukti Followup Customer
+                            @if ($gives_phone_number === '1' || $gives_phone_number === 1)
+                                <span class="text-red-500 font-bold">*</span> <span class="text-xs text-red-500 font-normal">(Wajib)</span>
+                            @else
+                                <span class="text-xs text-zinc-400 font-normal">(Opsional)</span>
+                            @endif
                         </label>
 
                         <div x-show="uploading"

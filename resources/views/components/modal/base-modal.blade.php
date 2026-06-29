@@ -1,3 +1,4 @@
+{{-- Goal: Base modal component with customizable header, footer, close button, and minimizeable state, Livewire: N/A, Alpine: open/close state management --}}
 @props([
     'show' => null,
     'id' => 'modal-' . uniqid(),
@@ -7,6 +8,7 @@
     'iconContainerClass' => 'bg-blue-600 shadow-blue-500/20',
     'isAlpine' => false,
     'showCloseButton' => true,
+    'minimizeable' => true,
 ])
 
 @php
@@ -33,7 +35,8 @@
         class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-900/60 p-4 backdrop-blur-md lg:p-6"
         x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" @click.self="open = false">
+        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+        @click.self="{{ $minimizeable ? 'open = false' : '' }}">
 
         <div x-show="open" x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0 scale-95 translate-y-4"

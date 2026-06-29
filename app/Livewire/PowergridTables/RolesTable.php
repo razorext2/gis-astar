@@ -44,9 +44,7 @@ final class RolesTable extends PowerGridComponent
 
     public function relationSearch(): array
     {
-        return [
-
-        ];
+        return [];
     }
 
     public function fields(): PowerGridFields
@@ -116,4 +114,3 @@ final class RolesTable extends PowerGridComponent
         return $this->powerGridQueryString();
     }
 }
-

@@ -8,6 +8,7 @@ use App\Models\Announcement;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
@@ -30,7 +31,7 @@ final class AnnouncementTable extends PowerGridComponent
             PowerGrid::header()
                 ->showSearchInput()
                 ->showToggleColumns(),
-            Powergrid::responsive(),
+            PowerGrid::responsive(),
             PowerGrid::footer()
                 ->showPerPage(perPage: 10, perPageValues: [10, 25, 50, 100, 500, 0])
                 ->showRecordCount(),
@@ -131,20 +132,20 @@ final class AnnouncementTable extends PowerGridComponent
         ]);
     }
 
-    #[\Livewire\Attributes\On('changeStatus')]
-    public function changeStatus($id)
+    #[On('changeStatus')]
+    public function changeStatus(int $id)
     {
         $announcement = Announcement::find($id);
         if ($announcement) {
             $announcement->update([
-                'status' => $announcement->status == 1 ? 0 : 1
+                'status' => $announcement->status == 1 ? 0 : 1,
             ]);
             $this->dispatch('pg:eventRefresh-AnnouncementTable');
         }
     }
 
-    #[\Livewire\Attributes\On('delete')]
-    public function delete($id)
+    #[On('delete')]
+    public function delete(int $id)
     {
         $announcement = Announcement::find($id);
         if ($announcement) {
@@ -152,5 +153,9 @@ final class AnnouncementTable extends PowerGridComponent
             $this->dispatch('pg:eventRefresh-AnnouncementTable');
         }
     }
-}
 
+    public function queryString(): array
+    {
+        return $this->powerGridQueryString();
+    }
+}
