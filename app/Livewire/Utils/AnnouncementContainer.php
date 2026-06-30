@@ -6,14 +6,18 @@ namespace App\Livewire\Utils;
 
 use App\Models\Announcement;
 use App\Models\AnnouncementRead;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class AnnouncementContainer extends Component
 {
     public ?Announcement $announcement = null;
+
     public bool $hasRead = false;
+
     public bool $showModal = false;
+
     public ?int $announcementId = null;
 
     public function mount(): void
@@ -25,52 +29,18 @@ class AnnouncementContainer extends Component
     {
         $user = Auth::user();
 
-        if (!$user) {
+        if (! $user) {
             $this->announcement = null;
             $this->announcementId = null;
+            $this->showModal = false;
+
             return;
         }
 
-        $roles = $user->roles->pluck('id')->toArray();
-        $userId = $user->id;
-
-        $this->announcement = Announcement::where('status', 1)
-            ->whereDoesntHave('reads', function ($query) use ($userId) {
-                $query->where('user_id', $userId);
-            })
-            ->where(function ($query) use ($roles, $userId) {
-                $query->where('target_type', 'all')
-                    ->orWhere(function ($q) use ($roles) {
-                        $q->where('target_type', 'role');
-                        if (empty($roles)) {
-                            $q->whereRaw('1 = 0'); // Jika user tidak punya role, pasti false
-                        } else {
-                            $q->where(function ($q2) use ($roles) {
-                                foreach ($roles as $role) {
-                                    $q2->orWhereJsonContains('target_roles', (int)$role)
-                                        ->orWhereJsonContains('target_roles', (string)$role);
-                                }
-                            });
-                        }
-                    })
-                    ->orWhere(function ($q) use ($userId) {
-                        $q->where('target_type', 'user')
-                            ->where(function ($sub) use ($userId) {
-                                $sub->whereJsonContains('target_users', (int)$userId)
-                                    ->orWhereJsonContains('target_users', (string)$userId);
-                            });
-                    });
-            })
-            ->first();
-
+        $this->announcement = Announcement::unreadForUser($user)->first();
         $this->announcementId = $this->announcement?->id;
         $this->hasRead = false;
-        
-        if ($this->announcement) {
-            $this->showModal = true;
-        } else {
-            $this->showModal = false;
-        }
+        $this->showModal = (bool) $this->announcement;
     }
 
     public function markAsRead(): void
@@ -78,18 +48,18 @@ class AnnouncementContainer extends Component
         if ($this->hasRead && $this->announcement) {
             AnnouncementRead::create([
                 'announcement_id' => $this->announcement->id,
-                'user_id' => auth()->id(),
+                'user_id' => Auth::id(),
                 'read_at' => now(),
             ]);
 
             $this->loadNextAnnouncement();
-            if (!$this->announcement) {
+            if (! $this->announcement) {
                 $this->dispatch('announcement-closed');
             }
         }
     }
 
-    public function render(): \Illuminate\Contracts\View\View
+    public function render(): View
     {
         return view('livewire.utils.announcement-container');
     }

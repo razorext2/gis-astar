@@ -6,12 +6,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Announcement extends Model
 {
     use HasFactory;
 
     protected $table = 'tb_announcements';
+
     protected $fillable = [
         'title',
         'description',
@@ -27,9 +29,50 @@ class Announcement extends Model
         'target_users' => 'array',
     ];
 
-    public function reads(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function reads(): HasMany
     {
         return $this->hasMany(AnnouncementRead::class);
+    }
+
+    /**
+     * Scope a query to only include unread announcements for a given user.
+     */
+    public function scopeUnreadForUser($query, ?User $user)
+    {
+        if (! $user) {
+            return $query->whereRaw('1 = 0');
+        }
+
+        $roles = $user->roles->pluck('id')->toArray();
+        $userId = $user->id;
+
+        return $query->where('status', 1)
+            ->whereDoesntHave('reads', function ($q) use ($userId) {
+                $q->where('user_id', $userId);
+            })
+            ->where(function ($q) use ($roles, $userId) {
+                $q->where('target_type', 'all')
+                    ->orWhere(function ($sq) use ($roles) {
+                        $sq->where('target_type', 'role');
+                        if (empty($roles)) {
+                            $sq->whereRaw('1 = 0');
+                        } else {
+                            $sq->where(function ($sq2) use ($roles) {
+                                foreach ($roles as $role) {
+                                    $sq2->orWhereJsonContains('target_roles', (int) $role)
+                                        ->orWhereJsonContains('target_roles', (string) $role);
+                                }
+                            });
+                        }
+                    })
+                    ->orWhere(function ($sq) use ($userId) {
+                        $sq->where('target_type', 'user')
+                            ->where(function ($sub) use ($userId) {
+                                $sub->whereJsonContains('target_users', (int) $userId)
+                                    ->orWhereJsonContains('target_users', (string) $userId);
+                            });
+                    });
+            });
     }
 
     /**
@@ -37,40 +80,6 @@ class Announcement extends Model
      */
     public static function hasUnreadForUser(?User $user): bool
     {
-        if (!$user) {
-            return false;
-        }
-
-        $roles = $user->roles->pluck('id')->toArray();
-        $userId = $user->id;
-
-        return self::where('status', 1)
-            ->whereDoesntHave('reads', function ($query) use ($userId) {
-                $query->where('user_id', $userId);
-            })
-            ->where(function ($query) use ($roles, $userId) {
-                $query->where('target_type', 'all')
-                    ->orWhere(function ($q) use ($roles) {
-                        $q->where('target_type', 'role');
-                        if (empty($roles)) {
-                            $q->whereRaw('1 = 0');
-                        } else {
-                            $q->where(function ($q2) use ($roles) {
-                                foreach ($roles as $role) {
-                                    $q2->orWhereJsonContains('target_roles', (int)$role)
-                                        ->orWhereJsonContains('target_roles', (string)$role);
-                                }
-                            });
-                        }
-                    })
-                    ->orWhere(function ($q) use ($userId) {
-                        $q->where('target_type', 'user')
-                            ->where(function ($sub) use ($userId) {
-                                $sub->whereJsonContains('target_users', (int)$userId)
-                                    ->orWhereJsonContains('target_users', (string)$userId);
-                            });
-                    });
-            })
-            ->exists();
+        return self::unreadForUser($user)->exists();
     }
 }
