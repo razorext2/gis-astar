@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Central console route scheduler, Caller: Kernel / Artisan Scheduler, Deps: Illuminate\Support\Facades\Schedule */
+
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -71,6 +73,23 @@ Schedule::command('app:auto-reject-expired-leave-requests')
     ->timezone('Asia/Jakarta')
     ->name('Auto reject expired leave requests')
     ->dailyAt('00:00')
+    ->onOneServer()
+    ->withoutOverlapping()
+    ->evenInMaintenanceMode();
+
+// Hapus berkas ekspor chatbot yang lebih lama dari 24 jam, dijalankan setiap hari pukul 01:30 WIB
+Schedule::call(function () {
+    $files = \Illuminate\Support\Facades\Storage::disk('public')->files('exports');
+    foreach ($files as $file) {
+        $lastModified = \Illuminate\Support\Facades\Storage::disk('public')->lastModified($file);
+        if (time() - $lastModified > 86400) { // 24 jam
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($file);
+        }
+    }
+})
+    ->timezone('Asia/Jakarta')
+    ->dailyAt('01:30')
+    ->name('Purge chatbot export files >24 jam')
     ->onOneServer()
     ->withoutOverlapping()
     ->evenInMaintenanceMode();

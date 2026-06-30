@@ -54,7 +54,7 @@ class ProcessChatMessage implements ShouldQueue
             ->toArray();
 
         // Auto-generate title from first user message if none
-        $service = new GeminiService;
+        $service = app(GeminiService::class);
 
         if (! $conversation->title) {
             $conversation->update(['title' => $service->generateTitle($this->userMessage)]);
