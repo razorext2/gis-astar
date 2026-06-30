@@ -321,6 +321,20 @@ final class ProductionTable extends PowerGridComponent
                 ->route('production.packing-list.add', ['production' => $row->id]);
         }
 
+        $hasPendingHistories = $row->productionHistories->contains('status_validasi', 0);
+
+        if (auth()->user()->can('produksi-approve') && $hasPendingHistories) {
+            $button[] = Button::make('bulk-approve', 'Approve')
+                ->slot('✓ Approve')
+                ->id($row->id)
+                ->class('dark:bg-emerald-800 text-sm dark:hover:bg-emerald-900 dark:text-white dark:border-zinc-800 rounded-lg bg-emerald-500 px-2 py-1.5 font-semibold text-white border border-zinc-200 hover:bg-emerald-700')
+                ->dispatchTo(
+                    component: 'handler.production-histories.bulk-approve-histories',
+                    event: 'open-bulk-approve-modal',
+                    params: ['productionId' => $row->id]
+                );
+        }
+
         return $button;
     }
 

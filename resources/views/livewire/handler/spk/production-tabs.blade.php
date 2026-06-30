@@ -36,4 +36,8 @@
             </div>
         @endif
     </div>
+
+    @can('produksi-approve')
+        @livewire('handler.production-histories.bulk-approve-histories')
+    @endcan
 </div>
