@@ -42,7 +42,6 @@
         @endif
 
         <div class="mb-4 flex flex-col items-stretch lg:grid lg:grid-cols-3 lg:gap-x-4">
-
             <form id="attend-in" action="{{ route('attendanceIn.index') }}"></form>
             <form id="attend-out" action="{{ route('attendanceOut.index') }}"></form>
 
@@ -130,4 +129,7 @@
 
     {{-- Leave Approval Popup --}}
     <livewire:dashboard.leave-approval-popup />
+
+    {{-- Report Approval Popups --}}
+    @include('dashboard.partials.report-approval-popups')
 @endsection
