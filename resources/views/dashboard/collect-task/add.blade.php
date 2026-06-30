@@ -58,14 +58,15 @@
                 </div>
 
                 <div class="col-span-2 w-full">
-                    <x-input.basic id="customer_name" name="customer_name" placeholder="PT XXX" required>
+                    <x-input.basic id="customer_name" name="customer_name" placeholder="PT XXX" required readonly>
                         Nama Customer
                     </x-input.basic>
                     <div class="mt-2 hidden text-sm text-red-500" id="alert-customer_name"></div>
                 </div>
 
                 <div class="col-span-2 w-full">
-                    <x-input.basic id="customer_recipient" name="customer_recipient" placeholder="Bp. Samsudin" required>
+                    <x-input.basic id="customer_recipient" name="customer_recipient" placeholder="Bp. Samsudin" required
+                        readonly>
                         Nama Penerima
                     </x-input.basic>
                     <div class="mt-2 hidden text-sm text-red-500" id="alert-customer_recipient"></div>
@@ -104,15 +105,15 @@
                 </div>
 
                 <div class="col-span-2 w-full">
-                    <x-input.currency id="total_bill" name="total_bill" placeholder="Rp. XXX.XXX,-" required>
+                    <x-input.currency id="total_bill" name="total_bill" placeholder="Rp. XXX.XXX,-" required readonly>
                         Total Tagihan
                     </x-input.currency>
                     <div class="mt-2 hidden text-sm text-red-500" id="alert-total_bill"></div>
                 </div>
 
                 <div class="w-full">
-
-                    <x-input.currency id="remaining_bill" name="remaining_bill" placeholder="Rp. XXX.XXX,-" required>
+                    <x-input.currency id="remaining_bill" name="remaining_bill" placeholder="Rp. XXX.XXX,-" required
+                        readonly>
                         Sisa Tagihan (Database)
 
                         <x-popover id="popover-remaining_bill">
@@ -125,7 +126,8 @@
                 </div>
 
                 <div class="w-full">
-                    <x-input.currency id="remaining_bill_bsi" name="remaining_bill_bsi" placeholder="Rp. XXX.XXX,-">
+                    <x-input.currency id="remaining_bill_bsi" name="remaining_bill_bsi" placeholder="Rp. XXX.XXX,-"
+                        readonly>
                         Sisa Tagihan (BSI)
                     </x-input.currency>
                 </div>
