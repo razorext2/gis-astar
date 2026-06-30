@@ -65,6 +65,11 @@
         .report-fab-group {
             pointer-events: none;
             transition: bottom 0.3s ease;
+            overflow: visible;
+            scrollbar-width: none; /* Firefox */
+        }
+        .report-fab-group::-webkit-scrollbar {
+            display: none; /* Safari and Chrome */
         }
         .report-fab-group.bottom-base {
             bottom: 9.5rem;
@@ -115,6 +120,8 @@
         /* Expanded state on Hover */
         .report-fab-group:hover {
             pointer-events: auto;
+            height: 22rem;
+            overflow: visible;
         }
         .report-fab-group:hover .report-fab-item {
             pointer-events: auto;
@@ -139,14 +146,45 @@
         .report-fab-item[data-index="6"] { z-index: 54; }
     </style>
 
-    <div class="report-fab-group fixed right-4 z-50 h-11 w-11 md:right-8 {{ $hasPendingLeave ? 'bottom-above-leave' : 'bottom-base' }}">
-        @foreach ($popups as $popup)
-            <livewire:dashboard.report-approval-popup
-                :type="$popup['type']"
-                :stackIndex="$popup['stack']"
-                :wire:key="'report-popup-' . $popup['type']"
-            />
-        @endforeach
+    <div x-data="{
+        openPopups: {},
+        get activeCount() {
+            return Object.values(this.openPopups).filter(v => v && v.show).length;
+        }
+    }">
+        {{-- FAB Group --}}
+        <div class="report-fab-group fixed right-4 z-50 h-11 w-11 md:right-8 {{ $hasPendingLeave ? 'bottom-above-leave' : 'bottom-base' }}">
+            @foreach ($popups as $popup)
+                <livewire:dashboard.report-approval-popup
+                    :type="$popup['type']"
+                    :stackIndex="$popup['stack']"
+                    :wire:key="'report-popup-' . $popup['type']"
+                />
+            @endforeach
+        </div>
+
+        {{-- Backdrop and Grid Overlay --}}
+        <div x-show="activeCount > 0"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 z-[100] flex justify-center bg-zinc-900/60 p-4 backdrop-blur-md lg:p-6 overflow-y-auto"
+            x-cloak
+        >
+            <div id="report-popup-grid-container"
+                 class="w-full grid gap-6 justify-center items-stretch my-auto py-8 lg:py-12"
+                 :class="{
+                    'grid-cols-1 max-w-sm': activeCount === 1,
+                    'grid-cols-1 lg:grid-cols-2 max-w-3xl': activeCount === 2 || activeCount === 4,
+                    'grid-cols-1 lg:grid-cols-3 max-w-6xl': activeCount === 3 || activeCount >= 5
+                 }"
+            >
+                {{-- Teleport target area --}}
+            </div>
+        </div>
     </div>
 @endif
 

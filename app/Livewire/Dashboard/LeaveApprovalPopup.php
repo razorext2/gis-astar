@@ -8,6 +8,8 @@ use App\Models\LeaveRequest\LeaveRequest;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 
+use Livewire\Attributes\On;
+
 class LeaveApprovalPopup extends Component
 {
     public bool $showPopup = false;
@@ -21,14 +23,59 @@ class LeaveApprovalPopup extends Component
      */
     private ?Collection $cachedRequests = null;
 
+    /**
+     * Check if there are pending leave requests for the given user.
+     */
+    public static function hasPendingForUser(?\App\Models\User $user): bool
+    {
+        if (!$user) {
+            return false;
+        }
+
+        return LeaveRequest::whereIn('status', ['pending_backup', 'pending_spv', 'pending_hrd', 'pending_management'])
+            ->where(function ($q) use ($user) {
+                $q->where(function ($sq) use ($user) {
+                    $sq->where('status', 'pending_backup')->where('backup_person_id', $user->id);
+                })
+                ->orWhere(function ($sq) use ($user) {
+                    $sq->where('status', 'pending_spv')
+                        ->whereHas('user.pegawai.jabatanRelasi.supervisors', fn ($jq) => $jq->where('users.id', $user->id));
+                })
+                ->orWhere(function ($sq) use ($user) {
+                    $sq->where('status', 'pending_hrd')
+                        ->whereHas('user.pegawai.jabatanRelasi.placementRelasi.hrds', fn ($jq) => $jq->where('users.id', $user->id));
+                })
+                ->orWhere(function ($sq) use ($user) {
+                    $sq->where('status', 'pending_management')
+                        ->whereHas('user.pegawai.jabatanRelasi.placementRelasi.managements', fn ($jq) => $jq->where('users.id', $user->id));
+                });
+            })
+            ->exists();
+    }
+
     public function mount(): void
     {
+        $user = auth()->user();
+        if (\App\Models\Announcement::hasUnreadForUser($user)) {
+            $this->hasPending = false;
+        } else {
+            $this->hasPending = $this->getPendingRequests()->isNotEmpty();
+        }
+    }
+
+    #[On('announcement-closed')]
+    public function handleAnnouncementClosed(): void
+    {
         $this->hasPending = $this->getPendingRequests()->isNotEmpty();
+        if ($this->hasPending) {
+            $this->showPopup = true;
+        }
     }
 
     public function dismiss(): void
     {
         $this->showPopup = false;
+        $this->dispatch('leave-closed');
     }
 
     public function next(): void

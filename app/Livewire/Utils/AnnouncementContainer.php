@@ -83,6 +83,9 @@ class AnnouncementContainer extends Component
             ]);
 
             $this->loadNextAnnouncement();
+            if (!$this->announcement) {
+                $this->dispatch('announcement-closed');
+            }
         }
     }
 

@@ -12,12 +12,15 @@ use App\Models\Technician;
 use App\Services\Driver\DriverRegionResolver;
 use App\Services\Sales\SalesRegionResolver;
 use Livewire\Component;
+use Livewire\Attributes\On;
 
 class ReportApprovalPopup extends Component
 {
     public string $type;
 
     public string $regionPermission = '';
+
+    public bool $forceShowReports = false;
 
     public int $stackIndex;
 
@@ -106,6 +109,22 @@ class ReportApprovalPopup extends Component
 
     private function countPending(): int
     {
+        /** @var \App\Models\User|null $user */
+        $user = \Illuminate\Support\Facades\Auth::user();
+        if (!$user) {
+            return 0;
+        }
+
+        // Prioritize unread announcements
+        if (\App\Models\Announcement::hasUnreadForUser($user)) {
+            return 0;
+        }
+
+        // Prioritize pending leave approvals unless forced
+        if (!$this->forceShowReports && \App\Livewire\Dashboard\LeaveApprovalPopup::hasPendingForUser($user)) {
+            return 0;
+        }
+
         return match ($this->type) {
             'sales'      => $this->countSalesPending(),
             'driver'     => $this->countDriverPending(),
@@ -115,6 +134,27 @@ class ReportApprovalPopup extends Component
             'production' => $this->countProductionPending(),
             default      => 0,
         };
+    }
+
+    #[On('announcement-closed')]
+    public function handleAnnouncementClosed(): void
+    {
+        $this->pendingCount = $this->countPending();
+        $this->hasPending = $this->pendingCount > 0;
+        if ($this->hasPending) {
+            $this->showPopup = true;
+        }
+    }
+
+    #[On('leave-closed')]
+    public function handleLeaveClosed(): void
+    {
+        $this->forceShowReports = true;
+        $this->pendingCount = $this->countPending();
+        $this->hasPending = $this->pendingCount > 0;
+        if ($this->hasPending) {
+            $this->showPopup = true;
+        }
     }
 
     private function countSalesPending(): int
