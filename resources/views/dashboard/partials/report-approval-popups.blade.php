@@ -52,12 +52,7 @@
             class="fixed inset-0 z-[100] flex justify-center overflow-y-auto bg-zinc-900/60 p-4 backdrop-blur-md lg:p-6"
             x-cloak>
             <div id="report-popup-grid-container"
-                class="my-auto grid w-full items-stretch justify-center gap-6 py-8 lg:py-12"
-                :class="{
-                    'grid-cols-1 max-w-sm': activeCount === 1,
-                    'grid-cols-1 lg:grid-cols-2 max-w-3xl': activeCount === 2 || activeCount === 4,
-                    'grid-cols-1 lg:grid-cols-3 max-w-6xl': activeCount === 3 || activeCount >= 5
-                }">
+                class="my-auto grid grid-cols-1 items-stretch justify-center gap-6 py-8 lg:py-12 w-full lg:flex lg:flex-row lg:flex-wrap lg:justify-center lg:max-w-6xl">
                 {{-- Teleport target area --}}
             </div>
         </div>

@@ -85,7 +85,7 @@ $watch('$wire.showPopup', val => {
                 x-transition:leave="transition ease-in duration-200 transform"
                 x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                 x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-                class="relative col-start-1 row-start-1 mx-auto flex w-full max-w-sm flex-col rounded-xl border border-zinc-200 bg-white shadow-xl dark:border-zinc-800 dark:bg-zinc-900 lg:col-auto lg:row-auto">
+                class="relative col-start-1 row-start-1 mx-auto flex w-full max-w-sm flex-col rounded-xl border border-zinc-200 bg-white shadow-xl dark:border-zinc-800 dark:bg-zinc-900 lg:col-auto lg:row-auto lg:w-[23rem]">
 
                 {{-- Header --}}
                 <div class="flex items-center justify-between border-b border-zinc-200 p-4 dark:border-zinc-800">
