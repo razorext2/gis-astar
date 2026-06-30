@@ -52,36 +52,7 @@
                         hasScrolledToEnd = true;
                     }
                 });">
-                    <style>
-                        .ql-editor {
-                            padding: 0 !important;
-                            background-color: transparent !important;
-                        }
 
-                        .ql-editor p {
-                            margin-bottom: 0.5rem;
-                        }
-
-                        .ql-editor h1,
-                        .ql-editor h2,
-                        .ql-editor h3 {
-                            font-weight: 700;
-                            margin-bottom: 0.5rem;
-                        }
-
-                        .ql-editor ul,
-                        .ql-editor ol {
-                            padding-left: 1.5rem;
-                            margin-bottom: 0.5rem;
-                        }
-
-                        .ql-editor blockquote {
-                            border-left: 4px solid #ccc;
-                            padding-left: 1rem;
-                            margin-bottom: 0.5rem;
-                            color: #666;
-                        }
-                    </style>
                     <div class="ql-snow text-gray-700 dark:text-gray-300">
                         <div class="ql-editor" style="padding: 0 !important; background-color: transparent !important;">
                             {!! $announcement->description !!}

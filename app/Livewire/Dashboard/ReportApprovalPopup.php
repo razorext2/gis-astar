@@ -4,15 +4,20 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Models\Announcement;
 use App\Models\Collector;
 use App\Models\Driver;
 use App\Models\Sales;
 use App\Models\Spk\SpkMain;
 use App\Models\Technician;
+use App\Models\User;
 use App\Services\Driver\DriverRegionResolver;
 use App\Services\Sales\SalesRegionResolver;
-use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
+use Livewire\Component;
 
 class ReportApprovalPopup extends Component
 {
@@ -49,57 +54,60 @@ class ReportApprovalPopup extends Component
     }
 
     /**
+     * Get computed configuration property.
+     *
      * @return array{title: string, icon: string, color: string, route: string}
      */
-    public function getConfigProperty(): array
+    #[Computed]
+    public function config(): array
     {
         return match ($this->type) {
             'sales' => [
                 'title' => 'Laporan Sales',
-                'icon'  => 'shopping-bag',
+                'icon' => 'shopping-bag',
                 'color' => 'blue',
                 'route' => route('sales.index'),
             ],
             'driver' => [
                 'title' => 'Laporan Driver',
-                'icon'  => 'truck',
+                'icon' => 'truck',
                 'color' => 'emerald',
                 'route' => route('driver.index'),
             ],
             'technician' => [
                 'title' => 'Laporan Teknisi',
-                'icon'  => 'hammer',
+                'icon' => 'hammer',
                 'color' => 'purple',
                 'route' => route('technician.index'),
             ],
             'collector' => [
                 'title' => 'Laporan Kolektor',
-                'icon'  => 'cash-register',
+                'icon' => 'cash-register',
                 'color' => 'amber',
                 'route' => route('collect.submitted'),
             ],
             'spk' => [
                 'title' => 'SPK',
-                'icon'  => 'clipboard-list',
+                'icon' => 'clipboard-list',
                 'color' => 'red',
                 'route' => route('spk.index'),
             ],
             'production' => [
                 'title' => 'Produksi',
-                'icon'  => 'briefcase',
+                'icon' => 'briefcase',
                 'color' => 'cyan',
                 'route' => route('production.index'),
             ],
             default => [
                 'title' => 'Laporan',
-                'icon'  => 'clipboard',
+                'icon' => 'clipboard',
                 'color' => 'zinc',
                 'route' => '#',
             ],
         };
     }
 
-    public function render(): \Illuminate\View\View
+    public function render(): View
     {
         $this->pendingCount = $this->countPending();
         $this->hasPending = $this->pendingCount > 0;
@@ -107,32 +115,35 @@ class ReportApprovalPopup extends Component
         return view('livewire.dashboard.report-approval-popup');
     }
 
+    /**
+     * Count pending items based on component type and priorities.
+     */
     private function countPending(): int
     {
-        /** @var \App\Models\User|null $user */
-        $user = \Illuminate\Support\Facades\Auth::user();
-        if (!$user) {
+        /** @var User|null $user */
+        $user = Auth::user();
+        if (! $user) {
             return 0;
         }
 
         // Prioritize unread announcements
-        if (\App\Models\Announcement::hasUnreadForUser($user)) {
+        if (Announcement::hasUnreadForUser($user)) {
             return 0;
         }
 
         // Prioritize pending leave approvals unless forced
-        if (!$this->forceShowReports && \App\Livewire\Dashboard\LeaveApprovalPopup::hasPendingForUser($user)) {
+        if (! $this->forceShowReports && LeaveApprovalPopup::hasPendingForUser($user)) {
             return 0;
         }
 
         return match ($this->type) {
-            'sales'      => $this->countSalesPending(),
-            'driver'     => $this->countDriverPending(),
+            'sales' => $this->countSalesPending($user),
+            'driver' => $this->countDriverPending($user),
             'technician' => $this->countTechnicianPending(),
-            'collector'  => $this->countCollectorPending(),
-            'spk'        => $this->countSpkPending(),
+            'collector' => $this->countCollectorPending(),
+            'spk' => $this->countSpkPending(),
             'production' => $this->countProductionPending(),
-            default      => 0,
+            default => 0,
         };
     }
 
@@ -157,15 +168,12 @@ class ReportApprovalPopup extends Component
         }
     }
 
-    private function countSalesPending(): int
+    /**
+     * Count sales reports pending approval.
+     */
+    private function countSalesPending(User $user): int
     {
-        /** @var \App\Models\User|null $user */
-        $user = \Illuminate\Support\Facades\Auth::user();
-        if (!$user) {
-            return 0;
-        }
         $allowedRoles = SalesRegionResolver::resolveForUser($user);
-
         if (empty($allowedRoles)) {
             return 0;
         }
@@ -175,15 +183,12 @@ class ReportApprovalPopup extends Component
             ->count();
     }
 
-    private function countDriverPending(): int
+    /**
+     * Count driver reports pending approval.
+     */
+    private function countDriverPending(User $user): int
     {
-        /** @var \App\Models\User|null $user */
-        $user = \Illuminate\Support\Facades\Auth::user();
-        if (!$user) {
-            return 0;
-        }
         $allowedRoles = DriverRegionResolver::resolveForUser($user);
-
         if (empty($allowedRoles)) {
             return 0;
         }
@@ -194,16 +199,25 @@ class ReportApprovalPopup extends Component
             ->count();
     }
 
+    /**
+     * Count technician reports pending approval.
+     */
     private function countTechnicianPending(): int
     {
         return Technician::needApprove()->count();
     }
 
+    /**
+     * Count collector reports pending approval.
+     */
     private function countCollectorPending(): int
     {
         return Collector::needApprove()->count();
     }
 
+    /**
+     * Count pending SPKs.
+     */
     private function countSpkPending(): int
     {
         return SpkMain::query()
@@ -212,6 +226,9 @@ class ReportApprovalPopup extends Component
             ->count();
     }
 
+    /**
+     * Count SPKs in production status.
+     */
     private function countProductionPending(): int
     {
         return SpkMain::query()
@@ -221,11 +238,14 @@ class ReportApprovalPopup extends Component
             ->count();
     }
 
+    /**
+     * Resolve region label for authorized regions.
+     */
     private function resolveRegionLabel(): string
     {
-        /** @var \App\Models\User|null $user */
-        $user = \Illuminate\Support\Facades\Auth::user();
-        if (!$user) {
+        /** @var User|null $user */
+        $user = Auth::user();
+        if (! $user) {
             return '';
         }
 
@@ -233,25 +253,20 @@ class ReportApprovalPopup extends Component
             if ($user->can('sales-export-all')) {
                 return 'Semua Wilayah';
             }
-            $labels = [];
-            $salesRegionMap = SalesRegionResolver::regionMap();
-            foreach ($salesRegionMap as $permission => $role) {
-                if ($user->can($permission)) {
-                    $labels[] = SalesRegionResolver::regionLabel($permission);
-                }
-            }
-            return implode(', ', $labels);
+
+            return collect(SalesRegionResolver::regionMap())
+                ->keys()
+                ->filter(fn ($permission) => $user->can($permission))
+                ->map(fn ($permission) => SalesRegionResolver::regionLabel($permission))
+                ->implode(', ');
         }
 
         if ($this->type === 'driver') {
-            $labels = [];
-            $driverRegionMap = DriverRegionResolver::regionMap();
-            foreach ($driverRegionMap as $permission => $role) {
-                if ($user->can($permission)) {
-                    $labels[] = DriverRegionResolver::regionLabel($permission);
-                }
-            }
-            return implode(', ', $labels);
+            return collect(DriverRegionResolver::regionMap())
+                ->keys()
+                ->filter(fn ($permission) => $user->can($permission))
+                ->map(fn ($permission) => DriverRegionResolver::regionLabel($permission))
+                ->implode(', ');
         }
 
         return '';

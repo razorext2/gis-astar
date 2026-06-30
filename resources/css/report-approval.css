@@ -1,0 +1,105 @@
+/*--------------------------------------------------------------
+# Report Approval FAB Stack & Overlay Styles
+--------------------------------------------------------------*/
+
+.report-fab-group {
+    pointer-events: none;
+    transition: bottom 0.3s ease;
+    overflow: visible;
+    scrollbar-width: none; /* Firefox */
+}
+
+.report-fab-group::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+}
+
+.report-fab-group.bottom-base {
+    bottom: 9.5rem;
+}
+
+.report-fab-group.bottom-above-leave {
+    bottom: 13rem;
+}
+
+@media (min-width: 768px) {
+    .report-fab-group.bottom-base {
+        bottom: 6rem;
+    }
+    .report-fab-group.bottom-above-leave {
+        bottom: 9.5rem;
+    }
+}
+
+.report-fab-group .report-fab-item {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease, scale 0.3s ease;
+}
+
+/* Collapsed state */
+.report-fab-group:not(:hover) .report-fab-item {
+    pointer-events: none;
+}
+
+.report-fab-group:not(:hover) .report-fab-item[data-index="0"] {
+    pointer-events: auto;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.report-fab-group:not(:hover) .report-fab-item[data-index="1"] {
+    opacity: 0.9;
+    transform: translateY(-6px) scale(0.92);
+}
+
+.report-fab-group:not(:hover) .report-fab-item[data-index="2"] {
+    opacity: 0.8;
+    transform: translateY(-12px) scale(0.84);
+}
+
+.report-fab-group:not(:hover) .report-fab-item[data-index="3"] {
+    opacity: 0.7;
+    transform: translateY(-18px) scale(0.76);
+}
+
+.report-fab-group:not(:hover) .report-fab-item:not([data-index="0"]):not([data-index="1"]):not([data-index="2"]):not([data-index="3"]) {
+    opacity: 0;
+    transform: translateY(-24px) scale(0.68);
+}
+
+/* Expanded state on Hover */
+.report-fab-group:hover {
+    pointer-events: auto;
+    height: 22rem;
+    overflow: visible;
+}
+
+.report-fab-group:hover .report-fab-item {
+    pointer-events: auto;
+    opacity: 1;
+}
+
+.report-fab-group:hover .report-fab-item[data-index="0"] {
+    transform: translateY(-0rem) scale(1);
+}
+
+.report-fab-group:hover .report-fab-item[data-index="1"] {
+    transform: translateY(-3.25rem) scale(1);
+}
+
+.report-fab-group:hover .report-fab-item[data-index="2"] {
+    transform: translateY(-6.5rem) scale(1);
+}
+
+.report-fab-group:hover .report-fab-item[data-index="3"] {
+    transform: translateY(-9.75rem) scale(1);
+}
+
+.report-fab-group:hover .report-fab-item[data-index="4"] {
+    transform: translateY(-13.0rem) scale(1);
+}
+
+.report-fab-group:hover .report-fab-item[data-index="5"] {
+    transform: translateY(-16.25rem) scale(1);
+}
