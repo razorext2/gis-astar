@@ -59,4 +59,31 @@ class SalesRegionResolver
             ->values()
             ->toArray();
     }
+
+    /**
+     * Return the full region map.
+     *
+     * @return array<string, string>
+     */
+    public static function regionMap(): array
+    {
+        return self::REGION_MAP;
+    }
+
+    /**
+     * Human-readable label untuk region permission.
+     */
+    public static function regionLabel(string $permission): string
+    {
+        return match ($permission) {
+            'sales-export-idy'        => 'Indodaya',
+            'sales-export-kurir-bank' => 'Kurir Bank',
+            'sales-export-medan'      => 'Medan',
+            'sales-export-jkt'        => 'Jakarta',
+            'sales-export-pku'        => 'Pekanbaru',
+            'sales-export-agrotec'    => 'Agrotec',
+            default                   => 'Unknown',
+        };
+    }
 }
+

@@ -50,4 +50,7 @@
 
     {{-- Leave Approval Popup --}}
     <livewire:dashboard.leave-approval-popup />
+
+    {{-- Report Approval Popups --}}
+    @include('dashboard.partials.report-approval-popups')
 @endsection
