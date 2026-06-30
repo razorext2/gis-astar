@@ -2,7 +2,7 @@
 <div class="space-y-6" x-data="{ showRejectForm: false }">
     {{-- Header --}}
     <div
-        class="flex items-center gap-3 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60">
+        class="flex items-center gap-3 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
         <x-button.danger wire:navigate href="{{ route('attendance-inquiry.approval-center.index') }}"
             class="max-h-10 max-w-fit">
             <x-icons.angle-left class="h-5 w-5" />
@@ -34,7 +34,7 @@
         <div class="space-y-6 lg:col-span-2">
             {{-- Detail Fields --}}
             <div
-                class="space-y-4 rounded-xl border border-zinc-200 bg-white/60 p-5 dark:border-zinc-800 dark:bg-zinc-900/60">
+                class="space-y-4 rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
                 <h3 class="text-base font-bold text-zinc-900 dark:text-white">Rincian Pengajuan</h3>
 
                 <div class="grid grid-cols-2 gap-4 border-t border-zinc-100 pt-4 dark:border-zinc-800">
@@ -74,7 +74,8 @@
             </div>
 
             {{-- Bukti Foto --}}
-            <div class="rounded-xl border border-zinc-200 bg-white/60 p-5 dark:border-zinc-800 dark:bg-zinc-900/60">
+            <div
+                class="rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
                 <h3 class="mb-4 text-base font-bold text-zinc-900 dark:text-white">Lampiran Bukti Foto</h3>
                 @if (!empty($inquiry->bukti))
                     <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
@@ -83,7 +84,8 @@
                                 class="group relative overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
                                 <img src="{{ asset('storage/' . $path) }}"
                                     class="h-32 w-full object-cover transition-transform duration-300 hover:scale-105"
-                                    alt="Bukti Absensi">
+                                    alt="Bukti Absensi"
+                                    onerror="this.onerror=null; this.src='{{ asset('assets/img/noImage.webp') }}';">
                                 <div
                                     class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
                                     <a href="{{ asset('storage/' . $path) }}" target="_blank"
@@ -102,7 +104,7 @@
             {{-- HRD Action Panel --}}
             @if ($inquiry->status === 'pending')
                 <div
-                    class="space-y-4 rounded-xl border border-zinc-200 bg-white/60 p-5 dark:border-zinc-800 dark:bg-zinc-900/60">
+                    class="space-y-4 rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
                     <h3 class="text-base font-bold text-zinc-900 dark:text-white">Tindakan HRD</h3>
 
                     <div class="flex flex-wrap items-center gap-3">
@@ -144,7 +146,8 @@
 
         {{-- Geolocation Card --}}
         <div class="space-y-6">
-            <div class="rounded-xl border border-zinc-200 bg-white/60 p-5 dark:border-zinc-800 dark:bg-zinc-900/60">
+            <div
+                class="rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
                 <h3 class="mb-4 text-base font-bold text-zinc-900 dark:text-white">Lokasi</h3>
 
                 @if ($inquiry->latitude && $inquiry->longitude)

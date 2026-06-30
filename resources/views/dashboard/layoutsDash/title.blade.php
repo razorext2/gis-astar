@@ -53,6 +53,7 @@
         'server.overview' => 'Manajemen Server',
         'system.holidays.*' => 'Manajemen Hari Libur',
         'chatbot.*' => 'AI Chatbot',
+        'attendance-inquiry.*' => 'Pengajuan Absensi',
     ];
 
     // Temukan judul berdasarkan rute dengan wildcard
