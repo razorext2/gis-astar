@@ -96,7 +96,7 @@ class ApiSalesController extends Controller
             'customer_name' => 'string|max:128|min:3',
             'customer_telp' => 'string|max:128|min:3',
             'lokasi' => 'string|min:3',
-            'keterangan' => 'string|min:3',
+            'keterangan' => 'required|string|min:3',
         ]);
 
         if ($validator->fails()) {

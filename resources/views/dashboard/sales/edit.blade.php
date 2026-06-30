@@ -103,7 +103,7 @@
 
                     <div class="col-span-2 w-full">
                         <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                            for="keterangan">Keterangan</label>
+                            for="keterangan">Keterangan <span class="text-red-500">*</span></label>
                         <div class="h-32 w-full" id="editor"></div>
                         <input id="keterangan" name="keterangan" type="hidden">
                         <div class="mt-2 hidden text-sm text-red-500" id="alert-keterangan"></div>

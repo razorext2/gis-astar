@@ -47,8 +47,23 @@ export function quillEditor(data = null, editable = true) {
     document.getElementById('editor').classList.add('!h-96', 'rounded-b-lg');
     document.getElementById("keterangan").classList.add("mt-2");
 
+    // Sync content instantly on text-change
+    quill.on('text-change', function () {
+      const rawText = quill.getText().trim();
+      const content = rawText === '' ? '' : quill.root.innerHTML;
+      $('#keterangan').val(content);
+
+      // Hide alert on text change
+      const alertElem = document.getElementById('alert-keterangan');
+      if (alertElem && rawText.length >= 3) {
+        alertElem.classList.add('hidden');
+        alertElem.innerHTML = '';
+      }
+    });
+
     $('#store').on('click', function () {
-      const content = quill.root.innerHTML;
+      const rawText = quill.getText().trim();
+      const content = rawText === '' ? '' : quill.root.innerHTML;
       $('#keterangan').val(content);
     });
   }
