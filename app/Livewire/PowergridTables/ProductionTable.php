@@ -201,7 +201,8 @@ final class ProductionTable extends PowerGridComponent
             })
             ->add('is_using_company_driver', fn ($query) => $query->spk->is_using_company_driver)
             ->add('is_picked_up_by_customer', fn ($query) => $query->spk->is_picked_up_by_customer)
-            ->add('is_using_old_stock', fn ($query) => $query->spk->is_using_old_stock);
+            ->add('is_using_old_stock', fn ($query) => $query->spk->is_using_old_stock)
+            ->add('has_reports', fn () => '');
     }
 
     public function columns(): array
@@ -215,6 +216,7 @@ final class ProductionTable extends PowerGridComponent
             Column::make('Supir perusahaan', 'is_using_company_driver')->hidden(),
             Column::make('Dijemput Customer', 'is_picked_up_by_customer')->hidden(),
             Column::make('Old Stock', 'is_using_old_stock')->hidden(),
+            Column::make('Laporan', 'has_reports')->hidden(),
             Column::make('Customer', 'customer_info', 'tb_spk.company_name')
                 ->searchable(),
             Column::make('Assign to', 'assign_to_formatted', 'assign_to'),
@@ -238,6 +240,49 @@ final class ProductionTable extends PowerGridComponent
                     $builder->whereHas('spk', function ($q) use ($value) {
                         $q->where('tipe_timbangan', $value);
                     });
+                }),
+            Filter::select('status_produksi', 'status_produksi')
+                ->dataSource([
+                    ['value' => 0, 'label' => 'SPK Dibuat'],
+                    ['value' => 1, 'label' => 'Pengadaan Material'],
+                    ['value' => 2, 'label' => 'Penandaan & Pemotongan'],
+                    ['value' => 3, 'label' => 'Penyetelan'],
+                    ['value' => 4, 'label' => 'Pengelasan'],
+                    ['value' => 5, 'label' => 'Pengeboran & Tapping'],
+                    ['value' => 6, 'label' => 'Perakitan & Pengujian'],
+                    ['value' => 7, 'label' => 'Prosedur NDT'],
+                    ['value' => 8, 'label' => 'Sandblasting'],
+                    ['value' => 9, 'label' => 'Pengecatan'],
+                    ['value' => 10, 'label' => 'Selesai'],
+                ])
+                ->optionLabel('label')
+                ->optionValue('value')
+                ->builder(function ($builder, $value) {
+                    $builder->where(function ($query) use ($value) {
+                        $query->whereRaw('(
+                            SELECT status_produksi 
+                            FROM tb_produksi_histories 
+                            WHERE tb_produksi_histories.id_produksi = tb_produksi.id 
+                            ORDER BY tb_produksi_histories.created_at DESC 
+                            LIMIT 1
+                        ) = ?', [$value]);
+                    });
+                }),
+            Filter::boolean('has_reports', 'has_reports')
+                ->label('Sudah Ada', 'Belum Ada')
+                ->builder(function ($builder, $value) {
+                    $hasReports = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+                    if ($hasReports) {
+                        $builder->whereHas('productionHistories', function ($q) {
+                            $q->whereColumn('added_by', 'tb_produksi.assign_to')
+                              ->orWhereColumn('added_by', 'tb_produksi.reassign_to');
+                        });
+                    } else {
+                        $builder->whereDoesntHave('productionHistories', function ($q) {
+                            $q->whereColumn('added_by', 'tb_produksi.assign_to')
+                              ->orWhereColumn('added_by', 'tb_produksi.reassign_to');
+                        });
+                    }
                 }),
             Filter::boolean('is_using_company_driver', field: 'is_using_company_driver')
                 ->label('Ya', 'Tidak'),

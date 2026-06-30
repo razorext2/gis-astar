@@ -53,6 +53,14 @@
             'counter' => 'text-cyan-600 dark:text-cyan-400',
             'pulse' => 'bg-cyan-500',
         ],
+        'indigo' => [
+            'icon_bg' => 'bg-indigo-600 shadow-indigo-500/20',
+            'badge_bg' => 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-400',
+            'fab_bg' => 'bg-indigo-600 shadow-indigo-500/20',
+            'fab_badge' => 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-400',
+            'counter' => 'text-indigo-600 dark:text-indigo-400',
+            'pulse' => 'bg-indigo-500',
+        ],
         default => [
             'icon_bg' => 'bg-zinc-600 shadow-zinc-500/20',
             'badge_bg' => 'bg-zinc-100 text-zinc-700 dark:bg-zinc-500/20 dark:text-zinc-400',
@@ -122,7 +130,11 @@ $watch('$wire.showPopup', val => {
                             {{ $pendingCount }}
                         </div>
                         <p class="text-center text-sm font-medium text-zinc-600 dark:text-zinc-400">
-                            laporan menunggu <span class="font-bold text-zinc-900 dark:text-white">approval</span> Anda
+                            @if ($message)
+                                {!! $message !!}
+                            @else
+                                laporan menunggu <span class="font-bold text-zinc-900 dark:text-white">approval</span> Anda
+                            @endif
                         </p>
                     </div>
 
@@ -130,7 +142,11 @@ $watch('$wire.showPopup', val => {
                         class="mb-4 flex items-start gap-2 rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-white/5">
                         <x-icons.info-circle class="mt-0.5 h-4 w-4 shrink-0 text-zinc-400" />
                         <p class="text-xs text-zinc-500 dark:text-zinc-400">
-                            Klik tombol di bawah untuk melihat semua laporan yang membutuhkan tindakan Anda.
+                            @if ($type === 'production-assigned')
+                                Klik tombol di bawah untuk mengisi atau melanjutkan laporan progres produksi Anda.
+                            @else
+                                Klik tombol di bawah untuk melihat semua laporan yang membutuhkan tindakan Anda.
+                            @endif
                         </p>
                     </div>
 

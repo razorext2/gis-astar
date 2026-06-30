@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Menampilkan & mengelola riwayat laporan produksi dengan pagination, Caller: production.show, Deps: ProductionHistory, WithPagination */
+
 namespace App\Livewire\Handler\ProductionHistories;
 
 use App\Livewire\Concerns\HandlesErrors;
@@ -7,10 +9,12 @@ use App\Models\Spk\ProductionHistory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class HistoriesList extends Component
 {
     use HandlesErrors;
+    use WithPagination;
 
     public ?string $id;
 

@@ -1,6 +1,6 @@
 <?php
 
-/** Goal: Popup notifikasi approval laporan di dashboard, Caller: dashboard.blade.php / dashboard-user.blade.php, Deps: Sales, Driver, Technician, Collector, SpkMain */
+/** Goal: Popup notifikasi approval laporan di dashboard, Caller: dashboard.blade.php / dashboard-user.blade.php, Deps: Sales, Driver, Technician, Collector, SpkMain, Production */
 
 namespace App\Livewire\Dashboard;
 
@@ -8,6 +8,7 @@ use App\Models\Announcement;
 use App\Models\Collector;
 use App\Models\Driver;
 use App\Models\Sales;
+use App\Models\Spk\Production;
 use App\Models\Spk\SpkMain;
 use App\Models\Technician;
 use App\Models\User;
@@ -37,11 +38,14 @@ class ReportApprovalPopup extends Component
 
     public string $regionLabel = '';
 
-    public function mount(string $type, string $regionPermission = '', int $stackIndex = 0): void
+    public ?string $message = null;
+
+    public function mount(string $type, string $regionPermission = '', int $stackIndex = 0, ?string $message = null): void
     {
         $this->type = $type;
         $this->regionPermission = $regionPermission;
         $this->stackIndex = $stackIndex;
+        $this->message = $message;
         $this->regionLabel = $this->resolveRegionLabel();
 
         $this->pendingCount = $this->countPending();
@@ -98,6 +102,12 @@ class ReportApprovalPopup extends Component
                 'color' => 'cyan',
                 'route' => route('production.index'),
             ],
+            'production-assigned' => [
+                'title' => 'Tugas Produksi',
+                'icon' => 'clipboard-check',
+                'color' => 'indigo',
+                'route' => route('production.index'),
+            ],
             default => [
                 'title' => 'Laporan',
                 'icon' => 'clipboard',
@@ -143,6 +153,7 @@ class ReportApprovalPopup extends Component
             'collector' => $this->countCollectorPending(),
             'spk' => $this->countSpkPending(),
             'production' => $this->countProductionPending(),
+            'production-assigned' => $this->countProductionAssignedPending($user),
             default => 0,
         };
     }
@@ -235,6 +246,31 @@ class ReportApprovalPopup extends Component
             ->where('status_approval', 1)
             ->whereIn('status', [1, 2])
             ->where('is_cancelled', false)
+            ->count();
+    }
+
+    /**
+     * Count active production jobs assigned to the given user.
+     */
+    private function countProductionAssignedPending(User $user): int
+    {
+        return Production::where(function ($q) use ($user) {
+                $q->where('assign_to', $user->id)
+                  ->orWhere('reassign_to', $user->id);
+            })
+            ->whereHas('spk', function ($q) {
+                $q->where('status_approval', 1)
+                  ->where('on_delay', 0)
+                  ->where('is_booked', 0)
+                  ->where('is_cancelled', false)
+                  ->where('status', '>=', 2);
+            })
+            ->whereHas('productionHistories', function ($q) {
+                $q->where('status_produksi', '>', 0);
+            })
+            ->whereDoesntHave('productionHistories', function ($q) use ($user) {
+                $q->where('added_by', $user->id);
+            })
             ->count();
     }
 

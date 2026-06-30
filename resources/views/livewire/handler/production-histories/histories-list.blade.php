@@ -139,6 +139,6 @@
     </div>
 
     <div class="mt-6">
-        {{ $data->links() }}
+        {{ $data->links(data: ['scrollTo' => false]) }}
     </div>
 </div>
