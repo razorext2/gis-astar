@@ -29,9 +29,14 @@
 @endphp
 
 <template x-teleport="body">
-    <div x-data="{ open: @if ($isAlpine) {{ $show }} @else @entangle($show) @endif }"
-        @if ($isAlpine) x-init="$watch('open', val => {{ $show }} = val); $watch('{{ $show }}', val => open = val)" @endif
-        x-show="open" x-cloak
+    <div x-data="{ open: @if ($isAlpine) {{ $show }} @else @entangle($show) @endif }" x-init="@if ($isAlpine) $watch('open', val => {{ $show }} = val);
+                $watch('{{ $show }}', val => open = val);
+            @else
+                $watch('open', val => {
+                    if (!val) {
+                        $wire.set('{{ $show }}', false);
+                    }
+                }); @endif" x-show="open" x-cloak
         class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-900/60 p-4 backdrop-blur-md lg:p-6"
         x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"

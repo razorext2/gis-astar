@@ -4,11 +4,13 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Models\Announcement;
 use App\Models\LeaveRequest\LeaveRequest;
+use App\Models\User;
 use Illuminate\Support\Collection;
-use Livewire\Component;
-
+use Illuminate\View\View;
 use Livewire\Attributes\On;
+use Livewire\Component;
 
 class LeaveApprovalPopup extends Component
 {
@@ -26,9 +28,9 @@ class LeaveApprovalPopup extends Component
     /**
      * Check if there are pending leave requests for the given user.
      */
-    public static function hasPendingForUser(?\App\Models\User $user): bool
+    public static function hasPendingForUser(?User $user): bool
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 
@@ -37,18 +39,18 @@ class LeaveApprovalPopup extends Component
                 $q->where(function ($sq) use ($user) {
                     $sq->where('status', 'pending_backup')->where('backup_person_id', $user->id);
                 })
-                ->orWhere(function ($sq) use ($user) {
-                    $sq->where('status', 'pending_spv')
-                        ->whereHas('user.pegawai.jabatanRelasi.supervisors', fn ($jq) => $jq->where('users.id', $user->id));
-                })
-                ->orWhere(function ($sq) use ($user) {
-                    $sq->where('status', 'pending_hrd')
-                        ->whereHas('user.pegawai.jabatanRelasi.placementRelasi.hrds', fn ($jq) => $jq->where('users.id', $user->id));
-                })
-                ->orWhere(function ($sq) use ($user) {
-                    $sq->where('status', 'pending_management')
-                        ->whereHas('user.pegawai.jabatanRelasi.placementRelasi.managements', fn ($jq) => $jq->where('users.id', $user->id));
-                });
+                    ->orWhere(function ($sq) use ($user) {
+                        $sq->where('status', 'pending_spv')
+                            ->whereHas('user.pegawai.jabatanRelasi.supervisors', fn ($jq) => $jq->where('users.id', $user->id));
+                    })
+                    ->orWhere(function ($sq) use ($user) {
+                        $sq->where('status', 'pending_hrd')
+                            ->whereHas('user.pegawai.jabatanRelasi.placementRelasi.hrds', fn ($jq) => $jq->where('users.id', $user->id));
+                    })
+                    ->orWhere(function ($sq) use ($user) {
+                        $sq->where('status', 'pending_management')
+                            ->whereHas('user.pegawai.jabatanRelasi.placementRelasi.managements', fn ($jq) => $jq->where('users.id', $user->id));
+                    });
             })
             ->exists();
     }
@@ -56,7 +58,7 @@ class LeaveApprovalPopup extends Component
     public function mount(): void
     {
         $user = auth()->user();
-        if (\App\Models\Announcement::hasUnreadForUser($user)) {
+        if (Announcement::hasUnreadForUser($user)) {
             $this->hasPending = false;
         } else {
             $this->hasPending = $this->getPendingRequests()->isNotEmpty();
@@ -69,6 +71,13 @@ class LeaveApprovalPopup extends Component
         $this->hasPending = $this->getPendingRequests()->isNotEmpty();
         if ($this->hasPending) {
             $this->showPopup = true;
+        }
+    }
+
+    public function updatedShowPopup(bool $value): void
+    {
+        if (! $value) {
+            $this->dispatch('leave-popup-minimized');
         }
     }
 
@@ -92,7 +101,7 @@ class LeaveApprovalPopup extends Component
         }
     }
 
-    public function render(): \Illuminate\View\View
+    public function render(): View
     {
         $pendingRequests = $this->getPendingRequests();
         $total = $pendingRequests->count();
@@ -104,8 +113,8 @@ class LeaveApprovalPopup extends Component
 
         return view('livewire.dashboard.leave-approval-popup', [
             'currentRequest' => $pendingRequests->values()->get($this->currentIndex),
-            'totalPending'   => $total,
-            'currentIndex'   => $this->currentIndex,
+            'totalPending' => $total,
+            'currentIndex' => $this->currentIndex,
         ]);
     }
 

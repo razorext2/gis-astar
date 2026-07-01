@@ -10,16 +10,28 @@
             return;
         }
 
+        window.__leavePopupState = { minimized: false };
+
         this.$watch('$wire.showPopup', value => {
             if (!value) {
                 this.minimized = true;
-            } else if (value) {
+                if (window.__leavePopupState) {
+                    window.__leavePopupState.minimized = true;
+                }
+                window.dispatchEvent(new CustomEvent('leave-popup-minimized'));
+            } else {
                 this.minimized = false;
+                if (window.__leavePopupState) {
+                    window.__leavePopupState.minimized = false;
+                }
             }
         });
 
         if (this.dismissedForSession) {
             this.minimized = true;
+            if (window.__leavePopupState) {
+                window.__leavePopupState.minimized = true;
+            }
         } else {
             setTimeout(() => { $wire.set('showPopup', true); }, 800);
         }

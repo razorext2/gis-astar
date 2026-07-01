@@ -141,8 +141,8 @@ class ReportApprovalPopup extends Component
             return 0;
         }
 
-        // Prioritize pending leave approvals unless forced
-        if (! $this->forceShowReports && LeaveApprovalPopup::hasPendingForUser($user)) {
+        // Prioritize pending leave approvals unless forced or showing
+        if (! $this->forceShowReports && ! $this->showPopup && LeaveApprovalPopup::hasPendingForUser($user)) {
             return 0;
         }
 
@@ -169,6 +169,7 @@ class ReportApprovalPopup extends Component
     }
 
     #[On('leave-closed')]
+    #[On('leave-popup-minimized')]
     public function handleLeaveClosed(): void
     {
         $this->forceShowReports = true;
@@ -255,15 +256,15 @@ class ReportApprovalPopup extends Component
     private function countProductionAssignedPending(User $user): int
     {
         return Production::where(function ($q) use ($user) {
-                $q->where('assign_to', $user->id)
-                  ->orWhere('reassign_to', $user->id);
-            })
+            $q->where('assign_to', $user->id)
+                ->orWhere('reassign_to', $user->id);
+        })
             ->whereHas('spk', function ($q) {
                 $q->where('status_approval', 1)
-                  ->where('on_delay', 0)
-                  ->where('is_booked', 0)
-                  ->where('is_cancelled', false)
-                  ->where('status', '>=', 2);
+                    ->where('on_delay', 0)
+                    ->where('is_booked', 0)
+                    ->where('is_cancelled', false)
+                    ->where('status', '>=', 2);
             })
             ->whereHas('productionHistories', function ($q) {
                 $q->where('status_produksi', '>', 0);
