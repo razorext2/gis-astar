@@ -8,7 +8,6 @@ use App\Models\Jabatan;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
@@ -23,15 +22,8 @@ final class UserTable extends PowerGridComponent
 
     public bool $deferLoading = true;
 
-    public ?Collection $roles = null;
-
-    public ?Collection $jabatans = null;
-
     public function setUp(): array
     {
-        $this->roles = Role::select('id', 'name')->get();
-        $this->jabatans = Jabatan::select('id', 'nama_jabatan')->get();
-
         return [
             PowerGrid::header()
                 ->showSearchInput()
@@ -44,14 +36,14 @@ final class UserTable extends PowerGridComponent
         ];
     }
 
+    /**
+     * Hanya join tb_pegawai untuk kebutuhan filter jabatan.
+     * Roles dihandle via Eloquent with() + relationSearch (whereHas).
+     * Menghindari leftJoin ke model_has_roles yang menyebabkan duplikasi baris
+     * per role dan membuat PowerGrid hanya menampilkan 1 data.
+     */
     public function datasource(): Builder
     {
-        /**
-         * Hanya join tb_pegawai untuk kebutuhan filter jabatan.
-         * Roles dihandle via Eloquent with() + relationSearch (whereHas).
-         * Menghindari leftJoin ke model_has_roles yang menyebabkan duplikasi baris
-         * per role dan membuat PowerGrid hanya menampilkan 1 data.
-         */
         return User::query()
             ->leftJoin('tb_pegawai', 'users.kode_pegawai', '=', 'tb_pegawai.kode_pegawai')
             ->select('users.*')
@@ -125,28 +117,30 @@ final class UserTable extends PowerGridComponent
 
     public function filters(): array
     {
+        $roles = Role::select(['id', 'name'])->get();
+        $jabatans = Jabatan::select(['id', 'nama_jabatan'])->get();
+
         return [
             Filter::inputText('kode_pegawai', 'users.kode_pegawai')
                 ->placeholder('Kode jari'),
+
             Filter::inputText('id', 'users.id')
                 ->placeholder('User ID'),
+
             Filter::inputText('name', 'users.name')
                 ->placeholder('Nama'),
+
             Filter::boolean('is_active', 'users.is_active')
                 ->label('Aktif', 'Tidak aktif'),
 
-            // Roles: gunakan whereHas karena tabel roles tidak di-join di datasource
             Filter::select('roles_formatted', 'role_id')
-                ->dataSource(collect($this->roles))
+                ->dataSource(collect($roles))
                 ->optionLabel('name')
                 ->optionValue('id')
-                ->builder(function (Builder $query, $value) {
-                    $query->whereHas('roles', fn ($q) => $q->where('id', $value));
-                }),
+                ->builder(fn (Builder $query, $value) => $query->whereHas('roles', fn ($q) => $q->where('id', $value))),
 
-            // Jabatan: menggunakan kolom tb_pegawai yang sudah ter-join
             Filter::select('jabatan', 'tb_pegawai.jabatan')
-                ->dataSource(collect($this->jabatans))
+                ->dataSource(collect($jabatans))
                 ->optionLabel('nama_jabatan')
                 ->optionValue('id'),
         ];
