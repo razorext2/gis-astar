@@ -79,10 +79,23 @@
             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
             x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            class="fixed inset-0 z-[100] flex justify-center overflow-y-auto bg-zinc-900/60 p-4 backdrop-blur-md lg:p-6"
+            class="fixed inset-0 z-[100] flex flex-col items-center overflow-y-auto bg-zinc-900/60 p-4 backdrop-blur-md lg:p-6"
             x-cloak>
+
+            {{-- Close All Button --}}
+            <div class="flex w-full max-w-6xl justify-end pt-2 pb-4 lg:pt-4">
+                <button
+                    @click="$dispatch('close-all-popups')"
+                    class="flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    Tutup Semua
+                </button>
+            </div>
+
             <div id="report-popup-grid-container"
-                class="my-auto grid w-full justify-center gap-6 py-8 [grid-template-columns:repeat(auto-fit,23rem)] lg:max-w-6xl lg:py-12">
+                class="mb-auto grid w-full justify-center gap-6 pb-8 [grid-template-columns:repeat(auto-fit,23rem)] lg:max-w-6xl lg:pb-12">
                 {{-- Teleport target area --}}
             </div>
         </div>

@@ -87,6 +87,7 @@ $watch('$wire.showPopup', val => {
         {{-- Teleport Card to the shared Grid Container --}}
         <template x-teleport="#report-popup-grid-container">
             <div x-show="openPopups['{{ $type }}']?.show"
+                @close-all-popups.window="$wire.set('showPopup', false)"
                 x-transition:enter="transition ease-out duration-300 transform"
                 x-transition:enter-start="opacity-0 scale-95 translate-y-4"
                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
