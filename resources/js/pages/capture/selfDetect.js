@@ -50,7 +50,7 @@ export function initSelfDetect(lat, lng) {
 
         // Draw the current frame of the video onto the canvas
         canvas
-            .getContext("2d")
+            .getContext("2d", { willReadFrequently: true })
             .drawImage(video, 0, 0, canvas.width, canvas.height);
 
         startButton.innerText = "Foto dicapture, mengolah...";
@@ -70,7 +70,7 @@ export function initSelfDetect(lat, lng) {
         // Ambil konteks 2D dari canvas "canvAttend"
         const canvasContext = document
             .getElementById("canvAttend")
-            .getContext("2d");
+            .getContext("2d", { willReadFrequently: true });
 
         if (canvasContext) {
             // Buat objek gambar baru
