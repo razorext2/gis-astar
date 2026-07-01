@@ -73,7 +73,7 @@ class BillingUpdate extends Component
         $customer_from_api = (string) $this->form->sanitizeAlphaNumeric($this->form->nama_customer);
 
         $policy = match ($this->form->tipe_tagihan) {
-            'idcnonppn' => 'updateNoTagihanIdcNonPpn',
+            'idcnon' => 'updateNoTagihanIdcNonPpn',
             'idcppn' => 'updateNoTagihanIdcPpn',
             'idyppn' => 'updateNoTagihanIdyPpn',
         };
