@@ -6,6 +6,8 @@ use App\Livewire\Concerns\HandlesErrors;
 use App\Livewire\Forms\Billing;
 use App\Models\Spk\ReceivableHistory;
 use App\Models\Spk\SpkMain;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
@@ -18,7 +20,7 @@ class BillingUpdate extends Component
 
     public $spk_data;
 
-    public function mount($id)
+    public function mount($id): void
     {
         $this->spk_data = SpkMain::with('invoice', 'receivableHistories')
             ->findOrFail($id);
@@ -28,7 +30,7 @@ class BillingUpdate extends Component
         $this->form->tipe_tagihan = $this->spk_data->tipe_tagihan;
     }
 
-    public function search()
+    public function search(): void
     {
         $this->form->validate();
 
@@ -58,16 +60,18 @@ class BillingUpdate extends Component
             $this->form->sisa = (float) ($data['SisaPiutang'] ?? 0);
 
         } catch (\Throwable $e) {
-            return $this->dispatch(
+            $this->dispatch(
                 event: 'swal',
                 icon: 'error',
                 title: 'Gagal',
                 text: $e->getMessage()
             );
+
+            return;
         }
     }
 
-    public function assign()
+    public function assign(): void
     {
         $customer_from_db = (string) $this->form->sanitizeAlphaNumeric($this->spk_data->customer['nama_perusahaan']);
         $customer_from_api = (string) $this->form->sanitizeAlphaNumeric($this->form->nama_customer);
@@ -83,7 +87,9 @@ class BillingUpdate extends Component
 
         // check kesamaan data customer
         if ($customer_from_db !== $customer_from_api) {
-            return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Data customer tidak sama.');
+            $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Data customer tidak sama.');
+
+            return;
         }
 
         $this->runSafely(function () {
@@ -94,8 +100,8 @@ class BillingUpdate extends Component
                     'nomor_tagihan' => $this->form->nomor_tagihan_baru,
                     'status_nomor_tagihan' => 1, // sudah diassign
                     'status' => 4, // penagihan
-                    'updated_by' => auth()->id(),
-                    'no_tagihan_updated_by' => auth()->id(),
+                    'updated_by' => Auth::id(),
+                    'no_tagihan_updated_by' => Auth::id(),
                 ]);
 
                 if (! $spk) {
@@ -111,13 +117,19 @@ class BillingUpdate extends Component
                     'sisa_piutang_sesudah' => $this->form->sisa,
                     'selisih' => $this->form->total_tagihan - $this->form->sisa,
                     'source' => 'manual',
-                    'updated_by' => auth()->id(),
+                    'updated_by' => Auth::id(),
                     'checked_at' => now(),
                 ]);
 
                 if (! $history) {
                     throw new \Exception('Gagal update history penagihan.');
                 }
+
+                $this->spk_data->addHistory(
+                    'Nomor SR penagihan di-assign.',
+                    Auth::user()->name.' telah meng-assign nomor SR penagihan ('.$this->form->nomor_tagihan_baru.').',
+                    Auth::id()
+                );
             });
 
             $this->dispatch(
@@ -135,7 +147,7 @@ class BillingUpdate extends Component
                 'id_spk' => $this->spk_data->id,
                 'nomor_tagihan' => $this->form->nomor_tagihan_baru,
             ],
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
         ]);
     }
 
@@ -151,7 +163,7 @@ class BillingUpdate extends Component
             ->paginate(10, pageName: 'receivable-histories-page');
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.handler.spk.billing-update');
     }
