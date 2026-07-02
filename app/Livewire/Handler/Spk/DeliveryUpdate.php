@@ -8,6 +8,8 @@ use App\Models\Driver;
 use App\Models\Spk\SpkDelivery;
 use App\Models\Spk\SpkMain;
 use App\Models\User;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
@@ -31,7 +33,7 @@ class DeliveryUpdate extends Component
 
     public ?string $alamat_customer = null;
 
-    public function mount($id)
+    public function mount($id): void
     {
         $this->id = $id;
         $this->spk_data = SpkMain::with('deliveries', 'production')->findOrFail($id);
@@ -41,7 +43,7 @@ class DeliveryUpdate extends Component
         }
     }
 
-    public function selectDriver($kode_pegawai, $name)
+    public function selectDriver($kode_pegawai, $name): void
     {
         $this->form->id_supir = $kode_pegawai;
         $this->form->nama_supir = $name;
@@ -49,7 +51,7 @@ class DeliveryUpdate extends Component
         $this->skipRender();
     }
 
-    public function clearForm()
+    public function clearForm(): void
     {
         $this->form->reset();
         $this->search_supir = null;
@@ -60,14 +62,16 @@ class DeliveryUpdate extends Component
         $this->form->via = $this->spk_data->is_using_company_driver ? 'supir' : '';
     }
 
-    public function fetchSR()
+    public function fetchSR(): void
     {
         // validasi sr
         $this->validateOnly('form.nomor_sr');
 
         // cek is_using_company_driver
         if (! $this->spk_data->is_using_company_driver) {
-            return $this->dispatch('swal', icon: 'error', text: 'SPK ini tidak dikirim menggunakan Supir Perusahaan.', title: 'Gagal');
+            $this->dispatch('swal', icon: 'error', text: 'SPK ini tidak dikirim menggunakan Supir Perusahaan.', title: 'Gagal');
+
+            return;
         }
 
         $api_fetch = match ($this->spk_data->tipe_tagihan) {
@@ -78,13 +82,17 @@ class DeliveryUpdate extends Component
         $response = Http::get('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe='.$api_fetch.'&NomorPermintaanJual='.$this->form->nomor_sr);
 
         if ($response['status'] == 'error') {
-            return $this->dispatch('swal', icon: 'error', text: $response['message'], title: 'Gagal');
+            $this->dispatch('swal', icon: 'error', text: $response['message'], title: 'Gagal');
+
+            return;
         }
 
         if ($this->sanitizeAlphaNumeric($response['data'][0]['NamaCustomer']) !== $this->sanitizeAlphaNumeric($this->spk_data->customer['nama_perusahaan'])) {
             $error_message = 'Nama Customer tidak sama dengan data SPK yang ada di sistem!. <br> SPK: <b>'.$this->spk_data->customer['nama_perusahaan'].'</b> <br> SR BSI: <b>'.$response['data'][0]['NamaCustomer'].'</b>';
 
-            return $this->dispatch('swal', icon: 'error', text: $error_message, title: 'Gagal');
+            $this->dispatch('swal', icon: 'error', text: $error_message, title: 'Gagal');
+
+            return;
         }
 
         $this->show_customer = true;
@@ -97,18 +105,20 @@ class DeliveryUpdate extends Component
         return strtoupper(preg_replace('/[^A-Za-z0-9]/', '', $text));
     }
 
-    public function updatedFormVia()
+    public function updatedFormVia(): void
     {
         if ($this->form->via == 'supir') {
             if (! $this->spk_data->is_using_company_driver) {
                 $this->form->via = '';
 
-                return $this->dispatch('swal', icon: 'error', text: 'SPK ini tidak dikirim menggunakan Supir Perusahaan.', title: 'Gagal');
+                $this->dispatch('swal', icon: 'error', text: 'SPK ini tidak dikirim menggunakan Supir Perusahaan.', title: 'Gagal');
+
+                return;
             }
         }
     }
 
-    public function generateKodeKirim()
+    public function generateKodeKirim(): string
     {
         $random = strtoupper(Str::random(8));
         $timestamp = now()->format('dmYHi');
@@ -116,7 +126,7 @@ class DeliveryUpdate extends Component
         return 'DLVR-'.$random.'-'.$timestamp;
     }
 
-    public function store()
+    public function store(): void
     {
         // check authorization
         $this->authorize('updateInformasiPengiriman', SpkMain::class);
@@ -127,7 +137,9 @@ class DeliveryUpdate extends Component
         // jika via darat dan laut
         if ($this->form->via !== 'supir' && $this->spk_data->is_picked_up_by_customer === false) {
             if (count($this->form->products) === 0) {
-                return $this->dispatch('swal', icon: 'error', text: 'Barang tidak boleh kosong. Minimal harus centang 1 barang!', title: 'Gagal');
+                $this->dispatch('swal', icon: 'error', text: 'Barang tidak boleh kosong. Minimal harus centang 1 barang!', title: 'Gagal');
+
+                return;
             }
         }
 
@@ -168,7 +180,7 @@ class DeliveryUpdate extends Component
                         'title' => $this->nama_customer,
                         'lokasi' => $this->alamat_customer,
                         'assign_date' => $this->form->etd,
-                        'assign_by' => auth()->user()->id,
+                        'assign_by' => Auth::id(),
                         'status' => 5,
                     ]);
 
@@ -181,6 +193,12 @@ class DeliveryUpdate extends Component
                 $this->spk_data->update([
                     'status' => 4, // proses penagihan
                 ]);
+
+                $this->spk_data->addHistory(
+                    'Menjadwalkan pengiriman.',
+                    Auth::user()->name.' sedang menjadwalkan pengiriman.',
+                    Auth::id()
+                );
             });
 
             // reset form
@@ -190,12 +208,12 @@ class DeliveryUpdate extends Component
 
             return $this->redirect(route('delivery.edit', $this->id), navigate: true);
         }, 'Gagal menambah data pengiriman', [
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'spk_id' => $this->id,
         ]);
     }
 
-    public function render()
+    public function render(): View
     {
         $drivers = User::role('Driver')
             ->when($this->search_supir, function ($query) {

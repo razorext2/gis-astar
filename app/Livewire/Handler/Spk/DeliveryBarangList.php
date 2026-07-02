@@ -5,6 +5,8 @@ namespace App\Livewire\Handler\Spk;
 use App\Livewire\Concerns\HandlesErrors;
 use App\Livewire\Forms\Spk\Delivery;
 use App\Models\Spk\SpkDelivery;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -26,12 +28,12 @@ class DeliveryBarangList extends Component
 
     public ?string $delayed_eta = '';
 
-    public function mount($id)
+    public function mount($id): void
     {
         $this->id = $id;
     }
 
-    public function detailModal($id)
+    public function detailModal($id): void
     {
         $this->showDetailModal = true;
 
@@ -40,7 +42,7 @@ class DeliveryBarangList extends Component
             ->first();
     }
 
-    public function delayModal($id)
+    public function delayModal($id): void
     {
         $this->showDelayedModal = true;
 
@@ -51,7 +53,7 @@ class DeliveryBarangList extends Component
         $this->delayed_eta = $this->modalData->eta;
     }
 
-    public function delayDelivery($id)
+    public function delayDelivery($id): void
     {
         $this->validate([
             'delayed_reason' => 'required|string|min:5|max:255',
@@ -67,7 +69,7 @@ class DeliveryBarangList extends Component
             $delayed_history = $this->modalData->is_delay;
 
             // tambah array history
-            $hist = $this->form->generateHistory('Pengiriman Mengalami Penundaan', 'Pengiriman telah ditunda oleh: '.auth()->user()->name.', karena: '.$this->delayed_reason.', tiba sekitar tanggal'.$this->delayed_eta);
+            $hist = $this->form->generateHistory('Pengiriman Mengalami Penundaan', 'Pengiriman telah ditunda oleh: '.Auth::user()->name.', karena: '.$this->delayed_reason.', tiba sekitar tanggal'.$this->delayed_eta);
 
             $history[] = $hist;
             $delayed_history[] = $hist;
@@ -84,13 +86,13 @@ class DeliveryBarangList extends Component
 
             $this->redirect(route('delivery.edit', $this->modalData->spk->id), navigate: true);
         }, 'Gagal menambah informasi delay pengiriman.', [
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'id_delivery' => $id,
             'kode_kirim' => $this->modalData->kode_kirim,
         ]);
     }
 
-    public function deliveryArrivedConfirmation()
+    public function deliveryArrivedConfirmation(): void
     {
         // cek authorization
         $this->authorize('validatePengiriman', \App\Models\Spk\SpkMain::class);
@@ -98,23 +100,31 @@ class DeliveryBarangList extends Component
         $this->runSafely(function () {
             $history = $this->modalData->history;
 
-            $history[] = $this->form->generateHistory('Pengiriman Selesai', 'Pengiriman telah dikonfirmasi selesai oleh: '.auth()->user()->name);
+            $history[] = $this->form->generateHistory('Pengiriman Selesai', 'Pengiriman telah dikonfirmasi selesai oleh: '.Auth::user()->name);
 
             $this->modalData->update([
                 'status_kirim' => 1,
                 'history' => $history,
             ]);
 
+            $this->modalData->loadMissing('spk');
+
+            $this->modalData->spk->addHistory(
+                'Pengiriman selesai.',
+                Auth::user()->name.' menandai pengiriman telah selesai.',
+                Auth::id()
+            );
+
             $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'Pengiriman selesai dikonfirmasi.');
 
             $this->redirect(route('delivery.edit', $this->modalData->spk->id), navigate: true);
         }, 'Gagal mengkonfirmasi pengiriman.', [
-            'user_id' => auth()->user()->id,
+            'user_id' => Auth::id(),
             'id_delivery' => $this->modalData->id,
         ]);
     }
 
-    public function continueAfterDelayConfirmation()
+    public function continueAfterDelayConfirmation(): void
     {
         // cek authorization
         $this->authorize('validatePengiriman', \App\Models\Spk\SpkMain::class);
@@ -133,12 +143,12 @@ class DeliveryBarangList extends Component
 
             $this->redirect(route('delivery.edit', $this->modalData->spk->id), navigate: true);
         }, 'Gagal melanjutkan pengiriman.', [
-            'user_id' => auth()->user()->id,
+            'user_id' => Auth::id(),
             'id_delivery' => $this->modalData->id,
         ]);
     }
 
-    public function render()
+    public function render(): View
     {
         $deliveries = SpkDelivery::with('spk.production')
             ->where('id_spk', $this->id)
