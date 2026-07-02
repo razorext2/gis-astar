@@ -1,7 +1,7 @@
-<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-4 lg:gap-6">
     {{-- Info Cust SPK --}}
     <div
-        class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 shadow dark:border-zinc-800 dark:bg-zinc-800/30 dark:shadow-none lg:p-6">
+        class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
         <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
             <div class="space-y-1">
                 <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">No. SPK</p>
@@ -45,7 +45,7 @@
 
     @if (!$form->status_nomor_tagihan)
         <div
-            class="rounded-xl border border-zinc-200 bg-white p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
+            class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
             <div class="mb-6 flex items-center gap-2 border-l-4 border-blue-500 pl-3">
                 <h3 class="text-base font-bold text-zinc-900 dark:text-white">Cari Tagihan</h3>
                 <span
@@ -81,12 +81,19 @@
 
                 <div wire:show="form.nomor_tagihan_baru" wire:transition
                     class="rounded-xl border border-zinc-200 bg-zinc-50 p-4 shadow-inner dark:border-zinc-800 dark:bg-zinc-800/50 lg:p-6">
-                    <div class="mb-4 flex items-center gap-3">
+                    <div class="mb-4 flex flex-wrap items-center gap-3">
                         <span
                             class="inline-flex rounded-full bg-indigo-100 px-2.5 py-0.5 text-[10px] font-bold tracking-wider text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400">
                             REKAP PIUTANG (BSI)
                         </span>
                         <div class="h-px flex-1 bg-zinc-200 dark:bg-zinc-700"></div>
+                        @if ($sisaDataMissing)
+                            <span
+                                class="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-0.5 text-[10px] font-bold text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+                                <x-icons.exclamation-circle class="h-3 w-3" />
+                                Belum ada data piutang di BSI
+                            </span>
+                        @endif
                     </div>
 
                     <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -100,6 +107,12 @@
                                 <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Nama Customer
                                 </p>
                                 <p class="font-bold text-zinc-900 dark:text-white">{{ $form->nama_customer ?? '-' }}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Nama Penerima
+                                </p>
+                                <p class="font-bold text-zinc-900 dark:text-white">{{ $form->customer_contact ?? '-' }}
+                                </p>
                             </div>
                         </div>
 
@@ -150,12 +163,51 @@
                     </x-button.success>
                 </div>
             </form>
+
+            {{-- Modal konfirmasi ketika data piutang (api_sisa) tidak ditemukan di BSI --}}
+            <x-modal.base-modal show="showNoSisaConfirm" title="Data Piutang Tidak Ditemukan"
+                subtitle="Konfirmasi assign" :minimizeable="false" :showCloseButton="false"
+                iconContainerClass="bg-amber-500 shadow-amber-500/20">
+                <x-slot name="icon">
+                    <x-icons.exclamation-circle class="h-5 w-5" />
+                </x-slot>
+
+                <div class="flex flex-col gap-3">
+                    <p class="text-sm text-zinc-700 dark:text-zinc-300">
+                        Data SR <span class="font-bold text-zinc-900 dark:text-white">{{ $form->nomor_tagihan }}</span>
+                        ditemukan, namun <span class="font-semibold text-amber-600 dark:text-amber-400">belum ada data
+                            piutang yang tercatat di BSI</span>
+                        untuk nomor tagihan ini.
+                    </p>
+                    <p class="text-sm text-zinc-500 dark:text-zinc-400">
+                        Apakah Anda tetap ingin melanjutkan proses assign ke SPK ini?
+                    </p>
+                </div>
+
+                <x-slot name="footer">
+                    <x-button.secondary type="button" wire:click="cancelAssignWithoutSisa"
+                        wire:loading.attr="disabled">
+                        <x-slot name="icon">
+                            <x-icons.close class="icon h-4 w-4" />
+                        </x-slot>
+                        Batal
+                    </x-button.secondary>
+
+                    <x-button.primary type="button" wire:click="confirmAssignWithoutSisa"
+                        wire:loading.attr="disabled">
+                        <x-slot name="icon">
+                            <x-icons.check class="icon h-4 w-4" />
+                        </x-slot>
+                        Ya, Lanjutkan
+                    </x-button.primary>
+                </x-slot>
+            </x-modal.base-modal>
         </div>
     @endif
 
     @if ($form->status_nomor_tagihan)
         <div
-            class="rounded-xl border border-zinc-200 bg-white p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
+            class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
             <div class="mb-6 flex items-center gap-2 border-l-4 border-blue-500 pl-3">
                 <h3 class="text-base font-bold text-zinc-900 dark:text-white">Riwayat Penagihan (BSI)</h3>
                 <span
@@ -206,15 +258,15 @@
                                         </dl>
                                         <dl
                                             class="flex items-center justify-between border-t border-dashed border-zinc-100 pt-2 text-xs dark:border-zinc-700">
-                                            <dt class="font-medium text-zinc-500 dark:text-zinc-400">Sisa Sesudah</dt>
-                                            <dd class="font-semibold text-zinc-900 dark:text-white">Rp
-                                                {{ number_format($row->sisa_piutang_sesudah, 2, '.', ',') }}</dd>
+                                            <dt class="font-medium text-green-500 dark:text-green-400">Pembayaran</dt>
+                                            <dd class="font-semibold text-green-700 dark:text-green-400">- Rp
+                                                {{ number_format($row->selisih, 2, '.', ',') }}</dd>
                                         </dl>
                                         <dl
                                             class="flex items-center justify-between border-t border-zinc-200 pt-3 text-sm dark:border-zinc-600">
-                                            <dt class="font-bold text-emerald-500">Pembayaran</dt>
-                                            <dd class="text-base font-bold text-emerald-600 dark:text-emerald-400">Rp
-                                                {{ number_format($row->selisih, 2, '.', ',') }}</dd>
+                                            <dt class="font-bold text-red-500">Sisa Piutang</dt>
+                                            <dd class="text-base font-bold text-red-600 dark:text-red-400">Rp
+                                                {{ number_format($row->sisa_piutang_sesudah, 2, '.', ',') }}</dd>
                                         </dl>
                                     </div>
                                 </div>

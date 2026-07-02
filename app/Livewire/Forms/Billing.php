@@ -15,7 +15,11 @@ class Billing extends Form
 
     public ?string $nama_customer = null;
 
+    public ?string $customer_contact = null;
+
     public ?string $nomor_tagihan_baru = null;
+
+    public ?float $jumlah_piutang = 0;
 
     public ?float $total_tagihan = 0;
 
@@ -63,5 +67,16 @@ class Billing extends Form
         }
 
         return $result['data'][0];
+    }
+
+    public function clearResults(): void
+    {
+        $this->nama_customer = null;
+        $this->customer_contact = null;
+        $this->nomor_tagihan_baru = null;
+        $this->jumlah_piutang = 0.0;
+        $this->total_tagihan = 0.0;
+        $this->total_bayar = 0.0;
+        $this->sisa = 0.0;
     }
 }

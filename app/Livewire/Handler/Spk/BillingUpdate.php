@@ -20,6 +20,12 @@ class BillingUpdate extends Component
 
     public $spk_data;
 
+    /** Tampilkan modal konfirmasi saat data piutang (api_sisa) tidak ditemukan di BSI */
+    public bool $showNoSisaConfirm = false;
+
+    /** Menandai bahwa data piutang BSI tidak tersedia saat fetch terakhir */
+    public bool $sisaDataMissing = false;
+
     public function mount($id): void
     {
         $this->spk_data = SpkMain::with('invoice', 'receivableHistories')
@@ -42,33 +48,56 @@ class BillingUpdate extends Component
                 $tipeTagihan['api'],
                 $this->form->nomor_tagihan
             );
+        } catch (\Throwable $e) {
+            $this->form->clearResults();
+            $this->dispatch('swal', icon: 'error', title: 'Gagal', text: $e->getMessage());
 
-            // Call API sisa
+            return;
+        }
+
+        // api_sisa bersifat opsional — jika gagal, tetap tampilkan data utama
+        // namun tandai bahwa data piutang belum tersedia dan tampilkan konfirmasi
+        $sisaData = [];
+        $this->sisaDataMissing = false;
+
+        try {
             $sisaData = $this->form->fetchApi(
                 $tipeTagihan['api_sisa'],
                 $this->form->nomor_tagihan
             );
-
-            // Merge data setelah keduanya valid
-            $data = array_merge($mainData, $sisaData);
-
-            // Set state
-            $this->form->nama_customer = $data['NamaCustomer'] ?? null;
-            $this->form->nomor_tagihan_baru = $data['NomorPermintaanJual'] ?? null;
-            $this->form->total_tagihan = (float) ($data['JumlahPiutang'] ?? 0);
-            $this->form->total_bayar = (float) ($data['TotalBayar'] ?? 0);
-            $this->form->sisa = (float) ($data['SisaPiutang'] ?? 0);
-
-        } catch (\Throwable $e) {
-            $this->dispatch(
-                event: 'swal',
-                icon: 'error',
-                title: 'Gagal',
-                text: $e->getMessage()
-            );
-
-            return;
+        } catch (\Throwable) {
+            $this->sisaDataMissing = true;
         }
+
+        // Merge data (sisaData bisa kosong jika api_sisa tidak tersedia)
+        $data = array_merge($mainData, $sisaData);
+
+        $this->form->nama_customer = $data['NamaCustomer'] ?? null;
+        $this->form->customer_contact = $data['CustomerContact'] ?? null;
+        $this->form->nomor_tagihan_baru = $data['NomorPermintaanJual'] ?? null;
+        $this->form->total_tagihan = (float) ($data['Total'] ?? 0);
+        $this->form->jumlah_piutang = (float) ($data['JumlahPiutang'] ?? 0);
+        $this->form->total_bayar = (float) ($data['TotalBayar'] ?? 0);
+        $this->form->sisa = (float) ($data['SisaPiutang'] ?? 0);
+
+        // Jika data piutang tidak ditemukan di BSI, tampilkan konfirmasi sebelum assign
+        if ($this->sisaDataMissing) {
+            $this->showNoSisaConfirm = true;
+        }
+    }
+
+    /** User memilih lanjut assign meski data piutang BSI tidak tersedia */
+    public function confirmAssignWithoutSisa(): void
+    {
+        $this->showNoSisaConfirm = false;
+    }
+
+    /** User memilih batal — reset form dan tutup modal */
+    public function cancelAssignWithoutSisa(): void
+    {
+        $this->showNoSisaConfirm = false;
+        $this->sisaDataMissing = false;
+        $this->form->clearResults();
     }
 
     public function assign(): void

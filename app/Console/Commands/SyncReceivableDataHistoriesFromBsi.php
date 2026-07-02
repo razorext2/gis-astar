@@ -25,20 +25,31 @@ class SyncReceivableDataHistoriesFromBsi extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
-        // ambil data spk yang nomor_tagihannya tidak null / udah diinput
+        // ambil SPK yang sudah memiliki nomor tagihan dan statusnya aktif
         $spks = SpkMain::with('receivableHistories')
             ->whereNotNull('nomor_tagihan')
             ->where('status_nomor_tagihan', 1)
             ->get();
 
         foreach ($spks as $spk) {
-            // buat url
-            $url = 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSisa1&NomorPermintaanJual='.$spk->nomor_tagihan;
+            $configKey = $spk->tipe_tagihan;
+
+            if (empty($configKey)) {
+                continue;
+            }
+
+            // ambil konfigurasi API berdasarkan tipe tagihan SPK (e.g. BSI, BRI, dll)
+            $tipeTagihan = config('spk-config.spk_tipe_tagihan')[$configKey] ?? null;
+
+            if (! $tipeTagihan || empty($tipeTagihan['api_sisa'])) {
+                continue;
+            }
+
+            $url = $tipeTagihan['api_sisa'].'&NomorPermintaanJual='.$spk->nomor_tagihan;
 
             try {
-                // akses api
                 $response = Http::timeout(10)
                     ->retry(2, 200)
                     ->get($url);
@@ -53,16 +64,39 @@ class SyncReceivableDataHistoriesFromBsi extends Command
                     continue;
                 }
 
-                $sisaSebelum = (float) $spk->receivableHistories->last()->sisa_piutang_sesudah;
-                $sisaSesudah = (float) $data['data'][0]['SisaPiutang'];
+                $record = $data['data'][0];
+                $apiCustomer = $record['NamaCustomer'] ?? '';
+
+                $spkCompany = $spk->company_name ?? '';
+                $customerName = $spk->customer['nama_perusahaan'] ?? '';
+                $contactPerson = $spk->customer['contact_person'] ?? '';
+
+                $apiCustomerSanitized = $this->sanitizeAlphaNumeric($apiCustomer);
+
+                // validasi: nama customer dari API harus cocok dengan salah satu field nama di SPK
+                // untuk mencegah history tersimpan pada SPK yang salah
+                $matchFound = (
+                    $apiCustomerSanitized === $this->sanitizeAlphaNumeric($spkCompany) ||
+                    ($customerName !== '' && $apiCustomerSanitized === $this->sanitizeAlphaNumeric($customerName)) ||
+                    ($contactPerson !== '' && $apiCustomerSanitized === $this->sanitizeAlphaNumeric($contactPerson))
+                );
+
+                if (! $matchFound) {
+                    $this->warn("Nama Customer tidak cocok untuk SPK {$spk->nomor_tagihan}. API: {$apiCustomer}, Company: {$spkCompany}, Customer: {$customerName}, CP: {$contactPerson}");
+
+                    continue;
+                }
+
+                // field di DB bertipe bigint, cast ke int agar perbandingan konsisten
+                $sisaSebelum = (int) ($spk->receivableHistories->last()?->sisa_piutang_sesudah ?? 0);
+                $sisaSesudah = (int) $record['SisaPiutang'];
                 $selisih = $sisaSebelum - $sisaSesudah;
 
-                // jika sisa piutang saat ini (dari API) tidak sama dengan sisa piutang dari database
+                // hanya simpan history jika ada perubahan sisa piutang dari data sebelumnya
                 if ($sisaSesudah !== $sisaSebelum) {
-                    // update data
                     $spk->receivableHistories()->create([
                         'nomor_sr' => $spk->nomor_tagihan,
-                        'total_piutang' => (float) $data['data'][0]['JumlahPiutang'],
+                        'total_piutang' => (int) $record['JumlahPiutang'],
                         'sisa_piutang_sebelum' => $sisaSebelum,
                         'sisa_piutang_sesudah' => $sisaSesudah,
                         'selisih' => $selisih,
@@ -70,14 +104,24 @@ class SyncReceivableDataHistoriesFromBsi extends Command
                         'checked_at' => now(),
                     ]);
 
-                    dump('Berhasil sinkronisasi data penagihan SPK '.$spk->nomor_tagihan);
+                    $this->info("Berhasil sinkronisasi data penagihan SPK {$spk->nomor_tagihan}");
                 }
             } catch (\Throwable $e) {
-                dump('Gagal sinkronisasi data penagihan SPK '.$spk->nomor_tagihan);
+                $this->error("Gagal sinkronisasi data penagihan SPK {$spk->nomor_tagihan}");
                 logger()->error($e->getMessage());
             }
         }
 
-        dump('Sinkronisasi data penagihan SPK selesai.');
+        $this->info('Sinkronisasi data penagihan SPK selesai.');
+
+        return self::SUCCESS;
+    }
+
+    /**
+     * Sanitize string to uppercase alphanumeric only.
+     */
+    private function sanitizeAlphaNumeric(string $text): string
+    {
+        return strtoupper(preg_replace('/[^A-Za-z0-9]/', '', $text));
     }
 }
