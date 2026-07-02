@@ -157,6 +157,13 @@ return [
             'days' => 30,
         ],
 
+        'receivable_anomaly' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/receivable-anomaly.log'),
+            'level' => 'debug',
+            'days' => 30,
+        ],
+
     ],
 
 ];

@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Spk\SpkMain;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class SyncReceivableDataHistoriesFromBsi extends Command
 {
@@ -91,6 +92,28 @@ class SyncReceivableDataHistoriesFromBsi extends Command
                 $sisaSebelum = (int) ($spk->receivableHistories->last()?->sisa_piutang_sesudah ?? 0);
                 $sisaSesudah = (int) $record['SisaPiutang'];
                 $selisih = $sisaSebelum - $sisaSesudah;
+
+                // abaikan jika sisa piutang sesudah LEBIH BESAR dari sebelumnya (selisih negatif)
+                // secara bisnis ini tidak wajar — piutang seharusnya hanya berkurang, bukan bertambah
+                // kemungkinan penyebab: human error di input BSI (misalnya: total bayar dikosongkan)
+                if ($selisih < 0) {
+                    $this->warn("Sisa piutang meningkat tidak wajar untuk SPK {$spk->nomor_tagihan}. Data dilewati.");
+
+                    Log::channel('receivable_anomaly')->warning('Sisa piutang meningkat tidak wajar — data dilewati', [
+                        'nomor_tagihan'       => $spk->nomor_tagihan,
+                        'tipe_tagihan'        => $spk->tipe_tagihan,
+                        'customer'            => $apiCustomer,
+                        'jumlah_piutang_api'  => (int) $record['JumlahPiutang'],
+                        'total_bayar_api'     => (int) $record['TotalBayar'],
+                        'sisa_sebelumnya'     => $sisaSebelum,
+                        'sisa_sesudah_api'    => $sisaSesudah,
+                        'selisih'             => $selisih,
+                        'kemungkinan_penyebab' => 'Human error di BSI (misalnya: total bayar dikosongkan atau salah input)',
+                        'detected_at'         => now()->toDateTimeString(),
+                    ]);
+
+                    continue;
+                }
 
                 // hanya simpan history jika ada perubahan sisa piutang dari data sebelumnya
                 if ($sisaSesudah !== $sisaSebelum) {
