@@ -6,8 +6,10 @@ use App\Livewire\Concerns\HandlesErrors;
 use App\Livewire\Forms\Spk\Attachment;
 use App\Livewire\Forms\Spk\PackingListItem;
 use App\Livewire\Forms\Spk\PackingListPart;
+use App\Models\Spk\PackingListKit;
 use App\Models\Spk\Production;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\On;
@@ -32,10 +34,10 @@ class PackingList extends Component
 
     public bool $accordionOpen = false;
 
-    public function mount($id)
+    public function mount($id): void
     {
         $this->id = $id;
-        $this->production = Production::findOrFail($this->id);
+        $this->production = Production::with('spk')->findOrFail($this->id);
     }
 
     public function addPart()
@@ -76,7 +78,7 @@ class PackingList extends Component
         $this->docForm->removeAttachment($index);
     }
 
-    public function store()
+    public function store(): void
     {
         // cek authorization
         $this->authorize('updatePackingList', Production::class);
@@ -116,6 +118,12 @@ class PackingList extends Component
                 $this->production->spk->update([
                     'status' => 3., // sedang diproses purchasing untuk pengiriman
                 ]);
+
+                $this->production->spk->addHistory(
+                    'Packing list ditambahkan.',
+                    Auth::user()->name.' telah menambahkan packing list ke SPK ini.',
+                    Auth::id()
+                );
             });
 
             // tampilkan pesan swal
@@ -164,7 +172,7 @@ class PackingList extends Component
         $data['jumlah_barang'] = $jumlah_barang.' ['.ucfirst($satuan_barang).']';
         $data['note'] = $note;
         $data['daftar_part'] = \App\Models\Spk\PackingList::where('id_barang', $id)->get()->toArray();
-        $data['daftar_box'] = \App\Models\Spk\PackingListKit::where('id_barang_produksi', $id)->get()->toArray();
+        $data['daftar_box'] = PackingListKit::where('id_barang_produksi', $id)->get()->toArray();
         $data['created_at'] = Carbon::parse($item['created_at'])->locale('id')->isoFormat('D MMMM Y');
 
         session(['packing_list_data' => $data]);
@@ -177,7 +185,7 @@ class PackingList extends Component
     }
 
     #[On('deletePackingList')]
-    public function deletePackingList($id)
+    public function deletePackingList($id): void
     {
         // ambil data terlebih dahulu
         $data = collect($this->production->packing_list)->firstWhere('id_barang', $id);

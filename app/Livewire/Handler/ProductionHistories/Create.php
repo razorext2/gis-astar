@@ -3,6 +3,7 @@
 namespace App\Livewire\Handler\ProductionHistories;
 
 use App\Livewire\Concerns\HandlesErrors;
+use App\Models\Spk\Production;
 use App\Models\Spk\ProductionHistory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -75,7 +76,7 @@ class Create extends Component
         'keterangan.min' => 'Keterangan minimal 10 karakter.',
     ];
 
-    public function mount($id_produksi, $status_produksi)
+    public function mount($id_produksi, $status_produksi): void
     {
         $this->id_produksi = $id_produksi;
         $this->status_produksi = (int) $status_produksi;
@@ -92,7 +93,7 @@ class Create extends Component
         }
     }
 
-    public function store()
+    public function store(): void
     {
         $isEdit = (bool) $this->history_id;
 
@@ -142,6 +143,21 @@ class Create extends Component
                             'documentations' => $paths,
                         ]);
                     }
+
+                    // jika status selesai, catat di SPK history
+                    $finalStatus = $this->status_baru ?? $this->status_produksi;
+
+                    if ($finalStatus === 10) {
+                        $production = Production::with('spk')->find($this->id_produksi);
+
+                        if ($production?->spk) {
+                            $production->spk->addHistory(
+                                'Produksi selesai.',
+                                Auth::user()->name.' telah menandai laporan produksi sebagai selesai.',
+                                Auth::id()
+                            );
+                        }
+                    }
                 }
             });
 
@@ -170,7 +186,7 @@ class Create extends Component
         ]);
     }
 
-    public function removeDocumentation($index)
+    public function removeDocumentation($index): void
     {
         // jika dokumentasi ada
         if (isset($this->documentations[$index])) {
@@ -221,7 +237,7 @@ class Create extends Component
         }
     }
 
-    public function updatedNewDocumentations()
+    public function updatedNewDocumentations(): void
     {
         // validasi gambar baru
         $this->validateOnly('newDocumentations.*');
