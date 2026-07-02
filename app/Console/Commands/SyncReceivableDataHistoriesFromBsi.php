@@ -100,7 +100,7 @@ class SyncReceivableDataHistoriesFromBsi extends Command
                         'sisa_piutang_sebelum' => $sisaSebelum,
                         'sisa_piutang_sesudah' => $sisaSesudah,
                         'selisih' => $selisih,
-                        'source' => 'API',
+                        'source' => 'BSI',
                         'checked_at' => now(),
                     ]);
 
