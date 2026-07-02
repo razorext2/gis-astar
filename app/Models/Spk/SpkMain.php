@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Represents SPK main data and handles SPK relationships and behaviors, Caller: App/Livewire/Handler/Spk/*.php, Deps: SpkHistory, User, Production */
+
 namespace App\Models\Spk;
 
 use App\Models\User;
@@ -247,5 +249,17 @@ class SpkMain extends Model
             4 => 'Dibatalkan',
             default => 'Status Approval tidak diketahui',
         };
+    }
+
+    /**
+     * Record a history entry for this SPK.
+     */
+    public function addHistory(string $title, string $desc, int $userId): SpkHistory
+    {
+        return $this->spkHistories()->create([
+            'title' => $title,
+            'keterangan' => $desc,
+            'added_by' => $userId,
+        ]);
     }
 }

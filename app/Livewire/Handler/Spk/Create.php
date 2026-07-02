@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Handles SPK creation flow, Caller: routes/web.php, Deps: SpkCreate, Barang, Attachment, SpkMain, Production */
+
 namespace App\Livewire\Handler\Spk;
 
 use App\Livewire\Concerns\HandlesErrors;
@@ -175,8 +177,7 @@ class Create extends Component
                 ]);
 
                 // tambah data history SPK
-                $this->createForm->generateHistory(
-                    $spk->id,
+                $spk->addHistory(
                     'SPK Dibuat.',
                     Auth::user()->name.' telah membuat SPK baru. Sedang menunggu approval dari tim Management.',
                     Auth::id()

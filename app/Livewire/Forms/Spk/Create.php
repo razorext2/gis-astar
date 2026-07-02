@@ -1,7 +1,10 @@
 <?php
 
+/** Goal: Holds form state and validation logic for creating SPKs, Caller: App/Livewire/Handler/Spk/Create.php, Deps: SpkHistory, SpkMain, User */
+
 namespace App\Livewire\Forms\Spk;
 
+use App\Models\Spk\SpkHistory;
 use App\Models\Spk\SpkMain;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -354,16 +357,6 @@ class Create extends Form
             'contact_person' => $this->contact_person ?? '',
             'no_hp' => $this->no_telp ?? '',
         ];
-    }
-
-    public function generateHistory(string $id, string $title, string $desc, int $userId)
-    {
-        \App\Models\Spk\SpkHistory::create([
-            'spk_id' => $id,
-            'title' => $title,
-            'keterangan' => $desc,
-            'added_by' => $userId,
-        ]);
     }
 
     public function moveItem(int $from, int $to)

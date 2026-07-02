@@ -60,7 +60,7 @@ class FetchPurchasingRequest extends Component
                 ? $nomorPrCollection->first()
                 : $nomorPrCollection->values()->toArray();
 
-            DB::transaction(function () use ($spk, $field, $nomor_pr) {
+            DB::transaction(function () use ($spk, $field, $nomor_pr, $data) {
                 $spk->update([
                     $field => $nomor_pr,
                     'status' => max($spk->status, 2),
@@ -91,6 +91,14 @@ class FetchPurchasingRequest extends Component
                     'status_produksi' => 1,
                     'status_validasi' => 1,
                 ]);
+
+                $nomorPrList = $data->pluck('nomor_pr')->implode(', ');
+
+                $spk->addHistory(
+                    'Purchasing Request di-assign.',
+                    Auth::user()->name." telah meng-assign Purchasing Request ({$nomorPrList}) ke SPK ini.",
+                    Auth::id()
+                );
             });
 
             $this->dispatch(

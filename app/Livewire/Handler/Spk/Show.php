@@ -183,11 +183,17 @@ class Show extends Component
                 ProductionHistory::create([
                     'id_produksi' => $this->data->production->id,
                     'judul' => 'SPK telah diset menggunakan stok lama.',
-                    'keterangan' => auth()->user()->name.' telah set SPK menggunakan stok lama.',
+                    'keterangan' => Auth::user()->name.' telah set SPK menggunakan stok lama.',
                     'documentations' => [],
                     'status_produksi' => 1,
                     'status_validasi' => 1,
                 ]);
+
+                $this->data->addHistory(
+                    'SPK menggunakan stok lama.',
+                    Auth::user()->name.' telah menandai SPK ini menggunakan stok lama. Purchasing Request tidak diperlukan.',
+                    Auth::id()
+                );
             });
 
             return $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'SPK telah diset untuk menggunakan stok lama!');

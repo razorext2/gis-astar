@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Handles SPK edit flow, Caller: routes/web.php, Deps: SpkCreate, Barang, Attachment, SpkMain */
+
 namespace App\Livewire\Handler\Spk;
 
 use App\Livewire\Concerns\HandlesErrors;
@@ -321,8 +323,7 @@ class Edit extends Component
                     ]);
 
                     // tambah history spk
-                    $this->createForm->generateHistory(
-                        $this->data->id,
+                    $this->data->addHistory(
                         'Staf Produksi telah diubah.',
                         'Staf yang mengerjakan Produksi telah diubah dari '.$this->data->assign_to.' menjadi '.$this->createForm->assign_to,
                         Auth::id(),
@@ -333,8 +334,7 @@ class Edit extends Component
                 $this->data->update($data);
 
                 // tambah history spk
-                $this->createForm->generateHistory(
-                    $this->data->id,
+                $this->data->addHistory(
                     $title,
                     $history_message,
                     Auth::id(),

@@ -62,10 +62,17 @@ class EditPurchasingRequest extends Component
         $this->authorize('update', PurchasingRequest::class);
 
         $item = PurchasingRequest::where('id_spk', $this->spk_id)->findOrFail($id);
+        $spk = SpkMain::findOrFail($this->spk_id);
 
-        $this->runSafely(function () use ($item) {
+        $this->runSafely(function () use ($item, $spk) {
             $item->delete();
             $this->loadExistingPr();
+
+            $spk->addHistory(
+                'Item PR dihapus.',
+                Auth::user()->name." telah menghapus item PR ({$item->kode_item} - {$item->nama_item}) dari SPK ini.",
+                Auth::id()
+            );
 
             $this->dispatch('swal', icon: 'success', text: "Item {$item->kode_item} berhasil dihapus.", title: 'Berhasil');
         }, 'Gagal menghapus item PR.');
@@ -152,11 +159,18 @@ class EditPurchasingRequest extends Component
                 ProductionHistory::create([
                     'id_produksi' => $spk->production->id,
                     'judul' => 'Data PR diperbarui.',
-                    'keterangan' => 'Data Purchasing Request diperbarui oleh ' . Auth::user()->name . '.',
+                    'keterangan' => 'Data Purchasing Request diperbarui oleh '.Auth::user()->name.'.',
                     'documentations' => [],
                     'status_produksi' => 1,
                     'status_validasi' => 1,
                 ]);
+
+                // 4. Log SPK history
+                $spk->addHistory(
+                    'Purchasing Request diperbarui.',
+                    Auth::user()->name.' telah memperbarui data Purchasing Request pada SPK ini.',
+                    Auth::id()
+                );
             });
 
             $this->dispatch(

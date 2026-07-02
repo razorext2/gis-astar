@@ -8,6 +8,7 @@ use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Spk\ProductionHistory;
 use App\Models\Spk\PurchasingRequest;
 use App\Models\Spk\SpkMain;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -48,14 +49,19 @@ class UnassignPurchasingRequest extends Component
                 ProductionHistory::create([
                     'id_produksi' => $spk->production->id,
                     'judul' => 'Nomor PR dibatalkan.',
-                    'keterangan' => 'Nomor PR dibatalkan oleh '.auth()->user()->name.'. Menunggu Purchasing assign PR Baru.',
+                    'keterangan' => 'Nomor PR dibatalkan oleh '.Auth::user()->name.'. Menunggu Purchasing assign PR Baru.',
                     'documentations' => [],
                     'status_produksi' => 1,
                     'status_validasi' => 1,
                 ]);
+
+                $spk->addHistory(
+                    'Purchasing Request di-unassign.',
+                    Auth::user()->name.' telah membatalkan (unassign) semua Purchasing Request dari SPK ini. Menunggu assign PR baru.',
+                    Auth::id()
+                );
             });
 
-            // return success
             $this->dispatch(
                 event: 'swal',
                 icon: 'success',
@@ -65,7 +71,7 @@ class UnassignPurchasingRequest extends Component
 
             $this->redirect(route('purchasing-request.edit', $this->id), navigate: true);
         }, 'Gagal Unassign Purchasing Request.', [
-            'user_id' => auth()->user()->id,
+            'user_id' => Auth::id(),
             'spk_id' => $this->id,
         ]);
     }
