@@ -108,6 +108,8 @@ class BillingUpdate extends Component
             if (empty($this->form->nama_customer)) {
                 $this->form->nama_customer = $sisaItems[0]['NamaCustomer'] ?? null;
             }
+
+            $this->dispatch('scroll-to-rekap');
         } catch (\Throwable) {
             $this->form->clearResults();
             $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Gagal mengambil data penagihan di laporan piutang BSI.');
@@ -127,10 +129,12 @@ class BillingUpdate extends Component
     }
 
     /** Dipanggil saat user mengubah pilihan radio SubTotal/Total untuk menggeser acuan piutang */
-    public function updatedFormJumlahPiutangField(): void
+    public function updated(string $property): void
     {
-        $this->recalculateJumlahPiutang();
-        $this->recalculateSisaTotals();
+        if ($property === 'form.jumlah_piutang_field') {
+            $this->recalculateJumlahPiutang();
+            $this->recalculateSisaTotals();
+        }
     }
 
     /** Reset hasil pencarian agar user bisa mencari ulang */
@@ -360,6 +364,9 @@ class BillingUpdate extends Component
         $this->totalSisaDihitung = $this->form->jumlah_piutang - $this->form->total_bayar;
 
         $this->form->sisa = $this->totalSisaDihitung;
-        $this->totalSelisih = $this->form->jumlah_piutang - $this->totalSisaDihitung;
+
+        // Selisih (Acuan vs Sisa BSI) = jumlah_piutang - (total_bayar + sisa_piutang_bsi)
+        $nonDpSisa = $nonDpItems->sum(fn (array $item) => (float) ($item['SisaPiutang'] ?? 0));
+        $this->totalSelisih = $this->form->jumlah_piutang - ($this->form->total_bayar + $nonDpSisa);
     }
 }

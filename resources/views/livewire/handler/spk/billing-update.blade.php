@@ -1,5 +1,10 @@
 {{-- Goal: UI assign/unassign nomor tagihan BSI ke SPK dan tampilkan riwayat piutang, Livewire: BillingUpdate, Alpine: minimal (wire:show, wire:transition) --}}
-<div class="flex flex-col gap-4 lg:gap-6">
+<div x-data="{}"
+    x-on:scroll-to-rekap.window="$nextTick(() => {
+        const el = document.getElementById('rekap-piutang-section');
+        if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    })"
+    class="flex flex-col gap-4 lg:gap-6">
     {{-- Info Cust SPK --}}
     <div
         class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
@@ -37,9 +42,29 @@
                 <x-icons.file-invoice class="h-5 w-5 text-blue-500" />
             </div>
             <div class="flex-1">
-                <p class="text-[10px] font-bold uppercase tracking-wider text-blue-500">Nomor Tagihan (SR/FP)</p>
-                <p class="font-bold text-blue-600 dark:text-blue-400">
-                    {{ $spk_data->nomor_tagihan ?? 'Belum ada sinkronisasi.' }}</p>
+                <p class="text-[10px] font-bold uppercase tracking-wider text-blue-500">Nomor Tagihan (SR)</p>
+                <div class="flex items-center gap-2">
+                    <p class="font-bold text-blue-600 dark:text-blue-400">
+                        {{ $spk_data->nomor_tagihan ?? 'Belum ada sinkronisasi.' }}
+                    </p>
+                    @if ($spk_data->tipe_tagihan)
+                        <span
+                            class="rounded bg-blue-100 px-1.5 py-0.5 text-[9px] font-bold text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                            {{ strtoupper($spk_data->tipe_tagihan) }}
+                        </span>
+                    @endif
+                </div>
+                @if ($form->status_nomor_tagihan)
+                    @php
+                        $latestSyncDetail = $this->histories->first()?->details->sortByDesc('id')->first();
+                    @endphp
+                    @if ($latestSyncDetail)
+                        <p class="mt-0.5 text-[10px] text-zinc-400 dark:text-zinc-500">
+                            Update terakhir:
+                            {{ \Carbon\Carbon::parse($latestSyncDetail->checked_at)->isoFormat('dddd, DD MMM YYYY • HH:mm') }}
+                        </p>
+                    @endif
+                @endif
             </div>
 
             @if ($form->status_nomor_tagihan && auth()->user()->can('spk-no-tagihan-unassign'))
@@ -122,12 +147,23 @@
                     <div>
                         <x-input.basic id="nomor_tagihan" name="nomor_tagihan" wire:model="form.nomor_tagihan"
                             type="text" placeholder="Masukkan nomor SR spk..." :labels="true">
-                            Nomor SR / FP
+                            Nomor SR
                         </x-input.basic>
 
                         @error('form.nomor_tagihan')
                             <span class="mt-2 text-xs font-bold text-red-600 dark:text-red-400">{{ $message }}</span>
                         @enderror
+
+                        <div
+                            class="mt-2.5 rounded-lg border border-zinc-200 bg-zinc-50 p-3 text-xs text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800/30">
+                            <span class="mb-1 block font-bold text-zinc-700 dark:text-zinc-300">Catatan:</span>
+                            <ul class="list-inside list-disc space-y-0.5">
+                                <li>Gunakan <span class="font-semibold text-zinc-700 dark:text-zinc-300">SR
+                                        Internal</span> untuk tagihan Non PPN</li>
+                                <li>Gunakan <span class="font-semibold text-zinc-700 dark:text-zinc-300">SR PPN</span>
+                                    untuk tagihan PPN</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
@@ -154,7 +190,7 @@
             </form>
         </div>
 
-        <div wire:show="form.nomor_tagihan_baru" wire:transition
+        <div id="rekap-piutang-section" wire:show="form.nomor_tagihan_baru" wire:transition
             class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-inner backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
             <div class="mb-4 flex flex-wrap items-center gap-3">
                 <span
@@ -167,7 +203,7 @@
             <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
                 <div class="flex flex-col gap-4">
                     <div class="space-y-1">
-                        <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">No. Tagihan (SR/FP)</p>
+                        <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">No. Tagihan (SR)</p>
                         <p class="font-bold text-zinc-900 dark:text-white">{{ $form->nomor_tagihan ?? '-' }}</p>
                     </div>
                     <div class="space-y-1">
@@ -184,7 +220,7 @@
                     {{-- Ringkasan nilai dari fetchSR* --}}
                     <div
                         class="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-700 dark:bg-zinc-800">
-                        <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Nilai dari SR/FP</p>
+                        <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Nilai dari SR</p>
 
                         <dl class="flex items-center justify-between gap-4">
                             <dt class="text-sm font-medium text-zinc-500 dark:text-zinc-400">SubTotal</dt>
@@ -444,35 +480,26 @@
                     <div
                         class="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-zinc-200 pb-3 dark:border-zinc-800">
                         <div class="flex flex-col gap-1">
-                            <div class="flex items-center gap-2">
-                                <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-500">
-                                    No. SR: <span
-                                        class="font-mono text-xs font-bold text-indigo-600 dark:text-indigo-400">{{ $history->nomor_sr }}</span>
-                                </h4>
-                                <span
-                                    class="rounded-full bg-blue-500 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
-                                    {{ ucfirst($history->source ?? '-') }}
-                                </span>
-                            </div>
-                            <p class="text-[10px] text-zinc-400">
-                                {{ \Carbon\Carbon::parse($history->created_at)->isoFormat('dddd, DD MMM YYYY • HH:mm') }}
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-500">
+                                No. SR: <span
+                                    class="font-mono text-xs font-bold text-indigo-600 dark:text-indigo-400">{{ $history->nomor_sr }}</span>
+                            </h4>
+
+                            <div>
+                                <p class="text-[10px] text-zinc-400">
+                                    Ditambahkan:
+                                    {{ \Carbon\Carbon::parse($history->created_at)->isoFormat('dddd, DD MMM YYYY • HH:mm') }}
+                                </p>
+
                                 @if ($history->updated_by)
-                                    • Oleh: {{ $history->updatedBy?->name ?? '-' }}
-                                @endif
-                            </p>
-                        </div>
-                        <div class="flex items-center gap-3 text-right">
-                            {{-- <div>
-                                    <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">SubTotal
+                                    <p class="text-[10px] text-zinc-400">
+                                        Oleh: {{ $history->updatedBy?->name ?? '-' }}
                                     </p>
-                                    <p class="text-sm font-bold text-zinc-700 dark:text-zinc-300">Rp
-                                        {{ number_format($history->subtotal, 2, '.', ',') }}</p>
-                                </div>
-                                <div>
-                                    <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Total</p>
-                                    <p class="text-sm font-bold text-zinc-700 dark:text-zinc-300">Rp
-                                        {{ number_format($history->total, 2, '.', ',') }}</p>
-                                </div> --}}
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 text-right">
                             <div
                                 class="rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 dark:border-blue-900/30 dark:bg-blue-900/10">
                                 <p class="text-[10px] font-bold uppercase tracking-wider text-blue-500">Acuan
@@ -496,10 +523,18 @@
                         @php
                             $groupedDetails = $history->details->groupBy('nomor_piutang');
                         @endphp
-                        <div class="space-y-6">
+                        <div class="space-y-4">
                             @foreach ($groupedDetails as $nomorPiutang => $group)
                                 @php
                                     $latestDetail = $group->sortByDesc('id')->first();
+                                    $totalInvoicePaid = 0;
+                                    foreach ($group as $d) {
+                                        if (!$d->is_dp) {
+                                            $totalInvoicePaid += is_null($d->sisa_sebelum)
+                                                ? $d->total_bayar
+                                                : $d->sisa_sebelum - $d->sisa_piutang;
+                                        }
+                                    }
                                 @endphp
 
                                 <div
@@ -510,12 +545,17 @@
                                         <div class="flex items-center gap-2">
                                             <span
                                                 class="font-mono text-sm font-bold text-indigo-600 dark:text-indigo-400">
-                                                {{ $nomorPiutang }}
+                                                Nomor Piutang: {{ $nomorPiutang }}
                                             </span>
 
                                             @if ($latestDetail->is_dp)
                                                 <span
                                                     class="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">DP</span>
+                                            @endif
+
+                                            @if ($latestDetail->sisa_piutang <= 0)
+                                                <span
+                                                    class="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">LUNAS</span>
                                             @endif
                                         </div>
                                         <div class="text-xs text-zinc-500 dark:text-zinc-400">
@@ -553,7 +593,7 @@
                                                     class="transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/30">
                                                     <td class="px-3 py-2.5">
                                                         <span class="font-medium text-zinc-700 dark:text-zinc-300">
-                                                            {{ \Carbon\Carbon::parse($firstData->checked_at)->isoFormat('DD MMM YYYY') }}
+                                                            {{ \Carbon\Carbon::parse($firstData->checked_at)->isoFormat(' HH:mm, DD MMM YYYY') }}
                                                         </span>
                                                         <span
                                                             class="ml-1.5 rounded bg-zinc-100 px-1 py-0.5 text-[9px] text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
@@ -577,7 +617,7 @@
                                                         class="{{ $detail->is_dp ? 'bg-amber-50/20 dark:bg-amber-900/5' : '' }} transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/30">
                                                         <td class="px-3 py-2.5">
                                                             <span class="font-medium text-zinc-700 dark:text-zinc-300">
-                                                                {{ \Carbon\Carbon::parse($detail->checked_at)->isoFormat('DD MMM YYYY') }}
+                                                                {{ \Carbon\Carbon::parse($detail->checked_at)->isoFormat('HH:mm, DD MMM YYYY') }}
                                                             </span>
                                                             <span
                                                                 class="ml-1.5 rounded bg-zinc-100 px-1 py-0.5 text-[9px] text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
@@ -600,6 +640,25 @@
                                                     </tr>
                                                 @endforeach
                                             </tbody>
+
+                                            <tfoot>
+                                                <tr
+                                                    class="bg-zinc-100 font-bold text-zinc-900 dark:bg-zinc-800 dark:text-white">
+                                                    <td
+                                                        class="px-3 py-2 text-left text-[10px] font-bold uppercase tracking-wider text-zinc-500">
+                                                        Total
+                                                    </td>
+                                                    <td
+                                                        class="px-3 py-2 text-right font-semibold text-green-600 dark:text-green-400">
+                                                        Rp {{ number_format($totalInvoicePaid, 2, '.', ',') }}
+                                                    </td>
+                                                    <td
+                                                        class="px-3 py-2 text-right font-bold text-red-600 dark:text-red-400">
+                                                        Rp
+                                                        {{ number_format($latestDetail->sisa_piutang, 2, '.', ',') }}
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
                                         </table>
                                     </div>
                                 </div>
@@ -613,20 +672,39 @@
                             @endphp
 
                             <div
-                                class="rounded-lg border border-zinc-200 bg-zinc-100 p-3 text-xs font-bold text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
-                                <div class="flex flex-wrap items-center justify-between gap-4">
-                                    <div>Total Tagihan</div>
-                                    <div class="flex items-center gap-6">
-                                        <div>Total Piutang: <span class="text-zinc-950 dark:text-white">Rp
-                                                {{ number_format($history->jumlah_piutang, 2, '.', ',') }}</span>
-                                        </div>
-                                        <div>Total Dibayar: <span class="text-green-600 dark:text-green-400">Rp
-                                                {{ number_format($activeLatestDetails->sum('total_bayar'), 2, '.', ',') }}</span>
-                                        </div>
-                                        <div>Sisa: <span class="text-red-600 dark:text-red-400">Rp
-                                                {{ number_format($history->jumlah_piutang - $activeLatestDetails->sum('total_bayar'), 2, '.', ',') }}</span>
-                                        </div>
-                                    </div>
+                                class="text-zinc-850 w-full gap-4 space-y-2 rounded-xl border border-zinc-200 bg-zinc-50 p-4 text-xs font-bold dark:border-zinc-700 dark:bg-zinc-800/40 dark:text-zinc-200 sm:flex-row sm:items-center sm:justify-between">
+                                <div class="flex items-center justify-between gap-4">
+                                    <span class="text-zinc-500 dark:text-zinc-400">Total Piutang</span>
+                                    <span class="text-zinc-900 dark:text-white">
+                                        Rp {{ number_format($history->jumlah_piutang, 2, '.', ',') }}
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-between gap-4">
+                                    <span class="text-zinc-500 dark:text-zinc-400">Pembayaran</span>
+                                    <span class="text-green-600 dark:text-green-400">
+                                        - Rp
+                                        {{ number_format($activeLatestDetails->sum('total_bayar'), 2, '.', ',') }}
+                                    </span>
+                                </div>
+                                <div
+                                    class="flex items-center justify-between gap-4 border-t border-zinc-200 pt-2 dark:border-zinc-700">
+                                    <span class="text-zinc-800 dark:text-zinc-200">Sisa</span>
+                                    @php
+                                        $sisaTagihan =
+                                            $history->jumlah_piutang - $activeLatestDetails->sum('total_bayar');
+                                    @endphp
+                                    <span class="flex items-center gap-1.5 text-sm font-extrabold">
+                                        <span
+                                            class="{{ $sisaTagihan <= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400' }}">
+                                            Rp {{ number_format($sisaTagihan, 2, '.', ',') }}
+                                        </span>
+                                        @if ($sisaTagihan <= 0)
+                                            <span
+                                                class="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                                LUNAS
+                                            </span>
+                                        @endif
+                                    </span>
                                 </div>
                             </div>
                         </div>
