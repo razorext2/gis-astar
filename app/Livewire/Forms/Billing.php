@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Form object untuk data billing SPK — validasi input dan fetch dari API eksternal, Caller: BillingUpdate Livewire component, Deps: Http */
+
 namespace App\Livewire\Forms;
 
 use Illuminate\Support\Facades\Http;
@@ -19,17 +21,28 @@ class Billing extends Form
 
     public ?string $nomor_tagihan_baru = null;
 
-    public ?float $jumlah_piutang = 0;
+    /** Nilai SubTotal dari API fetchSR* (sebelum DP/PPN) */
+    public ?float $subtotal = 0;
 
-    public ?float $total_tagihan = 0;
+    /** Nilai Total dari API fetchSR* (setelah DP dan/atau PPN) */
+    public ?float $total = 0;
+
+    /** Field yang dipilih user sebagai acuan jumlah piutang: 'subtotal' atau 'total' */
+    public string $jumlah_piutang_field = 'subtotal';
+
+    /** Jumlah piutang yang digunakan untuk perhitungan (subtotal atau total, tergantung pilihan) */
+    public ?float $jumlah_piutang = 0;
 
     public ?float $total_bayar = 0;
 
     public ?float $sisa = 0;
 
+    /** Detail baris piutang dari api_sisa (bisa lebih dari 1) */
+    public array $sisaItems = [];
+
     protected $rules = [
         'nomor_tagihan' => 'required|min:8|string',
-        'tipe_tagihan' => 'required:min:4|string',
+        'tipe_tagihan' => 'required|min:4|string',
     ];
 
     protected $messages = [
@@ -46,7 +59,71 @@ class Billing extends Form
         return strtoupper(preg_replace('/[^A-Za-z0-9]/', '', $text));
     }
 
+    /**
+     * Fetch satu baris pertama dari API (digunakan untuk fetchSR / fetchSR3 / fetchSR2).
+     *
+     * @return array<string, mixed>
+     */
     public function fetchApi(string $baseUrl, string $nomorTagihan): array
+    {
+        $data = $this->sendRequest($baseUrl, $nomorTagihan);
+
+        if (empty($data[0])) {
+            throw new \Exception('Data not found.');
+        }
+
+        return $data[0];
+    }
+
+    /**
+     * Fetch semua baris dari API fetchSisa* yang bisa mengembalikan lebih dari 1 record per NomorPiutang.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public function fetchSisa(string $baseUrl, string $nomorTagihan): array
+    {
+        $data = $this->sendRequest($baseUrl, $nomorTagihan);
+
+        if (empty($data)) {
+            throw new \Exception('Data not found.');
+        }
+
+        return $data;
+    }
+
+    /**
+     * Hitung jumlah_piutang berdasarkan pilihan field user.
+     * Default per tipe_tagihan: idcnon → subtotal, idcppn → subtotal, idyppn → total.
+     */
+    public function resolveDefaultJumlahPiutangField(): string
+    {
+        return match ($this->tipe_tagihan) {
+            'idyppn' => 'total',
+            default => 'subtotal',
+        };
+    }
+
+    public function clearResults(): void
+    {
+        $this->nama_customer = null;
+        $this->customer_contact = null;
+        $this->nomor_tagihan_baru = null;
+        $this->subtotal = 0.0;
+        $this->total = 0.0;
+        $this->jumlah_piutang = 0.0;
+        $this->jumlah_piutang_field = 'subtotal';
+        $this->total_bayar = 0.0;
+        $this->sisa = 0.0;
+        $this->sisaItems = [];
+    }
+
+    /**
+     * Kirim HTTP request ke API dan validasi response-nya.
+     * Throws exception jika request gagal atau status bukan 'success'.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function sendRequest(string $baseUrl, string $nomorTagihan): array
     {
         $response = Http::timeout(10)
             ->retry(2, 300)
@@ -62,21 +139,6 @@ class Billing extends Form
             throw new \Exception($result['message'] ?? 'Invalid API response.');
         }
 
-        if (empty($result['data'][0])) {
-            throw new \Exception('Data not found.');
-        }
-
-        return $result['data'][0];
-    }
-
-    public function clearResults(): void
-    {
-        $this->nama_customer = null;
-        $this->customer_contact = null;
-        $this->nomor_tagihan_baru = null;
-        $this->jumlah_piutang = 0.0;
-        $this->total_tagihan = 0.0;
-        $this->total_bayar = 0.0;
-        $this->sisa = 0.0;
+        return $result['data'] ?? [];
     }
 }

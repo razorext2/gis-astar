@@ -74,12 +74,12 @@ class SpkMainPolicy
         return $user->hasPermissionTo('spk-force-delete');
     }
 
-    public function billingIndex(User $user)
+    public function billingIndex(User $user): bool
     {
         return $user->hasPermissionTo('spk-billing-list');
     }
 
-    public function billingUpdate(User $user)
+    public function billingUpdate(User $user): bool
     {
         return $user->hasPermissionTo('spk-billing-edit');
     }
@@ -87,7 +87,7 @@ class SpkMainPolicy
     /**
      * Check if user has permission to update no tagihan IDC PPN
      */
-    public function updateNoTagihanIdcPpn(User $user)
+    public function updateNoTagihanIdcPpn(User $user): bool
     {
         return $user->hasPermissionTo('spk-no-tagihan-idcppn-edit');
     }
@@ -95,15 +95,23 @@ class SpkMainPolicy
     /**
      * Check if user has permission to update no tagihan IDC Non PPN
      */
-    public function updateNoTagihanIdcNonPpn(User $user)
+    public function updateNoTagihanIdcNonPpn(User $user): bool
     {
         return $user->hasPermissionTo('spk-no-tagihan-idcnonppn-edit');
     }
 
     /**
+     * Check if user has permission to unassign no tagihan from SPK
+     */
+    public function unassignNoTagihan(User $user): bool
+    {
+        return $user->hasPermissionTo('spk-no-tagihan-unassign');
+    }
+
+    /**
      * Check if user has permission to update information of pengiriman
      */
-    public function updateInformasiPengiriman(User $user)
+    public function updateInformasiPengiriman(User $user): bool
     {
         return $user->hasPermissionTo('spk-informasi-pengiriman-edit');
     }
@@ -111,7 +119,7 @@ class SpkMainPolicy
     /**
      * Check if user has permission to update information of pengiriman
      */
-    public function validatePengiriman(User $user)
+    public function validatePengiriman(User $user): bool
     {
         return $user->hasPermissionTo('spk-pengiriman-approve');
     }
@@ -119,7 +127,7 @@ class SpkMainPolicy
     /**
      * Check if user has permission to update kontrak pengiriman
      */
-    public function updateKontrakPengiriman(User $user)
+    public function updateKontrakPengiriman(User $user): bool
     {
         return $user->hasPermissionTo('spk-no-kontrak-pengiriman-edit');
     }
@@ -127,7 +135,7 @@ class SpkMainPolicy
     /**
      * Check if user has permission to validate SPK
      */
-    public function validate(User $user)
+    public function validate(User $user): bool
     {
         return $user->hasPermissionTo('spk-approve');
     }

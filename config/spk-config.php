@@ -14,6 +14,12 @@ return [
             'api' => 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSR3',
             'api_sisa' => 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSisa1',
         ],
+        'idyppn' => [
+            'label' => 'IDY PPN',
+            'value' => 'idyppn',
+            'api' => 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSR2',
+            'api_sisa' => 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSisa2',
+        ],
     ],
     'satuan' => [
         'blok' => 'Blok',
