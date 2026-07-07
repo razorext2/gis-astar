@@ -7,7 +7,7 @@
         })
     ">
     @if ($nomor_tagihan_baru)
-        <div id="rekap-piutang-section" wire:transition
+        <div id="rekap-piutang-section"
             class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-inner backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
             <div class="mb-4 flex flex-wrap items-center gap-3">
                 <span
