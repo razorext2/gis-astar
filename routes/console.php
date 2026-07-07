@@ -6,6 +6,7 @@ use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schedule;
+use Illuminate\Support\Facades\Storage;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
@@ -51,8 +52,11 @@ Schedule::command('up')
     ->evenInMaintenanceMode();
 
 Schedule::command('sync:receivable-data')
+    ->timezone('Asia/Jakarta')
+    ->name('Sinkronisasi data penagihan BSI')
+    ->everyTwoHours()
     ->onOneServer()
-    ->everyMinute();
+    ->withoutOverlapping();
 
 Schedule::command('app:auto-submit-daily-report')
     ->timezone('Asia/Jakarta')
@@ -79,11 +83,11 @@ Schedule::command('app:auto-reject-expired-leave-requests')
 
 // Hapus berkas ekspor chatbot yang lebih lama dari 24 jam, dijalankan setiap hari pukul 01:30 WIB
 Schedule::call(function () {
-    $files = \Illuminate\Support\Facades\Storage::disk('public')->files('exports');
+    $files = Storage::disk('public')->files('exports');
     foreach ($files as $file) {
-        $lastModified = \Illuminate\Support\Facades\Storage::disk('public')->lastModified($file);
+        $lastModified = Storage::disk('public')->lastModified($file);
         if (time() - $lastModified > 86400) { // 24 jam
-            \Illuminate\Support\Facades\Storage::disk('public')->delete($file);
+            Storage::disk('public')->delete($file);
         }
     }
 })
