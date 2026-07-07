@@ -1,4 +1,6 @@
 {{-- Goal: Orchestrate report approval popups berdasarkan permission user, Livewire: N/A, Alpine: N/A --}}
+{{-- $autoPop: true = auto-open on dashboard, false = FAB only (user must click) --}}
+@php $autoPop ??= false; @endphp
 
 @php
     $user = auth()->user();
@@ -19,7 +21,7 @@
     ];
 
     foreach ($reportTypes as $type => $permission) {
-        if ($user && $user->can($permission)) {
+        if ($user && $user->can($permission) && \App\Livewire\Dashboard\ReportApprovalPopup::hasPendingForUser($user, $type)) {
             $popups[] = [
                 'type' => $type,
                 'stack' => $stackIndex++,
@@ -60,10 +62,7 @@
     // Attendance Inquiry Pending (placement-based HRD check)
     if ($user && $user->hasPermissionTo('attendance-inquiry-approve-hrd')) {
         $hasPendingInquiry = \App\Models\AttendanceInquiry\AttendanceInquiry::where('status', 'pending')
-            ->whereHas(
-                'user.pegawai.jabatanRelasi.placementRelasi.hrds',
-                fn ($q) => $q->where('users.id', $user->id)
-            )
+            ->whereHas('user.pegawai.jabatanRelasi.placementRelasi.hrds', fn($q) => $q->where('users.id', $user->id))
             ->exists();
 
         if ($hasPendingInquiry) {
@@ -86,7 +85,11 @@
         <div
             class="report-fab-group {{ $hasPendingLeave ? 'bottom-above-leave' : 'bottom-base' }} fixed right-4 z-50 h-11 w-11 md:right-8">
             @foreach ($popups as $popup)
-                <livewire:dashboard.report-approval-popup :type="$popup['type']" :stackIndex="$popup['stack']" :message="$popup['message'] ?? null"
+                <livewire:dashboard.report-approval-popup
+                    :type="$popup['type']"
+                    :stackIndex="$popup['stack']"
+                    :message="$popup['message'] ?? null"
+                    :autoPop="$autoPop"
                     :wire:key="'report-popup-' . $popup['type']" />
             @endforeach
         </div>
@@ -94,7 +97,7 @@
         {{-- Backdrop and Grid Overlay --}}
         <div x-show="activeCount > 0" x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-            x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
+            x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
             class="fixed inset-0 z-[100] flex flex-col items-center overflow-y-auto bg-zinc-900/60 p-4 backdrop-blur-md lg:p-6"
             x-cloak>

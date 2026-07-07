@@ -41,12 +41,16 @@ class ReportApprovalPopup extends Component
 
     public ?string $message = null;
 
-    public function mount(string $type, string $regionPermission = '', int $stackIndex = 0, ?string $message = null): void
+    /** Controls whether the popup auto-opens on mount. False on non-dashboard pages. */
+    public bool $autoPop = true;
+
+    public function mount(string $type, string $regionPermission = '', int $stackIndex = 0, ?string $message = null, bool $autoPop = true): void
     {
         $this->type = $type;
         $this->regionPermission = $regionPermission;
         $this->stackIndex = $stackIndex;
         $this->message = $message;
+        $this->autoPop = $autoPop;
         $this->regionLabel = $this->resolveRegionLabel();
 
         $this->pendingCount = $this->countPending();
@@ -154,14 +158,14 @@ class ReportApprovalPopup extends Component
         }
 
         return match ($this->type) {
-            'sales' => $this->countSalesPending($user),
-            'driver' => $this->countDriverPending($user),
-            'technician' => $this->countTechnicianPending(),
-            'collector' => $this->countCollectorPending(),
-            'spk' => $this->countSpkPending(),
-            'production' => $this->countProductionPending(),
-            'production-assigned' => $this->countProductionAssignedPending($user),
-            'attendance-inquiry' => $this->countAttendanceInquiryPending($user),
+            'sales' => self::countSalesPending($user),
+            'driver' => self::countDriverPending($user),
+            'technician' => self::countTechnicianPending(),
+            'collector' => self::countCollectorPending(),
+            'spk' => self::countSpkPending(),
+            'production' => self::countProductionPending(),
+            'production-assigned' => self::countProductionAssignedPending($user),
+            'attendance-inquiry' => self::countAttendanceInquiryPending($user),
             default => 0,
         };
     }
@@ -189,9 +193,27 @@ class ReportApprovalPopup extends Component
     }
 
     /**
+     * Check if a user has pending items for a given report type.
+     */
+    public static function hasPendingForUser(User $user, string $type): bool
+    {
+        return match ($type) {
+            'sales' => self::countSalesPending($user) > 0,
+            'driver' => self::countDriverPending($user) > 0,
+            'technician' => self::countTechnicianPending() > 0,
+            'collector' => self::countCollectorPending() > 0,
+            'spk' => self::countSpkPending() > 0,
+            'production' => self::countProductionPending() > 0,
+            'production-assigned' => self::countProductionAssignedPending($user) > 0,
+            'attendance-inquiry' => self::countAttendanceInquiryPending($user) > 0,
+            default => false,
+        };
+    }
+
+    /**
      * Count sales reports pending approval.
      */
-    private function countSalesPending(User $user): int
+    public static function countSalesPending(User $user): int
     {
         $allowedRoles = SalesRegionResolver::resolveForUser($user);
         if (empty($allowedRoles)) {
@@ -206,7 +228,7 @@ class ReportApprovalPopup extends Component
     /**
      * Count driver reports pending approval.
      */
-    private function countDriverPending(User $user): int
+    public static function countDriverPending(User $user): int
     {
         $allowedRoles = DriverRegionResolver::resolveForUser($user);
         if (empty($allowedRoles)) {
@@ -222,7 +244,7 @@ class ReportApprovalPopup extends Component
     /**
      * Count technician reports pending approval.
      */
-    private function countTechnicianPending(): int
+    public static function countTechnicianPending(): int
     {
         return Technician::needApprove()->count();
     }
@@ -230,7 +252,7 @@ class ReportApprovalPopup extends Component
     /**
      * Count collector reports pending approval.
      */
-    private function countCollectorPending(): int
+    public static function countCollectorPending(): int
     {
         return Collector::needApprove()->count();
     }
@@ -238,7 +260,7 @@ class ReportApprovalPopup extends Component
     /**
      * Count pending SPKs.
      */
-    private function countSpkPending(): int
+    public static function countSpkPending(): int
     {
         return SpkMain::query()
             ->where('status_approval', 0)
@@ -249,7 +271,7 @@ class ReportApprovalPopup extends Component
     /**
      * Count SPKs in production status.
      */
-    private function countProductionPending(): int
+    public static function countProductionPending(): int
     {
         return SpkMain::query()
             ->where('status_approval', 1)
@@ -261,7 +283,7 @@ class ReportApprovalPopup extends Component
     /**
      * Count active production jobs assigned to the given user.
      */
-    private function countProductionAssignedPending(User $user): int
+    public static function countProductionAssignedPending(User $user): int
     {
         return Production::where(function ($q) use ($user) {
             $q->where('assign_to', $user->id)
@@ -286,7 +308,7 @@ class ReportApprovalPopup extends Component
     /**
      * Count pending attendance inquiries where the user is HRD for the employee's placement.
      */
-    private function countAttendanceInquiryPending(User $user): int
+    public static function countAttendanceInquiryPending(User $user): int
     {
         return AttendanceInquiry::where('status', 'pending')
             ->whereHas(

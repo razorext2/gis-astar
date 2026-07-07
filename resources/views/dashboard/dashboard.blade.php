@@ -126,10 +126,6 @@
             </div>
         @endif
     </div>
-
-    {{-- Leave Approval Popup --}}
-    <livewire:dashboard.leave-approval-popup />
-
-    {{-- Report Approval Popups --}}
-    @include('dashboard.partials.report-approval-popups')
+    {{-- Signal popup FABs to auto-open on this page --}}
+    <script>window.addEventListener('load', () => window.dispatchEvent(new CustomEvent('enable-autopop')), { once: true });</script>
 @endsection

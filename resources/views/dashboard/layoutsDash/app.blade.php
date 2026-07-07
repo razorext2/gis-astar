@@ -66,6 +66,12 @@
         <x-utils.preloader x-show="dynamicBg" />
     @endpersist
 
+    {{-- Report Approval FABs (semua halaman, tanpa auto-open) --}}
+    @include('dashboard.partials.report-approval-popups')
+
+    {{-- Leave Approval Popup (semua halaman, tanpa auto-open) --}}
+    <livewire:dashboard.leave-approval-popup />
+
     <!-- js -->
     @include('dashboard.layoutsDash.js')
     @stack('modals')

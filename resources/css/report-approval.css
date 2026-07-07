@@ -42,11 +42,10 @@
 
 /* Collapsed state */
 .report-fab-group:not(:hover) .report-fab-item {
-    pointer-events: none;
+    pointer-events: auto;
 }
 
 .report-fab-group:not(:hover) .report-fab-item[data-index="0"] {
-    pointer-events: auto;
     opacity: 1;
     transform: translateY(0) scale(1);
 }

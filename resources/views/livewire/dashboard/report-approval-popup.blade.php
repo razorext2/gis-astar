@@ -81,21 +81,31 @@
 @endphp
 
 <div style="display: contents;" x-init="openPopups['{{ $type }}'] = { show: $wire.showPopup && $wire.hasPending };
-if ($wire.hasPending && !$wire.showPopup) {
-    const openThisPopup = () => setTimeout(() => $wire.set('showPopup', true), 400);
 
-    if (window.__leavePopupPending) {
-        if (window.__leavePopupState?.minimized) {
-            openThisPopup();
+const triggerAutoOpen = () => {
+    if ($wire.hasPending && !$wire.showPopup) {
+        const openThisPopup = () => setTimeout(() => $wire.set('showPopup', true), 400);
+        if (window.__leavePopupPending) {
+            if (window.__leavePopupState?.minimized) {
+                openThisPopup();
+            } else {
+                window.addEventListener('leave-popup-minimized', openThisPopup, { once: true });
+            }
         } else {
-            window.addEventListener('leave-popup-minimized', openThisPopup, { once: true });
+            setTimeout(() => $wire.set('showPopup', true), 800);
         }
-    } else {
-        setTimeout(() => {
-            $wire.set('showPopup', true);
-        }, 800);
     }
+};
+
+if ($wire.hasPending && !$wire.showPopup && $wire.autoPop) {
+    triggerAutoOpen();
 }
+
+window.addEventListener('enable-autopop', () => {
+    $wire.set('autoPop', true);
+    triggerAutoOpen();
+}, { once: true });
+
 $watch('$wire.showPopup', val => {
     if (openPopups['{{ $type }}']) {
         openPopups['{{ $type }}'].show = val;
@@ -104,13 +114,14 @@ $watch('$wire.showPopup', val => {
     @if ($hasPending)
         {{-- Teleport Card to the shared Grid Container --}}
         <template x-teleport="#report-popup-grid-container">
-            <div x-show="openPopups['{{ $type }}']?.show" @close-all-popups.window="$wire.set('showPopup', false)"
-                x-transition:enter="transition ease-out duration-300 transform"
-                x-transition:enter-start="opacity-0 scale-95 translate-y-4"
-                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                x-transition:leave="transition ease-in duration-200 transform"
-                x-transition:leave-start="opacity-100 scale-100 translate-y-0"
-                x-transition:leave-end="opacity-0 scale-95 translate-y-4"
+            <div x-show="openPopups['{{ $type }}']?.show" @close-all-popups.window="openPopups['{{ $type }}'].show = false; setTimeout(() => $wire.set('showPopup', false), 500)"
+                wire:key="popup-card-{{ $type }}"
+                x-transition:enter="transition cubic-bezier(0.34, 1.56, 0.64, 1) duration-500 transform origin-bottom-right"
+                x-transition:enter-start="opacity-0 scale-0 translate-y-20 translate-x-20"
+                x-transition:enter-end="opacity-100 scale-100 translate-y-0 translate-x-0"
+                x-transition:leave="transition ease-in duration-300 transform origin-bottom-right"
+                x-transition:leave-start="opacity-100 scale-100 translate-y-0 translate-x-0"
+                x-transition:leave-end="opacity-0 scale-0 translate-y-20 translate-x-20"
                 class="relative col-start-1 row-start-1 mx-auto flex w-full max-w-sm flex-col rounded-xl border border-zinc-200 bg-white shadow-xl dark:border-zinc-800 dark:bg-zinc-900 lg:col-auto lg:row-auto lg:w-[23rem]">
 
                 {{-- Header --}}
@@ -132,7 +143,7 @@ $watch('$wire.showPopup', val => {
                             @endif
                         </div>
                     </div>
-                    <x-button.secondary @click="$wire.set('showPopup', false)"
+                    <x-button.secondary @click="openPopups['{{ $type }}'].show = false; setTimeout(() => $wire.set('showPopup', false), 500)"
                         class="!rounded-full !border-none !bg-transparent !p-2 !shadow-none !ring-0">
                         <x-slot name="icon">
                             <x-icons.close class="h-5 w-5" />
@@ -182,12 +193,12 @@ $watch('$wire.showPopup', val => {
 
         {{-- Minimized FAB Button --}}
         <div x-show="!openPopups['{{ $type }}']?.show"
-            x-transition:enter="transition ease-out duration-300 transform"
-            x-transition:enter-start="translate-y-10 opacity-0 scale-95"
-            x-transition:enter-end="translate-y-0 opacity-100 scale-100"
-            x-transition:leave="transition ease-in duration-200 transform"
-            x-transition:leave-start="translate-y-0 opacity-100 scale-100"
-            x-transition:leave-end="translate-y-10 opacity-0 scale-95" data-index="{{ $stackIndex }}"
+            x-transition:enter="transition cubic-bezier(0.34, 1.56, 0.64, 1) duration-500 transform"
+            x-transition:enter-start="scale-0 opacity-0"
+            x-transition:enter-end="scale-100 opacity-100"
+            x-transition:leave="transition ease-in duration-300 transform"
+            x-transition:leave-start="scale-100 opacity-100"
+            x-transition:leave-end="scale-0 opacity-0" data-index="{{ $stackIndex }}"
             class="report-fab-item {{ $colorClasses['fab_bg'] }} flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl shadow-lg transition-all duration-200 hover:scale-105"
             @click="$wire.set('showPopup', true)" style="display: none;">
 

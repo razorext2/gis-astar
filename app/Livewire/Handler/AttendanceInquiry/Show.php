@@ -6,6 +6,7 @@ namespace App\Livewire\Handler\AttendanceInquiry;
 
 use App\Models\AttendanceInquiry\AttendanceInquiry;
 use Illuminate\Support\Collection;
+use Illuminate\View\View;
 use Livewire\Component;
 
 class Show extends Component
@@ -27,7 +28,7 @@ class Show extends Component
             ?? collect();
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.handler.attendance-inquiry.show', [
             'allowedHrds' => $this->allowedHrds,

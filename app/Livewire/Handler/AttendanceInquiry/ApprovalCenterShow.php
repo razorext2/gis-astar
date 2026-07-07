@@ -36,11 +36,11 @@ class ApprovalCenterShow extends Component
             ?? collect();
     }
 
-    public function approve()
+    public function approve(): ?\Illuminate\Http\RedirectResponse
     {
         $this->authorize('approve', $this->inquiry);
 
-        $this->runSafely(function () {
+        return $this->runSafely(function () {
             \Illuminate\Support\Facades\DB::transaction(function () {
                 $photo = !empty($this->inquiry->bukti) ? $this->inquiry->bukti[0] : null;
 
@@ -116,7 +116,7 @@ class ApprovalCenterShow extends Component
         }, 'Gagal menyetujui pengajuan laporan absensi.');
     }
 
-    public function reject()
+    public function reject(): ?\Illuminate\Http\RedirectResponse
     {
         $this->authorize('approve', $this->inquiry);
 
@@ -124,7 +124,7 @@ class ApprovalCenterShow extends Component
             'rejection_reason' => 'required|string|min:5',
         ]);
 
-        $this->runSafely(function () {
+        return $this->runSafely(function () {
             $this->inquiry->update([
                 'status' => 'rejected',
                 'rejection_reason' => $this->rejection_reason,
@@ -138,7 +138,7 @@ class ApprovalCenterShow extends Component
         }, 'Gagal menolak pengajuan laporan absensi.');
     }
 
-    public function render()
+    public function render(): \Illuminate\View\View
     {
         return view('livewire.handler.attendance-inquiry.approval-center.show', [
             'allowedHrds' => $this->allowedHrds,
