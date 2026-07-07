@@ -28,7 +28,12 @@ class Search extends Component
     {
         $this->form->validate();
 
-        $tipeTagihan = config('spk-config.spk_tipe_tagihan')[$this->form->tipe_tagihan];
+        $tipeTagihan = config('spk-config.spk_tipe_tagihan')[$this->form->tipe_tagihan] ?? null;
+
+        if (! $tipeTagihan) {
+            $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Tipe tagihan tidak valid.');
+            return;
+        }
 
         try {
             $mainData = $this->form->fetchApi($tipeTagihan['api'], $this->form->nomor_tagihan);

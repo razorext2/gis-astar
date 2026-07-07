@@ -37,9 +37,6 @@ class Billing extends Form
 
     public ?float $sisa = 0;
 
-    /** Detail baris piutang dari api_sisa (bisa lebih dari 1) */
-    public array $sisaItems = [];
-
     protected $rules = [
         'nomor_tagihan' => 'required|min:8|string',
         'tipe_tagihan' => 'required|min:4|string',
@@ -101,20 +98,6 @@ class Billing extends Form
             'idyppn' => 'total',
             default => 'subtotal',
         };
-    }
-
-    public function clearResults(): void
-    {
-        $this->nama_customer = null;
-        $this->customer_contact = null;
-        $this->nomor_tagihan_baru = null;
-        $this->subtotal = 0.0;
-        $this->total = 0.0;
-        $this->jumlah_piutang = 0.0;
-        $this->jumlah_piutang_field = 'subtotal';
-        $this->total_bayar = 0.0;
-        $this->sisa = 0.0;
-        $this->sisaItems = [];
     }
 
     /**

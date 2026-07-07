@@ -101,6 +101,14 @@ class SpkMainPolicy
     }
 
     /**
+     * Check if user has permission to update no tagihan IDY PPN
+     */
+    public function updateNoTagihanIdyPpn(User $user): bool
+    {
+        return $user->hasPermissionTo('spk-no-tagihan-idyppn-edit');
+    }
+
+    /**
      * Check if user has permission to unassign no tagihan from SPK
      */
     public function unassignNoTagihan(User $user): bool

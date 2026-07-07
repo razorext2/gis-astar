@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Header riwayat penagihan piutang per nomor SR (Service Request).
@@ -58,15 +60,19 @@ class ReceivableHistory extends Model
     protected static function booted(): void
     {
         static::deleting(function (ReceivableHistory $history) {
-            if ($history->isForceDeleting()) {
-                $history->details()->forceDelete();
-            } else {
-                $history->details()->delete();
-            }
+            DB::transaction(function () use ($history) {
+                if ($history->isForceDeleting()) {
+                    $history->details()->forceDelete();
+                } else {
+                    $history->details()->delete();
+                }
+            });
         });
 
         static::restoring(function (ReceivableHistory $history) {
-            $history->details()->restore();
+            DB::transaction(function () use ($history) {
+                $history->details()->restore();
+            });
         });
     }
 
@@ -92,6 +98,35 @@ class ReceivableHistory extends Model
     // -------------------------------------------------------------------------
     // Business Logic
     // -------------------------------------------------------------------------
+
+    /**
+     * Kembalikan detail di-grup per nomor_piutang beserta kalkulasi totalInvoicePaid per group.
+     * Dipakai di history.blade.php untuk menghindari @php di Blade.
+     *
+     * @return Collection<string, array{group: Collection, latestDetail: ReceivableHistoryDetail, totalInvoicePaid: int}>
+     */
+    public function groupedDetails(): Collection
+    {
+        return $this->details
+            ->groupBy('nomor_piutang')
+            ->map(function (Collection $group) {
+                $latestDetail = $group->sortByDesc('id')->first();
+
+                $totalInvoicePaid = $group
+                    ->where('is_dp', false)
+                    ->sum(function ($d) {
+                        return is_null($d->sisa_sebelum)
+                            ? $d->total_bayar
+                            : $d->sisa_sebelum - $d->sisa_piutang;
+                    });
+
+                return [
+                    'group'            => $group->sortBy('id'),
+                    'latestDetail'     => $latestDetail,
+                    'totalInvoicePaid' => $totalInvoicePaid,
+                ];
+            });
+    }
 
     /**
      * Hitung ulang dan simpan total sisa piutang ke kolom sisa_piutang_total.

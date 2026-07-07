@@ -1,15 +1,13 @@
 <?php
 
-/** Goal: Component for displaying fetched BSI tagihan under subfolder, Caller: update.blade.php, Deps: SpkMain, ReceivableHistory, DB, Auth */
+/** Goal: Component for displaying fetched BSI tagihan under subfolder, Caller: update.blade.php, Deps: SpkMain, AssignService, Auth */
 
 namespace App\Livewire\Handler\Spk\Billing;
 
 use App\Livewire\Concerns\HandlesErrors;
-use App\Models\Spk\ReceivableHistory;
 use App\Models\Spk\SpkMain;
+use App\Services\Spk\Billing\AssignService;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class Preview extends Component
@@ -105,7 +103,8 @@ class Preview extends Component
 
     public function toggleSisaItemDp(int $index): void
     {
-        if (! isset($this->sisaItems[$index])) {
+        // Guard: pastikan data sudah difetch dan index valid
+        if (is_null($this->nomor_tagihan_baru) || ! isset($this->sisaItems[$index])) {
             return;
         }
 
@@ -115,9 +114,7 @@ class Preview extends Component
 
     public function assign(): void
     {
-        $customerFromDb = $this->sanitizeAlphaNumeric($this->spk_data->customer['nama_perusahaan']);
-        $customerFromApi = $this->sanitizeAlphaNumeric($this->nama_customer ?? '');
-
+        // BP-04: authorize PERTAMA sebelum akses data apapun
         $policy = match ($this->form_tipe_tagihan) {
             'idcnon' => 'updateNoTagihanIdcNonPpn',
             'idcppn' => 'updateNoTagihanIdcPpn',
@@ -127,18 +124,29 @@ class Preview extends Component
 
         $this->authorize($policy, SpkMain::class);
 
+        $customerFromDb = $this->sanitizeAlphaNumeric($this->spk_data->customer['nama_perusahaan']);
+        $customerFromApi = $this->sanitizeAlphaNumeric($this->nama_customer ?? '');
+
         if ($customerFromDb !== $customerFromApi) {
             $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Data customer tidak sama.');
             return;
         }
 
         $this->runSafely(function () {
-            DB::transaction(function () {
-                $this->updateSpkForAssign();
-                $history = $this->createReceivableHistory();
-                $this->createReceivableDetails($history);
-                $this->logAssignAudit();
-            });
+            /** @var AssignService $service */
+            $service = app(AssignService::class);
+
+            $service->assign(
+                spk: $this->spk_data,
+                formTipeTagihan: $this->form_tipe_tagihan,
+                nomorTagihanBaru: $this->nomor_tagihan_baru,
+                subtotal: $this->subtotal,
+                total: $this->total,
+                jumlahPiutang: $this->jumlah_piutang,
+                jumlahPiutangField: $this->jumlah_piutang_field,
+                totalSisaDihitung: (int) $this->totalSisaDihitung,
+                sisaItems: $this->sisaItems,
+            );
 
             $this->dispatch(
                 event: 'swal',
@@ -152,75 +160,7 @@ class Preview extends Component
             );
         }, 'Gagal assign nomor tagihan', [
             'form' => ['id_spk' => $this->spk_data->id, 'nomor_tagihan' => $this->nomor_tagihan_baru],
-            'user_id' => Auth::id(),
         ]);
-    }
-
-    private function updateSpkForAssign(): void
-    {
-        $updated = $this->spk_data->update([
-            'tipe_tagihan' => $this->form_tipe_tagihan,
-            'nomor_tagihan' => $this->nomor_tagihan_baru,
-            'status_nomor_tagihan' => 1,
-            'status' => 4,
-            'updated_by' => Auth::id(),
-            'no_tagihan_updated_by' => Auth::id(),
-        ]);
-
-        if (! $updated) {
-            throw new \Exception('Gagal update nomor tagihan di SPK.');
-        }
-    }
-
-    private function createReceivableHistory(): ReceivableHistory
-    {
-        $history = ReceivableHistory::create([
-            'spk_id' => $this->spk_data->id,
-            'nomor_sr' => $this->nomor_tagihan_baru,
-            'tipe_tagihan' => $this->form_tipe_tagihan,
-            'subtotal' => (int) $this->subtotal,
-            'total' => (int) $this->total,
-            'jumlah_piutang' => (int) $this->jumlah_piutang,
-            'jumlah_piutang_field' => $this->jumlah_piutang_field,
-            'sisa_piutang_total' => (int) $this->totalSisaDihitung,
-            'source' => 'manual',
-            'updated_by' => Auth::id(),
-            'checked_at' => now(),
-        ]);
-
-        if (! $history) {
-            throw new \Exception('Gagal membuat header riwayat piutang.');
-        }
-
-        return $history;
-    }
-
-    private function createReceivableDetails(ReceivableHistory $history): void
-    {
-        foreach ($this->sisaItems as $item) {
-            $detail = $history->details()->create([
-                'nomor_piutang' => $item['NomorPiutang'] ?? null,
-                'jumlah_piutang' => (int) ($item['JumlahPiutang'] ?? 0),
-                'total_bayar' => (int) ($item['TotalBayar'] ?? 0),
-                'sisa_piutang' => (int) ($item['SisaPiutang'] ?? 0),
-                'is_dp' => (bool) ($item['is_dp'] ?? false),
-                'source' => 'manual',
-                'checked_at' => now(),
-            ]);
-
-            if (! $detail) {
-                throw new \Exception('Gagal membuat detail riwayat piutang.');
-            }
-        }
-    }
-
-    private function logAssignAudit(): void
-    {
-        $this->spk_data->addHistory(
-            'Nomor SR penagihan di-assign.',
-            Auth::user()->name.' telah meng-assign nomor SR penagihan ('.$this->nomor_tagihan_baru.').',
-            Auth::id()
-        );
     }
 
     private function sanitizeAlphaNumeric(string $text): string

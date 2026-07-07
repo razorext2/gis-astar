@@ -5,17 +5,16 @@
 namespace App\Livewire\Handler\Spk\Billing;
 
 use App\Livewire\Concerns\HandlesErrors;
+use App\Livewire\Concerns\HasReceivableHistories;
 use App\Models\Spk\SpkMain;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 class Update extends Component
 {
-    use HandlesErrors;
+    use HandlesErrors, HasReceivableHistories;
 
     public SpkMain $spk_data;
 
@@ -73,19 +72,6 @@ class Update extends Component
             'nomor_tagihan' => $nomorTagihanLama,
             'user_id' => Auth::id(),
         ]);
-    }
-
-    #[Computed]
-    public function histories(): Collection
-    {
-        if (is_null($this->spk_data->nomor_tagihan)) {
-            return collect();
-        }
-
-        return $this->spk_data->receivableHistories()
-            ->with(['details', 'updatedBy'])
-            ->orderBy('created_at', 'desc')
-            ->get();
     }
 
     public function render(): View

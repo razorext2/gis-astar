@@ -53,21 +53,12 @@
 
             {{-- Detail per NomorPiutang --}}
             @if ($history->details->isNotEmpty())
-                @php
-                    $groupedDetails = $history->details->groupBy('nomor_piutang');
-                @endphp
                 <div class="space-y-4">
-                    @foreach ($groupedDetails as $nomorPiutang => $group)
+                    @foreach ($history->groupedDetails() as $nomorPiutang => $item)
                         @php
-                            $latestDetail = $group->sortByDesc('id')->first();
-                            $totalInvoicePaid = 0;
-                            foreach ($group as $d) {
-                                if (!$d->is_dp) {
-                                    $totalInvoicePaid += is_null($d->sisa_sebelum)
-                                        ? $d->total_bayar
-                                        : $d->sisa_sebelum - $d->sisa_piutang;
-                                }
-                            }
+                            $group = $item['group'];
+                            $latestDetail = $item['latestDetail'];
+                            $totalInvoicePaid = $item['totalInvoicePaid'];
                         @endphp
 
                         <div
@@ -140,7 +131,7 @@
                                             </td>
                                         </tr>
 
-                                        @foreach ($group->sortBy('id') as $detail)
+                                        @foreach ($group as $detail)
                                             @php
                                                 $paymentAmount = is_null($detail->sisa_sebelum)
                                                     ? $detail->total_bayar
@@ -199,8 +190,8 @@
 
                     <!-- Summary footer overall (Aktif) -->
                     @php
-                        $activeLatestDetails = $groupedDetails
-                            ->map(fn($group) => $group->sortByDesc('id')->first())
+                        $activeLatestDetails = $history->groupedDetails()
+                            ->map(fn($item) => $item['latestDetail'])
                             ->where('is_dp', false);
                     @endphp
 

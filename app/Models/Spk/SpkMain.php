@@ -7,6 +7,9 @@ namespace App\Models\Spk;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SpkMain extends Model
@@ -71,28 +74,33 @@ class SpkMain extends Model
         'reassign_at',
     ];
 
-    protected $casts = [
-        'customer' => 'array',
-        'products' => 'array',
-        'nomor_purchasing_request_json' => 'array',
-        'informasi_pengiriman' => 'array',
-        'documentations' => 'array',
-        'on_delay' => 'boolean',
-        'production_has_download_spk_pdf' => 'boolean',
-        'is_picked_up_by_customer' => 'boolean',
-        'is_cancelled' => 'boolean',
-        'is_revision' => 'boolean',
-        'is_booked' => 'boolean',
-        'is_using_old_stock' => 'boolean',
-        'is_using_company_driver' => 'boolean',
-        'approved_at' => 'date',
-        'cancel_request_at' => 'date',
-        'cancel_request_validated_at' => 'date',
-        'reassign_at' => 'date',
-        'booked_at' => 'date',
-        'production_has_download_spk_pdf_at' => 'date',
-        'on_delay_at' => 'date',
-    ];
+    protected $casts = [];
+
+    protected function casts(): array
+    {
+        return [
+            'customer'                           => 'array',
+            'products'                           => 'array',
+            'nomor_purchasing_request_json'      => 'array',
+            'informasi_pengiriman'               => 'array',
+            'documentations'                     => 'array',
+            'on_delay'                           => 'boolean',
+            'production_has_download_spk_pdf'    => 'boolean',
+            'is_picked_up_by_customer'           => 'boolean',
+            'is_cancelled'                       => 'boolean',
+            'is_revision'                        => 'boolean',
+            'is_booked'                          => 'boolean',
+            'is_using_old_stock'                 => 'boolean',
+            'is_using_company_driver'            => 'boolean',
+            'approved_at'                        => 'date',
+            'cancel_request_at'                  => 'date',
+            'cancel_request_validated_at'        => 'date',
+            'reassign_at'                        => 'date',
+            'booked_at'                          => 'date',
+            'production_has_download_spk_pdf_at' => 'date',
+            'on_delay_at'                        => 'date',
+        ];
+    }
 
     protected $appends = [
         'status_description',
@@ -100,113 +108,113 @@ class SpkMain extends Model
         'status_approval_description',
     ];
 
-    public function addedBy()
+    public function addedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'added_by', 'id');
     }
 
-    public function updateBy()
+    public function updateBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'update_by', 'id');
     }
 
-    public function assignTo()
+    public function assignTo(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assign_to', 'id');
     }
 
-    public function reassignTo()
+    public function reassignTo(): BelongsTo
     {
         return $this->belongsTo(User::class, 'reassign_to', 'id');
     }
 
-    public function reassignBy()
+    public function reassignBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'reassign_by', 'id');
     }
 
-    public function approvedBy()
+    public function approvedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by', 'id');
     }
 
-    public function onDelayBy()
+    public function onDelayBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'on_delay_by', 'id');
     }
 
-    public function pengirimanUpdatedBy()
+    public function pengirimanUpdatedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'pengiriman_updated_by', 'id');
     }
 
-    public function noTagihanUpdatedBy()
+    public function noTagihanUpdatedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'no_tagihan_updated_by', 'id');
     }
 
-    public function bookedBy()
+    public function bookedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'booked_by', 'id');
     }
 
-    public function latesRevisionRequestBy()
+    public function latesRevisionRequestBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'latest_revision_request_by', 'id');
     }
 
-    public function cancelRequestBy()
+    public function cancelRequestBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'cancel_request_by', 'id');
     }
 
-    public function cancelRequestValidatedBy()
+    public function cancelRequestValidatedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'cancel_request_validated_by', 'id');
     }
 
-    public function invoice()
+    public function invoice(): BelongsTo
     {
         return $this->belongsTo(\App\Models\Invoice::class, 'nomor_tagihan', 'no_faktur_pajak');
     }
 
-    public function purchasingRequests()
+    public function purchasingRequests(): HasMany
     {
         return $this->hasMany(\App\Models\Spk\PurchasingRequest::class, 'id_spk', 'id');
     }
 
-    public function spkHistories()
+    public function spkHistories(): HasMany
     {
         return $this->hasMany(\App\Models\Spk\SpkHistory::class, 'spk_id', 'id');
     }
 
-    public function laporanFondasi()
+    public function laporanFondasi(): HasMany
     {
         return $this->hasMany(\App\Models\Spk\LaporanFondasi::class, 'id_spk', 'id');
     }
 
-    public function project()
+    public function project(): HasOne
     {
         return $this->hasOne(\App\Models\Spk\Project::class, 'spk_id', 'id');
     }
 
-    public function production()
+    public function production(): HasOne
     {
         return $this->hasOne(\App\Models\Spk\Production::class, 'id_spk', 'id');
     }
 
-    public function deliveries()
+    public function deliveries(): HasMany
     {
         return $this->hasMany(\App\Models\Spk\SpkDelivery::class, 'id_spk', 'id');
     }
 
-    public function latestDelivery()
+    public function latestDelivery(): HasOne
     {
         return $this->hasOne(SpkDelivery::class, 'id_spk')
-            ->latestOfMany(); // Laravel 9+
+            ->latestOfMany();
     }
 
-    public function receivableHistories()
+    public function receivableHistories(): HasMany
     {
         return $this->hasMany(ReceivableHistory::class, 'spk_id', 'id');
     }
