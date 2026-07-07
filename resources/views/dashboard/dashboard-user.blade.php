@@ -5,7 +5,8 @@
         {{-- Greetings --}}
         <livewire:utils.greetings />
 
-        <div x-data="{ offline: !navigator.onLine }" @offline.window="offline = true" @online.window="offline = false" x-show="offline" style="display: none;" x-transition>
+        <div x-data="{ offline: !navigator.onLine }" @offline.window="offline = true" @online.window="offline = false" x-show="offline"
+            style="display: none;" x-transition>
             <x-notification-alert :id="'offline-alert'" type="offline">
                 <x-slot name="title">
                     KONEKSI TERPUTUS

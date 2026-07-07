@@ -137,6 +137,10 @@
 
         {{-- Geolocation Card --}}
         <div class="space-y-6">
+
+            {{-- Allowed HRD Card --}}
+            <x-attendance-inquiry.allowed-hrds-card :hrds="$allowedHrds" :inquiry="$inquiry" />
+
             <div
                 class="rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
                 <h3 class="mb-4 text-base font-bold text-zinc-900 dark:text-white">Lokasi</h3>

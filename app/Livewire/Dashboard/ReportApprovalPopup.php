@@ -1,10 +1,11 @@
 <?php
 
-/** Goal: Popup notifikasi approval laporan di dashboard, Caller: dashboard.blade.php / dashboard-user.blade.php, Deps: Sales, Driver, Technician, Collector, SpkMain, Production */
+/** Goal: Popup notifikasi approval laporan di dashboard, Caller: dashboard.blade.php / dashboard-user.blade.php, Deps: Sales, Driver, Technician, Collector, SpkMain, Production, AttendanceInquiry */
 
 namespace App\Livewire\Dashboard;
 
 use App\Models\Announcement;
+use App\Models\AttendanceInquiry\AttendanceInquiry;
 use App\Models\Collector;
 use App\Models\Driver;
 use App\Models\Sales;
@@ -108,6 +109,12 @@ class ReportApprovalPopup extends Component
                 'color' => 'indigo',
                 'route' => route('production.index'),
             ],
+            'attendance-inquiry' => [
+                'title' => 'Inquiry Absensi',
+                'icon' => 'fingerprint',
+                'color' => 'teal',
+                'route' => route('attendance-inquiry.approval-center.index'),
+            ],
             default => [
                 'title' => 'Laporan',
                 'icon' => 'clipboard',
@@ -154,6 +161,7 @@ class ReportApprovalPopup extends Component
             'spk' => $this->countSpkPending(),
             'production' => $this->countProductionPending(),
             'production-assigned' => $this->countProductionAssignedPending($user),
+            'attendance-inquiry' => $this->countAttendanceInquiryPending($user),
             default => 0,
         };
     }
@@ -272,6 +280,19 @@ class ReportApprovalPopup extends Component
             ->whereDoesntHave('productionHistories', function ($q) use ($user) {
                 $q->where('added_by', $user->id);
             })
+            ->count();
+    }
+
+    /**
+     * Count pending attendance inquiries where the user is HRD for the employee's placement.
+     */
+    private function countAttendanceInquiryPending(User $user): int
+    {
+        return AttendanceInquiry::where('status', 'pending')
+            ->whereHas(
+                'user.pegawai.jabatanRelasi.placementRelasi.hrds',
+                fn ($q) => $q->where('users.id', $user->id)
+            )
             ->count();
     }
 

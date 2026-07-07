@@ -61,6 +61,14 @@
             'counter' => 'text-indigo-600 dark:text-indigo-400',
             'pulse' => 'bg-indigo-500',
         ],
+        'teal' => [
+            'icon_bg' => 'bg-teal-600 shadow-teal-500/20',
+            'badge_bg' => 'bg-teal-100 text-teal-700 dark:bg-teal-500/20 dark:text-teal-400',
+            'fab_bg' => 'bg-teal-600 shadow-teal-500/20',
+            'fab_badge' => 'bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-400',
+            'counter' => 'text-teal-600 dark:text-teal-400',
+            'pulse' => 'bg-teal-500',
+        ],
         default => [
             'icon_bg' => 'bg-zinc-600 shadow-zinc-500/20',
             'badge_bg' => 'bg-zinc-100 text-zinc-700 dark:bg-zinc-500/20 dark:text-zinc-400',

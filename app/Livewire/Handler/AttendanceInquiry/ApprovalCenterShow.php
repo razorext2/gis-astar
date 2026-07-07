@@ -10,6 +10,7 @@ use App\Models\AttendanceOut;
 use App\Models\AttendanceInquiry\AttendanceInquiry;
 use App\Services\Attendance\AttendanceService;
 use App\Jobs\SyncAttendanceToExternalServerJob;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class ApprovalCenterShow extends Component
@@ -20,9 +21,19 @@ class ApprovalCenterShow extends Component
 
     public $rejection_reason;
 
+    public Collection $allowedHrds;
+
     public function mount(AttendanceInquiry $inquiry): void
     {
+        $inquiry->load(['user.pegawai.jabatanRelasi.placementRelasi.hrds']);
+
         $this->inquiry = $inquiry;
+        $this->allowedHrds = $inquiry->user
+            ?->pegawai
+            ?->jabatanRelasi
+            ?->placementRelasi
+            ?->hrds
+            ?? collect();
     }
 
     public function approve()
@@ -129,6 +140,8 @@ class ApprovalCenterShow extends Component
 
     public function render()
     {
-        return view('livewire.handler.attendance-inquiry.approval-center.show');
+        return view('livewire.handler.attendance-inquiry.approval-center.show', [
+            'allowedHrds' => $this->allowedHrds,
+        ]);
     }
 }
