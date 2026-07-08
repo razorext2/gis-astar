@@ -18,6 +18,9 @@ class LeaveApprovalPopup extends Component
 
     public bool $hasPending = false;
 
+    /** Apakah popup boleh auto-open saat mount? Hanya true di halaman dashboard. */
+    public bool $autoPop = false;
+
     public int $currentIndex = 0;
 
     /**

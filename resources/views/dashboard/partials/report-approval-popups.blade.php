@@ -75,23 +75,63 @@
 @endphp
 
 @if (count($popups) > 0)
+    {{-- Pembungkus relative agar FAB group absolute tidak memengaruhi flex layout --}}
+    <div class="relative h-11 w-11" style="overflow: visible;">
     <div x-data="{
+        isOpen: false,
+        radius: 92, // 5.75rem (92px) radius - sweet spot
+        totalPopups: {{ count($popups) }},
         openPopups: {},
         get activeCount() {
             return Object.values(this.openPopups).filter(v => v && v.show).length;
+        },
+        getTransform(index) {
+            if (!this.isOpen) {
+                return 'translate(0px, 0px) scale(0.9)';
+            }
+            let i = index - 1;
+            // Spacing: 22 degrees per item starts from 90 (up) to left/down-left
+            let angle = 90 + (i * 22);
+            let rad = angle * Math.PI / 180;
+            let x = Math.round(this.radius * Math.cos(rad));
+            let y = Math.round(this.radius * Math.sin(rad));
+            return 'translate(' + x + 'px, -' + y + 'px) scale(1)';
         }
     }">
-        {{-- FAB Group --}}
+        {{-- FAB Group: absolute bottom-0 right-0 agar keluar dari h-11 w-11 wrapper tanpa memengaruhi flex flow --}}
         <div
-            class="report-fab-group {{ $hasPendingLeave ? 'bottom-above-leave' : 'bottom-base' }} fixed right-4 z-50 h-11 w-11 md:right-8">
+            @mouseenter="isOpen = true"
+            @mouseleave="isOpen = false"
+            @click.away="isOpen = false"
+            class="report-fab-group absolute bottom-0 right-0"
+            :class="isOpen ? 'w-36 h-36' : 'w-11 h-11'"
+            :style="{
+                pointerEvents: isOpen ? 'auto' : 'none',
+                transition: 'width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), height 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+            }"
+            style="overflow: visible;">
+            
             @foreach ($popups as $popup)
                 <livewire:dashboard.report-approval-popup
                     :type="$popup['type']"
-                    :stackIndex="$popup['stack']"
+                    :stackIndex="$popup['stack'] + 1"
                     :message="$popup['message'] ?? null"
                     :autoPop="$autoPop"
                     :wire:key="'report-popup-' . $popup['type']" />
             @endforeach
+
+            {{-- Trigger Button (Base) --}}
+            <button
+                @click="isOpen = !isOpen"
+                class="absolute bottom-0 right-0 z-50 bg-gradient-to-b from-white/20 to-white/5 dark:from-white/5 dark:to-transparent border border-zinc-400/60 dark:border-zinc-600/40 backdrop-blur-md flex h-11 w-11 cursor-pointer items-center justify-center rounded-full transition-transform duration-300 hover:scale-105"
+                style="pointer-events: auto;">
+                <span x-show="!isOpen" x-transition:enter="transition duration-200" x-transition:enter-start="opacity-0 scale-75" x-transition:enter-end="opacity-100 scale-100" class="flex items-center justify-center">
+                    <x-icons.grid-plus class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
+                </span>
+                <span x-show="isOpen" x-transition:enter="transition duration-200" x-transition:enter-start="opacity-0 scale-75" x-transition:enter-end="opacity-100 scale-100" class="flex items-center justify-center" style="display: none;">
+                    <x-icons.close class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
+                </span>
+            </button>
         </div>
 
         {{-- Backdrop and Grid Overlay --}}
@@ -119,5 +159,6 @@
                 {{-- Teleport target area --}}
             </div>
         </div>
+    </div>
     </div>
 @endif

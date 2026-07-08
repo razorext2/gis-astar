@@ -53,24 +53,19 @@
         <x-drawer.mobile-menu />
     @endpersist
 
-    {{-- scroll to top --}}
-    <div x-data="scrollToggle()" x-init="init()">
-        <a href="javascript:void(0)" @click="handleScroll" :class="atTop ? 'rotate-0' : 'rotate-180'"
-            class="fixed bottom-24 right-4 z-50 h-fit w-fit rounded-full bg-red-600 p-2.5 transition-all duration-300 ease-in-out hover:bg-red-700 md:bottom-8 md:right-8 lg:block">
-            <x-icons.carred-down class="h-6 w-6 text-white" id="scroll-to-top-icon" />
-        </a>
-    </div>
-
     {{-- preload --}}
     @persist('preloader')
         <x-utils.preloader x-show="dynamicBg" />
     @endpersist
 
-    {{-- Report Approval FABs (semua halaman, tanpa auto-open) --}}
-    @include('dashboard.partials.report-approval-popups')
+    {{-- Floating Actions Stack (Scroll to Top, Report Approvals, Leave Approvals) --}}
+    <x-dashboard.floating-actions>
+        {{-- Report Approval FABs (semua halaman, tanpa auto-open) --}}
+        @include('dashboard.partials.report-approval-popups')
 
-    {{-- Leave Approval Popup (semua halaman, tanpa auto-open) --}}
-    <livewire:dashboard.leave-approval-popup />
+        {{-- Leave Approval Popup: auto-open hanya di halaman dashboard --}}
+        <livewire:dashboard.leave-approval-popup :autoPop="Route::is('dashboard')" />
+    </x-dashboard.floating-actions>
 
     <!-- js -->
     @include('dashboard.layoutsDash.js')

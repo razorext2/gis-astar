@@ -32,8 +32,15 @@
             if (window.__leavePopupState) {
                 window.__leavePopupState.minimized = true;
             }
-        } else {
+        } else if ($wire.autoPop) {
+            // Hanya auto-open di halaman dashboard
             setTimeout(() => { $wire.set('showPopup', true); }, 800);
+        } else {
+            // Halaman lain: langsung minimized, user harus klik FAB untuk buka
+            this.minimized = true;
+            if (window.__leavePopupState) {
+                window.__leavePopupState.minimized = true;
+            }
         }
     },
     toggleDismissSession(checked) {
@@ -47,7 +54,7 @@
             this.dismissedForSession = false;
         }
     }
-}">
+}" @class(['contents' => !$hasPending])>
     @if ($currentRequest)
         <x-modal.base-modal :show="'showPopup'" title="Permintaan Persetujuan Cuti"
             subtitle="Pengajuan ini membutuhkan keputusan Anda" iconContainerClass="bg-amber-500 shadow-amber-500/20"
@@ -184,7 +191,7 @@
             x-transition:leave="transition ease-in duration-200 transform"
             x-transition:leave-start="translate-y-0 opacity-100 scale-100"
             x-transition:leave-end="translate-y-10 opacity-0 scale-95"
-            class="fixed bottom-[9.5rem] right-4 z-50 flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl bg-amber-500 shadow-lg shadow-amber-500/20 transition-all duration-200 hover:scale-105 md:bottom-24 md:right-8"
+            class="pointer-events-auto flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl bg-amber-500 shadow-lg shadow-amber-500/20 transition-all duration-200 hover:scale-105"
             @click="$wire.set('showPopup', true)" style="display: none;">
             <x-icons.clipboard-check class="h-5 w-5 text-white" />
             <span
