@@ -173,6 +173,47 @@ document.addEventListener("alpine:init", () => {
 
             const isDark = document.documentElement.classList.contains("dark");
 
+            // --- Topographic Contour Lines ---
+            const drawTopoLine = (startRatio, endRatio, control1Ratio, control2Ratio) => {
+                let pts = sampledBezier(
+                    [W * startRatio, 0],
+                    [W * control1Ratio, 0],
+                    [W, H * control2Ratio],
+                    [W, H * endRatio],
+                );
+                ox.beginPath();
+                pts.forEach(([x, y], i) => i === 0 ? ox.moveTo(x, y) : ox.lineTo(x, y));
+                ox.strokeStyle = isDark ? "rgba(255,255,255,0.02)" : "rgba(120,113,108,0.08)";
+                ox.lineWidth = 1;
+                ox.stroke();
+            };
+
+            const drawTopoLineBL = (startRatio, endRatio, control1Ratio, control2Ratio) => {
+                let pts = sampledBezier(
+                    [W * startRatio, H],
+                    [W * control1Ratio, H],
+                    [0, H * control2Ratio],
+                    [0, H * endRatio],
+                );
+                ox.beginPath();
+                pts.forEach(([x, y], i) => i === 0 ? ox.moveTo(x, y) : ox.lineTo(x, y));
+                ox.strokeStyle = isDark ? "rgba(255,255,255,0.015)" : "rgba(120,113,108,0.07)";
+                ox.lineWidth = 1;
+                ox.stroke();
+            };
+
+            // Draw 8 concentric topo lines at top-right
+            for (let i = 1; i <= 8; i++) {
+                let factor = 0.1 + i * 0.085;
+                drawTopoLine(1 - factor, factor, 1 - factor * 0.7, factor * 0.7);
+            }
+
+            // Draw 6 concentric topo lines at bottom-left
+            for (let i = 1; i <= 6; i++) {
+                let factor = 0.08 + i * 0.07;
+                drawTopoLineBL(factor, 1 - factor, factor * 0.7, 1 - factor * 0.7);
+            }
+
             // --- Accent 1: Large radial sweep from top-right corner ---
             let arc1pts = [[W, 0]];
             arc1pts = arc1pts.concat(
@@ -186,13 +227,13 @@ document.addEventListener("alpine:init", () => {
             let g1 = ox.createRadialGradient(W, 0, W * 0.05, W, 0, W * 0.75);
             g1.addColorStop(
                 0,
-                isDark ? "rgba(35,5,5,0.95)" : "rgba(255,242,242,0.95)",
+                isDark ? "rgba(35,5,5,1)" : "rgba(254,244,244,1)",
             );
             g1.addColorStop(
                 0.45,
-                isDark ? "rgba(120,20,20,0.6)" : "rgba(239,68,68,0.3)",
+                isDark ? "rgba(9,9,11,1)" : "rgba(250,248,245,1)",
             );
-            g1.addColorStop(1, "rgba(0,0,0,0)");
+            g1.addColorStop(1, isDark ? "rgba(9,9,11,1)" : "rgba(250,248,245,1)");
             fillShape(arc1pts, g1);
 
             // --- Accent 2: Sharper inner arc, top-right ---
@@ -208,13 +249,13 @@ document.addEventListener("alpine:init", () => {
             let g2 = ox.createRadialGradient(W, 0, 0, W, 0, W * 0.38);
             g2.addColorStop(
                 0,
-                isDark ? "rgba(60,8,8,0.98)" : "rgba(255,238,238,0.98)",
+                isDark ? "rgba(60,8,8,1)" : "rgba(254,220,220,1)",
             );
             g2.addColorStop(
                 0.55,
-                isDark ? "rgba(160,25,25,0.55)" : "rgba(239,68,68,0.35)",
+                isDark ? "rgba(9,9,11,1)" : "rgba(250,248,245,1)",
             );
-            g2.addColorStop(1, "rgba(0,0,0,0)");
+            g2.addColorStop(1, isDark ? "rgba(9,9,11,1)" : "rgba(250,248,245,1)");
             fillShape(arc2pts, g2);
 
             // --- Accent 3: Subtle counter-arc from bottom-left ---
@@ -230,14 +271,58 @@ document.addEventListener("alpine:init", () => {
             let g3 = ox.createRadialGradient(0, H, 0, 0, H, H * 0.48);
             g3.addColorStop(
                 0,
-                isDark ? "rgba(30,5,5,0.88)" : "rgba(255,240,240,0.88)",
+                isDark ? "rgba(30,5,5,1)" : "rgba(254,244,244,1)",
             );
             g3.addColorStop(
                 0.5,
-                isDark ? "rgba(110,18,18,0.4)" : "rgba(239,68,68,0.2)",
+                isDark ? "rgba(9,9,11,1)" : "rgba(250,248,245,1)",
             );
-            g3.addColorStop(1, "rgba(0,0,0,0)");
+            g3.addColorStop(1, isDark ? "rgba(9,9,11,1)" : "rgba(250,248,245,1)");
             fillShape(arc3pts, g3);
+
+            // --- Accent 4: New inner sharpest arc, top-right (on top of Accent 2) ---
+            let arc4pts = [[W, 0]];
+            arc4pts = arc4pts.concat(
+                sampledBezier(
+                    [W * 0.82, 0],
+                    [W * 0.91, 0],
+                    [W, H * 0.05],
+                    [W, H * 0.18],
+                ),
+            );
+            let g4 = ox.createRadialGradient(W, 0, 0, W, 0, W * 0.22);
+            g4.addColorStop(
+                0,
+                isDark ? "rgba(90,12,12,1)" : "rgba(254,191,191,1)",
+            );
+            g4.addColorStop(
+                0.6,
+                isDark ? "rgba(9,9,11,1)" : "rgba(250,248,245,1)",
+            );
+            g4.addColorStop(1, isDark ? "rgba(9,9,11,1)" : "rgba(250,248,245,1)");
+            fillShape(arc4pts, g4);
+
+            // --- Accent 5: New inner sharpest counter-arc, bottom-left (on top of Accent 3) ---
+            let arc5pts = [[0, H]];
+            arc5pts = arc5pts.concat(
+                sampledBezier(
+                    [W * 0.15, H],
+                    [W * 0.05, H],
+                    [0, H * 0.85],
+                    [0, H * 0.72],
+                ),
+            );
+            let g5 = ox.createRadialGradient(0, H, 0, 0, H, H * 0.28);
+            g5.addColorStop(
+                0,
+                isDark ? "rgba(70,10,10,1)" : "rgba(254,220,220,1)",
+            );
+            g5.addColorStop(
+                0.6,
+                isDark ? "rgba(9,9,11,1)" : "rgba(250,248,245,1)",
+            );
+            g5.addColorStop(1, isDark ? "rgba(9,9,11,1)" : "rgba(250,248,245,1)");
+            fillShape(arc5pts, g5);
 
             this._bgCache = offscreen;
         },
