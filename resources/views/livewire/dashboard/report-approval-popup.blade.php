@@ -206,7 +206,7 @@ $watch('$wire.showPopup', val => {
             opacity: (isOpen && !openPopups['{{ $type }}']?.show) ? 1 : 0,
             pointerEvents: (isOpen && !openPopups['{{ $type }}']?.show) ? 'auto' : 'none'
         }"
-        class="report-fab-item bg-gradient-to-b from-white/20 to-white/5 dark:from-white/5 dark:to-transparent border border-zinc-400/60 dark:border-zinc-600/40 backdrop-blur-md flex h-11 w-11 cursor-pointer items-center justify-center rounded-full transition-all duration-300 hover:scale-105"
+        class="report-fab-item bg-white/70 backdrop-blur-md border border-zinc-200/30 dark:border-zinc-800/50 dark:bg-zinc-900/60 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full transition-all duration-300 hover:scale-105"
         @click="openPopups['{{ $type }}'].show = true; setTimeout(() => $wire.set('showPopup', true), 500)" style="display: none;">
 
         <x-dynamic-component :component="'icons.' . $config['icon']" class="h-5 w-5 {{ $colorClasses['text_color'] }}" />

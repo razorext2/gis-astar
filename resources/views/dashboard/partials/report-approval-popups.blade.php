@@ -123,7 +123,7 @@
             {{-- Trigger Button (Base) --}}
             <button
                 @click="isOpen = !isOpen"
-                class="absolute bottom-0 right-0 z-50 bg-gradient-to-b from-white/20 to-white/5 dark:from-white/5 dark:to-transparent border border-zinc-400/60 dark:border-zinc-600/40 backdrop-blur-md flex h-11 w-11 cursor-pointer items-center justify-center rounded-full transition-transform duration-300 hover:scale-105"
+                class="absolute bottom-0 right-0 z-50 bg-white/70 backdrop-blur-md border border-zinc-200/30 dark:border-zinc-800/50 dark:bg-zinc-900/60 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full transition-transform duration-300 hover:scale-105"
                 style="pointer-events: auto;">
                 <span x-show="!isOpen" x-transition:enter="transition duration-200" x-transition:enter-start="opacity-0 scale-75" x-transition:enter-end="opacity-100 scale-100" class="flex items-center justify-center">
                     <x-icons.grid-plus class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />

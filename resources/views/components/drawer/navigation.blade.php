@@ -1,7 +1,8 @@
+{{-- Goal: Mobile navigation bottom bar, Livewire: none, Alpine: none --}}
 <div {{ $attributes }} class="fixed bottom-3 left-1/2 z-[160] w-[92vw] max-w-sm -translate-x-1/2 md:hidden">
     <!-- iOS Glass Navigation Container -->
     <div
-        class="border-zinc-8000 h-[70px] w-full rounded-full border bg-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.1)] backdrop-blur-2xl transition-colors dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-zinc-950/50">
+        class="border-zinc-200/30 h-[70px] w-full rounded-full border bg-white/70 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-md transition-colors dark:border-zinc-800/50 dark:bg-zinc-900/60 dark:shadow-zinc-950/50">
         <div class="mx-auto grid h-full max-w-sm grid-cols-5 px-3">
 
             <x-drawer.button href="{{ route('dashboard') }}" :label="'Home'" :active="Route::is('dashboard')">
