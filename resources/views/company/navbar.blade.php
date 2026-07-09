@@ -77,7 +77,7 @@
 </nav>
 
 {{-- Mobile Menu --}}
-<div class="cp-mobile-menu fixed inset-0 bg-[#faf8f5]/98 z-[150] flex flex-col items-center justify-center gap-8 translate-x-full transition-transform duration-500">
+<div class="cp-mobile-menu fixed inset-0 bg-[#faf8f5] z-[150] flex flex-col items-center justify-center gap-8 translate-x-full transition-transform duration-500">
     <button class="cp-mobile-close absolute top-8 right-8 text-4xl text-[#1f1818] bg-transparent border-none cursor-pointer" aria-label="Close menu">&times;</button>
     <a href="#about" class="text-2xl cp-display hover:text-[#ac3630] transition-colors">Tentang</a>
     <a href="#services" class="text-2xl cp-display hover:text-[#ac3630] transition-colors">Layanan</a>

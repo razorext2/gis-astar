@@ -1,4 +1,4 @@
-{{-- Goal: Orchestrate report approval popups berdasarkan permission user, Livewire: N/A, Alpine: N/A --}}
+{{-- Goal: Orchestrate report approval popups berdasarkan permission user, Livewire: N/A, Alpine: isOpen, activeCount --}}
 {{-- $autoPop: true = auto-open on dashboard, false = FAB only (user must click) --}}
 @php $autoPop ??= false; @endphp
 
@@ -75,63 +75,52 @@
 @endphp
 
 @if (count($popups) > 0)
-    {{-- Pembungkus relative agar FAB group absolute tidak memengaruhi flex layout --}}
-    <div class="relative h-11 w-11" style="overflow: visible;">
+    <style>
+        .report-fab-item {
+            transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease, background-color 0.3s, border-color 0.3s, box-shadow 0.3s !important;
+        }
+    </style>
     <div x-data="{
         isOpen: false,
-        radius: 92, // 5.75rem (92px) radius - sweet spot
         totalPopups: {{ count($popups) }},
         openPopups: {},
         get activeCount() {
             return Object.values(this.openPopups).filter(v => v && v.show).length;
-        },
-        getTransform(index) {
-            if (!this.isOpen) {
-                return 'translate(0px, 0px) scale(0.9)';
-            }
-            let i = index - 1;
-            // Spacing: 22 degrees per item starts from 90 (up) to left/down-left
-            let angle = 90 + (i * 22);
-            let rad = angle * Math.PI / 180;
-            let x = Math.round(this.radius * Math.cos(rad));
-            let y = Math.round(this.radius * Math.sin(rad));
-            return 'translate(' + x + 'px, -' + y + 'px) scale(1)';
         }
     }">
-        {{-- FAB Group: absolute bottom-0 right-0 agar keluar dari h-11 w-11 wrapper tanpa memengaruhi flex flow --}}
         <div
-            @mouseenter="isOpen = true"
-            @mouseleave="isOpen = false"
             @click.away="isOpen = false"
-            class="report-fab-group absolute bottom-0 right-0"
-            :class="isOpen ? 'w-36 h-36' : 'w-11 h-11'"
-            :style="{
-                pointerEvents: isOpen ? 'auto' : 'none',
-                transition: 'width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), height 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
-            }"
+            class="relative"
             style="overflow: visible;">
-            
-            @foreach ($popups as $popup)
-                <livewire:dashboard.report-approval-popup
-                    :type="$popup['type']"
-                    :stackIndex="$popup['stack'] + 1"
-                    :message="$popup['message'] ?? null"
-                    :autoPop="$autoPop"
-                    :wire:key="'report-popup-' . $popup['type']" />
-            @endforeach
 
             {{-- Trigger Button (Base) --}}
             <button
                 @click="isOpen = !isOpen"
-                class="absolute bottom-0 right-0 z-50 bg-white/70 backdrop-blur-md border border-zinc-200/30 dark:border-zinc-800/50 dark:bg-zinc-900/60 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full transition-transform duration-300 hover:scale-105"
+                :class="dynamicBg
+                    ? 'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-none'
+                    : 'bg-white border-zinc-200 shadow-sm hover:bg-zinc-50 dark:bg-dark-primary dark:border-zinc-800 dark:hover:bg-zinc-800/80'"
+                class="group flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border transition-[background-color,border-color,box-shadow] duration-300 ease-out"
                 style="pointer-events: auto;">
-                <span x-show="!isOpen" x-transition:enter="transition duration-200" x-transition:enter-start="opacity-0 scale-75" x-transition:enter-end="opacity-100 scale-100" class="flex items-center justify-center">
+                <span x-show="!isOpen" x-transition:enter="transition duration-200" x-transition:enter-start="opacity-0 scale-75" x-transition:enter-end="opacity-100 scale-100" class="flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
                     <x-icons.grid-plus class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
                 </span>
-                <span x-show="isOpen" x-transition:enter="transition duration-200" x-transition:enter-start="opacity-0 scale-75" x-transition:enter-end="opacity-100 scale-100" class="flex items-center justify-center" style="display: none;">
+                <span x-show="isOpen" x-transition:enter="transition duration-200" x-transition:enter-start="opacity-0 scale-75" x-transition:enter-end="opacity-100 scale-100" class="flex items-center justify-center transition-transform duration-300 group-hover:scale-110" style="display: none;">
                     <x-icons.close class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
                 </span>
             </button>
+
+            {{-- Expanded Items: absolute, vertikal ke atas, di sebelah kiri tombol trigger --}}
+            <div class="absolute bottom-0 right-[calc(100%+12px)] flex flex-col-reverse items-end gap-3 pointer-events-none"
+                style="overflow: visible;">
+                @foreach ($popups as $popup)
+                    <livewire:dashboard.report-approval-popup
+                        :type="$popup['type']"
+                        :stackIndex="$popup['stack'] + 1"
+                        :message="$popup['message'] ?? null"
+                        :autoPop="$autoPop"
+                        :wire:key="'report-popup-' . $popup['type']" />
+                @endforeach
+            </div>
         </div>
 
         {{-- Backdrop and Grid Overlay --}}
@@ -146,10 +135,7 @@
             <div class="flex w-full max-w-6xl justify-end pb-4 pt-2 lg:pt-4">
                 <button @click="$dispatch('close-all-popups')"
                     class="flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/20">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    <x-icons.close class="h-4 w-4" />
                     Tutup Semua
                 </button>
             </div>
@@ -159,6 +145,5 @@
                 {{-- Teleport target area --}}
             </div>
         </div>
-    </div>
     </div>
 @endif

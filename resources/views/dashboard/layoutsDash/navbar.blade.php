@@ -1,4 +1,4 @@
-{{-- Goal: Dashboard top navigation bar with hide-on-scroll UX (mobile only), Livewire: None, Alpine: Yes --}}
+{{-- Goal: Floating dashboard navbar layout with adjustable background, shadow, and mobile responsiveness, Livewire: Yes, Alpine: Yes --}}
 <nav x-data="{
     navVisible: true,
     lastScrollY: 0,
@@ -20,25 +20,38 @@
     }
 }" x-init="window.addEventListener('scroll', () => handleScroll(), { passive: true });
 window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; }, { passive: true });"
-    :class="{
-        '-translate-y-full': !navVisible,
-        'translate-y-0': navVisible,
-        'bg-white/40 backdrop-blur-lg dark:bg-dark-primary/40 border-b border-zinc-200/50 dark:border-zinc-800/50': dynamicBg,
-        'bg-white backdrop-blur-none dark:bg-dark-primary border-b border-zinc-200 dark:border-zinc-800': !dynamicBg
-    }"
-    class="fixed top-0 z-40 w-full px-4 py-2.5 shadow-sm transition-all duration-300 ease-in-out dark:shadow-none lg:px-6">
+    :class="[
+        !navVisible ? '-top-28' : 'top-4',
+        openSidebar ? 'left-4 md:left-[304px] w-[calc(100%-2rem)] md:w-[calc(100%-320px)]' : 'left-4 w-[calc(100%-2rem)]',
+        dynamicBg
+            ? 'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md shadow-zinc-200/40 dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-none'
+            : 'bg-white border-zinc-200 shadow-md shadow-zinc-200/40 dark:bg-dark-primary dark:border-zinc-800 dark:shadow-none'
+    ]"
+    class="fixed z-40 px-4 py-2.5 rounded-2xl border transition-all duration-300 ease-in-out lg:px-6">
     <div class="flex items-center justify-between gap-2">
 
 
-        {{-- Logo & Title --}}
-        <div :class="openSidebar ? 'translate-x-0 sm:-translate-x-40' : 'translate-x-20 sm:translate-x-20'"
-            class="flex shrink-0 items-center justify-start transition-all duration-500 ease-out">
-            <a class="flex items-center gap-1.5 sm:gap-2" href="{{ config('app.url') }}">
-                <img class="h-6 w-auto object-contain sm:h-8" src="{{ asset('assets/img/logo.png') }}" alt="Indodacin Logo"
-                    loading="lazy" />
-                <span
-                    class="hidden text-sm font-semibold italic text-zinc-600 dark:text-zinc-400 sm:block">attendance</span>
-            </a>
+        {{-- Logo & Toggle --}}
+        <div class="flex items-center gap-2">
+            {{-- Sidebar Toggle Button (Desktop Only) --}}
+            <button @click="openSidebar = !openSidebar" class="hidden md:flex rounded-xl p-2 text-zinc-500 hover:bg-zinc-100/50 dark:text-zinc-400 dark:hover:bg-zinc-800/50 transition-colors">
+                <span x-show="!openSidebar">
+                    <x-icons.open-sidebar-alt class="h-5 w-5" />
+                </span>
+                <span x-show="openSidebar">
+                    <x-icons.close-sidebar-alt class="h-5 w-5" />
+                </span>
+            </button>
+
+            <div :class="openSidebar ? 'md:opacity-0 md:pointer-events-none md:w-0' : 'opacity-100'"
+                class="flex shrink-0 items-center justify-start transition-all duration-300 ease-out overflow-hidden">
+                <a class="flex items-center gap-1.5 sm:gap-2" href="{{ config('app.url') }}">
+                    <img class="h-6 w-auto object-contain sm:h-8" src="{{ asset('assets/img/logo.png') }}" alt="Indodacin Logo"
+                        loading="lazy" />
+                    <span
+                        class="hidden text-sm font-semibold italic text-zinc-600 dark:text-zinc-400 sm:block">attendance</span>
+                </a>
+            </div>
         </div>
 
         {{-- Points (Teknisi) --}}
@@ -54,51 +67,90 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
             @livewire('utils.ping-checker')
 
             {{-- Notification --}}
-            <div id="notifications" class="relative" x-data="{ open: false }">
-                <button @click="open = !open; if(open) { Livewire.dispatch('notification-received'); }"
+            <div id="notifications" class="relative" x-data="{
+                open: false,
+                dropdownStyle: '',
+                updatePosition() {
+                    const btn = document.getElementById('notificationButton');
+                    if (!btn) return;
+                    const rect = btn.getBoundingClientRect();
+                    const top = rect.bottom + 20;
+                    if (window.innerWidth < 640) {
+                        // Mobile: full-width with horizontal padding
+                        this.dropdownStyle = `position:fixed;top:${top}px;left:12px;right:12px;width:auto;`;
+                    } else {
+                        // Desktop: right-aligned fixed width
+                        const right = window.innerWidth - rect.right;
+                        this.dropdownStyle = `position:fixed;top:${top}px;right:${right}px;width:384px;`;
+                    }
+                }
+            }" @click.outside="open = false">
+                <button
+                    @click="open = !open; if(open) { Livewire.dispatch('notification-received'); updatePosition(); }"
                     class="relative rounded-xl p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-300 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white dark:focus:ring-zinc-700"
                     id="notificationButton" type="button" wire:ignore>
                     <span class="sr-only">View notifications</span>
                     @livewire('notification-bell')
                 </button>
 
-                {{-- Notification Dropdown --}}
-                <div x-show="open" @click.outside="open = false" style="display: none;"
-                    x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95"
-                    x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75"
-                    x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
-                    class="fixed left-0 right-0 top-14 z-50 origin-top px-4 sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-3 sm:w-[384px] sm:origin-top-right sm:px-0"
-                    id="notification-dropdown" wire:ignore.self>
-                    <div
-                        class="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-dark-primary">
+                {{-- Notification Dropdown (teleported to escape nav backdrop-filter context) --}}
+                <template x-teleport="body">
+                    <div x-show="open" @click.outside="open = false" style="display: none;"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                        x-transition:leave="transition ease-in duration-75"
+                        x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
+                        :style="dropdownStyle"
+                        :class="dynamicBg
+                            ?
+                            'border-glass-border-light bg-glass-light backdrop-blur-md shadow-[inset_0_1px_0px_rgba(255,255,255,0.6),0_0_9px_rgba(0,0,0,0.15),0_15px_30px_rgba(0,0,0,0.12)] dark:border-glass-border-dark dark:bg-glass-dark dark:shadow-[inset_0_1px_0px_rgba(255,255,255,0.08),0_0_9px_rgba(0,0,0,0.4),0_15px_30px_rgba(0,0,0,0.35)]' :
+                            'border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-dark-primary'"
+                        class="z-[100] origin-top-right overflow-hidden rounded-2xl border" id="notification-dropdown"
+                        wire:ignore.self>
+
+                        {{-- Header --}}
                         <div
-                            class="flex items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
+                            class="flex items-center justify-between border-b border-glass-divider-light px-4 py-3 dark:border-glass-divider-dark">
                             <div class="flex items-center gap-2">
-                                <div class="h-1.5 w-1.5 rounded-full bg-red-600 shadow-[0_0_6px_rgba(220,38,38,0.5)]">
+                                <div class="h-1.5 w-1.5 rounded-full bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.6)]">
                                 </div>
-                                <p class="text-sm font-bold text-zinc-800 dark:text-white">Notifikasi</p>
+                                <p class="text-sm font-bold text-glass-text-light dark:text-glass-text-dark">Notifikasi
+                                </p>
                             </div>
                         </div>
 
+                        {{-- Notification List --}}
                         <div class="max-h-72 overflow-y-auto md:max-h-96" id="notificationContainer">
                             @livewire('utils.notification-dropdown')
                         </div>
 
-                        <div class="border-t border-zinc-200 px-4 py-3 dark:border-zinc-800">
-                            <a class="text-sm font-semibold text-red-600 transition-colors hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                        {{-- Footer --}}
+                        <div class="border-t border-glass-divider-light px-4 py-3 dark:border-glass-divider-dark">
+                            <a class="text-sm font-semibold text-red-500 transition-colors hover:text-red-600 dark:text-red-400 dark:hover:text-red-300"
                                 href="{{ route('notifications.index') }}">
                                 Lihat semua notifikasi →
                             </a>
                         </div>
                     </div>
-                </div>
+                </template>
             </div>
             {{-- End Notification --}}
 
             {{-- Profile --}}
-            <div id="profile-content" class="relative" x-data="{ open: false }">
-                <button @click="open = !open"
-                    class="flex rounded-full ring-2 ring-zinc-200 transition-all hover:ring-red-500 focus:outline-none dark:ring-zinc-700 dark:hover:ring-red-600"
+            <div id="profile-content" class="relative" x-data="{
+                open: false,
+                dropdownStyle: 'top:0;right:0;',
+                updatePosition() {
+                    const btn = document.getElementById('user-menu-button');
+                    if (!btn) return;
+                    const rect = btn.getBoundingClientRect();
+                    const right = window.innerWidth - rect.right;
+                    const top = rect.bottom + 24;
+                    this.dropdownStyle = `position:fixed;top:${top}px;right:${right}px;`;
+                }
+            }" @click.outside="open = false">
+                <button @click="open = !open; if(open) updatePosition()"
+                    class="flex rounded-full ring-2 ring-red-600 transition-all hover:ring-red-700"
                     id="user-menu-button" type="button" :aria-expanded="open.toString()">
                     <span class="sr-only">Open user menu</span>
                     <img class="h-9 w-9 rounded-full object-cover"
@@ -106,98 +158,114 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
                         alt="user photo" loading="lazy" onerror="this.src = '{{ asset('assets/img/noImage.webp') }}'">
                 </button>
 
-                {{-- Profile Dropdown --}}
-                <div x-show="open" @click.outside="open = false" style="display: none;"
-                    x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95"
-                    x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75"
-                    x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
-                    class="absolute right-0 top-full z-50 mt-3 w-60 origin-top-right overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-dark-primary"
-                    id="profile-dropdown">
-
-                    {{-- User Info --}}
-                    <div class="flex items-center gap-3 border-b border-zinc-200 px-4 py-3.5 dark:border-zinc-800">
-                        <img class="h-9 w-9 shrink-0 rounded-full object-cover ring-2 ring-zinc-200 dark:ring-zinc-700"
-                            src="{{ auth()->user()->profile_pic ? asset('storage/profile-pictures/' . auth()->user()->profile_pic) : asset('assets/img/profile-picture-5.jpg') }}"
-                            alt="user photo" loading="lazy"
-                            onerror="this.src = '{{ asset('assets/img/noImage.webp') }}'">
-                        <div class="min-w-0">
-                            <p class="truncate text-sm font-bold text-zinc-900 dark:text-white">
-                                {{ auth()->user()->name }}
-                            </p>
-                            <p class="truncate text-xs text-zinc-500 dark:text-zinc-400">
-                                {{ auth()->user()->email }}
-                            </p>
-                        </div>
-                    </div>
-
-                    {{-- Menu Items --}}
-                    <ul class="py-1.5" aria-labelledby="dropdown-item">
-                        <li>
-                            <a class="flex items-center gap-2.5 px-4 py-2 text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white"
-                                href="{{ route('profile.me') }}">
-                                My Profile
-                            </a>
-                        </li>
-                        <li>
-                            <form id="editProfile" action="{{ route('profile.edit') }}"
-                                onclick="event.preventDefault();"></form>
-                            <button
-                                class="flex w-full items-center gap-2.5 px-4 py-2 text-left text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white"
-                                form="editProfile" type="submit">
-                                Account Settings
-                            </button>
-                        </li>
-                        @hasanyrole(['Admin', 'HRD', 'Management', 'Management-PKU', 'Management-JKT',
-                            'Management-Special'])
-                            <li>
-                                @livewire('utils.update-log')
-                            </li>
-                        @endhasanyrole
-                        <li>
-                            <div class="flex items-center justify-between px-4 py-2.5">
-                                <span class="text-sm font-medium text-zinc-600 dark:text-zinc-400">Theme</span>
-                                <div class="flex items-center gap-1.5">
-                                    <x-button-dark />
-                                    <x-button-light />
+                {{-- Profile Dropdown (teleported to body to escape nav backdrop-filter context) --}}
+                <template x-teleport="body">
+                    <div x-show="open" @click.outside="open = false" style="display: none;"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                        x-transition:leave="transition ease-in duration-75"
+                        x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
+                        :style="dropdownStyle"
+                        :class="dynamicBg
+                            ?
+                            'border-glass-border-light bg-glass-light backdrop-blur-md shadow-[inset_0_1px_0px_rgba(255,255,255,0.6),0_0_9px_rgba(0,0,0,0.15),0_15px_30px_rgba(0,0,0,0.12)] dark:border-glass-border-dark dark:bg-glass-dark dark:shadow-[inset_0_1px_0px_rgba(255,255,255,0.08),0_0_9px_rgba(0,0,0,0.4),0_15px_30px_rgba(0,0,0,0.35)]' :
+                            'border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-dark-primary'"
+                        class="z-[100] w-60 origin-top-right overflow-hidden rounded-2xl border p-1 transition-all duration-300"
+                        id="profile-dropdown">
+                        <div class="relative z-10">
+                            {{-- User Info --}}
+                            <div
+                                class="flex items-center gap-3 border-b border-glass-divider-light px-4 py-3.5 dark:border-glass-divider-dark">
+                                <img class="h-9 w-9 shrink-0 rounded-full object-cover ring-2 ring-glass-border-light dark:ring-glass-border-dark"
+                                    src="{{ auth()->user()->profile_pic ? asset('storage/profile-pictures/' . auth()->user()->profile_pic) : asset('assets/img/profile-picture-5.jpg') }}"
+                                    alt="user photo" loading="lazy"
+                                    onerror="this.src = '{{ asset('assets/img/noImage.webp') }}'">
+                                <div class="min-w-0">
+                                    <p
+                                        class="truncate text-sm font-bold text-glass-text-light dark:text-glass-text-dark">
+                                        {{ auth()->user()->name }}
+                                    </p>
+                                    <p class="truncate text-xs text-glass-muted-light dark:text-glass-muted-dark">
+                                        {{ auth()->user()->email }}
+                                    </p>
                                 </div>
                             </div>
-                        </li>
-                        <li>
-                            <div class="flex cursor-pointer items-center justify-between px-4 py-2.5 transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800"
-                                @click.stop="dynamicBg = !dynamicBg">
-                                <span class="text-sm font-medium text-zinc-600 dark:text-zinc-400">Dynamic Bg</span>
-                                <button type="button"
-                                    class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-dark-primary"
-                                    role="switch" :aria-checked="dynamicBg.toString()">
-                                    <span class="sr-only">Toggle dynamic background</span>
-                                    <span aria-hidden="true"
-                                        :class="dynamicBg ? 'bg-red-500' : 'bg-zinc-200 dark:bg-zinc-700'"
-                                        class="pointer-events-none absolute mx-auto h-4 w-8 rounded-full transition-colors duration-200 ease-in-out"></span>
-                                    <span aria-hidden="true" :class="dynamicBg ? 'translate-x-4' : 'translate-x-0'"
-                                        class="pointer-events-none absolute left-0.5 inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition-transform duration-200 ease-in-out"></span>
-                                </button>
-                            </div>
-                        </li>
-                    </ul>
 
-                    {{-- Sign Out & Install --}}
-                    <ul class="border-t border-zinc-200 py-1.5 dark:border-zinc-800" aria-labelledby="dropdown-item">
-                        <li>
-                            <form id="logout" method="post" action="{{ route('logout') }}"
-                                onclick="event.preventDefault();">@csrf</form>
-                            <button
-                                class="flex w-full items-center gap-2.5 px-4 py-2 text-left text-sm font-medium text-red-600 transition-colors hover:bg-red-50 hover:text-red-700 dark:text-red-400 dark:hover:bg-red-900/20 dark:hover:text-red-300"
-                                form="logout" type="submit">
-                                Sign Out
-                            </button>
-                        </li>
-                        <li class="flex items-center px-4 py-2" id="installAppContainer">
-                            <x-button.danger wire:navigate class="w-full justify-center" id="installApp">
-                                Install App
-                            </x-button.danger>
-                        </li>
-                    </ul>
-                </div>
+                            {{-- Menu Items --}}
+                            <ul class="py-1.5" aria-labelledby="dropdown-item">
+                                <li>
+                                    <a class="flex items-center gap-2.5 px-4 py-2 text-sm font-medium text-glass-text-light transition-colors hover:bg-glass-hover-light hover:text-zinc-900 dark:text-glass-text-dark dark:hover:bg-glass-hover-dark dark:hover:text-white"
+                                        href="{{ route('profile.me') }}">
+                                        My Profile
+                                    </a>
+                                </li>
+                                <li>
+                                    <form id="editProfile" action="{{ route('profile.edit') }}"
+                                        onclick="event.preventDefault();"></form>
+                                    <button
+                                        class="flex w-full items-center gap-2.5 px-4 py-2 text-left text-sm font-medium text-glass-text-light transition-colors hover:bg-glass-hover-light hover:text-zinc-900 dark:text-glass-text-dark dark:hover:bg-glass-hover-dark dark:hover:text-white"
+                                        form="editProfile" type="submit">
+                                        Account Settings
+                                    </button>
+                                </li>
+                                @hasanyrole(['Admin', 'HRD', 'Management', 'Management-PKU', 'Management-JKT',
+                                    'Management-Special'])
+                                    <li>
+                                        @livewire('utils.update-log')
+                                    </li>
+                                @endhasanyrole
+                                <li>
+                                    <div class="flex items-center justify-between px-4 py-2.5">
+                                        <span
+                                            class="text-sm font-medium text-glass-text-light dark:text-glass-text-dark">Theme</span>
+                                        <div class="flex items-center gap-1.5">
+                                            <x-button-dark />
+                                            <x-button-light />
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="flex cursor-pointer items-center justify-between px-4 py-2.5 transition-colors hover:bg-glass-hover-light dark:hover:bg-glass-hover-dark"
+                                        @click.stop="dynamicBg = !dynamicBg">
+                                        <span
+                                            class="text-sm font-medium text-glass-text-light dark:text-glass-text-dark">Dynamic
+                                            Bg</span>
+                                        <button type="button"
+                                            class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-zinc-900/75"
+                                            role="switch" :aria-checked="dynamicBg.toString()">
+                                            <span class="sr-only">Toggle dynamic background</span>
+                                            <span aria-hidden="true"
+                                                :class="dynamicBg ? 'bg-red-500' : 'bg-zinc-300 dark:bg-white/20'"
+                                                class="pointer-events-none absolute mx-auto h-4 w-8 rounded-full transition-colors duration-200 ease-in-out"></span>
+                                            <span aria-hidden="true"
+                                                :class="dynamicBg ? 'translate-x-4' : 'translate-x-0'"
+                                                class="pointer-events-none absolute left-0.5 inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition-transform duration-200 ease-in-out"></span>
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            {{-- Sign Out & Install --}}
+                            <ul class="border-t border-glass-divider-light py-1.5 dark:border-glass-divider-dark"
+                                aria-labelledby="dropdown-item">
+                                <li>
+                                    <form id="logout" method="post" action="{{ route('logout') }}"
+                                        onclick="event.preventDefault();">@csrf</form>
+                                    <button
+                                        class="flex w-full items-center gap-2.5 px-4 py-2 text-left text-sm font-medium text-red-500 transition-colors hover:bg-red-500/10 hover:text-red-600 dark:text-red-400 dark:hover:bg-red-500/10 dark:hover:text-red-300"
+                                        form="logout" type="submit">
+                                        Sign Out
+                                    </button>
+                                </li>
+                                <li class="flex items-center px-4 py-2" id="installAppContainer">
+                                    <x-button.danger wire:navigate class="w-full justify-center" id="installApp">
+                                        Install App
+                                    </x-button.danger>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </template>
             </div>
             {{-- End Profile --}}
 

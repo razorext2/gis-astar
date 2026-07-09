@@ -32,6 +32,21 @@ export default {
                 primary: colors.red[600],
                 "dark-primary": "#18181b",
                 "dark-secondary": "#242427",
+
+                // Glassmorphism design tokens
+                // Usage: bg-glass-light / dark:bg-glass-dark, border-glass-border-light / dark:border-glass-border-dark
+                "glass-light": "rgba(255,255,255,0.20)",
+                "glass-dark": "rgba(24,24,27,0.55)",
+                "glass-border-light": "rgba(228,228,231,0.50)",
+                "glass-border-dark": "rgba(255,255,255,0.10)",
+                "glass-text-light": "rgba(24,24,27,0.90)",
+                "glass-text-dark": "rgba(255,255,255,0.90)",
+                "glass-muted-light": "rgba(24,24,27,0.55)",
+                "glass-muted-dark": "rgba(255,255,255,0.55)",
+                "glass-divider-light": "rgba(24,24,27,0.12)",
+                "glass-divider-dark": "rgba(255,255,255,0.12)",
+                "glass-hover-light": "rgba(24,24,27,0.06)",
+                "glass-hover-dark": "rgba(255,255,255,0.08)",
             },
         },
     },

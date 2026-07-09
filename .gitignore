@@ -45,3 +45,7 @@ python/pegawai
 SYSTEM_MAP.MD
 AGENTS.MD
 /.cursor
+CLAUDE.MD
+GEMINI.MD
+.junie
+.vite

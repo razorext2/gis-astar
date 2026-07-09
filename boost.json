@@ -1,0 +1,14 @@
+{
+    "agents": [
+        "claude_code",
+        "codex",
+        "gemini"
+    ],
+    "editors": [
+        "codex",
+        "vscode"
+    ],
+    "guidelines": [
+        "laravel/octane"
+    ]
+}

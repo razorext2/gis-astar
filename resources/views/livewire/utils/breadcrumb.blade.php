@@ -13,8 +13,11 @@
 @endphp
 
 <nav class="mb-6 flex" aria-label="Breadcrumb">
-    <ol
-        class="inline-flex items-center gap-1 rounded-xl border border-zinc-200 bg-white/40 px-4 py-2 shadow-md backdrop-blur-md dark:border-zinc-800/50 dark:bg-zinc-950/40 dark:shadow-none md:gap-2">
+    <ol :class="dynamicBg
+        ?
+        'border-glass-border-light bg-glass-light backdrop-blur-md shadow-md dark:border-glass-border-dark dark:bg-glass-dark dark:shadow-none' :
+        'border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-dark-primary'"
+        class="inline-flex items-center gap-1 rounded-xl border px-4 py-2 md:gap-2">
         @foreach ($displayCrumbs as $i => $crumb)
             <li class="flex items-center">
                 <div class="flex items-center">

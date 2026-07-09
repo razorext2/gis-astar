@@ -1,3 +1,4 @@
+{{-- Goal: Sidebar navigation layout with responsive display controls, Livewire: None, Alpine: Yes --}}
 @php
     $rawMenu = config('navigation');
     $menu = [];
@@ -55,39 +56,24 @@
 
 <!-- Sidebar Navigation -->
 <aside
-    class="left-0 top-0 z-[60] hidden h-screen w-[272px] flex-col border-r border-zinc-200/50 bg-white/80 pb-14 backdrop-blur-xl transition-all duration-300 ease-out dark:border-zinc-800 dark:bg-zinc-950/80 dark:shadow-none md:fixed md:flex"
-    id="logo-sidebar" aria-label="Sidebar" :class="openSidebar ? 'translate-x-0' : '-translate-x-72'">
+    :class="[
+        openSidebar ? 'translate-x-0' : '-translate-x-80',
+        dynamicBg
+            ? 'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md dark:bg-glass-dark dark:border-glass-border-dark'
+            : 'bg-white border-zinc-200 shadow-sm dark:bg-dark-primary dark:border-zinc-800'
+    ]"
+    class="fixed bottom-4 left-4 top-4 z-40 hidden w-[272px] flex-col rounded-2xl border pb-6 transition-all duration-300 ease-out md:flex"
+    id="logo-sidebar" aria-label="Sidebar">
 
     {{-- Header / Toggle --}}
-    <div id="tombolSidebar" :class="openSidebar ? 'translate-x-0' : 'absolute translate-x-24 '"
-        class="mx-auto flex w-full justify-between rounded-br-2xl bg-white p-4 shadow-md transition-all duration-200 ease-out dark:border-b-[1px] dark:border-r-[4px] dark:border-red-800 dark:bg-dark-primary dark:shadow-none">
+    <div id="tombolSidebar"
+        class="mx-auto flex w-full items-center justify-between border-b border-zinc-200/50 p-5 dark:border-zinc-800/50">
 
         <div class="flex items-center justify-start">
             <a class="flex items-center" href="{{ config('app.url') }}">
                 <img class="h-8" src="{{ asset('assets/img/logo.png') }}" alt="Indodacin Logo" loading="lazy" />
             </a>
         </div>
-
-        <button @click="openSidebar = !openSidebar" class="rounded-lg px-2 py-1">
-            <span x-show="!openSidebar">
-                <x-icons.open-sidebar-alt data-tooltip-target="open-sidebar-alt"
-                    class="h-6 w-6 text-gray-800 transition-all duration-300 ease-in-out hover:scale-110 dark:text-white" />
-                <div id="open-sidebar-alt" role="tooltip"
-                    class="shadow-xs tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 transition-opacity duration-300 dark:bg-gray-700">
-                    Buka Sidebar
-                    <div class="tooltip-arrow" data-popper-arrow></div>
-                </div>
-            </span>
-            <span x-show="openSidebar">
-                <x-icons.close-sidebar-alt data-tooltip-target="close-sidebar-alt"
-                    class="h-6 w-6 text-gray-800 transition-all duration-300 ease-in-out hover:scale-110 dark:text-white" />
-                <div id="close-sidebar-alt" role="tooltip"
-                    class="shadow-xs tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 transition-opacity duration-300 dark:bg-gray-700">
-                    Tutup Sidebar
-                    <div class="tooltip-arrow" data-popper-arrow></div>
-                </div>
-            </span>
-        </button>
 
     </div>
 
@@ -109,7 +95,7 @@
     </div>
 
     {{-- Navigation Links --}}
-    <div id="sidebar-scroll" class="overflow-x-hidden overflow-y-scroll p-5" style="overflow-anchor: none" x-data x-init="const saved = sessionStorage.getItem('sidebar-scroll');
+    <div id="sidebar-scroll" class="overflow-x-hidden overflow-y-scroll p-5 pb-10" style="overflow-anchor: none" x-data x-init="const saved = sessionStorage.getItem('sidebar-scroll');
     if (saved) $el.scrollTop = parseInt(saved);
     $el.addEventListener('scroll', () => sessionStorage.setItem('sidebar-scroll', $el.scrollTop), { passive: true });
     document.addEventListener('livewire:navigating', () => sessionStorage.setItem('sidebar-scroll', $el.scrollTop));">

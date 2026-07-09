@@ -1,8 +1,11 @@
-{{-- Goal: Mobile navigation bottom bar, Livewire: none, Alpine: none --}}
+{{-- Goal: Mobile navigation bottom bar, Livewire: none, Alpine: yes (inherits dynamicBg from layout) --}}
 <div {{ $attributes }} class="fixed bottom-3 left-1/2 z-[160] w-[92vw] max-w-sm -translate-x-1/2 md:hidden">
     <!-- iOS Glass Navigation Container -->
     <div
-        class="border-zinc-200/30 h-[70px] w-full rounded-full border bg-white/70 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-md transition-colors dark:border-zinc-800/50 dark:bg-zinc-900/60 dark:shadow-zinc-950/50">
+        :class="dynamicBg
+            ? 'bg-glass-light border-glass-border-light backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)]'
+            : 'bg-white border-zinc-200/60 shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:bg-dark-primary dark:border-zinc-800/60 dark:shadow-zinc-950/50'"
+        class="h-[70px] w-full rounded-full border transition-colors duration-300">
         <div class="mx-auto grid h-full max-w-sm grid-cols-5 px-3">
 
             <x-drawer.button href="{{ route('dashboard') }}" :label="'Home'" :active="Route::is('dashboard')">
@@ -16,14 +19,29 @@
             </x-drawer.button>
 
             <!-- Center Contained Action Button -->
-            <div class="relative flex items-center justify-center">
+            <div class="relative flex items-center justify-center"
+                x-data="{
+                    isOpen: false,
+                    init() {
+                        const drawer = document.getElementById('drawer-swipe');
+                        if (!drawer) return;
+                        const observer = new MutationObserver(() => {
+                            this.isOpen = !drawer.classList.contains('translate-y-full');
+                        });
+                        observer.observe(drawer, { attributes: true, attributeFilter: ['class'] });
+                    }
+                }">
                 <button
-                    class="group flex h-[52px] w-[52px] items-center justify-center rounded-full bg-gradient-to-tr from-red-600 to-red-500 shadow-[0_8px_20px_-4px_rgba(220,38,38,0.4)] transition-all duration-300 ease-out will-change-transform hover:scale-105 hover:shadow-[0_12px_25px_-4px_rgba(220,38,38,0.5)] active:scale-95"
+                    :class="isOpen
+                        ? 'scale-110 shadow-[0_12px_28px_-4px_rgba(220,38,38,0.6)] from-red-700 to-red-600'
+                        : 'hover:scale-105 hover:shadow-[0_12px_25px_-4px_rgba(220,38,38,0.5)]'"
+                    class="group flex h-[52px] w-[52px] items-center justify-center rounded-full bg-gradient-to-tr from-red-600 to-red-500 shadow-[0_8px_20px_-4px_rgba(220,38,38,0.4)] transition-all duration-300 ease-out will-change-transform active:scale-95"
                     data-drawer-target="drawer-swipe" data-drawer-toggle="drawer-swipe" data-drawer-placement="bottom"
                     data-drawer-backdrop="false" data-drawer-edge="true" data-drawer-edge-offset="-bottom-[6rem]"
                     type="button" aria-controls="drawer-swipe">
                     <x-icons.bar
-                        class="h-6 w-6 text-white transition-transform duration-500 ease-in-out group-hover:rotate-180 group-hover:scale-110" />
+                        :class="'h-6 w-6 text-white transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]'"
+                        ::class="isOpen ? 'rotate-90 scale-110' : 'rotate-0 group-hover:rotate-180 group-hover:scale-110'" />
                     <span class="sr-only">Menu Drawer</span>
                 </button>
             </div>

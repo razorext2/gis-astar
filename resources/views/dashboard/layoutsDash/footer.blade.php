@@ -1,5 +1,8 @@
 <footer
-    class="absolute bottom-0 w-full border-t border-zinc-200/60 bg-white px-4 py-3 dark:border-zinc-800/60 dark:bg-zinc-950">
+    :class="dynamicBg
+        ? 'border-t border-glass-border-light bg-white/95 dark:border-glass-border-dark dark:bg-zinc-900/95'
+        : 'border-t border-zinc-200 bg-white dark:border-zinc-800 dark:bg-dark-primary'"
+    class="absolute bottom-0 w-full px-4 py-3 rounded-b-2xl">
     <div class="flex flex-col gap-0.5">
         <div class="flex items-center gap-1.5">
             <span

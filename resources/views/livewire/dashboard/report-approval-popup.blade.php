@@ -130,7 +130,7 @@ $watch('$wire.showPopup', val => {
             x-transition:leave="transition ease-in duration-300 transform origin-bottom-right"
             x-transition:leave-start="opacity-100 scale-100 translate-y-0 translate-x-0"
             x-transition:leave-end="opacity-0 scale-0 translate-y-20 translate-x-20"
-            class="relative col-start-1 row-start-1 mx-auto flex w-full max-w-sm flex-col rounded-xl border border-zinc-200 bg-white shadow-xl dark:border-zinc-800 dark:bg-zinc-900 lg:col-auto lg:row-auto lg:w-[23rem]">
+            class="relative col-start-1 row-start-1 mx-auto flex w-full max-w-sm flex-col rounded-xl border border-zinc-200 bg-white shadow-none dark:border-zinc-800 dark:bg-zinc-900 lg:col-auto lg:row-auto lg:w-[23rem]">
 
             {{-- Header --}}
             <div class="flex items-center justify-between border-b border-zinc-200 p-4 dark:border-zinc-800">
@@ -201,13 +201,15 @@ $watch('$wire.showPopup', val => {
 
     {{-- Minimized FAB Button --}}
     <div x-show="!openPopups['{{ $type }}']?.show && $wire.hasPending"
-        :style="{
-            transform: getTransform({{ $stackIndex }}),
-            opacity: (isOpen && !openPopups['{{ $type }}']?.show) ? 1 : 0,
-            pointerEvents: (isOpen && !openPopups['{{ $type }}']?.show) ? 'auto' : 'none'
-        }"
-        class="report-fab-item bg-white/70 backdrop-blur-md border border-zinc-200/30 dark:border-zinc-800/50 dark:bg-zinc-900/60 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full transition-all duration-300 hover:scale-105"
-        @click="openPopups['{{ $type }}'].show = true; setTimeout(() => $wire.set('showPopup', true), 500)" style="display: none;">
+        :class="dynamicBg
+            ? 'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-none'
+            : 'bg-white border-zinc-200 shadow-sm hover:bg-zinc-50 dark:bg-dark-primary dark:border-zinc-800 dark:hover:bg-zinc-800/80'"
+        class="report-fab-item flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border hover:scale-105"
+        :style="isOpen
+            ? 'transform: translate(0, 0) scale(1); opacity: 1; pointer-events: auto;'
+            : 'transform: translate(60px, ' + (({{ $stackIndex }} - 1) * 56) + 'px) scale(0.3); opacity: 0; pointer-events: none;'"
+        style="display: none;"
+        @click="openPopups['{{ $type }}'].show = true; setTimeout(() => $wire.set('showPopup', true), 500)">
 
         <x-dynamic-component :component="'icons.' . $config['icon']" class="h-5 w-5 {{ $colorClasses['text_color'] }}" />
     </div>
