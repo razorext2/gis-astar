@@ -8,7 +8,9 @@ use Livewire\Component;
 
 class Breadcrumb extends Component
 {
-    public function render()
+    public bool $isNavbar = false;
+
+    public function render(): \Illuminate\Contracts\View\View
     {
         $segments = request()->segments();
         $crumbs = [];

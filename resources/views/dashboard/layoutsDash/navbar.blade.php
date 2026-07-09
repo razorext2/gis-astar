@@ -1,4 +1,15 @@
 {{-- Goal: Floating dashboard navbar layout with adjustable background, shadow, and mobile responsiveness, Livewire: Yes, Alpine: Yes --}}
+@once
+    <style>
+        @keyframes navBreadcrumbFadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: navBreadcrumbFadeIn 0.25s ease-out forwards;
+        }
+    </style>
+@endonce
 <nav x-data="{
     navVisible: true,
     lastScrollY: 0,
@@ -36,22 +47,25 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
             {{-- Sidebar Toggle Button (Desktop Only) --}}
             <button @click="openSidebar = !openSidebar" class="hidden md:flex rounded-xl p-2 text-zinc-500 hover:bg-zinc-100/50 dark:text-zinc-400 dark:hover:bg-zinc-800/50 transition-colors">
                 <span x-show="!openSidebar">
-                    <x-icons.open-sidebar-alt class="h-5 w-5" />
+                    <x-icons.bar class="h-5 w-5" />
                 </span>
                 <span x-show="openSidebar">
-                    <x-icons.close-sidebar-alt class="h-5 w-5" />
+                    <x-icons.close class="h-5 w-5" />
                 </span>
             </button>
 
-            <div :class="openSidebar ? 'md:opacity-0 md:pointer-events-none md:w-0' : 'opacity-100'"
-                class="flex shrink-0 items-center justify-start transition-all duration-300 ease-out overflow-hidden">
-                <a class="flex items-center gap-1.5 sm:gap-2" href="{{ config('app.url') }}">
-                    <img class="h-6 w-auto object-contain sm:h-8" src="{{ asset('assets/img/logo.png') }}" alt="Indodacin Logo"
+            <div :class="openSidebar ? 'md:opacity-0 md:pointer-events-none md:w-0 md:-translate-x-5' : 'opacity-100 md:w-36 translate-x-0'"
+                class="flex shrink-0 transform items-center justify-start overflow-hidden transition-all duration-300 ease-out">
+                <a class="flex items-center gap-2" href="{{ config('app.url') }}">
+                    <img class="h-7 w-7 sm:h-8 sm:w-8 object-contain rounded-lg" src="{{ asset('images/icons/icon-384x384.png') }}" alt="Attendance Logo"
                         loading="lazy" />
                     <span
-                        class="hidden text-sm font-semibold italic text-zinc-600 dark:text-zinc-400 sm:block">attendance</span>
+                        class="hidden text-sm font-bold italic tracking-wide text-zinc-900 dark:text-white sm:block sm:text-base">Attendance</span>
                 </a>
             </div>
+
+            {{-- Breadcrumb Placeholder (Sticky) --}}
+            <div id="navbar-breadcrumb-container" class="flex items-center pl-3 sm:pl-4 border-l border-zinc-200/50 dark:border-zinc-800/50 h-6"></div>
         </div>
 
         {{-- Points (Teknisi) --}}

@@ -1,3 +1,4 @@
+{{-- Goal: Render latency ping checker status with absolute clamped popover, Livewire: Utils\PingChecker, Alpine: Yes --}}
 <div id="ping-checker-trigger" class="relative cursor-pointer" x-data="{
     latency: 0,
     isChecking: false,
@@ -51,9 +52,18 @@
         const trigger = document.getElementById('ping-checker-trigger');
         if (!trigger) return;
         const rect = trigger.getBoundingClientRect();
-        const top = rect.bottom + 30;
-        const right = window.innerWidth - rect.right;
-        this.popoverStyle = `position:fixed;top:${top}px;right:${right}px;`;
+        const top = rect.bottom + 12;
+        
+        const popoverWidth = 256; // w-64 is 16rem = 256px
+        const screenPadding = 16;
+        
+        let left = (rect.left + rect.width / 2) - (popoverWidth / 2);
+        
+        // Clamp to prevent left or right overflow on mobile screens
+        left = Math.max(screenPadding, left);
+        left = Math.min(window.innerWidth - popoverWidth - screenPadding, left);
+        
+        this.popoverStyle = `position:fixed;top:${top}px;left:${left}px;`;
     },
 
     async checkPing() {
@@ -107,7 +117,7 @@
                 ?
                 'border-glass-border-light bg-glass-light backdrop-blur-md dark:border-glass-border-dark dark:bg-glass-dark' :
                 'border-zinc-200 bg-white dark:border-zinc-800 dark:bg-dark-primary'"
-            class="z-[100] w-64 rounded-xl border p-4 text-sm text-zinc-800 shadow-md dark:text-white dark:shadow-none"
+            class="z-[110] w-64 rounded-xl border p-4 text-sm text-zinc-800 shadow-md dark:text-white dark:shadow-none"
             :style="popoverStyle" style="display: none;">
             <div class="flex flex-col gap-1">
                 <p class="font-bold">Status Koneksi Database Central</p>

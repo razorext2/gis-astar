@@ -68,10 +68,12 @@
     {{-- Header / Toggle --}}
     <div id="tombolSidebar"
         class="mx-auto flex w-full items-center justify-between border-b border-zinc-200/50 p-5 dark:border-zinc-800/50">
-
-        <div class="flex items-center justify-start">
-            <a class="flex items-center" href="{{ config('app.url') }}">
-                <img class="h-8" src="{{ asset('assets/img/logo.png') }}" alt="Indodacin Logo" loading="lazy" />
+        <div class="flex items-center justify-start pl-5">
+            <a class="flex items-center gap-2.5" href="{{ config('app.url') }}">
+                <img class="h-8 w-8 object-contain rounded-lg" src="{{ asset('images/icons/icon-384x384.png') }}" alt="Attendance Logo" loading="lazy" />
+                <span class="text-lg font-bold italic tracking-wide text-zinc-900 dark:text-white">
+                    Attendance
+                </span>
             </a>
         </div>
 
@@ -122,7 +124,7 @@
                         x-transition:enter-start="opacity-0 translate-y-1"
                         x-transition:enter-end="opacity-100 translate-y-0">
                         <a href="{{ route($item['route']) }}"
-                            class="{{ $isActive ? 'bg-zinc-100/80 dark:bg-white/5 text-red-600 dark:text-red-400 font-bold border-l-4 border-red-600' : 'text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-200' }} group relative flex items-center gap-3.5 rounded-r-2xl px-4 py-3 transition-all duration-200"
+                            class="{{ $isActive ? 'bg-zinc-100/80 dark:bg-white/5 text-red-600 dark:text-red-400 font-bold border-l-4 border-red-600' : 'text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-200 border-l-4 border-transparent' }} group relative flex items-center gap-3.5 rounded-r-2xl px-4 py-3 transition-all duration-200"
                             {{ $item['navigate'] ?? true ? 'wire:navigate' : '' }}>
 
                             <x-dynamic-component :component="'icons.' . $item['icon']"

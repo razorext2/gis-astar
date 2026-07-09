@@ -1,3 +1,4 @@
+{{-- Goal: Render a collapsable sidebar navigation group with sub-items, Livewire: None, Alpine: Yes --}}
 @props([
     'label',
     'icon',
@@ -24,7 +25,7 @@
 }" x-show="isMatch" x-transition:enter="transition ease-out duration-200"
     x-transition:enter-start="opacity-0 translate-y-1" x-transition:enter-end="opacity-100 translate-y-0">
     <button
-        class="{{ $isActive ? 'bg-zinc-100/80 dark:bg-white/5 text-red-600 dark:text-red-400 font-bold border-l-4 border-red-600' : 'text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-200' }} group relative flex w-full items-center rounded-r-2xl px-4 py-3 transition-all duration-200"
+        class="{{ $isActive ? 'bg-zinc-100/80 dark:bg-white/5 text-red-600 dark:text-red-400 font-bold border-l-4 border-red-600' : 'text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-200 border-l-4 border-transparent' }} group relative flex w-full items-center rounded-r-2xl px-4 py-3 transition-all duration-200"
         type="button"
         @click="
             const scroller = $el.closest('#sidebar-scroll');

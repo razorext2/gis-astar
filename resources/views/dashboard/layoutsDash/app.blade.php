@@ -28,10 +28,7 @@
         @include('dashboard.layoutsDash.sidebar')
 
         <div :class="openSidebar ? 'max-w-screen-xl sm:ml-72 xl:ml-96' : 'mx-0 md:mx-12 lg:mx-20 xl:mx-44 max-w-screen-2xl'"
-            class="mb-20 mt-[6.5rem] px-4 transition-all duration-300 ease-in-out md:mb-4">
-
-            {{-- breadcrumb --}}
-            @livewire('utils.breadcrumb')
+            class="mb-20 mt-[7.5rem] md:mt-[8rem] px-4 transition-all duration-300 ease-in-out md:mb-4">
 
             {{-- title --}}
             <div class="grid grid-cols-1">

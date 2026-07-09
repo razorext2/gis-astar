@@ -1,4 +1,4 @@
-{{-- Goal: Render dynamic breadcrumb navigation with truncated segment titles, Livewire: Utils\Breadcrumb, Alpine: None --}}
+{{-- Goal: Render dynamic breadcrumb navigation with truncated segment titles, Livewire: Utils\Breadcrumb, Alpine: Scroll detector and smooth navbar cross-fade --}}
 @php
     $total = count($crumbs);
     $displayCrumbs = [];
@@ -12,49 +12,112 @@
     }
 @endphp
 
-<nav class="mb-6 flex" aria-label="Breadcrumb">
-    <ol :class="dynamicBg
-        ?
-        'border-glass-border-light bg-glass-light backdrop-blur-md shadow-md dark:border-glass-border-dark dark:bg-glass-dark dark:shadow-none' :
-        'border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-dark-primary'"
-        class="inline-flex items-center gap-1 rounded-xl border px-4 py-2 md:gap-2">
-        @foreach ($displayCrumbs as $i => $crumb)
-            <li class="flex items-center">
-                <div class="flex items-center">
-                    @if ($i > 0)
-                        <x-icons.angle-right class="mx-2 h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />
-                    @endif
-
-                    @if (isset($crumb['is_ellipsis']))
-                        <span class="text-[10px] font-bold uppercase tracking-[0.15em] text-zinc-400 dark:text-zinc-500">
-                            ...
-                        </span>
-                    @else
-                        @php
-                            $isLast = $loop->last;
-                            $isFirst = $i === 0;
-                        @endphp
-
-                        @if (!$isLast)
-                            <a href="{{ $crumb['url'] }}"
-                                class="group flex items-center whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.15em] text-zinc-500 transition-all hover:text-red-600 dark:text-zinc-400 dark:hover:text-red-500">
-                                @if ($isFirst)
-                                    <x-icons.home class="me-2 h-3.5 w-3.5 transition-transform group-hover:scale-110" />
-                                @endif
-                                {{ $crumb['title'] }}
-                            </a>
-                        @else
-                            <span
-                                class="flex items-center whitespace-nowrap text-[10px] font-black uppercase tracking-[0.15em] text-red-600 dark:text-red-500">
-                                @if ($isFirst)
-                                    <x-icons.home class="me-2 h-3.5 w-3.5" />
-                                @endif
-                                {{ $crumb['title'] }}
-                            </span>
+<div wire:ignore x-data="{
+    isSticky: false,
+    init() {
+        const checkScroll = () => {
+            this.isSticky = window.scrollY > 30;
+        };
+        window.addEventListener('scroll', checkScroll, { passive: true });
+        checkScroll();
+    }
+}">
+    {{-- Normal State: rendered in the page flow under the title, minimalist borderless style. Parent wrapper in title.blade.php handles height transitions. --}}
+    <nav class="flex justify-start" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center gap-1 bg-transparent border-none p-0 shadow-none md:gap-1.5">
+            @foreach ($displayCrumbs as $i => $crumb)
+                <li class="flex items-center">
+                    <div class="flex items-center">
+                        @if ($i > 0)
+                            <x-icons.angle-right class="mx-1.5 h-3 w-3 text-zinc-400 dark:text-zinc-500" />
                         @endif
-                    @endif
-                </div>
-            </li>
-        @endforeach
-    </ol>
-</nav>
+
+                        @if (isset($crumb['is_ellipsis']))
+                            <span class="text-[10px] font-bold uppercase tracking-[0.15em] text-zinc-400 dark:text-zinc-500 leading-none">
+                                ...
+                            </span>
+                        @else
+                            @php
+                                $isLast = $loop->last;
+                                $isFirst = $i === 0;
+                                $crumbTitle = count($crumbs) > 2 && $isFirst ? '' : $crumb['title'];
+                            @endphp
+
+                            @if (!$isLast)
+                                <a href="{{ $crumb['url'] }}"
+                                    class="group flex items-center leading-none whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.15em] text-zinc-500 transition-all hover:text-red-600 dark:text-zinc-400 dark:hover:text-red-500">
+                                    @if ($isFirst)
+                                        <x-icons.home class="{{ $crumbTitle ? 'me-1.5' : '' }} h-3.5 w-3.5 transition-transform group-hover:scale-110" />
+                                    @endif
+                                    <span class="leading-none">{{ $crumbTitle }}</span>
+                                </a>
+                            @else
+                                <span
+                                    class="flex items-center leading-none whitespace-nowrap text-[10px] font-black uppercase tracking-[0.15em] text-red-600 dark:text-red-500">
+                                    @if ($isFirst)
+                                        <x-icons.home class="{{ $crumbTitle ? 'me-1.5' : '' }} h-3.5 w-3.5" />
+                                    @endif
+                                    <span class="leading-none">{{ $crumbTitle }}</span>
+                                </span>
+                            @endif
+                        @endif
+                    </div>
+                </li>
+            @endforeach
+        </ol>
+    </nav>
+
+    {{-- Sticky State: teleported into the navbar --}}
+    <template x-teleport="#navbar-breadcrumb-container">
+        <nav x-show="isSticky"
+            x-transition:enter="transition ease-out duration-250 transform"
+            x-transition:enter-start="opacity-0 -translate-y-2"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-150 transform"
+            x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 -translate-y-2"
+            class="flex" aria-label="Breadcrumb" style="display: none;">
+            <ol class="inline-flex items-center gap-1 bg-transparent border-none p-0 shadow-none md:gap-1.5">
+                @foreach ($displayCrumbs as $i => $crumb)
+                    <li class="flex items-center">
+                        <div class="flex items-center">
+                            @if ($i > 0)
+                                <x-icons.angle-right class="mx-1 h-3 w-3 text-zinc-400 dark:text-zinc-500" />
+                            @endif
+
+                            @if (isset($crumb['is_ellipsis']))
+                                <span class="text-[9px] font-bold uppercase tracking-[0.1em] text-zinc-400 dark:text-zinc-500 leading-none">
+                                    ...
+                                </span>
+                            @else
+                                @php
+                                    $isLast = $loop->last;
+                                    $isFirst = $i === 0;
+                                    $crumbTitle = count($crumbs) > 2 && $isFirst ? '' : $crumb['title'];
+                                @endphp
+
+                                @if (!$isLast)
+                                    <a href="{{ $crumb['url'] }}"
+                                        class="group flex items-center leading-none whitespace-nowrap text-[9px] font-bold uppercase tracking-[0.1em] text-zinc-500 transition-all hover:text-red-600 dark:text-zinc-400 dark:hover:text-red-500">
+                                        @if ($isFirst)
+                                            <x-icons.home class="{{ $crumbTitle ? 'me-1.5' : '' }} h-3.5 w-3.5 transition-transform group-hover:scale-110" />
+                                        @endif
+                                        <span class="leading-none">{{ $crumbTitle }}</span>
+                                    </a>
+                                @else
+                                    <span
+                                        class="flex items-center leading-none whitespace-nowrap text-[9px] font-black uppercase tracking-[0.1em] text-red-600 dark:text-red-500">
+                                        @if ($isFirst)
+                                            <x-icons.home class="{{ $crumbTitle ? 'me-1.5' : '' }} h-3.5 w-3.5" />
+                                        @endif
+                                        <span class="leading-none">{{ $crumbTitle }}</span>
+                                    </span>
+                                @endif
+                            @endif
+                        </div>
+                    </li>
+                @endforeach
+            </ol>
+        </nav>
+    </template>
+</div>
