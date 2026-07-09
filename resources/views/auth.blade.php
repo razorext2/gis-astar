@@ -33,7 +33,7 @@
     </script>
 </head>
 
-<body id="container" class="relative min-h-screen overflow-x-hidden bg-white antialiased dark:bg-zinc-950"
+<body id="container" class="relative min-h-screen overflow-x-hidden bg-zinc-50 antialiased dark:bg-zinc-950"
     onmousemove="document.getElementById('container').style.setProperty('--mouse-x', event.clientX + 'px'); document.getElementById('container').style.setProperty('--mouse-y', event.clientY + 'px');">
 
     <x-utils.dynamic-background />
@@ -79,7 +79,7 @@
         <div class="flex w-full max-w-6xl flex-col justify-between gap-10 md:flex-row md:items-center">
 
             {{-- Branding Area --}}
-            <div class="flex w-full flex-col items-center text-center md:w-1/2 md:items-start md:text-left">
+            <div class="relative z-20 flex w-full flex-col items-center text-center md:w-1/2 md:items-start md:text-left">
 
                 <h1
                     class="flex flex-col items-center text-center text-4xl font-black leading-tight tracking-tight text-zinc-900 drop-shadow-sm dark:text-white md:items-start md:text-left md:text-5xl lg:text-[3.5rem]">
@@ -127,7 +127,7 @@
             </div>
 
             {{-- Form Area Slot --}}
-            <div class="z-10 flex w-full justify-center pb-10 md:w-1/2 md:justify-end md:pb-0">
+            <div class="relative z-10 flex w-full justify-center pb-10 md:w-1/2 md:justify-end md:pb-0">
                 {{ $slot }}
             </div>
 

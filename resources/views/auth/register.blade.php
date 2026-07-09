@@ -1,9 +1,10 @@
+{{-- Goal: Register page form, Livewire: None, Alpine: Yes (shares GuestLayout context) --}}
 <x-guest-layout>
     <div class="mx-auto w-full max-w-md">
         <div
-            class="flex w-full flex-col rounded-xl bg-white/60 backdrop-blur-md p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] ring-1 ring-zinc-200 dark:bg-dark-primary/60 dark:backdrop-blur-md dark:ring-zinc-800 sm:p-10">
+            class="flex w-full flex-col rounded-2xl border-0 bg-transparent p-4 shadow-none backdrop-blur-none dark:border-0 dark:bg-transparent dark:shadow-none sm:border sm:border-glass-border-light sm:bg-glass-light sm:p-10 sm:shadow-xl sm:shadow-glass-light sm:backdrop-blur-2xl sm:dark:border-glass-border-dark sm:dark:bg-glass-dark sm:dark:shadow-glass-dark">
 
-            <div class="mb-8 border-b border-zinc-200 pb-5 dark:border-zinc-800">
+            <div class="mb-8 border-b border-glass-divider-light pb-5 dark:border-glass-divider-dark">
                 <h2 class="text-left text-3xl font-black tracking-tight text-zinc-900 dark:text-white">
                     Registrasi
                 </h2>
