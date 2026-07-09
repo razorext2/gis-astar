@@ -1,108 +1,144 @@
+{{-- Goal: Stat card carousel item with liquid glass/glassmorphism theme, Livewire: components.card, Alpine: None --}}
 @php
     $colorMap = [
         'blue' => [
-            'shadow' => 'group-hover:shadow-blue-500/10 dark:group-hover:shadow-blue-900/20',
-            'accent' => 'from-blue-400 via-blue-500 to-blue-700',
-            'radial' => 'from-blue-100 to-blue-50/50 dark:from-blue-900/20 dark:to-blue-800/10',
-            'icon' => 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400',
-            'progress' => 'from-blue-500 to-blue-700 dark:from-blue-500 dark:to-blue-400',
-            'progress-shadow' => 'rgba(59,130,246,0.5)',
+            'shadow' => 'group-hover:shadow-blue-500/20 dark:group-hover:shadow-blue-500/15',
+            'accent' => 'from-blue-400 via-sky-400 to-blue-600',
+            'glow' => 'bg-blue-400/20 dark:bg-blue-500/15',
+            'glow2' => 'bg-sky-300/10 dark:bg-sky-400/10',
+            'icon-ring' => 'ring-blue-300/50 dark:ring-blue-500/30',
+            'icon-bg' => 'bg-blue-400/20 dark:bg-blue-500/20',
+            'icon-text' => 'text-blue-600 dark:text-blue-300',
+            'progress' => 'from-blue-400 to-sky-500',
+            'progress-glow' => 'rgba(56,189,248,0.6)',
+            'value-from' => 'from-blue-600',
+            'value-to' => 'to-sky-500',
+            'value-dark-from' => 'dark:from-blue-300',
+            'value-dark-to' => 'dark:to-sky-200',
+            'label-hover' => 'group-hover:text-blue-600 dark:group-hover:text-blue-400',
         ],
         'red' => [
-            'shadow' => 'group-hover:shadow-red-500/10 dark:group-hover:shadow-red-900/20',
-            'accent' => 'from-red-400 via-red-500 to-red-700',
-            'radial' => 'from-red-100 to-red-50/50 dark:from-red-900/20 dark:to-red-800/10',
-            'icon' => 'bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400',
-            'progress' => 'from-red-500 to-red-700 dark:from-red-500 dark:to-red-400',
-            'progress-shadow' => 'rgba(239,68,68,0.5)',
+            'shadow' => 'group-hover:shadow-red-500/20 dark:group-hover:shadow-red-500/15',
+            'accent' => 'from-red-400 via-rose-400 to-red-600',
+            'glow' => 'bg-red-400/20 dark:bg-red-500/15',
+            'glow2' => 'bg-rose-300/10 dark:bg-rose-400/10',
+            'icon-ring' => 'ring-red-300/50 dark:ring-red-500/30',
+            'icon-bg' => 'bg-red-400/20 dark:bg-red-500/20',
+            'icon-text' => 'text-red-600 dark:text-red-300',
+            'progress' => 'from-red-400 to-rose-500',
+            'progress-glow' => 'rgba(251,113,133,0.6)',
+            'value-from' => 'from-red-600',
+            'value-to' => 'to-rose-500',
+            'value-dark-from' => 'dark:from-red-300',
+            'value-dark-to' => 'dark:to-rose-200',
+            'label-hover' => 'group-hover:text-red-600 dark:group-hover:text-red-400',
         ],
         'yellow' => [
-            'shadow' => 'group-hover:shadow-yellow-500/10 dark:group-hover:shadow-yellow-900/20',
-            'accent' => 'from-yellow-400 via-yellow-500 to-yellow-700',
-            'radial' => 'from-yellow-100 to-yellow-50/50 dark:from-yellow-900/20 dark:to-yellow-800/10',
-            'icon' => 'bg-yellow-50 text-yellow-600 dark:bg-yellow-500/10 dark:text-yellow-400',
-            'progress' => 'from-yellow-500 to-yellow-700 dark:from-yellow-500 dark:to-yellow-400',
-            'progress-shadow' => 'rgba(234,179,8,0.5)',
+            'shadow' => 'group-hover:shadow-yellow-500/20 dark:group-hover:shadow-yellow-500/15',
+            'accent' => 'from-yellow-400 via-amber-400 to-yellow-600',
+            'glow' => 'bg-yellow-400/20 dark:bg-yellow-500/15',
+            'glow2' => 'bg-amber-300/10 dark:bg-amber-400/10',
+            'icon-ring' => 'ring-yellow-300/50 dark:ring-yellow-500/30',
+            'icon-bg' => 'bg-yellow-400/20 dark:bg-yellow-500/20',
+            'icon-text' => 'text-yellow-600 dark:text-yellow-300',
+            'progress' => 'from-yellow-400 to-amber-500',
+            'progress-glow' => 'rgba(251,191,36,0.6)',
+            'value-from' => 'from-yellow-600',
+            'value-to' => 'to-amber-500',
+            'value-dark-from' => 'dark:from-yellow-300',
+            'value-dark-to' => 'dark:to-amber-200',
+            'label-hover' => 'group-hover:text-yellow-600 dark:group-hover:text-yellow-400',
         ],
         'green' => [
-            'shadow' => 'group-hover:shadow-green-500/10 dark:group-hover:shadow-green-900/20',
-            'accent' => 'from-green-400 via-green-500 to-green-700',
-            'radial' => 'from-green-100 to-green-50/50 dark:from-green-900/20 dark:to-green-800/10',
-            'icon' => 'bg-green-50 text-green-600 dark:bg-green-500/10 dark:text-green-400',
-            'progress' => 'from-green-500 to-green-700 dark:from-green-500 dark:to-green-400',
-            'progress-shadow' => 'rgba(34,197,94,0.5)',
+            'shadow' => 'group-hover:shadow-green-500/20 dark:group-hover:shadow-green-500/15',
+            'accent' => 'from-green-400 via-emerald-400 to-green-600',
+            'glow' => 'bg-green-400/20 dark:bg-green-500/15',
+            'glow2' => 'bg-emerald-300/10 dark:bg-emerald-400/10',
+            'icon-ring' => 'ring-green-300/50 dark:ring-green-500/30',
+            'icon-bg' => 'bg-green-400/20 dark:bg-green-500/20',
+            'icon-text' => 'text-green-600 dark:text-green-300',
+            'progress' => 'from-green-400 to-emerald-500',
+            'progress-glow' => 'rgba(52,211,153,0.6)',
+            'value-from' => 'from-green-600',
+            'value-to' => 'to-emerald-500',
+            'value-dark-from' => 'dark:from-green-300',
+            'value-dark-to' => 'dark:to-emerald-200',
+            'label-hover' => 'group-hover:text-green-600 dark:group-hover:text-green-400',
         ],
     ];
 
     $style = $colorMap[$color] ?? $colorMap['red'];
     $visibleCount = $visibleCount ?? 1;
 
-    // Responsive logic:
-    // 1 card: full width
-    // 2-3 cards: desktop/tab balanced, mobile overflow
-    // 4 cards: desktop balanced, tab/mobile overflow
-    // 5+ cards: all overflow
-    $itemClasses = match (true) {
-        $visibleCount == 1 => 'flex-1 min-w-0',
-        $visibleCount == 2 || $visibleCount == 3 => 'md:flex-1 min-w-[280px] md:min-w-0 flex-shrink-0 md:flex-shrink',
-        $visibleCount == 4 => 'lg:flex-1 min-w-[280px] lg:min-w-0 flex-shrink-0 lg:flex-shrink',
-        default => 'min-w-[280px] flex-shrink-0',
-    };
+    $itemClasses = 'min-w-[260px] flex-shrink-0 xl:flex-1 xl:min-w-0';
 @endphp
 
-<div class="group relative {{ $itemClasses }} snap-start">
-    <div class="relative h-full transition-transform duration-300 ease-out group-hover:-translate-y-1.5">
+<div class="{{ $itemClasses }} group relative snap-start">
+    <div class="relative h-full transition-all duration-500 ease-out group-hover:-translate-y-2">
 
-        {{-- Main Card --}}
+        {{-- Main Liquid Glass Card --}}
         <div
-            class="{{ $style['shadow'] }} relative h-full overflow-hidden rounded-xl bg-white/60 backdrop-blur-md p-4 shadow-md ring-1 ring-zinc-200 transition-all duration-300 group-hover:shadow-xl dark:bg-dark-primary/60 dark:backdrop-blur-md dark:ring-zinc-800">
+            class="{{ $style['shadow'] }} relative h-full overflow-hidden rounded-2xl border border-white/40 bg-white/50 p-5 shadow-md backdrop-blur-xl transition-all duration-500 group-hover:border-white/60 group-hover:shadow-sm dark:border-zinc-700/50 dark:bg-zinc-900/50 dark:group-hover:border-zinc-600/60">
 
-            {{-- Accent Top Line --}}
+            {{-- Colored Top Accent Bar --}}
             <div
-                class="{{ $style['accent'] }} absolute inset-x-0 top-0 h-1 bg-gradient-to-r opacity-80">
+                class="{{ $style['accent'] }} absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r opacity-90 transition-all duration-500 group-hover:opacity-100">
             </div>
 
-            {{-- Subtle Background Radial Effect --}}
+            {{-- Primary Glow Orb (top-right) --}}
             <div
-                class="{{ $style['radial'] }} absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-to-br blur-2xl transition-transform duration-700 ease-in-out group-hover:scale-150">
+                class="{{ $style['glow'] }} pointer-events-none absolute -right-6 -top-6 h-28 w-28 rounded-full blur-2xl transition-all duration-700 ease-in-out group-hover:scale-[1.6] group-hover:opacity-80">
+            </div>
+
+            {{-- Secondary Glow Orb (bottom-left) --}}
+            <div
+                class="{{ $style['glow2'] }} pointer-events-none absolute -bottom-8 -left-6 h-24 w-24 rounded-full blur-3xl transition-all duration-700 ease-in-out group-hover:scale-150 group-hover:opacity-60">
+            </div>
+
+            {{-- Inner Glass Sheen --}}
+            <div
+                class="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-white/10 via-transparent to-transparent dark:from-white/5">
             </div>
 
             <div class="relative z-10">
-                {{-- Header --}}
-                <div class="mb-4 flex items-center justify-between">
-                    <h3
-                        class="text-xs font-bold uppercase tracking-widest text-zinc-500 transition-colors duration-300 group-hover:text-zinc-700 dark:text-zinc-400 dark:group-hover:text-zinc-300">
-                        {{ $label }}
-                    </h3>
 
-                    {{-- Icon Box --}}
+                {{-- Header Row --}}
+                <div class="mb-4 flex items-start justify-between gap-2">
+                    <p
+                        class="{{ $style['label-hover'] }} text-[10px] font-bold uppercase tracking-[0.15em] text-zinc-400 transition-colors duration-300 dark:text-zinc-500">
+                        {{ $label }}
+                    </p>
+
+                    {{-- Liquid Glass Icon Badge --}}
                     <div
-                        class="{{ $style['icon'] }} relative flex h-8 w-8 items-center justify-center rounded-lg transition-transform duration-500 group-hover:rotate-6 group-hover:scale-110">
-                        <x-dynamic-component :component="$icon" class="h-4 w-4 drop-shadow-sm" />
+                        class="{{ $style['icon-bg'] }} {{ $style['icon-ring'] }} {{ $style['icon-text'] }} relative flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl ring-1 backdrop-blur-sm transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 group-hover:shadow-md">
+                        {{-- Icon inner glow --}}
+                        <div
+                            class="{{ $style['glow'] }} absolute inset-0 rounded-xl opacity-0 blur-sm transition-opacity duration-500 group-hover:opacity-100">
+                        </div>
+                        <x-dynamic-component :component="$icon" class="relative h-4 w-4 drop-shadow" />
                     </div>
                 </div>
 
-                {{-- Main Value --}}
+                {{-- Main Count Value --}}
                 <div class="flex items-end gap-2">
                     <span
-                        class="bg-gradient-to-br from-zinc-800 to-zinc-600 bg-clip-text text-4xl font-black tracking-tight text-transparent dark:from-white dark:to-zinc-300">
+                        class="{{ $style['value-from'] }} {{ $style['value-to'] }} {{ $style['value-dark-from'] }} {{ $style['value-dark-to'] }} inline-block origin-left bg-gradient-to-br bg-clip-text text-4xl font-black tracking-tight text-transparent transition-transform duration-300 group-hover:scale-105">
                         {{ number_format($count) }}
                     </span>
-                    <span class="mb-1.5 text-xs font-semibold text-zinc-500 dark:text-zinc-400">
+                    <span class="mb-1.5 text-[11px] font-semibold text-zinc-400 dark:text-zinc-500">
                         {{ $indicator }}
                     </span>
                 </div>
 
-                {{-- Progress/Decorative Bar --}}
-                <div
-                    class="mt-5 flex h-1.5 w-full items-center overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800/80">
-                    <div
-                        class="{{ $style['progress'] }} h-full w-1/3 rounded-full bg-gradient-to-r transition-all duration-1000 ease-out group-hover:w-full"
-                        style="box-shadow: 0 0 10px {{ $style['progress-shadow'] }};">
+                {{-- Neon Progress Track --}}
+                <div class="mt-5 h-1 w-full overflow-hidden rounded-full bg-zinc-200/60 dark:bg-zinc-700/50">
+                    <div class="{{ $style['progress'] }} h-full w-1/3 rounded-full bg-gradient-to-r transition-all duration-700 ease-out group-hover:w-full"
+                        style="box-shadow: 0 0 8px {{ $style['progress-glow'] }}, 0 0 2px {{ $style['progress-glow'] }};">
                     </div>
                 </div>
-            </div>
 
+            </div>
         </div>
     </div>
 </div>

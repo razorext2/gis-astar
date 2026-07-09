@@ -1,6 +1,6 @@
-<div class="relative mb-2 w-full overflow-x-auto py-2">
+<div class="relative mb-2 w-full overflow-x-auto xl:overflow-x-visible py-2">
 
-    <div class="flex snap-x snap-mandatory flex-nowrap gap-4" wire:poll.300s>
+    <div class="flex snap-x snap-mandatory flex-nowrap gap-4 xl:flex-wrap" wire:poll.300s>
 
         @foreach ($data as $row)
             @if ($row['permission'] == 'all' || auth()->user()->hasPermissionTo($row['permission']))
