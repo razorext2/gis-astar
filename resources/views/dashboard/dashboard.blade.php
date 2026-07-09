@@ -1,3 +1,4 @@
+{{-- Goal: Dashboard page displaying greetings, quick actions, attendance chart, and recent activity, Livewire: Line, recent-spk, financial-glance, technician-leaderboard, admin-attendance-overview, Alpine: None --}}
 @extends('dashboard.layoutsDash.app')
 @section('content')
     @livewire('components.card', ['type' => 'dashboard'])
@@ -48,25 +49,9 @@
             <!-- Chart Section -->
             <div
                 class="col-span-2 mb-4 flex h-full flex-col rounded-xl border border-zinc-200 bg-white/60 p-5 shadow-sm backdrop-blur-md transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none md:p-6 lg:mb-0">
-                <div class="mb-5 flex items-start justify-between">
-                    <div>
-                        <p class="mb-1 text-3xl font-black tracking-tight text-zinc-900 dark:text-white">
-                            {{ $yearNow }}
-                        </p>
-                        <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">
-                            Menampilkan data 7 hari kebelakang
-                        </p>
-                    </div>
-                    <div
-                        class="flex items-center rounded-lg bg-red-50 px-3 py-1 text-center text-sm font-bold text-red-700 dark:bg-red-700/10 dark:text-red-500">
-                        {{ $formattedDateRange }}
-                    </div>
-                </div>
-
+                
                 {{-- Livewire Chart --}}
-                <div class="relative h-[340px] w-full overflow-hidden px-1 py-4 lg:h-full lg:flex-1">
-                    <livewire:chart.line />
-                </div>
+                <livewire:chart.attendance-chart />
 
                 <div class="mt-4 border-t border-zinc-200 pt-5 dark:border-zinc-800">
                     <div class="flex flex-wrap items-center justify-between gap-3">

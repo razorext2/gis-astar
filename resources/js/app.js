@@ -15,8 +15,43 @@ import "lenis/dist/lenis.css";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 
+/** Goal: Clean up ApexCharts instances on Livewire 3 SPA navigation, Caller: Resources layouts, Deps: Livewire, livewire-charts */
+document.addEventListener("livewire:init", () => {
+    const chartCreators = [
+        'livewireChartsAreaChart',
+        'livewireChartsColumnChart',
+        'livewireChartsLineChart',
+        'livewireChartsMultiLineChart',
+        'livewireChartsPieChart',
+        'livewireChartsMultiColumnChart',
+        'livewireChartsRadarChart',
+        'livewireChartsTreeMapChart',
+        'livewireChartsRadialChart'
+    ];
+
+    chartCreators.forEach(creatorName => {
+        const originalCreator = window[creatorName];
+        if (originalCreator) {
+            window[creatorName] = function(...args) {
+                const chartObj = originalCreator(...args);
+                chartObj.destroy = function() {
+                    if (this.chart) {
+                        try {
+                            this.chart.destroy();
+                        } catch (e) {
+                            console.warn("Failed to destroy chart:", e);
+                        }
+                    }
+                };
+                return chartObj;
+            };
+        }
+    });
+});
+
 window.flatpickr = flatpickr;
 window.$ = window.jQuery = $;
+
 window.Swal = Swal;
 window.Quill = Quill;
 
