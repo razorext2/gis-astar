@@ -41,6 +41,7 @@ final class PermissionsTable extends PowerGridComponent
     public function datasource(): Builder
     {
         return Permission::query()
+            ->with('roles')
             ->orderBy('name', 'asc');
     }
 
@@ -55,6 +56,16 @@ final class PermissionsTable extends PowerGridComponent
             ->add('id')
             ->add('name')
             ->add('guard_name')
+            ->add('roles', function ($query) {
+                $roles = $query->roles
+                    ->pluck('name')
+                    ->sort()
+                    ->values();
+
+                $data = $roles->count() > 5 ? $roles->take(5)->push('...') : $roles;
+
+                return view('components.table-component.tags', ['items' => $data]);
+            })
             ->add('created_at')
             ->add('created_at_formatted', function ($query) {
                 $date = Carbon::parse($query->created_at)->locale('id')->isoFormat('D MMMM YYYY');
@@ -82,6 +93,7 @@ final class PermissionsTable extends PowerGridComponent
             Column::make('Guard', 'guard_name')
                 ->sortable()
                 ->searchable(),
+            Column::make('Roles', 'roles'),
             Column::make('Created at', 'created_at_formatted', 'created_at'),
             Column::make('Updated at', 'updated_at_formatted', 'updated_at'),
         ];

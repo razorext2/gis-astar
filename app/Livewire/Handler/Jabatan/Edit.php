@@ -10,10 +10,11 @@ use App\Models\Jabatan;
 use App\Models\Placement;
 use App\Models\User;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Edit extends Component
 {
-    use HandlesErrors;
+    use HandlesErrors, WithPagination;
 
     public $jabatanId;
 
@@ -72,10 +73,14 @@ class Edit extends Component
             ->orderBy('name')
             ->get();
 
+        $jabatan = Jabatan::findOrFail($this->jabatanId);
+        $employees = $jabatan->pegawai()->with('userRelasi')->paginate(5);
+
         return view('livewire.handler.jabatan.edit', [
             'divisions' => Division::select(['id', 'nama_divisi'])->get(),
             'placements' => Placement::select(['id', 'penempatan'])->get(),
             'allUsers' => $allUsers,
+            'employees' => $employees,
         ]);
     }
 }

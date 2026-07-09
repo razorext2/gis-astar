@@ -1,3 +1,4 @@
+{{-- Goal: Edit details of a permission and view its assigned roles, Livewire: Handler.Permissions.Update, Alpine: None --}}
 <form class="mt-4" wire:submit.prevent="save">
     @csrf
     @method('put')
@@ -7,6 +8,22 @@
                 Guard Name
             </label>
             <x-input.basic class="cursor-not-allowed" id="guard_name" wire:model="guard_name" name="guard_name" readonly />
+        </div>
+        <div class="flex w-full flex-col">
+            <label class="block text-sm font-medium text-gray-900 dark:text-white">
+                Daftar Role Terkait
+            </label>
+            <div class="mt-2 flex flex-wrap gap-1.5">
+                @forelse ($permission->roles as $role)
+                    <span class="rounded-lg bg-green-100 px-3 py-1 text-xs font-semibold text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                        {{ $role->name }}
+                    </span>
+                @empty
+                    <span class="text-sm italic text-zinc-500 dark:text-zinc-400">
+                        Belum ada role yang memiliki perizinan ini.
+                    </span>
+                @endforelse
+            </div>
         </div>
         <div class="flex w-full flex-col">
             <label class="block text-sm font-medium text-gray-900 dark:text-white" for="name">

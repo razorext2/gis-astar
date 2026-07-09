@@ -44,7 +44,7 @@ final class JabatanTable extends PowerGridComponent
     public function datasource(): Builder
     {
         return Jabatan::query()
-            ->with(['divisionRelasi', 'placementRelasi', 'supervisors'])
+            ->with(['divisionRelasi', 'placementRelasi', 'supervisors', 'pegawai'])
             ->orderBy('nama_jabatan', 'asc');
     }
 
@@ -79,6 +79,11 @@ final class JabatanTable extends PowerGridComponent
             })
             ->add('divisi', fn ($query) => $query->divisionRelasi->nama_divisi)
             ->add('penempatan', fn ($query) => $query->placementRelasi->penempatan)
+            ->add('pegawai_list', function ($query) {
+                $items = $query->pegawai->map(fn ($p) => $p->full_name)->toArray();
+
+                return view('components.table-component.tags', ['items' => $items]);
+            })
             ->add('created_at_formatted', fn ($query) => Carbon::parse($query->created_at)->locale('id')->isoFormat('DD MMM YYYY HH:mm:ss'));
     }
 
@@ -97,6 +102,8 @@ final class JabatanTable extends PowerGridComponent
             Column::make('Divisi', 'divisi'),
 
             Column::make('Penempatan', 'penempatan'),
+
+            Column::make('Pegawai', 'pegawai_list'),
 
             Column::make('Created at', 'created_at')
                 ->hidden(),

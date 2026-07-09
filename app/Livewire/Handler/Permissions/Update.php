@@ -7,6 +7,7 @@ use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
 
+/** Goal: Handle updating permission model and show its roles, Caller: routes/web.php, Deps: Spatie\Permission\Models\Permission */
 class Update extends Component
 {
     use HandlesErrors;
@@ -20,7 +21,7 @@ class Update extends Component
 
     public function mount($id)
     {
-        $this->permission = Permission::find($id);
+        $this->permission = Permission::with('roles')->find($id);
 
         if (! $this->permission) {
             return abort(404);
