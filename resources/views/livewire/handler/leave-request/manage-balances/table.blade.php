@@ -1,5 +1,5 @@
 {{-- Goal: Leave balance filter, table, pagination & edit modal, Livewire: Handler.LeaveRequest.ManageBalances.Table, Alpine: true --}}
-<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-4">
 
     {{-- Toolbar: Search + Year + Reset Massal --}}
     <div
@@ -309,12 +309,13 @@
                     @foreach ($this->roles as $role)
                         <label wire:key="role-{{ $role->id }}"
                             class="inline-flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-all"
-                            :class="$wire.resetSelectedRoleIds.includes('{{ $role->id }}')
-                                ? 'border-blue-500 bg-blue-50 text-blue-700 dark:border-blue-500 dark:bg-blue-500/20 dark:text-blue-300'
-                                : 'border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:border-zinc-600'">
-                            <input type="checkbox" value="{{ $role->id }}" wire:model.live="resetSelectedRoleIds"
-                                class="hidden">
-                            <x-icons.check class="h-3.5 w-3.5" x-show="$wire.resetSelectedRoleIds.includes('{{ $role->id }}')" x-cloak />
+                            :class="$wire.resetSelectedRoleIds.includes('{{ $role->id }}') ?
+                                'border-blue-500 bg-blue-50 text-blue-700 dark:border-blue-500 dark:bg-blue-500/20 dark:text-blue-300' :
+                                'border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:border-zinc-600'">
+                            <input type="checkbox" value="{{ $role->id }}"
+                                wire:model.live="resetSelectedRoleIds" class="hidden">
+                            <x-icons.check class="h-3.5 w-3.5"
+                                x-show="$wire.resetSelectedRoleIds.includes('{{ $role->id }}')" x-cloak />
                             {{ $role->name }}
                         </label>
                     @endforeach

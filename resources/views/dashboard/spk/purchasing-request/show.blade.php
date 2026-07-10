@@ -8,10 +8,11 @@
             class="flex flex-col rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 dark:shadow-none lg:p-6">
             <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                 <div class="flex items-center gap-3">
-                    <x-button.secondary href="{{ route('purchasing-request.index') }}" class="shrink-0" wire:navigate
+                    <x-button.danger href="{{ route('purchasing-request.index') }}" class="shrink-0" wire:navigate
                         id="back-button">
                         <x-icons.angle-left class="h-5 w-5" />
-                    </x-button.secondary>
+                    </x-button.danger>
+                    
                     <div class="space-y-0.5">
                         <div class="flex items-center gap-2">
                             <h1 class="text-xl font-bold text-zinc-900 dark:text-white">Purchasing Request</h1>

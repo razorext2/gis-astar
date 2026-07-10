@@ -1,7 +1,7 @@
 <div class="w-full space-y-4">
     {{-- informasi project --}}
     <div
-        class="mb-4 w-full rounded-xl border border-zinc-200 bg-white/60 p-4 shadow backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
+        class="w-full rounded-xl border border-zinc-200 bg-white/60 p-4 shadow backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
         {{-- HEADER --}}
         <div class="relative flex items-center gap-3 border-b border-zinc-200 pb-4 dark:border-zinc-800">
             <div
@@ -225,9 +225,9 @@
     {{-- list report --}}
     <div class="flex flex-col gap-4">
         {{-- ACTION BAR --}}
-        <div class="flex justify-end">
-            @can('laporan-harian-create')
-                @if (now()->lt(\Carbon\Carbon::parse($assignment->project->end_date)->endOfDay()) && $assignment->status != 'completed')
+        @can('laporan-harian-create')
+            <div class="flex justify-end">
+                @if (now()->lt(\Carbon\Carbon::parse($assignment->project->end_date)->endOfDay()) && $assignment->status !== 'completed')
                     <x-button.primary wire:click.prevent="add" type="button" id="add-report-btn">
                         <x-slot name="icon">
                             <x-icons.plus class="h-5 w-5" />
@@ -235,8 +235,8 @@
                         Tambah Laporan
                     </x-button.primary>
                 @endif
-            @endcan
-        </div>
+            </div>
+        @endcan
 
         {{-- LIST CONTAINER --}}
         <div

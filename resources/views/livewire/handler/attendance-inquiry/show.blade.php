@@ -1,5 +1,5 @@
 {{-- Goal: Display own attendance inquiry detail, Livewire: App\Livewire\Handler\AttendanceInquiry\Show, Alpine: - --}}
-<div class="space-y-6">
+<div class="space-y-4">
     {{-- Header --}}
     <div
         class="flex items-center gap-3 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
@@ -63,8 +63,8 @@
     @endif
 
     {{-- Details Grid --}}
-    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div class="space-y-6 lg:col-span-2">
+    <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div class="space-y-4 lg:col-span-2">
             {{-- Detail Fields --}}
             <div
                 class="space-y-4 rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
@@ -136,7 +136,7 @@
         </div>
 
         {{-- Geolocation Card --}}
-        <div class="space-y-6">
+        <div class="space-y-4">
 
             {{-- Allowed HRD Card --}}
             <x-attendance-inquiry.allowed-hrds-card :hrds="$allowedHrds" :inquiry="$inquiry" />

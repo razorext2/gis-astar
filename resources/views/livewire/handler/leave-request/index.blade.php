@@ -1,5 +1,5 @@
 {{-- Goal: Display list of leave requests and filter options, Livewire: handler.leave-request.index, Alpine: none --}}
-<div class="mt-4 flex flex-col gap-6">
+<div class="flex flex-col gap-4">
 
     {{-- Header Section --}}
     <div
@@ -102,7 +102,7 @@
     </div>
 
     {{-- Main List --}}
-    <div class="grid gap-4 lg:gap-6">
+    <div class="grid gap-4">
         @forelse ($leaveRequests as $request)
             <div wire:key="request-{{ $request->id }}"
                 class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-xl transition-all duration-300 hover:border-red-500/30 hover:shadow-lg hover:shadow-primary/5 dark:border-zinc-800 dark:bg-dark-primary/60 dark:hover:bg-dark-primary/80 lg:p-6">
@@ -241,7 +241,7 @@
     </div>
 
     {{-- Pagination --}}
-    <div class="mt-6">
+    <div class="mt-4">
         {{ $leaveRequests->links() }}
     </div>
 </div>

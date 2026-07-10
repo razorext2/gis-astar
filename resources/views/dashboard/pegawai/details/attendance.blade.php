@@ -1,3 +1,4 @@
+{{-- Goal: Display employee attendance records in accordion, Livewire: attendance-in-table, attendance-out-table, Alpine: none --}}
 @extends('dashboard.pegawai.detail')
 @section('menus')
     <!-- Attendance In Section -->

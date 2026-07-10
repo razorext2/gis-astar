@@ -1,3 +1,4 @@
+{{-- Goal: Display employee activity timeline, Livewire: none, Alpine: none --}}
 @extends('dashboard.pegawai.detail')
 @section('menus')
     <div class="grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap-4" id="timeline" role="tabpanel">

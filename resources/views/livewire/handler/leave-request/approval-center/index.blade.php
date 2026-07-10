@@ -1,6 +1,6 @@
 {{-- Goal: Approval Center interface for processing leave requests, Livewire: Handler.LeaveRequest.ApprovalCenter.Index, Alpine: false --}}
 
-<div class="mt-4 flex flex-col gap-6">
+<div class="flex flex-col gap-4">
     {{-- Header Section --}}
     <div
         class="flex flex-col justify-between gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60 sm:flex-row sm:items-center md:p-6">
@@ -97,7 +97,7 @@
     </div>
 
     {{-- Approval List --}}
-    <div class="grid gap-4 lg:gap-6">
+    <div class="grid gap-4">
         @forelse ($pendingApprovals as $request)
             <div wire:key="approval-{{ $request->id }}"
                 class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-xl transition-all duration-300 hover:border-red-500/50 hover:shadow-lg dark:border-zinc-800 dark:bg-dark-primary/60 dark:hover:bg-dark-primary/80 lg:p-6">
@@ -201,11 +201,6 @@
                         </div>
 
                         <div class="flex w-full gap-2 sm:w-auto">
-                            <x-button.primary wire:navigate
-                                href="{{ route('leave-request.approval-center.show', $request->id) }}"
-                                class="!px-4 !py-1.5 text-sm">
-                                Proses
-                            </x-button.primary>
                             <x-button.link wire:navigate
                                 href="{{ route('leave-request.approval-center.show', $request->id) }}"
                                 class="!px-3 !py-1 text-sm">

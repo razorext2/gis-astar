@@ -1,6 +1,6 @@
 {{-- Goal: Leave Types management tab content, Livewire: Handler.LeaveRequest.ManageLeaveTypes.Index, Alpine: true --}}
 
-<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-4">
 
     <div
         class="flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white/60 p-4 text-center backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">

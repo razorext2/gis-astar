@@ -1,7 +1,6 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div class="relative space-y-4 lg:space-y-6">
-
+    <div class="relative space-y-4">
         {{-- Header Card --}}
         <div
             class="flex items-center gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">

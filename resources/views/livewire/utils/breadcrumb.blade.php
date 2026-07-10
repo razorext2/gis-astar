@@ -41,9 +41,6 @@
                                 $isLast = $loop->last;
                                 $isFirst = $i === 0;
                                 $crumbTitle = count($crumbs) > 2 && $isFirst ? '' : $crumb['title'];
-                                if ($crumbTitle && mb_strlen($crumbTitle) > 5) {
-                                    $crumbTitle = mb_substr($crumbTitle, 0, 5) . '...';
-                                }
                             @endphp
 
                             @if (!$isLast)
@@ -97,9 +94,7 @@
                                     $isLast = $loop->last;
                                     $isFirst = $i === 0;
                                     $crumbTitle = count($crumbs) > 2 && $isFirst ? '' : $crumb['title'];
-                                    if ($crumbTitle && mb_strlen($crumbTitle) > 5) {
-                                        $crumbTitle = mb_substr($crumbTitle, 0, 5) . '...';
-                                    }
+                                    $crumbTitleMobile = $crumbTitle && mb_strlen($crumbTitle) > 5 ? mb_substr($crumbTitle, 0, 5) . '...' : $crumbTitle;
                                 @endphp
 
                                 @if (!$isLast)
@@ -108,7 +103,8 @@
                                         @if ($isFirst)
                                             <x-icons.home class="{{ $crumbTitle ? 'me-1.5' : '' }} h-3.5 w-3.5 transition-transform group-hover:scale-110" />
                                         @endif
-                                        <span class="leading-none">{{ $crumbTitle }}</span>
+                                        <span class="leading-none md:hidden">{{ $crumbTitleMobile }}</span>
+                                        <span class="leading-none hidden md:inline">{{ $crumbTitle }}</span>
                                     </a>
                                 @else
                                     <span
@@ -116,7 +112,8 @@
                                         @if ($isFirst)
                                             <x-icons.home class="{{ $crumbTitle ? 'me-1.5' : '' }} h-3.5 w-3.5" />
                                         @endif
-                                        <span class="leading-none">{{ $crumbTitle }}</span>
+                                        <span class="leading-none md:hidden">{{ $crumbTitleMobile }}</span>
+                                        <span class="leading-none hidden md:inline">{{ $crumbTitle }}</span>
                                     </span>
                                 @endif
                             @endif

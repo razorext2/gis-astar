@@ -1,10 +1,10 @@
 {{-- Goal: Reusable detail card for leave request information, Deps: LeaveRequest --}}
 @props(['request', 'showApprovalRole' => false])
 
-<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-4">
     {{-- Applicant Info Card --}}
     <div
-        class="overflow-hidden rounded-xl border border-zinc-200 bg-white/60 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60">
+        class="overflow-hidden rounded-xl border border-zinc-200 bg-white/60 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
         <div class="bg-zinc-50/50 p-4 dark:bg-white/5">
             <h2 class="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-zinc-500">
                 <x-icons.user-circle class="h-4 w-4" />

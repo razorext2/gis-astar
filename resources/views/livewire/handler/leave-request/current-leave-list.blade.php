@@ -1,6 +1,6 @@
 {{-- Goal: Current Leave List with Flight Board aesthetics, Livewire: CurrentLeaveList, Alpine: null --}}
 
-<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-4">
     {{-- Search Toolbar --}}
     <div
         class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60 sm:flex-row sm:items-center sm:justify-between md:p-5">

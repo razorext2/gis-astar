@@ -10,7 +10,6 @@
                 <x-slot name="icon">
                     <x-icons.angle-left class="h-5 w-5" />
                 </x-slot>
-                Kembali
             </x-button.danger>
 
             <div>

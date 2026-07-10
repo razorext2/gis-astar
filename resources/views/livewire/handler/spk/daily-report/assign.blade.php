@@ -1,3 +1,4 @@
+{{-- Goal: Assign Laporan ke Staf Form, Livewire: Handler\Spk\DailyReport\Assign, Alpine: - --}}
 <x-utils.accordion-item id="accordion-assign-report" title="Assign Laporan ke Staf?"
     description="Silakan perbarui informasi pengiriman pada form di bawah ini untuk barang yang telah selesai diproses."
     iconColor="green" :expanded="true" class="w-full">
@@ -37,15 +38,17 @@
                 Cari No. VT
             </label>
 
-            <div class="relative">
-                <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
-                    <x-icons.search class="h-4 w-4 text-zinc-400" />
+            <div class="flex items-center gap-2">
+                <div class="relative flex-1">
+                    <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
+                        <x-icons.search class="h-4 w-4 text-zinc-400" />
+                    </div>
+
+                    <x-input.basic class="ps-10" wire:model="form.no_vt" id="no_vt" name="no_vt"
+                        placeholder="cth: VT-12345678" :labels="false" />
                 </div>
 
-                <x-input.basic class="ps-10" wire:model="form.no_vt" id="no_vt" name="no_vt"
-                    placeholder="cth: VT-12345678" :labels="false" />
-
-                <x-button.primary type="button" wire:click="fetchVT" class="absolute bottom-[1px] end-0 focus:outline"
+                <x-button.primary type="button" wire:click="fetchVT" class="shrink-0 focus:outline"
                     id="no_vt_submit" wire:loading.attr="disabled" wire:target="fetchVT">
                     <x-slot name="icon">
                         <x-icons.search wire:loading.remove wire:target="fetchVT" class="icon h-5 w-5" />

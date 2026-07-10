@@ -1,6 +1,6 @@
 {{-- Goal: Pengaturan Cuti tab router, Livewire: Handler.LeaveRequest.ManageBalances.Index, Alpine: true --}}
 
-<div class="mt-4 flex flex-col gap-6" x-data="{ activeTab: 'balances' }">
+<div class="flex flex-col gap-4" x-data="{ activeTab: 'balances' }">
 
     {{-- Header / Tab Switcher --}}
     <div class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60 md:p-6 sm:flex-row sm:items-center sm:justify-between">

@@ -1,8 +1,8 @@
 {{-- Goal: Detailed review and action interface for leave request approvals, Livewire: Handler.LeaveRequest.ApprovalCenter.Show, Alpine: true --}}
 
-<div class="mt-4 flex flex-col gap-6" x-data="{ showRejectModal: false }">
+<div class="flex flex-col gap-4" x-data="{ showRejectModal: false }">
     {{-- Header / Navigation --}}
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-3 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none md:flex-row md:items-center lg:p-6">
         <x-button.danger wire:navigate href="{{ route('leave-request.approval-center.index') }}"
             class="max-h-10 max-w-fit">
             <x-icons.angle-left class="h-5 w-5" />
@@ -19,7 +19,7 @@
         <x-leave-request.deadline-timer :updatedAt="$request->updated_at" />
     @endif
 
-    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+    <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {{-- Left Column: Request Details --}}
         <div class="flex flex-col gap-6 lg:col-span-2">
             <x-leave-request.detail-card :request="$request" :showApprovalRole="true" />

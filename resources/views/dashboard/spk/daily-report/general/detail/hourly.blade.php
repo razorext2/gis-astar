@@ -4,12 +4,11 @@
         <div
             class="flex items-center gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
 
-            <x-button.danger href="{{ route('daily-report.daily', ['id' => $dailyReport->assignment_id]) }}"
+            <x-button.danger href="{{ route('report.general.daily', ['id' => $dailyReport->assignment_id]) }}"
                 class="max-h-10 w-fit shrink-0" wire:navigate id="back-button">
                 <x-slot name="icon">
                     <x-icons.angle-left class="h-5 w-5" />
                 </x-slot>
-                Kembali
             </x-button.danger>
 
             <div>

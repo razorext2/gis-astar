@@ -1,5 +1,5 @@
+{{-- Goal: Display employee sales report history and map location, Livewire: none, Alpine: none --}}
 @extends('dashboard.pegawai.detail')
-@section('menus')
 @section('menus')
     <div id="sales" role="tabpanel" class="grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap-4">
 

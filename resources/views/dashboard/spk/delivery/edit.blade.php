@@ -7,17 +7,25 @@
         <div
             class="flex flex-col rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
             <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                <div class="space-y-1">
-                    <div class="flex items-center gap-2">
-                        <h1 class="text-xl font-bold text-zinc-900 dark:text-white">Update Pengiriman</h1>
-                        <span
-                            class="inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 text-xs font-bold text-blue-700 ring-1 ring-inset ring-blue-700/10 dark:bg-blue-900/30 dark:text-blue-400">
-                            {{ $data->nomor_order }}
-                        </span>
+                <div class="flex items-center gap-4">
+                    <x-button.danger href="{{ route('delivery.index') }}" class="w-fit" wire:navigate id="back-button"
+                        class="max-h-10 max-w-fit">
+                        <x-icons.angle-left class="h-5 w-5" />
+                    </x-button.danger>
+
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h1 class="text-xl font-bold text-zinc-900 dark:text-white">Update Pengiriman</h1>
+                            <span
+                                class="inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 text-xs font-bold text-blue-700 ring-1 ring-inset ring-blue-700/10 dark:bg-blue-900/30 dark:text-blue-400">
+                                {{ $data->nomor_order }}
+                            </span>
+                        </div>
+
+                        <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+                            Kelola detail logistik dan informasi pengiriman untuk pelanggan.
+                        </p>
                     </div>
-                    <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">
-                        Kelola detail logistik dan informasi pengiriman untuk pelanggan.
-                    </p>
                 </div>
 
                 <div class="flex flex-wrap gap-2">

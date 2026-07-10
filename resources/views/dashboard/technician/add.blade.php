@@ -1,8 +1,8 @@
+{{-- Goal: Technician Report Log Form Page, Livewire: - (uses native js), Alpine: - --}}
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div class="w-full space-y-6">
-        <div
-            class="grid gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none sm:p-6">
+    <div
+        class="grid w-full gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none sm:p-6">
 
             <div class="w-full">
                 <header class="flex items-center">
@@ -288,8 +288,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 @endsection
 @push('script')
     @vite(['resources/js/pages/technician/add.js'])

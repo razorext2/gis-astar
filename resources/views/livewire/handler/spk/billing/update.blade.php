@@ -1,5 +1,5 @@
 {{-- Goal: UI parent wrapper untuk assign/unassign nomor tagihan BSI ke SPK, Livewire: Update, Alpine: minimal --}}
-<div class="flex flex-col gap-4 lg:gap-6">
+<div class="flex flex-col gap-4">
     {{-- Info Cust SPK --}}
     <div
         class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
