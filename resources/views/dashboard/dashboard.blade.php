@@ -49,25 +49,23 @@
             <!-- Chart Section -->
             <div
                 class="col-span-2 mb-4 flex h-full flex-col rounded-xl border border-zinc-200 bg-white/60 p-5 shadow-sm backdrop-blur-md transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none md:p-6 lg:mb-0">
-                
+
                 {{-- Livewire Chart --}}
                 <livewire:chart.attendance-chart />
 
                 <div class="mt-4 border-t border-zinc-200 pt-5 dark:border-zinc-800">
                     <div class="flex flex-wrap items-center justify-between gap-3">
 
-                        <x-button.primary form="attend-in" type="submit"
-                            class="flex-1 justify-center bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 sm:flex-none">
+                        <x-button.primary form="attend-in" type="submit">
                             <x-slot name="icon">
-                                <x-icons.angle-right class="icon h-5 w-5 text-white" />
+                                <x-icons.angle-right class="icon h-5 w-5" />
                             </x-slot>
                             Absen Masuk
                         </x-button.primary>
 
-                        <x-button.danger form="attend-out" type="submit"
-                            class="flex-1 justify-center !bg-red-700 text-white hover:!bg-red-800 dark:!bg-red-700 dark:hover:!bg-red-800 sm:flex-none">
+                        <x-button.danger form="attend-out" type="submit">
                             <x-slot name="icon">
-                                <x-icons.angle-left class="icon h-5 w-5 text-white" />
+                                <x-icons.angle-left class="icon h-5 w-5" />
                             </x-slot>
                             Absen Keluar
                         </x-button.danger>
@@ -112,5 +110,9 @@
         @endif
     </div>
     {{-- Signal popup FABs to auto-open on this page --}}
-    <script>window.addEventListener('load', () => window.dispatchEvent(new CustomEvent('enable-autopop')), { once: true });</script>
+    <script>
+        window.addEventListener('load', () => window.dispatchEvent(new CustomEvent('enable-autopop')), {
+            once: true
+        });
+    </script>
 @endsection

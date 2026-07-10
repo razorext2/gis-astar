@@ -108,15 +108,13 @@
                     <h3 class="text-base font-bold text-zinc-900 dark:text-white">Tindakan HRD</h3>
 
                     <div class="flex flex-wrap items-center gap-3">
-                        <button wire:click="approve" wire:loading.attr="disabled"
-                            class="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition-all hover:bg-blue-700 disabled:opacity-50">
+                        <x-button.primary wire:click="approve" wire:loading.attr="disabled" id="approve_btn">
                             Setujui Laporan
-                        </button>
+                        </x-button.primary>
 
-                        <button type="button" @click="showRejectForm = !showRejectForm"
-                            class="inline-flex items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-6 py-2.5 text-sm font-semibold text-zinc-700 shadow-sm hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800">
+                        <x-button.secondary type="button" @click="showRejectForm = !showRejectForm" id="toggle_reject_btn">
                             Tolak Laporan
-                        </button>
+                        </x-button.secondary>
                     </div>
 
                     {{-- Rejection Form (Slide Down) --}}
@@ -171,11 +169,15 @@
                                     class="text-zinc-700 dark:text-zinc-200">{{ $inquiry->longitude }}</strong></p>
                         </div>
 
-                        <a href="https://www.google.com/maps/search/?api=1&query={{ $inquiry->latitude }},{{ $inquiry->longitude }}"
+                        <x-button.secondary href="https://www.google.com/maps/search/?api=1&query={{ $inquiry->latitude }},{{ $inquiry->longitude }}"
                             target="_blank"
-                            class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-semibold text-zinc-700 shadow-sm hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800">
-                            <x-icons.map-pin class="h-4 w-4 text-red-500" /> Buka Google Maps
-                        </a>
+                            class="w-full"
+                            id="open_gmaps_btn">
+                            <x-slot name="icon">
+                                <x-icons.map-pin class="h-4 w-4 text-red-500" />
+                            </x-slot>
+                            Buka Google Maps
+                        </x-button.secondary>
                     </div>
                 @else
                     <div class="py-6 text-center text-zinc-500">

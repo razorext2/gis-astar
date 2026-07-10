@@ -71,12 +71,11 @@
                 </div>
 
                 @if ($showCloseButton)
-                    <x-button.secondary @click="open = false"
-                        class="!rounded-full !border-none !bg-transparent !p-2 !shadow-none !ring-0">
+                    <x-button.danger @click="open = false" class="!rounded-full !p-2">
                         <x-slot name="icon">
                             <x-icons.close class="h-5 w-5" />
                         </x-slot>
-                    </x-button.secondary>
+                    </x-button.danger>
                 @endif
             </div>
 

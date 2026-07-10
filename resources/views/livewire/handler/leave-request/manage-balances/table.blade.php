@@ -130,7 +130,6 @@
         {{ $users->links() }}
     </div>
 
-    {{-- Edit Balance Modal --}}
     {{-- Edit Saldo Modal --}}
     <x-modal.base-modal :show="'isEditOpen'" :title="'Edit Saldo Cuti'" :subtitle="$editUserName . ' — Tahun ' . $year" maxWidth="md">
         <x-slot name="icon">
@@ -177,10 +176,9 @@
             </div>
 
             <div class="flex justify-end gap-3 pt-2">
-                <button type="button" @click="open = false"
-                    class="rounded-xl border border-zinc-200 px-5 py-2 text-sm font-bold text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-400">
+                <x-button.secondary @click="open = false">
                     Batal
-                </button>
+                </x-button.secondary>
                 <x-button.primary type="submit">
                     <x-slot name="icon"><x-icons.check class="h-4 w-4" /></x-slot>
                     Simpan
@@ -255,10 +253,9 @@
         @endif
 
         <x-slot name="footer">
-            <button @click="open = false"
-                class="rounded-xl bg-zinc-200 px-6 py-2 text-xs font-bold text-zinc-700 transition-all hover:bg-zinc-300 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700">
+            <x-button.secondary @click="open = false">
                 Tutup
-            </button>
+            </x-button.secondary>
         </x-slot>
     </x-modal.base-modal>
 
@@ -387,10 +384,9 @@
         </div>
 
         <x-slot name="footer">
-            <button type="button" @click="open = false"
-                class="rounded-xl bg-zinc-200 px-6 py-2 text-xs font-bold text-zinc-700 transition-all hover:bg-zinc-300 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700">
+            <x-button.secondary type="button" @click="open = false">
                 Batal
-            </button>
+            </x-button.secondary>
             <x-button.primary wire:click="resetByFilter"
                 wire:confirm="Yakin ingin mereset saldo cuti untuk tahun {{ $year }}? Pegawai dengan riwayat pemakaian akan dilewati.">
                 <x-slot name="icon"><x-icons.clockwise class="h-4 w-4" /></x-slot>

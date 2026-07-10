@@ -1,15 +1,4 @@
 {{-- Goal: Floating dashboard navbar layout with adjustable background, shadow, and mobile responsiveness, Livewire: Yes, Alpine: Yes --}}
-@once
-    <style>
-        @keyframes navBreadcrumbFadeIn {
-            from { opacity: 0; transform: translateY(-4px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in {
-            animation: navBreadcrumbFadeIn 0.25s ease-out forwards;
-        }
-    </style>
-@endonce
 <nav x-data="{
     navVisible: true,
     lastScrollY: 0,
@@ -45,7 +34,14 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
         {{-- Logo & Toggle --}}
         <div class="flex items-center gap-2">
             {{-- Sidebar Toggle Button (Desktop Only) --}}
-            <button @click="openSidebar = !openSidebar" class="hidden md:flex rounded-xl p-2 text-zinc-500 hover:bg-zinc-100/50 dark:text-zinc-400 dark:hover:bg-zinc-800/50 transition-colors">
+            <button @click="openSidebar = !openSidebar"
+                x-data="{ tapping: false }"
+                x-on:mousedown="tapping = true"
+                x-on:touchstart="tapping = true"
+                x-on:animationend="tapping = false"
+                x-on:animationcancel="tapping = false"
+                :class="{ 'is-tapping': tapping }"
+                class="liquid-btn hidden md:flex rounded-xl p-2 text-zinc-500 hover:bg-zinc-100/50 dark:text-zinc-400 dark:hover:bg-zinc-800/50 transition-colors">
                 <span x-show="!openSidebar">
                     <x-icons.bar class="h-5 w-5" />
                 </span>

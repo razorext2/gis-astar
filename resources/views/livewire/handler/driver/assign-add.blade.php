@@ -19,23 +19,25 @@
                     Cari No. SR
                 </label>
 
-                <form wire:submit="fetchSR" class="relative">
-                    <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
-                        <x-icons.search class="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                <form wire:submit="fetchSR" class="flex flex-col gap-1">
+                    <div class="flex flex-row items-center gap-2">
+                        <div class="relative flex-1">
+                            <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
+                                <x-icons.search class="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                            </div>
+
+                            <x-input.basic class="ps-10" wire:model="no_sr" id="no_sr" name="no_sr" placeholder="No. SR"
+                                :labels="false" />
+                        </div>
+
+                        <x-button.primary type="submit" class="shrink-0" id="no_sr_submit">
+                            Cek SR
+                        </x-button.primary>
                     </div>
 
-                    <x-input.basic class="ps-10" wire:model="no_sr" id="no_sr" name="no_sr" placeholder="No. SR"
-                        :labels="false" />
-
-                    <x-button.primary type="submit" class="absolute bottom-[1px] end-0 focus:outline"
-                        id="no_sr_submit">
-                        Cek SR
-                    </x-button.primary>
-                </form>
-
-                @error('no_sr')
-                    <span class="error mt-2 text-xs text-red-500">{{ $message }}</span>
-                @enderror
+                    @error('no_sr')
+                        <span class="error text-xs text-red-500">{{ $message }}</span>
+                    @enderror
             </div>
         </div>
 

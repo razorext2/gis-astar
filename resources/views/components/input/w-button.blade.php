@@ -15,17 +15,19 @@
 	</label>
 @endif
 
-<div class="relative">
-	@if ($icon)
-		<div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
-			<x-icons.search class="h-4 w-4 text-zinc-500 dark:text-zinc-400" />
-		</div>
-	@endif
+<div class="flex flex-row items-center gap-2">
+	<div class="relative flex-1">
+		@if ($icon)
+			<div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
+				<x-icons.search class="h-4 w-4 text-zinc-500 dark:text-zinc-400" />
+			</div>
+		@endif
 
-	<x-input.basic class="{{ $icon ? 'ps-10' : '' }}" id="{{ $id }}" name="{{ $name }}"
-		value="{{ $value }}" placeholder="{{ $placeholder }}" required :labels="false" />
+		<x-input.basic class="{{ $icon ? 'ps-10' : '' }}" id="{{ $id }}" name="{{ $name }}"
+			value="{{ $value }}" placeholder="{{ $placeholder }}" required :labels="false" />
+	</div>
 
-	<x-button.primary class="absolute bottom-[1px] end-0 focus:outline" id="{{ $id }}_submit">
+	<x-button.primary type="submit" class="shrink-0 focus:outline" id="{{ $id }}_submit">
 		{{ $buttonLabel }}
 	</x-button.primary>
 </div>

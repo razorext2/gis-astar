@@ -41,6 +41,9 @@
                                 $isLast = $loop->last;
                                 $isFirst = $i === 0;
                                 $crumbTitle = count($crumbs) > 2 && $isFirst ? '' : $crumb['title'];
+                                if ($crumbTitle && mb_strlen($crumbTitle) > 5) {
+                                    $crumbTitle = mb_substr($crumbTitle, 0, 5) . '...';
+                                }
                             @endphp
 
                             @if (!$isLast)
@@ -94,6 +97,9 @@
                                     $isLast = $loop->last;
                                     $isFirst = $i === 0;
                                     $crumbTitle = count($crumbs) > 2 && $isFirst ? '' : $crumb['title'];
+                                    if ($crumbTitle && mb_strlen($crumbTitle) > 5) {
+                                        $crumbTitle = mb_substr($crumbTitle, 0, 5) . '...';
+                                    }
                                 @endphp
 
                                 @if (!$isLast)

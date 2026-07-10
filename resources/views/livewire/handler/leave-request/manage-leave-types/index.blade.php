@@ -136,10 +136,9 @@
             </div>
 
             <div class="flex justify-end gap-3 pt-4">
-                <button type="button" @click="open = false"
-                    class="rounded-xl border border-zinc-200 px-6 py-2 text-sm font-bold text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-400">
+                <x-button.secondary type="button" @click="open = false">
                     Batal
-                </button>
+                </x-button.secondary>
                 <x-button.primary type="submit" wire:loading.attr="disabled" wire:target="saveType">
                     <x-slot name="icon">
                         <x-icons.loading wire:loading wire:target="saveType" class="h-4 w-4 animate-spin" />

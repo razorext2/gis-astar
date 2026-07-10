@@ -634,8 +634,7 @@
 
         <div
             class="flex w-full items-center justify-end gap-3 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
-            <x-button.primary id="summary-button" wire:click="summary" type="button"
-                class="!bg-zinc-800 !text-white hover:!bg-zinc-700 dark:!bg-zinc-700 dark:hover:!bg-zinc-600"
+            <x-button.secondary id="summary-button" wire:click="summary" type="button"
                 wire:loading.attr="disabled" wire:target="summary">
                 <x-slot name="icon">
                     <x-icons.file-invoice wire:loading.remove wire:target="summary" class="h-5 w-5" />
@@ -644,7 +643,7 @@
 
                 <span wire:loading.remove wire:target="summary">Summary</span>
                 <span wire:loading wire:target="summary">Memuat...</span>
-            </x-button.primary>
+            </x-button.secondary>
 
             <x-button.success id="simpan-button" type="submit" wire:loading.attr="disabled" wire:target="store">
                 <x-slot name="icon">

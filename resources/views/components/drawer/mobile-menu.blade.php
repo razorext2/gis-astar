@@ -2,36 +2,30 @@
 <x-drawer.navigation />
 
 {{-- Backdrop overlay — closes drawer when clicking outside --}}
-<div
-    x-data="{
-        isOpen: false,
-        init() {
-            const drawer = document.getElementById('drawer-swipe');
-            if (!drawer) return;
-            const observer = new MutationObserver(() => {
-                this.isOpen = !drawer.classList.contains('translate-y-full');
-            });
-            observer.observe(drawer, { attributes: true, attributeFilter: ['class'] });
-        }
-    }"
-    x-show="isOpen"
-    x-transition:enter="transition ease-out duration-200"
-    x-transition:enter-start="opacity-0"
-    x-transition:enter-end="opacity-100"
-    x-transition:leave="transition ease-in duration-150"
-    x-transition:leave-start="opacity-100"
-    x-transition:leave-end="opacity-0"
-    @click="document.querySelector('[data-drawer-toggle=\'drawer-swipe\']').click()"
-    class="fixed inset-0 z-[149] bg-black/40 md:hidden"
-    style="display:none;">
+<div x-data="{
+    isOpen: false,
+    init() {
+        const drawer = document.getElementById('drawer-swipe');
+        if (!drawer) return;
+        const observer = new MutationObserver(() => {
+            this.isOpen = !drawer.classList.contains('translate-y-full');
+        });
+        observer.observe(drawer, { attributes: true, attributeFilter: ['class'] });
+    }
+}" x-show="isOpen" x-transition:enter="transition ease-out duration-200"
+    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+    x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0" @click="document.querySelector('[data-drawer-toggle=\'drawer-swipe\']').click()"
+    class="fixed inset-0 z-[149] bg-black/40 md:hidden" style="display:none;">
 </div>
 
 <!-- drawer component -->
 <div x-data="{ search: '' }"
-    class="fixed bottom-0 left-0 right-0 z-[150] mx-auto w-[96vw] max-w-lg translate-y-full overflow-hidden rounded-t-2xl border-x border-t pb-16 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.3)] transition-[transform] duration-[420ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform [transform-style:preserve-3d] [backface-visibility:hidden] md:hidden"
+    class="fixed bottom-0 left-0 right-0 z-[150] mx-auto w-[96vw] max-w-lg translate-y-full overflow-hidden rounded-t-2xl border-x border-t pb-16 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.3)] transition-[transform] duration-[420ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform [backface-visibility:hidden] [transform-style:preserve-3d] md:hidden"
     :class="dynamicBg
-        ? 'bg-glass-light border-glass-border-light backdrop-blur-md dark:bg-glass-dark dark:border-glass-border-dark'
-        : 'bg-white border-zinc-200 dark:bg-dark-primary dark:border-zinc-800'"
+        ?
+        'bg-glass-light border-glass-border-light backdrop-blur-md dark:bg-glass-dark dark:border-glass-border-dark' :
+        'bg-white border-zinc-200 dark:bg-dark-primary dark:border-zinc-800'"
     id="drawer-swipe" aria-labelledby="drawer-swipe-label" tabindex="-1">
 
     <!-- Drag Handle -->
@@ -74,12 +68,14 @@
 
             @if ($canSee)
                 <a x-show="search === '' || '{{ addslashes(strtolower($item['label'])) }}'.includes(search.toLowerCase())"
-                    x-transition.opacity.duration.300ms
-                    class="{{ $isActive ? 'bg-red-50/50 dark:bg-red-500/10 ring-1 ring-red-200 dark:ring-red-900/50' : 'bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800/50' }} group flex cursor-pointer flex-col items-center rounded-xl p-3 transition-all duration-300"
+                    x-transition.opacity.duration.300ms x-data="{ tapping: false }" x-on:mousedown="tapping = true"
+                    x-on:touchstart="tapping = true" x-on:animationend="tapping = false"
+                    x-on:animationcancel="tapping = false" :class="{ 'is-tapping': tapping }"
+                    class="liquid-btn {{ $isActive ? 'bg-red-50/50 dark:bg-red-500/10 ring-1 ring-red-200 dark:ring-red-900/50' : 'bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800/50' }} group flex cursor-pointer flex-col items-center rounded-xl p-3 transition-all duration-300"
                     href="{{ route($item['link']) }}">
 
                     <div
-                        class="{{ $isActive ? 'bg-red-600 text-white shadow-md shadow-red-500/30' : 'bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400 group-hover:bg-white dark:group-hover:bg-zinc-700 group-hover:shadow-sm group-hover:text-zinc-900 dark:group-hover:text-zinc-100 ring-1 ring-zinc-200 dark:ring-zinc-700' }} mb-3 flex h-14 w-14 items-center justify-center rounded-lg transition-all duration-300 group-hover:-translate-y-1 [transform:translate3d(0,0,0)] [backface-visibility:hidden]">
+                        class="{{ $isActive ? 'bg-red-600 text-white shadow-md shadow-red-500/30' : 'bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400 group-hover:bg-white dark:group-hover:bg-zinc-700 group-hover:shadow-sm group-hover:text-zinc-900 dark:group-hover:text-zinc-100 ring-1 ring-zinc-200 dark:ring-zinc-700' }} mb-3 flex h-14 w-14 items-center justify-center rounded-lg transition-all duration-300 [backface-visibility:hidden] [transform:translate3d(0,0,0)] group-hover:-translate-y-1">
                         <x-dynamic-component :component="'icons.' . $item['icon']"
                             class="{{ $isActive ? '' : 'group-hover:scale-110' }} h-7 w-7 transition-transform duration-300 [transform:translate3d(0,0,0)]" />
                     </div>

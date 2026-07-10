@@ -1,5 +1,5 @@
 {{-- Goal: Render latency ping checker status with absolute clamped popover, Livewire: Utils\PingChecker, Alpine: Yes --}}
-<div id="ping-checker-trigger" class="relative cursor-pointer" x-data="{
+<div id="ping-checker-trigger" class="relative cursor-pointer max-[420px]:hidden" x-data="{
     latency: 0,
     isChecking: false,
     intervalId: null,
@@ -53,16 +53,16 @@
         if (!trigger) return;
         const rect = trigger.getBoundingClientRect();
         const top = rect.bottom + 12;
-        
+
         const popoverWidth = 256; // w-64 is 16rem = 256px
         const screenPadding = 16;
-        
+
         let left = (rect.left + rect.width / 2) - (popoverWidth / 2);
-        
+
         // Clamp to prevent left or right overflow on mobile screens
         left = Math.max(screenPadding, left);
         left = Math.min(window.innerWidth - popoverWidth - screenPadding, left);
-        
+
         this.popoverStyle = `position:fixed;top:${top}px;left:${left}px;`;
     },
 
@@ -89,8 +89,9 @@
             this.isChecking = false;
         }
     }
-}" x-init="initPing()"
-    x-on:click="checkPing()" @mouseenter="showPopover = true; updatePosition()" @mouseleave="showPopover = false">
+}"
+    x-init="initPing()" x-on:click="checkPing()" @mouseenter="showPopover = true; updatePosition()"
+    @mouseleave="showPopover = false">
     <div class="flex shrink-0 flex-nowrap items-center justify-center gap-1.5 whitespace-nowrap transition-colors duration-300"
         :class="textColor">
 
@@ -102,7 +103,7 @@
         </span>
 
         <!-- Text with fixed minimum width to avoid layout jumping -->
-        <p class="w-16 shrink-0 whitespace-nowrap text-left text-sm font-semibold" x-text="statusText"></p>
+        <p class="w-16 shrink-0 whitespace-nowrap text-left text-xs font-semibold sm:text-sm" x-text="statusText"></p>
     </div>
 
     <!-- Alpine Popover Teleport -->

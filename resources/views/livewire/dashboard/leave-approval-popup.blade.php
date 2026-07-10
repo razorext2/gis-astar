@@ -191,10 +191,17 @@
             x-transition:leave="transition ease-in duration-200 transform"
             x-transition:leave-start="translate-y-0 opacity-100 scale-100"
             x-transition:leave-end="translate-y-10 opacity-0 scale-95"
-            :class="dynamicBg
-                ? 'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-none'
-                : 'bg-white border-zinc-200 shadow-sm hover:bg-zinc-50 dark:bg-dark-primary dark:border-zinc-800 dark:hover:bg-zinc-800/80'"
-            class="relative pointer-events-auto flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border transition-all duration-300 hover:scale-105"
+            x-data="{ tapping: false }"
+            x-on:mousedown="tapping = true"
+            x-on:touchstart="tapping = true"
+            x-on:animationend="tapping = false"
+            :class="[
+                tapping ? 'is-tapping' : '',
+                dynamicBg
+                    ? 'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-none'
+                    : 'bg-white border-zinc-200 shadow-sm hover:bg-zinc-50 dark:bg-dark-primary dark:border-zinc-800 dark:hover:bg-zinc-800/80'
+            ]"
+            class="liquid-btn relative pointer-events-auto flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border transition-all duration-300 hover:scale-105"
             @click="$wire.set('showPopup', true)" style="display: none;">
             <x-icons.clipboard-check class="h-5 w-5 text-amber-500 dark:text-amber-400" />
             <span

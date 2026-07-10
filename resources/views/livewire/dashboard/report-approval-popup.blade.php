@@ -201,10 +201,17 @@ $watch('$wire.showPopup', val => {
 
     {{-- Minimized FAB Button --}}
     <div x-show="!openPopups['{{ $type }}']?.show && $wire.hasPending"
-        :class="dynamicBg
-            ? 'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-none'
-            : 'bg-white border-zinc-200 shadow-sm hover:bg-zinc-50 dark:bg-dark-primary dark:border-zinc-800 dark:hover:bg-zinc-800/80'"
-        class="report-fab-item flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border hover:scale-105"
+        x-data="{ tapping: false }"
+        x-on:mousedown="tapping = true"
+        x-on:touchstart="tapping = true"
+        x-on:animationend="tapping = false"
+        :class="[
+            tapping ? 'is-tapping' : '',
+            dynamicBg
+                ? 'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-none'
+                : 'bg-white border-zinc-200 shadow-sm hover:bg-zinc-50 dark:bg-dark-primary dark:border-zinc-800 dark:hover:bg-zinc-800/80'
+        ]"
+        class="liquid-btn report-fab-item flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border hover:scale-105"
         :style="isOpen
             ? 'transform: translate(0, 0) scale(1); opacity: 1; pointer-events: auto;'
             : 'transform: translate(60px, ' + (({{ $stackIndex }} - 1) * 56) + 'px) scale(0.3); opacity: 0; pointer-events: none;'"

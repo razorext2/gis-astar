@@ -75,11 +75,6 @@
 @endphp
 
 @if (count($popups) > 0)
-    <style>
-        .report-fab-item {
-            transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease, background-color 0.3s, border-color 0.3s, box-shadow 0.3s !important;
-        }
-    </style>
     <div x-data="{
         isOpen: false,
         totalPopups: {{ count($popups) }},
@@ -93,13 +88,19 @@
             class="relative"
             style="overflow: visible;">
 
-            {{-- Trigger Button (Base) --}}
             <button
                 @click="isOpen = !isOpen"
-                :class="dynamicBg
-                    ? 'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-none'
-                    : 'bg-white border-zinc-200 shadow-sm hover:bg-zinc-50 dark:bg-dark-primary dark:border-zinc-800 dark:hover:bg-zinc-800/80'"
-                class="group flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border transition-[background-color,border-color,box-shadow] duration-300 ease-out"
+                x-data="{ tapping: false }"
+                x-on:mousedown="tapping = true"
+                x-on:touchstart="tapping = true"
+                x-on:animationend="tapping = false"
+                :class="[
+                    tapping ? 'is-tapping' : '',
+                    dynamicBg
+                        ? 'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-none'
+                        : 'bg-white border-zinc-200 shadow-sm hover:bg-zinc-50 dark:bg-dark-primary dark:border-zinc-800 dark:hover:bg-zinc-800/80'
+                ]"
+                class="liquid-btn group flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border transition-[background-color,border-color,box-shadow] duration-300 ease-out"
                 style="pointer-events: auto;">
                 <span x-show="!isOpen" x-transition:enter="transition duration-200" x-transition:enter-start="opacity-0 scale-75" x-transition:enter-end="opacity-100 scale-100" class="flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
                     <x-icons.grid-plus class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
@@ -133,11 +134,13 @@
 
             {{-- Close All Button --}}
             <div class="flex w-full max-w-6xl justify-end pb-4 pt-2 lg:pt-4">
-                <button @click="$dispatch('close-all-popups')"
-                    class="flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/20">
-                    <x-icons.close class="h-4 w-4" />
+                <x-button.secondary @click="$dispatch('close-all-popups')"
+                    class="!bg-white/10 !text-white !border-white/20 hover:!bg-white/20 hover:!border-white/30 backdrop-blur-sm shadow-none">
+                    <x-slot name="icon">
+                        <x-icons.close class="h-4 w-4" />
+                    </x-slot>
                     Tutup Semua
-                </button>
+                </x-button.secondary>
             </div>
 
             <div id="report-popup-grid-container"

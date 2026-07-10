@@ -13,16 +13,18 @@
                     ]" wire:model="fetchDataForm.tipe_tagihan" :value="$fetchDataForm->tipe_tagihan" />
             </div>
 
-            <form wire:submit="fetchFakturPajak" class="flex w-full flex-col gap-2">
-                <div class="relative">
-                    <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
-                        <x-icons.search class="h-4 w-4 text-gray-500 dark:text-gray-400" />
+            <form wire:submit="fetchFakturPajak" class="flex w-full flex-col gap-1">
+                <div class="flex flex-row items-center gap-2">
+                    <div class="relative flex-1">
+                        <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
+                            <x-icons.search class="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                        </div>
+
+                        <x-input.basic class="ps-10" wire:model.live="fetchDataForm.nofakturpajak" id="nofakturpajak"
+                            name="nofakturpajak" placeholder="No. Faktur Pajak" :labels="false" />
                     </div>
 
-                    <x-input.basic class="ps-10" wire:model.live="fetchDataForm.nofakturpajak" id="nofakturpajak"
-                        name="nofakturpajak" placeholder="No. Faktur Pajak" :labels="false" />
-
-                    <x-button.primary type="submit" class="absolute bottom-[1px] end-0 focus:outline"
+                    <x-button.primary type="submit" class="shrink-0"
                         id="nofakturpajak_submit" wire:loading.attr="disabled" wire:target="fetchFakturPajak">
                         <x-slot name="icon">
                             <x-icons.angle-right wire:loading.remove wire:target="fetchFakturPajak"

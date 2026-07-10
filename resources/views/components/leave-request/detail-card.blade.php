@@ -155,7 +155,6 @@
 
         <div class="mt-8 flex justify-end border-t border-zinc-100 pt-6 dark:border-white/5">
             <x-button.primary id="summary-button" wire:click="summary" type="button"
-                class="!bg-zinc-800 !text-white hover:!bg-zinc-700 dark:!bg-zinc-700 dark:hover:!bg-zinc-600"
                 wire:loading.attr="disabled" wire:target="summary">
                 <x-slot name="icon">
                     <x-icons.file-invoice wire:loading.remove wire:target="summary" class="h-5 w-5" />
