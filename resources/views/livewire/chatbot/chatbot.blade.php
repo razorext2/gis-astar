@@ -2,15 +2,21 @@
 
 @section('title', 'AI Chatbot')
 
-<div x-data="{ showSidebar: true }"
-    class="flex h-full w-full overflow-hidden rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
+<div x-data="{ showSidebar: window.innerWidth >= 1024 }"
+    :class="dynamicBg
+        ? 'bg-white/60 dark:bg-dark-primary/60 backdrop-blur-md'
+        : 'bg-white dark:bg-dark-primary'"
+    class="relative flex h-full w-full overflow-hidden rounded-xl border border-zinc-200 shadow-md dark:border-zinc-800">
 
     {{-- Conversation Sidebar --}}
     <div x-show="showSidebar" x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="-translate-x-full opacity-0" x-transition:enter-end="translate-x-0 opacity-100"
         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0 opacity-100"
         x-transition:leave-end="-translate-x-full opacity-0"
-        class="absolute z-[80] flex h-full w-80 flex-shrink-0 flex-col border-r border-zinc-200 bg-zinc-50/40 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/20 md:relative md:z-auto">
+        :class="dynamicBg
+            ? 'bg-zinc-50/40 dark:bg-zinc-900/20 backdrop-blur-md'
+            : 'bg-zinc-50 dark:bg-zinc-900'"
+        class="absolute z-[80] flex h-full w-80 flex-shrink-0 flex-col border-r border-zinc-200 dark:border-zinc-800 lg:relative lg:z-auto">
 
         {{-- Sidebar Header --}}
         <div class="flex items-center justify-between border-b border-zinc-200 p-4 dark:border-zinc-800">
@@ -72,9 +78,9 @@
         </div>
     </div>
 
-    {{-- Sidebar Overlay (mobile) --}}
+    {{-- Sidebar Overlay (mobile/tablet) --}}
     <div x-show="showSidebar" x-transition.opacity @click="showSidebar = false"
-        class="absolute inset-0 z-[70] bg-black/30 backdrop-blur-sm md:hidden">
+        class="absolute inset-0 z-[70] bg-black/30 backdrop-blur-sm lg:hidden">
     </div>
 
     {{-- Main Chat Area --}}
@@ -82,7 +88,10 @@
 
         {{-- Chat Header --}}
         <div
-            class="flex items-center gap-3 border-b border-zinc-200 bg-white/40 px-4 py-3 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/20">
+            :class="dynamicBg
+                ? 'bg-white/40 dark:bg-zinc-900/20 backdrop-blur-md'
+                : 'bg-white dark:bg-zinc-900'"
+            class="flex items-center gap-3 border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
             <button @click="showSidebar = !showSidebar"
                 class="flex h-9 w-9 items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-100/50 hover:text-zinc-700 dark:hover:bg-zinc-800/50 dark:hover:text-zinc-300">
                 <x-icons.bar class="h-5 w-5" />
@@ -104,7 +113,7 @@
             </div>
 
             {{-- Persona Switcher --}}
-            <div class="hidden items-center gap-1 rounded-xl border border-zinc-200 bg-zinc-50/50 p-1 dark:border-zinc-800 dark:bg-zinc-900/40 sm:flex">
+            <div class="hidden items-center gap-1 rounded-xl border border-zinc-200 bg-zinc-50/50 p-1 dark:border-zinc-800 dark:bg-zinc-900/40 lg:flex">
                 <button wire:click="setPersona('professional')"
                     title="Profesional — sopan, to-the-point"
                     class="{{ $persona === 'professional' ? 'bg-white shadow-sm text-zinc-900 dark:bg-zinc-800 dark:text-white' : 'text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300' }} rounded-lg px-2.5 py-1 text-xs font-medium transition-all duration-200">
@@ -124,7 +133,7 @@
 
             {{-- Powered by badge --}}
             <div
-                class="hidden items-center gap-1.5 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-1.5 dark:from-blue-900/20 dark:to-indigo-900/20 sm:flex">
+                class="hidden items-center gap-1.5 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-1.5 dark:from-blue-900/20 dark:to-indigo-900/20 lg:flex">
                 <svg class="h-3.5 w-3.5 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
                     <path
                         d="M12 2L1 21h22L12 2zm0 4l7.53 13H4.47L12 6z M11 10v4h2v-4h-2zm0 6v2h2v-2h-2z" />
@@ -150,25 +159,25 @@
 
             @if ($this->messages->isEmpty())
                 {{-- Welcome Screen --}}
-                <div class="flex h-full flex-col items-center justify-center px-4 pb-8 pt-4">
+                <div class="flex min-h-full flex-col items-center justify-start pt-6 lg:justify-center lg:pt-0 px-3 pb-3 md:px-4 md:pb-8">
                     <div
-                        class="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-red-500 to-red-600 shadow-lg shadow-red-500/25">
-                        <x-icons.chat class="h-10 w-10 text-white" />
+                        class="mb-3 lg:mb-6 flex h-14 w-14 lg:h-20 lg:w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-red-500 to-red-600 shadow-lg shadow-red-500/25">
+                        <x-icons.chat class="h-7 w-7 lg:h-10 lg:w-10 text-white" />
                     </div>
-                    <h2 class="mb-2 text-2xl font-bold text-zinc-900 dark:text-white">Halo! Saya Dacin AI 👋</h2>
-                    <p class="mb-8 max-w-md text-center text-sm text-zinc-500 dark:text-zinc-400">
+                    <h2 class="mb-1 lg:mb-2 text-xl lg:text-2xl font-bold text-zinc-900 dark:text-white">Halo! Saya Dacin AI 👋</h2>
+                    <p class="mb-4 lg:mb-8 max-w-md text-center text-xs lg:text-sm text-zinc-500 dark:text-zinc-400">
                         Asisten kerja Indodacin yang siap membantu Anda mencari data, membuat ringkasan, dan
-                        memberikan saran. Mulai dengan mengetik pertanyaan Anda!
+                        memberikan saran.
                     </p>
 
                     {{-- Quick Prompts --}}
-                    <div class="grid w-full max-w-lg grid-cols-1 gap-3 sm:grid-cols-2">
+                    <div class="grid w-full max-w-lg grid-cols-1 gap-2 lg:gap-3 sm:grid-cols-2">
                         @foreach ([['📊', 'Tampilkan ringkasan absensi hari ini'], ['👥', 'Siapa saja pegawai yang belum absen?'], ['💰', 'Berapa total piutang yang belum dibayar?'], ['📋', 'Daftar SPK yang sedang berjalan']] as $prompt)
                             <button wire:click="$set('newMessage', '{{ $prompt[1] }}')"
-                                class="flex items-start gap-3 rounded-xl border border-zinc-200 bg-white/60 p-4 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-300 hover:bg-zinc-50/50 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/40 dark:hover:border-zinc-700 dark:hover:bg-zinc-850/50">
-                                <span class="text-xl">{{ $prompt[0] }}</span>
+                                class="flex items-start gap-2 lg:gap-3 rounded-xl border border-zinc-200 bg-white/60 px-3 py-2.5 lg:p-4 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-300 hover:bg-zinc-50/50 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/40 dark:hover:border-zinc-700 dark:hover:bg-zinc-850/50">
+                                <span class="text-lg lg:text-xl">{{ $prompt[0] }}</span>
                                 <span
-                                    class="text-sm text-zinc-600 dark:text-zinc-300">{{ $prompt[1] }}</span>
+                                    class="text-xs lg:text-sm text-zinc-600 dark:text-zinc-300">{{ $prompt[1] }}</span>
                             </button>
                         @endforeach
                     </div>
@@ -186,10 +195,14 @@
                                     </div>
                                 @endif
 
-                                <div
-                                    class="{{ $msg->role === 'user'
-                                        ? 'bg-blue-600 text-white rounded-2xl rounded-tr-none shadow-sm'
-                                        : 'bg-white/80 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 rounded-2xl rounded-tl-none border border-zinc-200 dark:border-zinc-800 shadow-sm backdrop-blur-sm' }} px-4 py-3">
+                                @if ($msg->role === 'user')
+                                    <div class="bg-blue-600 text-white rounded-2xl rounded-tr-none shadow-sm px-4 py-3">
+                                @else
+                                    <div class="rounded-2xl rounded-tl-none border border-zinc-200 dark:border-zinc-800 shadow-sm px-4 py-3"
+                                        :class="dynamicBg
+                                            ? 'bg-white/80 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 backdrop-blur-sm'
+                                            : 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100'">
+                                @endif
                                     @if ($msg->role === 'model')
                                         <div class="chat-prose prose prose-sm prose-zinc max-w-none dark:prose-invert prose-headings:text-zinc-900 dark:prose-headings:text-white prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:rounded prose-code:bg-zinc-100 prose-code:px-1 prose-code:py-0.5 dark:prose-code:bg-zinc-700 prose-pre:rounded-xl prose-pre:border prose-pre:border-zinc-200 dark:prose-pre:border-zinc-800 prose-table:border-collapse prose-th:border prose-th:border-zinc-300 prose-th:bg-zinc-100 prose-th:px-3 prose-th:py-1.5 dark:prose-th:border-zinc-600 dark:prose-th:bg-zinc-700 prose-td:border prose-td:border-zinc-300 prose-td:px-3 prose-td:py-1.5 dark:prose-td:border-zinc-600">
                                             {!! \Illuminate\Support\Str::markdown($msg->content) !!}
@@ -227,7 +240,10 @@
                                     <x-icons.chat class="h-4 w-4 text-white" />
                                 </div>
                                 <div
-                                    class="rounded-2xl rounded-tl-none border border-zinc-200 bg-white/80 px-5 py-4 shadow-sm backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-800/80">
+                                    :class="dynamicBg
+                                        ? 'bg-white/80 dark:bg-zinc-800/80 backdrop-blur-sm'
+                                        : 'bg-white dark:bg-zinc-800'"
+                                    class="rounded-2xl rounded-tl-none border border-zinc-200 px-5 py-4 shadow-sm dark:border-zinc-800">
                                     <div class="flex items-center gap-1.5">
                                         <span
                                             class="inline-block h-2.5 w-2.5 animate-bounce rounded-full bg-red-400 [animation-delay:-0.3s]"></span>
@@ -245,7 +261,11 @@
         </div>
 
         {{-- Input Area --}}
-        <div class="border-t border-zinc-200 bg-white/40 p-4 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/20">
+        <div
+            :class="dynamicBg
+                ? 'bg-white/40 dark:bg-zinc-900/20 backdrop-blur-md'
+                : 'bg-white dark:bg-zinc-900'"
+            class="border-t border-zinc-200 p-4 dark:border-zinc-800">
             <form wire:submit="sendMessage" class="mx-auto max-w-3xl"
                 x-data="{ message: '' }"
                 x-init="
