@@ -271,37 +271,58 @@
                     </table>
                 </div>
 
-                @can('produksi-create')
-                    <div
-                        class="mt-2 flex flex-col justify-between gap-4 rounded-lg bg-zinc-50 p-4 dark:bg-zinc-800/50 sm:flex-row sm:items-center">
-                        <div class="flex flex-col">
-                            <span class="text-sm font-semibold text-zinc-900 dark:text-white">Produksi menggunakan bahan
-                                stok lama?</span>
-                            <span class="text-xs text-zinc-500 dark:text-zinc-400">Fitur khusus produksi untuk
-                                mengidentifikasi bahan baku yang digunakan.</span>
-                        </div>
-
+                @if ($data->tipe_timbangan === 'timbangan jembatan')
+                    @can('produksi-create')
                         @if ($data->is_using_old_stock == false)
-                            <x-button.primary class="shrink-0 text-sm" id="old-stock" type="button"
-                                wire:click="setOldStock" wire:confirm.prompt="Silahkan ketik YA untuk melanjutkan|YA"
-                                wire:loading.attr="disabled" wire:target="setOldStock">
-                                <x-slot name="icon">
-                                    <x-icons.loading wire:loading wire:target="setOldStock"
-                                        class="h-4 w-4 animate-spin" />
-                                    <x-icons.archive wire:loading.remove wire:target="setOldStock" class="h-4 w-4" />
-                                </x-slot>
+                            <div
+                                class="mt-2 flex flex-col justify-between gap-4 rounded-lg bg-zinc-50 p-4 dark:bg-zinc-800/50 sm:flex-row sm:items-center">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-semibold text-zinc-900 dark:text-white">Produksi menggunakan
+                                        bahan stok lama?</span>
+                                    <span class="text-xs text-zinc-500 dark:text-zinc-400">Fitur khusus produksi untuk
+                                        mengetahui asal bahan baku yang digunakan.</span>
+                                </div>
 
-                                <span wire:loading.remove wire:target="setOldStock">Gunakan Stok Lama</span>
-                                <span wire:loading wire:target="setOldStock">Memakai Stok...</span>
-                            </x-button.primary>
+                                <x-button.primary class="shrink-0 text-sm" id="old-stock" type="button"
+                                    wire:click="openOldStockModal" wire:loading.attr="disabled"
+                                    wire:target="openOldStockModal">
+                                    <x-slot name="icon">
+                                        <x-icons.loading wire:loading wire:target="openOldStockModal"
+                                            class="h-4 w-4 animate-spin" />
+                                        <x-icons.archive wire:loading.remove wire:target="openOldStockModal"
+                                            class="h-4 w-4" />
+                                    </x-slot>
+
+                                    <span wire:loading.remove wire:target="openOldStockModal">Gunakan Stok Lama</span>
+                                    <span wire:loading wire:target="openOldStockModal">Memakai Stok...</span>
+                                </x-button.primary>
+                            </div>
                         @else
-                            <span
-                                class="inline-flex shrink-0 items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700 dark:bg-green-900/30 dark:text-green-400">
-                                Menggunakan Stok Lama
-                            </span>
+                            <div
+                                class="mt-2 flex flex-col justify-between gap-4 rounded-lg border border-green-200 bg-green-50/30 p-4 dark:border-green-900/30 dark:bg-green-950/10 sm:flex-row sm:items-center">
+                                <div class="flex items-start gap-3">
+                                    <div
+                                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                                        <x-icons.archive class="h-5 w-5" />
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-semibold text-green-900 dark:text-green-400">Bahan Baku:
+                                            Stok Lama</span>
+                                        <span class="text-xs text-zinc-500 dark:text-zinc-400">SPK ini menggunakan
+                                            bahan baku dari stok lama.</span>
+                                    </div>
+                                </div>
+                                @if ($data->old_stock_notes)
+                                    <div
+                                        class="max-w-xs break-words rounded-lg border border-green-200/50 bg-white/85 px-3.5 py-2 text-xs text-zinc-600 shadow-sm dark:border-green-900/20 dark:bg-zinc-900/60 dark:text-zinc-300 sm:max-w-md">
+                                        <span class="font-bold text-zinc-700 dark:text-zinc-200">Note:</span>
+                                        {{ $data->old_stock_notes }}
+                                    </div>
+                                @endif
+                            </div>
                         @endif
-                    </div>
-                @endcan
+                    @endcan
+                @endif
             </div>
 
             {{-- Card: Keterlibatan & Riwayat --}}
@@ -315,7 +336,8 @@
                     <div class="col-span-2 flex flex-col">
                         <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Dibuat Oleh</span>
                         <div class="flex items-center gap-x-2">
-                            <span class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->addedBy->name }}</span>
+                            <span
+                                class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->addedBy->name }}</span>
                             <x-dashboard.badge-inactive :is_active="$data->addedBy?->is_active ?? true" />
                         </div>
                     </div>
@@ -406,7 +428,8 @@
                                 </div>
                             </div>
                             <div class="mt-1 flex flex-col">
-                                <span class="text-xs font-medium text-red-600 dark:text-red-400">Pembatalan Divalidasi Oleh</span>
+                                <span class="text-xs font-medium text-red-600 dark:text-red-400">Pembatalan Divalidasi
+                                    Oleh</span>
                                 <div class="flex items-center gap-x-2">
                                     <span class="text-sm font-semibold capitalize text-red-700 dark:text-red-300">
                                         {{ $data->cancelRequestValidatedBy->name ?? '-' }}
@@ -546,5 +569,47 @@
                 </x-button.primary>
             </x-slot>
         </x-modal.base-modal>
+    @endcan
+
+    @can('produksi-create')
+        @if ($data->tipe_timbangan === 'timbangan jembatan')
+            <x-modal.base-modal show="showOldStockModal" title="Gunakan Stok Lama"
+                subtitle="Konfirmasi penggunaan stok lama" iconContainerClass="bg-blue-600 shadow-blue-500/20"
+                maxWidth="md">
+                <x-slot name="icon">
+                    <x-icons.archive class="h-5 w-5" />
+                </x-slot>
+
+                <div class="flex flex-col gap-4">
+                    <div class="space-y-2">
+                        <label for="old-stock-notes" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                            Keterangan
+                        </label>
+                        <p class="text-xs text-zinc-500 dark:text-zinc-400">
+                            Silakan masukkan keterangan atau nomor SPK mana yang stoknya akan digunakan.
+                        </p>
+                        <textarea id="old-stock-notes" wire:model="oldStockNotes" rows="3"
+                            placeholder="Contoh: Menggunakan sisa bahan dari SPK #12345"
+                            class="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:border-blue-500"></textarea>
+                    </div>
+                </div>
+
+                <x-slot name="footer">
+                    <x-button.secondary @click="open = false">
+                        Batal
+                    </x-button.secondary>
+                    <x-button.primary id="btn-confirm-old-stock" wire:click="setOldStock" wire:loading.attr="disabled"
+                        wire:target="setOldStock">
+                        <x-slot name="icon">
+                            <x-icons.check-circle class="h-4 w-4" wire:loading.remove wire:target="setOldStock" />
+                            <x-icons.loading wire:loading wire:target="setOldStock" class="h-4 w-4 animate-spin" />
+                        </x-slot>
+
+                        <span wire:loading.remove wire:target="setOldStock">Konfirmasi</span>
+                        <span wire:loading wire:target="setOldStock">Menyimpan...</span>
+                    </x-button.primary>
+                </x-slot>
+            </x-modal.base-modal>
+        @endif
     @endcan
 </div>

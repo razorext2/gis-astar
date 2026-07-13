@@ -24,6 +24,10 @@ class Show extends Component
 
     public ?int $selectedReassignUserId = null;
 
+    public bool $showOldStockModal = false;
+
+    public string $oldStockNotes = '';
+
     public function mount($id): void
     {
         $this->data = SpkMain::with([
@@ -150,22 +154,47 @@ class Show extends Component
             ->values();
     }
 
+    public function openOldStockModal()
+    {
+        $this->authorize('create', \App\Models\Spk\Production::class);
+
+        if ($this->data->tipe_timbangan !== 'timbangan jembatan') {
+            return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Fitur stok lama hanya berlaku untuk SPK timbangan jembatan.');
+        }
+
+        if ($this->data->status_approval != 1) {
+            return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'SPK belum disetujui.');
+        }
+
+        if ($this->data->is_booked) {
+            return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'SPK sudah dibooking.');
+        }
+
+        if ($this->data->is_cancelled) {
+            return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'SPK sudah dibatalkan.');
+        }
+
+        $this->oldStockNotes = '';
+        $this->showOldStockModal = true;
+    }
+
     public function setOldStock()
     {
         // check autorization
         $this->authorize('create', \App\Models\Spk\Production::class);
 
-        // check status spk
+        if ($this->data->tipe_timbangan !== 'timbangan jembatan') {
+            return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Fitur stok lama hanya berlaku untuk SPK timbangan jembatan.');
+        }
+
         if ($this->data->status_approval != 1) {
             return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'SPK belum disetujui.');
         }
 
-        // check status booked
         if ($this->data->is_booked) {
             return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'SPK sudah dibooking.');
         }
 
-        // check status cancelled
         if ($this->data->is_cancelled) {
             return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'SPK sudah dibatalkan.');
         }
@@ -175,6 +204,7 @@ class Show extends Component
             DB::transaction(function () {
                 $this->data->update([
                     'is_using_old_stock' => true,
+                    'old_stock_notes' => $this->oldStockNotes ?: null,
                     'status' => 2,
                     'purchasing_list_updated_by' => Auth::id(),
                 ]);
@@ -183,7 +213,7 @@ class Show extends Component
                 ProductionHistory::create([
                     'id_produksi' => $this->data->production->id,
                     'judul' => 'SPK telah diset menggunakan stok lama.',
-                    'keterangan' => Auth::user()->name.' telah set SPK menggunakan stok lama.',
+                    'keterangan' => Auth::user()->name.' telah set SPK menggunakan stok lama. Catatan: ' . ($this->oldStockNotes ?: '-'),
                     'documentations' => [],
                     'status_produksi' => 1,
                     'status_validasi' => 1,
@@ -191,10 +221,13 @@ class Show extends Component
 
                 $this->data->addHistory(
                     'SPK menggunakan stok lama.',
-                    Auth::user()->name.' telah menandai SPK ini menggunakan stok lama. Purchasing Request tidak diperlukan.',
+                    Auth::user()->name.' telah menandai SPK ini menggunakan stok lama. Catatan: ' . ($this->oldStockNotes ?: '-'),
                     Auth::id()
                 );
             });
+
+            $this->showOldStockModal = false;
+            $this->oldStockNotes = '';
 
             return $this->dispatch('swal', icon: 'success', title: 'Berhasil', text: 'SPK telah diset untuk menggunakan stok lama!');
         }, 'Gagal membuat SPK menggunakan stok lama', [

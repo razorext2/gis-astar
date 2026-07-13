@@ -68,6 +68,7 @@ class SpkMain extends Model
         'cancel_request_validated_by',
         'cancel_request_validated_at',
         'is_using_old_stock',
+        'old_stock_notes',
         'is_using_company_driver',
         'is_picked_up_by_customer',
         'is_revision',
