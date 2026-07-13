@@ -4,9 +4,12 @@ namespace App\Livewire\Handler\Spk;
 
 use App\Jobs\ExportPdfJob;
 use App\Livewire\Concerns\HandlesErrors;
+use App\Models\Spk\Production;
 use App\Models\Spk\ProductionHistory;
 use App\Models\Spk\SpkMain;
 use App\Models\User;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
@@ -45,16 +48,20 @@ class Show extends Component
         ])->findOrFail($id);
     }
 
-    public function validateSpk()
+    public function validateSpk(): void
     {
         $this->authorize('validate', SpkMain::class);
 
         if ($this->data->is_booked) {
-            return $this->dispatch(event: 'swal', icon: 'error', title: 'Gagal', text: 'SPK masih dalam status booking, tidak bisa diapprove.');
+            $this->dispatch(event: 'swal', icon: 'error', title: 'Gagal', text: 'SPK masih dalam status booking, tidak bisa diapprove.');
+
+            return;
         }
 
         if ($this->data->on_delay) {
-            return $this->dispatch(event: 'swal', icon: 'error', title: 'Gagal', text: 'SPK sedang dalam status on delay, tidak bisa diapprove.');
+            $this->dispatch(event: 'swal', icon: 'error', title: 'Gagal', text: 'SPK sedang dalam status on delay, tidak bisa diapprove.');
+
+            return;
         }
 
         $this->runSafely(function () {
@@ -73,11 +80,11 @@ class Show extends Component
                     'approved_at' => now(),
                 ]);
 
-                $this->data->spkHistories()->create([
-                    'title' => 'SPK telah disetujui.',
-                    'keterangan' => Auth::user()->name.' telah menyetujui SPK. Sekarang SPK dapat lanjut ke tahap selanjutnya.',
-                    'added_by' => Auth::id(),
-                ]);
+                $this->data->addHistory(
+                    'SPK telah disetujui.',
+                    Auth::user()->name.' telah menyetujui SPK. Sekarang SPK dapat lanjut ke tahap selanjutnya.',
+                    Auth::id()
+                );
             });
 
             $this->dispatch(
@@ -94,18 +101,26 @@ class Show extends Component
         ]);
     }
 
-    public function cancelSpk()
+    public function cancelSpk(): void
     {
         $this->authorize('validate', SpkMain::class);
 
         $this->runSafely(function () {
-            $this->data->update([
-                'nomor_order' => $this->data->nomor_order.'-CANCELLED',
-                'status_approval' => 4,
-                'is_cancelled' => true,
-                'cancel_request_validated_by' => Auth::id(),
-                'cancel_request_validated_at' => now(),
-            ]);
+            DB::transaction(function () {
+                $this->data->update([
+                    'nomor_order' => $this->data->nomor_order.'-CANCELLED',
+                    'status_approval' => 4,
+                    'is_cancelled' => true,
+                    'cancel_request_validated_by' => Auth::id(),
+                    'cancel_request_validated_at' => now(),
+                ]);
+
+                $this->data->addHistory(
+                    'SPK dibatalkan.',
+                    Auth::user()->name.' telah menyetujui pembatalan SPK ini. Alasan: '.($this->data->cancel_request_reason ?: '-'),
+                    Auth::id()
+                );
+            });
 
             $this->dispatch(
                 event: 'swal',
@@ -119,7 +134,7 @@ class Show extends Component
         ]);
     }
 
-    public function export()
+    public function export(): void
     {
         $this->runSafely(function () {
             ExportPdfJob::dispatch(
@@ -140,63 +155,77 @@ class Show extends Component
         ]);
     }
 
-    public function getFilteredAttachmentsExcludeRequestFondasiProperty()
+    public function getFilteredAttachmentsExcludeRequestFondasiProperty(): Collection
     {
         return collect($this->data->documentations)
             ->where('tipe_dokumen', '!=', 'request_fondasi')
             ->values();
     }
 
-    public function getFilteredAttachmentsOnlyRequestFondasiProperty()
+    public function getFilteredAttachmentsOnlyRequestFondasiProperty(): Collection
     {
         return collect($this->data->documentations)
             ->where('tipe_dokumen', '=', 'request_fondasi')
             ->values();
     }
 
-    public function openOldStockModal()
+    public function openOldStockModal(): void
     {
-        $this->authorize('create', \App\Models\Spk\Production::class);
+        $this->authorize('create', Production::class);
 
         if ($this->data->tipe_timbangan !== 'timbangan jembatan') {
-            return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Fitur stok lama hanya berlaku untuk SPK timbangan jembatan.');
+            return;
         }
 
         if ($this->data->status_approval != 1) {
-            return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'SPK belum disetujui.');
+            $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'SPK belum disetujui.');
+
+            return;
         }
 
         if ($this->data->is_booked) {
-            return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'SPK sudah dibooking.');
+            $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'SPK sudah dibooking.');
+
+            return;
         }
 
         if ($this->data->is_cancelled) {
-            return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'SPK sudah dibatalkan.');
+            $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'SPK sudah dibatalkan.');
+
+            return;
         }
 
         $this->oldStockNotes = '';
         $this->showOldStockModal = true;
     }
 
-    public function setOldStock()
+    public function setOldStock(): void
     {
         // check autorization
-        $this->authorize('create', \App\Models\Spk\Production::class);
+        $this->authorize('create', Production::class);
 
         if ($this->data->tipe_timbangan !== 'timbangan jembatan') {
-            return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Fitur stok lama hanya berlaku untuk SPK timbangan jembatan.');
+            $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'Fitur stok lama hanya berlaku untuk SPK timbangan jembatan.');
+
+            return;
         }
 
         if ($this->data->status_approval != 1) {
-            return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'SPK belum disetujui.');
+            $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'SPK belum disetujui.');
+
+            return;
         }
 
         if ($this->data->is_booked) {
-            return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'SPK sudah dibooking.');
+            $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'SPK sudah dibooking.');
+
+            return;
         }
 
         if ($this->data->is_cancelled) {
-            return $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'SPK sudah dibatalkan.');
+            $this->dispatch('swal', icon: 'error', title: 'Gagal', text: 'SPK sudah dibatalkan.');
+
+            return;
         }
 
         // proses
@@ -213,7 +242,7 @@ class Show extends Component
                 ProductionHistory::create([
                     'id_produksi' => $this->data->production->id,
                     'judul' => 'SPK telah diset menggunakan stok lama.',
-                    'keterangan' => Auth::user()->name.' telah set SPK menggunakan stok lama. Catatan: ' . ($this->oldStockNotes ?: '-'),
+                    'keterangan' => Auth::user()->name.' telah set SPK menggunakan stok lama. Catatan: '.($this->oldStockNotes ?: '-'),
                     'documentations' => [],
                     'status_produksi' => 1,
                     'status_validasi' => 1,
@@ -221,7 +250,7 @@ class Show extends Component
 
                 $this->data->addHistory(
                     'SPK menggunakan stok lama.',
-                    Auth::user()->name.' telah menandai SPK ini menggunakan stok lama. Catatan: ' . ($this->oldStockNotes ?: '-'),
+                    Auth::user()->name.' telah menandai SPK ini menggunakan stok lama. Catatan: '.($this->oldStockNotes ?: '-'),
                     Auth::id()
                 );
             });
@@ -248,7 +277,7 @@ class Show extends Component
 
     /** Goal: Computed property untuk list pegawai produksi yang aktif. */
     #[Computed]
-    public function produksiUsers(): \Illuminate\Support\Collection
+    public function produksiUsers(): Collection
     {
         return User::whereHas('roles', fn ($role) => $role->where('name', 'Produksi'))
             ->where('is_active', true)
@@ -273,11 +302,11 @@ class Show extends Component
                     $this->data->update($reassignData);
                     $this->data->production()->update($reassignData);
 
-                    $this->data->spkHistories()->create([
-                        'title' => 'SPK dikembalikan ke IDC.',
-                        'keterangan' => Auth::user()->name.' telah mengembalikan SPK ke staf yang di-assign sebelumnya.',
-                        'added_by' => Auth::id(),
-                    ]);
+                    $this->data->addHistory(
+                        'SPK dikembalikan ke IDC.',
+                        Auth::user()->name.' telah mengembalikan SPK ke staf yang di-assign sebelumnya.',
+                        Auth::id()
+                    );
                 });
 
                 $this->showReassignModal = false;
@@ -322,11 +351,11 @@ class Show extends Component
                 $this->data->update($reassignData);
                 $this->data->production()->update($reassignData);
 
-                $this->data->spkHistories()->create([
-                    'title' => 'SPK di-reassign.',
-                    'keterangan' => Auth::user()->name.' telah mereassign SPK kepada '.$targetUser->name.' ('.$targetUser->kode_pegawai.').',
-                    'added_by' => Auth::id(),
-                ]);
+                $this->data->addHistory(
+                    'SPK di-reassign.',
+                    Auth::user()->name.' telah mereassign SPK kepada '.$targetUser->name.' ('.$targetUser->kode_pegawai.').',
+                    Auth::id()
+                );
             });
 
             $this->showReassignModal = false;
@@ -345,7 +374,7 @@ class Show extends Component
         ]);
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.handler.spk.show');
     }
