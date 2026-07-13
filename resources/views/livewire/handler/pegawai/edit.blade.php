@@ -2,7 +2,7 @@
 <div class="w-full space-y-6">
     <!-- Top Header Navigation -->
     <div
-        class="rounded-3xl border border-zinc-200 bg-white/60 p-6 shadow-2xl backdrop-blur-sm transition-all duration-500 ease-in-out dark:border-zinc-800 dark:bg-dark-primary/60">
+        class="rounded-xl border border-zinc-200 bg-white/60 p-6 shadow-2xl backdrop-blur-sm transition-all duration-500 ease-in-out dark:border-zinc-800 dark:bg-dark-primary/60">
         <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div class="flex items-center gap-4">
                 <x-button.link id="back-btn" class="group justify-center bg-white/50 hover:bg-red-700 hover:text-white"
@@ -38,7 +38,7 @@
         <div class="space-y-2 lg:col-span-2 lg:space-y-4">
             <!-- Data Personal Section -->
             <div
-                class="group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-zinc-800 dark:bg-dark-primary/60">
+                class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-zinc-800 dark:bg-dark-primary/60">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-blue-500/5 blur-3xl transition-colors group-hover:bg-blue-500/10">
                 </div>
@@ -158,7 +158,7 @@
 
             <!-- Penempatan & Jabatan Section -->
             <div
-                class="group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-zinc-800 dark:bg-dark-primary/60">
+                class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-zinc-800 dark:bg-dark-primary/60">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-purple-500/5 blur-3xl transition-colors group-hover:bg-purple-500/10">
                 </div>
@@ -200,7 +200,7 @@
             <!-- Akun Login Section -->
             @if ($has_account)
                 <div
-                    class="group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-zinc-800 dark:bg-dark-primary/60">
+                    class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-zinc-800 dark:bg-dark-primary/60">
                     <div
                         class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-green-500/5 blur-3xl transition-colors group-hover:bg-green-500/10">
                     </div>
@@ -280,6 +280,27 @@
                                 <span class="text-xs text-red-500">{{ $message }}</span>
                             @enderror
                         </div>
+
+                        {{-- Status Akun --}}
+                        <div class="grid gap-2 lg:gap-4 mt-6 border-t border-zinc-200/50 dark:border-zinc-800/50 pt-4">
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Status Akun</label>
+                                <select wire:model.live="is_active"
+                                    class="block w-full rounded-xl border border-zinc-200 bg-white/50 p-2.5 text-sm transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-zinc-800 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500">
+                                    <option value="1">Aktif</option>
+                                    <option value="0">Tidak Aktif</option>
+                                </select>
+                            </div>
+
+                            <div x-show="$wire.is_active == 0" x-cloak class="space-y-2">
+                                <x-input.textarea wire:model="deactivation_reason" id="deactivation_reason"
+                                    name="deactivation_reason" placeholder="Contoh: Resign atau Penonaktifan Sementara"
+                                    :labels="true" :textLabel="'Alasan Dinonaktifkan'" />
+                                @error('deactivation_reason')
+                                    <span class="text-xs text-red-500">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
                 </div>
             @endif
@@ -289,7 +310,7 @@
         <div class="space-y-2 lg:space-y-4">
             <!-- Upload New Photos -->
             <div
-                class="group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-zinc-800 dark:bg-dark-primary/60">
+                class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-zinc-800 dark:bg-dark-primary/60">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-orange-500/5 blur-3xl transition-colors group-hover:bg-orange-500/10">
                 </div>
@@ -380,7 +401,7 @@
 
             <!-- Existing Photos Display -->
             <div
-                class="group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-zinc-800 dark:bg-dark-primary/60">
+                class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-zinc-800 dark:bg-dark-primary/60">
                 <div class="mb-6 flex items-center gap-3">
                     <div class="h-10 w-1 rounded-full bg-zinc-600"></div>
                     <h3 class="text-xl font-bold text-gray-800 dark:text-white">Foto Saat Ini</h3>

@@ -95,7 +95,7 @@
                     @else
                         <div class="flex flex-col items-center justify-center py-12 text-center">
                             <div
-                                class="mb-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-gray-50 dark:bg-zinc-800/50">
+                                class="mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-gray-50 dark:bg-zinc-800/50">
                                 <x-icons.info class="h-8 w-8 text-gray-300" />
                             </div>
                             <h1 class="text-sm font-bold text-gray-500">Tidak ada data laporan sales</h1>

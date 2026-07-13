@@ -1,15 +1,15 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div class="space-y-6 pb-20">
+    <div class="space-y-4 pb-20">
         {{-- Header & Info Card --}}
         <div
-            class="relative overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+            class="relative overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
             {{-- Decorative background --}}
             <div
                 class="pointer-events-none absolute inset-0 bg-gradient-to-br from-red-600/5 via-transparent to-transparent">
             </div>
 
-            <div class="relative p-6 sm:p-8">
+            <div class="relative p-4 sm:p-6">
                 {{-- Action Header --}}
                 <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
                     <x-button.link wire:navigate href="{{ route('event.index') }}"
@@ -41,7 +41,7 @@
                 <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     {{-- Location --}}
                     <div
-                        class="rounded-2xl border border-zinc-200 bg-zinc-50/50 p-4 transition-colors hover:bg-white dark:border-zinc-800 dark:bg-zinc-950/20 dark:hover:bg-zinc-800/50">
+                        class="rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 transition-colors hover:bg-white dark:border-zinc-800 dark:bg-zinc-950/20 dark:hover:bg-zinc-800/50">
                         <div
                             class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400">
                             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -57,7 +57,7 @@
 
                     {{-- Date --}}
                     <div
-                        class="rounded-2xl border border-zinc-200 bg-zinc-50/50 p-4 transition-colors hover:bg-white dark:border-zinc-800 dark:bg-zinc-950/20 dark:hover:bg-zinc-800/50">
+                        class="rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 transition-colors hover:bg-white dark:border-zinc-800 dark:bg-zinc-950/20 dark:hover:bg-zinc-800/50">
                         <div
                             class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
                             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -75,7 +75,7 @@
 
                     {{-- Created At --}}
                     <div
-                        class="rounded-2xl border border-zinc-200 bg-zinc-50/50 p-4 transition-colors hover:bg-white dark:border-zinc-800 dark:bg-zinc-950/20 dark:hover:bg-zinc-800/50">
+                        class="rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 transition-colors hover:bg-white dark:border-zinc-800 dark:bg-zinc-950/20 dark:hover:bg-zinc-800/50">
                         <div
                             class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
                             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -90,7 +90,7 @@
 
                     {{-- Updated At --}}
                     <div
-                        class="rounded-2xl border border-zinc-200 bg-zinc-50/50 p-4 transition-colors hover:bg-white dark:border-zinc-800 dark:bg-zinc-950/20 dark:hover:bg-zinc-800/50">
+                        class="rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 transition-colors hover:bg-white dark:border-zinc-800 dark:bg-zinc-950/20 dark:hover:bg-zinc-800/50">
                         <div
                             class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
                             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -110,7 +110,7 @@
         {{-- Statistics & Graph Section --}}
         <div class="grid gap-6 lg:grid-cols-1">
             <div
-                class="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 sm:p-8">
+                class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 sm:p-6">
                 <div class="mb-6 flex items-center justify-between">
                     <div>
                         <h3 class="text-xl font-black tracking-tight text-zinc-900 dark:text-white">Grafik Visitor</h3>
@@ -131,8 +131,8 @@
         </div>
 
         {{-- Participants Section --}}
-        <div class="rounded-3xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-            <div class="border-b border-zinc-200 p-6 dark:border-zinc-800 sm:p-8">
+        <div class="rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+            <div class="border-b border-zinc-200 p-4 dark:border-zinc-800 sm:p-6">
                 <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
                     <div>
                         <h2 class="text-2xl font-black tracking-tight text-zinc-900 dark:text-white">Daftar Partisipan</h2>

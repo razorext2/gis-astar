@@ -55,6 +55,10 @@ class Edit extends Component
 
     public $join_date;
 
+    public $is_active = 1;
+
+    public $deactivation_reason;
+
     // Photo Uploads
     public $photo1;
 
@@ -81,6 +85,8 @@ class Edit extends Component
             $this->has_account = true;
             $this->selected_roles = $user->roles->pluck('name')->toArray();
             $this->join_date = $user->join_date ? $user->join_date->format('Y-m-d') : null;
+            $this->is_active = $user->is_active;
+            $this->deactivation_reason = $user->deactivation_reason;
         }
 
         // Get existing images
@@ -116,6 +122,8 @@ class Edit extends Component
             'selected_roles' => 'nullable|array',
             'join_date' => 'nullable|date',
             'ubah_kode_pegawai' => 'boolean',
+            'is_active' => 'boolean',
+            'deactivation_reason' => 'required_if:is_active,0|nullable|string',
         ];
 
         if ($this->ubah_kode_pegawai) {
@@ -201,9 +209,34 @@ class Edit extends Component
                             ]);
                         }
 
+                        if ($user->is_active != $this->is_active) {
+                            PegawaiChangesHistory::create([
+                                'pegawai_id' => $this->pegawai->id,
+                                'field_name' => 'is_active',
+                                'old_value' => $user->is_active ? '1' : '0',
+                                'new_value' => $this->is_active ? '1' : '0',
+                                'alasan' => $alasanLog,
+                                'changed_by' => auth()->id(),
+                            ]);
+                        }
+
+                        if ($user->deactivation_reason != $this->deactivation_reason) {
+                            PegawaiChangesHistory::create([
+                                'pegawai_id' => $this->pegawai->id,
+                                'field_name' => 'deactivation_reason',
+                                'old_value' => $user->deactivation_reason,
+                                'new_value' => $this->deactivation_reason,
+                                'alasan' => $alasanLog,
+                                'changed_by' => auth()->id(),
+                            ]);
+                        }
+
                         $user->update([
                             'name' => $this->full_name,
                             'join_date' => $this->join_date,
+                            'is_active' => $this->is_active,
+                            'deactivation_reason' => $this->is_active == 0 ? $this->deactivation_reason : null,
+                            'deactivation_at' => $this->is_active == 0 ? ($user->deactivation_at ?? now()) : null,
                         ]);
                     }
                 }

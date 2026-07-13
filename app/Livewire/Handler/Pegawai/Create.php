@@ -43,6 +43,10 @@ class Create extends Component
 
     public $join_date;
 
+    public $is_active = 1;
+
+    public $deactivation_reason;
+
     // Photo Labels
     public $photo1;
 
@@ -64,6 +68,8 @@ class Create extends Component
             'photo2' => 'nullable|image|max:2048',
             'selected_roles' => 'required_if:make_user,true|array',
             'join_date' => 'required_if:make_user,true|date',
+            'is_active' => 'boolean',
+            'deactivation_reason' => 'required_if:is_active,0|nullable|string',
         ];
     }
 
@@ -95,6 +101,9 @@ class Create extends Component
                     'email' => strtolower($this->nick_name).$this->kode_pegawai.'@indodacin.com',
                     'password' => Hash::make($this->kode_pegawai),
                     'join_date' => $this->join_date,
+                    'is_active' => $this->is_active,
+                    'deactivation_reason' => $this->is_active == 0 ? $this->deactivation_reason : null,
+                    'deactivation_at' => $this->is_active == 0 ? now() : null,
                 ]);
 
                 $user->syncRoles($this->selected_roles);
