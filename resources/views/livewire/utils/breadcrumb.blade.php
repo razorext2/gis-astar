@@ -49,7 +49,7 @@
                                     @if ($isFirst)
                                         <x-icons.home class="{{ $crumbTitle ? 'me-1.5' : '' }} h-3.5 w-3.5 transition-transform group-hover:scale-110" />
                                     @endif
-                                    <span class="leading-none">{{ $crumbTitle }}</span>
+                                    <span class="leading-none inline-block max-w-[70px] sm:max-w-[120px] lg:max-w-[200px] truncate" title="{{ $crumbTitle }}">{{ $crumbTitle }}</span>
                                 </a>
                             @else
                                 <span
@@ -57,7 +57,7 @@
                                     @if ($isFirst)
                                         <x-icons.home class="{{ $crumbTitle ? 'me-1.5' : '' }} h-3.5 w-3.5" />
                                     @endif
-                                    <span class="leading-none">{{ $crumbTitle }}</span>
+                                    <span class="leading-none inline-block max-w-[70px] sm:max-w-[120px] lg:max-w-[200px] truncate" title="{{ $crumbTitle }}">{{ $crumbTitle }}</span>
                                 </span>
                             @endif
                         @endif
@@ -76,13 +76,16 @@
             x-transition:leave="transition ease-in duration-150 transform"
             x-transition:leave-start="opacity-100 translate-y-0"
             x-transition:leave-end="opacity-0 -translate-y-2"
-            class="flex" aria-label="Breadcrumb" style="display: none;">
-            <ol class="inline-flex items-center gap-1 bg-transparent border-none p-0 shadow-none md:gap-1.5">
+            class="flex min-w-0 w-full" aria-label="Breadcrumb" style="display: none;">
+            <ol class="inline-flex items-center gap-1 bg-transparent border-none p-0 shadow-none md:gap-1.5 min-w-0 w-full">
                 @foreach ($displayCrumbs as $i => $crumb)
-                    <li class="flex items-center">
-                        <div class="flex items-center">
+                    @php
+                        $isLast = $loop->last;
+                    @endphp
+                    <li class="{{ $isLast ? 'flex items-center min-w-0' : 'hidden sm:flex items-center' }}">
+                        <div class="flex items-center min-w-0">
                             @if ($i > 0)
-                                <x-icons.angle-right class="mx-1 h-3 w-3 text-zinc-400 dark:text-zinc-500" />
+                                <x-icons.angle-right class="mx-1 h-3 w-3 text-zinc-400 dark:text-zinc-500 {{ $isLast ? 'hidden sm:block' : '' }}" />
                             @endif
 
                             @if (isset($crumb['is_ellipsis']))
@@ -91,10 +94,8 @@
                                 </span>
                             @else
                                 @php
-                                    $isLast = $loop->last;
                                     $isFirst = $i === 0;
                                     $crumbTitle = count($crumbs) > 2 && $isFirst ? '' : $crumb['title'];
-                                    $crumbTitleMobile = $crumbTitle && mb_strlen($crumbTitle) > 5 ? mb_substr($crumbTitle, 0, 5) . '...' : $crumbTitle;
                                 @endphp
 
                                 @if (!$isLast)
@@ -103,17 +104,15 @@
                                         @if ($isFirst)
                                             <x-icons.home class="{{ $crumbTitle ? 'me-1.5' : '' }} h-3.5 w-3.5 transition-transform group-hover:scale-110" />
                                         @endif
-                                        <span class="leading-none md:hidden">{{ $crumbTitleMobile }}</span>
-                                        <span class="leading-none hidden md:inline">{{ $crumbTitle }}</span>
+                                        <span class="leading-none inline-block max-w-[120px] lg:max-w-[200px] truncate" title="{{ $crumbTitle }}">{{ $crumbTitle }}</span>
                                     </a>
                                 @else
                                     <span
-                                        class="flex items-center leading-none whitespace-nowrap text-[9px] font-black uppercase tracking-[0.1em] text-red-600 dark:text-red-500">
+                                        class="flex items-center leading-none whitespace-nowrap text-[9px] font-black uppercase tracking-[0.1em] text-red-600 dark:text-red-500 min-w-0">
                                         @if ($isFirst)
                                             <x-icons.home class="{{ $crumbTitle ? 'me-1.5' : '' }} h-3.5 w-3.5" />
                                         @endif
-                                        <span class="leading-none md:hidden">{{ $crumbTitleMobile }}</span>
-                                        <span class="leading-none hidden md:inline">{{ $crumbTitle }}</span>
+                                        <span class="leading-none inline-block max-w-[80px] sm:max-w-[120px] lg:max-w-[200px] truncate" title="{{ $crumbTitle }}">{{ $crumbTitle }}</span>
                                     </span>
                                 @endif
                             @endif

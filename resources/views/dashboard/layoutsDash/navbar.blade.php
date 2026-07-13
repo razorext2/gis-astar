@@ -32,7 +32,7 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
 
 
         {{-- Logo & Toggle --}}
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 min-w-0">
             {{-- Sidebar Toggle Button (Desktop Only) --}}
             <button @click="openSidebar = !openSidebar"
                 x-data="{ tapping: false }"
@@ -61,7 +61,7 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
             </div>
 
             {{-- Breadcrumb Placeholder (Sticky) --}}
-            <div id="navbar-breadcrumb-container" class="flex items-center pl-3 sm:pl-4 border-l border-zinc-200/50 dark:border-zinc-800/50 h-6"></div>
+            <div id="navbar-breadcrumb-container" class="flex items-center pl-3 sm:pl-4 border-l border-zinc-200/50 dark:border-zinc-800/50 h-6 min-w-0"></div>
         </div>
 
         {{-- Points (Teknisi) --}}
