@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Invoice extends Model
@@ -29,17 +31,17 @@ class Invoice extends Model
         'latest_update_by',
     ];
 
-    public function addedBy()
+    public function addedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'added_by', 'id');
     }
 
-    public function latestUpdateBy()
+    public function latestUpdateBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'latest_update_by', 'id');
     }
 
-    public function details()
+    public function details(): HasMany
     {
         return $this->hasMany(InvoiceDetail::class, 'no_faktur_pajak', 'no_faktur_pajak');
     }

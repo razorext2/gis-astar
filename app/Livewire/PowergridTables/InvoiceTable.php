@@ -39,12 +39,16 @@ final class InvoiceTable extends PowerGridComponent
 
     public function booted(): void
     {
-        $this->currentRoute = request()->route()?->getName() ?? '';
+        if (empty($this->currentRoute)) {
+            $this->currentRoute = request()->route()?->getName() ?? '';
+        }
     }
 
     public function setUp(): array
     {
-        $this->currentRoute = request()->route()?->getName() ?? '';
+        if (empty($this->currentRoute)) {
+            $this->currentRoute = request()->route()?->getName() ?? '';
+        }
 
         if (auth()->user()->can('invoice-delete')) {
             $this->showCheckBox();
@@ -63,37 +67,51 @@ final class InvoiceTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
+        $query = Invoice::query()->with(['addedBy', 'latestUpdateBy', 'details']);
+
+        return $this->applyInvoiceFilter($query);
+    }
+
+    /**
+     * Apply route-based and permission-based filters to the invoice query.
+     *
+     * Each entry defines: the required permission, the matching route, and
+     * an optional filter (either a direct column value or a JSON path on details).
+     *
+     * @param  Builder<Invoice>  $query
+     * @return Builder<Invoice>
+     */
+    private function applyInvoiceFilter(Builder $query): Builder
+    {
         $route = $this->currentRoute;
 
-        $query = Invoice::query()
-            ->with(['addedBy', 'latestUpdateBy', 'details']);
+        /** @var array<int, array{permission: string, route: string, tipe_invoice?: string, tujuan?: string}> */
+        $filterMap = [
+            ['permission' => 'invoice-list',     'route' => 'invoice.all.index'],
+            ['permission' => 'invoice-list',     'route' => 'invoice.medan.index', 'tipe_invoice' => 'dalkot'],
+            ['permission' => 'invoice-list',     'route' => 'invoice.cust.index',  'tujuan' => 'cust'],
+            ['permission' => 'invoice-list-pku', 'route' => 'invoice.pku.index',   'tujuan' => 'pku'],
+            ['permission' => 'invoice-list-jkt', 'route' => 'invoice.jkt.index',   'tujuan' => 'jkt'],
+        ];
 
-        if (auth()->user()->can('invoice-list')) {
-            if ($route === 'invoice.all.index') {
-                return $query;
+        foreach ($filterMap as $filter) {
+            if (! auth()->user()->can($filter['permission'])) {
+                continue;
             }
 
-            if ($route === 'invoice.medan.index') {
-                return $query->where('tipe_invoice', 'dalkot');
+            if ($filter['route'] !== $route) {
+                continue;
             }
 
-            if ($route === 'invoice.cust.index') {
-                return $query->whereHas('details', function ($details) {
-                    $details->where('informasi_pengiriman->tujuan', 'cust');
-                });
+            if (isset($filter['tipe_invoice'])) {
+                return $query->where('tipe_invoice', $filter['tipe_invoice']);
             }
-        }
 
-        if (auth()->user()->can('invoice-list-pku') && $route === 'invoice.pku.index') {
-            return $query->whereHas('details', function ($details) {
-                $details->where('informasi_pengiriman->tujuan', 'pku');
-            });
-        }
+            if (isset($filter['tujuan'])) {
+                return $query->whereHas('details', fn ($q) => $q->where('informasi_pengiriman->tujuan', $filter['tujuan']));
+            }
 
-        if (auth()->user()->can('invoice-list-jkt') && $route === 'invoice.jkt.index') {
-            return $query->whereHas('details', function ($details) {
-                $details->where('informasi_pengiriman->tujuan', 'jkt');
-            });
+            return $query;
         }
 
         return $query;
