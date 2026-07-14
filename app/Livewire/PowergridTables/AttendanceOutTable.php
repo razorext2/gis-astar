@@ -1,6 +1,6 @@
 <?php
 
-/** Goal: Manage check-out attendance records and verification, Caller: Web Router, Deps: AttendanceOut, Pegawai */
+/** Goal: Manage check-out attendance records and verification, Caller: Web Router, Deps: AttendanceOut, Pegawai, Jabatan, Role */
 
 namespace App\Livewire\PowergridTables;
 
@@ -8,10 +8,10 @@ use App\Models\AttendanceOut;
 use App\Models\Jabatan;
 use App\Models\Pegawai;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
@@ -71,7 +71,7 @@ final class AttendanceOutTable extends PowerGridComponent
             ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
             ->select('tb_attendance_out.*', 'tb_pegawai.full_name', 'tb_pegawai.jabatan', 'users.is_active')
             ->groupBy('tb_attendance_out.id', 'tb_pegawai.full_name', 'tb_pegawai.jabatan', 'users.is_active')
-            ->when(auth()->user()->kode_pegawai, fn ($query, $kode) => $query->where('tb_attendance_out.kode_pegawai', $kode))
+            ->when(auth()->user()?->kode_pegawai, fn ($query, $kode) => $query->where('tb_attendance_out.kode_pegawai', $kode))
             ->when($this->kodePegawai, fn ($query, $kode) => $query->where('tb_attendance_out.kode_pegawai', $kode))
             ->latest('tb_attendance_out.jam_keluar');
     }
@@ -124,7 +124,7 @@ final class AttendanceOutTable extends PowerGridComponent
 
     public function columns(): array
     {
-        return [
+        $columns = [
             Column::make('#', 'photo_url')
                 ->visibleInExport(false),
 
@@ -137,11 +137,14 @@ final class AttendanceOutTable extends PowerGridComponent
                 ->searchable(),
 
             Column::make('Lokasi', 'location'),
+        ];
 
-            Column::action('Aksi')
-                ->hidden(isHidden: Auth::user()->can('attendance-approve') == false)
-                ->fixedOnResponsive(),
+        if (auth()->user()?->can('attendance-approve')) {
+            $columns[] = Column::action('Aksi')
+                ->fixedOnResponsive();
+        }
 
+        return array_merge($columns, [
             Column::make('Created at', 'created_at')
                 ->hidden(isHidden: true, isForceHidden: true)
                 ->visibleInExport(true),
@@ -160,7 +163,7 @@ final class AttendanceOutTable extends PowerGridComponent
 
             Column::make('Status Akun', 'is_active')
                 ->hidden(isHidden: true, isForceHidden: true),
-        ];
+        ]);
     }
 
     public function filters(): array
@@ -185,7 +188,7 @@ final class AttendanceOutTable extends PowerGridComponent
                 ->optionValue('value'),
         ];
 
-        if (Auth::user()->can('attendance-approve')) {
+        if (auth()->user()?->can('attendance-approve')) {
             $this->jabatan = Jabatan::select(['id', 'nama_jabatan'])->get();
             $this->roles = Role::select(['id', 'name'])->get();
 
@@ -223,17 +226,19 @@ final class AttendanceOutTable extends PowerGridComponent
         return $filters;
     }
 
-    public function actionsFromView(AttendanceOut $data)
+    public function actionsFromView(AttendanceOut $data): ?View
     {
-        if (Auth::user()->can('attendance-approve') && $data->verified == false && $data->status == 0) {
+        if (auth()->user()?->can('attendance-approve') && !$data->verified && (int) $data->status === 0) {
             return view('components.table-component.confirm-button', [
                 'data' => $data,
             ]);
         }
+
+        return null;
     }
 
     #[On('verifikasi')]
-    public function verifikasi(int $id)
+    public function verifikasi(int $id): void
     {
         $this->dispatch(
             'confirmation',
@@ -244,13 +249,13 @@ final class AttendanceOutTable extends PowerGridComponent
     }
 
     #[On('attendanceVerificationAction.{tableName}')]
-    public function verificationProcess(int $id, string $tableName)
+    public function verificationProcess(int $id, string $tableName): void
     {
-        if ($tableName == $this->tableName) {
+        if ($tableName === $this->tableName) {
             try {
-                $query = AttendanceOut::where('id', $id)->update([
+                $query = AttendanceOut::query()->where('id', $id)->update([
                     'verified' => 1,
-                    'verified_by' => Auth::id(),
+                    'verified_by' => auth()->id(),
                     'status' => 1,
                 ]);
 
@@ -259,15 +264,14 @@ final class AttendanceOutTable extends PowerGridComponent
                 }
             } catch (\Exception $e) {
                 Log::error($e);
-
-                return $this->swal('Gagal', 'Absensi gagal di verifikasi', 'error');
+                $this->swal('Gagal', 'Absensi gagal di verifikasi', 'error');
             }
         }
     }
 
-    public function swal(string $title, string $text, string $icon)
+    public function swal(string $title, string $text, string $icon): void
     {
-        return $this->dispatch(
+        $this->dispatch(
             'swal',
             title: $title,
             text: $text,
