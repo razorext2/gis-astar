@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
-use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -18,33 +17,33 @@ class ValidateSales extends Component
 {
     use HandlesErrors, WithFileUploads;
 
-    public $showModal = false;
+    public bool $showModal = false;
 
-    public $showDetail = false;
+    public bool $showDetail = false;
 
-    public $label;
+    public ?string $label = null;
 
-    public $id;
+    public ?int $id = null;
 
-    public $rejectionReason;
+    public ?string $rejectionReason = null;
 
-    public $step = 1;
+    public int $step = 1;
 
-    public $data;
+    public ?Sales $data = null;
 
-    public $customer_telp;
+    public ?string $customer_telp = null;
 
-    public $customer_name;
+    public ?string $customer_name = null;
 
-    public $customer_address;
+    public ?string $customer_address = null;
 
-    public $customer_make_order;
+    public ?bool $customer_make_order = null;
 
-    public $gives_phone_number;
+    public ?bool $gives_phone_number = null;
 
-    public $order_notes;
+    public ?string $order_notes = null;
 
-    public $proof_pic;
+    public mixed $proof_pic = null;
 
     public function rules(): array
     {
@@ -118,7 +117,7 @@ class ValidateSales extends Component
         $this->step = 3;
     }
 
-    public function confirmValidation(): mixed
+    public function confirmValidation(): void
     {
         $this->validate();
 
@@ -128,16 +127,14 @@ class ValidateSales extends Component
 
         $this->checkData($query);
 
-        return $this->runSafely(function () use ($query) {
+        $this->runSafely(function () use ($query) {
             DB::transaction(function () use ($query) {
-                // upload file if exists
                 $fileName = $query->proof_picture;
                 if ($this->proof_pic) {
                     $fileName = 'bukti_followup'.Str::random(10).'.'.$this->proof_pic->extension();
                     $this->proof_pic->storeAs('public/sales/proof', $fileName);
                 }
 
-                // update status laporan
                 $query->update([
                     'status' => 1,
                     'validate_by' => Auth::id(),
@@ -154,18 +151,19 @@ class ValidateSales extends Component
             $this->dispatch('swal', title: 'Berhasil', text: 'Data telah dikonfirmasi', icon: 'success');
 
             if ($this->label !== null) {
-                return $this->redirectRoute('sales.show', ['sale' => $this->id], navigate: true);
+                $this->redirectRoute('sales.show', ['sale' => $this->id], navigate: true);
+                return;
             }
 
-            return $this->dispatch('pg:eventRefresh-SalesTable');
+            $this->dispatch('pg:eventRefresh-SalesTable');
         }, 'Terjadi kesalahan saat mengonfirmasi data sales.', [
             'action' => 'confirm sales validation',
             'sales_id' => $this->id,
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
         ]);
     }
 
-    public function confirmRejection(): mixed
+    public function confirmRejection(): void
     {
         $this->checkPermission();
 
@@ -173,7 +171,7 @@ class ValidateSales extends Component
 
         $this->checkData($query);
 
-        return $this->runSafely(function () use ($query) {
+        $this->runSafely(function () use ($query) {
             $query->update([
                 'status' => 2,
                 'validate_by' => Auth::id(),
@@ -184,15 +182,22 @@ class ValidateSales extends Component
             $this->dispatch('swal', title: 'Sukses!', text: 'Data berhasil ditolak', icon: 'success');
 
             if ($this->label !== null) {
-                return $this->redirectRoute('sales.show', ['sale' => $this->id], navigate: true);
+                $this->redirectRoute('sales.show', ['sale' => $this->id], navigate: true);
+                return;
             }
 
-            return $this->dispatch('pg:eventRefresh-SalesTable');
+            $this->dispatch('pg:eventRefresh-SalesTable');
         }, 'Terjadi kesalahan saat menolak data sales.', [
             'action' => 'reject sales validation',
             'sales_id' => $this->id,
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
         ]);
+    }
+
+    public function removeProofPic(): void
+    {
+        $this->proof_pic = null;
+        $this->resetValidation('proof_pic');
     }
 
     public function resetModal(): void
@@ -220,10 +225,11 @@ class ValidateSales extends Component
         }
     }
 
-    public function checkData($query): void
+    public function checkData(?Sales $query): void
     {
         if (! $query) {
             $this->dispatch('swal', title: 'Data tidak ditemukan', text: 'Data tidak ditemukan', icon: 'error');
+            abort(404);
         }
     }
 

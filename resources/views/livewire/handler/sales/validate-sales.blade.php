@@ -139,7 +139,7 @@
                     <div>
                         <x-input.basic placeholder="Cth: Bp. Bintan" id="customer_name" name="customer_name"
                             wire:model="customer_name" required>
-                            Nama Customer
+                            Nama Customer <span class="text-red-500 font-bold">*</span>
                         </x-input.basic>
                         @error('customer_name')
                             <span class="mt-1 block text-xs text-red-500">{{ $message }}</span>
@@ -149,7 +149,7 @@
                     <div>
                         <x-input.basic placeholder="Cth: Jl. xxx" id="customer_address" name="customer_address"
                             wire:model="customer_address" required>
-                            Alamat Customer
+                            Alamat Customer <span class="text-red-500 font-bold">*</span>
                         </x-input.basic>
                         @error('customer_address')
                             <span class="mt-1 block text-xs text-red-500">{{ $message }}</span>
@@ -158,7 +158,7 @@
 
                     <div>
                         <span class="mb-2 block text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                            Apakah customer melakukan pembelian?
+                            Apakah customer melakukan pembelian? <span class="text-red-500 font-bold">*</span>
                         </span>
                         <div class="mb-2 ms-1 flex items-center">
                             <input id="option-1" type="radio" name="customer_make_order"
@@ -187,7 +187,7 @@
 
                     <div>
                         <span class="mb-2 block text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                            Apakah customer memberikan nomor telepon?
+                            Apakah customer memberikan nomor telepon? <span class="text-red-500 font-bold">*</span>
                         </span>
                         <div class="mb-2 ms-1 flex items-center">
                             <input id="phone-option-1" type="radio" name="gives_phone_number"
@@ -215,7 +215,7 @@
 
                     <div>
                         <span class="block text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                            Catatan
+                            Catatan <span class="text-red-500 font-bold">*</span>
                         </span>
                         <p class="mb-2 text-xs text-zinc-500 dark:text-zinc-400">
                             Jika customer order, sebutkan apa saja yg diorder. Jika tidak, jelaskan alasan
@@ -229,13 +229,13 @@
                     </div>
 
                     <div x-data="{ uploading: false, progress: 0 }" x-on:livewire-upload-start="uploading = true"
-                        x-on:livewire-upload-finish="uploading = false"
-                        x-on:livewire-upload-cancel="uploading = false" x-on:livewire-upload-error="uploading = false"
+                        x-on:livewire-upload-finish="uploading = false; progress = 0"
+                        x-on:livewire-upload-cancel="uploading = false; progress = 0" x-on:livewire-upload-error="uploading = false; progress = 0"
                         x-on:livewire-upload-progress="progress = $event.detail.progress">
                         <label class="mb-2 block text-sm font-medium text-zinc-900 dark:text-zinc-100"
                             for="proof_pic">
                             Bukti Followup Customer
-                            @if ($gives_phone_number === '1' || $gives_phone_number === 1)
+                            @if ($gives_phone_number)
                                 <span class="text-red-500 font-bold">*</span> <span class="text-xs text-red-500 font-normal">(Wajib)</span>
                             @else
                                 <span class="text-xs text-zinc-400 font-normal">(Opsional)</span>
@@ -249,19 +249,36 @@
                         </div>
 
                         @if ($proof_pic)
-                            <div class="relative mb-3">
-                                <img src="{{ $proof_pic->temporaryUrl() }}" alt="Proof Picture"
-                                    class="max-h-44 w-full rounded-lg border border-zinc-200 object-cover dark:border-zinc-700">
-                                <button type="button" wire:click="$cancelUpload('proof_pic')"
-                                    class="absolute right-2 top-2 rounded-full bg-red-600/80 p-1.5 text-white backdrop-blur-md transition hover:bg-red-600">
-                                    <x-icons.close class="h-4 w-4" />
-                                </button>
+                            <div class="mt-2 flex flex-col gap-2">
+                                <div class="relative w-fit">
+                                    <img class="h-32 w-32 rounded-xl border border-zinc-200 object-cover dark:border-zinc-800"
+                                        src="{{ $proof_pic->temporaryUrl() }}" alt="Proof Picture">
+                                    <button type="button"
+                                        class="absolute -end-2 -top-2 inline-flex items-center justify-center rounded-full bg-red-600 p-1 text-white shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                        wire:click="removeProofPic">
+                                        <x-icons.close class="h-3.5 w-3.5" />
+                                    </button>
+                                </div>
+                            </div>
+                        @else
+                            <div class="flex w-full flex-col gap-y-2">
+                                <label for="proof_pic"
+                                    class="flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-zinc-200 bg-zinc-50 transition-all duration-500 hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900/50 dark:hover:border-zinc-700 dark:hover:bg-zinc-900">
+                                    <div class="flex flex-col items-center justify-center pb-6 pt-5">
+                                        <x-icons.cloud-upload class="mb-2 h-8 w-8 text-zinc-400 dark:text-zinc-500" />
+                                        <p class="mb-0.5 text-sm font-semibold text-zinc-600 dark:text-zinc-400">
+                                            Klik untuk upload
+                                        </p>
+                                        <p class="w-full text-center text-xs text-zinc-400 dark:text-zinc-500">
+                                            PNG, JPG, JPEG (Maks. 2MB)
+                                        </p>
+                                    </div>
+                                </label>
                             </div>
                         @endif
 
-                        <input
-                            class="block w-full cursor-pointer rounded-lg border border-zinc-200 bg-zinc-50 text-sm text-zinc-900 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800/50 dark:text-zinc-300"
-                            id="proof_pic" name="proof_pic" wire:model="proof_pic" type="file">
+                        <input id="proof_pic" name="proof_pic" type="file" accept="image/*"
+                            wire:model="proof_pic" class="hidden" />
 
                         @error('proof_pic')
                             <span class="mt-1 block text-xs text-red-500">{{ $message }}</span>
