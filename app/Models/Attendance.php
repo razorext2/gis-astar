@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Attendance extends Model
 {
@@ -39,7 +41,40 @@ class Attendance extends Model
         'jam_masuk' => 'datetime',
     ];
 
-    // In Attendance.php (Model)
+    /**
+     * Get the display-ready photo src URL, falling back to a no-image asset.
+     */
+    public function getPhotoSrcAttribute(): string
+    {
+        $storagePath = "labels/{$this->kode_pegawai}/capturedImg/{$this->photoURL}.png";
+
+        if (Storage::disk('public')->exists($storagePath)) {
+            return asset(sha1('libs') . '/' . $this->photoURL . '.png');
+        }
+
+        return asset('assets/img/noImage.webp');
+    }
+
+    /**
+     * Get the parsed Carbon instance of waktuori.
+     */
+    public function getParsedTimeAttribute(): Carbon
+    {
+        return Carbon::parse($this->waktuori);
+    }
+
+    /**
+     * Get the face similarity percentage from distance.
+     */
+    public function getSimilarityPercentAttribute(): ?float
+    {
+        if ($this->distance === null) {
+            return null;
+        }
+
+        return (1 - round($this->distance, 2)) * 100;
+    }
+
     public function pegawaiRelasi()
     {
         return $this->belongsTo(Pegawai::class, 'kode_pegawai', 'kode_pegawai');

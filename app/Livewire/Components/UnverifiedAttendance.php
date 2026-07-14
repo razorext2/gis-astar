@@ -12,28 +12,62 @@ use Livewire\Component;
 
 class UnverifiedAttendance extends Component
 {
-    public string $type = 'in'; // 'in' or 'out'
+    /** @var string 'in'|'out' */
+    public string $type = 'in';
 
-    public function verify(int $id): void
+    public int $perPage = 10;
+
+    public int $totalCount = 0;
+
+    private function getModelClass(): string
+    {
+        return match($this->type) {
+            'out'   => AttendanceOut::class,
+            default => Attendance::class,
+        };
+    }
+
+    private function getTableName(): string
+    {
+        return match($this->type) {
+            'out'   => 'AttendanceOutTable',
+            default => 'AttendanceInTable',
+        };
+    }
+
+    private function ensureCanApprove(): bool
     {
         if (!auth()->user()?->can('attendance-approve')) {
             $this->dispatch('swal', title: 'Ditolak', text: 'Anda tidak memiliki akses.', icon: 'error');
+
+            return false;
+        }
+
+        return true;
+    }
+
+    public function loadMore(): void
+    {
+        $this->perPage += 10;
+    }
+
+    public function verify(int $id): void
+    {
+        if (!$this->ensureCanApprove()) {
             return;
         }
 
         try {
-            $modelClass = $this->type === 'in' ? Attendance::class : AttendanceOut::class;
-            $tableName = $this->type === 'in' ? 'AttendanceInTable' : 'AttendanceOutTable';
-
+            $modelClass = $this->getModelClass();
             $updated = $modelClass::query()->where('id', $id)->update([
-                'verified' => 1,
+                'verified'    => 1,
                 'verified_by' => auth()->id(),
-                'status' => 1,
+                'status'      => 1,
             ]);
 
             if ($updated) {
                 $this->dispatch('swal', title: 'Berhasil', text: 'Absensi berhasil di verifikasi', icon: 'success');
-                $this->dispatch("pg:eventRefresh-{$tableName}");
+                $this->dispatch("pg:eventRefresh-{$this->getTableName()}");
             }
         } catch (\Exception $e) {
             Log::error($e);
@@ -43,24 +77,21 @@ class UnverifiedAttendance extends Component
 
     public function reject(int $id): void
     {
-        if (!auth()->user()?->can('attendance-approve')) {
-            $this->dispatch('swal', title: 'Ditolak', text: 'Anda tidak memiliki akses.', icon: 'error');
+        if (!$this->ensureCanApprove()) {
             return;
         }
 
         try {
-            $modelClass = $this->type === 'in' ? Attendance::class : AttendanceOut::class;
-            $tableName = $this->type === 'in' ? 'AttendanceInTable' : 'AttendanceOutTable';
-
+            $modelClass = $this->getModelClass();
             $updated = $modelClass::query()->where('id', $id)->update([
-                'verified' => 0,
+                'verified'    => 0,
                 'verified_by' => auth()->id(),
-                'status' => 2, // Rejected
+                'status'      => 2,
             ]);
 
             if ($updated) {
                 $this->dispatch('swal', title: 'Berhasil', text: 'Absensi berhasil ditolak', icon: 'success');
-                $this->dispatch("pg:eventRefresh-{$tableName}");
+                $this->dispatch("pg:eventRefresh-{$this->getTableName()}");
             }
         } catch (\Exception $e) {
             Log::error($e);
@@ -70,12 +101,15 @@ class UnverifiedAttendance extends Component
 
     public function render(): View
     {
-        $modelClass = $this->type === 'in' ? Attendance::class : AttendanceOut::class;
-        
+        $modelClass = $this->getModelClass();
+
+        $this->totalCount = $modelClass::query()->notVerified()->count();
+
         $records = $modelClass::query()
             ->notVerified()
             ->with(['pegawaiRelasi'])
             ->latest('waktuori')
+            ->limit($this->perPage)
             ->get();
 
         return view('livewire.components.unverified-attendance', compact('records'));

@@ -16,20 +16,11 @@
     @endif
 
     <!-- Position Status Badge -->
-    @if ($data->position_status == 1)
-        <span class="inline-flex items-center gap-1 w-fit px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-200/60 dark:border-amber-900/40">
-            <x-icons.exclamation-circle class="h-3.5 w-3.5 text-amber-500 flex-shrink-0" />
-            Dalam Perjalanan
-        </span>
-    @elseif ($data->position_status == 2)
-        <span class="inline-flex items-center gap-1 w-fit px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-900/40">
-            <x-icons.check-circle class="h-3.5 w-3.5 text-emerald-500 flex-shrink-0" />
-            Stand By
-        </span>
-    @elseif ($data->position_status == 3)
-        <span class="inline-flex items-center gap-1 w-fit px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 border border-rose-200/60 dark:border-rose-900/40">
-            <x-icons.minus-circle class="h-3.5 w-3.5 text-rose-500 flex-shrink-0" />
-            Onsite
+    @php $positionStatus = \App\Enums\PositionStatus::tryFrom((int) $data->position_status); @endphp
+    @if ($positionStatus)
+        <span class="inline-flex items-center gap-1 w-fit px-2.5 py-0.5 rounded-full text-[11px] font-medium {{ $positionStatus->colorClasses() }}">
+            <x-dynamic-component :component="$positionStatus->iconComponent()" class="h-3.5 w-3.5 flex-shrink-0" />
+            {{ $positionStatus->label() }}
         </span>
     @else
         <span class="inline-flex items-center gap-1 w-fit px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-zinc-50 dark:bg-zinc-950/40 text-zinc-600 dark:text-zinc-400 border border-zinc-200/60 dark:border-zinc-800/40">
