@@ -1,3 +1,4 @@
+{{-- Goal: Add driver assignment report form, Livewire: App\Livewire\Handler\Driver\AssignAdd, Alpine: None --}}
 <div class="w-full">
     <div class="grid gap-4 md:grid-cols-2" id="laporan-content">
 
@@ -38,6 +39,7 @@
                     @error('no_sr')
                         <span class="error text-xs text-red-500">{{ $message }}</span>
                     @enderror
+                </form>
             </div>
         </div>
 

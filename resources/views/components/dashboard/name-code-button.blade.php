@@ -2,9 +2,9 @@
 @props(['capitalize' => true])
 
 <div class="flex w-fit min-w-32 flex-col items-start gap-1 text-wrap">
-    <span class="{{ $capitalize ? 'capitalize' : '' }} text-xs text-zinc-400">{{ $user->kode_pegawai ?? 'N/A' }}</span>
+    <span class="{{ $capitalize ? 'capitalize' : '' }} text-xs text-zinc-400">{{ $user->kode_pegawai ?? 'Belum Diatur' }}</span>
     <span class="font-medium capitalize dark:text-zinc-200 inline-flex items-center gap-1.5">
-        {{ $user->name ?? 'N/A' }}
+        {{ $user->name ?? 'Belum Diatur' }}
         @if (isset($user))
             <x-dashboard.badge-inactive :is_active="$user->is_active ?? true" />
         @endif

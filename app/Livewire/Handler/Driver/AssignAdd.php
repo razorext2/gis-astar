@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Handle driver assignment report creation, Caller: resources/views/dashboard/driver/assign-add.blade.php, Deps: App\Models\Driver */
+
 namespace App\Livewire\Handler\Driver;
 
 use App\Livewire\Concerns\HandlesErrors;
@@ -13,10 +15,9 @@ class AssignAdd extends Component
 {
     use HandlesErrors;
 
-    #[Validate('required|string|min:11|max:11', message: [
+    #[Validate('required|string|size:11', message: [
         'no_sr.required' => 'No. SR wajib diisi!',
-        'no_sr.min' => 'No. SR minimal 11 karakter!',
-        'no_sr.max' => 'No. SR maksimal 11 karakter!',
+        'no_sr.size' => 'No. SR harus berukuran 11 karakter!',
     ])]
     public string $no_sr = '';
 
@@ -27,10 +28,9 @@ class AssignAdd extends Component
     ])]
     public string $tipe_tagihan = '';
 
-    #[Validate('required|string|min:6|max:6', message: [
+    #[Validate('required|string|size:6', message: [
         'pt_type.required' => 'Tipe kunjungan wajib diisi!',
-        'pt_type.min' => 'Tipe kunjungan minimal 6 karakter!',
-        'pt_type.max' => 'Tipe kunjungan maksimal 6 karakter!',
+        'pt_type.size' => 'Tipe kunjungan harus berukuran 6 karakter!',
     ])]
     public string $pt_type = '';
 
@@ -49,35 +49,34 @@ class AssignAdd extends Component
     ])]
     public string $assign_date = '';
 
-    public function mount()
+    public function mount(): void
     {
         $this->assign_date = Carbon::now()->format('Y-m-d');
     }
 
-    public function fetchSR()
+    public function fetchSR(): void
     {
-        // validasi field no. sr
         $this->validateOnly('no_sr');
         $this->validateOnly('tipe_tagihan');
 
-        // set api berdasarkan tipe tagihan
         $api_fetch = match ($this->tipe_tagihan) {
             'idcppn' => 'fetchSR3',
-            'idcnon' => 'fetchSR'
+            'idcnon' => 'fetchSR',
+            default => throw new \InvalidArgumentException('Tipe tagihan tidak valid'),
         };
 
-        // tampilkan loading popup
         $this->dispatch('loadingProgress', message: 'Mencari data...');
 
-        // akses API
-        $response = Http::get('https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe='.$api_fetch.'&NomorPermintaanJual='.$this->no_sr);
+        $response = Http::get('https://indodacin.nusa.net.id/web/finger/secureapi.php', [
+            'tipe' => $api_fetch,
+            'NomorPermintaanJual' => $this->no_sr,
+        ]);
 
-        // jika status = error
         if ($response['status'] == 'error') {
-            return $this->dispatch('swal', icon: 'error', text: $response['message'], title: 'Gagal');
+            $this->dispatch('swal', icon: 'error', text: $response['message'], title: 'Gagal');
+            return;
         }
 
-        // tutup loading popup
         $this->dispatch('loadingClose');
 
         $data = $response['data'][0];
@@ -85,12 +84,10 @@ class AssignAdd extends Component
         $this->pt_address = $data['AlamatContact'];
     }
 
-    public function store()
+    public function store(): void
     {
-        // validasi input
         $this->validate();
 
-        // tampilkan pesan loading
         $this->dispatch('loadingProgress', message: 'Mengirim data...');
 
         $this->runSafely(function () {
@@ -116,7 +113,7 @@ class AssignAdd extends Component
         ]);
     }
 
-    public function render()
+    public function render(): \Illuminate\View\View
     {
         return view('livewire.handler.driver.assign-add');
     }
