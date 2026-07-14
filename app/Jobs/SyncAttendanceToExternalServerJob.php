@@ -65,6 +65,16 @@ class SyncAttendanceToExternalServerJob implements ShouldBeUnique, ShouldQueue
             'lokasi' => $this->lokasi,
         ], fn ($value) => $value !== null);
 
+        if (! app()->isProduction()) {
+            $this->log()->info('Sync absensi dilewati karena bukan environment production', [
+                'user_id' => $this->userId,
+                'kode_pegawai' => $this->kodePegawai,
+                'environment' => app()->environment(),
+            ]);
+            
+            return;
+        }
+
         $response = Http::withoutVerifying()->post($url, $payload);
 
         if ($response->failed()) {
