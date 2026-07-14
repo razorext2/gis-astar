@@ -18,23 +18,23 @@ import "quill/dist/quill.snow.css";
 /** Goal: Clean up ApexCharts instances on Livewire 3 SPA navigation, Caller: Resources layouts, Deps: Livewire, livewire-charts */
 document.addEventListener("livewire:init", () => {
     const chartCreators = [
-        'livewireChartsAreaChart',
-        'livewireChartsColumnChart',
-        'livewireChartsLineChart',
-        'livewireChartsMultiLineChart',
-        'livewireChartsPieChart',
-        'livewireChartsMultiColumnChart',
-        'livewireChartsRadarChart',
-        'livewireChartsTreeMapChart',
-        'livewireChartsRadialChart'
+        "livewireChartsAreaChart",
+        "livewireChartsColumnChart",
+        "livewireChartsLineChart",
+        "livewireChartsMultiLineChart",
+        "livewireChartsPieChart",
+        "livewireChartsMultiColumnChart",
+        "livewireChartsRadarChart",
+        "livewireChartsTreeMapChart",
+        "livewireChartsRadialChart",
     ];
 
-    chartCreators.forEach(creatorName => {
+    chartCreators.forEach((creatorName) => {
         const originalCreator = window[creatorName];
         if (originalCreator) {
-            window[creatorName] = function(...args) {
+            window[creatorName] = function (...args) {
                 const chartObj = originalCreator(...args);
-                chartObj.destroy = function() {
+                chartObj.destroy = function () {
                     if (this.chart) {
                         try {
                             this.chart.destroy();
@@ -129,6 +129,10 @@ document.addEventListener("livewire:navigated", function () {
     initEventListener();
     initWebSocketListener();
 
+    // Register zoom globally — safe to call every navigation because
+    // zoomImage uses a stable named handler reference (no duplicates).
+    zoomImage();
+
     // Optimize Lenis scroll positioning and recalculation
     if (window.lenis) {
         window.lenis.resize();
@@ -142,37 +146,30 @@ document.addEventListener("livewire:navigated", function () {
         }
     }
 
+    const path = window.location.pathname;
+
     // handle other pages
-    if (
-        window.location.pathname === "/dashboard/attendanceIn" ||
-        window.location.pathname === "/dashboard/attendanceOut"
-    ) {
-        zoomImage();
-    } else if (window.location.pathname === "/dashboard/capture") {
+    if (path === "/dashboard/capture") {
         import("./pages/capture/index.js").then((module) => {
             module.initCapture();
         });
-    } else if (window.location.pathname === "/dashboard/capture/route") {
+    } else if (path === "/dashboard/capture/route") {
         import("./pages/capture/route.js").then((module) => {
             module.initRecognition();
         });
-    } else if (
-        window.location.pathname.startsWith("/dashboard/collect-idy-ppn")
-    ) {
+    } else if (path.startsWith("/dashboard/collect-idy-ppn")) {
         import("./pages/collect-idy-ppn/index.js").then((module) => {
             module.initCollectIdyPpn();
         });
-    } else if (
-        window.location.pathname.startsWith("/dashboard/collect-task-ppn")
-    ) {
+    } else if (path.startsWith("/dashboard/collect-task-ppn")) {
         import("./pages/collect-task-ppn/index.js").then((module) => {
             module.initCollectTaskPpn();
         });
-    } else if (window.location.pathname.startsWith("/dashboard/collect-task")) {
+    } else if (path.startsWith("/dashboard/collect-task")) {
         import("./pages/collect-task/index.js").then((module) => {
             module.initCollectTask();
         });
-    } else if (window.location.pathname.startsWith("/dashboard/collect")) {
+    } else if (path.startsWith("/dashboard/collect")) {
         import("./pages/collect/index.js").then((module) => {
             module.initCollect();
         });

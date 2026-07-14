@@ -1,6 +1,6 @@
 import { editDataHandler } from "./func/formHandler";
 import { quillEditor } from "../../utils/quillEditor";
-import { backCameraStream } from '../../utils/cameraStream';
+import { backCameraStream, resetCapturedImages } from '../../utils/cameraStream';
 import { zoomImage } from "../../utils/zoomImage";
 import { getLocation } from '../../utils/geoLocation';
 import { loadingAlert, showAlert } from '../../utils/alert';
@@ -50,6 +50,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Inisialisasi editor Quill
   quillEditor(data, true);
   // Inisialisasi kamera belakang
+  resetCapturedImages();
   backCameraStream();
   // Inisialisasi handler data
   editDataHandler();

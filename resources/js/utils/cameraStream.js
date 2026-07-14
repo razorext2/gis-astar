@@ -1,6 +1,19 @@
 import { showAlert } from "./alert";
 
-export let capturedImages = [];
+/**
+ * Goal: Manage back camera stream with captured images state.
+ * Pattern: Use a stable array reference (push/splice) so ES module live
+ *          bindings remain consistent across all consumers.
+ * Deps: alert.js
+ */
+
+/** Stable array reference – never reassign, only mutate (push/splice). */
+export const capturedImages = [];
+
+/** Reset captured state between page navigations (call on init). */
+export function resetCapturedImages() {
+    capturedImages.splice(0, capturedImages.length);
+}
 
 export function backCameraStream() {
     const captureButton = document.getElementById("capture-button");
@@ -11,11 +24,14 @@ export function backCameraStream() {
     const videoElement = document.getElementById("video");
     const capturedImagesContainer = document.getElementById("captured-images");
 
-    let stream;
+    // Guard: prevent duplicate listeners when called multiple times (e.g. Livewire re-renders).
+    if (captureButton?.dataset.listenerInstalled) return;
 
-    // Vanilla JS Modal Management
+    let stream = null;
+
+    // ── Modal helpers ────────────────────────────────────────────────────────
     function showModal() {
-        if (backdrop) backdrop.classList.remove("hidden");
+        backdrop?.classList.remove("hidden");
         if (cameraModal) {
             cameraModal.classList.remove("hidden");
             cameraModal.classList.add("flex");
@@ -23,13 +39,22 @@ export function backCameraStream() {
     }
 
     function hideModal() {
-        if (backdrop) backdrop.classList.add("hidden");
+        backdrop?.classList.add("hidden");
         if (cameraModal) {
             cameraModal.classList.add("hidden");
             cameraModal.classList.remove("flex");
         }
     }
 
+    function stopStreamAndHideModal() {
+        if (stream) {
+            stream.getTracks().forEach((track) => track.stop());
+            stream = null;
+        }
+        hideModal();
+    }
+
+    // ── Camera ───────────────────────────────────────────────────────────────
     async function startCamera() {
         try {
             stream = await navigator.mediaDevices.getUserMedia({
@@ -44,7 +69,7 @@ export function backCameraStream() {
             switch (error.name) {
                 case "NotAllowedError":
                 case "PermissionDeniedError":
-                    errorMsg = "Anda menolak izin akses kamera kamera.";
+                    errorMsg = "Anda menolak izin akses kamera.";
                     break;
                 case "NotFoundError":
                 case "DevicesNotFoundError":
@@ -57,73 +82,84 @@ export function backCameraStream() {
         }
     }
 
+    // ── Capture ──────────────────────────────────────────────────────────────
+    function captureImage() {
+        const canvas = document.createElement("canvas");
+        canvas.width = videoElement.videoWidth;
+        canvas.height = videoElement.videoHeight;
+        canvas.getContext("2d").drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+        const imgData = canvas.toDataURL("image/png");
+
+        // Mutate in-place so ES module live bindings stay consistent.
+        capturedImages.push(imgData);
+        appendImageThumbnail(imgData);
+        stopStreamAndHideModal();
+    }
+
+    // ── DOM: thumbnail ───────────────────────────────────────────────────────
+    function appendImageThumbnail(imgData) {
+        // Use createElement instead of insertAdjacentHTML to avoid parsing overhead.
+        const wrapper = document.createElement("div");
+        wrapper.className = "relative me-3 flex-none items-center group";
+
+        const img = document.createElement("img");
+        img.src = imgData;
+        img.className = "w-32 h-32 object-cover rounded-xl shadow-sm ring-1 ring-zinc-200 dark:ring-zinc-800";
+        img.alt = "Foto yang diambil";
+
+        const removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.title = "Hapus gambar";
+        removeBtn.className =
+            "absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full " +
+            "bg-white text-zinc-400 shadow-md ring-1 ring-zinc-200 transition-colors " +
+            "hover:text-red-500 hover:ring-red-500 dark:bg-zinc-900 dark:text-zinc-500 " +
+            "dark:ring-zinc-800 dark:hover:text-red-400 dark:hover:ring-red-500 z-10";
+
+        removeBtn.innerHTML =
+            `<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">` +
+            `<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>` +
+            `</svg>`;
+
+        removeBtn.addEventListener("click", () => {
+            const index = capturedImages.indexOf(imgData);
+            if (index !== -1) {
+                // Mutate in-place – preserves the exported reference.
+                capturedImages.splice(index, 1);
+            }
+            wrapper.remove();
+        });
+
+        wrapper.appendChild(img);
+        wrapper.appendChild(removeBtn);
+        capturedImagesContainer.appendChild(wrapper);
+    }
+
+    // ── Event listeners ──────────────────────────────────────────────────────
     if (captureButton) {
         captureButton.addEventListener("click", startCamera);
+        captureButton.dataset.listenerInstalled = "true";
     }
 
-    if (captureImageButton) {
-        captureImageButton.addEventListener("click", () => {
-            const canvas = document.createElement("canvas");
-            canvas.width = videoElement.videoWidth;
-            canvas.height = videoElement.videoHeight;
-            canvas
-                .getContext("2d")
-                .drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+    captureImageButton?.addEventListener("click", captureImage);
+    closeModalButton?.addEventListener("click", stopStreamAndHideModal);
 
-            const imgData = canvas.toDataURL("image/png");
-            capturedImages.push(imgData);
-
-            // Refactored Premium HTML Template
-            const imageHTML = `
-                <div class="relative me-3 flex-none items-center group transition-transform hover:scale-105">
-                    <img src="${imgData}" class="w-32 h-32 object-cover rounded-xl shadow-sm ring-1 ring-zinc-200 dark:ring-zinc-800">
-                    <button type="button" class="absolute -top-2 -right-2 flex h-7 w-7 items-center justify-center rounded-full bg-white text-zinc-400 shadow-md ring-1 ring-zinc-200 transition-colors hover:text-red-500 hover:ring-red-500 dark:bg-zinc-900 dark:text-zinc-500 dark:ring-zinc-800 dark:hover:text-red-400 dark:hover:ring-red-500 z-10" title="Hapus gambar">
-                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
-                    </button>
-                </div>
-            `;
-
-            capturedImagesContainer.insertAdjacentHTML("beforeend", imageHTML);
-
-            // Remove logic
-            const newElement = capturedImagesContainer.lastElementChild;
-            const removeButton = newElement.querySelector("button");
-
-            removeButton.addEventListener("click", () => {
-                newElement.remove();
-                capturedImages = capturedImages.filter(
-                    (image) => image !== imgData,
-                );
-
-                if (capturedImagesContainer.childElementCount === 0) {
-                    capturedImagesContainer.classList.remove("mt-2");
-                }
-            });
-
-            stopStreamAndHideModal();
-        });
-    }
-
-    if (closeModalButton) {
-        closeModalButton.addEventListener("click", stopStreamAndHideModal);
-    }
-
-    // Escape listener
-    document.addEventListener("keydown", (e) => {
-        if (
-            e.key === "Escape" &&
-            stream &&
-            !cameraModal.classList.contains("hidden")
-        ) {
+    // Escape key – scoped handler attached once per init.
+    const handleKeydown = (e) => {
+        if (e.key === "Escape" && stream && !cameraModal?.classList.contains("hidden")) {
             stopStreamAndHideModal();
         }
-    });
+    };
+    document.addEventListener("keydown", handleKeydown);
 
-    function stopStreamAndHideModal() {
-        if (stream) {
-            stream.getTracks().forEach((track) => track.stop());
-            stream = null;
-        }
-        hideModal();
-    }
+    // ── Resource cleanup ─────────────────────────────────────────────────────
+    // Stop camera stream if user navigates away or closes the tab.
+    window.addEventListener("beforeunload", stopStreamAndHideModal, { once: true });
+
+    // Livewire SPA navigation support.
+    document.addEventListener("livewire:navigating", () => {
+        stopStreamAndHideModal();
+        document.removeEventListener("keydown", handleKeydown);
+    }, { once: true });
 }

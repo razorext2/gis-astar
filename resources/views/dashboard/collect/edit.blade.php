@@ -101,8 +101,8 @@
                         Ambil Foto
                     </x-button.primary>
 
-                    <div class="relative overflow-auto">
-                        <div class="mt-2 flex overflow-x-auto" id="captured-images">
+                    <div class="relative">
+                        <div class="flex overflow-x-auto empty:hidden mt-2" id="captured-images">
                             <!-- Thumbnail gambar yang diambil akan muncul di sini -->
                             @if ($data->photoCollectRelasi)
                                 @foreach ($data->photoCollectRelasi as $photo)
