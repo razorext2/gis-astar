@@ -6,7 +6,8 @@
 
     <h2 id="{{ $id }}-heading" class="m-0">
         <button type="button"
-            class="flex w-full items-center justify-between gap-3 p-5 text-left transition-all duration-300 hover:bg-white/50 focus:outline-none dark:hover:bg-white/5"
+            class="flex w-full items-center justify-between gap-3 p-5 text-left transition-all duration-300 hover: focus:outline-none dark:hover:"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
             @click="open = !open" :aria-expanded="open" aria-controls="{{ $id }}-body">
 
             <div class="flex min-w-0 flex-1 items-center gap-4">

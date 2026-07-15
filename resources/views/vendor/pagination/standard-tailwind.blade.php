@@ -17,7 +17,8 @@
             {{-- Prev --}}
             @if ($paginator->onFirstPage())
                 <span
-                    class="flex h-8 w-8 cursor-not-allowed items-center justify-center rounded-xl border border-zinc-200 bg-zinc-50 text-zinc-300 dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-700">
+                    class="flex h-8 w-8 cursor-not-allowed items-center justify-center rounded-xl border border-zinc-200 bg-zinc-50 text-zinc-300 dark:border-zinc-800 dark:text-zinc-700"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <x-icons.chevron-left class="h-4 w-4" />
                 </span>
             @else
@@ -87,7 +88,8 @@
                 </a>
             @else
                 <span
-                    class="flex h-8 w-8 cursor-not-allowed items-center justify-center rounded-xl border border-zinc-200 bg-zinc-50 text-zinc-300 dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-700">
+                    class="flex h-8 w-8 cursor-not-allowed items-center justify-center rounded-xl border border-zinc-200 bg-zinc-50 text-zinc-300 dark:border-zinc-800 dark:text-zinc-700"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <x-icons.chevron-right class="h-4 w-4" />
                 </span>
             @endif

@@ -33,7 +33,8 @@
         }
     }" @scroll.window.capture="open = false">
         <button type="button" id="action-btn-{{ $id }}" @click="toggle()"
-            class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-200 bg-white/60 text-zinc-500 shadow-sm backdrop-blur-md transition-all duration-200 hover:bg-zinc-50 hover:text-zinc-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+            class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-200 text-zinc-500 shadow-sm transition-all duration-200 hover:bg-zinc-50 hover:text-zinc-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
             :class="open ? 'bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-white' : ''">
             <x-icons.three-dots class="h-4 w-4 rotate-90" />
         </button>
@@ -48,7 +49,8 @@
                 x-transition:leave="transition ease-in duration-100"
                 x-transition:leave-start="transform opacity-100 scale-100"
                 x-transition:leave-end="transform opacity-0 scale-95"
-                class="z-50 w-48 rounded-xl border border-zinc-200 bg-white/95 p-1 shadow-lg backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/95"
+                class="z-50 w-48 rounded-xl border border-zinc-200 p-1 dark:border-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
                 :class="dropUp ? 'origin-bottom-left' : 'origin-top-left'" :style="dropdownStyle"
                 style="display: none;">
                 <ul class="flex flex-col gap-0.5">

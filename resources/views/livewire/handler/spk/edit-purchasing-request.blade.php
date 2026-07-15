@@ -1,6 +1,7 @@
 {{-- Goal: Edit PR — fetch new PR + edit/delete existing items, Livewire: EditPurchasingRequest, Alpine: accordion per section --}}
 <div
-    class="space-y-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none lg:p-6">
+    class="space-y-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none lg:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
     {{-- ─── Preview Modal (Nomor Order) ──────────────────────────────────────── --}}
     <x-modal.base-modal show="showOrderPreview" maxWidth="4xl" title="Preview Data PR dari Nomor Order"
@@ -53,7 +54,8 @@
                                 <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
                                     @foreach ($items as $index => $item)
                                         <tr
-                                            class="bg-white/40 transition-colors hover:bg-zinc-50 dark:bg-transparent dark:hover:bg-zinc-800/50">
+                                            class="transition-colors hover:bg-zinc-50 dark:bg-transparent dark:hover:bg-zinc-800/50"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                             <td class="px-3 py-2 text-center">
                                                 <input type="checkbox" wire:model.live="selectedOrderItems" value="{{ $item['original_index'] }}"
                                                     class="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800">
@@ -89,7 +91,8 @@
                         <div class="space-y-2 md:hidden">
                             @foreach ($items as $index => $item)
                                 <div
-                                    class="rounded-lg border border-zinc-200 bg-white p-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50">
+                                    class="rounded-lg border border-zinc-200 bg-white p-3 shadow-sm dark:border-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                     <div
                                         class="mb-2 flex items-center justify-between border-b border-zinc-100 pb-2 dark:border-zinc-800">
                                         <div class="flex items-center gap-2">
@@ -190,7 +193,8 @@
             </button>
 
             {{-- Body --}}
-            <div x-show="open" x-collapse class="space-y-4 bg-white/60 p-5 dark:bg-zinc-900/30">
+            <div x-show="open" x-collapse class="space-y-4 p-5"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div>
                     <div class="flex w-full flex-col gap-3 sm:flex-row sm:items-end">
                         <div class="w-full flex-1">
@@ -314,7 +318,8 @@
             </button>
 
             {{-- Body --}}
-            <div x-show="open" x-collapse class="space-y-4 bg-white/60 p-5 dark:bg-zinc-900/30">
+            <div x-show="open" x-collapse class="space-y-4 p-5"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div class="flex w-full flex-col gap-3 sm:flex-row sm:items-end">
                     <div class="w-full flex-1">
                         <x-input.basic id="nomor_order" name="nomor_order" :labels="true"
@@ -364,7 +369,8 @@
             </button>
 
             {{-- Body --}}
-            <div x-show="open" x-collapse class="space-y-4 bg-white/60 p-5 dark:bg-zinc-900/30">
+            <div x-show="open" x-collapse class="space-y-4 p-5"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div class="flex w-full flex-col gap-3 sm:flex-row sm:items-end">
                     <div class="w-full flex-1">
                         <x-input.basic id="nomor_po" name="nomor_po" :labels="true"
@@ -407,7 +413,8 @@
             <div class="grid grid-cols-1 gap-4">
                 @foreach ($data_pr as $index => $row)
                     <div
-                        class="flex flex-col gap-3 rounded-lg border border-zinc-200 bg-white/60 p-4 shadow backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-800/50">
+                        class="flex flex-col gap-3 rounded-lg border border-zinc-200 p-4 shadow dark:border-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         <div class="flex items-center gap-2">
                             <span
                                 class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700 dark:bg-emerald-900 dark:text-emerald-200">
@@ -501,7 +508,8 @@
             <div class="grid grid-cols-1 gap-4">
                 @foreach ($groupedExisting as $nomorPr => $items)
                     <div
-                        class="flex flex-col gap-3 rounded-lg border border-zinc-200 bg-white/60 p-4 shadow backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-800/50">
+                        class="flex flex-col gap-3 rounded-lg border border-zinc-200 p-4 shadow dark:border-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         {{-- PR Group Header --}}
                         <div class="flex items-center gap-2">
                             <x-icons.file-invoice class="h-4 w-4 shrink-0 text-amber-500" />
@@ -538,7 +546,8 @@
                                             $flatIndex = collect($existingPrItems)->search(fn($i) => $i['id'] === $item['id']);
                                         @endphp
                                         <tr wire:key="existing-{{ $item['id'] }}"
-                                            class="bg-white/40 transition-colors hover:bg-zinc-50 dark:bg-transparent dark:hover:bg-zinc-800/50">
+                                            class="transition-colors hover:bg-zinc-50 dark:bg-transparent dark:hover:bg-zinc-800/50"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                             <td class="whitespace-nowrap px-4 py-3 text-center text-xs font-medium text-zinc-500">
                                                 {{ $itemIndex + 1 }}
                                             </td>
@@ -601,7 +610,8 @@
                                     $flatIndex = collect($existingPrItems)->search(fn($i) => $i['id'] === $item['id']);
                                 @endphp
                                 <div wire:key="existing-mobile-{{ $item['id'] }}"
-                                    class="rounded-lg border border-zinc-200 bg-white p-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50">
+                                    class="rounded-lg border border-zinc-200 bg-white p-3 shadow-sm dark:border-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                     <div class="mb-3 flex items-center justify-between border-b border-zinc-100 pb-3 dark:border-zinc-800">
                                         <div class="flex items-center gap-2">
                                             <span class="text-xs font-bold text-zinc-400">#{{ $itemIndex + 1 }}</span>

@@ -1,7 +1,10 @@
 {{-- Goal: Reusable banner to remind user to set up their digital signature, Livewire: -, Alpine: - --}}
 @if (!auth()->user()->hasBeenSigned())
     <div
-        {{ $attributes->merge(['class' => 'flex flex-col gap-4 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 shadow-sm backdrop-blur-md dark:border-amber-500/20 dark:bg-amber-500/5 md:p-6']) }}>
+        x-bind:class="dynamicBg
+            ? 'border-amber-500/30 bg-amber-500/10 backdrop-blur-md dark:border-amber-500/20 dark:bg-amber-500/5'
+            : 'border-amber-200 bg-amber-50 dark:border-amber-900/30 dark:bg-amber-950/20'"
+        {{ $attributes->merge(['class' => 'flex flex-col gap-4 rounded-xl p-4 shadow-sm md:p-6 transform-gpu']) }}>
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div class="flex items-start gap-4">
                 <div class="rounded-full bg-amber-100 p-2 dark:bg-amber-900/30">

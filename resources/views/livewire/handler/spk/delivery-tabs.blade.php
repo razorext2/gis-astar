@@ -1,5 +1,6 @@
 {{-- Goal: Render SPK Delivery index tabs conditionally to avoid URL conflicts, Livewire: App\Livewire\Handler\Spk\DeliveryTabs, Alpine: false --}}
-<div class="rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none">
+<div class="rounded-xl border border-zinc-200 shadow-md dark:border-zinc-800 dark:shadow-none"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
     <div class="border-b border-zinc-200 px-4 pt-2 dark:border-zinc-800 lg:px-6">
         <ul class="-mb-px flex flex-wrap text-center text-sm font-medium" role="tablist">
             <li class="me-2" role="presentation">

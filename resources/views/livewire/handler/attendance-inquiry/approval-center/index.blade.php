@@ -1,5 +1,6 @@
 {{-- Goal: List all employee attendance inquiries for HRD, Livewire: App\Livewire\Handler\AttendanceInquiry\ApprovalCenterIndex, Alpine: - --}}
-<div class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 md:p-6 lg:p-8">
+<div class="rounded-xl border border-zinc-200 p-4 shadow-sm dark:border-zinc-800 md:p-6 lg:p-8"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
     {{-- Header --}}
     <div class="border-b border-zinc-200 pb-4 dark:border-zinc-800">
         <h2 class="text-xl font-bold text-zinc-900 dark:text-white lg:text-2xl">Persetujuan Laporan Absensi</h2>
@@ -72,7 +73,8 @@
                         <th class="px-6 py-4 text-right">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800 bg-white/40 dark:bg-zinc-900/40">
+                <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     @forelse ($inquiries as $inquiry)
                         <tr wire:key="approval-{{ $inquiry->id }}" class="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors">
                             <td class="px-6 py-4">
@@ -129,7 +131,8 @@
         </div>
 
         @if ($inquiries->hasPages())
-            <div class="border-t border-zinc-200 bg-zinc-50/50 px-6 py-4 dark:border-zinc-800 dark:bg-zinc-900/50">
+            <div class="border-t border-zinc-200 bg-zinc-50/50 px-6 py-4 dark:border-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 {{ $inquiries->links() }}
             </div>
         @endif

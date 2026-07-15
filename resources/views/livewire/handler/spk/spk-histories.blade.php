@@ -1,5 +1,6 @@
  <section x-data="{ open: @entangle('showRiwayatSpk') }"
-     class="overflow-hidden rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none">
+     class="overflow-hidden rounded-xl border border-zinc-200 shadow-md dark:border-zinc-800 dark:shadow-none"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
      <div class="flex flex-row items-center justify-between p-4 transition-all duration-500 ease-in-out hover:cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/30 lg:p-6"
          @click="open = !open">

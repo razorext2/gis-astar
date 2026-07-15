@@ -34,7 +34,8 @@
                 <!-- Capture Button (iOS Camera Style) -->
                 <div class="absolute bottom-6 left-1/2 -translate-x-1/2 transform">
                     <button type="button" id="capture-image"
-                        class="group relative flex h-16 w-16 items-center justify-center rounded-full bg-white/20 p-1 backdrop-blur-md transition-all hover:bg-white/30 focus:outline-none focus:ring-4 focus:ring-white/50 active:scale-95">
+                        class="group relative flex h-16 w-16 items-center justify-center rounded-full p-1 transition-all hover: focus:outline-none focus:ring-4 focus:ring-white/50 active:scale-95"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         <div
                             class="h-full w-full rounded-full bg-white shadow-sm transition-transform group-hover:scale-90 group-active:scale-75">
                         </div>

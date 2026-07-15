@@ -18,7 +18,8 @@
             <x-icons.arrow-right-bracket class="h-5 w-5" />
         </x-slot:icon>
 
-        <div class="overflow-hidden rounded-2xl border border-white/20 bg-white/30 dark:border-zinc-800 dark:bg-black/10">
+        <div class="overflow-hidden rounded-2xl border border-white/20 dark:border-zinc-800 dark:bg-black/10"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <livewire:attendance-out-table :kodePegawai="$pegawai->kode_pegawai" />
         </div>
     </x-utils.accordion-item>

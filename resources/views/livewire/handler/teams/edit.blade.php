@@ -30,7 +30,8 @@
 
         <!-- Ketua Tim -->
         <div
-            class="flex flex-col rounded-xl border border-zinc-200 bg-white/60 p-4 shadow dark:border-zinc-800 dark:bg-zinc-900/60">
+            class="flex flex-col rounded-xl border border-zinc-200 p-4 shadow dark:border-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <div class="mb-2 flex items-center gap-3">
                 <div class="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg">
                     <x-icons.user class="text-primary h-6 w-6" />
@@ -58,7 +59,8 @@
 
                 @if ($search_user != '')
                     <div
-                        class="mt-3 max-h-[220px] overflow-y-auto rounded-xl border border-zinc-200 bg-white/60 p-2 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800">
+                        class="mt-3 max-h-[220px] overflow-y-auto rounded-xl border border-zinc-200 p-2 shadow-sm dark:border-zinc-800 dark:bg-gray-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         @forelse ($users as $user)
                             <label for="helper-radio-{{ $user->kode_pegawai }}"
                                 class="group flex cursor-pointer items-center rounded-lg p-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50">

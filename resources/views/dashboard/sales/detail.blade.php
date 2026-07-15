@@ -17,7 +17,8 @@
 
     <div class="w-full space-y-4">
         {{-- Header / Main Info Card --}}
-        <div class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 dark:shadow-none lg:p-6">
+        <div class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none lg:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <header class="flex items-center">
                 <x-button.danger href="{{ route('sales.index') }}" wire:navigate class="my-auto me-4 max-h-10">
                     <x-slot name="icon">
@@ -38,7 +39,8 @@
         </div>
 
         {{-- Metrics & Info Card --}}
-        <div class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 dark:shadow-none lg:p-6">
+        <div class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none lg:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <div class="space-y-1">
                     <p class="text-xs font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Nama Customer</p>
@@ -135,7 +137,8 @@
         <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
             
             {{-- Card: Keterangan Laporan --}}
-            <div class="rounded-xl border border-zinc-200 bg-white/60 p-6 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 dark:shadow-none">
+            <div class="rounded-xl border border-zinc-200 p-6 shadow-md dark:border-zinc-800 dark:shadow-none"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3 class="mb-4 flex items-center gap-2 text-lg font-bold text-zinc-900 dark:text-white">
                     <x-icons.book-open class="h-5 w-5 text-blue-500" />
                     Keterangan Laporan
@@ -158,7 +161,8 @@
             </div>
 
             {{-- Card: Lokasi Checkpoint --}}
-            <div class="rounded-xl border border-zinc-200 bg-white/60 p-6 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 dark:shadow-none">
+            <div class="rounded-xl border border-zinc-200 p-6 shadow-md dark:border-zinc-800 dark:shadow-none"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3 class="mb-4 flex items-center gap-2 text-lg font-bold text-zinc-900 dark:text-white">
                     <x-icons.map-pin class="h-5 w-5 text-red-500" />
                     Lokasi Checkpoint
@@ -189,7 +193,8 @@
 
         {{-- Card: Hasil Kuesioner Validasi (jika sudah divalidasi dan ada data order) --}}
         @if ($data->status == 1 && $data->order_notes)
-            <div class="rounded-xl border border-zinc-200 bg-white/60 p-6 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 dark:shadow-none">
+            <div class="rounded-xl border border-zinc-200 p-6 shadow-md dark:border-zinc-800 dark:shadow-none"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3 class="mb-4 flex items-center gap-2 text-lg font-bold text-zinc-900 dark:text-white">
                     <x-icons.checklist-stepper class="h-5 w-5 text-green-500" />
                     Hasil Kuesioner Validasi
@@ -224,7 +229,8 @@
         @endif
 
         {{-- Documentation Card --}}
-        <div class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 dark:shadow-none lg:p-6">
+        <div class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none lg:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <h3 class="mb-4 flex items-center gap-2 text-lg font-bold text-zinc-900 dark:text-white">
                 <x-icons.camera class="h-5 w-5 text-indigo-500" />
                 Dokumentasi Lapangan

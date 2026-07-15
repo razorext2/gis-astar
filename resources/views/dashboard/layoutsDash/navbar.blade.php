@@ -27,7 +27,8 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
             ? 'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md shadow-zinc-200/40 dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-none'
             : 'bg-white border-zinc-200 shadow-md shadow-zinc-200/40 dark:bg-dark-primary dark:border-zinc-800 dark:shadow-none'
     ]"
-    class="fixed z-40 px-4 py-2.5 rounded-2xl border transition-all duration-300 ease-in-out lg:px-6">
+    class="top-4 left-4 md:left-[304px] w-[calc(100%-2rem)] md:w-[calc(100%-320px)] fixed z-40 px-4 py-2.5 rounded-2xl border transition-all duration-300 ease-in-out lg:px-6"
+    x-cloak>
     <div class="flex items-center justify-between gap-2">
 
 
@@ -111,7 +112,7 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
                         x-transition:leave="transition ease-in duration-75"
                         x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
                         :style="dropdownStyle"
-                        :class="dynamicBg
+                        x-bind:class="dynamicBg
                             ?
                             'border-glass-border-light bg-glass-light backdrop-blur-md shadow-[inset_0_1px_0px_rgba(255,255,255,0.6),0_0_9px_rgba(0,0,0,0.15),0_15px_30px_rgba(0,0,0,0.12)] dark:border-glass-border-dark dark:bg-glass-dark dark:shadow-[inset_0_1px_0px_rgba(255,255,255,0.08),0_0_9px_rgba(0,0,0,0.4),0_15px_30px_rgba(0,0,0,0.35)]' :
                             'border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-dark-primary'"
@@ -176,11 +177,11 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
                         x-transition:leave="transition ease-in duration-75"
                         x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
                         :style="dropdownStyle"
-                        :class="dynamicBg
+                        x-bind:class="dynamicBg
                             ?
                             'border-glass-border-light bg-glass-light backdrop-blur-md shadow-[inset_0_1px_0px_rgba(255,255,255,0.6),0_0_9px_rgba(0,0,0,0.15),0_15px_30px_rgba(0,0,0,0.12)] dark:border-glass-border-dark dark:bg-glass-dark dark:shadow-[inset_0_1px_0px_rgba(255,255,255,0.08),0_0_9px_rgba(0,0,0,0.4),0_15px_30px_rgba(0,0,0,0.35)]' :
                             'border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-dark-primary'"
-                        class="z-[100] w-60 origin-top-right overflow-hidden rounded-2xl border p-1 transition-all duration-300"
+                        class="z-[100] w-60 origin-top-right overflow-hidden rounded-2xl border p-1 transition-all duration-300 transform-gpu"
                         id="profile-dropdown">
                         <div class="relative z-10">
                             {{-- User Info --}}
@@ -245,10 +246,10 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
                                             role="switch" :aria-checked="dynamicBg.toString()">
                                             <span class="sr-only">Toggle dynamic background</span>
                                             <span aria-hidden="true"
-                                                :class="dynamicBg ? 'bg-red-500' : 'bg-zinc-300 dark:bg-white/20'"
+                                                x-bind:class="dynamicBg ? 'bg-red-500' : 'bg-zinc-300 dark:bg-white/20'"
                                                 class="pointer-events-none absolute mx-auto h-4 w-8 rounded-full transition-colors duration-200 ease-in-out"></span>
                                             <span aria-hidden="true"
-                                                :class="dynamicBg ? 'translate-x-4' : 'translate-x-0'"
+                                                x-bind:class="dynamicBg ? 'translate-x-4' : 'translate-x-0'"
                                                 class="pointer-events-none absolute left-0.5 inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition-transform duration-200 ease-in-out"></span>
                                         </button>
                                     </div>

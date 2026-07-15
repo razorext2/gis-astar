@@ -13,7 +13,8 @@
     {{-- DELAY OVERLAY --}}
     @if ($data->on_delay && $data->status_approval !== 4)
         <div
-            class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-red-50/90 p-4 backdrop-blur-md dark:bg-red-950/80">
+            class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-red-50/90 p-4 dark:bg-red-950/80"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <div class="flex items-start gap-4">
                 <div
                     class="mt-0.5 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600 ring-1 ring-red-500/30 dark:bg-red-500/20 dark:text-red-400 dark:ring-red-500/50">
@@ -44,7 +45,8 @@
     {{-- CANCELLED OVERLAY --}}
     @if ($data->status_approval === 4)
         <div
-            class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-red-50/90 p-4 backdrop-blur-md dark:bg-red-950/80">
+            class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-red-50/90 p-4 dark:bg-red-950/80"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <div class="flex items-start gap-4">
                 <div
                     class="mt-0.5 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-100 text-red-600 shadow-xl shadow-red-500/10 ring-1 ring-red-500/30 dark:bg-red-500/20 dark:text-red-500 dark:ring-red-500/50">

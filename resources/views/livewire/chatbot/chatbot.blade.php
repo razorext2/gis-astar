@@ -3,7 +3,7 @@
 @section('title', 'AI Chatbot')
 
 <div x-data="{ showSidebar: window.innerWidth >= 1024 }"
-    :class="dynamicBg
+    x-bind:class="dynamicBg
         ? 'bg-white/60 dark:bg-dark-primary/60 backdrop-blur-md'
         : 'bg-white dark:bg-dark-primary'"
     class="relative flex h-full w-full overflow-hidden rounded-xl border border-zinc-200 shadow-md dark:border-zinc-800">
@@ -13,7 +13,7 @@
         x-transition:enter-start="-translate-x-full opacity-0" x-transition:enter-end="translate-x-0 opacity-100"
         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0 opacity-100"
         x-transition:leave-end="-translate-x-full opacity-0"
-        :class="dynamicBg
+        x-bind:class="dynamicBg
             ? 'bg-zinc-50/40 dark:bg-zinc-900/20 backdrop-blur-md'
             : 'bg-zinc-50 dark:bg-zinc-900'"
         class="absolute z-[80] flex h-full w-80 flex-shrink-0 flex-col border-r border-zinc-200 dark:border-zinc-800 lg:relative lg:z-auto">
@@ -39,7 +39,8 @@
                         class="h-4 w-4 text-zinc-400 transition-colors group-focus-within:text-blue-500" />
                 </div>
                 <input type="text" wire:model.live.debounce.300ms="searchConversation"
-                    class="block w-full rounded-lg border-0 bg-zinc-50/50 py-2.5 pl-10 pr-3 text-sm text-zinc-900 ring-1 ring-zinc-200 placeholder:text-zinc-400 focus:bg-white/80 focus:ring-2 focus:ring-blue-500 dark:bg-zinc-800/30 dark:text-white dark:ring-zinc-800 dark:placeholder:text-zinc-500 dark:focus:bg-zinc-800/50"
+                    class="block w-full rounded-lg border-0 bg-zinc-50/50 py-2.5 pl-10 pr-3 text-sm text-zinc-900 ring-1 ring-zinc-200 placeholder:text-zinc-400 focus: focus:ring-2 focus:ring-blue-500 dark:text-white dark:ring-zinc-800 dark:placeholder:text-zinc-500 dark:focus:bg-zinc-800/50"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
                     placeholder="Cari percakapan...">
             </div>
         </div>
@@ -80,7 +81,8 @@
 
     {{-- Sidebar Overlay (mobile/tablet) --}}
     <div x-show="showSidebar" x-transition.opacity @click="showSidebar = false"
-        class="absolute inset-0 z-[70] bg-black/30 backdrop-blur-sm lg:hidden">
+        class="absolute inset-0 z-[70] bg-black/30 lg:hidden"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
     </div>
 
     {{-- Main Chat Area --}}
@@ -88,7 +90,7 @@
 
         {{-- Chat Header --}}
         <div
-            :class="dynamicBg
+            x-bind:class="dynamicBg
                 ? 'bg-white/40 dark:bg-zinc-900/20 backdrop-blur-md'
                 : 'bg-white dark:bg-zinc-900'"
             class="flex items-center gap-3 border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
@@ -113,7 +115,8 @@
             </div>
 
             {{-- Persona Switcher --}}
-            <div class="hidden items-center gap-1 rounded-xl border border-zinc-200 bg-zinc-50/50 p-1 dark:border-zinc-800 dark:bg-zinc-900/40 lg:flex">
+            <div class="hidden items-center gap-1 rounded-xl border border-zinc-200 bg-zinc-50/50 p-1 dark:border-zinc-800 lg:flex"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <button wire:click="setPersona('professional')"
                     title="Profesional — sopan, to-the-point"
                     class="{{ $persona === 'professional' ? 'bg-white shadow-sm text-zinc-900 dark:bg-zinc-800 dark:text-white' : 'text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300' }} rounded-lg px-2.5 py-1 text-xs font-medium transition-all duration-200">
@@ -174,7 +177,8 @@
                     <div class="grid w-full max-w-lg grid-cols-1 gap-2 lg:gap-3 sm:grid-cols-2">
                         @foreach ([['📊', 'Tampilkan ringkasan absensi hari ini'], ['👥', 'Siapa saja pegawai yang belum absen?'], ['💰', 'Berapa total piutang yang belum dibayar?'], ['📋', 'Daftar SPK yang sedang berjalan']] as $prompt)
                             <button wire:click="$set('newMessage', '{{ $prompt[1] }}')"
-                                class="flex items-start gap-2 lg:gap-3 rounded-xl border border-zinc-200 bg-white/60 px-3 py-2.5 lg:p-4 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-300 hover:bg-zinc-50/50 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/40 dark:hover:border-zinc-700 dark:hover:bg-zinc-850/50">
+                                class="flex items-start gap-2 lg:gap-3 rounded-xl border border-zinc-200 px-3 py-2.5 lg:p-4 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-300 hover:bg-zinc-50/50 hover:shadow-md dark:border-zinc-800 dark:hover:border-zinc-700 dark:hover:bg-zinc-850/50"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                 <span class="text-lg lg:text-xl">{{ $prompt[0] }}</span>
                                 <span
                                     class="text-xs lg:text-sm text-zinc-600 dark:text-zinc-300">{{ $prompt[1] }}</span>
@@ -199,7 +203,7 @@
                                     <div class="bg-blue-600 text-white rounded-2xl rounded-tr-none shadow-sm px-4 py-3">
                                 @else
                                     <div class="rounded-2xl rounded-tl-none border border-zinc-200 dark:border-zinc-800 shadow-sm px-4 py-3"
-                                        :class="dynamicBg
+                                        x-bind:class="dynamicBg
                                             ? 'bg-white/80 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 backdrop-blur-sm'
                                             : 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100'">
                                 @endif
@@ -240,7 +244,7 @@
                                     <x-icons.chat class="h-4 w-4 text-white" />
                                 </div>
                                 <div
-                                    :class="dynamicBg
+                                    x-bind:class="dynamicBg
                                         ? 'bg-white/80 dark:bg-zinc-800/80 backdrop-blur-sm'
                                         : 'bg-white dark:bg-zinc-800'"
                                     class="rounded-2xl rounded-tl-none border border-zinc-200 px-5 py-4 shadow-sm dark:border-zinc-800">
@@ -262,7 +266,7 @@
 
         {{-- Input Area --}}
         <div
-            :class="dynamicBg
+            x-bind:class="dynamicBg
                 ? 'bg-white/40 dark:bg-zinc-900/20 backdrop-blur-md'
                 : 'bg-white dark:bg-zinc-900'"
             class="border-t border-zinc-200 p-4 dark:border-zinc-800">

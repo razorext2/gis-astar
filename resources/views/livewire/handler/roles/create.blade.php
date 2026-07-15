@@ -33,7 +33,8 @@
             <div class="mt-4 space-y-4">
                 @forelse ($groupedPermissions as $group => $perms)
                     <div
-                        class="rounded-xl border border-zinc-200 bg-white/50 p-4 backdrop-blur-sm dark:border-zinc-800 dark:bg-gray-800/50">
+                        class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 dark:bg-gray-800/50"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         <h3
                             class="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-red-600 dark:text-red-400">
                             <span class="h-1 w-4 rounded-full bg-red-600 dark:bg-red-400"></span>

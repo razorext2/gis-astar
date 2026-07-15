@@ -263,7 +263,8 @@
                         @else
                             <div class="flex w-full flex-col gap-y-2">
                                 <label for="proof_pic"
-                                    class="flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-zinc-200 bg-zinc-50 transition-all duration-500 hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900/50 dark:hover:border-zinc-700 dark:hover:bg-zinc-900">
+                                    class="flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-zinc-200 bg-zinc-50 transition-all duration-500 hover:bg-zinc-100 dark:border-zinc-800 dark:hover:border-zinc-700 dark:hover:bg-zinc-900"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                     <div class="flex flex-col items-center justify-center pb-6 pt-5">
                                         <x-icons.cloud-upload class="mb-2 h-8 w-8 text-zinc-400 dark:text-zinc-500" />
                                         <p class="mb-0.5 text-sm font-semibold text-zinc-600 dark:text-zinc-400">

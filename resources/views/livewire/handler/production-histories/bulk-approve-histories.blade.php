@@ -26,7 +26,8 @@
             </div>
         @else
             {{-- Summary Info --}}
-            <div class="mb-4 flex items-center justify-between rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-3 dark:border-zinc-800 dark:bg-white/5">
+            <div class="mb-4 flex items-center justify-between rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-3 dark:border-zinc-800 dark:"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div class="flex items-center gap-2">
                     <x-icons.info-circle class="h-4 w-4 shrink-0 text-zinc-400" />
                     <p class="text-xs text-zinc-500 dark:text-zinc-400">

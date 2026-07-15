@@ -3,7 +3,8 @@
     <div class="flex flex-col gap-5">
         {{-- Main Profile Section --}}
         <div
-            class="flex flex-col rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
+            class="flex flex-col rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 lg:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <div class="flex flex-col gap-6">
 
                 <div class="flex items-center gap-2 border-b border-zinc-200 pb-4 dark:border-zinc-800">
@@ -159,12 +160,14 @@
                 class="group relative flex-1 content-center overflow-hidden rounded-xl bg-gradient-to-br from-red-600 to-red-800 px-6 py-10 shadow-md shadow-red-200 ring-1 ring-red-500/50 dark:from-dark-secondary dark:to-dark-primary dark:shadow-none dark:ring-zinc-800">
                 {{-- Decorative background glow --}}
                 <div
-                    class="absolute -right-12 -top-12 h-44 w-44 rounded-full bg-white/10 blur-3xl transition-transform duration-1000 group-hover:scale-150 dark:bg-red-900/10">
+                    class="absolute -right-12 -top-12 h-44 w-44 rounded-full blur-3xl transition-transform duration-1000 group-hover:scale-150 dark:bg-red-900/10"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 </div>
 
                 <div class="relative z-10 flex flex-col items-center gap-y-4">
                     <div
-                        class="rounded-full bg-white/20 p-4 backdrop-blur-md dark:border dark:border-zinc-700 dark:bg-dark-secondary/50">
+                        class="rounded-full p-4 dark:border dark:border-zinc-700 dark:bg-dark-secondary/50"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         <x-icons.file-pen class="h-10 w-10 text-white drop-shadow-sm dark:text-red-400" />
                     </div>
 

@@ -92,7 +92,8 @@
     {{ $pointData->onEachSide(1)->links() }}
 
     <div
-        class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none">
+        class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-sm dark:border-zinc-800 dark:shadow-none"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <div
             class="flex items-center gap-2 border-b border-zinc-200 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
             <x-icons.wallet class="h-4 w-4 text-blue-500" /> Riwayat Transaksi Poin

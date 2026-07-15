@@ -162,7 +162,8 @@
                     <img src="{{ asset(sha1('libs') . '/' . $attendance->photoURL . '.png') }}" class="w-full object-cover"
                         style="height: 280px;" onerror="this.src='{{ asset('assets/img/noImage.webp') }}'">
                     <div class="absolute inset-0 flex items-end bg-gradient-to-t from-zinc-900/60 to-transparent p-4">
-                        <span class="rounded-lg bg-white/20 px-3 py-1 text-xs font-bold text-white backdrop-blur-md">Foto
+                        <span class="rounded-lg px-3 py-1 text-xs font-bold text-white"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">Foto
                             Check-Out</span>
                     </div>
                 </div>

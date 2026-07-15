@@ -1,11 +1,11 @@
 {{-- Goal: Mobile navigation bottom bar, Livewire: none, Alpine: yes (inherits dynamicBg from layout) --}}
 <div {{ $attributes }} class="fixed bottom-3 left-1/2 z-[160] w-[92vw] max-w-sm -translate-x-1/2 md:hidden">
     <!-- iOS Glass Navigation Container -->
-    <div :class="dynamicBg
+    <div x-bind:class="dynamicBg
         ?
         'bg-glass-light border-glass-border-light backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)]' :
         'bg-white border-zinc-200/60 shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:bg-dark-primary dark:border-zinc-800/60 dark:shadow-zinc-950/50'"
-        class="h-[70px] w-full rounded-full border transition-colors duration-300">
+        class="h-[70px] w-full rounded-full border transition-colors duration-300" x-cloak>
         <div class="mx-auto grid h-full max-w-sm grid-cols-5 px-3">
 
             <x-drawer.button href="{{ route('dashboard') }}" :label="'Home'" :active="Route::is('dashboard')">

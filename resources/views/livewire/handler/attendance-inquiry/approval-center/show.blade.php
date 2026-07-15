@@ -1,8 +1,10 @@
 {{-- Goal: Detail view for HRD to review and approve/reject attendance inquiry, Livewire: App\Livewire\Handler\AttendanceInquiry\ApprovalCenterShow, Alpine: Toggle rejection reason view --}}
 <div class="space-y-4" x-data="{ showRejectForm: false }">
     {{-- Header --}}
-    <div
-        class="flex items-center gap-3 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
+    <div class="flex items-center gap-3 rounded-xl border border-zinc-200 p-4 shadow-sm dark:border-zinc-800 lg:p-6"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <x-button.danger wire:navigate href="{{ route('attendance-inquiry.approval-center.index') }}"
             class="max-h-10 max-w-fit">
             <x-icons.angle-left class="h-5 w-5" />
@@ -33,8 +35,10 @@
     <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div class="space-y-4 lg:col-span-2">
             {{-- Detail Fields --}}
-            <div
-                class="space-y-4 rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
+            <div class="space-y-4 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3 class="text-base font-bold text-zinc-900 dark:text-white">Rincian Pengajuan</h3>
 
                 <div class="grid grid-cols-2 gap-4 border-t border-zinc-100 pt-4 dark:border-zinc-800">
@@ -74,8 +78,10 @@
             </div>
 
             {{-- Bukti Foto --}}
-            <div
-                class="rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
+            <div class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3 class="mb-4 text-base font-bold text-zinc-900 dark:text-white">Lampiran Bukti Foto</h3>
                 @if (!empty($inquiry->bukti))
                     <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
@@ -89,7 +95,10 @@
                                 <div
                                     class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
                                     <a href="{{ asset('storage/' . $path) }}" target="_blank"
-                                        class="rounded-lg bg-zinc-900/80 px-3 py-1.5 text-xs font-bold text-white">
+                                        class="rounded-lg px-3 py-1.5 text-xs font-bold text-gray-800 dark:text-white"
+                                        x-bind:class="dynamicBg ?
+                                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+                                            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                         Perbesar
                                     </a>
                                 </div>
@@ -103,16 +112,19 @@
 
             {{-- HRD Action Panel --}}
             @if ($inquiry->status === 'pending')
-                <div
-                    class="space-y-4 rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
+                <div class="space-y-4 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <h3 class="text-base font-bold text-zinc-900 dark:text-white">Tindakan HRD</h3>
 
                     <div class="flex flex-wrap items-center gap-3">
-                        <x-button.primary wire:click="approve" wire:loading.attr="disabled" id="approve_btn">
+                        <x-button.primary wire:click="approve" wire:confirm.prompt="Apakah Anda yakin ingin menyetujui laporan absensi ini?\n\nKetik YA untuk melanjutkan.|YA" wire:loading.attr="disabled" id="approve_btn">
                             Setujui Laporan
                         </x-button.primary>
 
-                        <x-button.secondary type="button" @click="showRejectForm = !showRejectForm" id="toggle_reject_btn">
+                        <x-button.secondary type="button" @click="showRejectForm = !showRejectForm"
+                            id="toggle_reject_btn">
                             Tolak Laporan
                         </x-button.secondary>
                     </div>
@@ -125,17 +137,21 @@
                                 class="text-red-500">*</span></label>
                         <textarea id="rejection_reason" wire:model.live="rejection_reason" rows="3"
                             placeholder="Masukkan alasan mengapa pengajuan ini ditolak..."
-                            class="block w-full rounded-lg border-zinc-200 bg-white/50 text-sm text-zinc-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-white"></textarea>
+                            class="block w-full rounded-lg border-zinc-200 text-sm text-zinc-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:text-white"
+                            x-bind:class="dynamicBg ?
+                                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+                                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"></textarea>
                         @error('rejection_reason')
                             <span class="block text-xs text-red-500">{{ $message }}</span>
                         @enderror
 
                         <div class="flex justify-end gap-2">
-                            <button type="button" @click="showRejectForm = false"
-                                class="text-sm font-semibold text-zinc-500 hover:text-zinc-600 dark:text-zinc-400">Batal</button>
-                            <button type="button" wire:click="reject"
-                                class="text-sm font-bold text-red-600 hover:text-red-500 dark:text-red-400">Kirim
-                                Penolakan</button>
+                            <x-button.secondary type="button" @click="showRejectForm = false">
+                                Batal
+                            </x-button.secondary>
+                            <x-button.danger type="button" wire:click="reject">
+                                Kirim Penolakan
+                            </x-button.danger>
                         </div>
                     </div>
                 </div>
@@ -148,8 +164,10 @@
             {{-- Allowed HRD Card --}}
             <x-attendance-inquiry.allowed-hrds-card :hrds="$allowedHrds" :inquiry="$inquiry" />
 
-            <div
-                class="rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
+            <div class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3 class="mb-4 text-base font-bold text-zinc-900 dark:text-white">Lokasi</h3>
 
                 @if ($inquiry->latitude && $inquiry->longitude)
@@ -169,10 +187,9 @@
                                     class="text-zinc-700 dark:text-zinc-200">{{ $inquiry->longitude }}</strong></p>
                         </div>
 
-                        <x-button.secondary href="https://www.google.com/maps/search/?api=1&query={{ $inquiry->latitude }},{{ $inquiry->longitude }}"
-                            target="_blank"
-                            class="w-full"
-                            id="open_gmaps_btn">
+                        <x-button.secondary
+                            href="https://www.google.com/maps/search/?api=1&query={{ $inquiry->latitude }},{{ $inquiry->longitude }}"
+                            target="_blank" class="w-full" id="open_gmaps_btn">
                             <x-slot name="icon">
                                 <x-icons.map-pin class="h-4 w-4 text-red-500" />
                             </x-slot>

@@ -1,7 +1,8 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
     <div
-        class="w-full rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none sm:p-6 xl:w-6/12 2xl:w-1/3">
+        class="w-full rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6 xl:w-6/12 2xl:w-1/3"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <div class="max-w-xl">
             <header class="flex items-center">
                 <x-button.danger href="{{ route('division.index') }}" class="my-auto me-4 max-h-10" wire:navigate>

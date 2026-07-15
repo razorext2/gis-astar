@@ -2,7 +2,8 @@
 
 <div class="flex flex-col gap-4" x-data="{ showRejectModal: false }">
     {{-- Header / Navigation --}}
-    <div class="flex items-center gap-3 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none md:flex-row md:items-center lg:p-6">
+    <div class="flex items-center gap-3 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none md:flex-row md:items-center lg:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <x-button.danger wire:navigate href="{{ route('leave-request.approval-center.index') }}"
             class="max-h-10 max-w-fit">
             <x-icons.angle-left class="h-5 w-5" />
@@ -30,7 +31,8 @@
             {{-- Action Card --}}
             @if ($canApprove)
                 <div
-                    class="rounded-xl border-2 border-red-500/20 bg-white p-6 shadow-md backdrop-blur-xl dark:bg-dark-primary">
+                    class="rounded-xl border-2 border-red-500/20 bg-white p-6 shadow-md dark:bg-dark-primary"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <h3 class="mb-4 text-lg font-extrabold text-zinc-800 dark:text-white">Butuh Keputusan Anda</h3>
 
                     <div class="mb-6 space-y-4">
@@ -40,7 +42,8 @@
                         </x-button.primary>
 
                         <button @click="showRejectModal = true"
-                            class="flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 py-3 text-sm font-bold text-zinc-600 transition-all hover:bg-zinc-50 active:scale-95 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-white/5">
+                            class="flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 py-3 text-sm font-bold text-zinc-600 transition-all hover:bg-zinc-50 active:scale-95 dark:border-zinc-700 dark:text-zinc-400 dark:hover:"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                             <x-icons.close class="h-5 w-5 text-red-500" />
                             Tolak Pengajuan
                         </button>

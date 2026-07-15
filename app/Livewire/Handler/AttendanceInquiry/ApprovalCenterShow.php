@@ -36,7 +36,7 @@ class ApprovalCenterShow extends Component
             ?? collect();
     }
 
-    public function approve(): ?\Illuminate\Http\RedirectResponse
+    public function approve(): mixed
     {
         $this->authorize('approve', $this->inquiry);
 
@@ -116,7 +116,7 @@ class ApprovalCenterShow extends Component
         }, 'Gagal menyetujui pengajuan laporan absensi.');
     }
 
-    public function reject(): ?\Illuminate\Http\RedirectResponse
+    public function reject(): mixed
     {
         $this->authorize('approve', $this->inquiry);
 

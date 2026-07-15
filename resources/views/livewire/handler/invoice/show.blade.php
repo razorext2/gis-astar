@@ -21,7 +21,8 @@
 <div class="mb-16 space-y-4">
     {{-- Header Info Card --}}
     <div
-        class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 dark:shadow-none lg:p-6">
+        class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none lg:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
         <div class="mb-6 flex flex-col gap-4 sm:flex-row lg:items-center lg:justify-between">
             <div>
@@ -143,7 +144,8 @@
 
     {{-- History Section --}}
     <div
-        class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 dark:shadow-none lg:p-6">
+        class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none lg:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <div class="mb-6 flex items-center justify-between border-b border-zinc-200 pb-4 dark:border-zinc-800">
             <h3 class="flex items-center gap-2 text-lg font-bold text-zinc-900 dark:text-white">
                 <x-icons.clock class="h-5 w-5 text-indigo-500" />
@@ -172,7 +174,8 @@
                     </div>
 
                     <div
-                        class="min-w-0 flex-1 rounded-xl border border-zinc-200 bg-white/40 p-4 transition-all hover:bg-white/60 dark:border-zinc-800 dark:bg-zinc-900/40 dark:hover:bg-zinc-900/60">
+                        class="min-w-0 flex-1 rounded-xl border border-zinc-200 p-4 transition-all hover: dark:border-zinc-800 dark:hover:"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         <div class="mb-2 flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
                             <p class="text-sm font-bold text-zinc-900 dark:text-white">
                                 "{{ $detail->status }}"

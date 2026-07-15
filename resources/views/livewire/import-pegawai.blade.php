@@ -65,7 +65,8 @@
 
                     {{-- Loading indicator --}}
                     <div wire:loading wire:target="file"
-                        class="absolute inset-0 flex items-center justify-center rounded-xl bg-white/80 dark:bg-zinc-900/80">
+                        class="absolute inset-0 flex items-center justify-center rounded-xl"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         <x-icons.loading class="h-6 w-6 animate-spin text-blue-600" />
                     </div>
                 </div>

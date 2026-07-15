@@ -72,7 +72,8 @@
 
     {{-- Left column: header + timeline --}}
     <div
-        class="flex w-full flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
+        class="flex w-full flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-sm dark:border-zinc-800 lg:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
         {{-- Header --}}
         <div class="flex items-center border-b border-zinc-200 pb-5 dark:border-zinc-800/50">
@@ -97,7 +98,8 @@
         {{-- Date filter --}}
         <div class="flex items-center gap-3">
             <input type="date" wire:model.live="date"
-                class="block w-full rounded-xl border border-zinc-200 bg-white/50 px-4 py-2.5 text-sm font-medium text-zinc-900 backdrop-blur-sm transition-all focus:border-emerald-500 focus:ring-emerald-500 dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-white">
+                class="block w-full rounded-xl border border-zinc-200 px-4 py-2.5 text-sm font-medium text-zinc-900 transition-all focus:border-emerald-500 focus:ring-emerald-500 dark:border-zinc-800 dark:text-white"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
             <div
                 class="shrink-0 rounded-2xl border border-emerald-100 bg-emerald-50/50 px-4 py-2.5 text-xs font-bold text-emerald-700 dark:border-emerald-900/30 dark:bg-emerald-950/20 dark:text-emerald-400">
@@ -209,7 +211,8 @@
 
     {{-- Right column: map --}}
     <div
-        class="flex h-max w-full flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
+        class="flex h-max w-full flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-sm dark:border-zinc-800 lg:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <div class="flex items-center gap-3 border-b border-zinc-200 pb-4 dark:border-zinc-800/50">
             <div
                 class="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-500/20">

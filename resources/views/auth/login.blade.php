@@ -9,7 +9,8 @@
 
     <div class="mx-auto w-full max-w-md">
         <div
-            class="flex w-full flex-col rounded-2xl border-0 bg-transparent p-4 shadow-none backdrop-blur-none dark:border-0 dark:bg-transparent dark:shadow-none sm:border sm:border-glass-border-light sm:bg-glass-light sm:p-10 sm:shadow-xl sm:shadow-glass-light sm:backdrop-blur-2xl sm:dark:border-glass-border-dark sm:dark:bg-glass-dark sm:dark:shadow-glass-dark">
+            class="flex w-full flex-col rounded-2xl p-4 sm:border sm:p-10 bg-transparent border-transparent shadow-none dark:bg-transparent dark:border-transparent dark:shadow-none"
+            x-bind:class="dynamicBg ? 'sm:bg-glass-light sm:dark:bg-glass-dark sm:border-glass-border-light sm:dark:border-glass-border-dark sm:backdrop-blur-md sm:shadow-lg sm:shadow-red-500/10' : 'sm:bg-white sm:dark:bg-dark-primary sm:border-zinc-200 sm:dark:border-zinc-800 sm:shadow-sm'">
             <div class="mb-8 border-b border-glass-divider-light pb-5 dark:border-glass-divider-dark">
                 <h2 class="text-left text-3xl font-black tracking-tight text-zinc-900 dark:text-white">
                     Sign In

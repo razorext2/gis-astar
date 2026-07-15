@@ -1,5 +1,5 @@
 <footer
-    :class="dynamicBg
+    x-bind:class="dynamicBg
         ? 'border-t border-glass-border-light bg-white/95 dark:border-glass-border-dark dark:bg-zinc-900/95'
         : 'border-t border-zinc-200 bg-white dark:border-zinc-800 dark:bg-dark-primary'"
     class="absolute bottom-0 w-full px-4 py-3 rounded-b-2xl">

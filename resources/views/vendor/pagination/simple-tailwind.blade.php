@@ -11,7 +11,8 @@
         <div class="flex items-center gap-2">
             {{-- Prev --}}
             @if ($paginator->onFirstPage())
-                <span class="flex h-9 items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-4 text-xs font-bold text-zinc-300 dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-700">
+                <span class="flex h-9 items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-4 text-xs font-bold text-zinc-300 dark:border-zinc-800 dark:text-zinc-700"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <x-icons.chevron-left class="h-4 w-4" />
                     Sebelumnya
                 </span>
@@ -31,7 +32,8 @@
                     <x-icons.chevron-right class="h-4 w-4" />
                 </button>
             @else
-                <span class="flex h-9 items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-4 text-xs font-bold text-zinc-300 dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-700">
+                <span class="flex h-9 items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-4 text-xs font-bold text-zinc-300 dark:border-zinc-800 dark:text-zinc-700"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     Selanjutnya
                     <x-icons.chevron-right class="h-4 w-4" />
                 </span>

@@ -34,9 +34,12 @@
 </head>
 
 <body id="container" class="relative min-h-screen overflow-x-hidden bg-zinc-50 antialiased dark:bg-zinc-950"
+    x-data="{ dynamicBg: localStorage.getItem('dynamicBg') === null ? false : localStorage.getItem('dynamicBg') === 'true' }"
     onmousemove="document.getElementById('container').style.setProperty('--mouse-x', event.clientX + 'px'); document.getElementById('container').style.setProperty('--mouse-y', event.clientY + 'px');">
 
-    <x-utils.dynamic-background />
+    <div x-show="dynamicBg" x-transition.opacity.duration.500ms>
+        <x-utils.dynamic-background />
+    </div>
 
     @if (session('status'))
         <div class="fixed bottom-5 right-5 z-50 flex w-full max-w-xs scale-90 transform items-center divide-x rounded-lg transition duration-300"
@@ -75,7 +78,50 @@
         <img src="{{ asset('assets/img/logo.png') }}" class="h-10 w-auto object-contain drop-shadow-sm" alt="Logo">
     </div>
 
-    <div class="container mx-auto flex min-h-screen items-center justify-center px-6">
+    {{-- Theme Toggle Top-Right (Collapsible) --}}
+    <div x-data="{ showSettings: false }" class="fixed right-6 top-5 z-50 flex items-center justify-end">
+        
+        {{-- Settings Menu (Expands to Left) --}}
+        <div class="flex origin-right items-center gap-1 overflow-hidden transition-all duration-300 ease-in-out"
+             x-bind:class="{ 
+                 'max-w-[300px] opacity-100 mr-2 rounded-2xl border p-1.5': showSettings, 
+                 'max-w-0 opacity-0 mr-0 border-0 p-0': !showSettings,
+                 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10': dynamicBg,
+                 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm': !dynamicBg
+             }">
+            <div class="flex items-center gap-2 whitespace-nowrap border-r border-zinc-200 pl-2 pr-2 dark:border-zinc-800">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Dynamic Bg</span>
+                <button type="button" @click="dynamicBg = !dynamicBg; localStorage.setItem('dynamicBg', dynamicBg)"
+                    class="relative inline-flex h-4 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 dark:focus:ring-offset-dark-primary"
+                    role="switch" :aria-checked="dynamicBg.toString()">
+                    <span class="sr-only">Toggle dynamic background</span>
+                    <span aria-hidden="true"
+                        x-bind:class="dynamicBg ? 'bg-red-500' : 'bg-zinc-300 dark:bg-zinc-700'"
+                        class="pointer-events-none absolute mx-auto h-3 w-6 rounded-full transition-colors duration-200 ease-in-out"></span>
+                    <span aria-hidden="true"
+                        x-bind:class="dynamicBg ? 'translate-x-[0.35rem]' : '-translate-x-[0.35rem]'"
+                        class="pointer-events-none absolute left-1/2 -ml-1.5 inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition-transform duration-200 ease-in-out"></span>
+                </button>
+            </div>
+            <div class="flex shrink-0">
+                <x-button-light />
+                <x-button-dark />
+            </div>
+        </div>
+
+        {{-- Vertical Three-Dots Button --}}
+        <button @click="showSettings = !showSettings" type="button"
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all"
+                x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-zinc-600 dark:text-zinc-400">
+                <circle cx="12" cy="5" r="1.5"></circle>
+                <circle cx="12" cy="12" r="1.5"></circle>
+                <circle cx="12" cy="19" r="1.5"></circle>
+            </svg>
+        </button>
+    </div>
+
+    <div class="container mx-auto flex min-h-screen items-center justify-center px-6 py-24 md:py-0">
         <div class="flex w-full max-w-6xl flex-col justify-between gap-10 md:flex-row md:items-center">
 
             {{-- Branding Area --}}
@@ -135,6 +181,35 @@
     </div>
 
     @livewireScripts()
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const darkBtn = document.getElementById("theme-toggle-dark");
+            const lightBtn = document.getElementById("theme-toggle-light");
+
+            function toggleTheme(isDark) {
+                document.documentElement.classList.toggle("dark", isDark);
+                localStorage.setItem("color-theme", isDark ? "dark" : "light");
+                document.cookie = "color-theme=" + (isDark ? "dark" : "light") + "; path=/; max-age=31536000; SameSite=Lax";
+                
+                if (darkBtn) {
+                    darkBtn.classList.toggle("text-gray-300", isDark);
+                    darkBtn.classList.toggle("text-gray-200", !isDark);
+                }
+                if (lightBtn) {
+                    lightBtn.classList.toggle("text-gray-700", isDark);
+                    lightBtn.classList.toggle("text-red-400", !isDark);
+                }
+            }
+
+            if (darkBtn) darkBtn.addEventListener("click", () => toggleTheme(true));
+            if (lightBtn) lightBtn.addEventListener("click", () => toggleTheme(false));
+            
+            // Set initial state for button colors based on current theme
+            const isDarkMode = document.documentElement.classList.contains('dark');
+            toggleTheme(isDarkMode);
+        });
+    </script>
 </body>
 
 </html>

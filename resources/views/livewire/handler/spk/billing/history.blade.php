@@ -1,14 +1,16 @@
 {{-- Goal: Tampilkan riwayat tagihan dan sisa piutang BSI yang sudah di-assign, Livewire: History, Alpine: minimal --}}
 <div class="">
     <div
-        class="flex items-center gap-2 rounded-xl rounded-b-none border border-b-0 border-blue-500 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
+        class="flex items-center gap-2 rounded-xl rounded-b-none border border-b-0 border-blue-500 p-4 shadow-md dark:border-zinc-800 lg:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <h3 class="text-base font-bold text-zinc-900 dark:text-white">Riwayat Penagihan (BSI)</h3>
         <span class="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-600 dark:bg-blue-900/30">History</span>
     </div>
 
     @forelse ($this->histories as $history)
         <div
-            class="rounded-xl rounded-t-none border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
+            class="rounded-xl rounded-t-none border border-zinc-200 p-4 shadow-md dark:border-zinc-800 lg:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             {{-- Header SR --}}
             <div
                 class="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-zinc-200 pb-3 dark:border-zinc-800">

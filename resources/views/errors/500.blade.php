@@ -43,8 +43,7 @@
     </style>
 </head>
 
-<body
-    class="bg-[#f8fafc] antialiased transition-colors duration-300 selection:bg-blue-100 selection:text-blue-700 dark:bg-[#0f172a] dark:selection:bg-blue-900 dark:selection:text-blue-200">
+<body x-data="{ dynamicBg: localStorage.getItem('dynamicBg') === null ? false : localStorage.getItem('dynamicBg') === 'true' }" class="bg-[#f8fafc] antialiased transition-colors duration-300 selection:bg-blue-100 selection:text-blue-700 dark:bg-[#0f172a] dark:selection:bg-blue-900 dark:selection:text-blue-200">
     <div class="relative flex min-h-screen items-center justify-center overflow-hidden p-4 sm:p-6 lg:p-8">
         {{-- Background Accents --}}
         <div class="pointer-events-none absolute h-full w-full opacity-30 dark:opacity-20">
@@ -54,7 +53,8 @@
 
         <div class="relative w-full max-w-6xl">
             <div
-                class="grid items-center gap-8 rounded-[2.5rem] border border-white/40 bg-white/60 p-8 shadow-2xl shadow-blue-500/10 backdrop-blur-3xl dark:border-zinc-800/50 dark:bg-dark-primary/60 lg:grid-cols-2 lg:p-16">
+                class="grid items-center gap-8 rounded-[2.5rem] border border-white/40 p-8 shadow-2xl dark:border-zinc-800/50 lg:grid-cols-2 lg:p-16"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
                 {{-- Left Side: Content --}}
                 <div class="order-2 space-y-8 text-center lg:order-1 lg:text-left">
@@ -79,7 +79,8 @@
                         </x-button.link>
 
                         <x-button.secondary onclick="window.history.back()"
-                            class="flex items-center justify-center gap-2 rounded-2xl border-white/20 bg-white/50 px-8 py-4 font-bold shadow-sm transition-all hover:bg-white dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:bg-zinc-800">
+                            class="flex items-center justify-center gap-2 rounded-2xl border-white/20 px-8 py-4 font-bold shadow-sm transition-all hover:bg-white dark:border-zinc-700 dark:hover:bg-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                             <span>Muat Ulang Halaman</span>
                         </x-button.secondary>
                     </div>

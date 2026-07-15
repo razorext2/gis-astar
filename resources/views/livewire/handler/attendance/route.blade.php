@@ -1,3 +1,4 @@
+{{-- Goal: Route attendance livewire scanner UI, Livewire: handler.attendance.route, Alpine: dynamicBg --}}
 <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
     {{-- Scanner Section (Large) --}}
     <div class="lg:col-span-2" data-aos="zoom-in" data-aos-delay="100">
@@ -5,7 +6,6 @@
             {{-- Default State Image --}}
             <div class="absolute inset-0 flex items-center justify-center bg-cover bg-center bg-no-repeat grayscale"
                 style="background-image: url('{{ asset('assets/img/noCamera.webp') }}');">
-                <div class="absolute inset-0 bg-black/40 backdrop-blur-[2px]"></div>
             </div>
 
             {{-- Local Video Feed --}}

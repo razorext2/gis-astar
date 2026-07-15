@@ -4,7 +4,8 @@
     <div class="space-y-4">
         <!-- Header Navigation & Tabs -->
         <div
-            class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-lg backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
+            class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
                 <div class="flex items-center">
 

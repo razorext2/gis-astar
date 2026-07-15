@@ -25,7 +25,7 @@
     <!-- drawer component -->
     <div x-data="{ search: '' }"
         class="w-full h-full pointer-events-auto translate-y-full rounded-[35px] border shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.3)] transition-[transform] duration-[420ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform [backface-visibility:hidden] [transform-style:preserve-3d]"
-        :class="dynamicBg
+        x-bind:class="dynamicBg
             ? 'bg-glass-light border-glass-border-light backdrop-blur-md dark:bg-glass-dark dark:border-glass-border-dark'
             : 'bg-white border-zinc-200 dark:bg-dark-primary dark:border-zinc-800'"
         id="drawer-swipe" aria-labelledby="drawer-swipe-label" tabindex="-1">
@@ -44,7 +44,8 @@
                     <x-icons.search class="h-5 w-5 text-zinc-400 transition-colors group-focus-within:text-red-500" />
                 </div>
                 <input type="text" x-model="search"
-                    class="block w-full rounded-lg border-0 bg-zinc-50/50 p-3.5 ps-11 text-sm text-zinc-900 ring-1 ring-zinc-200 transition-all focus:ring-2 focus:ring-red-500 dark:bg-zinc-900/50 dark:text-white dark:placeholder-zinc-500 dark:ring-zinc-800"
+                    class="block w-full rounded-lg border-0 bg-zinc-50/50 p-3.5 ps-11 text-sm text-zinc-900 ring-1 ring-zinc-200 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 dark:text-white dark:placeholder-zinc-500 dark:ring-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
                     placeholder="Cari menu...">
             </div>
         </div>
@@ -100,7 +101,7 @@
 
             {{-- Gradient fade — blends last row of grid into the bottom --}}
             <div class="pointer-events-none absolute bottom-0 left-0 right-0 h-28"
-                :class="dynamicBg
+                x-bind:class="dynamicBg
                     ? 'bg-gradient-to-t from-white/95 to-transparent dark:from-zinc-900/95'
                     : 'bg-gradient-to-t from-white to-transparent dark:from-dark-primary'">
             </div>

@@ -8,7 +8,8 @@
             Informasi mengenai anda akan muncul di bagian sebelah kanan<br />
         </x-landing.header-text>
 
-        <div class="relative mx-2 mb-5 rounded-lg border border-zinc-200 bg-white/60 shadow-lg dark:border-zinc-800 dark:bg-dark-primary/70 lg:mx-auto lg:p-4"
+        <div class="relative mx-2 mb-5 rounded-lg border border-zinc-200 dark:border-zinc-800 lg:mx-auto lg:p-4"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
             id="scan" data-aos="zoom-in-up" data-aos-delay="50">
 
             <div class="grid h-auto grid-cols-1 lg:w-[900px] lg:grid-cols-3 lg:gap-4">

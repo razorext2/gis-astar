@@ -114,7 +114,7 @@
             x-transition:leave="transition ease-in duration-150"
             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
             x-transition:leave-end="opacity-0 translate-y-1 scale-95"
-            :class="dynamicBg
+            x-bind:class="dynamicBg
                 ?
                 'border-glass-border-light bg-glass-light backdrop-blur-md dark:border-glass-border-dark dark:bg-glass-dark' :
                 'border-zinc-200 bg-white dark:border-zinc-800 dark:bg-dark-primary'"

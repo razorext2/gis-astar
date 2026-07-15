@@ -2,7 +2,8 @@
 <x-guest-layout>
     <div class="mx-auto w-full max-w-md">
         <div
-            class="flex w-full flex-col rounded-2xl border-0 bg-transparent p-4 shadow-none backdrop-blur-none dark:border-0 dark:bg-transparent dark:shadow-none sm:border sm:border-glass-border-light sm:bg-glass-light sm:p-10 sm:shadow-xl sm:shadow-glass-light sm:backdrop-blur-2xl sm:dark:border-glass-border-dark sm:dark:bg-glass-dark sm:dark:shadow-glass-dark">
+            class="flex w-full flex-col rounded-2xl border-0 bg-transparent p-4 shadow-none dark:border-0 dark:bg-transparent dark:shadow-none sm:border sm:border-glass-border-light sm:bg-glass-light sm:p-10 sm: sm:shadow-glass-light sm: sm:dark:border-glass-border-dark sm:dark:bg-glass-dark sm:dark:shadow-glass-dark"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
             <div class="mb-6 pb-2">
                 <a href="{{ route('login') }}"

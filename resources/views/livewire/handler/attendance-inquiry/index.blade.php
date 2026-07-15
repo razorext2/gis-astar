@@ -1,6 +1,7 @@
 {{-- Goal: List own attendance inquiries, Livewire: App\Livewire\Handler\AttendanceInquiry\Index, Alpine: - --}}
 <div
-    class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 md:p-6 lg:p-8">
+    class="rounded-xl border border-zinc-200 p-4 shadow-sm dark:border-zinc-800 md:p-6 lg:p-8"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
     {{-- Header --}}
     <div
         class="flex flex-col justify-between gap-4 border-b border-zinc-200 pb-4 dark:border-zinc-800 sm:flex-row sm:items-center">
@@ -65,7 +66,8 @@
                         <th class="px-6 py-4 text-right">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-zinc-200 bg-white/40 dark:divide-zinc-800 dark:bg-zinc-900/40">
+                <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     @forelse ($inquiries as $inquiry)
                         <tr wire:key="inquiry-{{ $inquiry->id }}"
                             class="transition-colors hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30">
@@ -126,7 +128,8 @@
         </div>
 
         @if ($inquiries->hasPages())
-            <div class="border-t border-zinc-200 bg-zinc-50/50 px-6 py-4 dark:border-zinc-800 dark:bg-zinc-900/50">
+            <div class="border-t border-zinc-200 bg-zinc-50/50 px-6 py-4 dark:border-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 {{ $inquiries->links() }}
             </div>
         @endif

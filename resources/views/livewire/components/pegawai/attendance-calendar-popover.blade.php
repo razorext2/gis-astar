@@ -6,7 +6,7 @@
 @endphp
 <div id="popover-click-{{ $date }}" data-popover role="tooltip"
     class="invisible absolute z-20 inline-block w-80 overflow-hidden rounded-xl border border-zinc-200 p-4 text-sm opacity-0 shadow-md transition-opacity duration-300 dark:border-zinc-800"
-    :class="dynamicBg ? 'bg-white/80 backdrop-blur-md dark:bg-dark-primary/80' : 'bg-white dark:bg-dark-primary'">
+    x-bind:class="dynamicBg ? 'bg-white/80 backdrop-blur-md dark:bg-dark-primary/80' : 'bg-white dark:bg-dark-primary'">
 
     <div class="{{ $totalItems > 2 ? 'max-h-[380px] overflow-y-auto pr-2 custom-scrollbar' : '' }} space-y-4">
 
@@ -58,7 +58,8 @@
             @if ($attendance->isNotEmpty())
                 <div class="overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800">
                     <table class="w-full text-left text-[11px]">
-                        <thead class="bg-gray-50 dark:bg-white/5">
+                        <thead class="bg-gray-50 dark:"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                             <tr>
                                 <th class="px-3 py-1.5 font-bold text-gray-500">Info</th>
                                 <th class="px-3 py-1.5 text-center font-bold text-gray-500">Foto</th>
@@ -117,7 +118,8 @@
             @if ($attendanceOut->isNotEmpty())
                 <div class="overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800">
                     <table class="w-full text-left text-[11px]">
-                        <thead class="bg-gray-50 dark:bg-white/5">
+                        <thead class="bg-gray-50 dark:"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                             <tr>
                                 <th class="px-3 py-1.5 font-bold text-gray-500">Info</th>
                                 <th class="px-3 py-1.5 text-center font-bold text-gray-500">Foto</th>

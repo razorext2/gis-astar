@@ -10,7 +10,8 @@
             </div>
 
             <div
-                class="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow dark:border-zinc-800 dark:bg-zinc-900/50">
+                class="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow dark:border-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <table class="w-full text-left text-sm">
                     <thead
                         class="bg-zinc-50 text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:bg-zinc-800/50 dark:text-zinc-400">
@@ -85,7 +86,8 @@
                         @forelse ($spk_data->production->packing_list as $index => $row)
                             <label for="cb-{{ $index }}"
                                 wire:key="product-{{ $index }}-{{ $row['id_barang'] }}"
-                                class="group relative flex cursor-pointer items-center gap-3 rounded-xl border border-zinc-200 bg-white p-3 transition-all hover:border-blue-400 hover:bg-blue-50/30 dark:border-zinc-800 dark:bg-zinc-900/50 dark:hover:border-blue-500/50">
+                                class="group relative flex cursor-pointer items-center gap-3 rounded-xl border border-zinc-200 bg-white p-3 transition-all hover:border-blue-400 hover:bg-blue-50/30 dark:border-zinc-800 dark:hover:border-blue-500/50"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                 <input type="checkbox" id="cb-{{ $index }}" value="{{ $row['id_barang'] }}"
                                     wire:model.live="form.products"
                                     class="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800">
@@ -185,7 +187,8 @@
 
                         @if (count($drivers))
                             <div
-                                class="max-h-48 overflow-y-auto rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50">
+                                class="max-h-48 overflow-y-auto rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                 @foreach ($drivers as $driver)
                                     <button type="button"
                                         class="flex w-full items-center gap-3 border-b border-zinc-100 px-4 py-2.5 text-left transition-all last:border-0 hover:bg-blue-50 dark:border-zinc-800 dark:hover:bg-blue-900/20"

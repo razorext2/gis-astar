@@ -1,5 +1,6 @@
 <div
-    class="relative mt-4 overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
+    class="relative mt-4 overflow-hidden rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 lg:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
     <div class="relative">
         <div class="mb-6 flex items-center gap-4">
@@ -74,7 +75,8 @@
 
                     @if ($search_user != '')
                         <div
-                            class="mt-3 max-h-[220px] overflow-y-auto rounded-xl border border-zinc-200 bg-white/60 p-2 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800">
+                            class="mt-3 max-h-[220px] overflow-y-auto rounded-xl border border-zinc-200 p-2 shadow-sm dark:border-zinc-800 dark:bg-gray-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                             @forelse ($users as $user)
                                 <label for="helper-radio-{{ $user->kode_pegawai }}"
                                     class="group flex cursor-pointer items-center rounded-lg p-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50">

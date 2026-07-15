@@ -2,7 +2,8 @@
 @props(['request'])
 
 <div
-    class="rounded-xl border border-zinc-200 bg-white/60 p-6 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60">
+    class="rounded-xl border border-zinc-200 p-6 shadow-sm dark:border-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
     <h3 class="mb-6 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-zinc-400">
         <x-icons.clockwise class="h-4 w-4" />
         Alur Pengajuan
@@ -41,7 +42,8 @@
 
                     @if ($history->note)
                         <p
-                            class="mt-1 rounded-xl bg-zinc-50 px-3 py-1.5 text-xs italic text-zinc-600 dark:bg-white/5 dark:text-zinc-400">
+                            class="mt-1 rounded-xl bg-zinc-50 px-3 py-1.5 text-xs italic text-zinc-600 dark: dark:text-zinc-400"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                             "{{ $history->note }}"
                         </p>
                     @endif

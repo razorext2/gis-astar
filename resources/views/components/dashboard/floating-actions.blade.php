@@ -17,7 +17,7 @@
                     ? 'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md hover:bg-glass-hover-light dark:bg-glass-dark dark:border-glass-border-dark dark:hover:bg-glass-hover-dark dark:shadow-none'
                     : 'bg-white border-zinc-200 shadow-sm hover:bg-zinc-50 dark:bg-dark-primary dark:border-zinc-800 dark:hover:bg-zinc-800/80'
             ]"
-            class="liquid-btn group flex h-11 w-11 items-center justify-center rounded-full border transition-[background-color,border-color,box-shadow] duration-300 ease-out">
+            class="liquid-btn group flex h-11 w-11 items-center justify-center rounded-full border transition-[background-color,border-color,box-shadow] duration-300 ease-out" x-cloak>
             <span :class="atTop ? 'rotate-0' : 'rotate-180'" class="inline-block transition-transform duration-300 group-hover:scale-110">
                 <x-icons.carred-down class="h-6 w-6 text-red-600 dark:text-red-500" id="scroll-to-top-icon" />
             </span>

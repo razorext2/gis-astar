@@ -116,7 +116,8 @@
 
             {{-- Applicant Info --}}
             <div
-                class="my-4 flex items-center gap-4 rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-white/5">
+                class="my-4 flex items-center gap-4 rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div
                     class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-red-100 text-xl font-black text-red-600 dark:bg-red-900/30 dark:text-red-400">
                     {{ collect(explode(' ', $currentRequest->user->name))->map(fn($n) => \Str::substr($n, 0, 1))->take(2)->implode('') }}
@@ -158,7 +159,8 @@
             </div>
 
             {{-- Reason --}}
-            <div class="mb-5 rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-white/5">
+            <div class="mb-5 rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <p class="mb-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400">Alasan / Keperluan</p>
                 <p class="text-sm italic text-zinc-700 dark:text-zinc-300">"{{ $currentRequest->reason }}"</p>
             </div>
@@ -202,7 +204,7 @@
                     : 'bg-white border-zinc-200 shadow-sm hover:bg-zinc-50 dark:bg-dark-primary dark:border-zinc-800 dark:hover:bg-zinc-800/80'
             ]"
             class="liquid-btn relative pointer-events-auto flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border transition-all duration-300 hover:scale-105"
-            @click="$wire.set('showPopup', true)" style="display: none;">
+            @click="$wire.set('showPopup', true)" style="display: none;" x-cloak>
             <x-icons.clipboard-check class="h-5 w-5 text-amber-500 dark:text-amber-400" />
             <span
                 class="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full border border-white bg-amber-100 text-[10px] font-black text-amber-800 shadow dark:border-zinc-900 dark:bg-amber-900 dark:text-amber-400">

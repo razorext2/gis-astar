@@ -162,7 +162,8 @@ $watch('$wire.showPopup', val => {
             {{-- Body --}}
             <div class="flex flex-1 flex-col justify-between p-5">
                 <div
-                    class="mb-4 flex flex-col items-center gap-3 rounded-xl border border-zinc-200 bg-zinc-50/50 p-6 dark:border-zinc-800 dark:bg-white/5">
+                    class="mb-4 flex flex-col items-center gap-3 rounded-xl border border-zinc-200 bg-zinc-50/50 p-6 dark:border-zinc-800 dark:"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <div class="{{ $colorClasses['counter'] }} text-4xl font-black tracking-tight">
                         {{ $pendingCount }}
                     </div>
@@ -177,7 +178,8 @@ $watch('$wire.showPopup', val => {
                 </div>
 
                 <div
-                    class="mb-4 flex items-start gap-2 rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-white/5">
+                    class="mb-4 flex items-start gap-2 rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <x-icons.info-circle class="mt-0.5 h-4 w-4 shrink-0 text-zinc-400" />
                     <p class="text-xs text-zinc-500 dark:text-zinc-400">
                         @if ($type === 'production-assigned')

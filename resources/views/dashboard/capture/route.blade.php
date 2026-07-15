@@ -1,6 +1,9 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div class="relative overflow-hidden rounded-xl bg-white/60 p-4 text-zinc-900 shadow-2xl ring-1 ring-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:text-white dark:ring-zinc-800 md:p-6"
+    <div class="relative overflow-hidden rounded-xl p-4 text-zinc-900 shadow-2xl ring-1 ring-zinc-200 dark:text-white dark:ring-zinc-800 md:p-6"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
         id="Scan" data-aos="fade-up">
 
         {{-- Background Decoration --}}
@@ -22,8 +25,10 @@
                     </div>
                 </div>
 
-                <div
-                    class="flex items-center gap-3 rounded-lg bg-white/50 px-3 py-1.5 ring-1 ring-zinc-200 dark:bg-zinc-900/50 dark:ring-zinc-700">
+                <div class="flex items-center gap-3 rounded-lg px-3 py-1.5 ring-1 ring-zinc-200 dark:ring-zinc-700"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <x-icons.info class="h-4 w-4 text-amber-500" />
                     <div class="flex flex-col">
                         <span class="text-[9px] font-bold uppercase tracking-tighter text-zinc-400">Current Timezone</span>

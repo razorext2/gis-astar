@@ -9,7 +9,8 @@
         </div>
 
         <div
-            class="overflow-hidden rounded-xl border border-zinc-200 bg-white/50 dark:border-zinc-800 dark:bg-zinc-900/50">
+            class="overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <ul class="divide-y divide-zinc-100 dark:divide-zinc-800">
                 @forelse ($data['files'] as $index => $row)
                     <li
@@ -69,7 +70,8 @@
                 x-on:livewire-upload-progress="progress = $event.detail.progress">
 
                 <label for="attachment"
-                    class="relative flex min-h-[160px] w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-zinc-200 bg-white/50 p-6 transition-all hover:border-blue-400 hover:bg-blue-50/30 dark:border-zinc-700 dark:bg-zinc-900/50 dark:hover:border-blue-500/50">
+                    class="relative flex min-h-[160px] w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-zinc-200 p-6 transition-all hover:border-blue-400 hover:bg-blue-50/30 dark:border-zinc-700 dark:hover:border-blue-500/50"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
                     <div class="flex flex-col items-center text-center">
                         @if (!$docForm->attachment)
@@ -95,7 +97,8 @@
 
                     {{-- Uploading State Overlay --}}
                     <div x-show="uploading"
-                        class="absolute inset-0 z-20 flex flex-col items-center justify-center rounded-xl bg-white/90 backdrop-blur-sm dark:bg-zinc-900/90">
+                        class="absolute inset-0 z-20 flex flex-col items-center justify-center rounded-xl"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         <div class="flex w-48 flex-col items-center gap-3">
                             <x-icons.loading class="h-8 w-8 animate-spin text-blue-600" />
                             <div class="h-1.5 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">

@@ -8,7 +8,7 @@
 		@include('components.landing.partials.head', ['title' => $title])
 	</head>
 
-	<body>
+	<body x-data="{ dynamicBg: localStorage.getItem('dynamicBg') === null ? false : localStorage.getItem('dynamicBg') === 'true' }">
 		<x-landing.navbar />
 
 		{{ $slot }}

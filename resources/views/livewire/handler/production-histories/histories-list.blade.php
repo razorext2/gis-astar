@@ -41,7 +41,8 @@
                 </div>
 
                 {{-- Content Card --}}
-                <div class="flex flex-1 flex-col gap-3 rounded-xl border border-zinc-100 bg-white/40 p-4 shadow-sm backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/40">
+                <div class="flex flex-1 flex-col gap-3 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <div class="flex flex-wrap items-start justify-between gap-2">
                         <div class="flex flex-col gap-1">
                             <div class="flex items-center gap-2">

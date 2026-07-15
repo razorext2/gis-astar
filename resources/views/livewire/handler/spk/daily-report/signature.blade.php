@@ -1,7 +1,8 @@
 {{-- Goal: Tanda tangan customer untuk SPK Daily Report, Livewire: App\Livewire\Handler\Spk\DailyReport\Signature, Alpine: N/A --}}
 <div class="w-full">
     <div
-        class="mb-2 w-full rounded-xl border border-zinc-200 bg-white/60 p-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:mb-4 lg:p-4">
+        class="mb-2 w-full rounded-xl border border-zinc-200 p-2 shadow-md dark:border-zinc-800 lg:mb-4 lg:p-4"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
         <h2 class="mb-2 font-medium text-gray-700 dark:text-white">Info Customer</h2>
 
@@ -44,7 +45,8 @@
     </div>
 
     <div
-        class="relative max-h-[575px] w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white/60 p-2 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-4">
+        class="relative max-h-[575px] w-full overflow-y-auto rounded-xl border border-zinc-200 p-2 shadow-md dark:border-zinc-800 lg:p-4"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
         <h2 class="mb-2 font-medium text-gray-700 dark:text-white lg:mb-4">Rekap Laporan</h2>
 
@@ -52,7 +54,8 @@
             @foreach ($this->assigments() as $assignment)
                 {{-- ASSIGNMENT CARD --}}
                 <div
-                    class="rounded-xl border border-zinc-200 bg-white/60 shadow backdrop-blur-md dark:border-zinc-800 dark:bg-gray-800">
+                    class="rounded-xl border border-zinc-200 shadow dark:border-zinc-800 dark:bg-gray-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
                     {{-- HEADER --}}
                     <div class="border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">

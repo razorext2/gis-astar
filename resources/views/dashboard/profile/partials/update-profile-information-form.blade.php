@@ -1,5 +1,6 @@
 <div
-    class="rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60 lg:p-6">
+    class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 lg:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
     <header class="mb-6 border-b border-zinc-200 pb-5 dark:border-zinc-800">
         <h2 class="text-base font-bold text-zinc-900 dark:text-white">
             {{ __('Informasi Profil') }}

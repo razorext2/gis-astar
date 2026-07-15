@@ -2,7 +2,8 @@
 <div>
     @if ($records->isNotEmpty())
         <div
-            class="relative mb-4 w-full rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none lg:p-6">
+            class="relative mb-4 w-full rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none lg:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
             {{-- Header --}}
             <div class="mb-4 flex items-center justify-between">
@@ -72,7 +73,8 @@
 
                                 {{-- Floating Similarity Badge --}}
                                 @if ($row->similarity_percent !== null)
-                                    <span class="absolute left-3 top-3 rounded-full bg-emerald-600/90 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur-md flex items-center gap-1 shadow-sm z-10">
+                                    <span class="absolute left-3 top-3 rounded-full bg-emerald-600/90 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-bold text-white flex items-center gap-1 shadow-sm z-10"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                         <x-icons.check-circle class="h-3 w-3 text-emerald-100" />
                                         Kemiripan {{ $row->similarity_percent }}%
                                     </span>
@@ -80,7 +82,8 @@
 
                                 {{-- Floating Time badge --}}
                                 <span
-                                    class="absolute right-3 top-3 rounded-full bg-white/20 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur-md z-10">
+                                    class="absolute right-3 top-3 rounded-full px-2 py-0.5 text-[10px] font-bold text-white z-10"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                     {{ $row->timezone ?? 'WIB' }}
                                 </span>
 
@@ -152,7 +155,8 @@
                     {{-- Load More Card --}}
                     @if ($records->count() < $totalCount)
                         <div wire:key="load-more-card"
-                            class="flex w-56 shrink-0 snap-start flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-zinc-200 bg-zinc-50/50 transition-colors hover:border-amber-400 hover:bg-amber-50/50 dark:border-zinc-700 dark:bg-zinc-900/50 dark:hover:border-amber-600 dark:hover:bg-amber-950/30 cursor-pointer"
+                            class="flex w-56 shrink-0 snap-start flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-zinc-200 bg-zinc-50/50 transition-colors hover:border-amber-400 hover:bg-amber-50/50 dark:border-zinc-700 dark:hover:border-amber-600 dark:hover:bg-amber-950/30 cursor-pointer"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
                             wire:click="loadMore">
                             <div wire:loading.remove wire:target="loadMore" class="flex flex-col items-center gap-2 text-center">
                                 <div class="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/40">

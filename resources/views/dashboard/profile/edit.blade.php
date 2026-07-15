@@ -2,7 +2,8 @@
 @section('content')
     {{-- Hero Profile Header --}}
     <div
-        class="relative mb-6 rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/60">
+        class="relative mb-6 rounded-xl border border-zinc-200 shadow-md dark:border-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         {{-- Decorative gradient background --}}
         <div
             class="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-br from-red-600/10 via-transparent to-transparent dark:from-red-900/20">

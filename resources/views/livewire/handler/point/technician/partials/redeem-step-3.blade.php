@@ -6,7 +6,8 @@
 
             {{-- Card: Informasi Transaksi --}}
             <div
-                class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none">
+                class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3
                     class="flex items-center gap-2 border-b border-zinc-200 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.info-circle class="h-4 w-4 text-blue-500" /> Informasi Transaksi
@@ -100,7 +101,8 @@
 
             {{-- Card: Daftar Pegawai --}}
             <div
-                class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none lg:row-span-2">
+                class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none lg:row-span-2"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div
                     class="flex items-center gap-2 border-b border-zinc-200 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.users class="h-4 w-4 text-blue-500" /> Daftar Teknisi Terlibat
@@ -109,7 +111,8 @@
                 <div class="max-h-64 overflow-y-auto">
                     <table class="w-full whitespace-nowrap text-left text-sm">
                         <thead
-                            class="sticky top-0 border-b border-zinc-200 bg-white/90 text-xs text-zinc-500 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/90 dark:text-zinc-400">
+                            class="sticky top-0 border-b border-zinc-200 text-xs text-zinc-500 dark:border-zinc-800 dark:text-zinc-400"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                             <tr>
                                 <th class="pb-2 font-medium">Pegawai</th>
                                 <th class="pb-2 text-right font-medium">Poin Terkumpul</th>

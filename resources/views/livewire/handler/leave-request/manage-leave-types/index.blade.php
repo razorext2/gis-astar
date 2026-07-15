@@ -3,7 +3,8 @@
 <div class="flex flex-col gap-4">
 
     <div
-        class="flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white/60 p-4 text-center backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
+        class="flex flex-col gap-6 rounded-xl border border-zinc-200 p-4 text-center dark:border-zinc-800 lg:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         {{-- Action Bar --}}
         <div class="flex items-center justify-between border-b border-zinc-100 pb-4 dark:border-zinc-800">
             <h3 class="text-lg font-bold text-zinc-900 dark:text-white">Daftar Tipe Cuti</h3>
@@ -27,7 +28,8 @@
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                 @foreach ($leaveTypes as $type)
                     <div
-                        class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-xl transition-all hover:border-red-500/50 hover:shadow-lg dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
+                        class="group relative overflow-hidden rounded-xl border border-zinc-200 p-4 transition-all hover:border-red-500/50 hover: dark:border-zinc-800 lg:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         <div class="flex items-start justify-between">
                             <div class="text-left">
                                 <span
@@ -108,7 +110,8 @@
             </div>
 
             <div
-                class="grid grid-cols-1 gap-4 rounded-xl border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-white/5">
+                class="grid grid-cols-1 gap-4 rounded-xl border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <label class="flex cursor-pointer items-center gap-3">
                     <input type="checkbox" wire:model="typeAnualDeduction"
                         class="rounded border-zinc-300 text-red-600 focus:ring-red-500">

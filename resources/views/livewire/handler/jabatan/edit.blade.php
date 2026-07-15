@@ -3,7 +3,8 @@
 
     {{-- Left Column: Form Edit --}}
     <div class="lg:col-span-2">
-        <div class="rounded-xl bg-white/60 p-4 shadow-md ring-1 ring-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:ring-zinc-800 sm:p-6">
+        <div class="rounded-xl p-4 shadow-md ring-1 ring-zinc-200 dark:shadow-none dark:ring-zinc-800 sm:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <header class="mb-6 flex flex-row items-center gap-4 border-b border-zinc-100 pb-4 dark:border-white/5">
                 <x-button.danger href="{{ route('jabatan.index') }}" class="mb-0">
                     <x-slot name="icon">
@@ -149,7 +150,8 @@
 
     {{-- Right Column: Employees list --}}
     <div class="lg:col-span-1">
-        <div class="rounded-xl bg-white/60 p-4 shadow-md ring-1 ring-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:ring-zinc-800 sm:p-6">
+        <div class="rounded-xl p-4 shadow-md ring-1 ring-zinc-200 dark:shadow-none dark:ring-zinc-800 sm:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <header class="mb-6 border-b border-zinc-100 pb-4 dark:border-white/5">
                 <h2 class="text-lg font-bold text-gray-900 dark:text-white">
                     Daftar Pegawai

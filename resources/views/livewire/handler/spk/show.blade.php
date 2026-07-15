@@ -1,6 +1,7 @@
 <div class="space-y-4">
     <div
-        class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
+        class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 lg:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
         {{-- Header Section: Order Status --}}
         <div
@@ -140,7 +141,8 @@
 
             {{-- Card: Detail Order --}}
             <div
-                class="flex flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none">
+                class="flex flex-col gap-4 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 dark:shadow-none"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3
                     class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.file-invoice class="h-4 w-4 text-blue-500" /> Detail Order
@@ -188,7 +190,8 @@
 
             {{-- Card: Customer --}}
             <div
-                class="flex flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none">
+                class="flex flex-col gap-4 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 dark:shadow-none"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3
                     class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.user class="h-4 w-4 text-blue-500" /> Informasi Customer
@@ -222,7 +225,8 @@
 
             {{-- Card: Produk --}}
             <div
-                class="flex flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none md:col-span-2">
+                class="flex flex-col gap-4 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 dark:shadow-none md:col-span-2"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div
                     class="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-100 pb-3 dark:border-zinc-800">
                     <h3 class="flex items-center gap-2 text-sm font-semibold text-zinc-900 dark:text-white">
@@ -314,7 +318,8 @@
                                 </div>
                                 @if ($data->old_stock_notes)
                                     <div
-                                        class="max-w-xs break-words rounded-lg border border-green-200/50 bg-white/85 px-3.5 py-2 text-xs text-zinc-600 shadow-sm dark:border-green-900/20 dark:bg-zinc-900/60 dark:text-zinc-300 sm:max-w-md">
+                                        class="max-w-xs break-words rounded-lg border border-green-200/50 px-3.5 py-2 text-xs text-zinc-600 shadow-sm dark:border-green-900/20 dark:text-zinc-300 sm:max-w-md"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                         <span class="font-bold text-zinc-700 dark:text-zinc-200">Note:</span>
                                         {{ $data->old_stock_notes }}
                                     </div>
@@ -327,7 +332,8 @@
 
             {{-- Card: Keterlibatan & Riwayat --}}
             <div
-                class="flex flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none">
+                class="flex flex-col gap-4 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 dark:shadow-none"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3
                     class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.users class="h-4 w-4 text-blue-500" /> Staff
@@ -446,7 +452,8 @@
 
             {{-- Card: Dokumen Pendukung --}}
             <div
-                class="flex flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none">
+                class="flex flex-col gap-4 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 dark:shadow-none"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3
                     class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.clipboard class="h-4 w-4 text-blue-500" /> Dokumen Pendukung

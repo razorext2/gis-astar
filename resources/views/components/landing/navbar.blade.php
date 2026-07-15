@@ -1,5 +1,6 @@
 <nav
-    class="border-b border-zinc-200 bg-white/60 backdrop-blur-md p-4 shadow-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:backdrop-blur-md dark:shadow-none md:block lg:p-8">
+    class="border-b border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark: dark:shadow-none md:block lg:p-8"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
     <div class="center mx-auto flex max-w-screen-xl flex-wrap items-center justify-between">
 
         <a class="flex items-center space-x-3 md:mx-auto md:mb-4 lg:mx-0 lg:mb-0 rtl:space-x-reverse" href="#">
@@ -32,7 +33,8 @@
         </div>
     </div>
 
-    <div class="mt-1 hidden bg-white/60 backdrop-blur-md dark:bg-dark-primary/60 md:bg-white/60" id="mega-menu-full-dropdown">
+    <div class="mt-1 hidden md:"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'" id="mega-menu-full-dropdown">
         <div
             class="mx-auto grid max-w-screen-lg px-4 py-5 text-zinc-900 transition duration-1000 ease-in-out dark:text-white sm:grid-cols-1 md:px-6">
             <ul class="space-y-4 text-left text-zinc-500">

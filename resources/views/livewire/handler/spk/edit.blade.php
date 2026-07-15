@@ -5,7 +5,8 @@
 
         {{-- form info customer --}}
         <div id="informasi-customer"
-            class="flex flex-col rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none">
+            class="flex flex-col rounded-xl border border-zinc-200 shadow-md dark:border-zinc-800 dark:shadow-none"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
             <div class="flex items-center gap-3 border-b border-zinc-200 px-4 py-4 dark:border-zinc-800 lg:px-6">
                 <div
@@ -69,7 +70,8 @@
 
         {{-- form barang --}}
         <div id="informasi-barang"
-            class="flex flex-col rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none">
+            class="flex flex-col rounded-xl border border-zinc-200 shadow-md dark:border-zinc-800 dark:shadow-none"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
             <div class="flex items-center gap-3 border-b border-zinc-200 px-4 py-4 dark:border-zinc-800 lg:px-6">
                 <div
@@ -86,7 +88,8 @@
 
                 {{-- Form Tambah Barang --}}
                 <div
-                    class="flex w-full flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow dark:border-zinc-700 dark:bg-zinc-800">
+                    class="flex w-full flex-col gap-4 rounded-xl border border-zinc-100 p-4 shadow dark:border-zinc-700 dark:bg-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <div class="w-full">
                         <x-input.select id="tipe_timbangan" name="tipe_timbangan" :labels="true" :textLabel="'Tipe Timbangan Yang Dipesan'"
                             :defaultOption="'Pilih tipe timbangan'" wire:model="createForm.tipe_timbangan" :options="config('spk-config.tipe_timbangan')" />
@@ -159,7 +162,8 @@
                     </h3>
 
                     <div
-                        class="overflow-hidden rounded-xl border border-zinc-200 bg-white/60 shadow backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60">
+                        class="overflow-hidden rounded-xl border border-zinc-200 shadow dark:border-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         <table id="barang-list-table" class="w-full text-left">
                             <thead
                                 class="border-b border-zinc-200 bg-zinc-50 text-xs uppercase tracking-wider text-zinc-600 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-zinc-400">
@@ -247,7 +251,8 @@
 
         {{-- form spk --}}
         <div id="informasi-order"
-            class="flex flex-col rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none">
+            class="flex flex-col rounded-xl border border-zinc-200 shadow-md dark:border-zinc-800 dark:shadow-none"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
             <div class="flex items-center gap-3 border-b border-zinc-200 px-4 py-4 dark:border-zinc-800 lg:px-6">
                 <div
@@ -381,7 +386,8 @@
 
         {{-- form info tambahan --}}
         <div id="informasi-tambahan"
-            class="flex flex-col rounded-xl border border-zinc-200 bg-white/60 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 dark:shadow-none">
+            class="flex flex-col rounded-xl border border-zinc-200 shadow-md dark:border-zinc-800 dark:shadow-none"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
             <div class="flex items-center gap-3 border-b border-zinc-200 px-4 py-4 dark:border-zinc-800 lg:px-6">
                 <div
@@ -398,7 +404,8 @@
 
                 {{-- Attachment Upload Section --}}
                 <div
-                    class="col-span-1 flex w-full flex-col gap-4 rounded-xl border border-zinc-100 bg-white/60 p-4 shadow dark:border-zinc-700 dark:bg-zinc-800 lg:col-span-2 lg:flex-row">
+                    class="col-span-1 flex w-full flex-col gap-4 rounded-xl border border-zinc-100 p-4 shadow dark:border-zinc-700 dark:bg-zinc-800 lg:col-span-2 lg:flex-row"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
                     <div class="flex w-full flex-col lg:w-1/2">
                         <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
@@ -490,7 +497,8 @@
                     </h3>
 
                     <ul
-                        class="flex flex-col divide-y divide-zinc-200 rounded-xl border border-zinc-200 bg-white/60 shadow backdrop-blur-md dark:divide-zinc-800 dark:border-zinc-800 dark:bg-dark-primary/60">
+                        class="flex flex-col divide-y divide-zinc-200 rounded-xl border border-zinc-200 shadow dark:divide-zinc-800 dark:border-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         @foreach ($docForm->new_attachments as $index => $row)
                             <li
                                 class="flex items-center gap-4 px-4 py-3 transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
@@ -751,7 +759,8 @@
         {{-- end accordion cancel SPK --}}
 
         <div
-            class="flex w-full items-center justify-end gap-3 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 lg:p-6">
+            class="flex w-full items-center justify-end gap-3 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 lg:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <x-button.success id="ubah-button" type="submit" wire:loading.attr="disabled" wire:target="store">
                 <x-slot name="icon">
                     <x-icons.loading wire:loading wire:target="store" class="h-4 w-4 animate-spin" />

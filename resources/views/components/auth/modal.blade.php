@@ -41,7 +41,8 @@
 	<div class="fixed inset-0 transform transition-all" x-show="show" x-on:click="show = false"
 		x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
 		x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
-		<div class="absolute inset-0 bg-zinc-950/65 backdrop-blur-sm"></div>
+		<div class="absolute inset-0 bg-zinc-950/65"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"></div>
 	</div>
 
 	<div

@@ -1,5 +1,6 @@
 <div
-    class="mt-4 flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary md:p-6">
+    class="mt-4 flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-dark-primary md:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
     {{-- Breadcrumbs/Header --}}
     <div class="flex items-center gap-3">
         <x-button.danger wire:navigate href="{{ route('leave-request.my-requests.index') }}" class="max-h-10 max-w-fit">
@@ -20,7 +21,8 @@
         {{-- Left Column: Main Form --}}
         <div class="flex flex-col gap-6 lg:col-span-2">
             <div
-                class="flex flex-col gap-5 rounded-xl border border-zinc-200 bg-white/60 p-6 shadow-md backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60">
+                class="flex flex-col gap-5 rounded-xl border border-zinc-200 p-6 shadow-md dark:border-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
                 <div class="mb-2 flex items-center gap-2">
                     <div class="h-8 w-1 rounded-full bg-primary"></div>
@@ -44,7 +46,8 @@
                             <div class="relative">
                                 <input type="text" wire:model.live.debounce.300ms="search_backup"
                                     @focus="open = true" placeholder="Cari Nama atau Kode Pegawai..."
-                                    class="w-full rounded-xl border border-zinc-200 bg-white/50 py-3 pl-4 pr-10 text-sm transition-all focus:ring-red-500/50 dark:border-zinc-800 dark:bg-gray-800/50 dark:text-gray-200">
+                                    class="w-full rounded-xl border border-zinc-200 py-3 pl-4 pr-10 text-sm transition-all focus:ring-red-500/50 dark:border-zinc-800 dark:bg-gray-800/50 dark:text-gray-200"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                                     <x-icons.search class="h-4 w-4 text-gray-400" />
                                 </div>
@@ -55,7 +58,8 @@
                                 x-transition:enter="transition ease-out duration-100"
                                 x-transition:enter-start="opacity-0 scale-95"
                                 x-transition:enter-end="opacity-100 scale-100"
-                                class="absolute z-50 mt-2 max-h-60 w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white shadow-xl backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary">
+                                class="absolute z-50 mt-2 max-h-60 w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-dark-primary"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
                                 @forelse ($employees as $emp)
                                     <button type="button"
@@ -120,7 +124,8 @@
                     <label class="mb-1 block text-sm font-bold text-gray-700 dark:text-gray-300">Alasan /
                         Keperluan</label>
                     <textarea wire:model="reason" rows="4"
-                        class="w-full rounded-xl border border-zinc-200 bg-white/50 p-4 text-gray-700 placeholder-gray-400 transition-all focus:ring-primary/50 dark:border-zinc-800 dark:bg-gray-800/50 dark:text-gray-200"
+                        class="w-full rounded-xl border border-zinc-200 p-4 text-gray-700 placeholder-gray-400 transition-all focus:ring-primary/50 dark:border-zinc-800 dark:bg-gray-800/50 dark:text-gray-200"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
                         placeholder="Berikan alasan yang jelas untuk pengajuan cuti Anda..."></textarea>
                     @error('reason')
                         <span class="mt-1 text-xs text-red-500">{{ $message }}</span>
@@ -138,13 +143,15 @@
                         {{-- Upload Box --}}
                         <div class="relative">
                             <label
-                                class="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-zinc-200 bg-zinc-50/50 py-8 transition-all hover:border-primary/50 hover:bg-primary/5 dark:border-zinc-800 dark:bg-zinc-900/50">
+                                class="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-zinc-200 bg-zinc-50/50 py-8 transition-all hover:border-primary/50 hover:bg-primary/5 dark:border-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                 <x-icons.cloud-upload class="mb-2 h-8 w-8 text-gray-400" />
                                 <span class="text-xs font-medium text-gray-500">Klik untuk unggah file baru</span>
                                 <input type="file" wire:model="attachments" multiple class="hidden">
                             </label>
                             <div wire:loading wire:target="attachments"
-                                class="absolute inset-0 z-10 flex items-center justify-center rounded-xl bg-white/50 backdrop-blur-sm dark:bg-zinc-900/50">
+                                class="absolute inset-0 z-10 flex items-center justify-center rounded-xl"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                 <x-icons.loading-circle class="h-8 w-8 text-primary" />
                             </div>
                         </div>
@@ -193,14 +200,16 @@
 
         {{-- Right Column: Summary --}}
         <div class="flex flex-col gap-6">
-            <div class="rounded-xl border border-primary/20 bg-primary/5 p-6 backdrop-blur-xl dark:bg-primary/10">
+            <div class="rounded-xl border border-primary/20 bg-primary/5 p-6 dark:bg-primary/10"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3 class="mb-4 flex items-center gap-2 text-lg font-bold text-primary">
                     <x-icons.info-circle class="h-5 w-5" />
                     Detail Kalkulasi
                 </h3>
                 <div class="flex flex-col gap-4">
                     {{-- Return Work Estimation --}}
-                    <div class="flex flex-col gap-1 rounded-lg bg-white/50 p-3 dark:bg-black/20">
+                    <div class="flex flex-col gap-1 rounded-lg p-3 dark:bg-black/20"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-gray-500">Estimasi Kembali
                             Bekerja:</span>
                         <div class="flex items-center gap-2">

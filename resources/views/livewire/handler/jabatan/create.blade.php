@@ -1,6 +1,7 @@
 {{-- Goal: Render Jabatan creation form, Livewire: App\Livewire\Handler\Jabatan\Create, Alpine: Dropdown search logic for supervisor --}}
 <div
-    class="w-full rounded-xl bg-white/60 p-4 shadow-md ring-1 ring-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:shadow-none dark:ring-zinc-800 sm:p-6">
+    class="w-full rounded-xl p-4 shadow-md ring-1 ring-zinc-200 dark:shadow-none dark:ring-zinc-800 sm:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
     <div class="max-w-xl">
         <header class="mb-6 flex flex-row items-center gap-4 border-b border-zinc-100 pb-4 dark:border-white/5">
             <x-button.danger href="{{ route('jabatan.index') }}" class="mb-0">

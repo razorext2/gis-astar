@@ -101,7 +101,7 @@
                         : 'bg-white border-zinc-200 shadow-sm hover:bg-zinc-50 dark:bg-dark-primary dark:border-zinc-800 dark:hover:bg-zinc-800/80'
                 ]"
                 class="liquid-btn group flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border transition-[background-color,border-color,box-shadow] duration-300 ease-out"
-                style="pointer-events: auto;">
+                style="pointer-events: auto;" x-cloak>
                 <span x-show="!isOpen" x-transition:enter="transition duration-200" x-transition:enter-start="opacity-0 scale-75" x-transition:enter-end="opacity-100 scale-100" class="flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
                     <x-icons.grid-plus class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
                 </span>
@@ -135,7 +135,8 @@
             {{-- Close All Button --}}
             <div class="flex w-full max-w-6xl justify-end pb-4 pt-2 lg:pt-4">
                 <x-button.secondary @click="$dispatch('close-all-popups')"
-                    class="!bg-white/10 !text-white !border-white/20 hover:!bg-white/20 hover:!border-white/30 backdrop-blur-sm shadow-none">
+                    class="shadow-none text-zinc-700 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white transition-colors duration-200"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <x-slot name="icon">
                         <x-icons.close class="h-4 w-4" />
                     </x-slot>

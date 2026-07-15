@@ -3,7 +3,8 @@
 <div class="flex flex-col gap-4" x-data="{ activeTab: 'balances' }">
 
     {{-- Header / Tab Switcher --}}
-    <div class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/60 p-4 backdrop-blur-xl dark:border-zinc-800 dark:bg-dark-primary/60 md:p-6 sm:flex-row sm:items-center sm:justify-between">
+    <div class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 md:p-6 sm:flex-row sm:items-center sm:justify-between"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <div class="flex items-center gap-4">
             <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-red-500/10 text-red-500">
                 <x-icons.user-group class="h-8 w-8" />

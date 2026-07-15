@@ -220,7 +220,8 @@
                 x-transition:leave="transition ease-in duration-75"
                 x-transition:leave-start="transform opacity-100 scale-100"
                 x-transition:leave-end="transform opacity-0 scale-95"
-                class="absolute right-0 top-full z-50 mt-2 w-48 origin-top-right rounded-xl border border-zinc-200 bg-white p-1.5 shadow-xl shadow-zinc-200/50 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/90 dark:shadow-black/50"
+                class="absolute right-0 top-full z-50 mt-2 w-48 origin-top-right rounded-xl border border-zinc-200 bg-white p-1.5 shadow-zinc-200/50 dark:border-zinc-800 dark:shadow-black/50"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
                 style="display: none;">
 
                 @if ($server->is_active)
@@ -257,7 +258,8 @@
     {{-- System Health Bar (hanya untuk server aktif) --}}
     @if ($server->is_active)
         <div x-show="!loading && !error" x-transition
-            class="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-lg bg-zinc-50/50 px-3 py-2 text-[11px] dark:bg-zinc-900/40">
+            class="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-lg bg-zinc-50/50 px-3 py-2 text-[11px]"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <div class="flex items-center gap-1.5">
                 <x-icons.info class="h-3.5 w-3.5 text-zinc-400" />
                 <span class="font-medium text-zinc-500">System:</span>

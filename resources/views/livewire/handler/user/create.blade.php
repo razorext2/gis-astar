@@ -1,10 +1,12 @@
 <div class="w-full space-y-6">
     <!-- Top Header Navigation -->
     <div
-        class="rounded-xl border border-zinc-200 bg-white/60 p-6 shadow-2xl backdrop-blur-sm transition-all duration-500 ease-in-out dark:border-zinc-800 dark:bg-dark-primary/60">
+        class="rounded-xl border border-zinc-200 p-6 shadow-2xl transition-all duration-500 ease-in-out dark:border-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div class="flex items-center gap-4">
-                <x-button.link id="back-btn" class="group justify-center bg-white/50 hover:bg-red-700 hover:text-white"
+                <x-button.link id="back-btn" class="group justify-center hover:bg-red-700 hover:text-white"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
                     wire:navigate href="{{ route('users.index') }}">
                     <x-icons.angle-left class="h-5 w-5" />
                 </x-button.link>
@@ -34,7 +36,8 @@
         <div class="space-y-2 lg:col-span-2 lg:space-y-4">
             <!-- Informasi Akun Section -->
             <div
-                class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-zinc-800 dark:bg-dark-primary/60">
+                class="group relative overflow-hidden rounded-xl border border-zinc-200 p-8 dark:border-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-blue-500/5 blur-3xl transition-colors group-hover:bg-blue-500/10">
                 </div>
@@ -69,7 +72,8 @@
 
             <!-- Keamanan Section -->
             <div
-                class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-zinc-800 dark:bg-dark-primary/60">
+                class="group relative overflow-hidden rounded-xl border border-zinc-200 p-8 dark:border-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-purple-500/5 blur-3xl transition-colors group-hover:bg-purple-500/10">
                 </div>
@@ -106,7 +110,8 @@
         <!-- Right Column: Role Selection -->
         <div class="space-y-2 lg:space-y-4">
             <div
-                class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white/60 p-8 shadow-xl backdrop-blur-sm dark:border-zinc-800 dark:bg-dark-primary/60">
+                class="group relative overflow-hidden rounded-xl border border-zinc-200 p-8 dark:border-zinc-800"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-green-500/5 blur-3xl transition-colors group-hover:bg-green-500/10">
                 </div>

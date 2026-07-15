@@ -1,6 +1,10 @@
+{{-- Goal: Face scan interface for employee attendance, Livewire: None, Alpine: dynamicBg --}}
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div class="relative overflow-hidden rounded-xl bg-white/60 p-4 text-zinc-900 shadow-2xl ring-1 ring-zinc-200 backdrop-blur-md dark:bg-dark-primary/60 dark:text-white dark:ring-zinc-800 md:p-6"
+    <div class="relative overflow-hidden rounded-xl p-4 text-zinc-900 shadow-2xl ring-1 ring-zinc-200 dark:text-white dark:ring-zinc-800 md:p-6"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
         id="Scan" data-aos="fade-up">
 
         {{-- Background Decoration --}}
@@ -15,7 +19,6 @@
                     {{-- Default State Image --}}
                     <div class="absolute inset-0 flex items-center justify-center bg-cover bg-center bg-no-repeat grayscale"
                         style="background-image: url('{{ asset('assets/img/noCamera.webp') }}');">
-                        <div class="absolute inset-0 bg-black/40 backdrop-blur-[2px]"></div>
                     </div>
 
                     {{-- Local Video Feed --}}

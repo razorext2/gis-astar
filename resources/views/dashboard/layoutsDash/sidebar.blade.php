@@ -63,6 +63,7 @@
             : 'bg-white border-zinc-200 shadow-sm dark:bg-dark-primary dark:border-zinc-800'
     ]"
     class="fixed bottom-4 left-4 top-4 z-40 hidden w-[272px] flex-col rounded-2xl border pb-6 transition-all duration-300 ease-out md:flex"
+    x-cloak
     id="logo-sidebar" aria-label="Sidebar">
 
     {{-- Header / Toggle --}}
@@ -87,7 +88,8 @@
                     class="h-4 w-4 text-zinc-400 transition-colors duration-200 group-focus-within:text-red-600" />
             </div>
             <input type="text" x-model="menuSearch"
-                class="block w-full rounded-xl border-zinc-200 bg-zinc-50/50 py-2.5 pl-10 pr-3 text-sm tracking-wide text-zinc-900 placeholder-zinc-400 transition-all duration-200 focus:border-red-600 focus:bg-white focus:ring-4 focus:ring-red-600/5 dark:border-zinc-800 dark:bg-white/5 dark:text-white dark:placeholder-zinc-500 dark:focus:border-red-500"
+                class="block w-full rounded-xl border-zinc-200 bg-zinc-50/50 py-2.5 pl-10 pr-3 text-sm tracking-wide text-zinc-900 placeholder-zinc-400 transition-colors duration-200 focus:border-red-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-red-600/20 dark:border-zinc-800 dark:text-white dark:placeholder-zinc-500 dark:focus:border-red-500 dark:focus:ring-red-500/20"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
                 placeholder="Cari Menu..." />
             <button x-show="menuSearch" @click="menuSearch = ''"
                 class="absolute inset-y-0 right-0 flex items-center pr-3 text-zinc-400 hover:text-red-500">

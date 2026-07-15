@@ -28,7 +28,7 @@
         @include('dashboard.layoutsDash.sidebar')
 
         <div :class="openSidebar ? 'md:ml-72' : 'mx-0 md:mx-4'"
-            class="mb-20 mt-[7.5rem] px-4 transition-all duration-300 ease-in-out md:mb-4 md:mt-[8rem] xl:px-10">
+            class="md:ml-72 mb-20 mt-[7.5rem] px-4 transition-all duration-300 ease-in-out md:mb-4 md:mt-[8rem] xl:px-10">
 
             {{-- title --}}
             <div class="grid grid-cols-1">

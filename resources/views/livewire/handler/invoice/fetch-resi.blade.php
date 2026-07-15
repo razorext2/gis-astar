@@ -47,7 +47,8 @@
 
     {{-- Data Container --}}
     @if ($data)
-        <div class="flex flex-col gap-6 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition-all duration-300 dark:border-zinc-800 dark:bg-zinc-900/50 dark:shadow-none lg:p-6"
+        <div class="flex flex-col gap-6 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition-all duration-300 dark:border-zinc-800 dark:shadow-none lg:p-6"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
             wire:loading.remove wire:target="fetchResi" wire:transition.origin.top>
 
             {{-- Summary Header --}}
@@ -85,7 +86,8 @@
             {{-- Shipper & Receiver Grid --}}
             <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
                 <div
-                    class="group h-full rounded-2xl border border-zinc-200 bg-zinc-50/50 p-4 transition-all hover:border-red-500/30 hover:bg-white dark:border-white/5 dark:bg-white/5 dark:hover:border-red-500/20 dark:hover:bg-white/10">
+                    class="group h-full rounded-2xl border border-zinc-200 bg-zinc-50/50 p-4 transition-all hover:border-red-500/30 hover:bg-white dark:border-white/5 dark: dark:hover:border-red-500/20 dark:hover:"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <div class="mb-3 flex items-center gap-2 text-zinc-400 group-hover:text-red-500">
                         <x-icons.profile-card class="h-4 w-4" />
                         <span class="text-xs font-bold uppercase tracking-widest">Pengirim</span>
@@ -97,7 +99,8 @@
                 </div>
 
                 <div
-                    class="group h-full rounded-2xl border border-zinc-200 bg-zinc-50/50 p-4 transition-all hover:border-red-500/30 hover:bg-white dark:border-white/5 dark:bg-white/5 dark:hover:border-red-500/20 dark:hover:bg-white/10">
+                    class="group h-full rounded-2xl border border-zinc-200 bg-zinc-50/50 p-4 transition-all hover:border-red-500/30 hover:bg-white dark:border-white/5 dark: dark:hover:border-red-500/20 dark:hover:"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <div class="mb-3 flex items-center gap-2 text-zinc-400 group-hover:text-red-500">
                         <x-icons.map-pin class="h-4 w-4" />
                         <span class="text-xs font-bold uppercase tracking-widest">Penerima</span>
@@ -129,7 +132,8 @@
                             </div>
 
                             <div
-                                class="flex flex-col gap-2 rounded-xl border border-zinc-200 bg-white/50 p-4 transition-all hover:border-red-200 hover:bg-white dark:border-zinc-800 dark:bg-white/5 dark:hover:border-red-900/30 dark:hover:bg-white/10">
+                                class="flex flex-col gap-2 rounded-xl border border-zinc-200 p-4 transition-all hover:border-red-200 hover:bg-white dark:border-zinc-800 dark: dark:hover:border-red-900/30 dark:hover:"
+    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                 <div class="flex items-center justify-between gap-4">
                                     <p class="text-xs font-bold uppercase tracking-wide text-zinc-400">
                                         {{ \Carbon\Carbon::parse($history['date'])->isoFormat('DD MMMM YYYY') }}
