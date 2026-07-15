@@ -9,8 +9,6 @@ import { initWebSocketListener } from "./utils/webSocketListener";
 import "./../../vendor/power-components/livewire-powergrid/dist/powergrid";
 import { zoomImage } from "./utils/zoomImage";
 import "./components/dynamic-background.js";
-import Lenis from "lenis";
-import "lenis/dist/lenis.css";
 
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
@@ -55,43 +53,6 @@ window.$ = window.jQuery = $;
 window.Swal = Swal;
 window.Quill = Quill;
 
-// Initialize Lenis dynamically based on sidebar state
-let lenisInstance = null;
-
-function initLenis() {
-    const prefersReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-    ).matches;
-    if (prefersReducedMotion) return;
-
-    if (!lenisInstance) {
-        lenisInstance = new Lenis({
-            lerp: 0.08,
-            orientation: "vertical",
-            gestureOrientation: "vertical",
-            smoothWheel: true,
-            autoRaf: true,
-        });
-        window.lenis = lenisInstance;
-    }
-}
-
-function destroyLenis() {
-    if (lenisInstance) {
-        lenisInstance.destroy();
-        lenisInstance = null;
-        window.lenis = null;
-    }
-}
-
-window.toggleLenis = function (shouldEnable) {
-    if (shouldEnable) {
-        initLenis();
-    } else {
-        destroyLenis();
-    }
-};
-
 const triggerPreloaderExit = () => {
     const preloader = document.getElementById("preloader");
     if (preloader && !preloader.classList.contains("preloader-exit")) {
@@ -132,19 +93,6 @@ document.addEventListener("livewire:navigated", function () {
     // Register zoom globally — safe to call every navigation because
     // zoomImage uses a stable named handler reference (no duplicates).
     zoomImage();
-
-    // Optimize Lenis scroll positioning and recalculation
-    if (window.lenis) {
-        window.lenis.resize();
-        if (window.location.hash) {
-            const targetEl = document.querySelector(window.location.hash);
-            if (targetEl) {
-                window.lenis.scrollTo(targetEl, { immediate: true });
-            }
-        } else {
-            window.lenis.scrollTo(0, { immediate: true });
-        }
-    }
 
     const path = window.location.pathname;
 

@@ -21,28 +21,23 @@
 }" x-init="window.addEventListener('scroll', () => handleScroll(), { passive: true });
 window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; }, { passive: true });"
     :class="[
-        !navVisible ? '-top-28' : 'top-4',
-        openSidebar ? 'left-4 md:left-[304px] w-[calc(100%-2rem)] md:w-[calc(100%-320px)]' : 'left-4 w-[calc(100%-2rem)]',
-        dynamicBg
-            ? 'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md shadow-zinc-200/40 dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-none'
-            : 'bg-white border-zinc-200 shadow-md shadow-zinc-200/40 dark:bg-dark-primary dark:border-zinc-800 dark:shadow-none'
+        openSidebar ? 'md:ml-[288px]' : '',
+        dynamicBg ?
+        'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md shadow-zinc-200/40 dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-none' :
+        'bg-white border-zinc-200 shadow-md shadow-zinc-200/40 dark:bg-dark-primary dark:border-zinc-800 dark:shadow-none'
     ]"
-    class="top-4 left-4 md:left-[304px] w-[calc(100%-2rem)] md:w-[calc(100%-320px)] fixed z-40 px-4 py-2.5 rounded-2xl border transition-all duration-300 ease-in-out lg:px-6"
-    x-cloak>
+    :style="{ transform: !navVisible ? 'translateY(calc(-100% - 1rem))' : 'translateY(0)' }"
+    style="transition: margin-left 300ms ease-out, transform 300ms ease-in-out;"
+    class="fixed top-4 left-4 right-4 z-40 rounded-2xl border px-4 py-2.5 lg:px-6" x-cloak>
     <div class="flex items-center justify-between gap-2">
 
-
         {{-- Logo & Toggle --}}
-        <div class="flex items-center gap-2 min-w-0">
+        <div class="flex min-w-0 items-center gap-2">
             {{-- Sidebar Toggle Button (Desktop Only) --}}
-            <button @click="openSidebar = !openSidebar"
-                x-data="{ tapping: false }"
-                x-on:mousedown="tapping = true"
-                x-on:touchstart="tapping = true"
-                x-on:animationend="tapping = false"
-                x-on:animationcancel="tapping = false"
-                :class="{ 'is-tapping': tapping }"
-                class="liquid-btn hidden md:flex rounded-xl p-2 text-zinc-500 hover:bg-zinc-100/50 dark:text-zinc-400 dark:hover:bg-zinc-800/50 transition-colors">
+            <button @click="openSidebar = !openSidebar" x-data="{ tapping: false }" x-on:mousedown="tapping = true"
+                x-on:touchstart="tapping = true" x-on:animationend="tapping = false"
+                x-on:animationcancel="tapping = false" :class="{ 'is-tapping': tapping }"
+                class="liquid-btn hidden rounded-xl p-2 text-zinc-500 transition-colors hover:bg-zinc-100/50 dark:text-zinc-400 dark:hover:bg-zinc-800/50 md:flex">
                 <span x-show="!openSidebar">
                     <x-icons.bar class="h-5 w-5" />
                 </span>
@@ -51,18 +46,21 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
                 </span>
             </button>
 
-            <div :class="openSidebar ? 'md:opacity-0 md:pointer-events-none md:w-0 md:-translate-x-5' : 'opacity-100 md:w-36 translate-x-0'"
-                class="flex shrink-0 transform items-center justify-start overflow-hidden transition-all duration-300 ease-out">
+            <div :class="openSidebar ? 'md:opacity-0 md:pointer-events-none md:max-w-0 md:-translate-x-5' :
+                'opacity-100 md:max-w-[9rem] translate-x-0'"
+                class="flex shrink-0 transform items-center justify-start overflow-hidden transition-[opacity,transform,max-width] duration-300 ease-out">
                 <a class="flex items-center gap-2" href="{{ config('app.url') }}">
-                    <img class="h-7 w-7 sm:h-8 sm:w-8 object-contain rounded-lg" src="{{ asset('images/icons/icon-384x384.png') }}" alt="Attendance Logo"
-                        loading="lazy" />
+                    <img class="h-7 w-7 rounded-lg object-contain sm:h-8 sm:w-8"
+                        src="{{ asset('images/icons/icon-384x384.png') }}" alt="Attendance Logo" loading="lazy" />
                     <span
                         class="hidden text-sm font-bold italic tracking-wide text-zinc-900 dark:text-white sm:block sm:text-base">Attendance</span>
                 </a>
             </div>
 
             {{-- Breadcrumb Placeholder (Sticky) --}}
-            <div id="navbar-breadcrumb-container" class="flex items-center pl-3 sm:pl-4 border-l border-zinc-200/50 dark:border-zinc-800/50 h-6 min-w-0"></div>
+            <div id="navbar-breadcrumb-container"
+                class="flex h-6 min-w-0 items-center border-l border-zinc-200/50 pl-3 dark:border-zinc-800/50 sm:pl-4">
+            </div>
         </div>
 
         {{-- Points (Teknisi) --}}
@@ -181,7 +179,7 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
                             ?
                             'border-glass-border-light bg-glass-light backdrop-blur-md shadow-[inset_0_1px_0px_rgba(255,255,255,0.6),0_0_9px_rgba(0,0,0,0.15),0_15px_30px_rgba(0,0,0,0.12)] dark:border-glass-border-dark dark:bg-glass-dark dark:shadow-[inset_0_1px_0px_rgba(255,255,255,0.08),0_0_9px_rgba(0,0,0,0.4),0_15px_30px_rgba(0,0,0,0.35)]' :
                             'border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-dark-primary'"
-                        class="z-[100] w-60 origin-top-right overflow-hidden rounded-2xl border p-1 transition-all duration-300 transform-gpu"
+                        class="z-[100] w-60 origin-top-right transform-gpu overflow-hidden rounded-2xl border p-1 transition-all duration-300"
                         id="profile-dropdown">
                         <div class="relative z-10">
                             {{-- User Info --}}

@@ -58,20 +58,20 @@
 <aside
     :class="[
         openSidebar ? 'translate-x-0' : '-translate-x-80',
-        dynamicBg
-            ? 'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md dark:bg-glass-dark dark:border-glass-border-dark'
-            : 'bg-white border-zinc-200 shadow-sm dark:bg-dark-primary dark:border-zinc-800'
+        dynamicBg ?
+        'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md dark:bg-glass-dark dark:border-glass-border-dark' :
+        'bg-white border-zinc-200 shadow-sm dark:bg-dark-primary dark:border-zinc-800'
     ]"
-    class="fixed bottom-4 left-4 top-4 z-40 hidden w-[272px] flex-col rounded-2xl border pb-6 transition-all duration-300 ease-out md:flex"
-    x-cloak
-    id="logo-sidebar" aria-label="Sidebar">
+    class="fixed bottom-4 left-4 top-4 z-40 hidden w-[272px] flex-col rounded-2xl border pb-6 transition-transform duration-300 ease-out will-change-transform md:flex"
+    x-cloak id="logo-sidebar" aria-label="Sidebar">
 
     {{-- Header / Toggle --}}
     <div id="tombolSidebar"
         class="mx-auto flex w-full items-center justify-between border-b border-zinc-200/50 p-5 dark:border-zinc-800/50">
         <div class="flex items-center justify-start pl-5">
             <a class="flex items-center gap-2.5" href="{{ config('app.url') }}">
-                <img class="h-8 w-8 object-contain rounded-lg" src="{{ asset('images/icons/icon-384x384.png') }}" alt="Attendance Logo" loading="lazy" />
+                <img class="h-8 w-8 rounded-lg object-contain" src="{{ asset('images/icons/icon-384x384.png') }}"
+                    alt="Attendance Logo" loading="lazy" />
                 <span class="text-lg font-bold italic tracking-wide text-zinc-900 dark:text-white">
                     Attendance
                 </span>
@@ -81,7 +81,13 @@
     </div>
 
     {{-- Search Bar --}}
-    <div class="px-5 pt-4" x-show="openSidebar">
+    <div class="px-5 pt-4" x-show="openSidebar"
+        x-transition:enter="transition-opacity ease-out duration-200"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition-opacity ease-in duration-100"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0">
         <div class="group relative">
             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                 <x-icons.search
@@ -89,7 +95,9 @@
             </div>
             <input type="text" x-model="menuSearch"
                 class="block w-full rounded-xl border-zinc-200 bg-zinc-50/50 py-2.5 pl-10 pr-3 text-sm tracking-wide text-zinc-900 placeholder-zinc-400 transition-colors duration-200 focus:border-red-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-red-600/20 dark:border-zinc-800 dark:text-white dark:placeholder-zinc-500 dark:focus:border-red-500 dark:focus:ring-red-500/20"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
                 placeholder="Cari Menu..." />
             <button x-show="menuSearch" @click="menuSearch = ''"
                 class="absolute inset-y-0 right-0 flex items-center pr-3 text-zinc-400 hover:text-red-500">
@@ -99,18 +107,17 @@
     </div>
 
     {{-- Navigation Links --}}
-    <div id="sidebar-scroll" class="overflow-x-hidden overflow-y-scroll p-5 pb-10" style="overflow-anchor: none" x-data x-init="const saved = sessionStorage.getItem('sidebar-scroll');
-    if (saved) $el.scrollTop = parseInt(saved);
-    $el.addEventListener('scroll', () => sessionStorage.setItem('sidebar-scroll', $el.scrollTop), { passive: true });
-    document.addEventListener('livewire:navigating', () => sessionStorage.setItem('sidebar-scroll', $el.scrollTop));">
+    <div id="sidebar-scroll" class="overflow-x-hidden overflow-y-scroll p-5 pb-10" style="overflow-anchor: none" x-data
+        x-init="const saved = sessionStorage.getItem('sidebar-scroll');
+        if (saved) $el.scrollTop = parseInt(saved);
+        $el.addEventListener('scroll', () => sessionStorage.setItem('sidebar-scroll', $el.scrollTop), { passive: true });
+        document.addEventListener('livewire:navigating', () => sessionStorage.setItem('sidebar-scroll', $el.scrollTop));">
         <ul class="space-y-2 font-medium">
             @foreach ($menu as $item)
                 @if (($item['type'] ?? '') === 'header')
                     {{-- ── Header / Spacer ────────────────────────────────── --}}
                     <li x-show="!menuSearch || '{{ strtolower($item['label']) }}'.includes(menuSearch.toLowerCase())"
-                        x-transition:enter="transition ease-out duration-200"
-                        x-transition:enter-start="opacity-0 translate-y-1"
-                        x-transition:enter-end="opacity-100 translate-y-0" class="px-4 py-2">
+                        class="px-4 py-2">
                         <span
                             class="text-[10px] font-bold uppercase tracking-[0.15em] text-zinc-400 dark:text-zinc-500">
                             {{ $item['label'] }}
@@ -121,10 +128,7 @@
                     @php
                         $isActive = collect($item['check'])->contains(fn($r) => Route::is($r));
                     @endphp
-                    <li x-show="!menuSearch || '{{ strtolower($item['label']) }}'.includes(menuSearch.toLowerCase())"
-                        x-transition:enter="transition ease-out duration-200"
-                        x-transition:enter-start="opacity-0 translate-y-1"
-                        x-transition:enter-end="opacity-100 translate-y-0">
+                    <li x-show="!menuSearch || '{{ strtolower($item['label']) }}'.includes(menuSearch.toLowerCase())">
                         <a href="{{ route($item['route']) }}"
                             class="{{ $isActive ? 'bg-zinc-100/80 dark:bg-white/5 text-red-600 dark:text-red-400 font-bold border-l-4 border-red-600' : 'text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-200 border-l-4 border-transparent' }} group relative flex items-center gap-3.5 rounded-r-2xl px-4 py-3 transition-all duration-200"
                             {{ $item['navigate'] ?? true ? 'wire:navigate' : '' }}>
