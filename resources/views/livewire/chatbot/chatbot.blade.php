@@ -26,7 +26,7 @@
                 <x-icons.chat class="h-5 w-5 text-red-500" />
                 Dacin AI
             </h2>
-            <x-button.primary wire:click="createConversation" iconOnly="true" title="Chat Baru">
+            <x-button.primary wire:click="createConversation" :pill="false" iconOnly="true" title="Chat Baru">
                 <x-icons.plus class="h-4 w-4" />
             </x-button.primary>
         </div>
@@ -96,7 +96,7 @@
             'bg-white/40 dark:bg-zinc-900/20 backdrop-blur-md' :
             'bg-white dark:bg-zinc-900'"
             class="flex items-center gap-3 border-b border-zinc-200 px-4 py-4 dark:border-zinc-800">
-            <x-button.secondary @click="showSidebar = !showSidebar" iconOnly="true"
+            <x-button.secondary @click="showSidebar = !showSidebar" iconOnly="true" :pill="false"
                 class="text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300">
                 <x-icons.bar class="h-5 w-5" />
             </x-button.secondary>
@@ -116,31 +116,10 @@
                 @endif
             </div>
 
-            {{-- Persona Switcher --}}
-            <div class="hidden items-center gap-1 rounded-xl border border-zinc-200 bg-zinc-50/50 p-1 dark:border-zinc-800 lg:flex"
-                x-bind:class="dynamicBg ?
-                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
-                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
-                <button wire:click="setPersona('professional')" title="Profesional — sopan, to-the-point"
-                    class="{{ $persona === 'professional' ? 'bg-white shadow-sm text-zinc-900 dark:bg-zinc-800 dark:text-white' : 'text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300' }} rounded-lg px-2.5 py-1 text-xs font-medium transition-all duration-200">
-                    💼 Profesional
-                </button>
-                <button wire:click="setPersona('cheerful')" title="Ceria — ramah, penuh semangat"
-                    class="{{ $persona === 'cheerful' ? 'bg-white shadow-sm text-zinc-900 dark:bg-zinc-800 dark:text-white' : 'text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300' }} rounded-lg px-2.5 py-1 text-xs font-medium transition-all duration-200">
-                    😊 Ceria
-                </button>
-                <button wire:click="setPersona('strict')" title="Tegas — lugas, formal"
-                    class="{{ $persona === 'strict' ? 'bg-white shadow-sm text-zinc-900 dark:bg-zinc-800 dark:text-white' : 'text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300' }} rounded-lg px-2.5 py-1 text-xs font-medium transition-all duration-200">
-                    🔒 Tegas
-                </button>
-            </div>
-
             {{-- Powered by badge --}}
             <div
                 class="hidden items-center gap-1.5 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-1.5 dark:from-blue-900/20 dark:to-indigo-900/20 lg:flex">
-                <svg class="h-3.5 w-3.5 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L1 21h22L12 2zm0 4l7.53 13H4.47L12 6z M11 10v4h2v-4h-2zm0 6v2h2v-2h-2z" />
-                </svg>
+                <x-icons.gemini class="h-3.5 w-3.5" />
                 <span class="text-xs font-medium text-blue-600 dark:text-blue-400">Gemini</span>
             </div>
         </div>

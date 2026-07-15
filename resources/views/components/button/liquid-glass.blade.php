@@ -5,7 +5,7 @@
     'id' => null,
     'href' => null,
     'iconOnly' => false,
-    'pill' => false,
+    'pill' => null,
     'color' => 'zinc',
 ])
 
@@ -50,12 +50,16 @@
 
     $palette = $colorMap[$color] ?? $colorMap['zinc'];
     $tag = $href ? 'a' : 'button';
-    $isPill = $iconOnly || $pill;
+    $isPill = $pill ?? $iconOnly;
     $radius = $isPill ? 'rounded-full' : 'rounded-lg';
     $sizing = $iconOnly ? 'h-9 w-9 p-0' : 'px-4 py-2 gap-2';
 
     $passedClass = $attributes->get('class', '');
-    $hasCustomPosition = str_contains($passedClass, 'absolute') || str_contains($passedClass, 'fixed') || str_contains($passedClass, 'static') || str_contains($passedClass, 'sticky');
+    $hasCustomPosition =
+        str_contains($passedClass, 'absolute') ||
+        str_contains($passedClass, 'fixed') ||
+        str_contains($passedClass, 'static') ||
+        str_contains($passedClass, 'sticky');
     $positionClass = $hasCustomPosition ? '' : 'relative';
 
     $baseClasses = implode(' ', [
