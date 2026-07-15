@@ -1,13 +1,10 @@
-<div class="{{ $class }} group relative flex flex-col overflow-hidden rounded-xl bg-gradient-to-br from-red-600 to-red-800 p-5 ring-1 ring-red-500/50 dark:from-dark-secondary/70 dark:to-dark-primary/70 dark:ring-zinc-800 sm:p-6"
-    x-bind:class="dynamicBg ?
-        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
-        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+<div class="{{ $class }} group relative flex flex-col overflow-hidden rounded-xl bg-gradient-to-br from-red-600 to-red-800 p-5 ring-1 ring-red-500/50 transition-all duration-300 dark:from-dark-secondary/70 dark:to-dark-primary/70 dark:ring-zinc-800 sm:p-6"
+    x-bind:class="dynamicBg ? 'backdrop-blur-md border border-red-500/20 dark:border-zinc-800/30 shadow-lg shadow-red-500/10' :
+        'border-transparent shadow-sm'">
 
     {{-- Decorative Background Pattern --}}
-    <div class="absolute -right-10 -top-10 h-40 w-40 rounded-full blur-3xl transition-transform duration-700 group-hover:scale-150 dark:bg-red-900/10"
-        x-bind:class="dynamicBg ?
-            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
-            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="absolute -right-10 -top-10 h-40 w-40 rounded-full blur-3xl transition-transform duration-700 group-hover:scale-150"
+        x-bind:class="dynamicBg ? 'bg-red-400/20 dark:bg-red-900/10' : 'hidden'">
     </div>
 
     <div class="relative z-10 flex flex-col">
@@ -18,10 +15,10 @@
                 </span>
                 @if ($isOnLeave)
                     <span
-                        class="inline-flex items-center rounded-lg bg-amber-400/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-200 ring-1 ring-amber-400/50"
+                        class="inline-flex items-center rounded-lg px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-300"
                         x-bind:class="dynamicBg ?
-                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
-                            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                            'bg-amber-400/20 text-amber-200 ring-1 ring-amber-400/50' :
+                            'bg-amber-500 text-zinc-950 shadow-sm'">
                         Sedang Cuti
                     </span>
                 @endif
