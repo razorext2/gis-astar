@@ -12,7 +12,7 @@
     $watch('openSidebar', value => window.toggleLenis && window.toggleLenis(!value));
     window.toggleLenis && window.toggleLenis(!openSidebar);" :class="{ 'no-blur': !dynamicBg }">
 
-    <div x-show="dynamicBg" x-transition.opacity.duration.500ms>
+    <div x-show="dynamicBg" x-transition.opacity.duration.300ms>
         <x-utils.dynamic-background />
     </div>
 
@@ -27,18 +27,16 @@
 
         @include('dashboard.layoutsDash.sidebar')
 
-        <div :class="openSidebar ? 'md:ml-72' : 'mx-0 md:mx-4'"
-            class="livewire-app-container mb-[6.25rem] mt-[5.75rem] flex flex-col overflow-hidden px-2 transition-all duration-300 ease-in-out md:mb-4 md:mt-[8rem] md:px-4 xl:px-10">
+        <div :class="openSidebar ? 'md:ml-72' : ''"
+            class="mb-20 mt-[7.5rem] px-4 transition-[margin-left] duration-300 ease-in-out will-change-transform md:mb-4 md:mt-[8rem] xl:px-10">
 
             {{-- title --}}
-            <div class="hidden flex-shrink-0 md:grid md:grid-cols-1">
-                @include('dashboard.layoutsDash.title')
-            </div>
+            @include('dashboard.layoutsDash.title')
 
             {{-- announcement --}}
-            <div class="hidden flex-shrink-0 md:block">
-                <livewire:utils.announcement-container />
-            </div>
+            <livewire:utils.announcement-container />
+
+            <x-utils.offline-alert class="mb-2" />
 
             {{-- main content (slot for Livewire full-page components) --}}
             <div class="min-h-0 flex-1">
