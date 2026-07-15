@@ -39,7 +39,7 @@
 
             {{-- Livewire Content --}}
             <div class="relative">
-                @livewire('handler.attendance.route')
+                <livewire:handler.attendance.route />
             </div>
         </div>
     </div>

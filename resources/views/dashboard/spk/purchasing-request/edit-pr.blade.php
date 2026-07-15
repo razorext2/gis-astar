@@ -44,7 +44,7 @@
             </div>
         </div>
 
-        @livewire('handler.spk.edit-purchasing-request', ['id' => $data->id, 'nomorOrder' => $data->nomor_order])
+        <livewire:handler.spk.edit-purchasing-request :id="$data->id" :nomorOrder="$data->nomor_order" />
 
     </div>
 @endsection

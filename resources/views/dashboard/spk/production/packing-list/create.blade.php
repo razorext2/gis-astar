@@ -43,7 +43,7 @@
 
             {{-- Livewire Content --}}
             <div class="relative">
-                @livewire('handler.production-histories.packing-list', ['id' => $data->id])
+                <livewire:handler.production-histories.packing-list :id="$data->id" />
             </div>
 
         </div>

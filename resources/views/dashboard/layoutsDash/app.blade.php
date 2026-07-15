@@ -29,12 +29,12 @@
             class="mb-20 mt-[7.5rem] px-4 transition-[margin-left] duration-300 ease-in-out will-change-transform md:mb-4 md:mt-[8rem] xl:px-10">
 
             {{-- title --}}
-            <div class="grid grid-cols-1">
-                @include('dashboard.layoutsDash.title')
-            </div>
+            @include('dashboard.layoutsDash.title')
 
             {{-- announcement --}}
-            @livewire('utils.announcement-container')
+            <livewire:utils.announcement-container />
+
+            <x-utils.offline-alert class="mb-2" />
 
             {{-- main content --}}
             @yield('content')

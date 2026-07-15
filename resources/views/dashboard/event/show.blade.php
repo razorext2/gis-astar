@@ -125,7 +125,7 @@
                     </div>
                 </div>
                 <div class="relative min-h-[300px] w-full">
-                    @livewire('chart.participant-visitor-graph', ['event_id' => $event->id])
+                    <livewire:chart.participant-visitor-graph :event_id="$event->id" />
                 </div>
             </div>
         </div>
@@ -141,12 +141,12 @@
                     </div>
 
                     {{-- Form Create (Inline/Modal Trigger) --}}
-                    @livewire('handler.big-event-participant.create', ['big_event_id' => $event->id])
+                    <livewire:handler.big-event-participant.create :big_event_id="$event->id" />
                 </div>
 
                 {{-- Table Component --}}
                 <div class="overflow-hidden">
-                    @livewire('big-event-participant-table', ['id' => $event->id])
+                    <livewire:big-event-participant-table :id="$event->id" />
                 </div>
             </div>
         </div>

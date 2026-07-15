@@ -21,6 +21,6 @@
 
         </div>
 
-        @livewire('handler.spk.create')
+        <livewire:handler.spk.create />
     </div>
 @endsection

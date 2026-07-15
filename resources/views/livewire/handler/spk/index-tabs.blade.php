@@ -25,15 +25,15 @@
     <div class="px-2 py-4 lg:p-6">
         @if ($activeTab === 'all')
             <div>
-                @livewire('spk-table')
+                <livewire:spk-table />
             </div>
         @elseif ($activeTab === 'timbangan')
             <div>
-                @livewire('spk-table', ['tipe_timbangan' => 'timbangan jembatan'])
+                <livewire:spk-table tipe_timbangan="timbangan jembatan" />
             </div>
         @elseif ($activeTab === 'non_timbangan')
             <div>
-                @livewire('spk-table', ['tipe_timbangan' => 'non timbangan jembatan'])
+                <livewire:spk-table tipe_timbangan="non timbangan jembatan" />
             </div>
         @endif
     </div>

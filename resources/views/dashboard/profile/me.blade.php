@@ -216,7 +216,7 @@
             @if (auth()->user()->kode_pegawai)
                 <div
                     class="flex-1 items-start rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-dark-primary">
-                    @livewire('utils.attendance-calendar')
+                    <livewire:utils.attendance-calendar />
                 </div>
             @endif
         </div>

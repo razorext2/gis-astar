@@ -20,6 +20,6 @@
             </p>
         </div>
 
-        @livewire('handler.driver.assign-add')
+        <livewire:handler.driver.assign-add />
     </div>
 @endsection

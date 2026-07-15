@@ -1,7 +1,7 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
     {{-- Summary Cards --}}
-    @livewire('components.card', ['type' => 'servermonitor'])
+    <livewire:components.card type="servermonitor" />
 
     <div
         class="mb-4 rounded-2xl border border-white/60 p-4 shadow-zinc-200/50 dark:border-zinc-800 dark:shadow-black/30 md:p-6"
@@ -26,5 +26,5 @@
         </div>
     </div>
 
-    @livewire('system.server-overview')
+    <livewire:system.server-overview />
 @endsection

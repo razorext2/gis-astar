@@ -29,7 +29,7 @@
                 <div x-show="open" @click.away="open = false" x-transition:enter="transition ease-out duration-200"
                     x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                     class="absolute left-0 top-36 z-20 w-72 rounded-2xl border border-zinc-200 bg-white p-4 shadow-xl dark:border-zinc-700 dark:bg-zinc-900">
-                    @livewire('utils.profile-picture-uploader')
+                    <livewire:utils.profile-picture-uploader />
                 </div>
             </div>
 
@@ -49,12 +49,12 @@
 
                 @if (auth()->user()->kode_pegawai)
                     <div class="mt-3">
-                        @livewire('handler.profile.bio-edit')
+                        <livewire:handler.profile.bio-edit />
                     </div>
                 @endif
 
                 <div class="mt-3">
-                    @livewire('inspire-component')
+                    <livewire:inspire-component />
                 </div>
             </div>
         </div>
@@ -62,7 +62,7 @@
 
     {{-- Digital Signature --}}
     <div class="mb-6">
-        @livewire('utils.digital-signature')
+        <livewire:utils.digital-signature />
     </div>
 
     {{-- Form Cards --}}

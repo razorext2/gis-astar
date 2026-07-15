@@ -1,7 +1,7 @@
 {{-- Goal: Show Production index page with Livewire wrapper component, Livewire: App\Livewire\Handler\Spk\ProductionTabs, Alpine: false --}}
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    @livewire('components.card', ['type' => 'spkproduction'])
+    <livewire:components.card type="spkproduction" />
 
     <div class="relative space-y-4">
         <div
@@ -18,6 +18,6 @@
             </p>
         </div>
 
-        @livewire('handler.spk.production-tabs')
+        <livewire:handler.spk.production-tabs />
     </div>
 @endsection

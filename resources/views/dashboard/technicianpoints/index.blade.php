@@ -19,6 +19,6 @@
             @endcan
         </header>
 
-        @livewire('handler.point.technician.index')
+        <livewire:handler.point.technician.index />
     </div>
 @endsection

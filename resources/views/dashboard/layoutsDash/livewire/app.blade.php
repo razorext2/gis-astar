@@ -37,7 +37,7 @@
 
             {{-- announcement --}}
             <div class="hidden flex-shrink-0 md:block">
-                @livewire('utils.announcement-container')
+                <livewire:utils.announcement-container />
             </div>
 
             {{-- main content (slot for Livewire full-page components) --}}

@@ -184,7 +184,7 @@
                 @can('purchasing-request-update')
                     @if (!is_null($spk->nomor_purchasing_request) || !is_null($spk->nomor_purchasing_request_json))
                         <div class="flex justify-end pt-6">
-                            @livewire('handler.spk.unassign-purchasing-request', ['id' => $spk->id, 'nomorOrder' => $spk->nomor_order])
+                            <livewire:handler.spk.unassign-purchasing-request :id="$spk->id" :nomorOrder="$spk->nomor_order" />
                         </div>
                     @endif
                 @endcan

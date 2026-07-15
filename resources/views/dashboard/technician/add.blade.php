@@ -208,7 +208,7 @@
                         <div class="mt-2 hidden text-sm text-red-500" id="alert-junction_type"></div>
                     </div>
 
-                    {{-- @livewire('handler.pdf.upload-pdf') --}}
+                    {{-- <livewire:handler.pdf.upload-pdf /> --}}
                     <div class="col-span-2 w-full">
                         <p class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Upload Dokumen BAST</p>
                         <p class="mb-2 text-xs text-red-500">

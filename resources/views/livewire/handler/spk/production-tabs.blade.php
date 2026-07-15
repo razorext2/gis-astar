@@ -25,20 +25,20 @@
     <div class="px-2 py-4 lg:p-6">
         @if ($activeTab === 'all')
             <div>
-                @livewire('production-table')
+                <livewire:production-table />
             </div>
         @elseif ($activeTab === 'timbangan')
             <div>
-                @livewire('production-table', ['tipe_timbangan' => 'timbangan jembatan'])
+                <livewire:production-table tipe_timbangan="timbangan jembatan" />
             </div>
         @elseif ($activeTab === 'non_timbangan')
             <div>
-                @livewire('production-table', ['tipe_timbangan' => 'non timbangan jembatan'])
+                <livewire:production-table tipe_timbangan="non timbangan jembatan" />
             </div>
         @endif
     </div>
 
     @can('produksi-approve')
-        @livewire('handler.production-histories.bulk-approve-histories')
+        <livewire:handler.production-histories.bulk-approve-histories />
     @endcan
 </div>

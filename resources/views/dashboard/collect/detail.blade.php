@@ -23,7 +23,7 @@
             </header>
         </div>
 
-        @livewire('handler.collect.show', ['id' => $data->id])
+        <livewire:handler.collect.show :id="$data->id" />
     </div>
 @endsection
 

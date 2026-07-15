@@ -31,23 +31,23 @@
             </div>
         </div>
         <div class="flex shrink-0">
-            @livewire('handler.leave-request.import-leave-request')
+            <livewire:handler.leave-request.import-leave-request />
         </div>
     </div>
 
     {{-- Tab: Kelola Saldo --}}
     <div x-show="activeTab === 'balances'" x-transition>
-        @livewire('handler.leave-request.manage-balances.table')
+        <livewire:handler.leave-request.manage-balances.table />
     </div>
 
     {{-- Tab: Tipe Cuti --}}
     <div x-show="activeTab === 'types'" x-transition>
-        @livewire('handler.leave-request.manage-leave-types')
+        <livewire:handler.leave-request.manage-leave-types />
     </div>
 
     {{-- Tab: Sedang Cuti --}}
     <div x-show="activeTab === 'current'" x-transition>
-        @livewire('handler.leave-request.current-leave-list')
+        <livewire:handler.leave-request.current-leave-list />
     </div>
 
 </div>

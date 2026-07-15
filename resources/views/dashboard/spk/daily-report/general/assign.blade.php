@@ -16,7 +16,7 @@
         </div>
 
         <div class="flex flex-col gap-2 lg:gap-4">
-            @livewire('handler.spk.daily-report.assign')
+            <livewire:handler.spk.daily-report.assign />
         </div>
     </div>
 @endsection

@@ -61,7 +61,7 @@
             {{-- Livewire Content Area --}}
             <div class="space-y-6">
                 @if ($barang['packing_list_type'] === 'manual')
-                    @livewire('handler.production-histories.packing-list-kit', ['idbarang' => $barang['id_barang'], 'idspk' => $data->spk->id])
+                    <livewire:handler.production-histories.packing-list-kit :idbarang="$barang['id_barang']" :idspk="$data->spk->id" />
 
                     <div class="space-y-4">
                         <div class="flex items-center gap-2 border-b border-zinc-100 pb-2 dark:border-zinc-800">
@@ -69,14 +69,14 @@
                             <h4 class="text-sm font-bold text-zinc-900 dark:text-white">Daftar Peti</h4>
                         </div>
 
-                        @livewire('packing-list-kit-table', ['idbarang' => $barang['id_barang']])
+                        <livewire:packing-list-kit-table :idbarang="$barang['id_barang']" />
                     </div>
                 @endif
 
                 @if ($barang['packing_list_type'] === 'upload')
                     <div class="rounded-xl border border-zinc-100 p-4 dark:border-zinc-800"
     x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
-                        @livewire('handler.production-histories.packing-list-files', ['idbarang' => $barang['id_barang'], 'idspk' => $data->spk->id])
+                        <livewire:handler.production-histories.packing-list-files :idbarang="$barang['id_barang']" :idspk="$data->spk->id" />
                     </div>
                 @endif
             </div>

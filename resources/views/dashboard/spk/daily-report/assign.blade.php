@@ -24,10 +24,10 @@
 
         <div class="flex flex-col gap-2 lg:gap-4">
             @can('laporan-harian-spk-assign')
-                @livewire('handler.spk.daily-report.assign')
+                <livewire:handler.spk.daily-report.assign />
             @endcan
 
-            @livewire('handler.spk.daily-report.reports', ['id' => request()->get('spk_id')])
+            <livewire:handler.spk.daily-report.reports :id="request()->get('spk_id')" />
         </div>
     </div>
 @endsection

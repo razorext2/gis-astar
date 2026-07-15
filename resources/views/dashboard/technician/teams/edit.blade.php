@@ -16,6 +16,6 @@
         </div>
 
         {{-- livewire edit component --}}
-        @livewire('handler.teams.edit', ['team_code' => $team_code])
+        <livewire:handler.teams.edit :team_code="$team_code" />
     </div>
 @endsection

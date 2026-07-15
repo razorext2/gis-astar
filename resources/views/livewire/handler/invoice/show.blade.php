@@ -212,7 +212,7 @@
 
                                     @if (!empty($detail->informasi_pengiriman['resi']))
                                         <div class="mt-3 border-t border-zinc-100 pt-2 dark:border-zinc-800">
-                                            @livewire('handler.invoice.fetch-resi', ['resi' => $detail->informasi_pengiriman['resi'] ?? '0'], key('resi-' . $detail->id))
+                                            <livewire:handler.invoice.fetch-resi :resi="$detail->informasi_pengiriman['resi'] ?? '0'" :wire:key="'resi-' . $detail->id" />
                                         </div>
                                     @endif
                                 </div>

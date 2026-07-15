@@ -6,7 +6,7 @@
             <p class="text-sm text-gray-600 dark:text-gray-400"> Perbandingan data dari API dan data yang ada didatabase.
             </p>
             {{-- livewire --}}
-            @livewire('handler.technician.fetch', ['id' => $id])
+            <livewire:handler.technician.fetch :id="$id" />
         </div>
     </div>
 @endsection

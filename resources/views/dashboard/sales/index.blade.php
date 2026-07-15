@@ -1,6 +1,6 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    @livewire('components.card', ['type' => 'salesreport'])
+    <livewire:components.card type="salesreport" />
 
     {{-- Handler: validate sales modal — dipasang sekali di luar tabel, diaktifkan via event --}}
     @can('sales-approve')

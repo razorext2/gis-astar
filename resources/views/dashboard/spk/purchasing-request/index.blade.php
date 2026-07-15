@@ -1,6 +1,6 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    @livewire('components.card', ['type' => 'spkpurchasingrequest'])
+    <livewire:components.card type="spkpurchasingrequest" />
 
     <div
         class="flex flex-col gap-2 rounded-xl border border-zinc-200 px-2 py-4 shadow-md dark:border-zinc-800 dark:shadow-none lg:gap-4 lg:p-6"
@@ -15,7 +15,7 @@
 
         {{-- table here --}}
         <div>
-            @livewire('purchasing-request-table')
+            <livewire:purchasing-request-table />
         </div>
 
     </div>

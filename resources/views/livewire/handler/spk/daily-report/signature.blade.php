@@ -229,7 +229,7 @@
         {{-- kontainer untuk tombol kirim email --}}
         @if ($model->hasBeenSigned() && $model->assignTo->hasBeenSigned())
             <div class="mt-2 flex justify-center gap-x-2 lg:mt-4 lg:gap-x-4">
-                @livewire('handler.spk.daily-report.pdf.laporan-harian', ['assignmentId' => $model->id], key($model->id))
+                <livewire:handler.spk.daily-report.pdf.laporan-harian :assignmentId="$model->id" :wire:key="$model->id" />
 
                 <x-button.success wire:click.prevent="sentPdfToEmail" id="btn-sent-report-to-email"
                     wire:loading.attr="disabled" wire:target="sentPdfToEmail">

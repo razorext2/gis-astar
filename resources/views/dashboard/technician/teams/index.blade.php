@@ -1,6 +1,6 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    @livewire('components.card', ['type' => 'technicianteam'])
+    <livewire:components.card type="technicianteam" />
 
     <div
         class="rounded-xl border border-zinc-200 p-4 shadow-sm dark:border-zinc-800 md:p-6 lg:p-8"
@@ -26,6 +26,6 @@
         </div>
 
         {{-- livewire index component --}}
-        @livewire('handler.teams.index')
+        <livewire:handler.teams.index />
     </div>
 @endsection

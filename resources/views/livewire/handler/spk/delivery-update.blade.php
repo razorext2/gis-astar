@@ -300,5 +300,5 @@
     </x-utils.accordion-item>
 
     {{-- Riwayat List --}}
-    @livewire('handler.spk.delivery-barang-list', ['id' => $spk_data->id])
+    <livewire:handler.spk.delivery-barang-list :id="$spk_data->id" />
 </div>

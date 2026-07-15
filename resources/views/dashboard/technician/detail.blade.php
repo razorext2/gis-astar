@@ -38,6 +38,6 @@
             @endcan
         </div>
 
-        @livewire('handler.technician.show', ['id' => $technician->id])
+        <livewire:handler.technician.show :id="$technician->id" />
     </div>
 @endsection

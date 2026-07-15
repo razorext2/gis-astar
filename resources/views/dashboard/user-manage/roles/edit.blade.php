@@ -21,10 +21,10 @@
                     {{ __('Silahkan sesuaikan data dibawah ini dengan data yang benar.') }}
                 </p>
 
-                @livewire('handler.roles.delete', ['id' => $id])
+                <livewire:handler.roles.delete :id="$id" />
             </div>
 
-            @livewire('handler.roles.update', ['id' => $id])
+            <livewire:handler.roles.update :id="$id" />
         </div>
     </div>
 @endsection

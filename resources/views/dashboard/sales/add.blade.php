@@ -116,7 +116,7 @@
         </div>
     </div>
     @push('modals')
-        @livewire('utils.camera-stream-modal')
+        <livewire:utils.camera-stream-modal />
     @endpush
 @endsection
 @push('script')

@@ -25,6 +25,6 @@
             </div>
         </div>
 
-        @livewire('handler.spk.daily-report.detail.hourly', ['id' => $daily])
+        <livewire:handler.spk.daily-report.detail.hourly :id="$daily" />
     </div>
 @endsection

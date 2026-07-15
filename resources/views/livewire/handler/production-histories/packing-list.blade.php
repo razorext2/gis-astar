@@ -367,7 +367,7 @@
         </div>
 
         <div class="relative min-h-[200px]">
-            @livewire('packing-list-table', ['id' => $id], key($id))
+            <livewire:packing-list-table :id="$id" :wire:key="$id" />
         </div>
     </div>
 

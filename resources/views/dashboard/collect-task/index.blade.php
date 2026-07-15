@@ -1,6 +1,6 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    @livewire('components.card', ['type' => 'collectoridcnonppn'])
+    <livewire:components.card type="collectoridcnonppn" />
 
     <div class="relative grid grid-cols-1 gap-4">
 

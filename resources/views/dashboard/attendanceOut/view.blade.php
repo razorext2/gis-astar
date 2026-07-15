@@ -1,9 +1,9 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    @livewire('components.card', ['type' => 'attendanceout'])
+    <livewire:components.card type="attendanceout" />
 
     @can('attendance-approve')
-        @livewire('components.unverified-attendance', ['type' => 'out'])
+        <livewire:components.unverified-attendance type="out" />
     @endcan
 
     <div

@@ -142,7 +142,7 @@
                                 @if ($item['counter'] ?? null)
                                     <div class="flex-shrink-0">
                                         @if (!($item['counter_permission'] ?? null) || auth()->user()->can($item['counter_permission']))
-                                            @livewire($item['counter'])
+                                            <livewire:$item['counter'] />
                                         @endif
                                     </div>
                                 @endif

@@ -28,10 +28,7 @@
 
         </div>
 
-        @livewire('handler.production-histories.create', [
-            'id_produksi' => $data->id,
-            'status_produksi' => $data->productionHistories?->last()?->status_produksi,
-        ])
+        <livewire:handler.production-histories.create :id_produksi="$data->id" :status_produksi="$data->productionHistories?->last()?->status_produksi" />
 
     </div>
 @endsection

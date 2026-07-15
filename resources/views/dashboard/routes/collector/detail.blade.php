@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        @livewire('handler.route.collector', ['kode_pegawai' => $pegawai->kode_pegawai])
+        <livewire:handler.route.collector :kode_pegawai="$pegawai->kode_pegawai" />
 
     </div>
 @endsection

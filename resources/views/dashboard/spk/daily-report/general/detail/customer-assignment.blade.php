@@ -32,7 +32,7 @@
         </div>
 
         <div class="flex flex-col gap-2 lg:gap-4">
-            @livewire('handler.spk.daily-report.signature', ['id' => $id])
+            <livewire:handler.spk.daily-report.signature :id="$id" />
         </div>
 
     </div>

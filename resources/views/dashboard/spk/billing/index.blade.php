@@ -1,6 +1,6 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    @livewire('components.card', ['type' => 'spkbilling'])
+    <livewire:components.card type="spkbilling" />
 
     <div class="grid grid-cols-1 gap-6">
 
@@ -18,7 +18,7 @@
                 </p>
             </div>
 
-            @livewire('billing-table')
+            <livewire:billing-table />
         </div>
     </div>
 @endsection

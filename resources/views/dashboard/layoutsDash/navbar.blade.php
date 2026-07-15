@@ -66,14 +66,14 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
         {{-- Points (Teknisi) --}}
         <div id="point-container" class="hidden sm:block">
             @if (auth()->user()->hasRole('Teknisi'))
-                @livewire('widget.technician.points-accumulation')
+                <livewire:widget.technician.points-accumulation />
             @endif
         </div>
 
         {{-- Right Actions --}}
         <div class="flex items-center justify-end gap-2 sm:gap-3">
 
-            @livewire('utils.ping-checker')
+            <livewire:utils.ping-checker />
 
             {{-- Notification --}}
             <div id="notifications" class="relative" x-data="{
@@ -99,7 +99,7 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
                     class="relative rounded-xl p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-300 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white dark:focus:ring-zinc-700"
                     id="notificationButton" type="button" wire:ignore>
                     <span class="sr-only">View notifications</span>
-                    @livewire('notification-bell')
+                    <livewire:notification-bell />
                 </button>
 
                 {{-- Notification Dropdown (teleported to escape nav backdrop-filter context) --}}
@@ -130,7 +130,7 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
 
                         {{-- Notification List --}}
                         <div class="max-h-72 overflow-y-auto md:max-h-96" id="notificationContainer">
-                            @livewire('utils.notification-dropdown')
+                            <livewire:utils.notification-dropdown />
                         </div>
 
                         {{-- Footer --}}
@@ -220,7 +220,7 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
                                 @hasanyrole(['Admin', 'HRD', 'Management', 'Management-PKU', 'Management-JKT',
                                     'Management-Special'])
                                     <li>
-                                        @livewire('utils.update-log')
+                                        <livewire:utils.update-log />
                                     </li>
                                 @endhasanyrole
                                 <li>

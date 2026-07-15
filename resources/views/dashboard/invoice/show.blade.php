@@ -27,7 +27,7 @@
 
         </div>
 
-        @livewire('handler.invoice.show', ['id' => $id])
+        <livewire:handler.invoice.show :id="$id" />
     </div>
 
     @push('script')

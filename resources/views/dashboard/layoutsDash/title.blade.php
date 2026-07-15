@@ -85,7 +85,7 @@
         {{-- Smooth height, opacity, and margin transitions wrapper --}}
         <div :style="isSticky ? 'height: 0px; opacity: 0; margin-top: 0px;' : 'height: 16px; opacity: 1; margin-top: 6px;'"
              class="transition-all duration-300 ease-in-out overflow-hidden w-full flex items-center">
-            @livewire('utils.breadcrumb')
+            <livewire:utils.breadcrumb />
         </div>
     </div>
 </div>

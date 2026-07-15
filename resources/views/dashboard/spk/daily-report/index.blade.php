@@ -1,6 +1,6 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    @livewire('components.card', ['type' => 'spkdailyreport'])
+    <livewire:components.card type="spkdailyreport" />
 
     <div
         class="grid grid-cols-1 rounded-xl border border-zinc-200 px-2 py-4 shadow-md dark:border-zinc-800 dark:shadow-none lg:p-6"
@@ -17,7 +17,7 @@
             </p>
         </div>
 
-        @livewire('daily-report-table')
+        <livewire:daily-report-table />
 
     </div>
 @endsection

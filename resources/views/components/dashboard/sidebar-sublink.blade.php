@@ -23,7 +23,7 @@
 
             @if ($counter)
                 <div class="ml-2 flex-shrink-0">
-                    @livewire($counter)
+                    <livewire:dynamic-component :component="$counter" />
                 </div>
             @endif
         </div>

@@ -515,16 +515,16 @@
     </div>
 
     {{-- progress spk --}}
-    @livewire('utils.progres-spk', ['id' => $data->id])
+    <livewire:utils.progres-spk :id="$data->id" />
     {{-- end progress spk --}}
 
     @can('spk-history-view')
-        @livewire('handler.spk.spk-histories', ['id' => $data->id])
+        <livewire:handler.spk.spk-histories :id="$data->id" />
     @endcan
 
     {{-- laporan fondasi --}}
     @can('laporan-fondasi-list')
-        @livewire('handler.spk.laporan-fondasi.index', ['id_spk' => $data->id])
+        <livewire:handler.spk.laporan-fondasi.index :id_spk="$data->id" />
     @endcan
 
     {{-- Modal Reassign SPK --}}

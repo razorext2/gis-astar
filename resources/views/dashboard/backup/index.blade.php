@@ -16,7 +16,7 @@
             </div>
 
             <div>
-                @livewire('handler.backups.create')
+                <livewire:handler.backups.create />
             </div>
         </div>
 

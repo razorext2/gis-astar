@@ -19,7 +19,7 @@
                 {{ __('Silahkan sesuaikan data dibawah ini dengan data yang benar.') }}
             </p>
 
-            @livewire('handler.roles.create')
+            <livewire:handler.roles.create />
 
         </div>
     </div>

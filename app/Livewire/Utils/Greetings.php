@@ -8,7 +8,10 @@ use Livewire\Component;
 class Greetings extends Component
 {
     public $greet;
+
     public $isOnLeave = false;
+
+    public $class = '';
 
     public function mount()
     {

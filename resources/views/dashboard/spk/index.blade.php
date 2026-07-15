@@ -2,7 +2,7 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
     {{-- carousel for cards --}}
-    @livewire('components.card', ['type' => 'spk'])
+    <livewire:components.card type="spk" />
 
     <div class="relative space-y-4">
         <div
@@ -27,6 +27,6 @@
             </x-button.success>
         @endcan
 
-        @livewire('handler.spk.index-tabs')
+        <livewire:handler.spk.index-tabs />
     </div>
 @endsection

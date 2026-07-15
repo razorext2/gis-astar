@@ -26,6 +26,6 @@
 
         </div>
 
-        @livewire('handler.spk.edit', ['id' => $spk->id])
+        <livewire:handler.spk.edit :id="$spk->id" />
     </div>
 @endsection

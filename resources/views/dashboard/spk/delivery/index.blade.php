@@ -1,7 +1,7 @@
 {{-- Goal: Show SPK Delivery index page with Livewire wrapper component, Livewire: App\Livewire\Handler\Spk\DeliveryTabs, Alpine: false --}}
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    @livewire('components.card', ['type' => 'spkdelivery'])
+    <livewire:components.card type="spkdelivery" />
 
     <div class="relative space-y-4">
         <div
@@ -17,6 +17,6 @@
             </p>
         </div>
 
-        @livewire('handler.spk.delivery-tabs')
+        <livewire:handler.spk.delivery-tabs />
     </div>
 @endsection

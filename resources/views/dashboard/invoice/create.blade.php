@@ -21,6 +21,6 @@
             </div>
         </div>
 
-        @livewire('handler.invoice.create', ['id' => null, 'tipe_tagihan' => Request::get('tipe_tagihan')])
+        <livewire:handler.invoice.create :id="null" :tipe_tagihan="Request::get('tipe_tagihan')" />
     </div>
 @endsection

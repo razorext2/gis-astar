@@ -20,10 +20,10 @@
                 {{ __('Silahkan sesuaikan data dibawah ini dengan data yang benar.') }}
             </p>
 
-            @livewire('handler.permissions.delete', ['id' => $id])
+            <livewire:handler.permissions.delete :id="$id" />
         </div>
 
-        @livewire('handler.permissions.update', ['id' => $id])
+        <livewire:handler.permissions.update :id="$id" />
 
     </div>
 @endsection

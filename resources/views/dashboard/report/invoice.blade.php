@@ -2,5 +2,5 @@
 @extends('dashboard.layoutsDash.app')
 
 @section('content')
-    @livewire('handler.report.export-invoice')
+    <livewire:handler.report.export-invoice />
 @endsection

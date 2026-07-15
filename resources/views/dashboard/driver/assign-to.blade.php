@@ -19,6 +19,6 @@
             </p>
         </div>
 
-        @livewire('handler.driver.assign-to', ['id' => $id])
+        <livewire:handler.driver.assign-to :id="$id" />
     </div>
 @endsection

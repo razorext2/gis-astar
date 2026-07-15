@@ -24,15 +24,15 @@
     <div class="px-2 py-4 lg:p-6">
         @if ($activeTab === 'all')
             <div>
-                @livewire('spk-delivery-table')
+                <livewire:spk-delivery-table />
             </div>
         @elseif ($activeTab === 'process')
             <div>
-                @livewire('spk-delivery-table', ['status_kirim' => 0])
+                <livewire:spk-delivery-table :status_kirim="0" />
             </div>
         @elseif ($activeTab === 'completed')
             <div>
-                @livewire('spk-delivery-table', ['status_kirim' => 1])
+                <livewire:spk-delivery-table :status_kirim="1" />
             </div>
         @endif
     </div>

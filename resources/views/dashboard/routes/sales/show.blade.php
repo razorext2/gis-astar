@@ -19,7 +19,7 @@
 
             </div>
 
-            @livewire('sales-route-table')
+            <livewire:sales-route-table />
 
         </div>
     </div>

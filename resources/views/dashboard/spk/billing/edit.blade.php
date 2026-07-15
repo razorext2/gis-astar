@@ -26,6 +26,6 @@
         </div>
 
         {{-- Main Content --}}
-        @livewire('handler.spk.billing.update', ['id' => $id])
+        <livewire:handler.spk.billing.update :id="$id" />
     </div>
 @endsection

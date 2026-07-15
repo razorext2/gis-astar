@@ -1,4 +1,4 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    @livewire('handler.system.holiday.index')
+    <livewire:handler.system.holiday.index />
 @endsection

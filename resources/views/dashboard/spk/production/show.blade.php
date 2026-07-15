@@ -310,7 +310,7 @@
                     @endcan
                 </div>
 
-                @livewire('handler.production-histories.histories-list', ['id' => $data->id], $data->id)
+                <livewire:handler.production-histories.histories-list :id="$data->id" :wire:key="$data->id" />
             </div>
         @endcan
         {{-- End Riwayat Produksi --}}
