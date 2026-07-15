@@ -75,6 +75,23 @@ class Attendance extends Model
         return (1 - round($this->distance, 2)) * 100;
     }
 
+    /**
+     * Get the formatted late duration from jam_masuk relative to 08:00.
+     * Returns null if the attendance was on time or early.
+     */
+    public function getLateDurationAttribute(): ?string
+    {
+        $masuk = Carbon::parse($this->jam_masuk);
+        $target = $masuk->copy()->setTime(8, 0, 0);
+        $diffInSeconds = $target->diffInSeconds($masuk, false);
+
+        if ($diffInSeconds <= 0) {
+            return null;
+        }
+
+        return gmdate('H:i:s', $diffInSeconds);
+    }
+
     public function pegawaiRelasi()
     {
         return $this->belongsTo(Pegawai::class, 'kode_pegawai', 'kode_pegawai');

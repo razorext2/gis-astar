@@ -1,42 +1,58 @@
 <?php
 
-/** Goal: Display check-in records for today, Caller: Dashboard, Deps: Attendance, Pegawai, User */
+/** Goal: Display check-in and check-out records for a selected date, Caller: Dashboard, Deps: Attendance, AttendanceOut, Pegawai, User */
 
 namespace App\Livewire\Handler\Attendance;
 
 use App\Models\Attendance;
+use App\Models\AttendanceOut;
+use App\Services\Attendance\AttendanceService;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Lazy;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
+#[Lazy]
 class Today extends Component
 {
     use WithPagination;
 
-    public $attendance;
+    public Attendance|AttendanceOut|null $attendance = null;
 
+    #[Url]
     public string $date;
 
+    #[Url]
     public string $role = '';
+
+    #[Url]
+    public string $search = '';
 
     public string $address = '';
 
     public bool $showModal = false;
 
-    public function mount()
+    public bool $isModalOut = false;
+
+    public function mount(): void
     {
         $this->date = Carbon::now()->toDateString();
+    }
+
+    public function placeholder(): string
+    {
+        return '<x-skeleton.today />';
     }
 
     /**
      * Centralized role options based on user permissions.
      */
     #[Computed]
-    public function roleOptions()
+    public function roleOptions(): array
     {
         $user = auth()->user();
         $options = [];
@@ -88,38 +104,12 @@ class Today extends Component
         return $options;
     }
 
-    public function fetchAddress($lat, $long)
+    public function openModal(int $id): void
     {
-        $cacheKey = 'address_lat_long_'.round($lat, 5).'_'.round($long, 5);
+        if ($this->showModal && $this->attendance?->id == $id && ! $this->isModalOut) {
+            $this->showModal = false;
 
-        return Cache::remember($cacheKey, 86400 * 30, function () use ($lat, $long) {
-            try {
-                $response = Http::withHeaders([
-                    'User-Agent' => 'IndodacinFaceID/1.1 (indodacinfaceid@gmail.com)',
-                ])->timeout(10)->get('https://nominatim.openstreetmap.org/reverse.php', [
-                    'lat' => $lat,
-                    'lon' => $long,
-                    'zoom' => 18,
-                    'format' => 'jsonv2',
-                ]);
-
-                if ($response->successful()) {
-                    return $response->json()['display_name'] ?? 'Alamat tidak ditemukan';
-                }
-
-                return 'Gagal mengambil alamat';
-            } catch (\Exception $e) {
-                Log::error('Gagal fetch alamat: '.$e->getMessage());
-
-                return 'Terjadi kesalahan atau API timeout';
-            }
-        });
-    }
-
-    public function openModal($id)
-    {
-        if ($this->showModal && $this->attendance?->id == $id) {
-            return $this->showModal = false;
+            return;
         }
 
         $data = Attendance::with(['pegawaiRelasi', 'user'])->find($id);
@@ -129,45 +119,68 @@ class Today extends Component
         }
 
         $this->attendance = $data;
-        $this->address = $this->fetchAddress($data->latitude, $data->longitude);
+        $this->isModalOut = false;
+        $this->address = AttendanceService::fetchAddress($data->latitude, $data->longitude);
         $this->showModal = true;
+        $this->dispatch('attendance-modal-ready');
     }
 
-    public function getLateDuration($jamMasuk)
+    public function openModalOut(int $id): void
     {
-        $masuk = Carbon::parse($jamMasuk);
-        $target = $masuk->copy()->setTime(8, 0, 0);
-        $diffInSeconds = $target->diffInSeconds($masuk, false);
+        if ($this->showModal && $this->attendance?->id == $id && $this->isModalOut) {
+            $this->showModal = false;
 
-        if ($diffInSeconds <= 0) {
-            return null;
+            return;
         }
 
-        return gmdate('H:i:s', $diffInSeconds);
+        $data = AttendanceOut::with(['pegawaiRelasi', 'user'])->find($id);
+
+        if (! $data) {
+            return;
+        }
+
+        $this->attendance = $data;
+        $this->isModalOut = true;
+        $this->address = AttendanceService::fetchAddress($data->latitude, $data->longitude);
+        $this->showModal = true;
+        $this->dispatch('attendance-modal-ready');
     }
 
-    public function render()
+    public function applyFilter(): void
     {
-        $data = Attendance::with(['pegawaiRelasi', 'user.roles'])
-            ->whereDate('created_at', $this->date)
-            ->where('status', '=', 1)
-            ->when($this->role, function ($query) {
-                return $query->whereHas('user.roles', fn ($q) => $q->where('name', $this->role));
-            })
-            ->when(! $this->role, function ($query) {
-                $targetRoles = array_keys($this->roleOptions);
+        $this->resetPage('pageIn');
+        $this->resetPage('pageOut');
+    }
 
-                if (! empty($targetRoles)) {
-                    return $query->whereHas('user.roles', function ($q) use ($targetRoles) {
-                        $q->whereIn('name', $targetRoles);
-                    });
-                }
+    public function updatedSearch(): void
+    {
+        $this->resetPage('pageIn');
+        $this->resetPage('pageOut');
+    }
 
-                return $query;
-            })
-            ->latest('waktuori')
-            ->paginate(6);
+    /**
+     * Build a base attendance query with role-based filtering applied.
+     *
+     * @param  class-string<Attendance|AttendanceOut>  $model
+     */
+    private function buildAttendanceQuery(string $model, string $dateColumn): Builder
+    {
+        $targetRoles = array_keys($this->roleOptions);
 
-        return view('livewire.handler.attendance.today', compact('data'));
+        return $model::with(['pegawaiRelasi', 'user.roles'])
+            ->whereDate($dateColumn, $this->date)
+            ->where('status', 1)
+            ->when($this->search, fn ($q) => $q->whereHas('pegawaiRelasi', fn ($q) => $q->where('full_name', 'like', "%{$this->search}%")))
+            ->when($this->role, fn ($q) => $q->whereHas('user.roles', fn ($q) => $q->where('name', $this->role)))
+            ->when(! $this->role && ! empty($targetRoles), fn ($q) => $q->whereHas('user.roles', fn ($q) => $q->whereIn('name', $targetRoles)))
+            ->latest('waktuori');
+    }
+
+    public function render(): View
+    {
+        $ins = $this->buildAttendanceQuery(Attendance::class, 'jam_masuk')->paginate(6, ['*'], 'pageIn');
+        $outs = $this->buildAttendanceQuery(AttendanceOut::class, 'jam_keluar')->paginate(6, ['*'], 'pageOut');
+
+        return view('livewire.handler.attendance.today', compact('ins', 'outs'));
     }
 }
