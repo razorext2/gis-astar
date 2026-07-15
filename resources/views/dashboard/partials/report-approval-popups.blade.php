@@ -98,7 +98,7 @@
                     tapping ? 'is-tapping' : '',
                     dynamicBg
                         ? 'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-none'
-                        : 'bg-white border-zinc-200 shadow-sm hover:bg-zinc-50 dark:bg-dark-primary dark:border-zinc-800 dark:hover:bg-zinc-800/80'
+                        : 'bg-white border-zinc-200 shadow-sm hover:bg-zinc-50 dark:bg-dark-primary dark:border-zinc-800 dark:hover:bg-zinc-800'
                 ]"
                 class="liquid-btn group flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border transition-[background-color,border-color,box-shadow] duration-300 ease-out"
                 style="pointer-events: auto;" x-cloak>
