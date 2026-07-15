@@ -49,7 +49,7 @@ class Attendance extends Model
         $storagePath = "labels/{$this->kode_pegawai}/capturedImg/{$this->photoURL}.png";
 
         if (Storage::disk('public')->exists($storagePath)) {
-            return asset(sha1('libs') . '/' . $this->photoURL . '.png');
+            return asset(sha1('libs').'/'.$this->photoURL.'.png');
         }
 
         return asset('assets/img/noImage.webp');
@@ -81,7 +81,7 @@ class Attendance extends Model
      */
     public function getLateDurationAttribute(): ?string
     {
-        $masuk = Carbon::parse($this->jam_masuk);
+        $masuk = Carbon::parse($this->created_at);
         $target = $masuk->copy()->setTime(8, 0, 0);
         $diffInSeconds = $target->diffInSeconds($masuk, false);
 
@@ -89,7 +89,22 @@ class Attendance extends Model
             return null;
         }
 
-        return gmdate('H:i:s', $diffInSeconds);
+        $hours = floor($diffInSeconds / 3600);
+        $minutes = floor(($diffInSeconds % 3600) / 60);
+        $seconds = $diffInSeconds % 60;
+
+        $parts = [];
+        if ($hours > 0) {
+            $parts[] = "{$hours} jam";
+        }
+        if ($minutes > 0) {
+            $parts[] = "{$minutes} menit";
+        }
+        if ($seconds > 0 && $hours == 0) {
+            $parts[] = "{$seconds} detik";
+        }
+
+        return implode(' ', $parts) ?: '1 detik';
     }
 
     public function pegawaiRelasi()
