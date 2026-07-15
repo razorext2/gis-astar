@@ -28,10 +28,7 @@
         @include('dashboard.layoutsDash.sidebar')
 
         <div :class="openSidebar ? 'md:ml-72' : ''"
-            class="mb-20 mt-[7.5rem] px-4 transition-[margin-left] duration-300 ease-in-out will-change-transform md:mb-4 md:mt-[8rem] xl:px-10">
-
-            {{-- title --}}
-            @include('dashboard.layoutsDash.title')
+            class="mb-20 mt-[5.5rem] px-4 transition-[margin-left] duration-300 ease-in-out will-change-transform md:mb-4 md:mt-[6rem] xl:px-4">
 
             {{-- announcement --}}
             <livewire:utils.announcement-container />
