@@ -4,17 +4,13 @@
         wire:click="$set('showLogUpdateModal', true)">
         <x-slot name="icon">
             <div
-                class="flex h-8 w-8 items-center justify-center rounded-lg text-white shadow-sm transition-transform group-hover:scale-110"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-amber-600 text-white shadow-sm transition-transform duration-300 group-hover:scale-110 dark:bg-amber-500">
+                <x-icons.clock class="h-4 w-4" />
             </div>
         </x-slot>
 
         <div class="flex flex-col">
-            <span class="text-sm font-medium text-white">View Update Log</span>
+            <span class="text-sm font-medium">View Update Log</span>
         </div>
     </x-button.warning>
 
@@ -22,9 +18,7 @@
         iconContainerClass="bg-red-600 shadow-red-500/20">
 
         <x-slot name="icon">
-            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-            </svg>
+            <x-icons.code class="h-5 w-5" />
         </x-slot>
 
         {{-- Stats Bar --}}
@@ -116,7 +110,9 @@
                                         @endphp
                                         <div title="{{ $file['name'] }}"
                                             class="flex items-center gap-2 rounded-lg border border-zinc-200/50 bg-white p-2 transition-all hover:border-zinc-200 dark:border-zinc-800/50 dark:hover:border-zinc-700"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                                            x-bind:class="dynamicBg ?
+                                                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+                                                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                             <div
                                                 class="{{ $statusData['bg'] }} {{ $statusData['color'] }} flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-[10px] font-black">
                                                 {{ $statusData['icon'] }}

@@ -62,7 +62,7 @@
         'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md dark:bg-glass-dark dark:border-glass-border-dark' :
         'bg-white border-zinc-200 shadow-sm dark:bg-dark-primary dark:border-zinc-800'
     ]"
-    class="fixed bottom-4 left-4 top-4 z-40 hidden w-[272px] flex-col rounded-2xl border pb-6 transition-transform duration-300 ease-out will-change-transform md:flex"
+    class="fixed bottom-4 left-4 top-4 z-40 hidden w-[272px] flex-col rounded-2xl border pb-6 transition-transform duration-300 ease-in-out will-change-transform md:flex"
     x-cloak id="logo-sidebar" aria-label="Sidebar">
 
     {{-- Header / Toggle --}}
@@ -81,12 +81,9 @@
     </div>
 
     {{-- Search Bar --}}
-    <div class="px-5 pt-4" x-show="openSidebar"
-        x-transition:enter="transition-opacity ease-out duration-200"
-        x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100"
-        x-transition:leave="transition-opacity ease-in duration-100"
-        x-transition:leave-start="opacity-100"
+    <div class="px-5 pt-4" x-show="openSidebar" x-transition:enter="transition-opacity ease-out duration-200"
+        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+        x-transition:leave="transition-opacity ease-in duration-100" x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0">
         <div class="group relative">
             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">

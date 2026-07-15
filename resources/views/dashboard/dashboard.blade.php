@@ -47,9 +47,10 @@
             <form id="attend-out" action="{{ route('attendanceOut.index') }}"></form>
 
             <!-- Chart Section -->
-            <div
-                class="col-span-2 mb-4 flex h-full flex-col rounded-xl border border-zinc-200 p-5 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:shadow-none md:p-6 lg:mb-0"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="col-span-2 mb-4 flex h-full flex-col rounded-xl border border-zinc-200 p-5 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:shadow-none md:p-6 lg:mb-0"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
                 {{-- Livewire Chart --}}
                 <livewire:chart.attendance-chart />

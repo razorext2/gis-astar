@@ -28,7 +28,7 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
     ]"
     :style="{ transform: !navVisible ? 'translateY(calc(-100% - 1rem))' : 'translateY(0)' }"
     style="transition: margin-left 300ms ease-out, transform 300ms ease-in-out;"
-    class="fixed top-4 left-4 right-4 z-40 rounded-2xl border px-4 py-2.5 lg:px-6" x-cloak>
+    class="fixed left-4 right-4 top-4 z-40 rounded-2xl border px-4 py-2.5 lg:px-6" x-cloak>
     <div class="flex items-center justify-between gap-2">
 
         {{-- Logo & Toggle --}}
@@ -48,7 +48,7 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
 
             <div :class="openSidebar ? 'md:opacity-0 md:pointer-events-none md:max-w-0 md:-translate-x-5' :
                 'opacity-100 md:max-w-[9rem] translate-x-0'"
-                class="flex shrink-0 transform items-center justify-start overflow-hidden transition-[opacity,transform,max-width] duration-300 ease-out">
+                class="flex shrink-0 transform items-center justify-start overflow-hidden transition-[opacity,transform,max-width] duration-300 ease-in-out">
                 <a class="flex items-center gap-2" href="{{ config('app.url') }}">
                     <img class="h-7 w-7 rounded-lg object-contain sm:h-8 sm:w-8"
                         src="{{ asset('images/icons/icon-384x384.png') }}" alt="Attendance Logo" loading="lazy" />
