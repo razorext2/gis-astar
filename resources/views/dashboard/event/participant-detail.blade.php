@@ -2,15 +2,16 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
     <div class="mb-16 flex flex-col text-gray-800 dark:text-white">
-        <div
-            class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-2 shadow-md transition-all duration-500 dark:border-zinc-800 dark:shadow-none md:p-4 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+        <div class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-2 shadow-md transition-all duration-500 dark:border-zinc-800 dark:shadow-none md:p-4 lg:p-6"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
             <div class="col-span-2 mb-4 flex w-full flex-row items-center gap-4">
                 <div class="max-w-xs">
                     <x-button.danger wire:navigate href="{{ route('event.show', $participant->bigEventId->id) }}"
                         class="my-auto max-h-10">
-                        <x-icons.angle-right class="h-5 w-5" />
+                        <x-icons.angle-right class="h-5 w-5 rotate-180" />
                     </x-button.danger>
                 </div>
 

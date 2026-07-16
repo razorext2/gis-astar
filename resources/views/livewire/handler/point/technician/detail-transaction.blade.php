@@ -3,9 +3,10 @@
         <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
 
             {{-- Card: Informasi Transaksi --}}
-            <div
-                class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3
                     class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.info-circle class="h-4 w-4 text-blue-500" /> Informasi Transaksi
@@ -103,9 +104,10 @@
             </div>
 
             {{-- Card: Daftar Pegawai --}}
-            <div
-                class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none lg:row-span-2"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none lg:row-span-2"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div
                     class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.users class="h-4 w-4 text-blue-500" /> Daftar Teknisi Terlibat
@@ -115,7 +117,9 @@
                     <table class="w-full whitespace-nowrap text-left text-sm">
                         <thead
                             class="sticky top-0 border-b border-zinc-100 text-xs text-zinc-500 dark:border-zinc-800 dark:text-zinc-400"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                            x-bind:class="dynamicBg ?
+                                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                             <tr>
                                 <th class="p-2 font-medium">Pegawai</th>
                                 <th class="p-2 text-right font-medium">Poin Terkumpul</th>
@@ -146,9 +150,10 @@
 
             {{-- User Actions --}}
             @if ($results->first()->status == 2 && auth()->user()->can('point-approve'))
-                <div
-                    class="flex flex-col items-center justify-between gap-4 rounded-xl border border-amber-200 bg-amber-50/60 p-4 dark:border-amber-900/30 dark:bg-amber-900/10 sm:flex-row"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                <div class="flex flex-col items-center justify-between gap-4 rounded-xl border border-amber-200 bg-amber-50/60 p-4 dark:border-amber-900/30 dark:bg-amber-900/10 sm:flex-row"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <div class="flex flex-col">
                         <span class="text-sm font-semibold text-zinc-900 dark:text-white">
                             Verifikasi Transaksi
@@ -165,9 +170,10 @@
                     </x-button.primary>
                 </div>
             @elseif ($results->first()->status == 3 && auth()->user()->can('point-approve'))
-                <div
-                    class="flex flex-col items-center justify-between gap-4 rounded-xl border border-green-200 bg-green-50/60 p-4 shadow-sm shadow-green-300 dark:border-green-900/30 dark:bg-green-900/10 dark:shadow-none sm:flex-row"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                <div class="flex flex-col items-center justify-between gap-4 rounded-xl border border-green-200 bg-green-50/60 p-4 shadow-sm shadow-green-300 dark:border-green-900/30 dark:bg-green-900/10 dark:shadow-none sm:flex-row"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <div class="flex flex-col">
                         <span class="text-sm font-semibold text-zinc-900 dark:text-white">
                             Dokumen Selesai

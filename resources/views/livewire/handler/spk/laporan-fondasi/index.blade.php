@@ -1,7 +1,8 @@
 <div id="laporan-fondasi-container" x-data="{ open: @entangle('showLaporanFondasi') }">
-    <section
-        class="overflow-hidden rounded-xl border border-zinc-200 shadow-md dark:border-zinc-800 dark:shadow-none"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <section class="overflow-hidden rounded-xl border border-zinc-200 shadow-md dark:border-zinc-800 dark:shadow-none"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
         <div class="flex items-center justify-between space-x-2 p-4 transition-all duration-500 ease-in-out hover:cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/30 lg:p-6"
             @click="open = !open">
@@ -168,7 +169,9 @@
                         <div class="flex w-full flex-col gap-y-2">
                             <label for="documentation-input"
                                 class="flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-zinc-200 bg-zinc-50/50 transition-all duration-300 hover:bg-zinc-100 dark:border-zinc-800 dark:hover:bg-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                                x-bind:class="dynamicBg ?
+                                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                 <div class="flex flex-col items-center justify-center pb-6 pt-5">
                                     <x-icons.cloud-upload class="mb-2 h-8 w-8 text-zinc-400 dark:text-zinc-500" />
                                     <p class="mb-0.5 text-sm font-semibold text-zinc-600 dark:text-zinc-400">
@@ -186,9 +189,10 @@
 
                         @if ($form->documentations)
                             <div class="mt-4 flex flex-col gap-2">
-                                <div
-                                    class="scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-800 overflow-x-auto rounded-xl border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                                <div class="scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-800 overflow-x-auto rounded-xl border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800"
+                                    x-bind:class="dynamicBg ?
+                                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                     <div class="flex gap-4">
                                         @foreach ($form->documentations as $index => $doc)
                                             <div class="relative shrink-0">

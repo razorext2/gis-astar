@@ -13,8 +13,10 @@
     </x-slot>
 
     {{-- OS Info Bar --}}
-    <div class="mb-6 rounded-xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="dark: mb-6 rounded-xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <p class="font-medium text-zinc-600 dark:text-zinc-400" x-text="'OS System: ' + sysInfo.os"></p>
     </div>
 
@@ -22,13 +24,12 @@
     <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
 
         {{-- CPU & System --}}
-        <div class="space-y-4 rounded-xl border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+        <div class="dark: space-y-4 rounded-xl border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <h4 class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-400">
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2-2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
-                </svg>
+                <x-icons.cpu class="h-4 w-4" />
                 Processor
             </h4>
             <div class="space-y-2">
@@ -49,22 +50,18 @@
                 </div>
                 {{-- Sparkline CPU --}}
                 <div class="mt-3 h-10 w-full opacity-50">
-                    <svg class="h-full w-full" viewBox="0 0 120 40" preserveAspectRatio="none">
-                        <polyline fill="none" class="stroke-blue-500 dark:stroke-blue-400" stroke-width="1.5"
-                            stroke-linecap="round" stroke-linejoin="round" :points="getSparklinePoints('cpu')" />
-                    </svg>
+                    <x-chart.sparkline-alpine class="h-full w-full" points="getSparklinePoints('cpu')" strokeClass="stroke-blue-500 dark:stroke-blue-400" />
                 </div>
             </div>
         </div>
 
         {{-- Memory --}}
-        <div class="space-y-4 rounded-xl border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+        <div class="dark: space-y-4 rounded-xl border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <h4 class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-400">
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                </svg>
+                <x-icons.database class="h-4 w-4" />
                 Memory
             </h4>
             <div class="space-y-2">
@@ -85,22 +82,18 @@
                 </div>
                 {{-- Sparkline MEM --}}
                 <div class="mt-3 h-10 w-full opacity-50">
-                    <svg class="h-full w-full" viewBox="0 0 120 40" preserveAspectRatio="none">
-                        <polyline fill="none" class="stroke-purple-500 dark:stroke-purple-400" stroke-width="1.5"
-                            stroke-linecap="round" stroke-linejoin="round" :points="getSparklinePoints('mem')" />
-                    </svg>
+                    <x-chart.sparkline-alpine class="h-full w-full" points="getSparklinePoints('mem')" strokeClass="stroke-purple-500 dark:stroke-purple-400" />
                 </div>
             </div>
         </div>
 
         {{-- Network Summary --}}
-        <div class="space-y-4 rounded-xl border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+        <div class="dark: space-y-4 rounded-xl border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <h4 class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-400">
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" />
-                </svg>
+                <x-icons.wifi class="h-4 w-4" />
                 Network
             </h4>
             <div class="space-y-2">
@@ -220,9 +213,10 @@
                 </thead>
                 <tbody>
                     <template x-for="p in processes" :key="p.pid || p.name">
-                        <tr
-                            class="border-b border-zinc-50 transition-colors last:border-0 hover:bg-zinc-50/50 dark:border-zinc-900/40 dark:hover:"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                        <tr class="dark:hover: border-b border-zinc-50 transition-colors last:border-0 hover:bg-zinc-50/50 dark:border-zinc-900/40"
+                            x-bind:class="dynamicBg ?
+                                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                             <td class="max-w-[150px] truncate py-2.5 font-medium dark:text-zinc-300" x-text="p.name">
                             </td>
                             <td class="py-2.5 text-right font-mono font-bold"
@@ -237,5 +231,4 @@
             </table>
         </div>
     </div>
-
 </x-modal.base-modal>

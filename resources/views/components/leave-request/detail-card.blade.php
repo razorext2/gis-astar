@@ -3,11 +3,14 @@
 
 <div class="flex flex-col gap-4">
     {{-- Applicant Info Card --}}
-    <div
-        class="overflow-hidden rounded-xl border border-zinc-200 shadow-sm dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
-        <div class="bg-zinc-50/50 p-4 dark:"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="overflow-hidden rounded-xl border border-zinc-200 shadow-sm dark:border-zinc-800"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+        <div class="dark: bg-zinc-50/50 p-4"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <h2 class="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-zinc-500">
                 <x-icons.user-circle class="h-4 w-4" />
                 Informasi Pemohon
@@ -24,7 +27,7 @@
                     <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-zinc-500">
                         <span class="flex items-center gap-1.5">
                             <span
-                            class="font-mono font-bold text-zinc-700 dark:text-zinc-300">{{ $request->user->kode_pegawai ? '(' . $request->user->kode_pegawai . ')' : '' }}</span>
+                                class="font-mono font-bold text-zinc-700 dark:text-zinc-300">{{ $request->user->kode_pegawai ? '(' . $request->user->kode_pegawai . ')' : '' }}</span>
                         </span>
                         <span class="flex items-center gap-1.5">
                             <x-icons.briefcase class="h-4 w-4" />
@@ -45,9 +48,10 @@
     </div>
 
     {{-- Leave Info Card --}}
-    <div
-        class="rounded-xl border border-zinc-200 p-6 shadow-sm dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="rounded-xl border border-zinc-200 p-6 shadow-sm dark:border-zinc-800"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <div class="mb-6 flex items-center justify-between border-b border-zinc-100 pb-4 dark:border-white/5">
             <div class="flex items-center gap-3">
                 <div class="h-10 w-1 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,0.5)]"></div>
@@ -130,9 +134,10 @@
 
         <div class="mt-8 space-y-2">
             <p class="text-xs font-bold uppercase tracking-wider text-zinc-400">Alasan / Keperluan</p>
-            <div
-                class="rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 text-zinc-700 dark:border-white/5 dark: dark:text-zinc-300"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="dark: rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 text-zinc-700 dark:border-white/5 dark:text-zinc-300"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 "{{ $request->reason }}"
             </div>
         </div>
@@ -158,8 +163,8 @@
         @endif
 
         <div class="mt-8 flex justify-end border-t border-zinc-100 pt-6 dark:border-white/5">
-            <x-button.primary id="summary-button" wire:click="summary" type="button"
-                wire:loading.attr="disabled" wire:target="summary">
+            <x-button.primary id="summary-button" wire:click="summary" type="button" wire:loading.attr="disabled"
+                wire:target="summary">
                 <x-slot name="icon">
                     <x-icons.file-invoice wire:loading.remove wire:target="summary" class="h-5 w-5" />
                     <x-icons.loading wire:loading wire:target="summary" class="h-4 w-4 animate-spin" />

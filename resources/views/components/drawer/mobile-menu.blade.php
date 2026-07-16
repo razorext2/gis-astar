@@ -52,7 +52,7 @@
                 <input type="text" x-model="search"
                     class="dark:placeholder-zinc-450 block w-full rounded-lg border-0 bg-zinc-50/50 p-3.5 ps-11 text-sm text-zinc-900 placeholder-zinc-500 ring-1 ring-zinc-200 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 dark:text-white dark:ring-zinc-800"
                     x-bind:class="dynamicBg ?
-                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
                         'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
                     placeholder="Cari menu...">
             </div>
@@ -86,15 +86,21 @@
                             class="liquid-btn {{ $isActive ? 'bg-red-50/50 dark:bg-red-500/10 ring-1 ring-red-200 dark:ring-red-900/50' : 'bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800/50' }} group flex cursor-pointer flex-col items-center rounded-xl p-3 transition-all duration-300"
                             href="{{ route($item['link']) }}">
 
-                            <div
-                                x-bind:class="{{ $isActive ? 'true' : 'false' }} ? 'bg-red-600 text-white shadow-md shadow-red-500/30' : (dynamicBg ? 'bg-white/40 border border-white/20 text-zinc-600 dark:bg-white/5 dark:border-white/10 dark:text-zinc-300 group-hover:bg-white/60 dark:group-hover:bg-white/10 group-hover:text-zinc-900 dark:group-hover:text-white' : 'bg-zinc-100 border border-zinc-200 text-zinc-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400 group-hover:bg-white dark:group-hover:bg-zinc-700 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 shadow-sm')"
+                            <div x-bind:class="{{ $isActive ? 'true' : 'false' }} ? 'bg-red-600 text-white shadow-md shadow-red-500/30' : (
+                                dynamicBg ?
+                                'bg-white/40 border border-white/20 text-zinc-600 dark:bg-white/5 dark:border-white/10 dark:text-zinc-300 group-hover:bg-white/60 dark:group-hover:bg-white/10 group-hover:text-zinc-900 dark:group-hover:text-white' :
+                                'bg-zinc-100 border border-zinc-200 text-zinc-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400 group-hover:bg-white dark:group-hover:bg-zinc-700 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 shadow-sm'
+                            )"
                                 class="mb-3 flex h-14 w-14 items-center justify-center rounded-lg transition-all duration-300 [backface-visibility:hidden] [transform:translate3d(0,0,0)] group-hover:-translate-y-1">
                                 <x-dynamic-component :component="'icons.' . $item['icon']"
                                     class="{{ $isActive ? '' : 'group-hover:scale-110' }} h-7 w-7 transition-transform duration-300 [transform:translate3d(0,0,0)]" />
                             </div>
 
-                            <div
-                                x-bind:class="{{ $isActive ? 'true' : 'false' }} ? 'text-red-600 dark:text-red-400 font-bold' : (dynamicBg ? 'text-zinc-600 dark:text-zinc-300 font-medium group-hover:text-zinc-900 dark:group-hover:text-white' : 'text-zinc-600 dark:text-zinc-400 font-medium group-hover:text-zinc-900 dark:group-hover:text-zinc-200')"
+                            <div x-bind:class="{{ $isActive ? 'true' : 'false' }} ? 'text-red-600 dark:text-red-400 font-bold' : (
+                                dynamicBg ?
+                                'text-zinc-600 dark:text-zinc-300 font-medium group-hover:text-zinc-900 dark:group-hover:text-white' :
+                                'text-zinc-600 dark:text-zinc-400 font-medium group-hover:text-zinc-900 dark:group-hover:text-zinc-200'
+                            )"
                                 class="line-clamp-2 text-center text-xs tracking-tight transition-colors">
                                 {{ $item['label'] }}
                             </div>

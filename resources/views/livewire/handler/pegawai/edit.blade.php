@@ -1,13 +1,16 @@
 {{-- Goal: Edit form for employee data, Livewire: Handler\Pegawai\Edit, Alpine: - --}}
 <div class="w-full space-y-6">
     <!-- Top Header Navigation -->
-    <div
-        class="rounded-xl border border-zinc-200 p-6 shadow-2xl transition-all duration-500 ease-in-out dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="rounded-xl border border-zinc-200 p-6 shadow-2xl transition-all duration-500 ease-in-out dark:border-zinc-800"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div class="flex items-center gap-4">
                 <x-button.link id="back-btn" class="group justify-center hover:bg-red-700 hover:text-white"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
                     wire:navigate href="{{ route('pegawai.detail', $pegawai->id) }}">
                     <x-icons.angle-left class="h-5 w-5" />
                 </x-button.link>
@@ -39,9 +42,10 @@
         <!-- Left Column: Form Details -->
         <div class="space-y-2 lg:col-span-2 lg:space-y-4">
             <!-- Data Personal Section -->
-            <div
-                class="group relative overflow-hidden rounded-xl border border-zinc-200 p-8 dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="group relative overflow-hidden rounded-xl border border-zinc-200 p-8 dark:border-zinc-800"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-blue-500/5 blur-3xl transition-colors group-hover:bg-blue-500/10">
                 </div>
@@ -63,20 +67,24 @@
                     </div>
 
                     <!-- Centang Ubah Kode Pegawai -->
-                    <div class="md:col-span-2 space-y-4 rounded-2xl border border-zinc-200 p-5 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/20">
+                    <div
+                        class="space-y-4 rounded-2xl border border-zinc-200 bg-zinc-50/50 p-5 dark:border-zinc-800 dark:bg-zinc-800/20 md:col-span-2">
                         <label class="flex cursor-pointer items-center gap-3">
                             <input wire:model.live="ubah_kode_pegawai" type="checkbox" id="ubah_kode_pegawai"
                                 class="h-5 w-5 rounded-lg border-zinc-200 text-blue-600 focus:ring-blue-500">
-                            <span class="text-sm font-semibold text-gray-800 dark:text-white">Ubah Kode Pegawai (Sistemik)</span>
+                            <span class="text-sm font-semibold text-gray-800 dark:text-white">Ubah Kode Pegawai
+                                (Sistemik)</span>
                         </label>
                         <p class="text-xs text-zinc-500 dark:text-zinc-400">
-                            Mengubah kode pegawai akan memperbarui seluruh referensi kode jari pada tabel absensi, transaksi, dan data log terkait secara aman.
+                            Mengubah kode pegawai akan memperbarui seluruh referensi kode jari pada tabel absensi,
+                            transaksi, dan data log terkait secara aman.
                         </p>
 
                         @if ($ubah_kode_pegawai)
-                            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 pt-2" x-transition>
+                            <div class="grid grid-cols-1 gap-4 pt-2 md:grid-cols-2" x-transition>
                                 <div class="space-y-2">
-                                    <x-input.basic wire:model="kode_pegawai_baru" id="kode_pegawai_baru" name="kode_pegawai_baru" type="text"
+                                    <x-input.basic wire:model="kode_pegawai_baru" id="kode_pegawai_baru"
+                                        name="kode_pegawai_baru" type="text"
                                         placeholder="Masukkan kode pegawai baru">
                                         Kode Pegawai Baru
                                     </x-input.basic>
@@ -85,7 +93,8 @@
                                     @enderror
                                 </div>
                                 <div class="space-y-2">
-                                    <x-input.basic wire:model="alasan_ubah_kode" id="alasan_ubah_kode" name="alasan_ubah_kode" type="text"
+                                    <x-input.basic wire:model="alasan_ubah_kode" id="alasan_ubah_kode"
+                                        name="alasan_ubah_kode" type="text"
                                         placeholder="Alasan perubahan kode pegawai">
                                         Alasan Kode Pegawai Diubah
                                     </x-input.basic>
@@ -142,7 +151,9 @@
                             for="tgl_lahir">Tanggal Lahir</label>
                         <input wire:model="tgl_lahir" type="date"
                             class="block w-full rounded-xl border-zinc-200 p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-dark-secondary dark:text-white"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                            x-bind:class="dynamicBg ?
+                                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         @error('tgl_lahir')
                             <span class="text-xs text-red-500">{{ $message }}</span>
                         @enderror
@@ -161,9 +172,10 @@
             </div>
 
             <!-- Penempatan & Jabatan Section -->
-            <div
-                class="group relative overflow-hidden rounded-xl border border-zinc-200 p-8 dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="group relative overflow-hidden rounded-xl border border-zinc-200 p-8 dark:border-zinc-800"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-purple-500/5 blur-3xl transition-colors group-hover:bg-purple-500/10">
                 </div>
@@ -204,9 +216,10 @@
 
             <!-- Akun Login Section -->
             @if ($has_account)
-                <div
-                    class="group relative overflow-hidden rounded-xl border border-zinc-200 p-8 dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                <div class="group relative overflow-hidden rounded-xl border border-zinc-200 p-8 dark:border-zinc-800"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <div
                         class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-green-500/5 blur-3xl transition-colors group-hover:bg-green-500/10">
                     </div>
@@ -247,7 +260,9 @@
                                     </div>
                                     <input x-model="search" type="text"
                                         class="block w-full rounded-xl border-zinc-200 pl-10 text-xs focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-dark-secondary dark:text-white"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
+                                        x-bind:class="dynamicBg ?
+                                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
                                         placeholder="Cari role...">
                                 </div>
                             </div>
@@ -283,19 +298,24 @@
                                 for="join_date">Tanggal Bergabung (Join Date)</label>
                             <input wire:model="join_date" type="date" id="join_date"
                                 class="block w-full rounded-xl border-zinc-200 p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-dark-secondary dark:text-white"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                                x-bind:class="dynamicBg ?
+                                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                             @error('join_date')
                                 <span class="text-xs text-red-500">{{ $message }}</span>
                             @enderror
                         </div>
 
                         {{-- Status Akun --}}
-                        <div class="grid gap-2 lg:gap-4 mt-6 border-t border-zinc-200/50 dark:border-zinc-800/50 pt-4">
+                        <div class="mt-6 grid gap-2 border-t border-zinc-200/50 pt-4 dark:border-zinc-800/50 lg:gap-4">
                             <div class="space-y-2">
-                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Status Akun</label>
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Status
+                                    Akun</label>
                                 <select wire:model.live="is_active"
                                     class="block w-full rounded-xl border border-zinc-200 p-2.5 text-sm transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-zinc-800 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                                    x-bind:class="dynamicBg ?
+                                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                     <option value="1">Aktif</option>
                                     <option value="0">Tidak Aktif</option>
                                 </select>
@@ -303,8 +323,9 @@
 
                             <div x-show="$wire.is_active == 0" x-cloak class="space-y-2">
                                 <x-input.textarea wire:model="deactivation_reason" id="deactivation_reason"
-                                    name="deactivation_reason" placeholder="Contoh: Resign atau Penonaktifan Sementara"
-                                    :labels="true" :textLabel="'Alasan Dinonaktifkan'" />
+                                    name="deactivation_reason"
+                                    placeholder="Contoh: Resign atau Penonaktifan Sementara" :labels="true"
+                                    :textLabel="'Alasan Dinonaktifkan'" />
                                 @error('deactivation_reason')
                                     <span class="text-xs text-red-500">{{ $message }}</span>
                                 @enderror
@@ -318,9 +339,10 @@
         <!-- Right Column: Photo Labels & Existing Photos -->
         <div class="space-y-2 lg:space-y-4">
             <!-- Upload New Photos -->
-            <div
-                class="group relative overflow-hidden rounded-xl border border-zinc-200 p-8 dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="group relative overflow-hidden rounded-xl border border-zinc-200 p-8 dark:border-zinc-800"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-orange-500/5 blur-3xl transition-colors group-hover:bg-orange-500/10">
                 </div>
@@ -361,7 +383,9 @@
 
                             <div wire:loading wire:target="photo1"
                                 class="absolute inset-0 flex items-center justify-center"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                                x-bind:class="dynamicBg ?
+                                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                 <div class="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
                             </div>
                         </div>
@@ -400,7 +424,9 @@
 
                             <div wire:loading wire:target="photo2"
                                 class="absolute inset-0 flex items-center justify-center"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                                x-bind:class="dynamicBg ?
+                                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                 <div class="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
                             </div>
                         </div>
@@ -412,9 +438,10 @@
             </div>
 
             <!-- Existing Photos Display -->
-            <div
-                class="group relative overflow-hidden rounded-xl border border-zinc-200 p-8 dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="group relative overflow-hidden rounded-xl border border-zinc-200 p-8 dark:border-zinc-800"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div class="mb-6 flex items-center gap-3">
                     <div class="h-10 w-1 rounded-full bg-zinc-600"></div>
                     <h3 class="text-xl font-bold text-gray-800 dark:text-white">Foto Saat Ini</h3>

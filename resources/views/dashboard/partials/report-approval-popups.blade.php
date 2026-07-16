@@ -21,7 +21,11 @@
     ];
 
     foreach ($reportTypes as $type => $permission) {
-        if ($user && $user->can($permission) && \App\Livewire\Dashboard\ReportApprovalPopup::hasPendingForUser($user, $type)) {
+        if (
+            $user &&
+            $user->can($permission) &&
+            \App\Livewire\Dashboard\ReportApprovalPopup::hasPendingForUser($user, $type)
+        ) {
             $popups[] = [
                 'type' => $type,
                 'stack' => $stackIndex++,
@@ -83,43 +87,37 @@
             return Object.values(this.openPopups).filter(v => v && v.show).length;
         }
     }">
-        <div
-            @click.away="isOpen = false"
-            class="relative"
-            style="overflow: visible;">
+        <div @click.away="isOpen = false" class="relative" style="overflow: visible;">
 
-            <button
-                @click="isOpen = !isOpen"
-                x-data="{ tapping: false }"
-                x-on:mousedown="tapping = true"
-                x-on:touchstart="tapping = true"
-                x-on:animationend="tapping = false"
+            <button @click="isOpen = !isOpen" x-data="{ tapping: false }" x-on:mousedown="tapping = true"
+                x-on:touchstart="tapping = true" x-on:animationend="tapping = false"
                 :class="[
                     tapping ? 'is-tapping' : '',
-                    dynamicBg
-                        ? 'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-none'
-                        : 'bg-white border-zinc-200 shadow-sm hover:bg-zinc-50 dark:bg-dark-primary dark:border-zinc-800 dark:hover:bg-zinc-800'
+                    dynamicBg ?
+                    'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-none' :
+                    'bg-white border-zinc-200 shadow-sm hover:bg-zinc-50 dark:bg-dark-primary dark:border-zinc-800 dark:hover:bg-zinc-800'
                 ]"
                 class="liquid-btn group flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border transition-[background-color,border-color,box-shadow] duration-300 ease-out"
                 style="pointer-events: auto;" x-cloak>
-                <span x-show="!isOpen" x-transition:enter="transition duration-200" x-transition:enter-start="opacity-0 scale-75" x-transition:enter-end="opacity-100 scale-100" class="flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                <span x-show="!isOpen" x-transition:enter="transition duration-200"
+                    x-transition:enter-start="opacity-0 scale-75" x-transition:enter-end="opacity-100 scale-100"
+                    class="flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
                     <x-icons.grid-plus class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
                 </span>
-                <span x-show="isOpen" x-transition:enter="transition duration-200" x-transition:enter-start="opacity-0 scale-75" x-transition:enter-end="opacity-100 scale-100" class="flex items-center justify-center transition-transform duration-300 group-hover:scale-110" style="display: none;">
+                <span x-show="isOpen" x-transition:enter="transition duration-200"
+                    x-transition:enter-start="opacity-0 scale-75" x-transition:enter-end="opacity-100 scale-100"
+                    class="flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+                    style="display: none;">
                     <x-icons.close class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
                 </span>
             </button>
 
             {{-- Expanded Items: absolute, vertikal ke atas, di sebelah kiri tombol trigger --}}
-            <div class="absolute bottom-0 right-[calc(100%+12px)] flex flex-col-reverse items-end gap-3 pointer-events-none"
+            <div class="pointer-events-none absolute bottom-0 right-[calc(100%+12px)] flex flex-col-reverse items-end gap-3"
                 style="overflow: visible;">
                 @foreach ($popups as $popup)
-                    <livewire:dashboard.report-approval-popup
-                        :type="$popup['type']"
-                        :stackIndex="$popup['stack'] + 1"
-                        :message="$popup['message'] ?? null"
-                        :autoPop="$autoPop"
-                        :wire:key="'report-popup-' . $popup['type']" />
+                    <livewire:dashboard.report-approval-popup :type="$popup['type']" :stackIndex="$popup['stack'] + 1" :message="$popup['message'] ?? null"
+                        :autoPop="$autoPop" :wire:key="'report-popup-' . $popup['type']" />
                 @endforeach
             </div>
         </div>
@@ -135,8 +133,10 @@
             {{-- Close All Button --}}
             <div class="flex w-full max-w-6xl justify-end pb-4 pt-2 lg:pt-4">
                 <x-button.secondary @click="$dispatch('close-all-popups')"
-                    class="shadow-none text-zinc-700 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white transition-colors duration-200"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                    class="text-zinc-700 shadow-none transition-colors duration-200 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <x-slot name="icon">
                         <x-icons.close class="h-4 w-4" />
                     </x-slot>

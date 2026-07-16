@@ -1,7 +1,8 @@
 {{-- Goal: Custom view export laporan absensi, Livewire: Handler\Report\ExportAbsensi, Alpine: Yes --}}
-<div
-    class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 md:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+<div class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 md:p-6"
+    x-bind:class="dynamicBg ?
+        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
     <form wire:submit="export" class="flex flex-col gap-4 md:gap-6">
 
         {{-- Header Title --}}
@@ -152,7 +153,8 @@
                             <span class="mr-2 font-bold text-blue-600 dark:text-blue-400">#{{ $p->kode_pegawai }}</span>
                             <span>{{ $p->full_name }}</span>
                             @if (!$p->is_active)
-                                <span class="ml-1.5 text-xs font-medium text-red-500 dark:text-red-400">(nonaktif)</span>
+                                <span
+                                    class="ml-1.5 text-xs font-medium text-red-500 dark:text-red-400">(nonaktif)</span>
                             @endif
                         </button>
                     @endforeach
@@ -165,13 +167,13 @@
                     @foreach ($selectedPegawai as $p)
                         <span
                             class="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700 dark:border-blue-800/60 dark:bg-blue-900/30 dark:text-blue-300">
-                            <span>#{{ $p['kode_pegawai'] }} - {{ $p['full_name'] }}@if (!($p['is_active'] ?? true))<span class="ml-1 font-medium text-red-500 dark:text-red-400">(nonaktif)</span>@endif</span>
+                            <span>#{{ $p['kode_pegawai'] }} - {{ $p['full_name'] }}@if (!($p['is_active'] ?? true))
+                                    <span class="ml-1 font-medium text-red-500 dark:text-red-400">(nonaktif)</span>
+                                @endif
+                            </span>
                             <button type="button" wire:click="removePegawai({{ $p['kode_pegawai'] }})"
                                 class="text-blue-500 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-200">
-                                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12" />
-                                </svg>
+                                <x-icons.close class="h-3.5 w-3.5" />
                             </button>
                         </span>
                     @endforeach

@@ -2,9 +2,10 @@
 <div class="space-y-4">
 
     {{-- ===== HEADER CARD: Info Kunjungan & Status ===== --}}
-    <div
-        class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 lg:p-6"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
         {{-- Top row: No VT + Status badge + Action buttons --}}
         <div
@@ -112,9 +113,10 @@
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 
             {{-- Card: Info Teknisi --}}
-            <div
-                class="flex flex-col gap-3 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="flex flex-col gap-3 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3
                     class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.user class="h-4 w-4 text-blue-500" /> Informasi Teknisi
@@ -152,9 +154,10 @@
             </div>
 
             {{-- Card: Info Customer --}}
-            <div
-                class="flex flex-col gap-3 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="flex flex-col gap-3 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3
                     class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.users class="h-4 w-4 text-blue-500" /> Informasi Customer
@@ -175,9 +178,10 @@
             </div>
 
             {{-- Card: Spesifikasi Timbangan --}}
-            <div
-                class="flex flex-col gap-3 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 md:col-span-2"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="flex flex-col gap-3 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 md:col-span-2"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3
                     class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.archive class="h-4 w-4 text-blue-500" /> Spesifikasi Timbangan
@@ -232,9 +236,10 @@
             </div>
 
             {{-- Card: Rincian Pekerjaan --}}
-            <div
-                class="flex flex-col gap-3 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="flex flex-col gap-3 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3
                     class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.clipboard class="h-4 w-4 text-blue-500" /> Rincian Pekerjaan
@@ -244,9 +249,10 @@
             </div>
 
             {{-- Card: Update Pekerjaan --}}
-            <div
-                class="flex flex-col gap-3 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="flex flex-col gap-3 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3
                     class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.rectangle-list class="h-4 w-4 text-blue-500" /> Update Pekerjaan
@@ -256,9 +262,10 @@
             </div>
 
             {{-- Card: Dokumentasi --}}
-            <div
-                class="flex flex-col gap-3 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 md:col-span-2"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="flex flex-col gap-3 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 md:col-span-2"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3
                     class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.cloud-upload class="h-4 w-4 text-blue-500" /> Dokumentasi
@@ -294,9 +301,10 @@
             </div>
 
             {{-- Card: Status Validasi & Revisi --}}
-            <div
-                class="flex flex-col gap-3 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 md:col-span-2"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="flex flex-col gap-3 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 md:col-span-2"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3
                     class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.check-circle class="h-4 w-4 text-blue-500" /> Riwayat Validasi

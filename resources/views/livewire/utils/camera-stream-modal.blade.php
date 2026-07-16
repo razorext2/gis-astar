@@ -1,4 +1,4 @@
-{{-- Goal: Modal Overlay for Camera Streaming, Caller: Edit/Collect Views, Alpine: None --}}
+{{-- Goal: Modal Overlay for Camera Streaming, Caller: Edit/Collect Views, Livewire: -, Alpine: dynamicBg --}}
 <div>
     <!-- Backdrop -->
     <div class="fixed inset-0 z-[100] hidden bg-zinc-900/60 backdrop-blur-sm transition-opacity"
@@ -15,12 +15,10 @@
                 <h3 class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">
                     Ambil Foto
                 </h3>
-                <button type="button"
-                    class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-zinc-400 hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-200 dark:hover:bg-zinc-800 dark:hover:text-white dark:focus:ring-zinc-700"
-                    id="close-button">
+                <x-button.danger type="button" id="close-button" :iconOnly="true">
                     <x-icons.close class="h-5 w-5" />
                     <span class="sr-only">Tutup kamera</span>
-                </button>
+                </x-button.danger>
             </div>
 
             <!-- Video Stream Container -->
@@ -28,18 +26,13 @@
                 <!-- Video -->
                 <video class="w-full object-cover" id="video" autoplay playsinline></video>
 
-                <!-- Gradient Overlay for Bottom Tools -->
-                <div class="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/60 to-transparent"></div>
-
                 <!-- Capture Button (iOS Camera Style) -->
                 <div class="absolute bottom-6 left-1/2 -translate-x-1/2 transform">
-                    <button type="button" id="capture-image"
-                        class="group relative flex h-16 w-16 items-center justify-center rounded-full p-1 transition-all hover: focus:outline-none focus:ring-4 focus:ring-white/50 active:scale-95"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
-                        <div
-                            class="h-full w-full rounded-full bg-white shadow-sm transition-transform group-hover:scale-90 group-active:scale-75">
-                        </div>
-                    </button>
+                    <x-button.secondary type="button" id="capture-image" :iconOnly="true" :pill="true"
+                        class="!h-16 !w-16">
+                        <x-icons.camera class="h-8 w-8" />
+                        <span class="sr-only">Ambil foto</span>
+                    </x-button.secondary>
                 </div>
             </div>
         </div>

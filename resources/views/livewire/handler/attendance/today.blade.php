@@ -4,7 +4,7 @@
     {{-- Unified Filter Bar --}}
     <div class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-dark-primary sm:flex-row sm:items-center sm:justify-between md:p-6"
         x-bind:class="dynamicBg ?
-            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
             'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <div>
             <h2 class="text-lg font-black tracking-tight text-zinc-900 dark:text-white">Filter Histori Kehadiran</h2>
@@ -55,7 +55,7 @@
         {{-- Absensi Masuk --}}
         <div class="flex w-full flex-col gap-4 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-dark-primary lg:p-6"
             x-bind:class="dynamicBg ?
-                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
                 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <div class="flex items-center justify-between border-b border-zinc-200 pb-5 dark:border-zinc-800/50">
                 <div class="flex items-center gap-3">
@@ -105,7 +105,7 @@
         {{-- Absensi Keluar --}}
         <div class="flex w-full flex-col gap-4 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-dark-primary md:p-6"
             x-bind:class="dynamicBg ?
-                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
                 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <div class="flex items-center justify-between border-b border-zinc-200 pb-5 dark:border-zinc-800/50">
                 <div class="flex items-center gap-3">

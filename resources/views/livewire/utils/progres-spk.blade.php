@@ -1,3 +1,4 @@
+{{-- Goal: Display SPK progress timeline with status overlays, Livewire: App\Livewire\Utils\ProgresSpk, Alpine: dynamicBg --}}
 <div
     class="{{ $data->on_delay || $data->status_approval === 4 ? 'overflow-hidden' : 'overflow-x-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700' }} relative flex w-full flex-row items-center gap-2 rounded-xl border border-zinc-200 bg-white/60 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-dark-primary/60 sm:p-6">
 
@@ -12,16 +13,14 @@
 
     {{-- DELAY OVERLAY --}}
     @if ($data->on_delay && $data->status_approval !== 4)
-        <div
-            class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-red-50/90 p-4 dark:bg-red-950/80"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+        <div class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-red-50/90 p-4 dark:bg-red-950/80"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <div class="flex items-start gap-4">
                 <div
                     class="mt-0.5 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600 ring-1 ring-red-500/30 dark:bg-red-500/20 dark:text-red-400 dark:ring-red-500/50">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <x-icons.clock class="h-6 w-6" />
                 </div>
                 <div class="flex flex-col">
                     <h4 class="text-lg font-black uppercase tracking-widest text-red-600 dark:text-red-400">SPK
@@ -44,12 +43,13 @@
 
     {{-- CANCELLED OVERLAY --}}
     @if ($data->status_approval === 4)
-        <div
-            class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-red-50/90 p-4 dark:bg-red-950/80"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+        <div class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-red-50/90 p-4 dark:bg-red-950/80"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <div class="flex items-start gap-4">
                 <div
-                    class="mt-0.5 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-100 text-red-600 shadow-xl shadow-red-500/10 ring-1 ring-red-500/30 dark:bg-red-500/20 dark:text-red-500 dark:ring-red-500/50">
+                    class="mt-0.5 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-100 text-red-600 shadow-xl ring-1 ring-red-500/30 dark:bg-red-500/20 dark:text-red-500 dark:ring-red-500/50">
                     <x-icons.close class="h-6 w-6" />
                 </div>
                 <div class="flex flex-col">

@@ -3,9 +3,10 @@
     {{-- Summary Cards --}}
     <livewire:components.card type="servermonitor" />
 
-    <div
-        class="mb-4 rounded-2xl border border-white/60 p-4 shadow-zinc-200/50 dark:border-zinc-800 dark:shadow-black/30 md:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="mb-4 rounded-2xl border border-white/60 p-4 shadow-zinc-200/50 dark:border-zinc-800 dark:shadow-black/30 md:p-6"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
         <!-- Header -->
         <div class="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">

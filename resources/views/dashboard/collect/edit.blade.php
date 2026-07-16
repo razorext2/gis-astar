@@ -1,8 +1,9 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div
-        class="grid w-full gap-6 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="grid w-full gap-6 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
         <div class="w-full">
             <header class="flex items-center">
@@ -103,7 +104,7 @@
                     </x-button.primary>
 
                     <div class="relative">
-                        <div class="flex overflow-x-auto empty:hidden mt-2" id="captured-images">
+                        <div class="mt-2 flex overflow-x-auto empty:hidden" id="captured-images">
                             <!-- Thumbnail gambar yang diambil akan muncul di sini -->
                             @if ($data->photoCollectRelasi)
                                 @foreach ($data->photoCollectRelasi as $photo)

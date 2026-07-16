@@ -31,12 +31,7 @@
                     <button type="button" wire:click.stop="togglePegawai('{{ $kodePegawai }}')"
                         class="flex h-5 w-5 shrink-0 items-center justify-center rounded border transition-colors {{ $isSelected ? 'border-blue-500 bg-blue-500 text-white' : 'border-zinc-300 bg-white dark:border-zinc-600 dark:bg-zinc-800' }}">
                         @if ($isSelected)
-                            <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
-                                    clip-rule="evenodd" />
-                            </svg>
+                            <x-icons.check class="h-3 w-3" />
                         @endif
                     </button>
                 @endif
@@ -56,11 +51,7 @@
                     <button type="button" @click="open = !open"
                         class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-zinc-100 transition-all duration-300 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700"
                         :class="open ? 'rotate-180 !bg-blue-50 dark:!bg-blue-900/30 text-blue-600' : 'text-zinc-500 dark:text-zinc-400'">
-                        <svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M7.119 8h9.762a1 1 0 0 1 .772 1.636l-4.881 5.927a1 1 0 0 1-1.544 0l-4.88-5.927A1 1 0 0 1 7.118 8Z" />
-                        </svg>
+                        <x-icons.carred-down class="h-4 w-4" />
                     </button>
                 </div>
             </div>

@@ -5,9 +5,10 @@
         <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
 
             {{-- Card: Informasi Transaksi --}}
-            <div
-                class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3
                     class="flex items-center gap-2 border-b border-zinc-200 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.info-circle class="h-4 w-4 text-blue-500" /> Informasi Transaksi
@@ -100,9 +101,10 @@
             </div>
 
             {{-- Card: Daftar Pegawai --}}
-            <div
-                class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none lg:row-span-2"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none lg:row-span-2"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div
                     class="flex items-center gap-2 border-b border-zinc-200 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                     <x-icons.users class="h-4 w-4 text-blue-500" /> Daftar Teknisi Terlibat
@@ -112,7 +114,9 @@
                     <table class="w-full whitespace-nowrap text-left text-sm">
                         <thead
                             class="sticky top-0 border-b border-zinc-200 text-xs text-zinc-500 dark:border-zinc-800 dark:text-zinc-400"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                            x-bind:class="dynamicBg ?
+                                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                             <tr>
                                 <th class="pb-2 font-medium">Pegawai</th>
                                 <th class="pb-2 text-right font-medium">Poin Terkumpul</th>
@@ -155,10 +159,8 @@
                         wire:click="processRedeem('{{ $results->first()->transaction_id }}')"
                         wire:loading.attr="disabled" wire:target="processRedeem">
                         <x-slot name="icon">
-                            <x-icons.angle-right wire:loading.remove wire:target="processRedeem"
-                                class="icon h-5 w-5" />
-                            <x-icons.loading wire:loading wire:target="processRedeem"
-                                class="h-4 w-4 animate-spin" />
+                            <x-icons.angle-right wire:loading.remove wire:target="processRedeem" class="icon h-5 w-5" />
+                            <x-icons.loading wire:loading wire:target="processRedeem" class="h-4 w-4 animate-spin" />
                         </x-slot>
                         <span wire:loading.remove wire:target="processRedeem">Kirim ke HRD</span>
                         <span wire:loading wire:target="processRedeem">Memproses...</span>

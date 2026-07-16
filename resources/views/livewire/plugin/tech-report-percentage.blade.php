@@ -1,6 +1,7 @@
-<div
-    class="flex w-full flex-col gap-6 rounded-xl border border-white/40 p-4 dark:border-zinc-800/50 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+<div class="flex w-full flex-col gap-6 rounded-xl border border-white/40 p-4 dark:border-zinc-800/50 lg:p-6"
+    x-bind:class="dynamicBg ?
+        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
     {{-- Header with Month Selector --}}
     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -79,9 +80,10 @@
                 @endphp
 
                 @foreach ($statusCards as $card)
-                    <div
-                        class="flex flex-col gap-2 rounded-2xl border border-zinc-200 bg-zinc-50/50 p-4 transition-all hover:scale-[1.02] hover:bg-white dark:border-zinc-800 dark:hover:bg-zinc-800/60"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                    <div class="flex flex-col gap-2 rounded-2xl border border-zinc-200 bg-zinc-50/50 p-4 transition-all hover:scale-[1.02] hover:bg-white dark:border-zinc-800 dark:hover:bg-zinc-800/60"
+                        x-bind:class="dynamicBg ?
+                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         <div class="flex items-center justify-between">
                             <div
                                 class="{{ str_replace('bg-', 'bg-opacity-10 ', $card['color']) }} {{ $card['text'] }} flex h-8 w-8 items-center justify-center rounded-lg">
@@ -105,9 +107,10 @@
                     Bulanan (API)</h3>
             </div>
 
-            <div
-                class="space-y-4 rounded-2xl border border-zinc-200 bg-zinc-50/50 p-5 dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="space-y-4 rounded-2xl border border-zinc-200 bg-zinc-50/50 p-5 dark:border-zinc-800"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 @foreach ($historicalData as $item)
                     <div class="space-y-2">
                         <div class="flex items-center justify-between text-xs font-bold">

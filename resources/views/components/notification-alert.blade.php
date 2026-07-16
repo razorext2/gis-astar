@@ -1,10 +1,10 @@
 {{-- Goal: Offline notification alert widget (simplified, announcement type removed), Livewire: -, Alpine: - --}}
 @props(['class' => null, 'id' => null])
 
-<div
-    x-bind:class="dynamicBg
-        ? 'border-red-500/10 bg-red-500/15 backdrop-blur-md dark:border-red-500/20 dark:bg-red-500/5 shadow-lg shadow-red-500/10'
-        : 'border-red-300 bg-red-100 dark:border-red-900 dark:bg-[#251010] shadow-sm'"
+<div x-bind:class="dynamicBg
+    ?
+    'border-red-500/10 bg-red-500/15 backdrop-blur-md dark:border-red-500/20 dark:bg-red-500/5 shadow-lg ' :
+    'border-red-300 bg-red-100 dark:border-red-900 dark:bg-[#251010] shadow-sm'"
     {{ $attributes->merge(['class' => 'relative flex items-start gap-4 overflow-hidden rounded-xl border p-4 transition-all duration-300 md:p-6']) }}
     id="{{ $id }}" role="alert">
 

@@ -1,7 +1,8 @@
 {{-- Goal: Render form to borrow leave quota, Livewire: Handler.LeaveRequest.Borrow, Alpine: UI state / dropdown select --}}
-<div
-    class="mt-4 flex flex-col gap-6 rounded-xl border border-zinc-200 p-4 shadow-sm dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+<div class="mt-4 flex flex-col gap-6 rounded-xl border border-zinc-200 p-4 shadow-sm dark:border-zinc-800 lg:p-6"
+    x-bind:class="dynamicBg ?
+        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
     {{-- Breadcrumbs/Header --}}
     <div class="flex items-center gap-3">
@@ -73,7 +74,9 @@
                             <input type="text" wire:model.live.debounce.300ms="search_backup" @focus="open = true"
                                 placeholder="Cari Nama atau Kode Pegawai..."
                                 class="w-full rounded-xl border border-zinc-200 py-3 pl-4 pr-10 text-sm transition-all focus:ring-red-500/50 dark:border-zinc-800 dark:bg-gray-800/50 dark:text-gray-200"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                                x-bind:class="dynamicBg ?
+                                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                                 <x-icons.search class="h-4 w-4 text-gray-400" />
                             </div>
@@ -84,7 +87,9 @@
                             x-transition:enter="transition ease-out duration-100"
                             x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                             class="absolute z-50 mt-2 max-h-60 w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-dark-primary"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                            x-bind:class="dynamicBg ?
+                                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
                             @forelse ($employees as $emp)
                                 @php
@@ -215,7 +220,9 @@
                 </label>
                 <textarea wire:model="reason" rows="4"
                     class="w-full rounded-xl border border-zinc-200 p-4 text-gray-700 placeholder-gray-400 transition-all focus:ring-primary/50 dark:border-zinc-800 dark:bg-gray-800/50 dark:text-gray-200"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
                     placeholder="Berikan alasan yang jelas untuk pengajuan cuti Anda..."></textarea>
             </div>
         </div>
@@ -224,9 +231,10 @@
         <div class="flex flex-col gap-6">
             {{-- Summary Card --}}
             @if ($leave_type_id)
-                <div
-                    class="rounded-xl border border-zinc-200 bg-primary/5 p-6 dark:border-zinc-800 dark:bg-primary/10"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                <div class="rounded-xl border border-zinc-200 bg-primary/5 p-6 dark:border-zinc-800 dark:bg-primary/10"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <h3 class="mb-4 flex items-center gap-2 text-lg font-bold text-primary">
                         <x-icons.info-circle class="h-5 w-5" />
                         Ringkasan Pengajuan
@@ -282,9 +290,10 @@
             @endif
 
             {{-- Attachment Card --}}
-            <div
-                class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-6 shadow-md dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-6 shadow-md dark:border-zinc-800"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3 class="flex items-center gap-2 text-lg font-bold text-gray-800 dark:text-gray-100">
                     <x-icons.paper-clip class="h-5 w-5" />
                     Lampiran {{ $selected_leave_type?->requires_attachment ? '*' : '(Opsional)' }}
@@ -318,9 +327,10 @@
                     @if ($attachments)
                         <div class="flex flex-col gap-2">
                             @foreach ($attachments as $index => $file)
-                                <div
-                                    class="flex items-center justify-between rounded-lg bg-zinc-50 p-2 text-xs dark:"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                                <div class="dark: flex items-center justify-between rounded-lg bg-zinc-50 p-2 text-xs"
+                                    x-bind:class="dynamicBg ?
+                                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                     <div class="flex items-center gap-2 truncate">
                                         <x-icons.check-circle class="h-4 w-4 text-green-500" />
                                         <span

@@ -71,9 +71,10 @@
     class="grid w-full gap-4 md:grid-cols-2">
 
     {{-- Left column: header + timeline --}}
-    <div
-        class="flex w-full flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-sm dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="flex w-full flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-sm dark:border-zinc-800 lg:p-6"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
         {{-- Header --}}
         <div class="flex items-center border-b border-zinc-200 pb-5 dark:border-zinc-800/50">
@@ -99,7 +100,9 @@
         <div class="flex items-center gap-3">
             <input type="date" wire:model.live="date"
                 class="block w-full rounded-xl border border-zinc-200 px-4 py-2.5 text-sm font-medium text-zinc-900 transition-all focus:border-emerald-500 focus:ring-emerald-500 dark:border-zinc-800 dark:text-white"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
             <div
                 class="shrink-0 rounded-2xl border border-emerald-100 bg-emerald-50/50 px-4 py-2.5 text-xs font-bold text-emerald-700 dark:border-emerald-900/30 dark:bg-emerald-950/20 dark:text-emerald-400">
@@ -132,10 +135,7 @@
                         class="absolute -start-11 flex h-6 w-6 items-center justify-center rounded-full shadow-lg ring-4 ring-white transition-colors duration-200 dark:ring-zinc-900"
                         :class="activeIndex === {{ $data->id }} ? 'bg-blue-600 shadow-blue-500/20' :
                             'bg-emerald-600 shadow-emerald-500/20'">
-                        <svg class="h-3 w-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path
-                                d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0-2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                        </svg>
+                        <x-icons.calendar class="h-3 w-3 text-white" />
                     </span>
 
                     {{-- Content --}}
@@ -174,10 +174,7 @@
                                 @if ($distance)
                                     <span
                                         class="flex items-center gap-1 rounded-xl bg-blue-50 px-2.5 py-1 text-[11px] font-bold text-blue-700 dark:bg-blue-950/20 dark:text-blue-400">
-                                        <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                        </svg>
+                                        <x-icons.map-pin class="h-3 w-3" />
                                         +{{ $distance }}
                                     </span>
                                 @endif
@@ -206,16 +203,14 @@
     </div>
 
     {{-- Right column: map --}}
-    <div
-        class="flex h-max w-full flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-sm dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="flex h-max w-full flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-sm dark:border-zinc-800 lg:p-6"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <div class="flex items-center gap-3 border-b border-zinc-200 pb-4 dark:border-zinc-800/50">
             <div
                 class="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-500/20">
-                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-                </svg>
+                <x-icons.map class="h-5 w-5" />
             </div>
             <div>
                 <h3 class="text-lg font-black tracking-tight text-zinc-900 dark:text-white">Peta Rute</h3>

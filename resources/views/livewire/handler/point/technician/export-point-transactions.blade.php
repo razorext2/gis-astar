@@ -16,9 +16,10 @@
 
         <div class="flex max-h-96 w-full flex-col gap-4 overflow-y-auto p-1">
             @foreach ($data ?? [] as $row)
-                <div
-                    class="flex flex-col rounded-xl border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                <div class="flex flex-col rounded-xl border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
                     {{-- Header: Teknisi & Periode --}}
                     <div
@@ -45,9 +46,10 @@
                         </span>
                         <div class="flex max-h-40 flex-col gap-2 overflow-y-auto pr-1">
                             @foreach ($row->point as $point)
-                                <div
-                                    class="flex flex-col gap-1 rounded-lg border border-zinc-100 px-3 py-2 shadow-sm dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                                <div class="flex flex-col gap-1 rounded-lg border border-zinc-100 px-3 py-2 shadow-sm dark:border-zinc-800"
+                                    x-bind:class="dynamicBg ?
+                                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                     <div class="flex items-center justify-between">
                                         <span class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">
                                             {{ $point->from_vt }}

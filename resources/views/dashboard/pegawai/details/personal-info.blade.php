@@ -4,9 +4,10 @@
     <div class="grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap-4">
         <!-- Left Column: Personal Info -->
         <div class="space-y-2 lg:space-y-4">
-            <div
-                class="group relative overflow-hidden rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="group relative overflow-hidden rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
                 <div class="mb-6 flex items-center justify-between">
                     <div class="flex items-center gap-3">
@@ -76,9 +77,10 @@
 
         <!-- Right Column: Calendar & Stats -->
         <div class="space-y-2 lg:space-y-4">
-            <div
-                class="group relative overflow-hidden rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="group relative overflow-hidden rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
                 <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div class="flex items-center gap-3">
@@ -153,8 +155,10 @@
                                     </x-button.warning>
                                 @else
                                     <x-button.secondary
-                                        class="!h-full !w-full !border-zinc-200 ! !p-0 !text-xs !text-gray-400 hover:!border-blue-200 hover:!bg-white hover:!text-blue-600 dark:!border-zinc-800 dark:! dark:!text-gray-500 dark:hover:!"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
+                                        class="! dark:! dark:hover:! !h-full !w-full !border-zinc-200 !p-0 !text-xs !text-gray-400 hover:!border-blue-200 hover:!bg-white hover:!text-blue-600 dark:!border-zinc-800 dark:!text-gray-500"
+                                        x-bind:class="dynamicBg ?
+                                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
                                         type="button" data-date="{{ $date }}"
                                         data-popover-target="popover-click-{{ $date }}"
                                         data-popover-trigger="click">

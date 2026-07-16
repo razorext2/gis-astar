@@ -103,11 +103,7 @@
                     <div class="flex items-center gap-1">
                         <span class="font-semibold text-zinc-500 dark:text-zinc-400 lg:hidden">CPU</span>
                         <template x-if="stats.cpu >= 90">
-                            <svg class="h-3 w-3 animate-bounce text-red-500" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                            </svg>
+                            <x-icons.exclamation-triangle class="h-3 w-3 animate-bounce text-red-500" />
                         </template>
                     </div>
                     <span class="font-mono font-bold"
@@ -127,11 +123,7 @@
                     <div class="flex items-center gap-1">
                         <span class="font-semibold text-zinc-500 dark:text-zinc-400 lg:hidden">Memori</span>
                         <template x-if="stats.mem >= 90">
-                            <svg class="h-3 w-3 animate-bounce text-red-500" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                            </svg>
+                            <x-icons.exclamation-triangle class="h-3 w-3 animate-bounce text-red-500" />
                         </template>
                     </div>
                     <span class="font-mono font-bold"
@@ -151,11 +143,7 @@
                     <div class="flex items-center gap-1">
                         <span class="font-semibold text-zinc-500 dark:text-zinc-400 lg:hidden">Disk</span>
                         <template x-if="stats.disk >= 90">
-                            <svg class="h-3 w-3 animate-bounce text-red-500" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                            </svg>
+                            <x-icons.exclamation-triangle class="h-3 w-3 animate-bounce text-red-500" />
                         </template>
                     </div>
                     <span class="font-mono font-bold"
@@ -175,17 +163,11 @@
                     <span class="font-semibold text-zinc-500 dark:text-zinc-400 lg:hidden">Network</span>
                     <div class="flex items-center gap-3">
                         <div class="flex items-center gap-1 text-green-600 dark:text-green-400">
-                            <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                            </svg>
+                            <x-icons.arrow-down class="h-3 w-3" />
                             <span class="font-mono font-bold" x-text="formatBytes(stats.net_rx) + '/s'"></span>
                         </div>
                         <div class="flex items-center gap-1 text-blue-600 dark:text-blue-400">
-                            <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 10l7-7m0 0l7 7m-7-7v18" />
-                            </svg>
+                            <x-icons.arrow-up class="h-3 w-3" />
                             <span class="font-mono font-bold" x-text="formatBytes(stats.net_tx) + '/s'"></span>
                         </div>
                     </div>
@@ -207,33 +189,26 @@
             <button @click="openMenu = !openMenu"
                 class="flex h-8 w-8 items-center justify-center rounded-lg text-zinc-400 transition-all hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
                 :class="{ 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300': openMenu }">
-                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-                </svg>
+                <x-icons.three-dots-vertical class="h-5 w-5" />
             </button>
 
-            <div x-show="openMenu" @click.away="openMenu = false"
-                x-transition:enter="transition ease-out duration-100"
+            <div x-show="openMenu" @click.away="openMenu = false" x-transition:enter="transition ease-out duration-100"
                 x-transition:enter-start="transform opacity-0 scale-95"
                 x-transition:enter-end="transform opacity-100 scale-100"
                 x-transition:leave="transition ease-in duration-75"
                 x-transition:leave-start="transform opacity-100 scale-100"
                 x-transition:leave-end="transform opacity-0 scale-95"
                 class="absolute right-0 top-full z-50 mt-2 w-48 origin-top-right rounded-xl border border-zinc-200 bg-white p-1.5 shadow-zinc-200/50 dark:border-zinc-800 dark:shadow-black/50"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
                 style="display: none;">
 
                 @if ($server->is_active)
                     <button x-show="typeof loading !== 'undefined' ? (!loading && !error) : false"
                         @click="showDetails = true; openMenu = false"
                         class="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-50 hover:text-red-600 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-red-400">
-                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
+                        <x-icons.eye class="h-4 w-4" />
                         Detail Metrics
                     </button>
                     <div class="my-1 border-t border-zinc-100 dark:border-zinc-800"></div>
@@ -259,25 +234,21 @@
     @if ($server->is_active)
         <div x-show="!loading && !error" x-transition
             class="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-lg bg-zinc-50/50 px-3 py-2 text-[11px]"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <div class="flex items-center gap-1.5">
                 <x-icons.info class="h-3.5 w-3.5 text-zinc-400" />
                 <span class="font-medium text-zinc-500">System:</span>
                 <span class="text-zinc-700 dark:text-zinc-300" x-text="sysInfo.os || '--'"></span>
             </div>
             <div class="flex items-center gap-1.5">
-                <svg class="h-3.5 w-3.5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <x-icons.clock class="h-3.5 w-3.5 text-zinc-400" />
                 <span class="font-medium text-zinc-500">Uptime:</span>
                 <span class="text-zinc-700 dark:text-zinc-300" x-text="sysInfo.uptime || '--'"></span>
             </div>
             <div class="flex items-center gap-1.5">
-                <svg class="h-3.5 w-3.5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <x-icons.info class="h-3.5 w-3.5 text-zinc-400" />
                 <span class="font-medium text-zinc-500">Local IP:</span>
                 <span class="font-mono text-zinc-700 dark:text-zinc-300" x-text="sysInfo.ip || '--'"></span>
             </div>

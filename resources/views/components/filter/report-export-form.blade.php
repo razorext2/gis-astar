@@ -5,9 +5,10 @@
     'users' => collect(),
 ])
 
-<div
-    class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 md:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+<div class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 md:p-6"
+    x-bind:class="dynamicBg ?
+        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
     <form wire:submit="export" class="flex flex-col gap-4 md:gap-6">
 
         {{-- Quick Date Select --}}

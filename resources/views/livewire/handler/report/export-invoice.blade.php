@@ -1,13 +1,15 @@
 {{-- Goal: Custom view export laporan invoice, Livewire: Handler\Report\ExportInvoice, Alpine: None --}}
-<div
-    class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 md:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+<div class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 md:p-6"
+    x-bind:class="dynamicBg ?
+        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
     <form wire:submit="export" class="flex flex-col gap-4 md:gap-6">
 
         {{-- Header Title --}}
         <div>
             <h2 class="text-lg font-bold text-zinc-900 dark:text-white">Ekspor Laporan Invoice</h2>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400">Sesuaikan rentang tanggal, tipe tagihan, tipe invoice, status pengiriman, dan filter petugas untuk mengekspor data invoice.</p>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400">Sesuaikan rentang tanggal, tipe tagihan, tipe invoice,
+                status pengiriman, dan filter petugas untuk mengekspor data invoice.</p>
         </div>
 
         <div class="h-px w-full bg-zinc-200 dark:bg-zinc-800"></div>
@@ -59,13 +61,13 @@
 
         {{-- Standalone Filters Grid --}}
         <div>
-            <p class="mb-3 text-xs font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">Parameter Filter Tambahan</p>
+            <p class="mb-3 text-xs font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">Parameter
+                Filter Tambahan</p>
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
 
                 {{-- 1. Filter Tanggal Berdasarkan --}}
                 <div>
-                    <label class="mb-2 block text-sm font-bold text-zinc-900 dark:text-white"
-                        for="report_date_type">
+                    <label class="mb-2 block text-sm font-bold text-zinc-900 dark:text-white" for="report_date_type">
                         Filter Tanggal Berdasarkan
                     </label>
                     <select id="report_date_type" wire:model.live="dateType"
@@ -78,8 +80,7 @@
 
                 {{-- 2. Tipe Tagihan --}}
                 <div>
-                    <label class="mb-2 block text-sm font-bold text-zinc-900 dark:text-white"
-                        for="report_tipe_tagihan">
+                    <label class="mb-2 block text-sm font-bold text-zinc-900 dark:text-white" for="report_tipe_tagihan">
                         Tipe Tagihan
                     </label>
                     <select id="report_tipe_tagihan" wire:model.live="tipeTagihan"
@@ -92,8 +93,7 @@
 
                 {{-- 3. Tipe Invoice --}}
                 <div>
-                    <label class="mb-2 block text-sm font-bold text-zinc-900 dark:text-white"
-                        for="report_tipe_invoice">
+                    <label class="mb-2 block text-sm font-bold text-zinc-900 dark:text-white" for="report_tipe_invoice">
                         Tipe Invoice
                     </label>
                     <select id="report_tipe_invoice" wire:model.live="tipeInvoice"

@@ -1,6 +1,8 @@
 {{-- Goal: Render form to create Attendance Inquiry, Livewire: App\Livewire\Handler\AttendanceInquiry\Create, Alpine: Geolocation event handling --}}
 <div class="rounded-xl border border-zinc-200 p-4 shadow-sm dark:border-zinc-800 md:p-6 lg:p-8"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
+    x-bind:class="dynamicBg ?
+        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
     id="attendance-inquiry-create-container" x-data="{
         gpsStatus: 'loading',
         gpsError: ''
@@ -122,9 +124,10 @@
             <label class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">Foto Bukti (Dokumentasi Error /
                 Bukti Kehadiran) <span class="text-red-500">*</span></label>
 
-            <div
-                class="mt-2 flex justify-center rounded-xl border border-dashed border-zinc-300 bg-zinc-50/50 px-6 py-6 dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="mt-2 flex justify-center rounded-xl border border-dashed border-zinc-300 bg-zinc-50/50 px-6 py-6 dark:border-zinc-800"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div class="text-center">
                     <x-icons.cloud-upload class="mx-auto h-12 w-12 text-zinc-400" />
                     <div class="mt-4 flex text-sm text-zinc-600 dark:text-zinc-400">
@@ -161,9 +164,10 @@
             {{-- Preview section --}}
             @if (!empty($this->bukti))
                 <div class="mt-4 flex flex-col gap-2">
-                    <div
-                        class="scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-800 overflow-x-auto rounded-xl border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                    <div class="scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-800 overflow-x-auto rounded-xl border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800"
+                        x-bind:class="dynamicBg ?
+                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         <div class="flex gap-4">
                             @foreach ($this->bukti as $index => $photo)
                                 <div class="relative shrink-0">

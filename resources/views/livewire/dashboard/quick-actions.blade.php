@@ -1,10 +1,11 @@
-<div class="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+<div class="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
     @can('spk-create')
         <x-card.quick-action href="{{ route('spk.create') }}" label="Buat SPK Baru" icon="plus" color="red" />
     @endcan
 
     @can('invoice-list')
-        <x-card.quick-action href="{{ route('invoice.all.index') }}" label="Daftar Tagihan" icon="file-invoice" color="blue" />
+        <x-card.quick-action href="{{ route('invoice.all.index') }}" label="Daftar Tagihan" icon="file-invoice"
+            color="blue" />
     @endcan
 
     @can('spk-approve')

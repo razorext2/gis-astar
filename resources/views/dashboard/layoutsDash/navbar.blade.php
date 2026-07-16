@@ -23,8 +23,8 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
     :class="[
         openSidebar ? 'md:ml-[288px]' : '',
         dynamicBg ?
-        'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md shadow-zinc-200/40 dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-none' :
-        'bg-white border-zinc-200 shadow-md shadow-zinc-200/40 dark:bg-dark-primary dark:border-zinc-800 dark:shadow-none'
+        'bg-glass-light border-glass-border-light backdrop-blur-md shadow-sm dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-none' :
+        'bg-white border-zinc-200 shadow-sm dark:bg-dark-primary dark:border-zinc-800 dark:shadow-none'
     ]"
     :style="{ transform: !navVisible ? 'translateY(calc(-100% - 1rem))' : 'translateY(0)' }"
     style="transition: margin-left 300ms ease-out, transform 300ms ease-in-out;"

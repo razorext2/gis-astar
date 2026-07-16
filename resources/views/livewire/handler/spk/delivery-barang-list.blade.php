@@ -10,9 +10,10 @@
     <div id="delivery-history-content" class="grid w-full gap-2 lg:grid-cols-2 lg:gap-4">
         @forelse ($deliveries as $row)
             <div class="w-full">
-                <div
-                    class="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                <div class="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-zinc-800"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <div
                         class="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-800/30">
                         <div class="flex items-center gap-2">
@@ -133,8 +134,10 @@
                                                 class="flex-grow font-medium text-zinc-900 dark:text-white">{{ $barang['nama_barang'] ?? '-' }}</span>
                                             <span
                                                 class="inline-flex items-center gap-1 whitespace-nowrap rounded-md bg-zinc-100/80 px-2 py-0.5 text-[11px] font-medium text-zinc-700 ring-1 ring-inset ring-zinc-200 dark:bg-zinc-800/80 dark:text-zinc-300 dark:ring-zinc-700/80">
-                                                <span class="font-bold text-zinc-900 dark:text-white">{{ $barang['qty_barang'] ?? 0 }}</span>
-                                                <span class="text-zinc-500 dark:text-zinc-400">{{ $barang['satuan_barang'] ?? '' }}</span>
+                                                <span
+                                                    class="font-bold text-zinc-900 dark:text-white">{{ $barang['qty_barang'] ?? 0 }}</span>
+                                                <span
+                                                    class="text-zinc-500 dark:text-zinc-400">{{ $barang['satuan_barang'] ?? '' }}</span>
                                             </span>
                                         </li>
                                     @empty
@@ -189,9 +192,10 @@
                 @endphp
 
                 @forelse ($histories as $row)
-                    <div
-                        class="relative overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                    <div class="relative overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800"
+                        x-bind:class="dynamicBg ?
+                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         <div
                             class="{{ $row['status'] == 'Selesai' ? 'bg-emerald-500' : ($row['status'] == 'Delay' ? 'bg-amber-500' : 'bg-blue-500') }} absolute left-0 top-0 h-full w-1">
                         </div>
@@ -289,7 +293,9 @@
                         </div>
                         <input id="delayed_eta" name="delayed_eta" wire:model="delayed_eta" type="date"
                             class="block w-full rounded-xl border border-zinc-200 py-2.5 pr-4 ps-11 text-sm font-medium text-zinc-900 transition-all focus:border-amber-500 focus:ring-amber-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-white"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                            x-bind:class="dynamicBg ?
+                                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     </div>
                     @error('delayed_eta')
                         <span class="mt-2 text-xs text-red-500">{{ $message }}</span>

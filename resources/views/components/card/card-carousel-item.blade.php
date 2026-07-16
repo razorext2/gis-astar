@@ -29,7 +29,7 @@
             'value-dark-from' => 'dark:from-red-300',
             'value-dark-to' => 'dark:to-rose-200',
             'label-hover' => 'group-hover:text-red-600 dark:group-hover:text-red-400',
-            'shadow-hover' => 'group-hover:shadow-red-500/15 dark:group-hover:shadow-red-500/10',
+            'shadow-hover' => 'group-hover:shadow-red-500/15 dark:group-hover:',
         ],
         'yellow' => [
             'accent' => 'from-yellow-400 via-amber-400 to-yellow-600',

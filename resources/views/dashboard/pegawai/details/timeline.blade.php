@@ -5,9 +5,10 @@
 
         {{-- Filter Section --}}
         <div class="lg:col-span-2">
-            <div
-                class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <form id="dateForm" action="{{ route('pegawai.timeline', ['pegawai' => $pegawai->kode_pegawai]) }}"
                     method="GET" class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div class="flex items-center gap-3">
@@ -24,9 +25,10 @@
         </div>
 
         {{-- Activity Timeline --}}
-        <div
-            class="relative overflow-hidden rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+        <div class="relative overflow-hidden rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <div class="mb-8 border-b border-zinc-200 pb-4 dark:border-zinc-800">
                 <h2 class="text-2xl font-bold tracking-tight text-gray-800 dark:text-white">
                     {{ $pegawai->full_name }}
@@ -134,9 +136,10 @@
         </div>
 
         {{-- Map Section --}}
-        <div
-            class="relative h-max overflow-hidden rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+        <div class="relative h-max overflow-hidden rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <div class="mb-6 flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="h-8 w-1 rounded-full bg-red-600"></div>

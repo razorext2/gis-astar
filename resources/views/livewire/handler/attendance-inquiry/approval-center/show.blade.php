@@ -3,7 +3,7 @@
     {{-- Header --}}
     <div class="flex items-center gap-3 rounded-xl border border-zinc-200 p-4 shadow-sm dark:border-zinc-800 lg:p-6"
         x-bind:class="dynamicBg ?
-            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
             'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <x-button.danger wire:navigate href="{{ route('attendance-inquiry.approval-center.index') }}"
             class="max-h-10 max-w-fit">
@@ -37,7 +37,7 @@
             {{-- Detail Fields --}}
             <div class="space-y-4 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
                 x-bind:class="dynamicBg ?
-                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
                     'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3 class="text-base font-bold text-zinc-900 dark:text-white">Rincian Pengajuan</h3>
 
@@ -80,7 +80,7 @@
             {{-- Bukti Foto --}}
             <div class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
                 x-bind:class="dynamicBg ?
-                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
                     'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3 class="mb-4 text-base font-bold text-zinc-900 dark:text-white">Lampiran Bukti Foto</h3>
                 @if (!empty($inquiry->bukti))
@@ -97,7 +97,7 @@
                                     <a href="{{ asset('storage/' . $path) }}" target="_blank"
                                         class="rounded-lg px-3 py-1.5 text-xs font-bold text-gray-800 dark:text-white"
                                         x-bind:class="dynamicBg ?
-                                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+                                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
                                             'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                         Perbesar
                                     </a>
@@ -114,12 +114,14 @@
             @if ($inquiry->status === 'pending')
                 <div class="space-y-4 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
                     x-bind:class="dynamicBg ?
-                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
                         'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <h3 class="text-base font-bold text-zinc-900 dark:text-white">Tindakan HRD</h3>
 
                     <div class="flex flex-wrap items-center gap-3">
-                        <x-button.primary wire:click="approve" wire:confirm.prompt="Apakah Anda yakin ingin menyetujui laporan absensi ini?\n\nKetik YA untuk melanjutkan.|YA" wire:loading.attr="disabled" id="approve_btn">
+                        <x-button.primary wire:click="approve"
+                            wire:confirm.prompt="Apakah Anda yakin ingin menyetujui laporan absensi ini?\n\nKetik YA untuk melanjutkan.|YA"
+                            wire:loading.attr="disabled" id="approve_btn">
                             Setujui Laporan
                         </x-button.primary>
 
@@ -139,7 +141,7 @@
                             placeholder="Masukkan alasan mengapa pengajuan ini ditolak..."
                             class="block w-full rounded-lg border-zinc-200 text-sm text-zinc-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:text-white"
                             x-bind:class="dynamicBg ?
-                                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+                                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
                                 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"></textarea>
                         @error('rejection_reason')
                             <span class="block text-xs text-red-500">{{ $message }}</span>
@@ -166,7 +168,7 @@
 
             <div class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
                 x-bind:class="dynamicBg ?
-                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
                     'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3 class="mb-4 text-base font-bold text-zinc-900 dark:text-white">Lokasi</h3>
 

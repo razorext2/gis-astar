@@ -1,9 +1,10 @@
 {{-- Goal: UI parent wrapper untuk assign/unassign nomor tagihan BSI ke SPK, Livewire: Update, Alpine: minimal --}}
 <div class="flex flex-col gap-4">
     {{-- Info Cust SPK --}}
-    <div
-        class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow dark:border-zinc-800 dark:shadow-none lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow dark:border-zinc-800 dark:shadow-none lg:p-6"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
             <div class="space-y-1">
                 <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">No. SPK</p>

@@ -1,9 +1,10 @@
 {{-- Goal: Display own attendance inquiry detail, Livewire: App\Livewire\Handler\AttendanceInquiry\Show, Alpine: - --}}
 <div class="space-y-4">
     {{-- Header --}}
-    <div
-        class="flex items-center gap-3 rounded-xl border border-zinc-200 p-4 shadow-sm dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="flex items-center gap-3 rounded-xl border border-zinc-200 p-4 shadow-sm dark:border-zinc-800 lg:p-6"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <x-button.danger wire:navigate href="{{ route('attendance-inquiry.my-inquiries.index') }}"
             class="max-h-10 max-w-fit">
             <x-icons.angle-left class="h-5 w-5" />
@@ -32,9 +33,10 @@
 
     {{-- Rejection Warning Card --}}
     @if ($inquiry->status === 'rejected')
-        <div
-            class="rounded-xl border border-red-200 bg-red-50/50 p-4 text-red-800 dark:border-red-800 dark:bg-red-900/10 dark:text-red-400"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+        <div class="rounded-xl border border-red-200 bg-red-50/50 p-4 text-red-800 dark:border-red-800 dark:bg-red-900/10 dark:text-red-400"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <div class="flex gap-3">
                 <x-icons.exclamation-circle class="h-5 w-5 flex-shrink-0" />
                 <div>
@@ -50,9 +52,10 @@
 
     {{-- Approval Info Card --}}
     @if ($inquiry->status === 'approved')
-        <div
-            class="rounded-xl border border-green-200 bg-green-50/50 p-4 text-green-800 dark:border-green-800 dark:bg-green-900/10 dark:text-green-400"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+        <div class="rounded-xl border border-green-200 bg-green-50/50 p-4 text-green-800 dark:border-green-800 dark:bg-green-900/10 dark:text-green-400"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <div class="flex gap-3">
                 <x-icons.check-circle class="h-5 w-5 flex-shrink-0" />
                 <div>
@@ -69,9 +72,10 @@
     <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div class="space-y-4 lg:col-span-2">
             {{-- Detail Fields --}}
-            <div
-                class="space-y-4 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="space-y-4 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3 class="text-base font-bold text-zinc-900 dark:text-white">Rincian Pengajuan</h3>
 
                 <div class="grid grid-cols-2 gap-4 border-t border-zinc-100 pt-4 dark:border-zinc-800">
@@ -111,9 +115,10 @@
             </div>
 
             {{-- Bukti Foto --}}
-            <div
-                class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3 class="mb-4 text-base font-bold text-zinc-900 dark:text-white">Lampiran Bukti Foto</h3>
                 @if (!empty($inquiry->bukti))
                     <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
@@ -128,7 +133,9 @@
                                     class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
                                     <a href="{{ asset('storage/' . $path) }}" target="_blank"
                                         class="rounded-lg px-3 py-1.5 text-xs font-bold text-white"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                                        x-bind:class="dynamicBg ?
+                                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                         Perbesar
                                     </a>
                                 </div>
@@ -147,9 +154,10 @@
             {{-- Allowed HRD Card --}}
             <x-attendance-inquiry.allowed-hrds-card :hrds="$allowedHrds" :inquiry="$inquiry" />
 
-            <div
-                class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <h3 class="mb-4 text-base font-bold text-zinc-900 dark:text-white">Lokasi</h3>
 
                 @if ($inquiry->latitude && $inquiry->longitude)
@@ -169,11 +177,14 @@
                                     class="text-zinc-700 dark:text-zinc-200">{{ $inquiry->longitude }}</strong></p>
                         </div>
 
-                        <a href="https://www.google.com/maps/search/?api=1&query={{ $inquiry->latitude }},{{ $inquiry->longitude }}"
-                            target="_blank"
-                            class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-semibold text-zinc-700 shadow-sm hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800">
-                            <x-icons.map-pin class="h-4 w-4 text-red-500" /> Buka Google Maps
-                        </a>
+                        <x-button.secondary
+                            href="https://www.google.com/maps/search/?api=1&query={{ $inquiry->latitude }},{{ $inquiry->longitude }}"
+                            target="_blank" class="w-full">
+                            <x-slot name="icon">
+                                <x-icons.map-pin class="h-4 w-4 text-red-500" />
+                            </x-slot>
+                            Buka Google Maps
+                        </x-button.secondary>
                     </div>
                 @else
                     <div class="py-6 text-center text-zinc-500">

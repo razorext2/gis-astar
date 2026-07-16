@@ -18,7 +18,9 @@
         </x-landing.header-text>
 
         <div class="relative mx-2 mb-5 rounded-lg border border-zinc-200 p-0 dark:border-zinc-800 lg:mx-auto lg:p-4"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
             id="scan" data-aos="zoom-in-up" data-aos-delay="50">
             <form id="photoForm" action="{{ route('photo.registProcess') }}" method="POST"
                 enctype="multipart/form-data">

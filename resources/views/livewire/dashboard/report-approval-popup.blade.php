@@ -122,7 +122,8 @@ $watch('$wire.showPopup', val => {
 });">
     {{-- Teleport Card to the shared Grid Container --}}
     <template x-teleport="#report-popup-grid-container">
-        <div x-show="openPopups['{{ $type }}']?.show && $wire.hasPending" @close-all-popups.window="openPopups['{{ $type }}'].show = false; setTimeout(() => $wire.set('showPopup', false), 500)"
+        <div x-show="openPopups['{{ $type }}']?.show && $wire.hasPending"
+            @close-all-popups.window="openPopups['{{ $type }}'].show = false; setTimeout(() => $wire.set('showPopup', false), 500)"
             wire:key="popup-card-{{ $type }}"
             x-transition:enter="transition cubic-bezier(0.34, 1.56, 0.64, 1) duration-500 transform origin-bottom-right"
             x-transition:enter-start="opacity-0 scale-0 translate-y-20 translate-x-20"
@@ -144,14 +145,14 @@ $watch('$wire.showPopup', val => {
                             {{ $config['title'] }}
                         </h2>
                         @if ($regionLabel)
-                            <p
-                                class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
                                 {{ $regionLabel }}
                             </p>
                         @endif
                     </div>
                 </div>
-                <x-button.secondary @click="openPopups['{{ $type }}'].show = false; setTimeout(() => $wire.set('showPopup', false), 500)"
+                <x-button.secondary
+                    @click="openPopups['{{ $type }}'].show = false; setTimeout(() => $wire.set('showPopup', false), 500)"
                     class="!rounded-full !border-none !bg-transparent !p-2 !shadow-none !ring-0">
                     <x-slot name="icon">
                         <x-icons.close class="h-5 w-5" />
@@ -161,9 +162,10 @@ $watch('$wire.showPopup', val => {
 
             {{-- Body --}}
             <div class="flex flex-1 flex-col justify-between p-5">
-                <div
-                    class="mb-4 flex flex-col items-center gap-3 rounded-xl border border-zinc-200 bg-zinc-50/50 p-6 dark:border-zinc-800 dark:"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                <div class="dark: mb-4 flex flex-col items-center gap-3 rounded-xl border border-zinc-200 bg-zinc-50/50 p-6 dark:border-zinc-800"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <div class="{{ $colorClasses['counter'] }} text-4xl font-black tracking-tight">
                         {{ $pendingCount }}
                     </div>
@@ -177,9 +179,10 @@ $watch('$wire.showPopup', val => {
                     </p>
                 </div>
 
-                <div
-                    class="mb-4 flex items-start gap-2 rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                <div class="dark: mb-4 flex items-start gap-2 rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <x-icons.info-circle class="mt-0.5 h-4 w-4 shrink-0 text-zinc-400" />
                     <p class="text-xs text-zinc-500 dark:text-zinc-400">
                         @if ($type === 'production-assigned')
@@ -202,24 +205,23 @@ $watch('$wire.showPopup', val => {
     </template>
 
     {{-- Minimized FAB Button --}}
-    <div x-show="!openPopups['{{ $type }}']?.show && $wire.hasPending"
-        x-data="{ tapping: false }"
-        x-on:mousedown="tapping = true"
-        x-on:touchstart="tapping = true"
-        x-on:animationend="tapping = false"
+    <div x-show="!openPopups['{{ $type }}']?.show && $wire.hasPending" x-data="{ tapping: false }"
+        x-on:mousedown="tapping = true" x-on:touchstart="tapping = true" x-on:animationend="tapping = false"
         :class="[
             tapping ? 'is-tapping' : '',
-            dynamicBg
-                ? 'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-none'
-                : 'bg-white border-zinc-200 shadow-sm hover:bg-zinc-50 dark:bg-dark-primary dark:border-zinc-800 dark:hover:bg-zinc-800'
+            dynamicBg ?
+            'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-none' :
+            'bg-white border-zinc-200 shadow-sm hover:bg-zinc-50 dark:bg-dark-primary dark:border-zinc-800 dark:hover:bg-zinc-800'
         ]"
         class="liquid-btn report-fab-item flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border hover:scale-105"
         :style="isOpen
-            ? 'transform: translate(0, 0) scale(1); opacity: 1; pointer-events: auto;'
-            : 'transform: translate(60px, ' + (({{ $stackIndex }} - 1) * 56) + 'px) scale(0.3); opacity: 0; pointer-events: none;'"
+            ?
+            'transform: translate(0, 0) scale(1); opacity: 1; pointer-events: auto;' :
+            'transform: translate(60px, ' + (({{ $stackIndex }} - 1) * 56) +
+            'px) scale(0.3); opacity: 0; pointer-events: none;'"
         style="display: none;"
         @click="openPopups['{{ $type }}'].show = true; setTimeout(() => $wire.set('showPopup', true), 500)">
 
-        <x-dynamic-component :component="'icons.' . $config['icon']" class="h-5 w-5 {{ $colorClasses['text_color'] }}" />
+        <x-dynamic-component :component="'icons.' . $config['icon']" class="{{ $colorClasses['text_color'] }} h-5 w-5" />
     </div>
 </div>

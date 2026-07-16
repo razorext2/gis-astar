@@ -1,11 +1,13 @@
 <div class="mt-4 grid gap-4 lg:gap-6">
     @forelse ($teams as $row)
         <div wire:key="{{ $row->team_code }}"
-            class="hover:shadow-primary/5 hover:ring-primary/20 group relative overflow-hidden rounded-md p-4 ring-1 ring-zinc-200/60 transition-all duration-300 hover: dark:ring-white/10 dark:hover:bg-dark-primary/80 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            class="hover: group relative overflow-hidden rounded-md p-4 ring-1 ring-zinc-200/60 transition-all duration-300 hover:shadow-primary/5 hover:ring-primary/20 dark:ring-white/10 dark:hover:bg-dark-primary/80 lg:p-6"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <!-- Dekorasi Blur Blob -->
             <div
-                class="bg-primary/10 dark:bg-primary/20 pointer-events-none absolute -right-10 -top-10 z-0 h-40 w-40 rounded-full opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100">
+                class="pointer-events-none absolute -right-10 -top-10 z-0 h-40 w-40 rounded-full bg-primary/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100 dark:bg-primary/20">
             </div>
 
             <div class="relative z-10 flex w-full flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -58,9 +60,10 @@
             {{-- end detail member --}}
         </div>
     @empty
-        <div
-            class="flex flex-col items-center justify-center rounded-2xl border border-zinc-200/50 py-12 dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+        <div class="flex flex-col items-center justify-center rounded-2xl border border-zinc-200/50 py-12 dark:border-zinc-800"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <x-icons.user-group class="mb-4 h-16 w-16 text-gray-300 dark:text-gray-600" />
             <p class="text-lg font-medium text-gray-600 dark:text-gray-300">Belum ada tim yang terbentuk</p>
             <p class="mt-1 text-sm text-gray-400 dark:text-gray-500">Buat tim baru terlebih dahulu untuk mulai

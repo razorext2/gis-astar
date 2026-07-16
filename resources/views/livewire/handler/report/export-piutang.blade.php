@@ -1,13 +1,15 @@
 {{-- Goal: Custom view export laporan piutang, Livewire: Handler\Report\ExportPiutang, Alpine: Yes --}}
-<div
-    class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 md:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+<div class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 md:p-6"
+    x-bind:class="dynamicBg ?
+        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
     <form wire:submit="export" class="flex flex-col gap-4 md:gap-6">
 
         {{-- Header Title --}}
         <div>
             <h2 class="text-lg font-bold text-zinc-900 dark:text-white">Ekspor Laporan Piutang</h2>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400">Sesuaikan rentang tanggal, filter petugas, tipe SR, dan status tagihan untuk mengekspor data piutang.</p>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400">Sesuaikan rentang tanggal, filter petugas, tipe SR, dan
+                status tagihan untuk mengekspor data piutang.</p>
         </div>
 
         <div class="h-px w-full bg-zinc-200 dark:bg-zinc-800"></div>
@@ -59,13 +61,13 @@
 
         {{-- Standalone Filters Grid --}}
         <div>
-            <p class="mb-3 text-xs font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">Parameter Filter Tambahan</p>
+            <p class="mb-3 text-xs font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">Parameter
+                Filter Tambahan</p>
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
 
                 {{-- 1. Tipe Filter Tanggal --}}
                 <div>
-                    <label class="mb-2 block text-sm font-bold text-zinc-900 dark:text-white"
-                        for="report_date_type">
+                    <label class="mb-2 block text-sm font-bold text-zinc-900 dark:text-white" for="report_date_type">
                         Tipe Filter Tanggal
                     </label>
                     <select id="report_date_type" wire:model.live="dateType"
@@ -92,8 +94,7 @@
 
                 {{-- 3. Status Tagihan (Bill Status) --}}
                 <div>
-                    <label class="mb-2 block text-sm font-bold text-zinc-900 dark:text-white"
-                        for="report_bill_status">
+                    <label class="mb-2 block text-sm font-bold text-zinc-900 dark:text-white" for="report_bill_status">
                         Status Tagihan
                     </label>
                     <select id="report_bill_status" wire:model.live="billStatus"
@@ -140,7 +141,8 @@
                             <option value="">Pilih...</option>
                             @foreach ($users as $user)
                                 <option value="{{ $user->kode_pegawai }}">
-                                    {{ $user->name }} {{ $user->kode_pegawai ? "($user->kode_pegawai)" : '' }}{{ !$user->is_active ? ' (nonaktif)' : '' }}
+                                    {{ $user->name }}
+                                    {{ $user->kode_pegawai ? "($user->kode_pegawai)" : '' }}{{ !$user->is_active ? ' (nonaktif)' : '' }}
                                 </option>
                             @endforeach
                         </select>

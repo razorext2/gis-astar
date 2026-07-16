@@ -1,24 +1,33 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div
-        class="flex w-full flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6 md:max-w-lg lg:max-w-xl xl:max-w-2xl"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="flex w-full flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6 md:max-w-lg lg:max-w-xl xl:max-w-2xl"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
-        <div>
-            <span class="text-xl font-semibold text-gray-900 dark:text-white">
-                Tambah Event
-            </span>
+        <div class="flex items-center gap-4 border-b border-zinc-100 pb-4 dark:border-white/5">
+            <x-button.danger href="{{ route('event.index') }}" class="max-h-10 w-fit shrink-0" wire:navigate id="back-button">
+                <x-slot name="icon">
+                    <x-icons.angle-left class="h-5 w-5" />
+                </x-slot>
+            </x-button.danger>
 
-            <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
-                Silahkan isi data event sesuai dengan form yang diberikan.
-            </p>
+            <div>
+                <span class="text-xl font-semibold text-gray-900 dark:text-white">
+                    Tambah Event
+                </span>
+
+                <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
+                    Silahkan isi data event sesuai dengan form yang diberikan.
+                </p>
+            </div>
         </div>
 
         <form method="POST" action="{{ route('event.store') }}" class="grid grid-cols-2 gap-4">
             @csrf
             <div class="col-span-2 w-full">
-                <x-input.basic id="event_name" class="@error('event_name') border-red-500 @enderror" required name="event_name"
-                    placeholder="Nama Event" value="{{ old('event_name') }}">
+                <x-input.basic id="event_name" class="@error('event_name') border-red-500 @enderror" required
+                    name="event_name" placeholder="Nama Event" value="{{ old('event_name') }}">
                     Nama Event
                 </x-input.basic>
 

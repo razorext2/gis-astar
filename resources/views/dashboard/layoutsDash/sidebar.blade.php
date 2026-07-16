@@ -93,7 +93,7 @@
             <input type="text" x-model="menuSearch"
                 class="block w-full rounded-xl border-zinc-200 bg-zinc-50/50 py-2.5 pl-10 pr-3 text-sm tracking-wide text-zinc-900 placeholder-zinc-400 transition-colors duration-200 focus:border-red-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-red-600/20 dark:border-zinc-800 dark:text-white dark:placeholder-zinc-500 dark:focus:border-red-500 dark:focus:ring-red-500/20"
                 x-bind:class="dynamicBg ?
-                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
                     'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
                 placeholder="Cari Menu..." />
             <button x-show="menuSearch" @click="menuSearch = ''"

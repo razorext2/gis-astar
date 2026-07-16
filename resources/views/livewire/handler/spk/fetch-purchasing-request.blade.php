@@ -1,7 +1,8 @@
-{{-- Goal: Fetch & assign PR by nomor PR, nomor order or nomor PO, Livewire: FetchPurchasingRequest, Alpine: accordion per section --}}
-<div
-    class="space-y-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+{{-- Goal: Fetch & assign PR by nomor PR, nomor order or nomor PO, Livewire: App\Livewire\Handler\Spk\FetchPurchasingRequest, Alpine: accordion per section --}}
+<div class="space-y-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none lg:p-6"
+    x-bind:class="dynamicBg ?
+        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
     {{-- ─── Preview Modal (Nomor Order) ──────────────────────────────────────── --}}
     <x-modal.base-modal show="showOrderPreview" maxWidth="4xl" title="Preview Data PR dari Nomor Order"
@@ -17,8 +18,9 @@
                         class="rounded-full bg-blue-100 px-2.5 py-1 text-xs font-bold text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
                         {{ count($orderPreviewData) }} item ditemukan
                     </span>
-                    <label class="flex items-center gap-2 text-xs font-semibold text-zinc-700 dark:text-zinc-300 cursor-pointer">
-                        <input type="checkbox" wire:click="toggleSelectAllOrder" 
+                    <label
+                        class="flex cursor-pointer items-center gap-2 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                        <input type="checkbox" wire:click="toggleSelectAllOrder"
                             class="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800"
                             {{ count($selectedOrderItems) === count($orderPreviewData) && count($orderPreviewData) > 0 ? 'checked' : '' }}>
                         Pilih Semua
@@ -42,7 +44,7 @@
                                 <thead
                                     class="border-b border-zinc-200 bg-zinc-50 text-xs uppercase text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-zinc-400">
                                     <tr>
-                                        <th scope="col" class="px-3 py-2 text-center w-10">Pilih</th>
+                                        <th scope="col" class="w-10 px-3 py-2 text-center">Pilih</th>
                                         <th scope="col" class="px-3 py-2 text-center">#</th>
                                         <th scope="col" class="px-3 py-2 text-center">Kode Item</th>
                                         <th scope="col" class="px-3 py-2">Nama Item</th>
@@ -53,11 +55,13 @@
                                 </thead>
                                 <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
                                     @foreach ($items as $index => $item)
-                                        <tr
-                                            class="transition-colors hover:bg-zinc-50 dark:bg-transparent dark:hover:bg-zinc-800/50"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                                        <tr class="transition-colors hover:bg-zinc-50 dark:bg-transparent dark:hover:bg-zinc-800/50"
+                                            x-bind:class="dynamicBg ?
+                                                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                             <td class="px-3 py-2 text-center">
-                                                <input type="checkbox" wire:model.live="selectedOrderItems" value="{{ $item['original_index'] }}"
+                                                <input type="checkbox" wire:model.live="selectedOrderItems"
+                                                    value="{{ $item['original_index'] }}"
                                                     class="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800">
                                             </td>
                                             <td class="px-3 py-2 text-center text-xs font-medium text-zinc-500">
@@ -90,13 +94,15 @@
                         {{-- Mobile Cards --}}
                         <div class="space-y-2 md:hidden">
                             @foreach ($items as $index => $item)
-                                <div
-                                    class="rounded-lg border border-zinc-200 bg-white p-3 shadow-sm dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                                <div class="rounded-lg border border-zinc-200 bg-white p-3 shadow-sm dark:border-zinc-800"
+                                    x-bind:class="dynamicBg ?
+                                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                     <div
                                         class="mb-2 flex items-center justify-between border-b border-zinc-100 pb-2 dark:border-zinc-800">
                                         <div class="flex items-center gap-2">
-                                            <input type="checkbox" wire:model.live="selectedOrderItems" value="{{ $item['original_index'] }}"
+                                            <input type="checkbox" wire:model.live="selectedOrderItems"
+                                                value="{{ $item['original_index'] }}"
                                                 class="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800">
                                             <span class="text-xs font-bold text-zinc-400">#{{ $index + 1 }}</span>
                                             <span
@@ -170,18 +176,15 @@
                     <p class="text-xs text-zinc-500 dark:text-zinc-400">Cari item PR berdasarkan nomor purchasing
                         request dari BSI</p>
                 </div>
-                <svg class="h-4 w-4 shrink-0 text-zinc-400 transition-transform duration-200"
-                    :class="open ? 'rotate-180' : ''" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                    fill="currentColor">
-                    <path fill-rule="evenodd"
-                        d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-                        clip-rule="evenodd" />
-                </svg>
+                <x-icons.chevron-down-filled class="h-4 w-4 shrink-0 text-zinc-400 transition-transform duration-200"
+                    x-bind:class="open ? 'rotate-180' : ''" />
             </button>
 
             {{-- Body --}}
             <div x-show="open" x-collapse class="space-y-4 p-5"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div>
                     <div class="flex w-full flex-col gap-3 sm:flex-row sm:items-end">
                         <div class="w-full flex-1">
@@ -213,8 +216,8 @@
                         <thead
                             class="border-b border-zinc-200 bg-zinc-50 text-xs uppercase text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-zinc-400">
                             <tr>
-                                <th scope="col" class="whitespace-nowrap px-6 py-3 text-center w-10">
-                                    <input type="checkbox" wire:click="toggleSelectAllPr" 
+                                <th scope="col" class="w-10 whitespace-nowrap px-6 py-3 text-center">
+                                    <input type="checkbox" wire:click="toggleSelectAllPr"
                                         class="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800"
                                         {{ count($selectedPrItems) === count($data) && count($data) > 0 ? 'checked' : '' }}>
                                 </th>
@@ -232,7 +235,8 @@
                             @forelse ($data as $index => $row)
                                 <tr class="transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-700/50">
                                     <td class="whitespace-nowrap px-6 py-4 text-center">
-                                        <input type="checkbox" wire:model.live="selectedPrItems" value="{{ $index }}"
+                                        <input type="checkbox" wire:model.live="selectedPrItems"
+                                            value="{{ $index }}"
                                             class="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800">
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-4 text-center">
@@ -295,18 +299,15 @@
                     <p class="text-xs text-zinc-500 dark:text-zinc-400">Cari semua PR berdasarkan KeteranganDetail =
                         nomor order SPK</p>
                 </div>
-                <svg class="h-4 w-4 shrink-0 text-zinc-400 transition-transform duration-200"
-                    :class="open ? 'rotate-180' : ''" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                    fill="currentColor">
-                    <path fill-rule="evenodd"
-                        d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-                        clip-rule="evenodd" />
-                </svg>
+                <x-icons.chevron-down-filled class="h-4 w-4 shrink-0 text-zinc-400 transition-transform duration-200"
+                    x-bind:class="open ? 'rotate-180' : ''" />
             </button>
 
             {{-- Body --}}
             <div x-show="open" x-collapse class="space-y-4 p-5"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div class="flex w-full flex-col gap-3 sm:flex-row sm:items-end">
                     <div class="w-full flex-1">
                         <x-input.basic id="nomor_order" name="nomor_order" :labels="true"
@@ -344,20 +345,18 @@
                 </span>
                 <div class="flex-1">
                     <p class="text-sm font-semibold text-zinc-900 dark:text-white">Fetch via Nomor PO</p>
-                    <p class="text-xs text-zinc-500 dark:text-zinc-400">Cari item PR berdasarkan nomor PO (purchasing order) dari BSI</p>
+                    <p class="text-xs text-zinc-500 dark:text-zinc-400">Cari item PR berdasarkan nomor PO (purchasing
+                        order) dari BSI</p>
                 </div>
-                <svg class="h-4 w-4 shrink-0 text-zinc-400 transition-transform duration-200"
-                    :class="open ? 'rotate-180' : ''" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                    fill="currentColor">
-                    <path fill-rule="evenodd"
-                        d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-                        clip-rule="evenodd" />
-                </svg>
+                <x-icons.chevron-down-filled class="h-4 w-4 shrink-0 text-zinc-400 transition-transform duration-200"
+                    x-bind:class="open ? 'rotate-180' : ''" />
             </button>
 
             {{-- Body --}}
             <div x-show="open" x-collapse class="space-y-4 p-5"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div class="flex w-full flex-col gap-3 sm:flex-row sm:items-end">
                     <div class="w-full flex-1">
                         <x-input.basic id="nomor_po" name="nomor_po" :labels="true"
@@ -370,8 +369,7 @@
                         wire:loading.attr="disabled" wire:target="fetchByNomorPO">
                         <x-slot name="icon">
                             <x-icons.search wire:loading.remove wire:target="fetchByNomorPO" class="h-4 w-4" />
-                            <x-icons.loading wire:loading wire:target="fetchByNomorPO"
-                                class="h-4 w-4 animate-spin" />
+                            <x-icons.loading wire:loading wire:target="fetchByNomorPO" class="h-4 w-4 animate-spin" />
                         </x-slot>
                         <span wire:loading.remove wire:target="fetchByNomorPO">Fetch by PO</span>
                         <span wire:loading wire:target="fetchByNomorPO">Mencari...</span>
@@ -394,9 +392,10 @@
 
             <div class="grid grid-cols-1 gap-4">
                 @foreach ($data_pr as $index => $row)
-                    <div
-                        class="flex flex-col gap-3 rounded-lg border border-zinc-200 p-4 shadow dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                    <div class="flex flex-col gap-3 rounded-lg border border-zinc-200 p-4 shadow dark:border-zinc-800"
+                        x-bind:class="dynamicBg ?
+                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         <div class="flex items-center gap-2">
                             <span
                                 class="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700 dark:bg-blue-900 dark:text-blue-200">

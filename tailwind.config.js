@@ -35,8 +35,8 @@ export default {
 
                 // Glassmorphism design tokens
                 // Usage: bg-glass-light / dark:bg-glass-dark, border-glass-border-light / dark:border-glass-border-dark
-                "glass-light": "rgba(255,255,255,0.20)",
-                "glass-dark": "rgba(24,24,27,0.55)",
+                "glass-light": "rgba(255,255,255,0.50)",
+                "glass-dark": "rgba(24,24,27,0.60)",
                 "glass-border-light": "rgba(228,228,231,0.50)",
                 "glass-border-dark": "rgba(255,255,255,0.10)",
                 "glass-text-light": "rgba(24,24,27,0.90)",

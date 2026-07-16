@@ -2,9 +2,10 @@
 
 <div class="flex flex-col gap-4">
     {{-- Header Section --}}
-    <div
-        class="flex flex-col justify-between gap-4 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 sm:flex-row sm:items-center md:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="flex flex-col justify-between gap-4 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 sm:flex-row sm:items-center md:p-6"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <div>
             <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white">Pusat Persetujuan Cuti</h1>
             <p class="text-sm text-zinc-500 dark:text-zinc-400">Tinjau dan proses pengajuan cuti dari anggota tim Anda.
@@ -18,9 +19,10 @@
         </div>
     </div>
 
-    <div
-        class="flex flex-col gap-6 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="flex flex-col gap-6 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         {{-- Tabs Section --}}
         <div class="flex items-center gap-2 overflow-x-auto border-b border-zinc-100 dark:border-zinc-800">
             <button wire:click="setTab('pending')"
@@ -51,15 +53,19 @@
                     <x-icons.search-alt class="h-5 w-5 text-zinc-400" />
                 </div>
                 <input wire:model.live.debounce.300ms="search" type="text"
-                    class="block w-full rounded-xl border-zinc-200 bg-zinc-50 py-2.5 pl-10 text-sm focus:border-primary focus:ring-primary dark:border-zinc-800 dark: dark:text-white"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
+                    class="dark: block w-full rounded-xl border-zinc-200 bg-zinc-50 py-2.5 pl-10 text-sm focus:border-primary focus:ring-primary dark:border-zinc-800 dark:text-white"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
                     placeholder="Cari nama, kode pegawai, atau alasan...">
             </div>
 
             <div class="flex flex-wrap items-center gap-3">
                 <select wire:model.live="filterStatus"
-                    class="rounded-xl border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-700 focus:border-primary focus:ring-primary dark:border-zinc-800 dark: dark:text-white"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                    class="dark: rounded-xl border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-700 focus:border-primary focus:ring-primary dark:border-zinc-800 dark:text-white"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="">Semua Status
                     </option>
                     <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="pending_backup">
@@ -81,8 +87,10 @@
                 </select>
 
                 <select wire:model.live="filterLeaveType"
-                    class="rounded-xl border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-700 focus:border-primary focus:ring-primary dark:border-zinc-800 dark: dark:text-white"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                    class="dark: rounded-xl border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-700 focus:border-primary focus:ring-primary dark:border-zinc-800 dark:text-white"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="">Semua Tipe
                         Cuti</option>
                     @foreach ($leaveTypes as $type)
@@ -105,8 +113,10 @@
     <div class="grid gap-4">
         @forelse ($pendingApprovals as $request)
             <div wire:key="approval-{{ $request->id }}"
-                class="group relative overflow-hidden rounded-xl border border-zinc-200 p-4 shadow-md transition-all duration-300 hover:border-red-500/50 hover: dark:border-zinc-800 dark:hover:bg-dark-primary/80 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                class="hover: group relative overflow-hidden rounded-xl border border-zinc-200 p-4 shadow-md transition-all duration-300 hover:border-red-500/50 dark:border-zinc-800 dark:hover:bg-dark-primary/80 lg:p-6"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
                 {{-- Hover Accent --}}
                 <div
@@ -217,16 +227,18 @@
                 </div>
 
                 {{-- Reason Snippet --}}
-                <div
-                    class="mt-4 rounded-xl bg-gray-50/50 p-3 text-sm italic text-gray-600 dark: dark:text-gray-400"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                <div class="dark: mt-4 rounded-xl bg-gray-50/50 p-3 text-sm italic text-gray-600 dark:text-gray-400"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     "{{ Str::limit($request->reason, 120) }}"
                 </div>
             </div>
         @empty
-            <div
-                class="flex flex-col items-center justify-center rounded-xl border border-zinc-200 py-16 dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="flex flex-col items-center justify-center rounded-xl border border-zinc-200 py-16 dark:border-zinc-800"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div class="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
                     <x-icons.check class="h-10 w-10 text-zinc-300 dark:text-zinc-600" />
                 </div>

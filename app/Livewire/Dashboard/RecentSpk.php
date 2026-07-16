@@ -9,6 +9,8 @@ use Livewire\Component;
 
 class RecentSpk extends Component
 {
+    public ?bool $showRightColumn;
+
     public function render()
     {
         $recentSpks = collect();

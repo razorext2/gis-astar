@@ -112,9 +112,7 @@ final class TeamMemberTable extends PowerGridComponent
     {
         return [
             Button::add('removeMember')
-                ->slot('<svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
-                    </svg>')
+                ->slot(\Illuminate\Support\Facades\Blade::render('<x-icons.trash class="w-4 h-4 text-gray-800 dark:text-white" />'))
                 ->class('dark:bg-red-800 dark:hover:bg-red-900 dark:text-white dark:border-zinc-800 rounded-lg bg-red-400 p-2 font-bold text-white border border-zinc-200 hover:bg-red-700')
                 ->dispatch('removeMemberModal', ['kode_pegawai' => $row->kode_pegawai, 'team_code' => $row->team_code]),
         ];

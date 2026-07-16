@@ -1,9 +1,10 @@
 {{-- Goal: Edit Driver Page, Livewire: - (uses native js), Alpine: - --}}
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div
-        class="grid w-full gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="grid w-full gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
         <div class="w-full">
             <header class="flex items-center">
@@ -27,15 +28,13 @@
                 <input id="id" type="hidden" value="{{ $data->id }}" required>
 
                 <div class="{{ $data->kode_pegawai ?? 'hidden' }} col-span-2 w-full lg:col-span-1">
-                    <x-input.basic id="kode_pegawai" name="kode_pegawai" value="{{ $data->kode_pegawai ?? '' }}"
-                        readonly>
+                    <x-input.basic id="kode_pegawai" name="kode_pegawai" value="{{ $data->kode_pegawai ?? '' }}" readonly>
                         Kode Pegawai
                     </x-input.basic>
                 </div>
 
                 <div class="{{ $data->user ? '' : 'hidden' }} col-span-2 w-full lg:col-span-1">
-                    <x-input.basic id="employee_name" name="employee_name" value="{{ $data->user->name ?? '-' }}"
-                        readonly>
+                    <x-input.basic id="employee_name" name="employee_name" value="{{ $data->user->name ?? '-' }}" readonly>
                         Nama Pegawai
                     </x-input.basic>
                 </div>
@@ -63,8 +62,8 @@
                 </div>
 
                 <div class="col-span-2 w-full">
-                    <x-input.basic id="title" name="title" value="{{ $data->title }}"
-                        placeholder="Judul laporan" required>
+                    <x-input.basic id="title" name="title" value="{{ $data->title }}" placeholder="Judul laporan"
+                        required>
                         Judul Laporan
                     </x-input.basic>
                     <div class="mt-2 hidden text-sm text-red-500" id="alert-title"></div>
@@ -79,8 +78,7 @@
                 </div>
 
                 <div class="col-span-2 w-full">
-                    <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                        for="status_pengantaran">
+                    <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="status_pengantaran">
                         Status Pengantaran
                     </label>
 

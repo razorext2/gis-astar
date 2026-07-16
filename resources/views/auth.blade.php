@@ -1,6 +1,7 @@
 {{-- Goal: Authentication page layout, Livewire: None, Alpine: Yes --}}
 <!DOCTYPE html>
-<html class="{{ (isset($_COOKIE['color-theme']) && $_COOKIE['color-theme'] === 'dark') ? 'dark' : '' }}" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html class="{{ isset($_COOKIE['color-theme']) && $_COOKIE['color-theme'] === 'dark' ? 'dark' : '' }}"
+    lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="utf-8">
@@ -53,11 +54,7 @@
                 id="toast-success" role="alert">
                 <div
                     class="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:text-white">
-                    <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                        viewBox="0 0 20 20">
-                        <path
-                            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                    </svg>
+                    <x-icons.check-circle class="h-5 w-5" />
                     <span class="sr-only">Check icon</span>
                 </div>
                 <div class="ms-3 mt-0.5 text-sm font-normal text-black"><x-auth.auth-session-status class="mb-4"
@@ -80,23 +77,24 @@
 
     {{-- Theme Toggle Top-Right (Collapsible) --}}
     <div x-data="{ showSettings: false }" class="fixed right-6 top-5 z-50 flex items-center justify-end">
-        
+
         {{-- Settings Menu (Expands to Left) --}}
         <div class="flex origin-right items-center gap-1 overflow-hidden transition-all duration-300 ease-in-out"
-             x-bind:class="{ 
-                 'max-w-[300px] opacity-100 mr-2 rounded-2xl border p-1.5': showSettings, 
-                 'max-w-0 opacity-0 mr-0 border-0 p-0': !showSettings,
-                 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10': dynamicBg,
-                 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm': !dynamicBg
-             }">
-            <div class="flex items-center gap-2 whitespace-nowrap border-r border-zinc-200 pl-2 pr-2 dark:border-zinc-800">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Dynamic Bg</span>
+            x-bind:class="{
+                'max-w-[300px] opacity-100 mr-2 rounded-2xl border p-1.5': showSettings,
+                'max-w-0 opacity-0 mr-0 border-0 p-0': !showSettings,
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm': dynamicBg,
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm': !dynamicBg
+            }">
+            <div
+                class="flex items-center gap-2 whitespace-nowrap border-r border-zinc-200 pl-2 pr-2 dark:border-zinc-800">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Dynamic
+                    Bg</span>
                 <button type="button" @click="dynamicBg = !dynamicBg; localStorage.setItem('dynamicBg', dynamicBg)"
                     class="relative inline-flex h-4 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 dark:focus:ring-offset-dark-primary"
                     role="switch" :aria-checked="dynamicBg.toString()">
                     <span class="sr-only">Toggle dynamic background</span>
-                    <span aria-hidden="true"
-                        x-bind:class="dynamicBg ? 'bg-red-500' : 'bg-zinc-300 dark:bg-zinc-700'"
+                    <span aria-hidden="true" x-bind:class="dynamicBg ? 'bg-red-500' : 'bg-zinc-300 dark:bg-zinc-700'"
                         class="pointer-events-none absolute mx-auto h-3 w-6 rounded-full transition-colors duration-200 ease-in-out"></span>
                     <span aria-hidden="true"
                         x-bind:class="dynamicBg ? 'translate-x-[0.35rem]' : '-translate-x-[0.35rem]'"
@@ -111,21 +109,19 @@
 
         {{-- Vertical Three-Dots Button --}}
         <button @click="showSettings = !showSettings" type="button"
-                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all"
-                x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-zinc-600 dark:text-zinc-400">
-                <circle cx="12" cy="5" r="1.5"></circle>
-                <circle cx="12" cy="12" r="1.5"></circle>
-                <circle cx="12" cy="19" r="1.5"></circle>
-            </svg>
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <x-icons.three-dots-vertical class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
         </button>
     </div>
 
     <div class="container mx-auto flex min-h-screen items-center justify-center px-6 py-24 md:py-0">
         <div class="flex w-full max-w-6xl flex-col justify-between gap-10 md:flex-row md:items-center">
-
             {{-- Branding Area --}}
-            <div class="relative z-20 flex w-full flex-col items-center text-center md:w-1/2 md:items-start md:text-left">
+            <div
+                class="relative z-20 flex w-full flex-col items-center text-center md:w-1/2 md:items-start md:text-left">
 
                 <h1
                     class="flex flex-col items-center text-center text-4xl font-black leading-tight tracking-tight text-zinc-900 drop-shadow-sm dark:text-white md:items-start md:text-left md:text-5xl lg:text-[3.5rem]">
@@ -138,7 +134,7 @@
                         isDeleting: false,
                         type() {
                             const current = this.words[this.wordIndex];
-
+                    
                             if (this.isDeleting) {
                                 this.currentWord = current.substring(0, this.charIndex - 1);
                                 this.charIndex--;
@@ -146,10 +142,10 @@
                                 this.currentWord = current.substring(0, this.charIndex + 1);
                                 this.charIndex++;
                             }
-
+                    
                             let typeSpeed = 100 - Math.random() * 50;
                             if (this.isDeleting) typeSpeed /= 2.5; // Delete faster
-
+                    
                             if (!this.isDeleting && this.currentWord === current) {
                                 typeSpeed = 2000; // Pause at the end before deleting
                                 this.isDeleting = true;
@@ -158,7 +154,7 @@
                                 this.wordIndex = (this.wordIndex + 1) % this.words.length;
                                 typeSpeed = 500; // Pause before starting new word
                             }
-
+                    
                             setTimeout(() => this.type(), typeSpeed);
                         }
                     }" x-init="setTimeout(() => type(), 800)"
@@ -190,8 +186,9 @@
             function toggleTheme(isDark) {
                 document.documentElement.classList.toggle("dark", isDark);
                 localStorage.setItem("color-theme", isDark ? "dark" : "light");
-                document.cookie = "color-theme=" + (isDark ? "dark" : "light") + "; path=/; max-age=31536000; SameSite=Lax";
-                
+                document.cookie = "color-theme=" + (isDark ? "dark" : "light") +
+                    "; path=/; max-age=31536000; SameSite=Lax";
+
                 if (darkBtn) {
                     darkBtn.classList.toggle("text-gray-300", isDark);
                     darkBtn.classList.toggle("text-gray-200", !isDark);
@@ -204,7 +201,7 @@
 
             if (darkBtn) darkBtn.addEventListener("click", () => toggleTheme(true));
             if (lightBtn) lightBtn.addEventListener("click", () => toggleTheme(false));
-            
+
             // Set initial state for button colors based on current theme
             const isDarkMode = document.documentElement.classList.contains('dark');
             toggleTheme(isDarkMode);

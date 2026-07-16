@@ -40,7 +40,7 @@
                 <input type="text" wire:model.live.debounce.300ms="searchConversation"
                     class="focus: block w-full rounded-lg border-0 bg-zinc-50/50 py-2.5 pl-10 pr-3 text-sm text-zinc-900 ring-1 ring-zinc-200 placeholder:text-zinc-400 focus:ring-2 focus:ring-blue-500 dark:text-white dark:ring-zinc-800 dark:placeholder:text-zinc-500 dark:focus:bg-zinc-800/50"
                     x-bind:class="dynamicBg ?
-                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
                         'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
                     placeholder="Cari percakapan...">
             </div>
@@ -83,7 +83,7 @@
     <div x-show="showSidebar" x-transition.opacity @click="showSidebar = false"
         class="absolute inset-0 z-[70] bg-black/30 lg:hidden"
         x-bind:class="dynamicBg ?
-            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
             'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
     </div>
 
@@ -155,7 +155,7 @@
                             <button wire:click="$set('newMessage', '{{ $prompt[1] }}')"
                                 class="dark:hover:bg-zinc-850/50 flex items-start gap-2 rounded-xl border border-zinc-200 px-3 py-2.5 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-300 hover:bg-zinc-50/50 hover:shadow-md dark:border-zinc-800 dark:hover:border-zinc-700 lg:gap-3 lg:p-4"
                                 x-bind:class="dynamicBg ?
-                                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+                                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
                                     'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                 <span class="text-lg lg:text-xl">{{ $prompt[0] }}</span>
                                 <span

@@ -3,9 +3,10 @@
 @section('content')
     <div class="space-y-4">
         <!-- Header Navigation & Tabs -->
-        <div
-            class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+        <div class="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
                 <div class="flex items-center">
 
@@ -15,7 +16,7 @@
                     </x-button.danger>
 
                     <div>
-                        <h2 class="text-xl font-bold tracking-tight text-gray-800 dark:text-white flex items-center gap-2">
+                        <h2 class="flex items-center gap-2 text-xl font-bold tracking-tight text-gray-800 dark:text-white">
                             Detail Pegawai
                             <x-dashboard.badge-inactive :is_active="$pegawai->userRelasi?->is_active ?? true" />
                         </h2>

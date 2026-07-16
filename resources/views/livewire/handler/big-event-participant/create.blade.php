@@ -1,3 +1,4 @@
+{{-- Goal: Add participant to event form, Livewire: Handler\BigEventParticipant\Create, Alpine: None --}}
 <div class="flex w-full flex-col gap-4">
 
     {{-- Action Bar --}}
@@ -27,7 +28,7 @@
                 <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Cari dan daftarkan user ke event ini</p>
             </div>
             <x-button.secondary wire:click="$set('showCreateForm', false)"
-                class="!bg-transparent !p-1 !shadow-none !ring-0 !border-none">
+                class="!border-none !bg-transparent !p-1 !shadow-none !ring-0">
                 <x-slot name="icon">
                     <x-icons.close class="h-6 w-6" />
                 </x-slot>
@@ -73,11 +74,7 @@
                         </label>
                     @empty
                         <div class="flex flex-col items-center justify-center py-10 opacity-40">
-                            <svg class="h-10 w-10 text-zinc-400" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="1.5">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
+                            <x-icons.search-alt class="h-10 w-10 text-zinc-400" stroke-width="1.5" />
                             <p class="mt-2 text-sm italic">Cari nama untuk melihat hasil</p>
                         </div>
                     @endforelse

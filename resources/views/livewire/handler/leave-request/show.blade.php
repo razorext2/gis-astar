@@ -1,8 +1,9 @@
 <div class="mt-4 flex flex-col gap-4">
     {{-- Header with Quick Info --}}
-    <div
-        class="flex flex-col justify-between gap-6 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none md:flex-row md:items-center lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="flex flex-col justify-between gap-6 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none md:flex-row md:items-center lg:p-6"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <div class="flex items-center gap-4">
             <x-button.danger wire:navigate href="{{ route('leave-request.my-requests.index') }}"
                 class="max-h-10 max-w-fit">
@@ -44,7 +45,7 @@
             @if ($request->status === 'approved')
                 <div x-data="{ openCancelModal: false }"
                     @close-modal.window="if($event.detail === 'cancel-request-modal') openCancelModal = false">
-                    <x-button.danger @click="openCancelModal = true" class="shadow-lg shadow-red-500/10">
+                    <x-button.danger @click="openCancelModal = true" class="shadow-lg">
                         <x-slot name="icon"><x-icons.close class="h-4 w-4" /></x-slot>
                         Ajukan Pembatalan Cuti
                     </x-button.danger>
@@ -99,6 +100,6 @@
         </div>
 
         {{-- Right: Timeline --}}
-            <x-leave-request.timeline :request="$request" />
+        <x-leave-request.timeline :request="$request" />
     </div>
 </div>

@@ -1,9 +1,10 @@
 {{-- Goal: Add Sales Report Page, Livewire: - (uses native js), Alpine: - --}}
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div
-        class="grid w-full gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="grid w-full gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
         <div class="w-full">
             <header class="flex items-center">
@@ -33,8 +34,8 @@
                 </div>
 
                 <div class="col-span-2 w-full lg:col-span-1">
-                    <x-input.basic id="employee_name" name="employee_name"
-                        value="{{ Auth::user()->name ?? 'Superadmin' }}" readonly>
+                    <x-input.basic id="employee_name" name="employee_name" value="{{ Auth::user()->name ?? 'Superadmin' }}"
+                        readonly>
                         Nama Pegawai
                     </x-input.basic>
                 </div>
@@ -88,8 +89,8 @@
                 </div>
 
                 <div class="col-span-2 w-full">
-                    <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                        for="keterangan">Keterangan <span class="text-red-500">*</span></label>
+                    <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="keterangan">Keterangan
+                        <span class="text-red-500">*</span></label>
                     <div class="h-32 w-full" id="editor"></div>
                     <input id="keterangan" name="keterangan" type="hidden">
                     <div class="mt-2 hidden text-sm text-red-500" id="alert-keterangan"></div>

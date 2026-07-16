@@ -58,8 +58,10 @@
             @if ($attendance->isNotEmpty())
                 <div class="overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800">
                     <table class="w-full text-left text-[11px]">
-                        <thead class="bg-gray-50 dark:"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                        <thead class="dark: bg-gray-50"
+                            x-bind:class="dynamicBg ?
+                                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                             <tr>
                                 <th class="px-3 py-1.5 font-bold text-gray-500">Info</th>
                                 <th class="px-3 py-1.5 text-center font-bold text-gray-500">Foto</th>
@@ -118,8 +120,10 @@
             @if ($attendanceOut->isNotEmpty())
                 <div class="overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800">
                     <table class="w-full text-left text-[11px]">
-                        <thead class="bg-gray-50 dark:"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                        <thead class="dark: bg-gray-50"
+                            x-bind:class="dynamicBg ?
+                                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                             <tr>
                                 <th class="px-3 py-1.5 font-bold text-gray-500">Info</th>
                                 <th class="px-3 py-1.5 text-center font-bold text-gray-500">Foto</th>

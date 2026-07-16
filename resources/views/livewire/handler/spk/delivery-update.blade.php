@@ -9,9 +9,10 @@
                 <h4 class="text-sm font-bold text-zinc-900 dark:text-white">Data Packing List</h4>
             </div>
 
-            <div
-                class="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow dark:border-zinc-800"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <table class="w-full text-left text-sm">
                     <thead
                         class="bg-zinc-50 text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:bg-zinc-800/50 dark:text-zinc-400">
@@ -62,7 +63,6 @@
         </x-slot:icon>
 
         <form wire:submit.prevent="store" class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-
             {{-- Metode Pengiriman --}}
             <div
                 class="col-span-2 rounded-xl border border-zinc-100 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-800/30">
@@ -87,7 +87,9 @@
                             <label for="cb-{{ $index }}"
                                 wire:key="product-{{ $index }}-{{ $row['id_barang'] }}"
                                 class="group relative flex cursor-pointer items-center gap-3 rounded-xl border border-zinc-200 bg-white p-3 transition-all hover:border-blue-400 hover:bg-blue-50/30 dark:border-zinc-800 dark:hover:border-blue-500/50"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                                x-bind:class="dynamicBg ?
+                                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                 <input type="checkbox" id="cb-{{ $index }}" value="{{ $row['id_barang'] }}"
                                     wire:model.live="form.products"
                                     class="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800">
@@ -186,9 +188,10 @@
                             wire:model.live="search_supir">Cari Supir Perusahaan</x-input.basic>
 
                         @if (count($drivers))
-                            <div
-                                class="max-h-48 overflow-y-auto rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                            <div class="max-h-48 overflow-y-auto rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800"
+                                x-bind:class="dynamicBg ?
+                                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                 @foreach ($drivers as $driver)
                                     <button type="button"
                                         class="flex w-full items-center gap-3 border-b border-zinc-100 px-4 py-2.5 text-left transition-all last:border-0 hover:bg-blue-50 dark:border-zinc-800 dark:hover:bg-blue-900/20"

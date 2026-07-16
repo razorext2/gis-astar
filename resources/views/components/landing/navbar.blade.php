@@ -1,6 +1,8 @@
-<nav
-    class="border-b border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark: dark:shadow-none md:block lg:p-8"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+{{-- Goal: Landing page navigation header menu, Livewire: None, Alpine: dynamicBg --}}
+<nav class="dark: border-b border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none md:block lg:p-8"
+    x-bind:class="dynamicBg ?
+        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
     <div class="center mx-auto flex max-w-screen-xl flex-wrap items-center justify-between">
 
         <a class="flex items-center space-x-3 md:mx-auto md:mb-4 lg:mx-0 lg:mb-0 rtl:space-x-reverse" href="#">
@@ -33,57 +35,40 @@
         </div>
     </div>
 
-    <div class="mt-1 hidden md:"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'" id="mega-menu-full-dropdown">
+    <div class="md: mt-1 hidden"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
+        id="mega-menu-full-dropdown">
         <div
             class="mx-auto grid max-w-screen-lg px-4 py-5 text-zinc-900 transition duration-1000 ease-in-out dark:text-white sm:grid-cols-1 md:px-6">
             <ul class="space-y-4 text-left text-zinc-500">
                 <li class="flex items-center space-x-3 rtl:space-x-reverse">
-                    <svg class="h-3.5 w-3.5 flex-shrink-0 text-green-500" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M1 5.917 5.724 10.5 15 1.5" />
-                    </svg>
+                    <x-icons.check class="h-3.5 w-3.5 flex-shrink-0 text-green-500" />
                     <span class="dark:text-white">Tekan tombol <i
                             class="text-xl font-bold text-black dark:text-zinc-50">[Enter]</i>
                         untuk start dan stop kamera</span>
                 </li>
                 <li class="flex items-center space-x-3 rtl:space-x-reverse">
-                    <svg class="h-3.5 w-3.5 flex-shrink-0 text-green-500" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M1 5.917 5.724 10.5 15 1.5" />
-                    </svg>
+                    <x-icons.check class="h-3.5 w-3.5 flex-shrink-0 text-green-500" />
                     <span class="dark:text-white">Tekan tombol <i
                             class="text-xl font-bold text-black dark:text-zinc-50">[*]</i>
                         untuk
                         melakukan refresh</span>
                 </li>
                 <li class="flex items-center space-x-3 rtl:space-x-reverse">
-                    <svg class="h-3.5 w-3.5 flex-shrink-0 text-green-500" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M1 5.917 5.724 10.5 15 1.5" />
-                    </svg>
+                    <x-icons.check class="h-3.5 w-3.5 flex-shrink-0 text-green-500" />
                     <span class="dark:text-white">Tekan tombol <i
                             class="text-xl font-bold text-black dark:text-zinc-50">[/]</i>
                         untuk melakukan pendaftaran</span></span>
                 </li>
                 <li class="flex items-center space-x-3 rtl:space-x-reverse">
-                    <svg class="h-3.5 w-3.5 flex-shrink-0 text-green-500" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M1 5.917 5.724 10.5 15 1.5" />
-                    </svg>
+                    <x-icons.check class="h-3.5 w-3.5 flex-shrink-0 text-green-500" />
                     <span class="dark:text-white">Lepas semua hal yang menutupi wajah. Pastikan wajah menghadap ke
                         kamera.</span></span>
                 </li>
                 <li class="flex items-center space-x-3 rtl:space-x-reverse">
-                    <svg class="h-3.5 w-3.5 flex-shrink-0 text-green-500" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M1 5.917 5.724 10.5 15 1.5" />
-                    </svg>
+                    <x-icons.check class="h-3.5 w-3.5 flex-shrink-0 text-green-500" />
                     <span class="dark:text-white">Jika wajah berhasil terdeteksi dan sudah muncul data nya, silahkan
                         stop
                         aplikasi.</span></span>

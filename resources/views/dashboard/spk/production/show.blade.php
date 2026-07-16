@@ -3,9 +3,10 @@
 @section('content')
     <div class="relative space-y-4">
         {{-- Outer Card --}}
-        <div
-            class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+        <div class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 lg:p-6"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             {{-- Header Section: Order Status --}}
             <div
                 class="flex flex-col justify-between gap-4 border-b border-zinc-200 pb-4 dark:border-zinc-800 md:flex-row md:items-start">
@@ -66,9 +67,10 @@
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 
                 {{-- Card: Detail Order --}}
-                <div
-                    class="flex flex-col gap-4 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 dark:shadow-none"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                <div class="flex flex-col gap-4 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 dark:shadow-none"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <h3
                         class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                         <x-icons.file-invoice class="h-4 w-4 text-blue-500" /> Detail Order
@@ -100,9 +102,10 @@
                 </div>
 
                 {{-- Card: Informasi Customer --}}
-                <div
-                    class="flex flex-col gap-4 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 dark:shadow-none"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                <div class="flex flex-col gap-4 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 dark:shadow-none"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <h3
                         class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                         <x-icons.user class="h-4 w-4 text-blue-500" /> Informasi Customer
@@ -118,9 +121,10 @@
                 </div>
 
                 {{-- Card: Daftar Produk Dipesan (full width) --}}
-                <div
-                    class="flex flex-col gap-4 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 dark:shadow-none md:col-span-2"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                <div class="flex flex-col gap-4 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 dark:shadow-none md:col-span-2"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <div
                         class="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-100 pb-3 dark:border-zinc-800">
                         <h3 class="flex items-center gap-2 text-sm font-semibold text-zinc-900 dark:text-white">
@@ -190,9 +194,10 @@
                 </div>
 
                 {{-- Card: Staff --}}
-                <div
-                    class="flex flex-col gap-4 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 dark:shadow-none"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                <div class="flex flex-col gap-4 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 dark:shadow-none"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <h3
                         class="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:text-white">
                         <x-icons.users class="h-4 w-4 text-blue-500" /> Staff
@@ -201,14 +206,16 @@
                         <div class="col-span-2 flex flex-col">
                             <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Ditambah Oleh</span>
                             <div class="flex items-center gap-x-2">
-                                <span class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->spk->addedBy->name }}</span>
+                                <span
+                                    class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->spk->addedBy->name }}</span>
                                 <x-dashboard.badge-inactive :is_active="$data->spk->addedBy?->is_active ?? true" />
                             </div>
                         </div>
                         <div class="flex flex-col">
                             <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Diproduksi Oleh</span>
                             <div class="flex items-center gap-x-2">
-                                <span class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->spk->assignTo->name ?? '-' }}</span>
+                                <span
+                                    class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->spk->assignTo->name ?? '-' }}</span>
                                 @if ($data->spk->assignTo)
                                     <x-dashboard.badge-inactive :is_active="$data->spk->assignTo?->is_active ?? true" />
                                 @endif
@@ -217,7 +224,8 @@
                         <div class="flex flex-col">
                             <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Reassign Ke</span>
                             <div class="flex items-center gap-x-2">
-                                <span class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->reassignTo->name ?? '-' }}</span>
+                                <span
+                                    class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->reassignTo->name ?? '-' }}</span>
                                 @if ($data->reassignTo)
                                     <x-dashboard.badge-inactive :is_active="$data->reassignTo?->is_active ?? true" />
                                 @endif
@@ -226,7 +234,8 @@
                         <div class="flex flex-col">
                             <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Divalidasi Oleh</span>
                             <div class="flex items-center gap-x-2">
-                                <span class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->spk->approvedBy->name ?? '-' }}</span>
+                                <span
+                                    class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->spk->approvedBy->name ?? '-' }}</span>
                                 @if ($data->spk->approvedBy)
                                     <x-dashboard.badge-inactive :is_active="$data->spk->approvedBy?->is_active ?? true" />
                                 @endif
@@ -244,9 +253,10 @@
                 </div>
 
                 {{-- Card: Progress Produksi --}}
-                <div
-                    class="flex flex-col gap-4 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 dark:shadow-none"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                <div class="flex flex-col gap-4 rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 dark:shadow-none"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <div class="flex items-center justify-between border-b border-zinc-100 pb-3 dark:border-zinc-800">
                         <h3 class="flex items-center gap-2 text-sm font-semibold text-zinc-900 dark:text-white">
                             <x-icons.bar class="h-4 w-4 text-blue-500" /> Progress Produksi
@@ -289,9 +299,10 @@
 
         {{-- Riwayat Produksi --}}
         @can('produksi-list')
-            <div
-                class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none lg:p-6"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
                 <div
                     class="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-200 pb-4 dark:border-zinc-800">

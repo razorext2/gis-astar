@@ -4,16 +4,17 @@
     <div class="relative space-y-4">
 
         {{-- Header Card --}}
-        <div
-            class="flex flex-col rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+        <div class="flex flex-col rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none lg:p-6"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                 <div class="flex items-center gap-3">
                     <x-button.danger href="{{ route('purchasing-request.index') }}" class="shrink-0" wire:navigate
                         id="back-button">
                         <x-icons.angle-left class="h-5 w-5" />
                     </x-button.danger>
-                    
+
                     <div class="space-y-0.5">
                         <div class="flex items-center gap-2">
                             <h1 class="text-xl font-bold text-zinc-900 dark:text-white">Purchasing Request</h1>
@@ -46,15 +47,18 @@
         </div>
 
         {{-- Main Content Card --}}
-        <div
-            class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+        <div class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none lg:p-6"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
             @if (!$spk->is_using_old_stock)
                 @php
-                    $groupedData = $is_multiple 
-                        ? $data 
-                        : (empty($data) ? [] : [$spk->nomor_purchasing_request ?? '-' => $data]);
+                    $groupedData = $is_multiple
+                        ? $data
+                        : (empty($data)
+                            ? []
+                            : [$spk->nomor_purchasing_request ?? '-' => $data]);
                 @endphp
 
                 <div class="space-y-6">
@@ -93,9 +97,10 @@
                                     </thead>
                                     <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
                                         @foreach ($rows as $index => $row)
-                                            <tr
-                                                class="transition-colors hover:bg-zinc-50 dark:bg-transparent dark:hover:bg-zinc-800/50"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                                            <tr class="transition-colors hover:bg-zinc-50 dark:bg-transparent dark:hover:bg-zinc-800/50"
+                                                x-bind:class="dynamicBg ?
+                                                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                                 <td class="px-4 py-3 text-center text-xs font-medium text-zinc-500">
                                                     {{ $index + 1 }}</td>
                                                 <td class="px-4 py-3 text-center">
@@ -125,14 +130,14 @@
                             {{-- Mobile Cards --}}
                             <div class="space-y-3 md:hidden">
                                 @foreach ($rows as $index => $row)
-                                    <div
-                                        class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                                    <div class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800"
+                                        x-bind:class="dynamicBg ?
+                                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                         <div
                                             class="mb-3 flex items-center justify-between border-b border-zinc-100 pb-3 dark:border-zinc-800">
                                             <div class="flex items-center gap-2">
-                                                <span
-                                                    class="text-xs font-bold text-zinc-400">#{{ $index + 1 }}</span>
+                                                <span class="text-xs font-bold text-zinc-400">#{{ $index + 1 }}</span>
                                                 <span
                                                     class="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[10px] font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
                                                     {{ $row->kode_item ?? '-' }}
@@ -158,8 +163,7 @@
                                             </div>
                                             @if (!empty($row->keterangan))
                                                 <div>
-                                                    <p
-                                                        class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">
+                                                    <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">
                                                         Keterangan</p>
                                                     <p class="text-xs italic text-zinc-500 dark:text-zinc-400">
                                                         {{ $row->keterangan }}</p>
@@ -206,4 +210,3 @@
         </div>
     </div>
 @endsection
-

@@ -1,6 +1,7 @@
-<div
-    class="relative mt-4 overflow-hidden rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+<div class="relative mt-4 overflow-hidden rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 lg:p-6"
+    x-bind:class="dynamicBg ?
+        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
     <div class="relative">
         <div class="mb-6 flex items-center gap-4">
@@ -49,8 +50,8 @@
             <div
                 class="flex flex-col rounded-xl border border-zinc-200 bg-gray-50/50 p-5 dark:border-zinc-800/50 dark:bg-gray-800/30">
                 <div class="mb-2 flex items-center gap-3">
-                    <div class="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg">
-                        <x-icons.user class="text-primary h-6 w-6" />
+                    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                        <x-icons.user class="h-6 w-6 text-primary" />
                     </div>
                     <div>
                         <h3 class="font-semibold text-gray-800 dark:text-gray-200">Pemilihan Ketua Tim</h3>
@@ -64,30 +65,26 @@
                         id="team_leader_search" name="search_user" placeholder="Ketik area pencarian di sini..."
                         class="w-full bg-white dark:bg-dark-secondary">
                         <x-slot name="icon">
-                            <svg class="h-5 w-5 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
-                                    d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                            </svg>
+                            <x-icons.search-alt class="h-5 w-5 text-gray-500 dark:text-gray-400" />
                         </x-slot>
                     </x-input.basic>
 
                     @if ($search_user != '')
-                        <div
-                            class="mt-3 max-h-[220px] overflow-y-auto rounded-xl border border-zinc-200 p-2 shadow-sm dark:border-zinc-800 dark:bg-gray-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                        <div class="mt-3 max-h-[220px] overflow-y-auto rounded-xl border border-zinc-200 p-2 shadow-sm dark:border-zinc-800 dark:bg-gray-800"
+                            x-bind:class="dynamicBg ?
+                                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                             @forelse ($users as $user)
                                 <label for="helper-radio-{{ $user->kode_pegawai }}"
                                     class="group flex cursor-pointer items-center rounded-lg p-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50">
                                     <div class="flex h-5 items-center">
                                         <input id="helper-radio-{{ $user->kode_pegawai }}" wire:model="team_leader"
                                             type="radio" value="{{ $user->kode_pegawai }}" required
-                                            class="text-primary focus:ring-primary/50 h-4 w-4 border-zinc-200 bg-gray-100 focus:ring-2 dark:border-zinc-800 dark:bg-gray-700 dark:ring-offset-gray-800">
+                                            class="h-4 w-4 border-zinc-200 bg-gray-100 text-primary focus:ring-2 focus:ring-primary/50 dark:border-zinc-800 dark:bg-gray-700 dark:ring-offset-gray-800">
                                     </div>
                                     <div class="ms-3 flex flex-col">
                                         <span
-                                            class="group-hover:text-primary font-semibold text-gray-900 dark:text-gray-200 dark:group-hover:text-white">{{ $user->name }}</span>
+                                            class="font-semibold text-gray-900 group-hover:text-primary dark:text-gray-200 dark:group-hover:text-white">{{ $user->name }}</span>
                                         <span class="text-sm text-gray-500 dark:text-gray-400">Kode Pegawai: <span
                                                 class="border-zinc-200 font-bold dark:border-zinc-800">{{ $user->kode_pegawai }}</span></span>
                                     </div>
@@ -118,7 +115,7 @@
             <div class="mt-2 flex w-full justify-end gap-3 border-t border-zinc-200 pt-6 dark:border-zinc-800/50">
                 <x-button.danger href="{{ route('teams.index') }}" wire:navigate as="a">Batal</x-button.danger>
 
-                <x-button.primary type="submit" class="shadow-primary/20 px-8 transition-all hover:shadow-lg"
+                <x-button.primary type="submit" class="px-8 shadow-primary/20 transition-all hover:shadow-lg"
                     wire:loading.attr="disabled" wire:target="store">
                     <x-slot name="icon">
                         <x-icons.loading class="h-5 w-5 animate-spin" wire:loading wire:target="store" />

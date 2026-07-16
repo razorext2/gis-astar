@@ -4,7 +4,9 @@
     {{-- Left Column: Form Edit --}}
     <div class="lg:col-span-2">
         <div class="rounded-xl p-4 shadow-md ring-1 ring-zinc-200 dark:shadow-none dark:ring-zinc-800 sm:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <header class="mb-6 flex flex-row items-center gap-4 border-b border-zinc-100 pb-4 dark:border-white/5">
                 <x-button.danger href="{{ route('jabatan.index') }}" class="mb-0">
                     <x-slot name="icon">
@@ -70,9 +72,9 @@
                         users: {{ Js::from($allUsers->map(fn($u) => ['id' => $u->id, 'name' => $u->name, 'kode' => $u->pegawai ? $u->pegawai->kode_pegawai : ''])) }},
                         get filteredUsers() {
                             if (this.search === '') return this.users.filter(u => !this.selectedIds.includes(u.id)).slice(0, 5);
-                            return this.users.filter(u => 
-                                (u.name.toLowerCase().includes(this.search.toLowerCase()) || 
-                                 u.kode.toLowerCase().includes(this.search.toLowerCase())) &&
+                            return this.users.filter(u =>
+                                (u.name.toLowerCase().includes(this.search.toLowerCase()) ||
+                                    u.kode.toLowerCase().includes(this.search.toLowerCase())) &&
                                 !this.selectedIds.includes(u.id)
                             ).slice(0, 5);
                         },
@@ -97,10 +99,12 @@
                         {{-- Selected Chips --}}
                         <div class="mb-2 flex flex-wrap gap-2" x-show="selectedUsers.length > 0" style="display: none;">
                             <template x-for="user in selectedUsers" :key="user.id">
-                                <span class="inline-flex items-center gap-1 rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
+                                <span
+                                    class="inline-flex items-center gap-1 rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
                                     <span x-text="user.name"></span>
-                                    <button type="button" @click="remove(user.id)" class="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-red-600 hover:bg-red-200 hover:text-red-900 dark:hover:bg-red-800 dark:hover:text-red-200">
-                                        <svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8"><path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"/></svg>
+                                    <button type="button" @click="remove(user.id)"
+                                        class="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-red-600 hover:bg-red-200 hover:text-red-900 dark:hover:bg-red-800 dark:hover:text-red-200">
+                                        <x-icons.close class="h-2 w-2" />
                                     </button>
                                 </span>
                             </template>
@@ -118,8 +122,10 @@
                                 <template x-for="user in filteredUsers" :key="user.id">
                                     <button type="button" @click="add(user.id)"
                                         class="flex w-full flex-col items-start px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <span class="text-sm font-medium text-gray-900 dark:text-white" x-text="user.name"></span>
-                                        <span class="text-xs text-gray-500 dark:text-gray-400" x-text="user.kode"></span>
+                                        <span class="text-sm font-medium text-gray-900 dark:text-white"
+                                            x-text="user.name"></span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400"
+                                            x-text="user.kode"></span>
                                     </button>
                                 </template>
                             </div>
@@ -151,7 +157,9 @@
     {{-- Right Column: Employees list --}}
     <div class="lg:col-span-1">
         <div class="rounded-xl p-4 shadow-md ring-1 ring-zinc-200 dark:shadow-none dark:ring-zinc-800 sm:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <header class="mb-6 border-b border-zinc-100 pb-4 dark:border-white/5">
                 <h2 class="text-lg font-bold text-gray-900 dark:text-white">
                     Daftar Pegawai
@@ -167,7 +175,8 @@
                         <li class="py-4">
                             <div class="flex items-center space-x-4">
                                 <div class="flex-shrink-0">
-                                    <div class="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400">
+                                    <div
+                                        class="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400">
                                         <x-icons.user class="h-5 w-5" />
                                     </div>
                                 </div>
@@ -180,7 +189,8 @@
                                     </p>
                                 </div>
                                 <div>
-                                    <span class="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
+                                    <span
+                                        class="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
                                         Aktif
                                     </span>
                                 </div>

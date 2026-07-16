@@ -1,14 +1,12 @@
+{{-- Goal: Filter bar component with collapsible search parameters, Livewire: None, Alpine: open --}}
 <div id="filter-bar" x-data="{ open: false }">
     <h2>
         <button
             class="flex w-full items-center justify-between gap-3 rounded-lg border border-zinc-200 p-2.5 font-medium text-zinc-500 hover:bg-zinc-100 dark:border-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-800"
             type="button" @click="open = ! open">
             <span>Filter data...</span>
-            <svg class="h-3 w-3 shrink-0 transform transition-transform duration-300" aria-hidden="true"
-                :class="{ 'rotate-180 ': open }" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9 5 5 1 1 5" />
-            </svg>
+            <x-icons.chevron-up class="h-3 w-3 shrink-0 transform transition-transform duration-300"
+                x-bind:class="{ 'rotate-180': open }" />
         </button>
     </h2>
 

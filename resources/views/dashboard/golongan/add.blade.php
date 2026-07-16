@@ -5,13 +5,13 @@
         <form class="mt-4" action="{{ route('golongan.store') }}" method="POST">
             @csrf
             <div class="w-full md:max-w-lg">
-                <div
-                    class="w-full rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                <div class="w-full rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <div class="max-w-xl">
                         <header class="flex items-center">
-                            <x-button.danger href="{{ route('golongan.index') }}" class="my-auto me-4 max-h-10"
-                                wire:navigate>
+                            <x-button.danger href="{{ route('golongan.index') }}" class="my-auto me-4 max-h-10" wire:navigate>
                                 <x-icons.angle-left class="h-5 w-5" />
                             </x-button.danger>
 
@@ -62,8 +62,7 @@
                                     <div class="grid gap-2 py-4 sm:flex md:gap-4">
 
                                         <div class="w-20 sm:flex-none">
-                                            <h3
-                                                class="text-md mt-0 font-semibold text-gray-700 dark:text-white md:mt-9">
+                                            <h3 class="text-md mt-0 font-semibold text-gray-700 dark:text-white md:mt-9">
                                                 {{ $day }}</h3>
                                         </div>
 
@@ -101,7 +100,7 @@
                             </x-button.success>
                         </div>
                     </div>
-            </div>
+                </div>
         </form>
     </div>
 @endsection

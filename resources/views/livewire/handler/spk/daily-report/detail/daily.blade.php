@@ -1,8 +1,9 @@
 <div class="w-full space-y-4">
     {{-- informasi project --}}
-    <div
-        class="w-full rounded-xl border border-zinc-200 p-4 shadow dark:border-zinc-800 dark:shadow-none lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="w-full rounded-xl border border-zinc-200 p-4 shadow dark:border-zinc-800 dark:shadow-none lg:p-6"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         {{-- HEADER --}}
         <div class="relative flex items-center gap-3 border-b border-zinc-200 pb-4 dark:border-zinc-800">
             <div
@@ -109,9 +110,10 @@
 
             {{-- extend request --}}
             @if ($assignment->project->extend_request)
-                <div
-                    class="mt-2 rounded-xl border border-zinc-100 bg-zinc-50 p-4 dark:border-zinc-800 sm:col-span-2 lg:col-span-4"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                <div class="mt-2 rounded-xl border border-zinc-100 bg-zinc-50 p-4 dark:border-zinc-800 sm:col-span-2 lg:col-span-4"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <div class="text-sm text-zinc-800 dark:text-zinc-200">
                         <p>
                             <span class="font-semibold text-zinc-900 dark:text-white">
@@ -241,9 +243,10 @@
         @endcan
 
         {{-- LIST CONTAINER --}}
-        <div
-            class="w-full rounded-xl border border-zinc-200 p-4 shadow dark:border-zinc-800 dark:shadow-none lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+        <div class="w-full rounded-xl border border-zinc-200 p-4 shadow dark:border-zinc-800 dark:shadow-none lg:p-6"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
             <div class="mb-4 flex items-center gap-3 border-b border-zinc-200 pb-4 dark:border-zinc-800">
                 <div
@@ -259,9 +262,10 @@
 
             <div class="grid grid-cols-1 gap-4">
                 @forelse ($this->dailyReports as $index => $row)
-                    <div
-                        class="relative flex flex-col gap-4 overflow-hidden rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 dark:shadow-none"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                    <div class="relative flex flex-col gap-4 overflow-hidden rounded-xl border border-zinc-100 p-4 shadow-sm dark:border-zinc-800 dark:shadow-none"
+                        x-bind:class="dynamicBg ?
+                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
                         {{-- WATERMARK --}}
                         <div class="pointer-events-none absolute inset-y-0 right-4 flex items-center justify-center">
@@ -362,9 +366,10 @@
                         </div>
                     </div>
                 @empty
-                    <div
-                        class="rounded-xl border border-zinc-100 bg-zinc-50 p-6 text-center shadow-sm dark:border-zinc-800 dark:shadow-none"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                    <div class="rounded-xl border border-zinc-100 bg-zinc-50 p-6 text-center shadow-sm dark:border-zinc-800 dark:shadow-none"
+                        x-bind:class="dynamicBg ?
+                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         <div class="flex flex-col items-center justify-center gap-2">
                             <x-icons.calendar class="h-8 w-8 text-zinc-400" />
                             <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Staf belum membuat

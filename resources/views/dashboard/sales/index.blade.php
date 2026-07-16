@@ -15,7 +15,7 @@
                 <div class="max-w-xs">
                     <x-button.success id="add-button" form="add-form" type="submit">
                         <x-slot name="icon">
-                            <x-icons.angle-right class="h-6 w-6 text-green-500 dark:text-white" />
+                            <x-icons.angle-right class="h-6 w-6 text-white" />
                         </x-slot>
                         Tambah Data
                     </x-button.success>
@@ -24,9 +24,10 @@
         </div>
 
         <div class="flex h-auto items-center justify-center">
-            <div
-                class="grid w-full grid-cols-2 gap-2 rounded-xl border border-zinc-200 p-2 shadow-md dark:border-zinc-800 dark:shadow-none md:gap-4 md:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="grid w-full grid-cols-2 gap-2 rounded-xl border border-zinc-200 p-2 shadow-md dark:border-zinc-800 dark:shadow-none md:gap-4 md:p-6"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
                 <div class="col-span-2">
                     <livewire:sales-table />

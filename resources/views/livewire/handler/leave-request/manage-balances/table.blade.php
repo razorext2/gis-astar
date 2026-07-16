@@ -2,9 +2,10 @@
 <div class="flex flex-col gap-4">
 
     {{-- Toolbar: Search + Year + Reset Massal --}}
-    <div
-        class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 sm:flex-row sm:items-center sm:justify-between md:p-5"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 sm:flex-row sm:items-center sm:justify-between md:p-5"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         {{-- Search --}}
         <div class="relative w-full sm:w-96">
             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
@@ -12,7 +13,9 @@
             </div>
             <input type="text" wire:model.live="search"
                 class="block w-full rounded-xl border-zinc-200 bg-zinc-50/50 py-3 pl-11 pr-4 text-sm transition-all focus:border-red-500 focus:ring-red-500/50 dark:border-zinc-800 dark:text-white"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
                 placeholder="Cari nama atau kode pegawai...">
         </div>
 
@@ -20,7 +23,9 @@
         <div class="flex shrink-0 items-center gap-3">
             <select wire:model.live="year"
                 class="rounded-xl border border-zinc-200 py-2.5 pl-3 pr-10 text-sm font-bold text-zinc-700 focus:ring-red-500/50 dark:border-zinc-800 dark:text-white"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 @for ($i = date('Y') - 2; $i <= date('Y') + 1; $i++)
                     <option class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white" value="{{ $i }}">
                         Tahun {{ $i }}</option>
@@ -34,15 +39,17 @@
     </div>
 
     {{-- Table --}}
-    <div
-        class="overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <div class="overflow-x-auto">
             <table class="w-full text-left text-sm">
                 <thead>
-                    <tr
-                        class="bg-zinc-50/50 text-xs font-bold uppercase tracking-wider text-zinc-500 dark: dark:text-zinc-400"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                    <tr class="dark: bg-zinc-50/50 text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400"
+                        x-bind:class="dynamicBg ?
+                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         <th class="px-6 py-4">Karyawan</th>
                         <th class="px-6 py-4 text-center">Join Date</th>
                         <th class="px-6 py-4 text-center">Tahun</th>
@@ -61,8 +68,10 @@
                             $remaining = $total - $used;
                             $percentage = $total > 0 ? ($used / $total) * 100 : 0;
                         @endphp
-                        <tr class="group transition-colors hover:bg-zinc-50/50 dark:hover:"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                        <tr class="dark:hover: group transition-colors hover:bg-zinc-50/50"
+                            x-bind:class="dynamicBg ?
+                                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                             <td class="px-6 py-4">
                                 <div class="flex items-center gap-3">
                                     <div
@@ -100,22 +109,25 @@
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <div class="flex justify-end gap-2">
-                                    <button wire:click="openHistory({{ $user->id }})"
-                                        class="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-500/10 text-blue-600 transition-all hover:bg-blue-500 hover:text-white"
+                                    <x-button.primary wire:click="openHistory({{ $user->id }})" iconOnly="true"
                                         title="Riwayat Cuti">
-                                        <x-icons.clock class="h-4 w-4" />
-                                    </button>
-                                    <button wire:click="openEdit({{ $user->id }})"
-                                        class="flex h-8 w-8 items-center justify-center rounded-xl bg-red-500/10 text-red-600 transition-all hover:bg-red-500 hover:text-white"
+                                        <x-slot name="icon">
+                                            <x-icons.clock class="h-4 w-4" />
+                                        </x-slot>
+                                    </x-button.primary>
+                                    <x-button.danger wire:click="openEdit({{ $user->id }})" iconOnly="true"
                                         title="Edit Saldo">
-                                        <x-icons.pen class="h-4 w-4" />
-                                    </button>
-                                    <button wire:click="resetBalance({{ $user->id }})"
+                                        <x-slot name="icon">
+                                            <x-icons.pen class="h-4 w-4" />
+                                        </x-slot>
+                                    </x-button.danger>
+                                    <x-button.secondary wire:click="resetBalance({{ $user->id }})"
                                         wire:confirm="Hitung ulang saldo cuti {{ $user->name }} sesuai masa kerjanya?"
-                                        class="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-100 text-zinc-500 transition-all hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400"
-                                        title="Reset Saldo">
-                                        <x-icons.clockwise class="h-4 w-4" />
-                                    </button>
+                                        iconOnly="true" title="Reset Saldo">
+                                        <x-slot name="icon">
+                                            <x-icons.clockwise class="h-4 w-4" />
+                                        </x-slot>
+                                    </x-button.secondary>
                                 </div>
                             </td>
                         </tr>
@@ -165,8 +177,10 @@
             </div>
 
             {{-- Live preview --}}
-            <div class="rounded-xl bg-zinc-50 p-4 dark:"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="dark: rounded-xl bg-zinc-50 p-4"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div class="flex items-center justify-between text-sm">
                     <span class="text-zinc-500">Sisa Cuti</span>
                     <span class="text-lg font-black text-emerald-600 dark:text-emerald-400">
@@ -362,7 +376,9 @@
                     </div>
                     <input type="text" wire:model.live.debounce.300ms="resetUserSearchQuery"
                         class="block w-full rounded-xl border-zinc-200 bg-zinc-50/50 py-3 pl-10 pr-4 text-sm transition-all focus:border-blue-500 focus:ring-blue-500/50 dark:border-zinc-800 dark:text-white"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
+                        x-bind:class="dynamicBg ?
+                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
                         placeholder="Ketik nama atau kode pegawai...">
                 </div>
 

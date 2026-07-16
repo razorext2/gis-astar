@@ -1,9 +1,10 @@
 {{-- Goal: Edit form page for announcement, Livewire: Handler\Announcement\Edit, Alpine: Quill editor, user search --}}
 <div class="w-full space-y-6">
     <!-- Top Header Navigation -->
-    <div
-        class="rounded-xl border border-zinc-200 p-6 shadow-2xl transition-all duration-500 ease-in-out dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="rounded-xl border border-zinc-200 p-6 shadow-2xl transition-all duration-500 ease-in-out dark:border-zinc-800"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div class="flex items-center">
                 <x-button.danger class="my-auto me-4 max-h-10" href="{{ route('announcement.index') }}" wire:navigate>
@@ -33,9 +34,10 @@
         <!-- Left Column: Form Details -->
         <div class="space-y-2 lg:col-span-2 lg:space-y-4">
             <!-- Informasi Pengumuman -->
-            <div
-                class="group relative overflow-hidden rounded-xl border border-zinc-200 p-8 dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="group relative overflow-hidden rounded-xl border border-zinc-200 p-8 dark:border-zinc-800"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-blue-500/5 blur-3xl transition-colors group-hover:bg-blue-500/10">
                 </div>
@@ -79,9 +81,9 @@
                                     ]
                                 }
                             });
-
+                    
                             this.quill.root.innerHTML = $wire.get('description') || '';
-
+                    
                             this.quill.on('text-change', () => {
                                 $wire.set('description', this.quill.root.innerHTML);
                             });
@@ -100,9 +102,10 @@
             </div>
 
             <!-- Target Pengumuman -->
-            <div
-                class="group relative rounded-xl border border-zinc-200 p-8 dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="group relative rounded-xl border border-zinc-200 p-8 dark:border-zinc-800"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-xl">
                     <div
                         class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-purple-500/5 blur-3xl transition-colors group-hover:bg-purple-500/10">
@@ -140,7 +143,9 @@
                                     </div>
                                     <input x-model="search" type="text"
                                         class="block w-full rounded-xl border-zinc-200 pl-10 text-xs focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-dark-secondary dark:text-white"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
+                                        x-bind:class="dynamicBg ?
+                                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
                                         placeholder="Cari role...">
                                 </div>
                             </div>
@@ -204,9 +209,7 @@
                                         <span x-text="user.name"></span>
                                         <button type="button" @click="remove(user.id)"
                                             class="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-blue-600 hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-200">
-                                            <svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
-                                                <path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7" />
-                                            </svg>
+                                            <x-icons.close class="h-2 w-2" />
                                         </button>
                                     </span>
                                 </template>
@@ -249,9 +252,10 @@
 
         <!-- Right Column: Lampiran -->
         <div class="space-y-2 lg:space-y-4">
-            <div
-                class="group relative overflow-hidden rounded-xl border border-zinc-200 p-8 dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="group relative overflow-hidden rounded-xl border border-zinc-200 p-8 dark:border-zinc-800"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div
                     class="absolute right-0 top-0 -mr-16 -mt-16 h-32 w-32 rounded-full bg-orange-500/5 blur-3xl transition-colors group-hover:bg-orange-500/10">
                 </div>
@@ -291,7 +295,9 @@
 
                             <div wire:loading wire:target="file"
                                 class="absolute inset-0 flex items-center justify-center"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                                x-bind:class="dynamicBg ?
+                                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                                 <div class="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
                             </div>
                         </div>

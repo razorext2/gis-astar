@@ -1,9 +1,10 @@
 {{-- Goal: Update Driver Assignment Page, Livewire: - (uses native js), Alpine: - --}}
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div
-        class="grid w-full gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="grid w-full gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
         <div class="w-full">
             <header class="flex items-center">
@@ -97,11 +98,11 @@
                 <div class="mt-2 hidden text-sm text-red-500" id="alert-keterangan"></div>
             </div>
 
-            <input class="w-full rounded-lg border border-zinc-200 bg-gray-400 p-2.5 text-sm text-gray-900"
-                id="longitude" name="longitude" type="hidden" readonly>
+            <input class="w-full rounded-lg border border-zinc-200 bg-gray-400 p-2.5 text-sm text-gray-900" id="longitude"
+                name="longitude" type="hidden" readonly>
 
-            <input class="w-full rounded-lg border border-zinc-200 bg-gray-400 p-2.5 text-sm text-gray-900"
-                id="latitude" name="latitude" type="hidden" readonly>
+            <input class="w-full rounded-lg border border-zinc-200 bg-gray-400 p-2.5 text-sm text-gray-900" id="latitude"
+                name="latitude" type="hidden" readonly>
 
             <div class="mb-4 hidden text-sm text-red-500" id="alert-coordinate"></div>
 

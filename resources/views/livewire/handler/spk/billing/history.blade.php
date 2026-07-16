@@ -1,16 +1,19 @@
 {{-- Goal: Tampilkan riwayat tagihan dan sisa piutang BSI yang sudah di-assign, Livewire: History, Alpine: minimal --}}
 <div class="">
-    <div
-        class="flex items-center gap-2 rounded-xl rounded-b-none border border-b-0 border-blue-500 p-4 shadow-md dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="flex items-center gap-2 rounded-xl rounded-b-none border border-b-0 border-blue-500 p-4 shadow-md dark:border-zinc-800 lg:p-6"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <h3 class="text-base font-bold text-zinc-900 dark:text-white">Riwayat Penagihan (BSI)</h3>
-        <span class="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-600 dark:bg-blue-900/30">History</span>
+        <span
+            class="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-600 dark:bg-blue-900/30">History</span>
     </div>
 
     @forelse ($this->histories as $history)
-        <div
-            class="rounded-xl rounded-t-none border border-zinc-200 p-4 shadow-md dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+        <div class="rounded-xl rounded-t-none border border-zinc-200 p-4 shadow-md dark:border-zinc-800 lg:p-6"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             {{-- Header SR --}}
             <div
                 class="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-zinc-200 pb-3 dark:border-zinc-800">
@@ -69,8 +72,7 @@
                             <div
                                 class="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-200 pb-3 dark:border-zinc-700">
                                 <div class="flex items-center gap-2">
-                                    <span
-                                        class="font-mono text-sm font-bold text-indigo-600 dark:text-indigo-400">
+                                    <span class="font-mono text-sm font-bold text-indigo-600 dark:text-indigo-400">
                                         Nomor Piutang: {{ $nomorPiutang }}
                                     </span>
 
@@ -178,8 +180,7 @@
                                                 class="px-3 py-2 text-right font-semibold text-green-600 dark:text-green-400">
                                                 Rp {{ number_format($totalInvoicePaid, 2, '.', ',') }}
                                             </td>
-                                            <td
-                                                class="px-3 py-2 text-right font-bold text-red-600 dark:text-red-400">
+                                            <td class="px-3 py-2 text-right font-bold text-red-600 dark:text-red-400">
                                                 Rp
                                                 {{ number_format($latestDetail->sisa_piutang, 2, '.', ',') }}
                                             </td>
@@ -192,7 +193,8 @@
 
                     <!-- Summary footer overall (Aktif) -->
                     @php
-                        $activeLatestDetails = $history->groupedDetails()
+                        $activeLatestDetails = $history
+                            ->groupedDetails()
                             ->map(fn($item) => $item['latestDetail'])
                             ->where('is_dp', false);
                     @endphp
@@ -216,8 +218,7 @@
                             class="flex items-center justify-between gap-4 border-t border-zinc-200 pt-2 dark:border-zinc-700">
                             <span class="text-zinc-800 dark:text-zinc-200">Sisa</span>
                             @php
-                                $sisaTagihan =
-                                    $history->jumlah_piutang - $activeLatestDetails->sum('total_bayar');
+                                $sisaTagihan = $history->jumlah_piutang - $activeLatestDetails->sum('total_bayar');
                             @endphp
                             <span class="flex items-center gap-1.5 text-sm font-extrabold">
                                 <span

@@ -115,9 +115,10 @@
             <x-leave-request.deadline-timer :updatedAt="$currentRequest->updated_at" :compact="true" />
 
             {{-- Applicant Info --}}
-            <div
-                class="my-4 flex items-center gap-4 rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="dark: my-4 flex items-center gap-4 rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 dark:border-zinc-800"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div
                     class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-red-100 text-xl font-black text-red-600 dark:bg-red-900/30 dark:text-red-400">
                     {{ collect(explode(' ', $currentRequest->user->name))->map(fn($n) => \Str::substr($n, 0, 1))->take(2)->implode('') }}
@@ -159,8 +160,10 @@
             </div>
 
             {{-- Reason --}}
-            <div class="mb-5 rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="dark: mb-5 rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 dark:border-zinc-800"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <p class="mb-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400">Alasan / Keperluan</p>
                 <p class="text-sm italic text-zinc-700 dark:text-zinc-300">"{{ $currentRequest->reason }}"</p>
             </div>
@@ -192,18 +195,15 @@
             x-transition:enter-end="translate-y-0 opacity-100 scale-100"
             x-transition:leave="transition ease-in duration-200 transform"
             x-transition:leave-start="translate-y-0 opacity-100 scale-100"
-            x-transition:leave-end="translate-y-10 opacity-0 scale-95"
-            x-data="{ tapping: false }"
-            x-on:mousedown="tapping = true"
-            x-on:touchstart="tapping = true"
-            x-on:animationend="tapping = false"
+            x-transition:leave-end="translate-y-10 opacity-0 scale-95" x-data="{ tapping: false }"
+            x-on:mousedown="tapping = true" x-on:touchstart="tapping = true" x-on:animationend="tapping = false"
             :class="[
                 tapping ? 'is-tapping' : '',
-                dynamicBg
-                    ? 'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-none'
-                    : 'bg-white border-zinc-200 shadow-sm hover:bg-zinc-50 dark:bg-dark-primary dark:border-zinc-800 dark:hover:bg-zinc-800'
+                dynamicBg ?
+                'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-none' :
+                'bg-white border-zinc-200 shadow-sm hover:bg-zinc-50 dark:bg-dark-primary dark:border-zinc-800 dark:hover:bg-zinc-800'
             ]"
-            class="liquid-btn relative pointer-events-auto flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border transition-all duration-300 hover:scale-105"
+            class="liquid-btn pointer-events-auto relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border transition-all duration-300 hover:scale-105"
             @click="$wire.set('showPopup', true)" style="display: none;" x-cloak>
             <x-icons.clipboard-check class="h-5 w-5 text-amber-500 dark:text-amber-400" />
             <span

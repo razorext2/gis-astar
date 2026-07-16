@@ -1,6 +1,8 @@
-<div
-    class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+{{-- Goal: User profile update information form, Livewire: None, Alpine: None --}}
+<div class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 lg:p-6"
+    x-bind:class="dynamicBg ?
+        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
     <header class="mb-6 border-b border-zinc-200 pb-5 dark:border-zinc-800">
         <h2 class="text-base font-bold text-zinc-900 dark:text-white">
             {{ __('Informasi Profil') }}
@@ -30,11 +32,7 @@
                 @if (!is_null($user->email_verified_at))
                     <span
                         class="flex shrink-0 items-center gap-1 rounded-lg bg-green-100 px-2.5 py-1.5 text-xs font-semibold text-green-700 dark:bg-green-900/30 dark:text-green-400">
-                        <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                                clip-rule="evenodd" />
-                        </svg>
+                        <x-icons.check class="h-3.5 w-3.5" />
                         Verified
                     </span>
                 @else

@@ -1,13 +1,15 @@
 {{-- Goal: Custom view export laporan kolektor, Livewire: Handler\Report\ExportKolektor, Alpine: Yes --}}
-<div
-    class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 md:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+<div class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 md:p-6"
+    x-bind:class="dynamicBg ?
+        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
     <form wire:submit="export" class="flex flex-col gap-4 md:gap-6">
 
         {{-- Header Title --}}
         <div>
             <h2 class="text-lg font-bold text-zinc-900 dark:text-white">Ekspor Laporan Kolektor</h2>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400">Sesuaikan rentang tanggal, tipe tagihan, status pembayaran, status laporan, dan filter petugas untuk mengekspor data kolektor.</p>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400">Sesuaikan rentang tanggal, tipe tagihan, status
+                pembayaran, status laporan, dan filter petugas untuk mengekspor data kolektor.</p>
         </div>
 
         <div class="h-px w-full bg-zinc-200 dark:bg-zinc-800"></div>
@@ -59,13 +61,13 @@
 
         {{-- Standalone Filters Grid --}}
         <div>
-            <p class="mb-3 text-xs font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">Parameter Filter Tambahan</p>
+            <p class="mb-3 text-xs font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">Parameter
+                Filter Tambahan</p>
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
 
                 {{-- 1. Tipe Tagihan --}}
                 <div>
-                    <label class="mb-2 block text-sm font-bold text-zinc-900 dark:text-white"
-                        for="report_bill_type">
+                    <label class="mb-2 block text-sm font-bold text-zinc-900 dark:text-white" for="report_bill_type">
                         Tipe Tagihan
                     </label>
                     <select id="report_bill_type" wire:model.live="billType"
@@ -96,8 +98,7 @@
 
                 {{-- 3. Status Laporan --}}
                 <div>
-                    <label class="mb-2 block text-sm font-bold text-zinc-900 dark:text-white"
-                        for="report_status">
+                    <label class="mb-2 block text-sm font-bold text-zinc-900 dark:text-white" for="report_status">
                         Status Laporan
                     </label>
                     <select id="report_status" wire:model.live="status"
@@ -145,11 +146,14 @@
                             <option value="">Pilih...</option>
                             @foreach ($users as $user)
                                 @php
-                                    $useKode = ($filterOptions[$this->filterBy]['value_type'] ?? null) === 'kode_pegawai' || $this->filterBy === 'kode_pegawai';
+                                    $useKode =
+                                        ($filterOptions[$this->filterBy]['value_type'] ?? null) === 'kode_pegawai' ||
+                                        $this->filterBy === 'kode_pegawai';
                                     $optionValue = $useKode ? $user->kode_pegawai : $user->id;
                                 @endphp
                                 <option value="{{ $optionValue }}">
-                                    {{ $user->name }} {{ $user->kode_pegawai ? "($user->kode_pegawai)" : '' }}{{ !$user->is_active ? ' (nonaktif)' : '' }}
+                                    {{ $user->name }}
+                                    {{ $user->kode_pegawai ? "($user->kode_pegawai)" : '' }}{{ !$user->is_active ? ' (nonaktif)' : '' }}
                                 </option>
                             @endforeach
                         </select>

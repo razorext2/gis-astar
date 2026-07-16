@@ -1,13 +1,15 @@
 {{-- Goal: Custom view export laporan cuti, Livewire: Handler\Report\ExportCuti, Alpine: Yes --}}
-<div
-    class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 md:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+<div class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 md:p-6"
+    x-bind:class="dynamicBg ?
+        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
     <form wire:submit="export" class="flex flex-col gap-4 md:gap-6">
 
         {{-- Header Title --}}
         <div>
             <h2 class="text-lg font-bold text-zinc-900 dark:text-white">Ekspor Laporan Cuti</h2>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400">Sesuaikan rentang tanggal, pencarian pengaju cuti, role pengguna, dan status cuti untuk mengekspor data cuti.</p>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400">Sesuaikan rentang tanggal, pencarian pengaju cuti, role
+                pengguna, dan status cuti untuk mengekspor data cuti.</p>
         </div>
 
         <div class="h-px w-full bg-zinc-200 dark:bg-zinc-800"></div>
@@ -59,13 +61,13 @@
 
         {{-- Standalone Filters Grid --}}
         <div>
-            <p class="mb-3 text-xs font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">Parameter Filter Tambahan</p>
+            <p class="mb-3 text-xs font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">Parameter
+                Filter Tambahan</p>
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
 
                 {{-- 1. Tipe Tanggal --}}
                 <div>
-                    <label class="mb-2 block text-sm font-bold text-zinc-900 dark:text-white"
-                        for="report_date_type">
+                    <label class="mb-2 block text-sm font-bold text-zinc-900 dark:text-white" for="report_date_type">
                         Tipe Filter Tanggal
                     </label>
                     <select id="report_date_type" wire:model.live="dateType"
@@ -91,8 +93,7 @@
 
                 {{-- 3. Status Cuti --}}
                 <div>
-                    <label class="mb-2 block text-sm font-bold text-zinc-900 dark:text-white"
-                        for="report_leave_status">
+                    <label class="mb-2 block text-sm font-bold text-zinc-900 dark:text-white" for="report_leave_status">
                         Status Cuti
                     </label>
                     <select id="report_leave_status" wire:model.live="leaveStatus"
@@ -137,11 +138,13 @@
                             @click="open = false"
                             class="flex w-full items-center px-4 py-2 text-left text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-100 dark:text-white dark:hover:bg-zinc-800">
                             @if ($u->kode_pegawai)
-                                <span class="mr-2 font-bold text-blue-600 dark:text-blue-400">#{{ $u->kode_pegawai }}</span>
+                                <span
+                                    class="mr-2 font-bold text-blue-600 dark:text-blue-400">#{{ $u->kode_pegawai }}</span>
                             @endif
                             <span>{{ $u->name }}</span>
                             @if (!$u->is_active)
-                                <span class="ml-1.5 text-xs font-medium text-red-500 dark:text-red-400">(nonaktif)</span>
+                                <span
+                                    class="ml-1.5 text-xs font-medium text-red-500 dark:text-red-400">(nonaktif)</span>
                             @endif
                         </button>
                     @endforeach
@@ -156,16 +159,15 @@
                             class="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700 dark:border-blue-800/60 dark:bg-blue-900/30 dark:text-blue-300">
                             <span>
                                 @if ($u['kode_pegawai'])
-                                    #{{ $u['kode_pegawai'] }} - 
+                                    #{{ $u['kode_pegawai'] }} -
                                 @endif
-                                {{ $u['name'] }}@if (!($u['is_active'] ?? true))<span class="ml-1 font-medium text-red-500 dark:text-red-400">(nonaktif)</span>@endif
+                                {{ $u['name'] }}@if (!($u['is_active'] ?? true))
+                                    <span class="ml-1 font-medium text-red-500 dark:text-red-400">(nonaktif)</span>
+                                @endif
                             </span>
                             <button type="button" wire:click="removeUser({{ $u['id'] }})"
                                 class="text-blue-500 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-200">
-                                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12" />
-                                </svg>
+                                <x-icons.close class="h-3.5 w-3.5" />
                             </button>
                         </span>
                     @endforeach

@@ -1,11 +1,12 @@
 {{--
     Goal: Halaman utama monitoring server dengan CRUD dan visualisasi uptime.
-    Livewire: system.server-overview
-    Alpine: serverMonitor() — didefinisikan di @push('script') bawah, diinisialisasi oleh x-server.card.
+    Livewire: App\Livewire\System\ServerOverview
+    Alpine: serverMonitor(), dynamicBg
 --}}
-<div
-    class="mx-auto max-w-screen-2xl rounded-2xl border border-white/60 p-4 shadow-zinc-200/50 dark:border-zinc-800 dark:shadow-black/30 md:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+<div class="mx-auto max-w-screen-2xl rounded-2xl border border-white/60 p-4 shadow-zinc-200/50 dark:border-zinc-800 dark:shadow-black/30 md:p-6"
+    x-bind:class="dynamicBg ?
+        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
     {{-- Column Headers --}}
     @if (count($servers) > 0)
@@ -59,29 +60,17 @@
             </p>
 
             <div class="flex items-center gap-2">
-                <button wire:click="prevPage" @disabled($page <= 1)
-                    class="inline-flex items-center gap-1.5 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-medium text-zinc-700 transition-all hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800">
-                    <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M12.79 5.23a.75.75 0 0 1-.02 1.06L8.832 10l3.938 3.71a.75.75 0 1 1-1.04 1.08l-4.5-4.25a.75.75 0 0 1 0-1.08l4.5-4.25a.75.75 0 0 1 1.06.02z"
-                            clip-rule="evenodd" />
-                    </svg>
-                    Sebelumnya
-                </button>
+                <x-button.secondary wire:click="prevPage" :iconOnly="true" :disabled="$page <= 1">
+                    <x-icons.chevron-left class="h-4 w-4" />
+                </x-button.secondary>
 
                 <span class="px-2 text-sm text-zinc-500 dark:text-zinc-400">
                     {{ $page }} / {{ $this->totalPages() }}
                 </span>
 
-                <button wire:click="nextPage" @disabled($page >= $this->totalPages())
-                    class="inline-flex items-center gap-1.5 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-medium text-zinc-700 transition-all hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800">
-                    Selanjutnya
-                    <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M7.21 14.77a.75.75 0 0 1 .02-1.06L11.168 10 7.23 6.29a.75.75 0 1 1 1.04-1.08l4.5 4.25a.75.75 0 0 1 0 1.08l-4.5 4.25a.75.75 0 0 1-1.06-.02z"
-                            clip-rule="evenodd" />
-                    </svg>
-                </button>
+                <x-button.secondary wire:click="nextPage" :iconOnly="true" :disabled="$page >= $this->totalPages()">
+                    <x-icons.chevron-right class="h-4 w-4" />
+                </x-button.secondary>
             </div>
         </div>
     @endif

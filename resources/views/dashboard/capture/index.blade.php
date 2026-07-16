@@ -3,7 +3,7 @@
 @section('content')
     <div class="relative overflow-hidden rounded-xl p-4 text-zinc-900 shadow-2xl ring-1 ring-zinc-200 dark:text-white dark:ring-zinc-800 md:p-6"
         x-bind:class="dynamicBg ?
-            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' :
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
             'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
         id="Scan" data-aos="fade-up">
 

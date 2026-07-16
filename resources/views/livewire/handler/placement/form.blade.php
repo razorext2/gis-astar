@@ -4,9 +4,10 @@
 }" x-init="$watch('radius', val => window.dispatchEvent(new CustomEvent('placement-radius-changed', { detail: { radius: val } })))"
     x-on:map-pin-updated.window="$wire.set('longitude', $event.detail.lng); $wire.set('latitude', $event.detail.lat)">
     {{-- ===================== KOLOM FORM ===================== --}}
-    <div
-        class="w-full rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="w-full rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <div class="max-w-xl">
 
             {{-- Header --}}
@@ -70,9 +71,9 @@
                     users: {{ Js::from($users->map(fn($u) => ['id' => $u->id, 'name' => $u->name, 'kode' => $u->pegawai ? $u->pegawai->kode_pegawai : ''])) }},
                     get filteredUsers() {
                         if (this.search === '') return this.users.filter(u => !this.selectedIds.includes(u.id)).slice(0, 5);
-                        return this.users.filter(u => 
-                            (u.name.toLowerCase().includes(this.search.toLowerCase()) || 
-                             u.kode.toLowerCase().includes(this.search.toLowerCase())) &&
+                        return this.users.filter(u =>
+                            (u.name.toLowerCase().includes(this.search.toLowerCase()) ||
+                                u.kode.toLowerCase().includes(this.search.toLowerCase())) &&
                             !this.selectedIds.includes(u.id)
                         ).slice(0, 5);
                     },
@@ -93,14 +94,16 @@
                     <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
                         Tim HRD
                     </label>
-                    
+
                     {{-- Selected Chips --}}
                     <div class="mb-2 flex flex-wrap gap-2" x-show="selectedUsers.length > 0" style="display: none;">
                         <template x-for="user in selectedUsers" :key="user.id">
-                            <span class="inline-flex items-center gap-1 rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
+                            <span
+                                class="inline-flex items-center gap-1 rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
                                 <span x-text="user.name"></span>
-                                <button type="button" @click="remove(user.id)" class="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-red-600 hover:bg-red-200 hover:text-red-900 dark:hover:bg-red-800 dark:hover:text-red-200">
-                                    <svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8"><path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"/></svg>
+                                <button type="button" @click="remove(user.id)"
+                                    class="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-red-600 hover:bg-red-200 hover:text-red-900 dark:hover:bg-red-800 dark:hover:text-red-200">
+                                    <x-icons.close class="h-2 w-2" />
                                 </button>
                             </span>
                         </template>
@@ -108,17 +111,18 @@
 
                     {{-- Search Input --}}
                     <div class="relative">
-                        <input type="text" x-model="search" @focus="open = true" 
-                            class="{{ $errors->has('hrd_ids') ? 'border-red-500 bg-red-50' : 'border-zinc-200 bg-white' }} block w-full rounded-lg border p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500" 
+                        <input type="text" x-model="search" @focus="open = true"
+                            class="{{ $errors->has('hrd_ids') ? 'border-red-500 bg-red-50' : 'border-zinc-200 bg-white' }} block w-full rounded-lg border p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
                             placeholder="Cari nama atau NIP HRD...">
-                        
+
                         {{-- Dropdown --}}
                         <div x-show="open && filteredUsers.length > 0" x-transition style="display: none;"
                             class="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-lg bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-gray-800 dark:ring-white dark:ring-opacity-10">
                             <template x-for="user in filteredUsers" :key="user.id">
-                                <button type="button" @click="add(user.id)" 
+                                <button type="button" @click="add(user.id)"
                                     class="flex w-full flex-col items-start px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    <span class="text-sm font-medium text-gray-900 dark:text-white" x-text="user.name"></span>
+                                    <span class="text-sm font-medium text-gray-900 dark:text-white"
+                                        x-text="user.name"></span>
                                     <span class="text-xs text-gray-500 dark:text-gray-400" x-text="user.kode"></span>
                                 </button>
                             </template>
@@ -128,7 +132,7 @@
                             Tidak ada data ditemukan.
                         </div>
                     </div>
-                    
+
                     @error('hrd_ids')
                         <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                     @enderror
@@ -142,9 +146,9 @@
                     users: {{ Js::from($users->map(fn($u) => ['id' => $u->id, 'name' => $u->name, 'kode' => $u->pegawai ? $u->pegawai->kode_pegawai : ''])) }},
                     get filteredUsers() {
                         if (this.search === '') return this.users.filter(u => !this.selectedIds.includes(u.id)).slice(0, 5);
-                        return this.users.filter(u => 
-                            (u.name.toLowerCase().includes(this.search.toLowerCase()) || 
-                             u.kode.toLowerCase().includes(this.search.toLowerCase())) &&
+                        return this.users.filter(u =>
+                            (u.name.toLowerCase().includes(this.search.toLowerCase()) ||
+                                u.kode.toLowerCase().includes(this.search.toLowerCase())) &&
                             !this.selectedIds.includes(u.id)
                         ).slice(0, 5);
                     },
@@ -165,14 +169,16 @@
                     <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
                         Tim Manajemen
                     </label>
-                    
+
                     {{-- Selected Chips --}}
                     <div class="mb-2 flex flex-wrap gap-2" x-show="selectedUsers.length > 0" style="display: none;">
                         <template x-for="user in selectedUsers" :key="user.id">
-                            <span class="inline-flex items-center gap-1 rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
+                            <span
+                                class="inline-flex items-center gap-1 rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
                                 <span x-text="user.name"></span>
-                                <button type="button" @click="remove(user.id)" class="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-red-600 hover:bg-red-200 hover:text-red-900 dark:hover:bg-red-800 dark:hover:text-red-200">
-                                    <svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8"><path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"/></svg>
+                                <button type="button" @click="remove(user.id)"
+                                    class="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-red-600 hover:bg-red-200 hover:text-red-900 dark:hover:bg-red-800 dark:hover:text-red-200">
+                                    <x-icons.close class="h-2 w-2" />
                                 </button>
                             </span>
                         </template>
@@ -180,17 +186,18 @@
 
                     {{-- Search Input --}}
                     <div class="relative">
-                        <input type="text" x-model="search" @focus="open = true" 
-                            class="{{ $errors->has('management_ids') ? 'border-red-500 bg-red-50' : 'border-zinc-200 bg-white' }} block w-full rounded-lg border p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500" 
+                        <input type="text" x-model="search" @focus="open = true"
+                            class="{{ $errors->has('management_ids') ? 'border-red-500 bg-red-50' : 'border-zinc-200 bg-white' }} block w-full rounded-lg border p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-gray-700 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
                             placeholder="Cari nama atau NIP Manajemen...">
-                        
+
                         {{-- Dropdown --}}
                         <div x-show="open && filteredUsers.length > 0" x-transition style="display: none;"
                             class="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-lg bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-gray-800 dark:ring-white dark:ring-opacity-10">
                             <template x-for="user in filteredUsers" :key="user.id">
-                                <button type="button" @click="add(user.id)" 
+                                <button type="button" @click="add(user.id)"
                                     class="flex w-full flex-col items-start px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    <span class="text-sm font-medium text-gray-900 dark:text-white" x-text="user.name"></span>
+                                    <span class="text-sm font-medium text-gray-900 dark:text-white"
+                                        x-text="user.name"></span>
                                     <span class="text-xs text-gray-500 dark:text-gray-400" x-text="user.kode"></span>
                                 </button>
                             </template>
@@ -200,7 +207,7 @@
                             Tidak ada data ditemukan.
                         </div>
                     </div>
-                    
+
                     @error('management_ids')
                         <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                     @enderror
@@ -299,9 +306,10 @@
     </div>
 
     {{-- ===================== KOLOM PETA ===================== --}}
-    <div
-        class="w-full rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="w-full rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <div class="max-w-xl">
             <header>
                 <h2 class="text-lg font-medium text-gray-900 dark:text-white">

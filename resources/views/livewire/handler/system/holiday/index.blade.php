@@ -19,18 +19,20 @@
     </div>
 
     {{-- Main Table Section --}}
-    <div
-        class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <livewire:powergrid-tables.holiday-table />
     </div>
 
     {{-- Fetch API Modal --}}
     <x-modal.base-modal maxWidth="lg" show="showCreateModal" title="Fetch Hari Libur dari API">
         <div class="p-6">
-            <div
-                class="mb-6 flex items-end gap-3 rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="dark: mb-6 flex items-end gap-3 rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 dark:border-zinc-800"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div class="flex-1">
                     <label class="mb-1 block text-sm font-bold uppercase tracking-wider text-zinc-500">Tahun</label>
                     <input type="number" wire:model="year"

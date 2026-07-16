@@ -1,4 +1,4 @@
-{{-- Goal: Tampilan pratinjau tagihan BSI dan tombol assign, Livewire: Preview, Alpine: scroll to rekap --}}
+{{-- Goal: Tampilan pratinjau tagihan BSI dan tombol assign, Livewire: App\Livewire\Handler\Spk\Billing\Preview, Alpine: scroll-to-rekap --}}
 <div
     x-on:scroll-to-rekap.window="
         $nextTick(() => {
@@ -9,7 +9,9 @@
     @if ($nomor_tagihan_baru)
         <div id="rekap-piutang-section"
             class="rounded-xl border border-zinc-200 p-4 shadow-inner dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <div class="mb-4 flex flex-wrap items-center gap-3">
                 <span
                     class="inline-flex rounded-full bg-indigo-100 px-2.5 py-0.5 text-[10px] font-bold tracking-wider text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400">
@@ -59,11 +61,9 @@
                                 sebagai acuan tagihan</p>
                             <div class="flex items-center gap-4">
                                 <label class="flex cursor-pointer items-center gap-2">
-                                    <input type="radio" wire:model.live="jumlah_piutang_field"
-                                        value="subtotal"
+                                    <input type="radio" wire:model.live="jumlah_piutang_field" value="subtotal"
                                         class="h-4 w-4 cursor-pointer text-blue-600 focus:ring-blue-500 dark:border-zinc-600" />
-                                    <span
-                                        class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">SubTotal</span>
+                                    <span class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">SubTotal</span>
                                 </label>
                                 <label class="flex cursor-pointer items-center gap-2">
                                     <input type="radio" wire:model.live="jumlah_piutang_field" value="total"
@@ -223,22 +223,19 @@
                                             {{ number_format((float) ($item['SisaPiutang'] ?? 0), 2, '.', ',') }}
                                         </td>
                                         <td class="px-4 py-3 text-center">
-                                            <button type="button" wire:click="toggleSisaItemDp({{ $index }})"
+                                            <x-button.liquid-glass type="button" :isPill="false" :iconOnly="true"
+                                                :color="$isDp ? 'amber' : 'zinc'" wire:click="toggleSisaItemDp({{ $index }})"
                                                 wire:loading.attr="disabled"
                                                 wire:target="toggleSisaItemDp({{ $index }})"
                                                 title="{{ $isDp ? 'Hapus tanda DP' : 'Tandai sebagai DP' }}"
-                                                class="{{ $isDp ? 'border-amber-400 bg-amber-400 text-white dark:border-amber-500 dark:bg-amber-500' : 'border-zinc-300 bg-white text-zinc-400 hover:border-amber-400 hover:text-amber-500 dark:border-zinc-600 dark:bg-zinc-800 dark:hover:border-amber-500' }} inline-flex h-6 w-6 items-center justify-center rounded-md border transition-colors">
+                                                class="!h-6 !w-6 !rounded-md">
                                                 <x-icons.loading wire:loading
                                                     wire:target="toggleSisaItemDp({{ $index }})"
                                                     class="h-3 w-3 animate-spin" />
-                                                <svg wire:loading.remove
+                                                <x-icons.check wire:loading.remove
                                                     wire:target="toggleSisaItemDp({{ $index }})"
-                                                    class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd"
-                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                            </button>
+                                                    class="h-3.5 w-3.5" />
+                                            </x-button.liquid-glass>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -263,8 +260,8 @@
 
                     <div
                         class="flex items-center justify-end gap-3 border-t border-zinc-100 pt-6 dark:border-zinc-800">
-                        <x-button.success type="button"
-                            id="assign" wire:click="assign" wire:loading.attr="disabled" wire:target="assign">
+                        <x-button.success type="button" id="assign" wire:click="assign"
+                            wire:loading.attr="disabled" wire:target="assign">
                             <x-slot name="icon">
                                 <x-icons.angle-right wire:loading.remove wire:target="assign" class="icon h-5 w-5" />
                                 <x-icons.loading wire:loading wire:target="assign" class="h-4 w-4 animate-spin" />

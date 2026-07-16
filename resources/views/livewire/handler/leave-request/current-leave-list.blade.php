@@ -2,16 +2,19 @@
 
 <div class="flex flex-col gap-4">
     {{-- Search Toolbar --}}
-    <div
-        class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 sm:flex-row sm:items-center sm:justify-between md:p-5"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="flex flex-col gap-4 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 sm:flex-row sm:items-center sm:justify-between md:p-5"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <div class="relative w-full sm:w-96">
             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
                 <x-icons.info class="h-4 w-4 text-zinc-400" />
             </div>
             <input type="text" wire:model.live="search"
                 class="w-full rounded-xl border-zinc-200 py-2.5 pl-11 text-sm transition-all focus:border-red-500 focus:ring-red-500 dark:border-zinc-800 dark:text-zinc-200"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
                 placeholder="Cari nama pegawai yang sedang cuti...">
         </div>
         <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-500">
@@ -23,9 +26,10 @@
     {{-- Flight Board List --}}
     <div class="flex flex-col gap-4">
         @forelse ($leaves as $leave)
-            <div
-                class="group relative overflow-hidden rounded-xl border border-zinc-200 transition-all hover:border-red-500/30 hover: hover:shadow-red-500/5 dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="hover: group relative overflow-hidden rounded-xl border border-zinc-200 transition-all hover:border-red-500/30 hover:shadow-red-500/5 dark:border-zinc-800"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                 <div class="flex flex-col md:flex-row">
 
                     {{-- Left Section: Employee Info --}}
@@ -86,8 +90,10 @@
                     </div>
 
                     {{-- Right Section: Status --}}
-                    <div class="flex items-center justify-center bg-zinc-50/50 p-5 dark: md:w-48"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                    <div class="dark: flex items-center justify-center bg-zinc-50/50 p-5 md:w-48"
+                        x-bind:class="dynamicBg ?
+                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         <div class="flex flex-col items-center gap-1">
                             @php
                                 $isUpcoming = \Carbon\Carbon::parse($leave->start_date)
@@ -113,20 +119,23 @@
                 </div>
 
                 {{-- Bottom Description --}}
-                <div
-                    class="border-t border-zinc-100 bg-zinc-50/30 px-5 py-3 text-[11px] italic text-zinc-500 dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                <div class="border-t border-zinc-100 bg-zinc-50/30 px-5 py-3 text-[11px] italic text-zinc-500 dark:border-zinc-800"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <span class="mr-2 font-bold uppercase not-italic tracking-tighter text-zinc-400">Alasan:</span>
                     "{{ $leave->reason ?? 'No description provided' }}"
                 </div>
             </div>
         @empty
-            <div
-                class="flex flex-col items-center justify-center rounded-xl border border-dashed border-zinc-200 py-20 text-center dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
-                <div
-                    class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-zinc-50 text-zinc-400 dark:"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="flex flex-col items-center justify-center rounded-xl border border-dashed border-zinc-200 py-20 text-center dark:border-zinc-800"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                <div class="dark: mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-zinc-50 text-zinc-400"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <x-icons.command class="h-8 w-8" />
                 </div>
                 <h3 class="text-lg font-bold text-zinc-800 dark:text-zinc-200">Semua Pegawai Sedang Bertugas</h3>

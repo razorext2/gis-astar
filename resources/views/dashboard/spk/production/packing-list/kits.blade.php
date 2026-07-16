@@ -4,9 +4,10 @@
     <div class="relative space-y-4">
 
         {{-- Main Container --}}
-        <div
-            class="flex flex-col gap-6 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+        <div class="flex flex-col gap-6 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 lg:p-6"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
             {{-- Header Section --}}
             <div
@@ -75,7 +76,9 @@
 
                 @if ($barang['packing_list_type'] === 'upload')
                     <div class="rounded-xl border border-zinc-100 p-4 dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                        x-bind:class="dynamicBg ?
+                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         <livewire:handler.production-histories.packing-list-files :idbarang="$barang['id_barang']" :idspk="$data->spk->id" />
                     </div>
                 @endif

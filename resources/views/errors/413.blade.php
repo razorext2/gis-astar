@@ -43,7 +43,8 @@
     </style>
 </head>
 
-<body x-data="{ dynamicBg: localStorage.getItem('dynamicBg') === null ? false : localStorage.getItem('dynamicBg') === 'true' }" class="bg-[#f8fafc] antialiased transition-colors duration-300 selection:bg-blue-100 selection:text-blue-700 dark:bg-[#0f172a] dark:selection:bg-blue-900 dark:selection:text-blue-200">
+<body x-data="{ dynamicBg: localStorage.getItem('dynamicBg') === null ? false : localStorage.getItem('dynamicBg') === 'true' }"
+    class="bg-[#f8fafc] antialiased transition-colors duration-300 selection:bg-blue-100 selection:text-blue-700 dark:bg-[#0f172a] dark:selection:bg-blue-900 dark:selection:text-blue-200">
     <div class="relative flex min-h-screen items-center justify-center overflow-hidden p-4 sm:p-6 lg:p-8">
         {{-- Background Accents --}}
         <div class="pointer-events-none absolute h-full w-full opacity-30 dark:opacity-20">
@@ -52,9 +53,10 @@
         </div>
 
         <div class="relative w-full max-w-6xl">
-            <div
-                class="grid items-center gap-8 rounded-[2.5rem] border border-white/40 p-8 shadow-2xl dark:border-zinc-800/50 lg:grid-cols-2 lg:p-16"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            <div class="grid items-center gap-8 rounded-[2.5rem] border border-white/40 p-8 shadow-2xl dark:border-zinc-800/50 lg:grid-cols-2 lg:p-16"
+                x-bind:class="dynamicBg ?
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
                 {{-- Left Side: Content --}}
                 <div class="order-2 space-y-8 text-center lg:order-1 lg:text-left">
@@ -80,7 +82,9 @@
 
                         <x-button.secondary onclick="window.history.back()"
                             class="flex items-center justify-center gap-2 rounded-2xl border-white/20 px-8 py-4 font-bold shadow-sm transition-all hover:bg-white dark:border-zinc-700 dark:hover:bg-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                            x-bind:class="dynamicBg ?
+                                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                             <span>Halaman Sebelumnya</span>
                         </x-button.secondary>
                     </div>

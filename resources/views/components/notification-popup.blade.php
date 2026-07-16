@@ -7,9 +7,10 @@
     x-transition:leave-start="transform translate-y-0 opacity-100 scale-100"
     x-transition:leave-end="transform translate-y-[-20px] opacity-0 scale-95">
 
-    <div
-        class="relative flex w-full items-center gap-4 overflow-hidden rounded-xl border border-white/40 p-5 shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:border-zinc-800 dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] md:gap-5"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="relative flex w-full items-center gap-4 overflow-hidden rounded-xl border border-white/40 p-5 shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:border-zinc-800 dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] md:gap-5"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
         <!-- Decoration Gradient -->
         <div class="absolute -left-10 -top-10 h-24 w-24 rounded-full bg-blue-500/10 blur-2xl"></div>

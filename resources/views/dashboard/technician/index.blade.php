@@ -4,9 +4,10 @@
 
     <div class="relative grid grid-cols-1 gap-4">
 
-        <div
-            class="rounded-xl border border-zinc-200 p-2 shadow-md dark:border-zinc-800 dark:shadow-none md:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+        <div class="rounded-xl border border-zinc-200 p-2 shadow-md dark:border-zinc-800 dark:shadow-none md:p-6"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
             {{-- desktop view --}}
             <div class="hidden items-center lg:flex">
@@ -41,7 +42,7 @@
                 {{-- button --}}
                 <x-button.secondary class="flex w-full items-center justify-between !p-2.5" @click="open = ! open">
                     <span>Actions...</span>
-                    <x-icons.carred-down class="h-3 w-3 shrink-0 transform transition-transform duration-300" 
+                    <x-icons.carred-down class="h-3 w-3 shrink-0 transform transition-transform duration-300"
                         ::class="{ 'rotate-180 ': open }" />
                 </x-button.secondary>
 
@@ -81,9 +82,10 @@
             </div>
         @endcan
 
-        <div
-            class="relative grid grid-cols-1 rounded-xl py-2 shadow-md border border-zinc-200 dark:shadow-none dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+        <div class="relative grid grid-cols-1 rounded-xl border border-zinc-200 py-2 shadow-md dark:border-zinc-800 dark:shadow-none lg:p-6"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
             <livewire:powergrid-tables.technician-table />
 

@@ -12,6 +12,8 @@ class ParticipantVisitorGraph extends Component
 {
     public bool $isDark = false;
 
+    public string $event_id;
+
     public function makePalette(int $n = 10): array
     {
         $set = [];
@@ -33,7 +35,7 @@ class ParticipantVisitorGraph extends Component
             ->setVertical()
             ->withoutLegend();
 
-        $data = BigEventParticipant::where('big_event_id', '01k6w7ajs264rd3rf11pvmnsxe')->get();
+        $data = BigEventParticipant::where('big_event_id', $this->event_id)->get();
 
         foreach ($data as $i => $item) {
             $totalVisitor = $item->bigEventVisitor->count();

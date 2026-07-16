@@ -1,9 +1,10 @@
 {{-- Goal: Edit Permissions Page, Livewire: handler.permissions.delete, handler.permissions.update, Alpine: - --}}
 @extends('dashboard.layoutsDash.app')
 @section('content')
-    <div
-        class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6 xl:w-1/2"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+    <div class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6 xl:w-1/2"
+        x-bind:class="dynamicBg ?
+            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
         <header class="flex items-center">
             <x-button.danger class="my-auto me-4 max-h-10" href="{{ route('permissions.index') }}" wire:navigate>

@@ -7,6 +7,7 @@ use App\Models\PhotoCollect;
 use App\Models\Technician;
 use App\Models\TechnicianPoints;
 use App\Support\IdObfuscator;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -187,7 +188,7 @@ class TechnicianController extends Controller
         }
     }
 
-    public function show(string $hash): \Illuminate\Contracts\View\View
+    public function show(string $hash): View
     {
         $id = $this->decodeOrAbort($hash);
 
@@ -255,7 +256,7 @@ class TechnicianController extends Controller
         return new ApiResource(true, 'Berhasil mengambil data dari database', $technician);
     }
 
-    public function fetchUpdate(string $hash): \Illuminate\Contracts\View\View
+    public function fetchUpdate(string $hash): View
     {
         $id = $this->decodeOrAbort($hash);
 
@@ -263,6 +264,7 @@ class TechnicianController extends Controller
 
         return view('dashboard.technician.fetch-update', [
             'id' => $technician->no_vt,
+            'hash' => $hash,
         ]);
     }
 

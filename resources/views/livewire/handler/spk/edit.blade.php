@@ -1,3 +1,4 @@
+{{-- Goal: Edit SPK details and item parameters, Livewire: App\Livewire\Handler\Spk\Edit, Alpine: focusNamaCustomer() --}}
 <div class="space-y-4" x-data="{ focusNamaCustomer() { this.$nextTick(() => this.$refs.namaCustomer?.focus()); } }" x-init="focusNamaCustomer()"
     x-on:focus-nama-customer.window="focusNamaCustomer()">
 
@@ -6,7 +7,9 @@
         {{-- form info customer --}}
         <div id="informasi-customer"
             class="flex flex-col rounded-xl border border-zinc-200 shadow-md dark:border-zinc-800 dark:shadow-none"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
             <div class="flex items-center gap-3 border-b border-zinc-200 px-4 py-4 dark:border-zinc-800 lg:px-6">
                 <div
@@ -71,7 +74,9 @@
         {{-- form barang --}}
         <div id="informasi-barang"
             class="flex flex-col rounded-xl border border-zinc-200 shadow-md dark:border-zinc-800 dark:shadow-none"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
             <div class="flex items-center gap-3 border-b border-zinc-200 px-4 py-4 dark:border-zinc-800 lg:px-6">
                 <div
@@ -87,9 +92,10 @@
             <div class="grid w-full grid-cols-1 gap-6 p-4 lg:p-6">
 
                 {{-- Form Tambah Barang --}}
-                <div
-                    class="flex w-full flex-col gap-4 rounded-xl border border-zinc-100 p-4 shadow dark:border-zinc-700 dark:bg-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                <div class="flex w-full flex-col gap-4 rounded-xl border border-zinc-100 p-4 shadow dark:border-zinc-700 dark:bg-zinc-800"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <div class="w-full">
                         <x-input.select id="tipe_timbangan" name="tipe_timbangan" :labels="true" :textLabel="'Tipe Timbangan Yang Dipesan'"
                             :defaultOption="'Pilih tipe timbangan'" wire:model="createForm.tipe_timbangan" :options="config('spk-config.tipe_timbangan')" />
@@ -161,9 +167,10 @@
                     <h3 class="mb-3 text-base font-semibold text-gray-900 dark:text-white">Daftar Barang Yang Dipesan
                     </h3>
 
-                    <div
-                        class="overflow-hidden rounded-xl border border-zinc-200 shadow dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                    <div class="overflow-hidden rounded-xl border border-zinc-200 shadow dark:border-zinc-800"
+                        x-bind:class="dynamicBg ?
+                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         <table id="barang-list-table" class="w-full text-left">
                             <thead
                                 class="border-b border-zinc-200 bg-zinc-50 text-xs uppercase tracking-wider text-zinc-600 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-zinc-400">
@@ -196,31 +203,23 @@
                                         </td>
                                         <td class="px-4 py-4 align-top">
                                             <div class="flex items-center justify-center gap-1">
-                                                <button type="button"
-                                                    class="{{ $index !== 0 ? 'block' : 'hidden' }} rounded p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-blue-600 dark:hover:bg-zinc-800 dark:hover:text-blue-400"
-                                                    id="barang-up" wire:click="upBarang({{ $index }})"
-                                                    title="Pindah ke Atas">
-                                                    <x-icons.carred-down class="h-4 w-4 rotate-180" />
-                                                </button>
-                                                <button type="button"
-                                                    class="{{ $index === count($createForm->barang) - 1 ? 'hidden' : 'block' }} rounded p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-blue-600 dark:hover:bg-zinc-800 dark:hover:text-blue-400"
-                                                    id="barang-down" wire:click="downBarang({{ $index }})"
-                                                    title="Pindah ke Bawah">
-                                                    <x-icons.carred-down class="h-4 w-4" />
-                                                </button>
+                                                @if ($index !== 0)
+                                                    <x-button.secondary type="button" id="barang-up-{{ $index }}" wire:click="upBarang({{ $index }})" title="Pindah ke Atas" :iconOnly="true" class="!h-7 !w-7 !p-0">
+                                                        <x-icons.carred-down class="h-4 w-4 rotate-180" />
+                                                    </x-button.secondary>
+                                                @endif
+                                                @if ($index !== count($createForm->barang) - 1)
+                                                    <x-button.secondary type="button" id="barang-down-{{ $index }}" wire:click="downBarang({{ $index }})" title="Pindah ke Bawah" :iconOnly="true" class="!h-7 !w-7 !p-0">
+                                                        <x-icons.carred-down class="h-4 w-4" />
+                                                    </x-button.secondary>
+                                                @endif
 
-                                                <button type="button"
-                                                    class="rounded p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-blue-600 dark:hover:bg-zinc-800 dark:hover:text-blue-400"
-                                                    id="edit-barang" wire:click="editBarang({{ $index }})"
-                                                    title="Edit">
+                                                <x-button.secondary type="button" id="edit-barang-{{ $index }}" wire:click="editBarang({{ $index }})" title="Edit" :iconOnly="true" class="!h-7 !w-7 !p-0">
                                                     <x-icons.pen class="h-4 w-4" />
-                                                </button>
-                                                <button type="button"
-                                                    class="rounded p-1 text-zinc-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-500"
-                                                    id="hapus-barang" wire:click="hapusBarang({{ $index }})"
-                                                    title="Hapus">
+                                                </x-button.secondary>
+                                                <x-button.danger type="button" id="hapus-barang-{{ $index }}" wire:click="hapusBarang({{ $index }})" title="Hapus" :iconOnly="true" class="!h-7 !w-7 !p-0">
                                                     <x-icons.trash-bin class="h-4 w-4" />
-                                                </button>
+                                                </x-button.danger>
                                             </div>
                                         </td>
                                     </tr>
@@ -252,7 +251,9 @@
         {{-- form spk --}}
         <div id="informasi-order"
             class="flex flex-col rounded-xl border border-zinc-200 shadow-md dark:border-zinc-800 dark:shadow-none"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
             <div class="flex items-center gap-3 border-b border-zinc-200 px-4 py-4 dark:border-zinc-800 lg:px-6">
                 <div
@@ -387,7 +388,9 @@
         {{-- form info tambahan --}}
         <div id="informasi-tambahan"
             class="flex flex-col rounded-xl border border-zinc-200 shadow-md dark:border-zinc-800 dark:shadow-none"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
             <div class="flex items-center gap-3 border-b border-zinc-200 px-4 py-4 dark:border-zinc-800 lg:px-6">
                 <div
@@ -403,9 +406,10 @@
             <div class="grid w-full grid-cols-1 gap-6 p-4 lg:grid-cols-2 lg:p-6">
 
                 {{-- Attachment Upload Section --}}
-                <div
-                    class="col-span-1 flex w-full flex-col gap-4 rounded-xl border border-zinc-100 p-4 shadow dark:border-zinc-700 dark:bg-zinc-800 lg:col-span-2 lg:flex-row"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                <div class="col-span-1 flex w-full flex-col gap-4 rounded-xl border border-zinc-100 p-4 shadow dark:border-zinc-700 dark:bg-zinc-800 lg:col-span-2 lg:flex-row"
+                    x-bind:class="dynamicBg ?
+                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
 
                     <div class="flex w-full flex-col lg:w-1/2">
                         <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
@@ -496,9 +500,10 @@
                     <h3 class="mb-3 text-base font-semibold text-gray-900 dark:text-white">Daftar Lampiran Tersimpan
                     </h3>
 
-                    <ul
-                        class="flex flex-col divide-y divide-zinc-200 rounded-xl border border-zinc-200 shadow dark:divide-zinc-800 dark:border-zinc-800"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                    <ul class="flex flex-col divide-y divide-zinc-200 rounded-xl border border-zinc-200 shadow dark:divide-zinc-800 dark:border-zinc-800"
+                        x-bind:class="dynamicBg ?
+                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         @foreach ($docForm->new_attachments as $index => $row)
                             <li
                                 class="flex items-center gap-4 px-4 py-3 transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
@@ -758,9 +763,10 @@
         </x-utils.accordion-item>
         {{-- end accordion cancel SPK --}}
 
-        <div
-            class="flex w-full items-center justify-end gap-3 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 lg:p-6"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+        <div class="flex w-full items-center justify-end gap-3 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 lg:p-6"
+            x-bind:class="dynamicBg ?
+                'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
             <x-button.success id="ubah-button" type="submit" wire:loading.attr="disabled" wire:target="store">
                 <x-slot name="icon">
                     <x-icons.loading wire:loading wire:target="store" class="h-4 w-4 animate-spin" />

@@ -19,7 +19,8 @@
         <div class="flex flex-col gap-5">
 
             {{-- Info Banner --}}
-            <div class="rounded-lg border border-amber-200 bg-amber-50/50 p-3 dark:border-amber-900/50 dark:bg-amber-950/30">
+            <div
+                class="rounded-lg border border-amber-200 bg-amber-50/50 p-3 dark:border-amber-900/50 dark:bg-amber-950/30">
                 <div class="flex items-center gap-2">
                     <x-icons.exclamation-circle class="h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" />
                     <span class="text-xs font-medium text-amber-700 dark:text-amber-400">
@@ -29,7 +30,8 @@
             </div>
 
             {{-- Template Download --}}
-            <div class="flex items-center justify-between rounded-lg border border-blue-200 bg-blue-50/50 p-3 dark:border-blue-900/50 dark:bg-blue-950/30">
+            <div
+                class="flex items-center justify-between rounded-lg border border-blue-200 bg-blue-50/50 p-3 dark:border-blue-900/50 dark:bg-blue-950/30">
                 <div class="flex items-center gap-2">
                     <x-icons.file-excel class="h-5 w-5 text-blue-600 dark:text-blue-400" />
                     <span class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Download template Excel</span>
@@ -41,15 +43,15 @@
             </div>
 
             {{-- Upload Area (only shown when no result yet) --}}
-            @if (! $importResult)
+            @if (!$importResult)
                 <div x-data="{ isDragging: false }" class="relative">
                     <label for="leave-file-upload"
                         class="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-8 transition-colors"
                         x-bind:class="isDragging
-                            ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-950/20'
-                            : 'border-zinc-300 bg-zinc-50/50 hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:border-zinc-600'"
-                        x-on:dragover.prevent="isDragging = true"
-                        x-on:dragleave.prevent="isDragging = false"
+                            ?
+                            'border-blue-500 bg-blue-50/50 dark:bg-blue-950/20' :
+                            'border-zinc-300 bg-zinc-50/50 hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:border-zinc-600'"
+                        x-on:dragover.prevent="isDragging = true" x-on:dragleave.prevent="isDragging = false"
                         x-on:drop.prevent="isDragging = false; $refs.fileInput.files = $event.dataTransfer.files; $refs.fileInput.dispatchEvent(new Event('change'))">
 
                         <x-icons.cloud-upload class="mb-3 h-10 w-10 text-zinc-400 dark:text-zinc-500" />
@@ -63,20 +65,24 @@
                             </p>
                         @else
                             <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400">
-                                Drag & drop file di sini, atau <span class="text-blue-600 dark:text-blue-400">pilih file</span>
+                                Drag & drop file di sini, atau <span class="text-blue-600 dark:text-blue-400">pilih
+                                    file</span>
                             </p>
                             <p class="mt-1 text-xs text-zinc-400 dark:text-zinc-500">
                                 Format: .xlsx, .xls (Maks. 5MB)
                             </p>
                         @endif
 
-                        <input id="leave-file-upload" x-ref="fileInput" type="file" wire:model="file" accept=".xlsx,.xls" class="hidden" />
+                        <input id="leave-file-upload" x-ref="fileInput" type="file" wire:model="file"
+                            accept=".xlsx,.xls" class="hidden" />
                     </label>
 
                     {{-- Loading indicator --}}
                     <div wire:loading wire:target="file"
                         class="absolute inset-0 flex items-center justify-center rounded-xl"
-    x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-lg shadow-red-500/10' : 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                        x-bind:class="dynamicBg ?
+                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+                            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                         <x-icons.loading class="h-6 w-6 animate-spin text-blue-600" />
                     </div>
                 </div>
@@ -90,7 +96,8 @@
             @if ($importResult)
                 <div class="flex flex-col gap-3">
                     {{-- Success count --}}
-                    <div class="flex items-center gap-3 rounded-lg border border-green-200 bg-green-50/60 p-3 dark:border-green-900/50 dark:bg-green-950/30">
+                    <div
+                        class="flex items-center gap-3 rounded-lg border border-green-200 bg-green-50/60 p-3 dark:border-green-900/50 dark:bg-green-950/30">
                         <x-icons.check-circle class="h-5 w-5 text-green-600 dark:text-green-400" />
                         <span class="text-sm font-semibold text-green-700 dark:text-green-400">
                             {{ $importResult['imported'] }} data cuti berhasil diimport
@@ -98,15 +105,17 @@
                     </div>
 
                     {{-- Skipped rows --}}
-                    @if (! empty($importResult['skipped']))
-                        <div class="rounded-lg border border-amber-200 bg-amber-50/60 p-3 dark:border-amber-900/50 dark:bg-amber-950/30">
+                    @if (!empty($importResult['skipped']))
+                        <div
+                            class="rounded-lg border border-amber-200 bg-amber-50/60 p-3 dark:border-amber-900/50 dark:bg-amber-950/30">
                             <div class="mb-2 flex items-center gap-2">
                                 <x-icons.exclamation-circle class="h-5 w-5 text-amber-600 dark:text-amber-400" />
                                 <span class="text-sm font-semibold text-amber-700 dark:text-amber-400">
                                     {{ count($importResult['skipped']) }} baris di-skip
                                 </span>
                             </div>
-                            <ul class="max-h-32 space-y-1 overflow-y-auto pl-7 text-xs text-amber-600 dark:text-amber-400">
+                            <ul
+                                class="max-h-32 space-y-1 overflow-y-auto pl-7 text-xs text-amber-600 dark:text-amber-400">
                                 @foreach ($importResult['skipped'] as $skip)
                                     <li>{{ $skip }}</li>
                                 @endforeach
@@ -115,8 +124,9 @@
                     @endif
 
                     {{-- Validation failures --}}
-                    @if (! empty($importResult['failures']))
-                        <div class="rounded-lg border border-red-200 bg-red-50/60 p-3 dark:border-red-900/50 dark:bg-red-950/30">
+                    @if (!empty($importResult['failures']))
+                        <div
+                            class="rounded-lg border border-red-200 bg-red-50/60 p-3 dark:border-red-900/50 dark:bg-red-950/30">
                             <div class="mb-2 flex items-center gap-2">
                                 <x-icons.close class="h-5 w-5 text-red-600 dark:text-red-400" />
                                 <span class="text-sm font-semibold text-red-700 dark:text-red-400">
@@ -139,7 +149,7 @@
                 {{ $importResult ? 'Tutup' : 'Batal' }}
             </x-button.secondary>
 
-            @if (! $importResult)
+            @if (!$importResult)
                 <x-button.primary wire:click="import" wire:loading.attr="disabled" wire:target="import, file">
                     <x-slot name="icon">
                         <x-icons.cloud-upload wire:loading.remove wire:target="import" class="h-5 w-5" />
