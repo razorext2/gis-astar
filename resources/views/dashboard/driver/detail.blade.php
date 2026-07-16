@@ -43,10 +43,7 @@
 
             <header class="flex items-center">
                 <x-button.danger href="{{ route('driver.index') }}" wire:navigate class="my-auto me-4 max-h-10">
-                    <x-slot name="icon">
-                        <x-icons.angle-left class="h-4 w-4" />
-                    </x-slot>
-                    Kembali
+                    <x-icons.angle-left class="h-4 w-4" />
                 </x-button.danger>
 
                 <div>

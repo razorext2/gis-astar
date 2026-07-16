@@ -6,10 +6,7 @@
     <div class="max-w-xl">
         <header class="mb-6 flex flex-row items-center gap-4 border-b border-zinc-100 pb-4 dark:border-white/5">
             <x-button.danger href="{{ route('jabatan.index') }}" class="mb-0">
-                <x-slot name="icon">
-                    <x-icons.angle-left class="h-6 w-6" />
-                </x-slot>
-                {{ __('Kembali') }}
+                <x-icons.angle-left class="h-6 w-6" />
             </x-button.danger>
             <div>
                 <h2 class="text-lg font-bold text-gray-900 dark:text-white">

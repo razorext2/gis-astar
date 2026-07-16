@@ -8,18 +8,15 @@
 </div>
 
 @if ($results->isNotEmpty())
-    <livewire:handler.point.technician.step-two :results="$result" :redeemMode="$redeemMode"
-        key="step-two-{{ $step }}" />
+    <livewire:handler.point.technician.step-two :results="$result" :redeemMode="$redeemMode" key="step-two-{{ $step }}" />
 
     {{-- Action Bottom for Step 2 --}}
-    <div class="mt-6 flex flex-col items-center justify-between gap-4 border-t border-zinc-200 pt-6 sm:flex-row dark:border-zinc-800">
+    <div
+        class="mt-6 flex flex-col items-center justify-between gap-4 border-t border-zinc-200 pt-6 dark:border-zinc-800 sm:flex-row">
         <x-button.danger wire:click="$set('step', 1)" class="w-full sm:w-auto">
-            <x-slot name="icon">
-                <x-icons.angle-left class="h-5 w-5" />
-            </x-slot>
-            Kembali
+            <x-icons.angle-left class="h-5 w-5" />
         </x-button.danger>
-        
+
         <x-button.success class="w-full sm:w-auto" wire:click="openModal">
             Lanjut Konfirmasi
             <x-slot name="icon">
@@ -29,8 +26,8 @@
     </div>
 
     {{-- Confirmation Modal --}}
-    <x-modal.base-modal show="showModal" id="konfirmasi-redeem" title="Konfirmasi Pengajuan"
-        subtitle="Verifikasi Data" maxWidth="lg" iconContainerClass="bg-blue-600 shadow-blue-500/20">
+    <x-modal.base-modal show="showModal" id="konfirmasi-redeem" title="Konfirmasi Pengajuan" subtitle="Verifikasi Data"
+        maxWidth="lg" iconContainerClass="bg-blue-600 shadow-blue-500/20">
         <x-slot name="icon">
             <x-icons.info-circle class="h-5 w-5" />
         </x-slot>
