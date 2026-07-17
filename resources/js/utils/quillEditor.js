@@ -20,6 +20,13 @@ export function quillEditor(data = null, editable = true) {
   CustomEmbed.tagName = 'div';
   Quill.register(CustomEmbed);
 
+  // Tambahkan class notranslate dan attribute translate="no" untuk mencegah konflik Google Translate
+  const editorEl = document.getElementById('editor');
+  if (editorEl) {
+    editorEl.classList.add('notranslate');
+    editorEl.setAttribute('translate', 'no');
+  }
+
   // Inisialisasi editor
   const quill = new Quill('#editor', {
     theme: 'snow',

@@ -1,3 +1,4 @@
+{{-- Goal: Edit Collect / Payment page, Livewire: - (uses native js), Alpine: - --}}
 @extends('dashboard.layoutsDash.app')
 @section('content')
     <div class="grid w-full gap-6 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6"
@@ -171,7 +172,7 @@
                 <div class="col-span-2 w-full">
                     <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                         for="keterangan">Keterangan</label>
-                    <div class="h-32 w-full" id="editor"></div>
+                    <div class="h-32 w-full notranslate" id="editor" translate="no"></div>
                     <input id="keterangan" name="keterangan" type="hidden">
 
                     <input type="hidden" id="data" value="{{ $data->keterangan }}">

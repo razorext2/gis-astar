@@ -1,7 +1,7 @@
 {{-- Goal: Reusable timeline component for leave request history and status tracking, Deps: LeaveRequest (requires eager: user.pegawai.jabatanRelasi.supervisors, user.pegawai.jabatanRelasi.placementRelasi.hrds, user.pegawai.jabatanRelasi.placementRelasi.managements, backupPerson, histories.actedByUser) --}}
 @props(['request'])
 
-<div class="rounded-xl border border-zinc-200 p-6 shadow-sm dark:border-zinc-800"
+<div class="h-fit rounded-xl border border-zinc-200 p-6 shadow-sm dark:border-zinc-800"
     x-bind:class="dynamicBg ?
         'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
         'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">

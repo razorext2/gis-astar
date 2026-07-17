@@ -110,10 +110,35 @@
             </div>
         </div>
 
-        {{-- Keterangan --}}
-        <div>
-            <x-input.textarea id="keterangan" name="keterangan" wire:model.live="keterangan" rows="4"
-                placeholder="Tulis alasan keterlambatan atau kegagalan absensi..." :textLabel="'Keterangan *'" />
+        {{-- Keterangan (Quill Editor) --}}
+        <div class="space-y-2" x-data="{
+            quill: null,
+            init() {
+                this.quill = new Quill(this.$refs.editor, {
+                    theme: 'snow',
+                    placeholder: 'Tulis alasan keterlambatan atau kegagalan absensi...',
+                    modules: {
+                        toolbar: [
+                            ['bold', 'italic', 'underline'],
+                            ['code-block'],
+                            [{ 'list': 'ordered' }, { 'list': 'bullet' }]
+                        ]
+                    }
+                });
+
+                this.quill.on('text-change', () => {
+                    const rawText = this.quill.getText().trim();
+                    const content = rawText === '' ? '' : this.quill.root.innerHTML;
+                    $wire.set('keterangan', content);
+                });
+            }
+        }">
+            <label class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">Keterangan *</label>
+            <div wire:ignore class="[&_.ql-editor]:min-h-[150px] notranslate" translate="no">
+                <div x-ref="editor"
+                    class="rounded-b-lg bg-white text-gray-900 dark:bg-gray-800 dark:text-white">
+                </div>
+            </div>
             @error('keterangan')
                 <span class="mt-1 block text-xs text-red-500">{{ $message }}</span>
             @enderror

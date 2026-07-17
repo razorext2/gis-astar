@@ -90,7 +90,7 @@
                         }
                     }">
                         <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
-                        <div wire:ignore class="[&_.ql-editor]:min-h-[384px]">
+                        <div wire:ignore class="[&_.ql-editor]:min-h-[384px] notranslate" translate="no">
                             <div x-ref="editor"
                                 class="rounded-b-lg bg-white text-gray-900 dark:bg-gray-800 dark:text-white"></div>
                         </div>

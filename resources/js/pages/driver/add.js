@@ -4,6 +4,9 @@ import { backCameraStream, resetCapturedImages } from "../../utils/cameraStream"
 import { getLocation } from '../../utils/geoLocation';
 
 document.addEventListener("DOMContentLoaded", async () => {
+  // Inisialisasi editor Quill
+  quillEditor();
+
   // Inisialisasi kamera belakang
   resetCapturedImages();
   backCameraStream();
