@@ -280,6 +280,10 @@ final class SpkTable extends PowerGridComponent
         return [
             Filter::inputText('nomor_order', 'nomor_order')
                 ->placeholder('Nomor SPK'),
+            Filter::select('added_by', 'added_by')
+                ->dataSource(\App\Models\User::whereHas('spks')->orderBy('name', 'asc')->get(['id', 'name']))
+                ->optionLabel('name')
+                ->optionValue('id'),
             Filter::select('tipe_tagihan', 'tipe_tagihan')
                 ->dataSource([
                     ['value' => 'idcnon', 'label' => 'IDC Non PPN'],

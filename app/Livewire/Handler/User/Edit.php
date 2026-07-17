@@ -1,5 +1,7 @@
 <?php
 
+/** Goal: Edit user account, Caller: Admin User Management, Deps: User Model, Role Model, SpkMain Model */
+
 namespace App\Livewire\Handler\User;
 
 use App\Livewire\Concerns\HandlesErrors;
@@ -29,7 +31,13 @@ class Edit extends Component
 
     public $selected_roles = [];
 
-    public function mount(User $user)
+    public $spk_count = 0;
+
+    public $transfer_user_id;
+
+    public $transfer_search = '';
+
+    public function mount(User $user): void
     {
         $this->user = $user;
         $this->name = $user->name;
@@ -37,11 +45,12 @@ class Edit extends Component
         $this->is_active = $user->is_active;
         $this->deactivation_reason = $user->deactivation_reason;
         $this->selected_roles = $user->roles->pluck('name')->toArray();
+        $this->spk_count = $user->spks()->count();
     }
 
-    protected function rules()
+    protected function rules(): array
     {
-        return [
+        $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,'.$this->user->id,
             'password' => 'nullable|min:8|same:password_confirmation',
@@ -49,15 +58,51 @@ class Edit extends Component
             'is_active' => 'required|boolean',
             'deactivation_reason' => 'required_if:is_active,0|nullable|string|max:255',
         ];
+
+        if (! $this->is_active && $this->spk_count > 0) {
+            $rules['transfer_user_id'] = 'required|exists:users,id';
+        }
+
+        return $rules;
     }
 
     protected $messages = [
         'deactivation_reason.required_if' => 'Alasan nonaktif wajib diisi jika status diatur ke Tidak Aktif.',
         'selected_roles.required' => 'Minimal pilih satu role.',
         'password.same' => 'Konfirmasi password tidak cocok.',
+        'transfer_user_id.required' => 'Penerima pengalihan data SPK wajib dipilih.',
     ];
 
-    public function save()
+    public function getEligibleRoles(): array
+    {
+        $roles = $this->user->roles->pluck('name')->toArray();
+
+        if (count($roles) > 1) {
+            $filtered = array_values(array_filter(
+                $roles,
+                fn ($role) => ! in_array(strtolower($role), ['employee', 'admin'])
+            ));
+
+            if (! empty($filtered)) {
+                return $filtered;
+            }
+        }
+
+        return $roles;
+    }
+
+    public function selectTransferUser(int $userId): void
+    {
+        $this->transfer_user_id = $userId;
+    }
+
+    public function clearTransferUser(): void
+    {
+        $this->transfer_user_id = null;
+        $this->transfer_search = '';
+    }
+
+    public function save(): mixed
     {
         $this->validate();
 
@@ -75,6 +120,11 @@ class Edit extends Component
 
                     // Hapus session jika user dinonaktifkan
                     DB::table('sessions')->where('user_id', $this->user->id)->delete();
+
+                    // Pengalihan data SPK jika ada
+                    if ($this->spk_count > 0 && $this->transfer_user_id) {
+                        $this->user->spks()->update(['added_by' => $this->transfer_user_id]);
+                    }
                 } else {
                     $data['deactivation_reason'] = null;
                     $data['deactivation_at'] = null;
@@ -97,10 +147,33 @@ class Edit extends Component
         ]);
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
+        $eligibleUsers = collect();
+        $selectedTransferUser = null;
+
+        if (! $this->is_active && $this->spk_count > 0) {
+            $eligibleRoles = $this->getEligibleRoles();
+
+            if (! empty($eligibleRoles)) {
+                $eligibleUsers = User::query()
+                    ->where('id', '!=', $this->user->id)
+                    ->where('is_active', 1)
+                    ->whereHas('roles', fn ($q) => $q->whereIn('name', $eligibleRoles))
+                    ->when($this->transfer_search, fn ($q) => $q->where('name', 'like', '%'.$this->transfer_search.'%'))
+                    ->limit(5)
+                    ->get();
+            }
+
+            if ($this->transfer_user_id) {
+                $selectedTransferUser = User::find($this->transfer_user_id);
+            }
+        }
+
         return view('livewire.handler.user.edit', [
             'list_roles' => Role::orderBy('name', 'asc')->get(),
+            'eligible_users' => $eligibleUsers,
+            'selected_transfer_user' => $selectedTransferUser,
         ]);
     }
 }

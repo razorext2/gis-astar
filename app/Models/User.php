@@ -9,6 +9,7 @@ namespace App\Models;
 use App\Models\LeaveRequest\LeaveBalance;
 use App\Models\LeaveRequest\LeaveRequest;
 use App\Models\LeaveRequest\LeaveRequestHistory;
+use App\Models\Spk\SpkMain;
 use Creagia\LaravelSignPad\Concerns\RequiresSignature;
 use Creagia\LaravelSignPad\Contracts\CanBeSigned;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -114,6 +115,11 @@ class User extends Authenticatable implements CanBeSigned
     public function backedUpLeaves()
     {
         return $this->hasMany(LeaveRequest::class, 'backup_person_id');
+    }
+
+    public function spks(): HasMany
+    {
+        return $this->hasMany(SpkMain::class, 'added_by', 'id');
     }
 
     public function performedActions()
