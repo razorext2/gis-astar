@@ -81,10 +81,16 @@ class ChatbotPromptBuilder
         $personaContent = $this->loadPromptFile("personas/{$validatedPersona}.md");
         $permissionBlock = $this->buildPermissionContextBlock($userContext);
 
-        return str_replace(
-            ['{{ currentTime }}', '{{ baseUrl }}', '{{ schema }}', '{{ navigation }}', '{{ persona }}', '{{ permissionBlock }}'],
-            [$currentTime, $baseUrl, $schema, $navigation, $personaContent, $permissionBlock],
+        $content = str_replace(
+            ['{{ schema }}', '{{ navigation }}', '{{ persona }}', '{{ permissionBlock }}'],
+            [$schema, $navigation, $personaContent, $permissionBlock],
             $template
+        );
+
+        return str_replace(
+            ['{{ currentTime }}', '{{ baseUrl }}'],
+            [$currentTime, $baseUrl],
+            $content
         );
     }
 
