@@ -41,10 +41,13 @@ document.addEventListener("DOMContentLoaded", function () {
             icon: customIcon,
             draggable: true,
         }).addTo(map);
+        const UNLIMITED_RADIUS = 999999999;
+        const isUnlimited = initRadius >= UNLIMITED_RADIUS;
         const circle = L.circle(marker.getLatLng(), {
-            radius: initRadius,
+            radius: isUnlimited ? 0 : initRadius,
             color: "#3b82f6",
-            fillOpacity: 0.15,
+            opacity: isUnlimited ? 0 : 1,
+            fillOpacity: isUnlimited ? 0 : 0.15,
         }).addTo(map);
 
         /** Dispatch koordinat baru ke Livewire via Alpine */
@@ -54,6 +57,17 @@ document.addEventListener("DOMContentLoaded", function () {
                     detail: { lat: position.lat, lng: position.lng },
                 }),
             );
+        }
+
+        /** Update visibilitas dan ukuran lingkaran radius */
+        function applyCircleStyle(r) {
+            if (r >= UNLIMITED_RADIUS) {
+                circle.setRadius(0);
+                circle.setStyle({ opacity: 0, fillOpacity: 0 });
+            } else {
+                circle.setRadius(r);
+                circle.setStyle({ opacity: 1, fillOpacity: 0.15 });
+            }
         }
 
         // Marker drag
@@ -73,7 +87,9 @@ document.addEventListener("DOMContentLoaded", function () {
         // Alpine mengirim radius baru → update lingkaran
         window.addEventListener("placement-radius-changed", function (e) {
             const r = parseInt(e.detail.radius);
-            if (!isNaN(r)) circle.setRadius(r);
+            if (!isNaN(r)) {
+                applyCircleStyle(r);
+            }
         });
 
         // Notifikasi koordinat awal ke Livewire (terutama saat create + geolocation)

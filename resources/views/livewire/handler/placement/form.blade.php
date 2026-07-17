@@ -1,7 +1,31 @@
 {{-- Goal: Shared form view penempatan (create & edit), Livewire: Handler\Placement\Create|Edit, Alpine: radius slider entangle + map bridge --}}
-<div class="grid gap-6 lg:grid-cols-2" x-data="{
+<div class="mt-4 grid gap-4 lg:grid-cols-2" x-data="{
     radius: $wire.entangle('radius'),
-}" x-init="$watch('radius', val => window.dispatchEvent(new CustomEvent('placement-radius-changed', { detail: { radius: val } })))"
+    radiusType: '',
+    lastLimitedRadius: 100,
+    init() {
+        if (this.radius >= 999999999) {
+            this.radiusType = 'unlimited';
+            this.lastLimitedRadius = 100;
+        } else {
+            this.radiusType = 'limited';
+            this.lastLimitedRadius = this.radius || 100;
+        }
+        this.$watch('radiusType', val => {
+            if (val === 'unlimited') {
+                this.radius = 999999999;
+            } else {
+                this.radius = this.lastLimitedRadius;
+            }
+        });
+        this.$watch('radius', val => {
+            if (val < 999999999) {
+                this.lastLimitedRadius = val;
+            }
+            window.dispatchEvent(new CustomEvent('placement-radius-changed', { detail: { radius: val } }));
+        });
+    }
+}"
     x-on:map-pin-updated.window="$wire.set('longitude', $event.detail.lng); $wire.set('latitude', $event.detail.lat)">
     {{-- ===================== KOLOM FORM ===================== --}}
     <div class="w-full rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6"
@@ -224,8 +248,37 @@
                     @enderror
                 </div>
 
-                {{-- Radius Slider (Alpine-controlled, entangled with Livewire) --}}
+                {{-- Opsi Radius --}}
                 <div class="w-full">
+                    <label class="mb-2 block text-sm font-medium text-zinc-900 dark:text-white">
+                        Tipe Radius Absen
+                    </label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="relative flex cursor-pointer rounded-lg border p-3 shadow-sm focus:outline-none transition-all duration-200"
+                            :class="radiusType === 'limited'
+                                ? 'border-blue-500 ring-2 ring-blue-500 ' + (dynamicBg ? 'bg-blue-50/20 dark:bg-blue-900/20' : 'bg-blue-50 dark:bg-zinc-800')
+                                : 'border-zinc-200 dark:border-zinc-800 ' + (dynamicBg ? 'bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md' : 'bg-white dark:bg-dark-primary')">
+                            <input type="radio" name="radius_type" value="limited" x-model="radiusType" class="sr-only">
+                            <div class="flex flex-col">
+                                <span class="block text-sm font-semibold text-zinc-900 dark:text-white">Dibatasi</span>
+                                <span class="block text-xs text-zinc-500 dark:text-zinc-400">Radius maks 150m</span>
+                            </div>
+                        </label>
+                        <label class="relative flex cursor-pointer rounded-lg border p-3 shadow-sm focus:outline-none transition-all duration-200"
+                            :class="radiusType === 'unlimited'
+                                ? 'border-blue-500 ring-2 ring-blue-500 ' + (dynamicBg ? 'bg-blue-50/20 dark:bg-blue-900/20' : 'bg-blue-50 dark:bg-zinc-800')
+                                : 'border-zinc-200 dark:border-zinc-800 ' + (dynamicBg ? 'bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md' : 'bg-white dark:bg-dark-primary')">
+                            <input type="radio" name="radius_type" value="unlimited" x-model="radiusType" class="sr-only">
+                            <div class="flex flex-col">
+                                <span class="block text-sm font-semibold text-zinc-900 dark:text-white">Bebas</span>
+                                <span class="block text-xs text-zinc-500 dark:text-zinc-400">Tanpa batasan jarak</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                {{-- Radius Slider (Alpine-controlled, entangled with Livewire) --}}
+                <div class="w-full" x-show="radiusType === 'limited'" x-transition>
                     <x-input.basic type="number" id="radius-number" name="radius-number" wire:model="radius"
                         class="{{ $errors->has('radius') ? 'border-red-500 bg-red-50' : 'border-zinc-200 bg-white' }}"
                         placeholder="Masukkan radius absen" :labels="true" :textLabel="'Radius Absen'" min="10"
@@ -251,6 +304,20 @@
                     @error('radius')
                         <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                     @enderror
+                </div>
+
+                {{-- Info Unlimited --}}
+                <div class="w-full" x-show="radiusType === 'unlimited'" x-transition style="display: none;">
+                    <div class="flex items-start gap-3 rounded-lg border border-blue-200 p-4 dark:border-blue-900"
+                        :class="dynamicBg ? 'bg-blue-50/20 dark:bg-blue-950/20 backdrop-blur-md' : 'bg-blue-50 dark:bg-zinc-800/40'">
+                        <x-icons.info-circle class="h-5 w-5 shrink-0 text-blue-600 dark:text-blue-400 mt-0.5" />
+                        <div>
+                            <h4 class="text-sm font-semibold text-blue-900 dark:text-blue-200">Radius Tidak Terbatas</h4>
+                            <p class="mt-1 text-xs text-blue-700 dark:text-blue-300 leading-relaxed">
+                                Pegawai dapat melakukan presensi kehadiran dari mana saja tanpa batasan jarak dari koordinat lokasi ini.
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
                 {{-- Koordinat (read dari peta, bisa di-edit manual) --}}

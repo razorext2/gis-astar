@@ -1,14 +1,15 @@
 <?php
 
-/** Goal: PowerGrid table representing placements, Caller: Placement dashboard, Deps: Placement model */
+/** Goal: PowerGrid table representing placements, Caller: Placement dashboard, Deps: Placement model, HandlesErrors */
 
 namespace App\Livewire\PowergridTables;
 
+use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Placement;
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
@@ -17,6 +18,8 @@ use PowerComponents\LivewirePowerGrid\PowerGridFields;
 
 final class PlacementTable extends PowerGridComponent
 {
+    use HandlesErrors;
+
     public string $tableName = 'PlacementTable';
 
     public bool $deferLoading = true;
@@ -39,7 +42,7 @@ final class PlacementTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return Placement::with(['hrds', 'managements']);
+        return Placement::query()->with(['hrds.pegawai', 'managements.pegawai']);
     }
 
     public function relationSearch(): array
@@ -64,7 +67,7 @@ final class PlacementTable extends PowerGridComponent
                     'components.dashboard.date-w-name',
                     [
                         'date' => $query->penempatan,
-                        'name' => $query->alamat,
+                        'name' => Str::limit($query->alamat, 40),
                     ]
                 )
                     ->render();
@@ -72,18 +75,18 @@ final class PlacementTable extends PowerGridComponent
             ->add('longitude', function ($query) {
                 return view('components.dashboard.date-w-name', [
                     'date' => $query->radius.' Meter',
-                    'name' => $query->latitude.', '.$query->longitude,
+                    'name' => Str::limit($query->latitude.', '.$query->longitude, 8),
                 ])
                     ->render();
             })
             ->add('hrd_names', function ($query) {
-                return $query->hrds->pluck('name')->implode(', ') ?: '-';
+                return $query->hrds->map(fn ($user) => $user->pegawai?->nick_name ?? $user->name)->implode(', ') ?: '-';
             })
             ->add('management_names', function ($query) {
-                return $query->managements->pluck('name')->implode(', ') ?: '-';
+                return $query->managements->map(fn ($user) => $user->pegawai?->nick_name ?? $user->name)->implode(', ') ?: '-';
             })
             ->add('restrict_app')
-            ->add('created_at_formatted', fn ($query) => Carbon::parse($query->created_at)->locale('id')->isoFormat('DD MMMM YYYY, HH:mm:ss'));
+            ->add('created_at_formatted', fn ($query) => Carbon::parse($query->created_at)->locale('id')->isoFormat('DD MMM YYYY, HH:mm'));
     }
 
     public function columns(): array
@@ -92,7 +95,7 @@ final class PlacementTable extends PowerGridComponent
             Column::action('Action')
                 ->bodyAttribute('text-center'),
             Column::make('ID', 'id'),
-            Column::make('Kode penempatan', 'kode_penempatan')
+            Column::make('Kode', 'kode_penempatan')
                 ->sortable()
                 ->searchable(),
 
@@ -106,11 +109,11 @@ final class PlacementTable extends PowerGridComponent
             Column::make('Tim Manajemen', 'management_names')
                 ->searchable(),
 
-            Column::make('Longitude', 'longitude')
+            Column::make('Lokasi', 'longitude')
                 ->sortable()
                 ->searchable(),
 
-            Column::make('Restrict app', 'restrict_app')
+            Column::make('Pembatasan', 'restrict_app')
                 ->sortable()
                 ->searchable(),
 
@@ -120,11 +123,10 @@ final class PlacementTable extends PowerGridComponent
 
     public function filters(): array
     {
-        return [
-        ];
+        return [];
     }
 
-    public function actionsFromView(Placement $row)
+    public function actionsFromView(Placement $row): View
     {
         $actions = [
             [
@@ -148,37 +150,13 @@ final class PlacementTable extends PowerGridComponent
     }
 
     #[On('confirmDeleteAction')]
-    public function confirmDelete(int $id, Request $request): void
+    public function confirmDelete(int $id): void
     {
-        $data = Placement::find($id);
-
-        if (! $data) {
-            $this->swal('Gagal!', "Terjadi kesalahan saat menghapus data dengan ID <b>$id</b>", 'error');
-
-            return;
-        }
-
-        try {
+        $this->runSafely(function () use ($id) {
+            $data = Placement::query()->findOrFail($id);
             $data->delete();
-
-            $this->swal('Terhapus!', 'Data yang dipilih berhasil dihapus.', 'success');
-
-            Log::info($request->user()." : Menghapus data {$id}");
-        } catch (\Exception $e) {
-            $this->swal('Gagal!', "Terjadi kesalahan saat menghapus data dengan ID <b>$id</b>", 'error');
-
-            Log::info($request->user()->kode_pegawai." : Gagal menghapus data {$id}. {$e->getMessage()}");
-        }
-    }
-
-    public function swal(string $title, string $text, string $icon)
-    {
-        return $this->dispatch(
-            'swal',
-            title: $title,
-            text: $text,
-            icon: $icon
-        );
+            $this->dispatch('swal', title: 'Terhapus!', text: 'Data yang dipilih berhasil dihapus.', icon: 'success');
+        }, "Terjadi kesalahan saat menghapus data dengan ID <b>$id</b>");
     }
 
     public function queryString(): array

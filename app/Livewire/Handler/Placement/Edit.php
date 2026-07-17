@@ -6,11 +6,14 @@ namespace App\Livewire\Handler\Placement;
 
 use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Placement;
+use App\Models\User;
 use Livewire\Component;
 
 class Edit extends Component
 {
     use HandlesErrors;
+
+    protected const int UNLIMITED_RADIUS = 999999999;
 
     public Placement $placement;
 
@@ -55,13 +58,22 @@ class Edit extends Component
             'alamat' => 'required|string',
             'longitude' => 'required|numeric',
             'latitude' => 'required|numeric',
-            'radius' => 'required|integer|min:10|max:150',
+            'radius' => $this->radiusValidationRule(),
             'restrict_app' => 'required|in:y,t',
             'hrd_ids' => 'nullable|array',
             'hrd_ids.*' => 'exists:users,id',
             'management_ids' => 'nullable|array',
             'management_ids.*' => 'exists:users,id',
         ];
+    }
+
+    protected function radiusValidationRule(): string
+    {
+        if ($this->radius === self::UNLIMITED_RADIUS) {
+            return 'required|integer';
+        }
+
+        return 'required|integer|min:10|max:150';
     }
 
     protected array $messages = [
@@ -108,10 +120,8 @@ class Edit extends Component
 
     public function render(): \Illuminate\View\View
     {
-        $users = \App\Models\User::orderBy('name', 'asc')->get();
-
         return view('livewire.handler.placement.form', [
-            'users' => $users
+            'users' => User::orderBy('name')->get(),
         ]);
     }
 }
