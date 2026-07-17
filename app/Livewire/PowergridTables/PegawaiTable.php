@@ -16,12 +16,10 @@ use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
-use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 use Spatie\Permission\Models\Role;
 
 final class PegawaiTable extends PowerGridComponent
 {
-    use WithExport;
 
     public string $tableName = 'PegawaiTable';
 
@@ -106,7 +104,6 @@ final class PegawaiTable extends PowerGridComponent
     {
         return [
             Column::action('Action')
-                ->visibleInExport(false)
                 ->bodyAttribute('text-center'),
 
             Column::make('UserID', 'user_id'),

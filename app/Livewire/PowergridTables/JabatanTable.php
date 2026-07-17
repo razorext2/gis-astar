@@ -15,12 +15,9 @@ use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
-use PowerComponents\LivewirePowerGrid\Traits\WithExport;
-
 /** Goal: Display Jabatan table with multiple supervisors column formatted, Caller: Livewire, Deps: Jabatan */
 final class JabatanTable extends PowerGridComponent
 {
-    use WithExport;
 
     public string $tableName = 'JabatanTable';
 
@@ -91,7 +88,6 @@ final class JabatanTable extends PowerGridComponent
     {
         return [
             Column::action('Action')
-                ->visibleInExport(false)
                 ->bodyAttribute('text-center'),
             Column::make('ID', 'id')
                 ->hidden(),

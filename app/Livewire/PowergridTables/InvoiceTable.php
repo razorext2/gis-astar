@@ -17,11 +17,8 @@ use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
-use PowerComponents\LivewirePowerGrid\Traits\WithExport;
-
 final class InvoiceTable extends PowerGridComponent
 {
-    use WithExport;
 
     public string $tableName = 'InvoiceTable';
 

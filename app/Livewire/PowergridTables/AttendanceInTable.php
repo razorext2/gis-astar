@@ -18,12 +18,10 @@ use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
-use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 use Spatie\Permission\Models\Role;
 
 final class AttendanceInTable extends PowerGridComponent
 {
-    use WithExport;
 
     public string $tableName = 'AttendanceInTable';
 
@@ -125,8 +123,7 @@ final class AttendanceInTable extends PowerGridComponent
     public function columns(): array
     {
         $columns = [
-            Column::make('#', 'photo_url')
-                ->visibleInExport(false),
+            Column::make('#', 'photo_url'),
 
             Column::make('Pegawai', 'kode_pegawai_formatted'),
 
@@ -146,8 +143,7 @@ final class AttendanceInTable extends PowerGridComponent
 
         return array_merge($columns, [
             Column::make('Created at', 'created_at')
-                ->hidden(isHidden: true, isForceHidden: true)
-                ->visibleInExport(true),
+                ->hidden(isHidden: true, isForceHidden: true),
 
             Column::make('Verified', 'verified')
                 ->hidden(isHidden: true, isForceHidden: true),

@@ -17,11 +17,8 @@ use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
-use PowerComponents\LivewirePowerGrid\Traits\WithExport;
-
 final class TechnicianTable extends PowerGridComponent
 {
-    use WithExport;
 
     public string $tableName = 'TechnicianTable';
 
@@ -150,8 +147,7 @@ final class TechnicianTable extends PowerGridComponent
             Column::action('Action'),
             Column::make('No VT', 'no_vt_formatted', 'no_vt')
                 ->sortable()
-                ->searchable()
-                ->visibleInExport(false),
+                ->searchable(),
 
             Column::make('Kode Jari', 'kode_pegawai')
                 ->hidden(),
