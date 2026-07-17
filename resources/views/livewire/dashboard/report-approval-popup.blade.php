@@ -90,7 +90,6 @@
 @endphp
 
 <div style="display: contents;" x-init="openPopups['{{ $type }}'] = { show: $wire.showPopup && $wire.hasPending };
-
 const triggerAutoOpen = () => {
     if ($wire.hasPending && !$wire.showPopup) {
         const openThisPopup = () => setTimeout(() => $wire.set('showPopup', true), 400);
@@ -131,7 +130,7 @@ $watch('$wire.showPopup', val => {
             x-transition:leave="transition ease-in duration-300 transform origin-bottom-right"
             x-transition:leave-start="opacity-100 scale-100 translate-y-0 translate-x-0"
             x-transition:leave-end="opacity-0 scale-0 translate-y-20 translate-x-20"
-            class="relative col-start-1 row-start-1 mx-auto flex w-full max-w-sm flex-col rounded-xl border border-zinc-200 bg-white shadow-none dark:border-zinc-800 dark:bg-zinc-900 lg:col-auto lg:row-auto lg:w-[23rem]">
+            class="relative col-start-1 row-start-1 mx-auto flex w-full max-w-sm flex-col rounded-xl border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-zinc-900 lg:col-auto lg:row-auto lg:w-[23rem]">
 
             {{-- Header --}}
             <div class="flex items-center justify-between border-b border-zinc-200 p-4 dark:border-zinc-800">
@@ -162,10 +161,8 @@ $watch('$wire.showPopup', val => {
 
             {{-- Body --}}
             <div class="flex flex-1 flex-col justify-between p-5">
-                <div class="dark: mb-4 flex flex-col items-center gap-3 rounded-xl border border-zinc-200 bg-zinc-50/50 p-6 dark:border-zinc-800"
-                    x-bind:class="dynamicBg ?
-                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
-                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                <div
+                    class="mb-4 flex flex-col items-center gap-3 rounded-xl border border-zinc-200 bg-zinc-50/50 p-6 dark:border-zinc-800 dark:bg-zinc-800/30">
                     <div class="{{ $colorClasses['counter'] }} text-4xl font-black tracking-tight">
                         {{ $pendingCount }}
                     </div>
@@ -179,10 +176,8 @@ $watch('$wire.showPopup', val => {
                     </p>
                 </div>
 
-                <div class="dark: mb-4 flex items-start gap-2 rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800"
-                    x-bind:class="dynamicBg ?
-                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
-                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
+                <div
+                    class="mb-4 flex items-start gap-2 rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-800/30">
                     <x-icons.info-circle class="mt-0.5 h-4 w-4 shrink-0 text-zinc-400" />
                     <p class="text-xs text-zinc-500 dark:text-zinc-400">
                         @if ($type === 'production-assigned')

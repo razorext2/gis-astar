@@ -63,8 +63,14 @@
 
     {{-- Signal popup FABs to auto-open on this page --}}
     <script>
-        window.addEventListener('load', () => window.dispatchEvent(new CustomEvent('enable-autopop')), {
-            once: true
-        });
+        (() => {
+            const fireAutoPop = () => window.dispatchEvent(new CustomEvent('enable-autopop'));
+            if (document.readyState === 'complete') {
+                fireAutoPop();
+            } else {
+                window.addEventListener('load', fireAutoPop, { once: true });
+            }
+            document.addEventListener('livewire:navigated', fireAutoPop, { once: true });
+        })();
     </script>
 @endsection

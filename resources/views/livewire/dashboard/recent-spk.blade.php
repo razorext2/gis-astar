@@ -1,7 +1,7 @@
 {{-- Goal: Display a table of the 5 most recent SPKs, Livewire: RecentSpk, Alpine: None --}}
 <div class="{{ $showRightColumn ? 'lg:col-span-2' : 'lg:col-span-3' }}">
     @can('spk-list')
-        <div class="flex h-full flex-col rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
+        <div class="flex h-fit flex-col rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 lg:p-6"
             x-bind:class="dynamicBg ?
                 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
                 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">

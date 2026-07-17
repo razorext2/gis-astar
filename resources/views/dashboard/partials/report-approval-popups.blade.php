@@ -88,7 +88,6 @@
         }
     }">
         <div @click.away="isOpen = false" class="relative" style="overflow: visible;">
-
             <button @click="isOpen = !isOpen" x-data="{ tapping: false }" x-on:mousedown="tapping = true"
                 x-on:touchstart="tapping = true" x-on:animationend="tapping = false"
                 :class="[
@@ -127,8 +126,8 @@
             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
             x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            class="fixed inset-0 z-[100] flex flex-col items-center overflow-y-auto bg-zinc-900/60 p-4 backdrop-blur-md lg:p-6"
-            x-cloak>
+            x-bind:class="dynamicBg ? 'bg-zinc-950/50 backdrop-blur-md' : 'bg-zinc-950/70'"
+            class="fixed inset-0 z-[100] flex flex-col items-center overflow-y-auto p-4 lg:p-6" x-cloak>
 
             {{-- Close All Button --}}
             <div class="flex w-full max-w-6xl justify-end pb-4 pt-2 lg:pt-4">
