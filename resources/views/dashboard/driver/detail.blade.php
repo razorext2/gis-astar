@@ -184,9 +184,18 @@
                     Keterangan Laporan
                 </h3>
 
-                <div class="prose prose-sm dark:prose-invert prose-p:leading-relaxed prose-p:m-0 prose-ul:m-0 prose-li:m-0 quill-content max-w-none rounded-lg border border-zinc-100 bg-zinc-50 p-4 text-sm text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-zinc-300"
+                <div class="rounded-lg border border-zinc-100 bg-zinc-50 p-4 text-sm text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-zinc-300"
                     id="editor">
-                    {!! $data->keterangan ?? 'Belum diupdate.' !!}
+                    @if (strip_tags($data->keterangan) === $data->keterangan)
+                        <div class="whitespace-pre-line">
+                            {{ $data->keterangan ?? 'Belum diupdate.' }}
+                        </div>
+                    @else
+                        <div
+                            class="quill-content prose prose-sm max-w-none dark:prose-invert prose-p:m-0 prose-p:leading-relaxed prose-ul:m-0 prose-li:m-0">
+                            {!! $data->keterangan ?? 'Belum diupdate.' !!}
+                        </div>
+                    @endif
                 </div>
 
                 @if ($data->notes)

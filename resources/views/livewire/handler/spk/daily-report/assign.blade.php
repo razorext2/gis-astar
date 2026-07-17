@@ -48,8 +48,8 @@
                         placeholder="cth: VT-12345678" :labels="false" />
                 </div>
 
-                <x-button.primary type="button" wire:click="fetchVT" class="shrink-0 focus:outline"
-                    id="no_vt_submit" wire:loading.attr="disabled" wire:target="fetchVT">
+                <x-button.primary type="button" wire:click="fetchVT" class="shrink-0 focus:outline" id="no_vt_submit"
+                    wire:loading.attr="disabled" wire:target="fetchVT">
                     <x-slot name="icon">
                         <x-icons.search wire:loading.remove wire:target="fetchVT" class="icon h-5 w-5" />
                         <x-icons.loading wire:loading wire:target="fetchVT" class="h-4 w-4 animate-spin" />
@@ -106,9 +106,34 @@
             @enderror
         </div>
 
-        {{-- deskripsi --}}
-        <div class="col-span-2">
-            <x-input.textarea id="description" name="description" wire:model="form.description" :textLabel="'Deskripsi Projek'" />
+        {{-- deskripsi (Quill Editor) --}}
+        <div class="col-span-2 space-y-2" x-data="{
+            quill: null,
+            init() {
+                this.quill = new Quill(this.$refs.editor, {
+                    theme: 'snow',
+                    placeholder: 'Tulis deskripsi projek di sini...',
+                    modules: {
+                        toolbar: [
+                            ['bold', 'italic', 'underline'],
+                            ['code-block'],
+                            [{ 'list': 'ordered' }, { 'list': 'bullet' }]
+                        ]
+                    }
+                });
+
+                this.quill.on('text-change', () => {
+                    const rawText = this.quill.getText().trim();
+                    const content = rawText === '' ? '' : this.quill.root.innerHTML;
+                    $wire.set('form.description', content);
+                });
+            }
+        }">
+            <label class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">Deskripsi Projek *</label>
+            <div wire:ignore class="notranslate [&_.ql-editor]:min-h-[350px]" translate="no">
+                <div x-ref="editor" class="rounded-b-lg bg-white text-gray-900 dark:bg-gray-800 dark:text-white">
+                </div>
+            </div>
 
             @error('form.description')
                 <span class="mt-2 text-xs text-red-500">{{ $message }}</span>

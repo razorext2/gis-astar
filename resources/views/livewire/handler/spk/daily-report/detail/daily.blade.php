@@ -50,7 +50,17 @@
             {{-- DESCRIPTION --}}
             <div class="flex flex-col sm:col-span-2 lg:col-span-4">
                 <dt class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Deskripsi Project</dt>
-                <dd class="mt-1 text-sm text-zinc-800 dark:text-zinc-200">{{ $assignment->project->description }}</dd>
+                <dd class="text-sm text-zinc-800 dark:text-zinc-200">
+                    @if (strip_tags($assignment->project->description) === $assignment->project->description)
+                        <div class="whitespace-pre-line">
+                            {{ $assignment->project->description }}
+                        </div>
+                    @else
+                        <div class="prose prose-sm max-w-none text-zinc-800 dark:prose-invert dark:text-zinc-200">
+                            {!! $assignment->project->description !!}
+                        </div>
+                    @endif
+                </dd>
             </div>
 
             {{-- START DATE --}}

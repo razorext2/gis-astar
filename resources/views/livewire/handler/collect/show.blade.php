@@ -209,8 +209,17 @@
             <div class="mt-6">
                 <h4 class="mb-2 text-sm font-bold text-zinc-900 dark:text-white">Keterangan Kolektor:</h4>
                 <div
-                    class="prose prose-sm dark:prose-invert prose-p:leading-relaxed prose-p:m-0 prose-ul:m-0 prose-li:m-0 max-w-none rounded-lg border border-zinc-100 bg-zinc-50 p-4 text-sm text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-zinc-300">
-                    {!! $data->keterangan ?? 'Belum diupdate.' !!}
+                    class="rounded-lg border border-zinc-100 bg-zinc-50 p-4 text-sm text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-zinc-300">
+                    @if (strip_tags($data->keterangan) === $data->keterangan)
+                        <div class="whitespace-pre-line">
+                            {{ $data->keterangan ?? 'Belum diupdate.' }}
+                        </div>
+                    @else
+                        <div
+                            class="prose prose-sm max-w-none dark:prose-invert prose-p:m-0 prose-p:leading-relaxed prose-ul:m-0 prose-li:m-0">
+                            {!! $data->keterangan ?? 'Belum diupdate.' !!}
+                        </div>
+                    @endif
                 </div>
             </div>
 

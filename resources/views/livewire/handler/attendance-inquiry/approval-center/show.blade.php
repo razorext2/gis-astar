@@ -71,10 +71,16 @@
 
                 <div class="border-t border-zinc-100 pt-4 dark:border-zinc-800">
                     <span class="text-xs font-bold uppercase tracking-wider text-zinc-400">Keterangan Pengajuan</span>
-                    <div
-                        class="prose prose-sm dark:prose-invert mt-1 max-w-none text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
-                        {!! $inquiry->keterangan !!}
-                    </div>
+                    @if (strip_tags($inquiry->keterangan) === $inquiry->keterangan)
+                        <div class="mt-1 whitespace-pre-line text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
+                            {{ $inquiry->keterangan }}
+                        </div>
+                    @else
+                        <div
+                            class="prose prose-sm mt-1 max-w-none text-sm leading-relaxed text-zinc-700 dark:prose-invert dark:text-zinc-300">
+                            {!! $inquiry->keterangan !!}
+                        </div>
+                    @endif
                 </div>
             </div>
 

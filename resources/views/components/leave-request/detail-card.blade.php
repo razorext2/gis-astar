@@ -138,9 +138,15 @@
                 x-bind:class="dynamicBg ?
                     'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
                     'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
-                <div class="prose prose-sm dark:prose-invert max-w-none">
-                    {!! $request->reason !!}
-                </div>
+                @if (strip_tags($request->reason) === $request->reason)
+                    <div class="whitespace-pre-line">
+                        {{ $request->reason }}
+                    </div>
+                @else
+                    <div class="prose prose-sm dark:prose-invert max-w-none">
+                        {!! $request->reason !!}
+                    </div>
+                @endif
             </div>
         </div>
 
