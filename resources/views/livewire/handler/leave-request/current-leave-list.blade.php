@@ -124,7 +124,7 @@
                         'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
                         'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
                     <span class="mr-2 font-bold uppercase not-italic tracking-tighter text-zinc-400">Alasan:</span>
-                    "{{ $leave->reason ?? 'No description provided' }}"
+                    "{{ strip_tags($leave->reason) ?? 'Tidak ada keterangan yang diberikan.' }}"
                 </div>
             </div>
         @empty

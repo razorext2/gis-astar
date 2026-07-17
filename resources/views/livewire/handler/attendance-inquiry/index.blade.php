@@ -90,7 +90,7 @@
                                 {{ $inquiry->no_vt ?: '-' }}
                             </td>
                             <td class="max-w-xs truncate px-6 py-4 text-zinc-600 dark:text-zinc-400">
-                                {{ $inquiry->keterangan }}
+                                {{ Str::limit(strip_tags($inquiry->keterangan), 100) }}
                             </td>
                             <td class="whitespace-nowrap px-6 py-4">
                                 @php

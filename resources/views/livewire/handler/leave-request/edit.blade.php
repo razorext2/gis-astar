@@ -1,3 +1,4 @@
+{{-- Goal: Render form to edit an existing leave request, Livewire: Handler.LeaveRequest.Edit, Alpine: dropdown select/UI state --}}
 <div class="mt-4 flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-dark-primary md:p-6"
     x-bind:class="dynamicBg ?
         'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
@@ -129,12 +130,36 @@
                 <div class="flex flex-col">
                     <label class="mb-1 block text-sm font-bold text-gray-700 dark:text-gray-300">Alasan /
                         Keperluan</label>
-                    <textarea wire:model="reason" rows="4"
-                        class="w-full rounded-xl border border-zinc-200 p-4 text-gray-700 placeholder-gray-400 transition-all focus:ring-primary/50 dark:border-zinc-800 dark:bg-gray-800/50 dark:text-gray-200"
-                        x-bind:class="dynamicBg ?
-                            'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
-                            'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
-                        placeholder="Berikan alasan yang jelas untuk pengajuan cuti Anda..."></textarea>
+                    <div class="space-y-2" x-data="{
+                        quill: null,
+                        init() {
+                            this.quill = new Quill(this.$refs.editor, {
+                                theme: 'snow',
+                                placeholder: 'Berikan alasan yang jelas untuk pengajuan cuti Anda...',
+                                modules: {
+                                    toolbar: [
+                                        ['bold', 'italic', 'underline'],
+                                        ['code-block'],
+                                        [{ 'list': 'ordered' }, { 'list': 'bullet' }]
+                                    ]
+                                }
+                            });
+
+                            this.quill.root.innerHTML = $wire.get('reason') || '';
+
+                            this.quill.on('text-change', () => {
+                                const rawText = this.quill.getText().trim();
+                                const content = rawText === '' ? '' : this.quill.root.innerHTML;
+                                $wire.set('reason', content);
+                            });
+                        }
+                    }">
+                        <div wire:ignore class="[&_.ql-editor]:min-h-[150px] notranslate" translate="no">
+                            <div x-ref="editor"
+                                class="rounded-b-lg bg-white text-gray-900 dark:bg-gray-800 dark:text-white">
+                            </div>
+                        </div>
+                    </div>
                     @error('reason')
                         <span class="mt-1 text-xs text-red-500">{{ $message }}</span>
                     @enderror

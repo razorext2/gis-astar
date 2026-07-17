@@ -243,7 +243,7 @@
                     x-bind:class="dynamicBg ?
                         'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
                         'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
-                    "{{ Str::limit($request->reason, 100) }}"
+                    "{{ Str::limit(strip_tags($request->reason), 100) }}"
                 </div>
             </div>
         @empty

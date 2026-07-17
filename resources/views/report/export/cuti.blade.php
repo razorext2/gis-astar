@@ -28,7 +28,7 @@
 				<td style="border: 1px solid black; text-align: center;">{{ $item->end_date?->format('d/m/Y') ?? '-' }}</td>
 				<td style="border: 1px solid black; text-align: center;">{{ $item->total_days ?? '-' }}</td>
 				<td style="border: 1px solid black; text-align: center;">{{ $item->status === 'approved' ? ($item->user?->leaveBalances?->first()?->remaining_quota ?? '-') : '-' }}</td>
-				<td style="border: 1px solid black;">{{ $item->reason ?? '-' }}</td>
+				<td style="border: 1px solid black;">{{ strip_tags($item->reason) ?? '-' }}</td>
 				<td style="border: 1px solid black; text-align: center;">{{ ucfirst(str_replace('_', ' ', $item->status)) }}</td>
 				<td style="border: 1px solid black;">{{ $item->backupPerson->name ?? '-' }}</td>
 				<td style="border: 1px solid black; text-align: center;">{{ $item->created_at?->format('d/m/Y') ?? '-' }}</td>
