@@ -15,10 +15,10 @@ use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
+
 /** Goal: Display Jabatan table with multiple supervisors column formatted, Caller: Livewire, Deps: Jabatan */
 final class JabatanTable extends PowerGridComponent
 {
-
     public string $tableName = 'JabatanTable';
 
     public bool $deferLoading = true;

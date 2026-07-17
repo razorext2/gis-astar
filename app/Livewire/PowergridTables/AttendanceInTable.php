@@ -22,7 +22,6 @@ use Spatie\Permission\Models\Role;
 
 final class AttendanceInTable extends PowerGridComponent
 {
-
     public string $tableName = 'AttendanceInTable';
 
     public bool $deferLoading = true;
@@ -224,7 +223,7 @@ final class AttendanceInTable extends PowerGridComponent
 
     public function actionsFromView(Attendance $data): ?View
     {
-        if (auth()->user()?->can('attendance-approve') && !$data->verified && (int) $data->status === 0) {
+        if (auth()->user()?->can('attendance-approve') && ! $data->verified && (int) $data->status === 0) {
             return view('components.table-component.confirm-button', [
                 'data' => $data,
             ]);

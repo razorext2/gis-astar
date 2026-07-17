@@ -20,7 +20,6 @@ use Spatie\Permission\Models\Role;
 
 final class PegawaiTable extends PowerGridComponent
 {
-
     public string $tableName = 'PegawaiTable';
 
     public bool $deferLoading = true;

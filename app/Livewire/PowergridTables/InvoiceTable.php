@@ -17,9 +17,9 @@ use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
+
 final class InvoiceTable extends PowerGridComponent
 {
-
     public string $tableName = 'InvoiceTable';
 
     public bool $deferLoading = true;
