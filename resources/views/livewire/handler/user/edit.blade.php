@@ -7,13 +7,9 @@
             'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div class="flex items-center gap-4">
-                <x-button.link id="back-btn" class="group justify-center hover:bg-red-700 hover:text-white"
-                    x-bind:class="dynamicBg ?
-                        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
-                        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
-                    wire:navigate href="{{ route('users.index') }}">
+                <x-button.danger id="back-btn" wire:navigate href="{{ route('users.index') }}">
                     <x-icons.angle-left class="h-5 w-5" />
-                </x-button.link>
+                </x-button.danger>
                 <div>
                     <h2 class="flex items-center gap-2 text-2xl font-bold tracking-tight text-gray-800 dark:text-white">
                         Edit Data User
