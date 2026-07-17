@@ -76,7 +76,7 @@
         @include('dashboard.profile.partials.update-password-form')
 
         {{-- Delete Account --}}
-        @include('dashboard.profile.partials.delete-user-form')
+        {{-- @include('dashboard.profile.partials.delete-user-form') --}}
 
     </div>
 @endsection
