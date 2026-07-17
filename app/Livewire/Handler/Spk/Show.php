@@ -45,6 +45,8 @@ class Show extends Component
             'approvedBy',
             'cancelRequestBy',
             'cancelRequestValidatedBy',
+            'transferredFrom',
+            'transferredTo',
         ])->findOrFail($id);
     }
 

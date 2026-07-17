@@ -4,8 +4,10 @@
 
 namespace App\Livewire\Handler\User;
 
+use App\Jobs\TransferSpkOwnershipJob;
 use App\Livewire\Concerns\HandlesErrors;
 use App\Models\User;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
@@ -121,9 +123,13 @@ class Edit extends Component
                     // Hapus session jika user dinonaktifkan
                     DB::table('sessions')->where('user_id', $this->user->id)->delete();
 
-                    // Pengalihan data SPK jika ada
+                    // Pengalihan data SPK jika ada — diproses secara asinkron via queue
                     if ($this->spk_count > 0 && $this->transfer_user_id) {
-                        $this->user->spks()->update(['added_by' => $this->transfer_user_id]);
+                        TransferSpkOwnershipJob::dispatch(
+                            $this->user->id,
+                            $this->transfer_user_id,
+                            auth()->id()
+                        );
                     }
                 } else {
                     $data['deactivation_reason'] = null;
@@ -147,7 +153,7 @@ class Edit extends Component
         ]);
     }
 
-    public function render(): \Illuminate\Contracts\View\View
+    public function render(): View
     {
         $eligibleUsers = collect();
         $selectedTransferUser = null;

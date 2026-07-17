@@ -392,6 +392,49 @@
                         </div>
                     @endif
 
+                    @if ($data->transferred_from)
+                        <div
+                            class="col-span-2 flex flex-col gap-2 rounded-lg border border-amber-100 bg-amber-50/50 p-3 dark:border-amber-900/30 dark:bg-amber-900/10">
+                            <span
+                                class="text-xs font-semibold uppercase tracking-wide text-amber-700 dark:text-amber-400">
+                                Riwayat Pengalihan SPK
+                            </span>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="flex flex-col">
+                                    <span
+                                        class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Dialihkan Dari</span>
+                                    <div class="flex items-center gap-x-2">
+                                        <span
+                                            class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->transferredFrom?->name ?? '-' }}</span>
+                                        @if ($data->transferredFrom)
+                                            <x-dashboard.badge-inactive
+                                                :is_active="$data->transferredFrom?->is_active ?? true" />
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span
+                                        class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Dialihkan Ke</span>
+                                    <div class="flex items-center gap-x-2">
+                                        <span
+                                            class="text-sm font-semibold capitalize text-zinc-900 dark:text-white">{{ $data->transferredTo?->name ?? '-' }}</span>
+                                        @if ($data->transferredTo)
+                                            <x-dashboard.badge-inactive
+                                                :is_active="$data->transferredTo?->is_active ?? true" />
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-span-2 flex flex-col">
+                                    <span
+                                        class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Waktu Pengalihan</span>
+                                    <span class="text-sm font-semibold text-zinc-900 dark:text-white">
+                                        {{ $data->transferred_at ? \Carbon\Carbon::parse($data->transferred_at)->locale('id')->isoFormat('D MMMM Y, HH:mm') : '-' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                     @if ($data->is_booked)
                         <div class="flex flex-col">
                             <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Dibooking Oleh</span>

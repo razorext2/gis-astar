@@ -73,6 +73,9 @@ class SpkMain extends Model
         'is_picked_up_by_customer',
         'is_revision',
         'reassign_at',
+        'transferred_from',
+        'transferred_to',
+        'transferred_at',
     ];
 
     protected $casts = [];
@@ -97,6 +100,7 @@ class SpkMain extends Model
             'cancel_request_at'                  => 'date',
             'cancel_request_validated_at'        => 'date',
             'reassign_at'                        => 'date',
+            'transferred_at'                     => 'datetime',
             'booked_at'                          => 'date',
             'production_has_download_spk_pdf_at' => 'date',
             'on_delay_at'                        => 'date',
@@ -132,6 +136,16 @@ class SpkMain extends Model
     public function reassignBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'reassign_by', 'id');
+    }
+
+    public function transferredFrom(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'transferred_from', 'id');
+    }
+
+    public function transferredTo(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'transferred_to', 'id');
     }
 
     public function approvedBy(): BelongsTo
