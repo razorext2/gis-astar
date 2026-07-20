@@ -1,5 +1,4 @@
-import { showAlert, loadingAlert } from "./alert";
-import { showModal as showModalDriver } from "../pages/driver/func/modal";
+import { loadingAlert } from "./alert";
 
 export async function initEventListener() {
     // swal deletion prompt
@@ -9,7 +8,7 @@ export async function initEventListener() {
             html: html,
             icon: icon,
             showCancelButton: true,
-            confirmButtonText: "Ya. ",
+            confirmButtonText: "Ya",
         });
     };
 
@@ -58,7 +57,7 @@ export async function initEventListener() {
         });
     });
 
-    // livewire redirect delayea
+    // livewire redirect delay
     Livewire.on("redirectRoute", (route) => {
         if (document.getElementById("dataTable")) {
             $("#dataTable").DataTable().ajax.reload();
@@ -69,81 +68,10 @@ export async function initEventListener() {
         }
     });
 
-    // livewire modal event
-    Livewire.on("detailDriverModal", (data) => {
-        showModalDriver(data.data).then(async (result) => {
-            if (result.isConfirmed) {
-                Livewire.dispatch("confirmAction", {
-                    id: data.data.id,
-                });
-            } else if (result.isDenied) {
-                const revision = await Swal.fire({
-                    icon: "question",
-                    title: "Tolak laporan ini?",
-                    html: "Kamu dapat memberikan revisi sebanyak <b>1x</b> sebelum laporan ditolak.",
-                    confirmButtonText: "Revisi",
-                    showCancelButton: true,
-                    showDenyButton: true,
-                    denyButtonText: "Ya, Tolak!",
-                });
-
-                if (revision.isConfirmed) {
-                    const { value: reason } = await Swal.fire({
-                        title: "Alasan penolakan",
-                        input: "textarea",
-                        inputPlaceholder: "Alasan penolakan...",
-                        inputAttributes: {
-                            "aria-label": "Type your message here",
-                        },
-                        showCancelButton: true,
-                        inputValidator: (value) => {
-                            if (!value) {
-                                return "Alasan penolakan tidak boleh kosong!";
-                            }
-                        },
-                    });
-
-                    if (reason) {
-                        Livewire.dispatch("revisionAction", {
-                            id: data.data.id,
-                            note: reason,
-                        });
-                    }
-                } else if (revision.isDenied) {
-                    const { value: reason } = await Swal.fire({
-                        title: "Alasan penolakan",
-                        input: "textarea",
-                        inputPlaceholder: "Alasan penolakan...",
-                        inputAttributes: {
-                            "aria-label": "Type your message here",
-                        },
-                        showCancelButton: true,
-                        inputValidator: (value) => {
-                            if (!value) {
-                                return "Alasan penolakan tidak boleh kosong!";
-                            }
-                        },
-                    });
-
-                    if (reason) {
-                        Livewire.dispatch("declineAction", {
-                            id: data.data.id,
-                            note: reason,
-                        });
-                    }
-                } else {
-                    Swal.close();
-                }
-            }
-        });
-    });
-
     Livewire.on("confirmation", (data) => {
-        console.log(data);
-
         confirmationModal(
             "Apa kamu yakin?",
-            `Kamu akan memverifikasi kehadiran dengan ID <b>${data.id}</b>`,
+            `Kamu akan memverifikasi data dengan ID <b>${data.id}</b>`,
             "warning"
         ).then((result) => {
             if (result.isConfirmed) {
