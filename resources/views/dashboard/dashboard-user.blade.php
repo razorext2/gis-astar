@@ -6,24 +6,8 @@
 
         <x-signature-reminder />
 
-        {{-- Schedule Card --}}
-        <livewire:dashboard.user-schedule-overview />
-
-        {{-- Sales Percentage --}}
-        @can('sales-create')
-            <livewire:dashboard.user-sales-stats />
-        @endcan
-
-        {{-- Teknisi Report --}}
-        @hasrole('Teknisi')
-            <livewire:plugin.tech-report-percentage />
-        @endhasrole
-
-        {{-- Attendance History --}}
-        <livewire:dashboard.user-attendance-history />
-
         {{-- All Menu (Mobile only) --}}
-        <div class="dark: rounded-xl border border-zinc-200 p-5 shadow-sm dark:border-zinc-800 md:hidden lg:p-6"
+        <div class="rounded-xl border border-zinc-200 p-5 shadow-sm dark:border-zinc-800 md:hidden lg:p-6"
             x-bind:class="dynamicBg ?
                 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
                 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
@@ -36,17 +20,4 @@
             </div>
         </div>
     </div>
-
-    {{-- Signal popup FABs to auto-open on this page --}}
-    <script>
-        (() => {
-            const fireAutoPop = () => window.dispatchEvent(new CustomEvent('enable-autopop'));
-            if (document.readyState === 'complete') {
-                fireAutoPop();
-            } else {
-                window.addEventListener('load', fireAutoPop, { once: true });
-            }
-            document.addEventListener('livewire:navigated', fireAutoPop, { once: true });
-        })();
-    </script>
 @endsection
