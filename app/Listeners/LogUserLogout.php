@@ -28,7 +28,7 @@ class LogUserLogout
         $user = $event->user;
 
         // Menyimpan log logout ke tb_log
-        DB::table('tb_log')->insert([
+        DB::table('log_histories')->insert([
             'user_id' => $user->id,
             'user_action' => 'logout',
             'ip_address' => request()->ip(),

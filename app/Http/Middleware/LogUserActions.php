@@ -168,9 +168,9 @@ class LogUserActions
             'updated_at' => now(),
         ];
 
-        // Simpan ke Database (tb_log)
+        // Simpan ke Database (log_histories)
         try {
-            DB::table('tb_log')->insert($data);
+            DB::table('log_histories')->insert($data);
         } catch (\Exception $e) {
             Log::error('Gagal menyimpan log user ke DB: '.$e->getMessage());
         }

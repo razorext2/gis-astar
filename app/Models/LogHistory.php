@@ -10,7 +10,6 @@ class LogHistory extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'tb_log';
     protected $fillable = ['user_id', 'user_action', 'ip_address', 'user_agent', 'user_location'];
 
     public function userRelasi()

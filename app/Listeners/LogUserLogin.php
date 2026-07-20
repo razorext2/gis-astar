@@ -28,7 +28,7 @@ class LogUserLogin
         $user = $event->user;
 
         // Menyimpan log login ke tb_log
-        DB::table('tb_log')->insert([
+        DB::table('log_histories')->insert([
             'user_id' => $user->id,
             'user_action' => 'login',
             'ip_address' => request()->ip(),

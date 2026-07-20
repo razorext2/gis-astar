@@ -26,7 +26,7 @@ Schedule::call(function () {
 
 // Hapus log > 7 hari, sekali sehari
 Schedule::call(function () {
-    DB::table('tb_log')
+    DB::table('log_histories')
         ->where('created_at', '<', now()->subWeek())
         ->delete();
 })
