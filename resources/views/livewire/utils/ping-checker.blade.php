@@ -52,7 +52,7 @@
         const trigger = document.getElementById('ping-checker-trigger');
         if (!trigger) return;
         const rect = trigger.getBoundingClientRect();
-        const top = rect.bottom + 12;
+        const top = rect.bottom + 34;
 
         const popoverWidth = 256; // w-64 is 16rem = 256px
         const screenPadding = 16;
@@ -73,7 +73,7 @@
         const start = performance.now();
 
         try {
-            await fetch('https://attendance.indodacin.com/status', {
+            await fetch('{{ url('/status') }}', {
                 method: 'HEAD',
                 mode: 'no-cors',
                 cache: 'no-store'
