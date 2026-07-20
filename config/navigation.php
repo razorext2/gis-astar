@@ -95,7 +95,7 @@ return [
         'type' => 'group',
         'label' => 'Rekam Absensi',
         'icon' => 'camera',
-        'guard' => ['any_permission', ['capture-view', 'capture-route-view', 'attendance-inquiry-approval-center', 'attendance-inquiry-list-own']],
+        'guard' => ['any_permission', ['capture-view', 'capture-route-view']],
         'submenu' => [
             [
                 'label' => 'Rekam Absensi Realtime',
@@ -115,75 +115,10 @@ return [
                 'permission' => 'capture-route-view',
                 'navigate' => false,
             ],
-            [
-                'label' => 'Laporan Absensi Saya',
-                'mobile_label' => 'Laporan Absensi Saya',
-                'route' => 'attendance-inquiry.my-inquiries.index',
-                'check' => ['attendance-inquiry.my-inquiries.*'],
-                'icon' => 'envelope',
-                'permission' => 'attendance-inquiry-list-own',
-                'navigate' => true,
-            ],
-            [
-                'label' => 'Persetujuan Laporan Absensi',
-                'mobile_label' => 'Persetujuan Laporan Absensi',
-                'route' => 'attendance-inquiry.approval-center.index',
-                'check' => ['attendance-inquiry.approval-center.*'],
-                'icon' => 'command',
-                'permission' => 'attendance-inquiry-approval-center',
-                'navigate' => true,
-                'counter' => 'utils.counter.attendance-inquiry-approval-counter',
-            ],
         ],
     ],
 
-    // --- Pengajuan Cuti
-    [
-        'type' => 'group',
-        'label' => 'Pengajuan Cuti',
-        'icon' => 'envelope',
-        'guard' => ['any_permission', ['leave-list-own', 'leave-create', 'leave-approval-center', 'leave-balance-manage']],
-        'submenu' => [
-            [
-                'label' => 'Pengajuan Cuti',
-                'mobile_label' => 'Pengajuan Cuti',
-                'route' => 'leave-request.my-requests.index',
-                'check' => ['leave-request.my-requests.*'],
-                'icon' => 'envelope',
-                'permission' => 'leave-list-own',
-                'navigate' => true,
-            ],
-            [
-                'label' => 'Pengajuan Pinjam Cuti',
-                'mobile_label' => 'Pengajuan Pinjam Cuti',
-                'route' => 'leave-request.borrow.index',
-                'check' => ['leave-request.borrow.*'],
-                'icon' => 'calendar',
-                'permission' => 'leave-create',
-                'navigate' => true,
-            ],
-            [
-                'label' => 'Pusat Approval Cuti',
-                'mobile_label' => 'Pusat Approval Cuti',
-                'route' => 'leave-request.approval-center.index',
-                'check' => ['leave-request.approval-center.*'],
-                'icon' => 'command',
-                'permission' => 'leave-approval-center',
-                'navigate' => true,
-                'counter' => 'utils.counter.leave-request-approval-center-counter',
-            ],
-            [
-                'label' => 'Kelola Cuti',
-                'mobile_label' => 'Kelola Cuti',
-                'route' => 'leave-request.manage.index',
-                'check' => ['leave-request.manage.*'],
-                'icon' => 'wallet',
-                'permission' => 'leave-balance-manage',
-                'navigate' => true,
-                'counter' => 'utils.counter.leave-request-manage-counter',
-            ],
-        ],
-    ],
+
 
     // ─── Rute ─────────────────────────────────────────────────────────────────
     [
@@ -273,60 +208,7 @@ return [
         ],
     ],
 
-    // ─── Data Invoice ─────────────────────────────────────────────────────────
-    [
-        'type' => 'group',
-        'label' => 'Data Invoice',
-        'icon' => 'rectangle-list',
-        'guard' => ['any_permission', ['invoice-list', 'invoice-list-pku', 'invoice-list-jkt']],
-        'submenu' => [
-            [
-                'label' => 'Semua Data',
-                'mobile_label' => 'Semua Invoice',
-                'route' => 'invoice.all.index',
-                'check' => ['invoice.all.*'],
-                'icon' => 'file-invoice',
-                'permission' => 'invoice-list',
-                'navigate' => true,
-            ],
-            [
-                'label' => 'Direct Cust',
-                'mobile_label' => 'Direct Cust Invoice',
-                'route' => 'invoice.cust.index',
-                'check' => ['invoice.cust.*'],
-                'icon' => 'file-invoice',
-                'permission' => 'invoice-list',
-                'navigate' => true,
-            ],
-            [
-                'label' => 'Medan',
-                'mobile_label' => 'Invoice Medan',
-                'route' => 'invoice.medan.index',
-                'check' => ['invoice.medan.*'],
-                'icon' => 'file-invoice',
-                'permission' => 'invoice-list',
-                'navigate' => true,
-            ],
-            [
-                'label' => 'Pekanbaru',
-                'mobile_label' => 'Invoice Pekanbaru',
-                'route' => 'invoice.pku.index',
-                'check' => ['invoice.pku.*'],
-                'icon' => 'file-invoice',
-                'permission' => 'invoice-list-pku',
-                'navigate' => true,
-            ],
-            [
-                'label' => 'Jakarta',
-                'mobile_label' => 'Invoice Jakarta',
-                'route' => 'invoice.jkt.index',
-                'check' => ['invoice.jkt.*'],
-                'icon' => 'file-invoice',
-                'permission' => 'invoice-list-jkt',
-                'navigate' => true,
-            ],
-        ],
-    ],
+
 
     // ─── Manajemen SPK ────────────────────────────────────────────────────────
     [
@@ -573,90 +455,7 @@ return [
         ],
     ],
 
-    // ─── Laporan Export ───────────────────────────────────────────────────────
-    [
-        'type' => 'group',
-        'label' => 'Ekspor Laporan',
-        'icon' => 'clipboard-list',
-        'guard' => ['any_permission', [
-            'attendance-approve', 'leave-list-all', 'collect-approve',
-            'invoice-create', 'spk-create', 'spk-approve', 'driver-approve', 'sales-approve',
-        ]],
-        'submenu' => [
-            [
-                'label' => 'Laporan Absensi',
-                'mobile_label' => 'Laporan Absensi',
-                'route' => 'report.export.absensi',
-                'check' => ['report.export.absensi'],
-                'icon' => 'badge-check',
-                'permission' => 'attendance-approve',
-                'navigate' => true,
-            ],
-            [
-                'label' => 'Laporan Cuti',
-                'mobile_label' => 'Laporan Cuti',
-                'route' => 'report.export.cuti',
-                'check' => ['report.export.cuti'],
-                'icon' => 'envelope',
-                'permission' => 'leave-list-all',
-                'navigate' => true,
-            ],
-            [
-                'label' => 'Laporan Piutang',
-                'mobile_label' => 'Laporan Piutang',
-                'route' => 'report.export.piutang',
-                'check' => ['report.export.piutang'],
-                'icon' => 'wallet',
-                'permission' => 'collect-approve',
-                'navigate' => true,
-            ],
-            [
-                'label' => 'Laporan Kolektor',
-                'mobile_label' => 'Laporan Kolektor',
-                'route' => 'report.export.kolektor',
-                'check' => ['report.export.kolektor'],
-                'icon' => 'cash-register',
-                'permission' => 'collect-approve',
-                'navigate' => true,
-            ],
-            [
-                'label' => 'Laporan Invoice',
-                'mobile_label' => 'Laporan Invoice',
-                'route' => 'report.export.invoice',
-                'check' => ['report.export.invoice'],
-                'icon' => 'file-invoice',
-                'permission' => 'invoice-export-all',
-                'navigate' => true,
-            ],
-            [
-                'label' => 'Laporan SPK',
-                'mobile_label' => 'Laporan SPK',
-                'route' => 'report.export.spk',
-                'check' => ['report.export.spk'],
-                'icon' => 'clipboard-check',
-                'permission' => ['spk-create', 'spk-approve'],
-                'navigate' => true,
-            ],
-            [
-                'label' => 'Laporan Driver',
-                'mobile_label' => 'Laporan Driver',
-                'route' => 'report.export.driver',
-                'check' => ['report.export.driver'],
-                'icon' => 'truck',
-                'permission' => 'driver-approve',
-                'navigate' => true,
-            ],
-            [
-                'label' => 'Laporan Sales',
-                'mobile_label' => 'Laporan Sales',
-                'route' => 'report.export.sales',
-                'check' => ['report.export.sales'],
-                'icon' => 'receipt',
-                'permission' => 'sales-approve',
-                'navigate' => true,
-            ],
-        ],
-    ],
+
 
     // ─── Settings ─────────────────────────────────────────────────────────────
     [

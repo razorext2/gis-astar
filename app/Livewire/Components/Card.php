@@ -15,12 +15,10 @@ use App\Services\Attendance\AttendanceCardService;
 use App\Services\Collector\CollectorCardService;
 use App\Services\DailyReport\DailyReportCardService;
 use App\Services\Driver\DriverCardService;
-use App\Services\LeaveRequest\LeaveRequestCardService;
 use App\Services\Sales\SalesCardService;
 use App\Services\Spk\SpkCardService;
 use App\Services\System\ServerCardService;
 use App\Services\Technician\TechnicianCardService;
-use App\Models\AttendanceInquiry\AttendanceInquiry;
 use Livewire\Component;
 
 class Card extends Component
@@ -69,11 +67,6 @@ class Card extends Component
             'driverreport' => $this->getDriverReportCards(),
             'salesreport' => $this->getSalesReportCards(),
             'servermonitor' => $this->getServerMonitorCards(),
-            'my-leave-request' => $this->getMyLeaveRequestCards(),
-            'approval-center-leave' => $this->getApprovalCenterLeaveCards(),
-            'manage-leave-balance' => $this->getManageLeaveBalanceCards(),
-            'my-attendance-inquiry' => $this->getMyAttendanceInquiryCards(),
-            'attendance-inquiry-approval-center' => $this->getAttendanceInquiryApprovalCards(),
             default => [],
         };
     }
@@ -149,17 +142,6 @@ class Card extends Component
                 'color' => 'red',
             ],
             [
-                'permission' => 'pegawai-list',
-                'label' => 'Cuti hari ini',
-                'count' => \App\Models\LeaveRequest\LeaveRequest::where('status', 'approved')
-                    ->whereDate('start_date', '<=', \Carbon\Carbon::today())
-                    ->whereDate('end_date', '>=', \Carbon\Carbon::today())
-                    ->count(),
-                'indicator' => 'Orang',
-                'icon' => 'icons.calendar',
-                'color' => 'yellow',
-            ],
-            [
                 'permission' => 'collect-edit',
                 'label' => 'Kolektor',
                 'count' => auth()->user()->cannot('collect-approve')
@@ -216,82 +198,5 @@ class Card extends Component
     protected function getServerMonitorCards(): array
     {
         return app(ServerCardService::class)->getServerMonitorCards();
-    }
-
-    protected function getMyLeaveRequestCards(): array
-    {
-        return app(LeaveRequestCardService::class)->getMyRequestCards();
-    }
-
-    protected function getApprovalCenterLeaveCards(): array
-    {
-        return app(LeaveRequestCardService::class)->getApprovalCenterCards();
-    }
-
-    protected function getManageLeaveBalanceCards(): array
-    {
-        return app(LeaveRequestCardService::class)->getManageBalanceCards();
-    }
-
-    protected function getMyAttendanceInquiryCards(): array
-    {
-        $kodePegawai = auth()->user()->kode_pegawai;
-
-        return [
-            [
-                'label' => 'Total Pengajuan',
-                'count' => AttendanceInquiry::where('kode_pegawai', $kodePegawai)->count(),
-                'indicator' => 'Pengajuan',
-                'icon' => 'icons.envelope',
-                'color' => 'blue',
-                'permission' => 'all',
-            ],
-            [
-                'label' => 'Menunggu Approval',
-                'count' => AttendanceInquiry::where('kode_pegawai', $kodePegawai)->where('status', 'pending')->count(),
-                'indicator' => 'Pengajuan',
-                'icon' => 'icons.clock',
-                'color' => 'yellow',
-                'permission' => 'all',
-            ],
-            [
-                'label' => 'Disetujui',
-                'count' => AttendanceInquiry::where('kode_pegawai', $kodePegawai)->where('status', 'approved')->count(),
-                'indicator' => 'Pengajuan',
-                'icon' => 'icons.badge-check',
-                'color' => 'green',
-                'permission' => 'all',
-            ],
-        ];
-    }
-
-    protected function getAttendanceInquiryApprovalCards(): array
-    {
-        return [
-            [
-                'label' => 'Total Masuk (YTD)',
-                'count' => AttendanceInquiry::whereYear('created_at', date('Y'))->count(),
-                'indicator' => 'Pengajuan',
-                'icon' => 'icons.envelope',
-                'color' => 'blue',
-                'permission' => 'all',
-            ],
-            [
-                'label' => 'Butuh Review',
-                'count' => AttendanceInquiry::where('status', 'pending')->count(),
-                'indicator' => 'Pengajuan',
-                'icon' => 'icons.clock',
-                'color' => 'yellow',
-                'permission' => 'all',
-            ],
-            [
-                'label' => 'Selesai Diproses',
-                'count' => AttendanceInquiry::whereIn('status', ['approved', 'rejected'])->count(),
-                'indicator' => 'Pengajuan',
-                'icon' => 'icons.badge-check',
-                'color' => 'green',
-                'permission' => 'all',
-            ],
-        ];
     }
 }

@@ -6,7 +6,6 @@ namespace App\Livewire\Components\Pegawai;
 
 use App\Models\Attendance;
 use App\Models\AttendanceOut;
-use App\Models\LeaveRequest\LeaveRequest;
 use App\Models\User;
 use Carbon\Carbon;
 use Livewire\Component;
@@ -40,14 +39,6 @@ class AttendanceCalendarPopover extends Component
 
         $user = User::where('kode_pegawai', $this->kodePegawai)->first();
         $leave = null;
-        if ($user) {
-            $leave = LeaveRequest::where('user_id', $user->id)
-                ->where('status', 'approved')
-                ->whereDate('start_date', '<=', $dateFormatted)
-                ->whereDate('end_date', '>=', $dateFormatted)
-                ->with('leaveType')
-                ->first();
-        }
 
         $holiday = \App\Models\System\Holiday::whereDate('date', $dateFormatted)->first();
 

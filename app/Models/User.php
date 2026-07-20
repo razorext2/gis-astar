@@ -6,9 +6,6 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use App\Models\LeaveRequest\LeaveBalance;
-use App\Models\LeaveRequest\LeaveRequest;
-use App\Models\LeaveRequest\LeaveRequestHistory;
 use App\Models\Spk\SpkMain;
 use Creagia\LaravelSignPad\Concerns\RequiresSignature;
 use Creagia\LaravelSignPad\Contracts\CanBeSigned;
@@ -95,77 +92,8 @@ class User extends Authenticatable implements CanBeSigned
         return $this->belongsTo(Pegawai::class, 'deleted_by', 'kode_pegawai');
     }
 
-    // aksesor routing persetujuan cuti
-    public function getDirectSupervisorsAttribute()
-    {
-        return $this->pegawai?->jabatanRelasi?->supervisors ?? collect();
-    }
-
-    // relasi pengajuan cuti
-    public function leaveBalances()
-    {
-        return $this->hasMany(LeaveBalance::class);
-    }
-
-    public function leaveRequests()
-    {
-        return $this->hasMany(LeaveRequest::class);
-    }
-
-    public function backedUpLeaves()
-    {
-        return $this->hasMany(LeaveRequest::class, 'backup_person_id');
-    }
-
     public function spks(): HasMany
     {
         return $this->hasMany(SpkMain::class, 'added_by', 'id');
-    }
-
-    public function performedActions()
-    {
-        return $this->hasMany(LeaveRequestHistory::class, 'acted_by');
-    }
-
-    public function currentLeave(): HasOne
-    {
-        return $this->hasOne(LeaveRequest::class)
-            ->where('status', 'approved')
-            ->whereDate('start_date', '<=', now())
-            ->whereDate('end_date', '>=', now());
-    }
-
-    // --- Leave Helpers ---
-
-    /**
-     * Mendapatkan sisa kuota cuti tahunan berjalan.
-     */
-    public function currentLeaveBalance()
-    {
-        return $this->leaveBalances()->where('year', date('Y'))->first();
-    }
-
-    /**
-     * Menghitung total hari yang sudah digunakan untuk tipe cuti tertentu.
-     *
-     * @param  string  $leaveCode  (khusus, tahunan, dll)
-     */
-    public function getLeaveUsageCount(string $leaveCode): int
-    {
-        return (int) $this->leaveRequests()
-            ->whereHas('leaveType', fn ($q) => $q->where('code', $leaveCode))
-            ->whereNotIn('status', ['rejected', 'auto_reject', 'cancelled'])
-            ->sum('total_days');
-    }
-
-    /**
-     * Cek apakah sudah pernah mengambil cuti khusus (biasanya sekali seumur hidup/periode tertentu).
-     */
-    public function hasTakenSpecialLeave(string $leaveCode): bool
-    {
-        return $this->leaveRequests()
-            ->whereHas('leaveType', fn ($q) => $q->where('code', $leaveCode))
-            ->whereNotIn('status', ['rejected', 'auto_reject', 'cancelled'])
-            ->exists();
     }
 }

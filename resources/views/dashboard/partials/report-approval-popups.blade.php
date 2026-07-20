@@ -7,9 +7,6 @@
     $popups = [];
     $stackIndex = 0;
 
-    // Check if leave approval popup has pending items to offset position
-    $hasPendingLeave = $user ? \App\Livewire\Dashboard\LeaveApprovalPopup::hasPendingForUser($user) : false;
-
     // Map of report types and their required permissions
     $reportTypes = [
         'sales' => 'sales-approve',
@@ -59,20 +56,6 @@
                 'stack' => $stackIndex++,
                 'message' =>
                     'tugas produksi menunggu <span class="font-bold text-zinc-900 dark:text-white">pengerjaan</span> Anda',
-            ];
-        }
-    }
-
-    // Attendance Inquiry Pending (placement-based HRD check)
-    if ($user && $user->hasPermissionTo('attendance-inquiry-approve-hrd')) {
-        $hasPendingInquiry = \App\Models\AttendanceInquiry\AttendanceInquiry::where('status', 'pending')
-            ->whereHas('user.pegawai.jabatanRelasi.placementRelasi.hrds', fn($q) => $q->where('users.id', $user->id))
-            ->exists();
-
-        if ($hasPendingInquiry) {
-            $popups[] = [
-                'type' => 'attendance-inquiry',
-                'stack' => $stackIndex++,
             ];
         }
     }

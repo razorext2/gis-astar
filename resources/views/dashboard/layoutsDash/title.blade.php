@@ -40,21 +40,9 @@
         'delivery.*' => 'Pengiriman',
         'billing.*' => 'Penagihan',
         'daily-report.*' => 'Laporan Kerja Harian',
-        'report.export.absensi' => 'Laporan Absensi',
-        'report.export.cuti' => 'Laporan Cuti',
-        'report.export.piutang' => 'Laporan Piutang',
-        'report.export.kolektor' => 'Laporan Kolektor',
-        'report.export.invoice' => 'Laporan Invoice',
-        'report.export.spk' => 'Laporan SPK',
-        'report.export.driver' => 'Laporan Driver',
-        'report.export.sales' => 'Laporan Sales',
-        'report.*' => 'Laporan',
-        'leave-request.approval-center.*' => 'Pusat Persetujuan',
-        'leave-request.*' => 'Pengajuan Cuti',
         'server.overview' => 'Manajemen Server',
         'system.holidays.*' => 'Manajemen Hari Libur',
         'chatbot.*' => 'AI Chatbot',
-        'attendance-inquiry.*' => 'Pengajuan Absensi',
     ];
 
     $pageTitle =

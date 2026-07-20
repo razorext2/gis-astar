@@ -16,7 +16,6 @@ use App\Http\Controllers\CollectTaskPpnController;
 use App\Http\Controllers\DivisionController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\GolonganController;
-use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\LoghistoryController;
 use App\Http\Controllers\NotificationController;
@@ -288,49 +287,6 @@ Route::middleware(['auth'])->group(function () {
         // teams
         Route::resource('teams', TeamController::class)->only('index', 'create', 'edit');
 
-        // invoice
-        Route::prefix('invoice')->group(function () {
-            // semua
-            Route::prefix('all')->name('invoice.all.')->group(function () {
-                Route::get('/', [InvoiceController::class, 'index'])->name('index');
-                Route::get('/create', [InvoiceController::class, 'create'])->name('create');
-                Route::get('/{invoice}', [InvoiceController::class, 'show'])->name('show');
-                Route::get('/add/{id}', [InvoiceController::class, 'addDetails'])->name('addDetails');
-            });
-
-            // cust langsung
-            Route::prefix(prefix: 'cust')->name('invoice.cust.')->group(function () {
-                Route::get('/', [InvoiceController::class, 'index'])->name('index');
-                Route::get('/create', [InvoiceController::class, 'create'])->name('create');
-                Route::get('/{invoice}', [InvoiceController::class, 'show'])->name('show');
-                Route::get('/add/{id}', [InvoiceController::class, 'addDetails'])->name('addDetails');
-            });
-
-            // medan
-            Route::prefix('medan')->name('invoice.medan.')->group(function () {
-                Route::get('/', [InvoiceController::class, 'index'])->name('index');
-                Route::get('/create', [InvoiceController::class, 'create'])->name('create');
-                Route::get('/{invoice}', [InvoiceController::class, 'show'])->name('show');
-                Route::get('/add/{id}', [InvoiceController::class, 'addDetails'])->name('addDetails');
-            });
-
-            // pku
-            Route::prefix('pku')->name('invoice.pku.')->group(function () {
-                Route::get('/', [InvoiceController::class, 'indexPku'])->name('index');
-                Route::get('/create', [InvoiceController::class, 'create'])->name('create');
-                Route::get('/{invoice}', [InvoiceController::class, 'show'])->name('show');
-                Route::get('/{id}/add', [InvoiceController::class, 'addDetails'])->name('addDetails');
-            });
-
-            // jkt
-            Route::prefix('jkt')->name('invoice.jkt.')->group(function () {
-                Route::get('/', [InvoiceController::class, 'indexJkt'])->name('index');
-                Route::get('/create', [InvoiceController::class, 'create'])->name('create');
-                Route::get('/{invoice}', [InvoiceController::class, 'show'])->name('show');
-                Route::get('/{id}/add', [InvoiceController::class, 'addDetails'])->name('addDetails');
-            });
-        });
-
         // ini untuk event
         Route::get('event/{event}/participant/{participant}', [BigEventController::class, 'participantDetails'])->name('event.participant.show');
         Route::delete('event/{event}/participant/{participant}', [BigEventController::class, 'participantDelete'])->name('event.participant.delete');
@@ -381,15 +337,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('daily-report/general/{id}/index', [DailyReportController::class, 'generalDaily'])->name('report.general.daily');
         Route::get('daily-report/general/{id}/customer-assignment', [DailyReportController::class, 'generalCustomerAssignment'])->name('report.general.customer-assignment');
         Route::get('daily-report/general/{id}/{hourly}/detail', [DailyReportController::class, 'generalHourly'])->name('report.general.hourly');
-
-        // route pengajuan cuti
-        require __DIR__.'/features/leave-request.php';
-
-        // route inquiry absensi
-        require __DIR__.'/features/attendance-inquiry.php';
-
-        // route laporan export
-        require __DIR__.'/features/report.php';
     });
 });
 

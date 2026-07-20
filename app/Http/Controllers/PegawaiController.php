@@ -7,7 +7,6 @@ namespace App\Http\Controllers;
 use App\Models\Attendance;
 use App\Models\AttendanceOut;
 use App\Models\Collector;
-use App\Models\LeaveRequest\LeaveRequest;
 use App\Models\Pegawai;
 use App\Models\Sales;
 use Carbon\Carbon;
@@ -168,14 +167,6 @@ class PegawaiController extends Controller
 
         // Get leave requests
         $leaveRequests = collect();
-        if ($pegawai->userRelasi) {
-            $leaveRequests = LeaveRequest::query()
-                ->where('user_id', $pegawai->userRelasi->id)
-                ->where('status', 'approved')
-                ->where('start_date', '<=', $endOfMonth)
-                ->where('end_date', '>=', $startOfMonth)
-                ->get();
-        }
 
         // Get national holidays
         $holidays = \App\Models\System\Holiday::query()
