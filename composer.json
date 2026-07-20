@@ -58,8 +58,7 @@
         },
         "files": [
             "app/Helpers/getCurrentDate.php",
-            "app/Helpers/countDistance.php",
-            "app/Helpers/errorLogger.php"
+            "app/Helpers/countDistance.php"
         ]
     },
     "autoload-dev": {
