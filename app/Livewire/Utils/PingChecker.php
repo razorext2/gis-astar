@@ -2,14 +2,16 @@
 
 namespace App\Livewire\Utils;
 
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
 class PingChecker extends Component
 {
-    public $pingMs = null;
-    public $isOnline = true;
+    public ?int $pingMs = null;
 
-    public function render()
+    public bool $isOnline = true;
+
+    public function render(): View
     {
         return view('livewire.utils.ping-checker');
     }
