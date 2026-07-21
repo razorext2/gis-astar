@@ -1,4 +1,4 @@
-<div class="relative mb-2 w-full overflow-x-auto xl:overflow-x-visible py-2">
+<div class="relative w-full overflow-x-auto xl:overflow-x-visible">
 
     <div class="flex snap-x snap-mandatory flex-nowrap gap-4 xl:flex-wrap" wire:poll.300s>
 

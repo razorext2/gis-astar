@@ -123,12 +123,14 @@ document.addEventListener("livewire:navigated", function () {
         themeToggleLightBtn.addEventListener("click", () => toggleTheme(false));
     }
 
-    // minta izin notifikasi, subscribeUser
-    Notification.requestPermission().then((permission) => {
-        if (permission === "granted") {
-            subscribeUser();
-        }
-    });
+    // Unregister any active service worker registrations
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.getRegistrations().then((registrations) => {
+            for (let registration of registrations) {
+                registration.unregister();
+            }
+        });
+    }
 
     // ==== INSTALL APP HANDLER ====
 
@@ -174,39 +176,5 @@ document.addEventListener("livewire:navigated", function () {
         }
     }
 
-    async function subscribeUser() {
-        if (!("serviceWorker" in navigator) || !("PushManager" in window))
-            return;
 
-        const metaVapid = document.querySelector('meta[name="vapid-public-key"]')?.content;
-        const vapidPublicKey = metaVapid || import.meta.env.VITE_VAPID_PUBLIC_KEY;
-
-        if (!vapidPublicKey || typeof vapidPublicKey !== "string" || !vapidPublicKey.trim()) {
-            return;
-        }
-
-        try {
-            const reg = await navigator.serviceWorker.register("/serviceworker.js");
-
-            let sub = await reg.pushManager.getSubscription();
-            if (!sub) {
-                const key = urlBase64ToUint8Array(vapidPublicKey.trim());
-                sub = await reg.pushManager.subscribe({
-                    userVisibleOnly: true,
-                    applicationServerKey: key,
-                });
-            }
-            await axios.post("/push-subscribe", sub);
-        } catch (err) {
-            console.warn("Push subscription skipped or failed:", err.message);
-        }
-    }
-
-    function urlBase64ToUint8Array(b64) {
-        if (!b64) return new Uint8Array();
-        const pad = "=".repeat((4 - (b64.length % 4)) % 4);
-        const base64 = (b64 + pad).replace(/-/g, "+").replace(/_/g, "/");
-        const raw = atob(base64);
-        return Uint8Array.from([...raw].map((c) => c.charCodeAt(0)));
-    }
 });
