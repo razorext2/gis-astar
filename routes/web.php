@@ -10,7 +10,6 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PushController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\ServerOverviewController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -62,9 +61,6 @@ Route::middleware(['auth'])->group(function () {
 
         // Activity Logs
         Route::get('log', [LoghistoryController::class, 'index'])->name('log.index');
-
-        // Server Overview
-        Route::get('server-overview', [ServerOverviewController::class, 'index'])->name('server.overview')->middleware('permission:manage-server');
     });
 });
 

@@ -9,7 +9,6 @@
         'permissions.*' => 'Permissions',
         'notifications.*' => 'Pusat Notifikasi',
         'announcement.*' => 'Pusat Pengumuman',
-        'server.overview' => 'Manajemen Server',
     ];
 
     $pageTitle =

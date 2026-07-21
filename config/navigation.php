@@ -80,15 +80,6 @@ return [
                 'permission' => 'log-list',
                 'navigate' => true,
             ],
-            [
-                'label' => 'Manajemen Server',
-                'mobile_label' => 'Manajemen Server',
-                'route' => 'server.overview',
-                'check' => ['server.overview'],
-                'icon' => 'computer',
-                'permission' => 'manage-server',
-                'navigate' => false,
-            ],
         ],
     ],
 ];
