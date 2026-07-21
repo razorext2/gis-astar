@@ -1,8 +1,5 @@
-<div>
+<div class="flex flex-col gap-6">
     <livewire:components.card type="dashboard" />
 
-    <div class="flex flex-col gap-4 mt-4">
-        {{-- Greetings Section --}}
-        <livewire:utils.greetings class="mb-4" />
-    </div>
+    <livewire:utils.greetings />
 </div>

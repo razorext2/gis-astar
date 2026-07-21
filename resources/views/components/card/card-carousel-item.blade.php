@@ -29,7 +29,7 @@
             'value-dark-from' => 'dark:from-red-300',
             'value-dark-to' => 'dark:to-rose-200',
             'label-hover' => 'group-hover:text-red-600 dark:group-hover:text-red-400',
-            'shadow-hover' => 'group-hover:shadow-red-500/15 dark:group-hover:',
+            'shadow-hover' => 'group-hover:shadow-red-500/15 dark:group-hover:shadow-red-500/10',
         ],
         'yellow' => [
             'accent' => 'from-yellow-400 via-amber-400 to-yellow-600',
@@ -65,7 +65,7 @@
 
     $style = $colorMap[$color] ?? $colorMap['red'];
     $visibleCount = $visibleCount ?? 1;
-    $itemClasses = 'min-w-[260px] flex-shrink-0 xl:flex-1 xl:min-w-0';
+    $itemClasses = 'min-w-[260px] shrink-0 xl:flex-1 xl:min-w-0';
 @endphp
 
 <div class="{{ $itemClasses }} group relative snap-start will-change-transform">
@@ -81,7 +81,7 @@
                 'bg-white border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800'">
 
             {{-- Coloured top accent bar (static, no hover animation) --}}
-            <div class="{{ $style['accent'] }} absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r opacity-90"></div>
+            <div class="{{ $style['accent'] }} absolute inset-x-0 top-0 h-0.75 bg-linear-to-r opacity-90"></div>
 
             {{-- Single decorative glow orb — static, blur-lg (was blur-2xl/3xl), no hover scale --}}
             <div
@@ -90,7 +90,7 @@
 
             {{-- Inner glass sheen (no blur, just gradient) --}}
             <div
-                class="from-white/8 dark:from-white/4 pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br via-transparent to-transparent">
+                class="from-white/8 dark:from-white/4 pointer-events-none absolute inset-0 rounded-2xl bg-linear-to-br via-transparent to-transparent">
             </div>
 
             <div class="relative z-10">
@@ -104,7 +104,7 @@
 
                     {{-- Icon badge: no backdrop-blur, no rotate (scale only) --}}
                     <div
-                        class="{{ $style['icon-bg'] }} {{ $style['icon-ring'] }} {{ $style['icon-text'] }} flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl ring-1 transition-transform duration-300 ease-out group-hover:scale-110">
+                        class="{{ $style['icon-bg'] }} {{ $style['icon-ring'] }} {{ $style['icon-text'] }} flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ring-1 transition-transform duration-300 ease-out group-hover:scale-110">
                         <x-dynamic-component :component="$icon" class="h-4 w-4" />
                     </div>
                 </div>
@@ -112,7 +112,7 @@
                 {{-- Count value (no hover scale — text scale is expensive) --}}
                 <div class="flex items-end gap-2">
                     <span
-                        class="{{ $style['value-from'] }} {{ $style['value-to'] }} {{ $style['value-dark-from'] }} {{ $style['value-dark-to'] }} inline-block bg-gradient-to-br bg-clip-text text-4xl font-black tracking-tight text-transparent">
+                        class="{{ $style['value-from'] }} {{ $style['value-to'] }} {{ $style['value-dark-from'] }} {{ $style['value-dark-to'] }} inline-block bg-linear-to-br bg-clip-text text-4xl font-black tracking-tight text-transparent">
                         {{ number_format($count) }}
                     </span>
                     <span class="mb-1.5 text-[11px] font-semibold text-zinc-400 dark:text-zinc-500">
@@ -122,7 +122,7 @@
 
                 {{-- Progress track (static width, no hover expand — was triggering layout recalc) --}}
                 <div class="mt-5 h-1 w-full overflow-hidden rounded-full bg-zinc-200/60 dark:bg-zinc-700/50">
-                    <div class="{{ $style['progress'] }} h-full w-1/2 rounded-full bg-gradient-to-r"
+                    <div class="{{ $style['progress'] }} h-full w-1/2 rounded-full bg-linear-to-r"
                         style="box-shadow: 0 0 6px {{ $style['progress-glow'] }};"></div>
                 </div>
 
