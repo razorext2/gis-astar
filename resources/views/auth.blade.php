@@ -102,8 +102,8 @@
                 </button>
             </div>
             <div class="flex shrink-0">
-                <x-button-light />
-                <x-button-dark />
+                <x-button.light />
+                <x-button.dark />
             </div>
         </div>
 

@@ -27,13 +27,13 @@
 
                 <!-- Email Address -->
                 <div class="mb-6 flex w-full flex-col">
-                    <x-input-label class="mb-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300" for="email"
+                    <x-input.label class="mb-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300" for="email"
                         :value="__('Email Address')" />
-                    <x-text-input
+                    <x-input.text
                         class="block w-full rounded-xl border-zinc-200 bg-zinc-50 px-4 py-3 text-zinc-900 placeholder-zinc-400 focus:border-red-500 focus:bg-white focus:ring-red-500 dark:border-zinc-700 dark:bg-dark-secondary dark:text-white dark:placeholder-zinc-500 dark:focus:border-red-500"
                         id="email" name="email" type="email" :value="old('email')" required autofocus
                         placeholder="contoh@indodacin.com" />
-                    <x-input-error class="mt-2" :messages="$errors->get('email')" />
+                    <x-input.error class="mt-2" :messages="$errors->get('email')" />
                 </div>
 
                 <div class="mt-8 flex w-full flex-col">

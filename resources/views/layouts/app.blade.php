@@ -19,9 +19,9 @@
 
     <div class="relative z-10 mb-5 flex min-h-screen flex-col">
         @if (session('status'))
-            <x-notification-popup>
+            <x-alert.popup>
                 {{ session('status') }}
-            </x-notification-popup>
+            </x-alert.popup>
         @endif
 
         @include('layouts.partials.navbar')

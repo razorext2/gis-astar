@@ -26,35 +26,35 @@
 
                 <!-- Email Address -->
                 <div class="mb-5 flex w-full flex-col">
-                    <x-input-label class="mb-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300" for="email"
+                    <x-input.label class="mb-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300" for="email"
                         :value="__('Email Account')" />
-                    <x-text-input
+                    <x-input.text
                         class="block w-full rounded-xl border-zinc-200 bg-zinc-50 px-4 py-3 text-zinc-900 placeholder-zinc-400 focus:border-red-500 focus:bg-white focus:ring-red-500 dark:border-zinc-700 dark:bg-dark-secondary dark:text-white dark:placeholder-zinc-500 dark:focus:border-red-500"
                         id="email" name="email" type="email" placeholder="contoh@indodacin.com"
                         :value="old('email', $request->email)" required autofocus autocomplete="username" />
-                    <x-input-error class="mt-2" :messages="$errors->get('email')" />
+                    <x-input.error class="mt-2" :messages="$errors->get('email')" />
                 </div>
 
                 <!-- Password -->
                 <div class="mb-5 flex w-full flex-col">
-                    <x-input-label class="mb-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300" for="password"
+                    <x-input.label class="mb-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300" for="password"
                         :value="__('New Password')" />
-                    <x-text-input
+                    <x-input.text
                         class="block w-full rounded-xl border-zinc-200 bg-zinc-50 px-4 py-3 text-zinc-900 placeholder-zinc-400 focus:border-red-500 focus:bg-white focus:ring-red-500 dark:border-zinc-700 dark:bg-dark-secondary dark:text-white dark:placeholder-zinc-500 dark:focus:border-red-500"
                         id="password" name="password" type="password" placeholder="••••••••" required
                         autocomplete="new-password" />
-                    <x-input-error class="mt-2" :messages="$errors->get('password')" />
+                    <x-input.error class="mt-2" :messages="$errors->get('password')" />
                 </div>
 
                 <!-- Confirm Password -->
                 <div class="mb-8 flex w-full flex-col">
-                    <x-input-label class="mb-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300"
+                    <x-input.label class="mb-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300"
                         for="password_confirmation" :value="__('Confirm Password')" />
-                    <x-text-input
+                    <x-input.text
                         class="block w-full rounded-xl border-zinc-200 bg-zinc-50 px-4 py-3 text-zinc-900 placeholder-zinc-400 focus:border-red-500 focus:bg-white focus:ring-red-500 dark:border-zinc-700 dark:bg-dark-secondary dark:text-white dark:placeholder-zinc-500 dark:focus:border-red-500"
                         id="password_confirmation" name="password_confirmation" type="password" placeholder="••••••••"
                         required autocomplete="new-password" />
-                    <x-input-error class="mt-2" :messages="$errors->get('password_confirmation')" />
+                    <x-input.error class="mt-2" :messages="$errors->get('password_confirmation')" />
                 </div>
 
                 <div class="flex w-full flex-col">

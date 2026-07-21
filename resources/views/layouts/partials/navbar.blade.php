@@ -228,8 +228,8 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
                                         <span
                                             class="text-sm font-medium text-glass-text-light dark:text-glass-text-dark">Theme</span>
                                         <div class="flex items-center gap-1.5">
-                                            <x-button-dark />
-                                            <x-button-light />
+                                            <x-button.dark />
+                                            <x-button.light />
                                         </div>
                                     </div>
                                 </li>
