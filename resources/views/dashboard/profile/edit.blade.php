@@ -1,4 +1,4 @@
-@extends('dashboard.layoutsDash.app')
+@extends('layouts.app')
 @section('content')
     {{-- Hero Profile Header --}}
     <div class="relative z-30 mb-6 rounded-xl border border-zinc-200 shadow-md dark:border-zinc-800"

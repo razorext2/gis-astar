@@ -1,4 +1,4 @@
-@extends('dashboard.layoutsDash.app')
+@extends('layouts.app')
 @section('content')
     <div class="flex h-auto items-center justify-center">
         <div class="grid w-full gap-4 rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none md:gap-4 md:p-6"

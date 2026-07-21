@@ -1,5 +1,5 @@
 {{-- Goal: Edit Roles Page, Livewire: handler.roles.delete, handler.roles.update, Alpine: - --}}
-@extends('dashboard.layoutsDash.app')
+@extends('layouts.app')
 @section('content')
     <div class="w-fit rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6"
         x-bind:class="dynamicBg ?

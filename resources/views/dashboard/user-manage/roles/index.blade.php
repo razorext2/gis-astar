@@ -1,4 +1,4 @@
-@extends('dashboard.layoutsDash.app')
+@extends('layouts.app')
 @section('content')
     <div class="relative grid grid-cols-1 gap-6">
 

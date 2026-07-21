@@ -1,4 +1,4 @@
-@extends('dashboard.layoutsDash.app')
+@extends('layouts.app')
 @section('content')
     <div class="flex flex-col gap-5">
         {{-- Main Profile Section --}}

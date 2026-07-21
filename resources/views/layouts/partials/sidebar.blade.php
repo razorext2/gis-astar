@@ -192,6 +192,6 @@
     </div>
 
     <!-- start footer -->
-    @include('dashboard.layoutsDash.footer')
+    @include('layouts.partials.footer')
     <!-- footer -->
 </aside>

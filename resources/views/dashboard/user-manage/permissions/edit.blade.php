@@ -1,5 +1,5 @@
 {{-- Goal: Edit Permissions Page, Livewire: handler.permissions.delete, handler.permissions.update, Alpine: - --}}
-@extends('dashboard.layoutsDash.app')
+@extends('layouts.app')
 @section('content')
     <div class="rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 dark:shadow-none sm:p-6 xl:w-1/2"
         x-bind:class="dynamicBg ?

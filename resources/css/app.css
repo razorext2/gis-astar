@@ -1,7 +1,6 @@
 @import "flatpickr/dist/flatpickr.min.css";
 @import "../../vendor/power-components/livewire-powergrid/dist/tailwind.css";
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@900&display=swap");
-@import "report-approval.css";
 @import "announcement.css";
 @import "liquid-glass.css";
 @tailwind base;

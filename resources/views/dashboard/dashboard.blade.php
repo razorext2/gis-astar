@@ -1,4 +1,4 @@
-@extends('dashboard.layoutsDash.app')
+@extends('layouts.app')
 @section('content')
     @livewire('components.card', ['type' => 'dashboard'])
 
