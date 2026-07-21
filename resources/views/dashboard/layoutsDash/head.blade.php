@@ -24,7 +24,6 @@
     rel="stylesheet">
 
 @livewireStyles
-@laravelPWA
 
 <!-- Vite Files -->
 @vite('resources/css/app.css')
