@@ -79,10 +79,10 @@
             <form class="space-y-4" wire:submit="updateProfileInformation">
                 {{-- Email --}}
                 <div>
-                    <x-input-label class="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300" for="email"
+                    <x-input.label class="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300" for="email"
                         :value="__('Email')" />
                     <div class="flex items-center gap-2">
-                        <x-text-input
+                        <x-input.text
                             class="block w-full rounded-xl border-0 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-900 ring-1 ring-zinc-200 placeholder:text-zinc-400 focus:ring-2 focus:ring-red-500 dark:bg-zinc-800/50 dark:text-white dark:ring-zinc-700"
                             id="email" wire:model="email" type="email" autocomplete="email" />
                         @if (!is_null($user->email_verified_at))
@@ -93,17 +93,17 @@
                             </span>
                         @endif
                     </div>
-                    <x-input-error class="mt-1.5" :messages="$errors->get('email')" />
+                    <x-input.error class="mt-1.5" :messages="$errors->get('email')" />
                 </div>
 
                 {{-- Nama Lengkap --}}
                 <div>
-                    <x-input-label class="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300" for="name"
+                    <x-input.label class="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300" for="name"
                         :value="__('Nama Lengkap')" />
-                    <x-text-input
+                    <x-input.text
                         class="block w-full rounded-xl border-0 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-900 ring-1 ring-zinc-200 placeholder:text-zinc-400 focus:ring-2 focus:ring-red-500 dark:bg-zinc-800/50 dark:text-white dark:ring-zinc-700"
                         id="name" wire:model="name" type="text" autocomplete="name" />
-                    <x-input-error class="mt-1.5" :messages="$errors->get('name')" />
+                    <x-input.error class="mt-1.5" :messages="$errors->get('name')" />
                 </div>
 
                 {{-- Save Button --}}
@@ -134,30 +134,30 @@
 
             <form class="space-y-4" wire:submit="updatePassword">
                 <div>
-                    <x-input-label class="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+                    <x-input.label class="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
                         for="current_password" :value="__('Kata Sandi Saat Ini')" />
-                    <x-text-input
+                    <x-input.text
                         class="mt-1 block w-full rounded-xl border-0 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-900 ring-1 ring-zinc-200 placeholder:text-zinc-400 focus:ring-2 focus:ring-red-500 dark:bg-zinc-800/50 dark:text-white dark:ring-zinc-700"
                         id="current_password" wire:model="current_password" type="password" autocomplete="current-password" />
-                    <x-input-error class="mt-1.5" :messages="$errors->get('current_password')" />
+                    <x-input.error class="mt-1.5" :messages="$errors->get('current_password')" />
                 </div>
 
                 <div>
-                    <x-input-label class="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+                    <x-input.label class="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
                         for="password" :value="__('Kata Sandi Baru')" />
-                    <x-text-input
+                    <x-input.text
                         class="mt-1 block w-full rounded-xl border-0 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-900 ring-1 ring-zinc-200 placeholder:text-zinc-400 focus:ring-2 focus:ring-red-500 dark:bg-zinc-800/50 dark:text-white dark:ring-zinc-700"
                         id="password" wire:model="password" type="password" autocomplete="new-password" />
-                    <x-input-error class="mt-1.5" :messages="$errors->get('password')" />
+                    <x-input.error class="mt-1.5" :messages="$errors->get('password')" />
                 </div>
 
                 <div>
-                    <x-input-label class="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+                    <x-input.label class="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
                         for="password_confirmation" :value="__('Konfirmasi Kata Sandi')" />
-                    <x-text-input
+                    <x-input.text
                         class="mt-1 block w-full rounded-xl border-0 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-900 ring-1 ring-zinc-200 placeholder:text-zinc-400 focus:ring-2 focus:ring-red-500 dark:bg-zinc-800/50 dark:text-white dark:ring-zinc-700"
                         id="password_confirmation" wire:model="password_confirmation" type="password" autocomplete="new-password" />
-                    <x-input-error class="mt-1.5" :messages="$errors->get('password_confirmation')" />
+                    <x-input.error class="mt-1.5" :messages="$errors->get('password_confirmation')" />
                 </div>
 
                 <div class="flex items-center gap-4 pt-2">

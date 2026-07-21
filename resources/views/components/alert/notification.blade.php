@@ -1,5 +1,5 @@
 {{-- Goal: Offline notification alert widget (simplified, announcement type removed), Livewire: -, Alpine: - --}}
-@props(['class' => null, 'id' => null])
+@props(['class' => null, 'id' => null, 'title' => null, 'desc' => null])
 
 <div x-bind:class="dynamicBg
     ?
@@ -16,11 +16,17 @@
 
     {{-- Content --}}
     <div class="flex flex-1 flex-col pt-0.5">
-        <h3 class="text-sm font-bold text-red-900 dark:text-red-200">
-            {{ $title }}
-        </h3>
-        <div class="mt-1 text-sm leading-relaxed text-red-800/90 dark:text-red-300">
-            {{ $desc }}
-        </div>
+        @if ($title)
+            <h3 class="text-sm font-bold text-red-900 dark:text-red-200">
+                {{ $title }}
+            </h3>
+        @endif
+        @if ($desc)
+            <div class="mt-1 text-sm leading-relaxed text-red-800/90 dark:text-red-300">
+                {{ $desc }}
+            </div>
+        @endif
+        {{ $slot }}
     </div>
 </div>
+
