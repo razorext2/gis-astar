@@ -60,14 +60,14 @@ final class LogTable extends PowerGridComponent
     public function datasource(): Builder
     {
         return LogHistory::query()
-            ->with('userRelasi:id,name,is_active')
+            ->with('user:id,name,is_active')
             ->latest();
     }
 
     public function relationSearch(): array
     {
         return [
-            'userRelasi' => [
+            'user' => [
                 'name',
             ],
         ];
@@ -79,8 +79,8 @@ final class LogTable extends PowerGridComponent
             ->add('id')
             ->add('user_name', function ($query) {
                 return view('components.dashboard.name-w-badge', [
-                    'name' => $query->userRelasi->name ?? 'System',
-                    'is_active' => (bool) ($query->userRelasi->is_active ?? true),
+                    'name' => $query->user->name ?? 'System',
+                    'is_active' => (bool) ($query->user->is_active ?? true),
                 ]);
             })
             ->add('user_action')
@@ -215,7 +215,7 @@ final class LogTable extends PowerGridComponent
         );
     }
 
-    protected function queryString(): array
+    public function queryString(): array
     {
         return $this->powerGridQueryString();
     }

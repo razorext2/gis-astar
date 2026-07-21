@@ -3,10 +3,8 @@
 namespace App\Livewire\Forms\Roles;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
-use Livewire\Livewire;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -18,7 +16,7 @@ class Post extends Form
     #[Validate('required')]
     public array $selectedPermissions = [];
 
-    public function store()
+    public function store(): void
     {
         try {
             DB::beginTransaction();
@@ -35,11 +33,11 @@ class Post extends Form
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error(now() . ': Error saat menambah data perizinan ->' . $e->getMessage());
+            throw $e;
         }
     }
 
-    public function update($role)
+    public function update($role): void
     {
         try {
             DB::beginTransaction();

@@ -57,17 +57,6 @@ export async function initEventListener() {
         });
     });
 
-    // livewire redirect delay
-    Livewire.on("redirectRoute", (route) => {
-        if (document.getElementById("dataTable")) {
-            $("#dataTable").DataTable().ajax.reload();
-        } else {
-            setTimeout(() => {
-                window.location.href = route;
-            }, 1000);
-        }
-    });
-
     Livewire.on("confirmation", (data) => {
         confirmationModal(
             "Apa kamu yakin?",

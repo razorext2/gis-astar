@@ -7,7 +7,7 @@ namespace App\Livewire\Handler\Announcement;
 use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Announcement;
 use App\Models\User;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Spatie\Permission\Models\Role;
@@ -17,10 +17,15 @@ class Create extends Component
     use HandlesErrors, WithFileUploads;
 
     public $title;
+
     public $description;
+
     public $target_type = 'all';
+
     public $target_roles = [];
+
     public $target_users = [];
+
     public $file;
 
     protected function rules(): array
@@ -69,11 +74,12 @@ class Create extends Component
         ]);
     }
 
-    public function render(): \Illuminate\Contracts\View\View
+    public function render(): View
     {
         return view('livewire.handler.announcement.create', [
             'roles' => Role::select(['id', 'name'])->get(),
             'users' => User::select(['id', 'name', 'email'])
+                ->where('is_active', true)
                 ->get(),
         ]);
     }

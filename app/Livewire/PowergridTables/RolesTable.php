@@ -109,7 +109,7 @@ final class RolesTable extends PowerGridComponent
         ");
     }
 
-    public function queryString()
+    public function queryString(): array
     {
         return $this->powerGridQueryString();
     }

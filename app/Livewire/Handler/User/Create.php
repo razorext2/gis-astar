@@ -4,6 +4,7 @@ namespace App\Livewire\Handler\User;
 
 use App\Livewire\Concerns\HandlesErrors;
 use App\Models\User;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
@@ -23,7 +24,7 @@ class Create extends Component
 
     public $selected_roles = [];
 
-    protected function rules()
+    protected function rules(): array
     {
         return [
             'name' => 'required|string|max:255',
@@ -45,7 +46,7 @@ class Create extends Component
         'selected_roles.min' => 'Minimal pilih satu role.',
     ];
 
-    public function save()
+    public function save(): mixed
     {
         $this->validate();
 
@@ -70,7 +71,7 @@ class Create extends Component
         ]);
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.handler.user.create', [
             'list_roles' => Role::orderBy('name', 'asc')->get(),

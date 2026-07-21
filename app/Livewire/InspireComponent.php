@@ -2,17 +2,21 @@
 
 namespace App\Livewire;
 
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Inspiring;
 use Livewire\Component;
 
 class InspireComponent extends Component
 {
-    public $quote;
-    public function render()
-    {
-        Artisan::call('inspire');
-        $this->quote = Artisan::output();
+    public string $quote = '';
 
+    public function mount(): void
+    {
+        $this->quote = Inspiring::quotes()->random();
+    }
+
+    public function render(): View
+    {
         return view('livewire.inspire-component');
     }
 }

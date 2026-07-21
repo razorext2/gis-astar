@@ -80,6 +80,10 @@ class Announcement extends Model
      */
     public static function hasUnreadForUser(?User $user): bool
     {
-        return self::unreadForUser($user)->exists();
+        if (! $user) {
+            return false;
+        }
+
+        return once(fn () => self::unreadForUser($user)->exists());
     }
 }

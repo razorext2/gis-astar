@@ -25,6 +25,9 @@ class User extends Authenticatable
         'email',
         'password',
         'is_active',
+        'deactivation_reason',
+        'deactivation_at',
+        'last_login',
         'profile_pic',
         'bio',
     ];

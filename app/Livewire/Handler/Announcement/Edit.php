@@ -7,6 +7,7 @@ namespace App\Livewire\Handler\Announcement;
 use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Announcement;
 use App\Models\User;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -19,11 +20,17 @@ class Edit extends Component
     public Announcement $announcement;
 
     public $title;
+
     public $description;
+
     public $target_type = 'all';
+
     public $target_roles = [];
+
     public $target_users = [];
+
     public $file;
+
     public $existing_file;
 
     public function mount(Announcement $announcement): void
@@ -86,11 +93,12 @@ class Edit extends Component
         ]);
     }
 
-    public function render(): \Illuminate\Contracts\View\View
+    public function render(): View
     {
         return view('livewire.handler.announcement.edit', [
             'roles' => Role::select(['id', 'name'])->get(),
             'users' => User::select(['id', 'name', 'email'])
+                ->where('is_active', true)
                 ->get(),
         ]);
     }

@@ -1,11 +1,10 @@
 {{-- Goal: Render a dropdown of actions (such as detail, assign, delete, reschedule) for data table rows, Livewire: None, Alpine: x-data="{ open: false, dropdownStyle: '', dropUp: false }" --}}
 @props([
-    'delete' => false,
-    'detail' => false,
-    'confirm' => false,
-    'reschedule' => false,
+    'delete'          => false,
+    'detail'          => false,
+    'reschedule'      => false,
     'changeCollector' => false,
-    'navigate' => false,
+    'navigate'        => false,
 ])
 
 <div class="flex gap-2">
@@ -70,11 +69,11 @@
                                 {{ $item['navigate'] ?? $navigate ? 'wire:navigate' : '' }}
                                 data-userid="{{ Crypt::encryptString(auth()->user()->id) }}">
                                 @if ($isShow)
-                                    <x-icons.eye class="h-4 w-4 flex-shrink-0" />
+                                    <x-icons.eye class="h-4 w-4 shrink-0" />
                                 @elseif ($isEdit)
-                                    <x-icons.pen class="h-4 w-4 flex-shrink-0" />
+                                    <x-icons.pen class="h-4 w-4 shrink-0" />
                                 @elseif ($isDelete)
-                                    <x-icons.trash class="h-4 w-4 flex-shrink-0" />
+                                    <x-icons.trash class="h-4 w-4 shrink-0" />
                                 @endif
                                 <span>{{ $item['label'] }}</span>
                             </a>
@@ -88,7 +87,7 @@
                                 id="detail-btn" wire:click="$dispatch('detail', {id: {{ $id }}})"
                                 data-userid="{{ Crypt::encryptString(auth()->user()->id) }}"
                                 wire:key="detail-btn-{{ $id }}">
-                                <x-icons.check-circle class="h-4 w-4 flex-shrink-0" />
+                                <x-icons.check-circle class="h-4 w-4 shrink-0" />
                                 Confirm
                             </button>
                         </li>
@@ -100,7 +99,7 @@
                                 class="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-amber-600 transition-all duration-200 hover:bg-amber-50 dark:text-amber-400 dark:hover:bg-amber-950/30"
                                 id="reschedule-btn-{{ $id }}"
                                 onclick="Livewire.dispatch('reschedule', {id: {{ $id }}})">
-                                <x-icons.calendar class="h-4 w-4 flex-shrink-0" />
+                                <x-icons.calendar class="h-4 w-4 shrink-0" />
                                 Reschedule
                             </button>
                         </li>
@@ -112,7 +111,7 @@
                                 class="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-blue-600 transition-all duration-200 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-950/30"
                                 id="change-collector-btn-{{ $id }}"
                                 onclick="Livewire.dispatch('changeCollector', {id: {{ $id }}})">
-                                <x-icons.user class="h-4 w-4 flex-shrink-0" />
+                                <x-icons.user class="h-4 w-4 shrink-0" />
                                 Ganti Kolektor
                             </button>
                         </li>
@@ -124,7 +123,7 @@
                                 class="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-red-600 transition-all duration-200 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/30"
                                 id="delete-btn" wire:click="$dispatch('delete', {id: {{ $id }}})"
                                 wire:key="delete-btn-{{ $id }}">
-                                <x-icons.trash class="h-4 w-4 flex-shrink-0" />
+                                <x-icons.trash class="h-4 w-4 shrink-0" />
                                 Hapus
                             </button>
                         </li>
@@ -133,9 +132,4 @@
             </div>
         </template>
     </div>
-
-    @if ($confirm)
-        <livewire:handler.sales.validate-sales id="{{ $id }}" wire:key="salesid-{{ $id }}"
-            :showDetail="true" />
-    @endif
 </div>
