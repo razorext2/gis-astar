@@ -66,8 +66,8 @@ class BaseFileDownload extends Notification implements ShouldQueue
         return (new WebPushMessage)
             ->title('PT. Indodacin Presisi Utama')
             ->body($this->message)
-            ->icon(asset('assets/img/logo.ico'))
-            ->badge(asset('assets/img/logo.ico'))
+            ->icon(asset('images/brand/logo.ico'))
+            ->badge(asset('images/brand/logo.ico'))
             ->action($this->label, route($this->route, $this->parameters))
             ->tag('Indodacin')
             ->data(['url' => route($this->route, $this->parameters)]);

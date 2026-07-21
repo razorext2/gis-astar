@@ -60,40 +60,10 @@
                         @enderror
                     </div>
 
-                    {{-- Description (Quill Editor) --}}
-                    <div class="space-y-2" x-data="{
-                        quill: null,
-                        init() {
-                            this.quill = new Quill(this.$refs.editor, {
-                                theme: 'snow',
-                                placeholder: 'Tulis isi pengumuman di sini...',
-                                modules: {
-                                    toolbar: [
-                                        ['bold', 'italic', 'underline', 'strike'],
-                                        ['blockquote', 'code-block'],
-                                        [{ 'header': 1 }, { 'header': 2 }],
-                                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                                        [{ 'indent': '-1' }, { 'indent': '+1' }],
-                                        [{ 'size': ['small', false, 'large', 'huge'] }],
-                                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                                        [{ 'color': [] }, { 'background': [] }],
-                                        [{ 'align': [] }],
-                                        ['clean']
-                                    ]
-                                }
-                            });
-                    
-                            this.quill.on('text-change', () => {
-                                $wire.set('description', this.quill.root.innerHTML);
-                            });
-                        }
-                    }">
-                        <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
-                        <div wire:ignore class="[&_.ql-editor]:min-h-[384px] notranslate" translate="no">
-                            <div x-ref="editor"
-                                class="rounded-b-lg bg-white text-gray-900 dark:bg-gray-800 dark:text-white">
-                            </div>
-                        </div>
+                    {{-- Description --}}
+                    <div class="space-y-2">
+                        <x-input.textarea wire:model="description" id="description" name="description"
+                            textLabel="Deskripsi" placeholder="Tulis isi pengumuman di sini..." rows="8" />
                         @error('description')
                             <span class="text-xs text-red-500">{{ $message }}</span>
                         @enderror

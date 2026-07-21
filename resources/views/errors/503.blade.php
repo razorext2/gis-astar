@@ -84,7 +84,7 @@
 
                 {{-- Right Side: Illustration --}}
                 <div class="order-1 flex items-center justify-center lg:order-2">
-                    <img src="{{ asset('assets/img/503.png') }}" alt="503 Service Unavailable"
+                    <img src="{{ asset('images/errors/503.png') }}" alt="503 Service Unavailable"
                         class="animate-float w-full max-w-md drop-shadow-2xl">
                 </div>
             </div>

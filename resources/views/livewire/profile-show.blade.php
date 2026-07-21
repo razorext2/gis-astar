@@ -26,9 +26,9 @@
                             class="bg-linear-to-br absolute -inset-0.5 rounded-[0.85rem] from-red-500 to-red-700 opacity-60 blur-sm transition-opacity duration-500 group-hover:opacity-100 dark:from-red-600/50 dark:to-red-900/50">
                         </div>
                         <img class="dark:border-dark-secondary relative h-20 w-20 rounded-xl border-2 border-white object-cover shadow-sm lg:h-24 lg:w-24"
-                            src="{{ auth()->user()->profile_pic ? asset('storage/profile-pictures/' . auth()->user()->profile_pic) : asset('assets/img/profile-picture-5.jpg') }}"
+                            src="{{ auth()->user()->profile_pic ? asset('storage/profile-pictures/' . auth()->user()->profile_pic) : asset('images/defaults/profile-picture-5.jpg') }}"
                             alt="user photo" loading="lazy"
-                            onerror="this.src = '{{ asset('assets/img/noImage.webp') }}'">
+                            onerror="this.src = '{{ asset('images/defaults/noImage.webp') }}'">
                     </div>
 
                     <div class="flex flex-col gap-y-1">

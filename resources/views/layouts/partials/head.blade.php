@@ -18,8 +18,8 @@
 <meta name="vapid-public-key" content="{{ config('webpush.vapid.public_key') }}">
 
 <!-- Favicons -->
-<link href="{{ asset('assets/img/logo.ico') }}" rel="icon" />
-<link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon" />
+<link href="{{ asset('images/brand/logo.ico') }}" rel="icon" />
+<link href="{{ asset('images/brand/apple-touch-icon.png') }}" rel="apple-touch-icon" />
 <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Poppins&family=Montserrat&display=swap"
     rel="stylesheet">
 

@@ -92,7 +92,7 @@
 
                 {{-- Right Side: Illustration --}}
                 <div class="order-1 flex items-center justify-center lg:order-2">
-                    <img src="{{ asset('assets/img/403.png') }}" alt="401 Unauthorized"
+                    <img src="{{ asset('images/errors/403.png') }}" alt="401 Unauthorized"
                         class="animate-float w-full max-w-md drop-shadow-2xl">
                 </div>
             </div>

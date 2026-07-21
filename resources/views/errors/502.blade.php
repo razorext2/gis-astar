@@ -92,7 +92,7 @@
 
                 {{-- Right Side: Illustration --}}
                 <div class="order-1 flex items-center justify-center lg:order-2">
-                    <img src="{{ asset('assets/img/500.svg') }}" alt="502 Bad Gateway"
+                    <img src="{{ asset('images/errors/500.svg') }}" alt="502 Bad Gateway"
                         class="animate-float w-full max-w-md drop-shadow-2xl">
                 </div>
             </div>

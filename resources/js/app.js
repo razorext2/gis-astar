@@ -7,17 +7,11 @@ import { initFlowbite } from "flowbite";
 import { initEventListener } from "./utils/eventListener.js";
 import { initWebSocketListener } from "./utils/webSocketListener";
 import "./../../vendor/power-components/livewire-powergrid/dist/powergrid";
-import { zoomImage } from "./utils/zoomImage";
 import "./components/dynamic-background.js";
-
-import Quill from "quill";
-import "quill/dist/quill.snow.css";
 
 window.flatpickr = flatpickr;
 window.$ = window.jQuery = $;
-
 window.Swal = Swal;
-window.Quill = Quill;
 
 const triggerPreloaderExit = () => {
     const preloader = document.getElementById("preloader");
@@ -47,7 +41,4 @@ document.addEventListener("livewire:navigated", function () {
     initFlowbite();
     initEventListener();
     initWebSocketListener();
-
-    // Register zoom globally
-    zoomImage();
 });

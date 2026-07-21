@@ -21,7 +21,7 @@
 }" x-init="window.addEventListener('scroll', () => handleScroll(), { passive: true });
 window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; }, { passive: true });"
     :class="[
-        openSidebar ? 'md:ml-[288px]' : '',
+        openSidebar ? 'md:ml-72' : '',
         dynamicBg ?
         'bg-glass-light border-glass-border-light backdrop-blur-md shadow-sm dark:bg-glass-dark dark:border-glass-border-dark dark:shadow-none' :
         'bg-white border-zinc-200 shadow-sm dark:bg-dark-primary dark:border-zinc-800 dark:shadow-none'
@@ -37,7 +37,7 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
             <button @click="openSidebar = !openSidebar" x-data="{ tapping: false }" x-on:mousedown="tapping = true"
                 x-on:touchstart="tapping = true" x-on:animationend="tapping = false"
                 x-on:animationcancel="tapping = false" :class="{ 'is-tapping': tapping }"
-                class="liquid-btn hidden rounded-xl p-2 text-zinc-500 transition-colors hover:bg-zinc-100/50 dark:text-zinc-400 dark:hover:bg-zinc-800/50 md:flex">
+                class="liquid-btn hidden rounded-xl p-2 text-zinc-500 transition-colors hover:bg-zinc-100/50 md:flex dark:text-zinc-400 dark:hover:bg-zinc-800/50">
                 <span x-show="!openSidebar">
                     <x-icons.bar class="h-5 w-5" />
                 </span>
@@ -47,19 +47,19 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
             </button>
 
             <div :class="openSidebar ? 'md:opacity-0 md:pointer-events-none md:max-w-0 md:-translate-x-5' :
-                'opacity-100 md:max-w-[9rem] translate-x-0'"
+                'opacity-100 md:max-w-36 translate-x-0'"
                 class="flex shrink-0 transform items-center justify-start overflow-hidden transition-[opacity,transform,max-width] duration-300 ease-in-out">
                 <a class="flex items-center gap-2" href="{{ config('app.url') }}">
                     <img class="h-7 w-7 rounded-lg object-contain sm:h-8 sm:w-8"
-                        src="{{ asset('images/icons/icon-384x384.png') }}" alt="Attendance Logo" loading="lazy" />
+                        src="{{ asset('images/brand/logo.png') }}" alt="Attendance Logo" loading="lazy" />
                     <span
-                        class="hidden text-sm font-bold italic tracking-wide text-zinc-900 dark:text-white sm:block sm:text-base">Attendance</span>
+                        class="hidden text-sm font-bold italic tracking-wide text-zinc-900 sm:block sm:text-base dark:text-white">Attendance</span>
                 </a>
             </div>
 
             {{-- Breadcrumb Placeholder (Sticky) --}}
             <div id="navbar-breadcrumb-container"
-                class="flex h-6 min-w-0 items-center border-l border-zinc-200/50 pl-3 dark:border-zinc-800/50 sm:pl-4">
+                class="flex h-6 min-w-0 items-center border-l border-zinc-200/50 pl-3 sm:pl-4 dark:border-zinc-800/50">
             </div>
         </div>
 
@@ -114,16 +114,16 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
                             ?
                             'border-glass-border-light bg-glass-light backdrop-blur-md shadow-[inset_0_1px_0px_rgba(255,255,255,0.6),0_0_9px_rgba(0,0,0,0.15),0_15px_30px_rgba(0,0,0,0.12)] dark:border-glass-border-dark dark:bg-glass-dark dark:shadow-[inset_0_1px_0px_rgba(255,255,255,0.08),0_0_9px_rgba(0,0,0,0.4),0_15px_30px_rgba(0,0,0,0.35)]' :
                             'border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-dark-primary'"
-                        class="z-[100] origin-top-right overflow-hidden rounded-2xl border" id="notification-dropdown"
+                        class="z-100 origin-top-right overflow-hidden rounded-2xl border" id="notification-dropdown"
                         wire:ignore.self>
 
                         {{-- Header --}}
                         <div
-                            class="flex items-center justify-between border-b border-glass-divider-light px-4 py-3 dark:border-glass-divider-dark">
+                            class="border-glass-divider-light dark:border-glass-divider-dark flex items-center justify-between border-b px-4 py-3">
                             <div class="flex items-center gap-2">
                                 <div class="h-1.5 w-1.5 rounded-full bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.6)]">
                                 </div>
-                                <p class="text-sm font-bold text-glass-text-light dark:text-glass-text-dark">Notifikasi
+                                <p class="text-glass-text-light dark:text-glass-text-dark text-sm font-bold">Notifikasi
                                 </p>
                             </div>
                         </div>
@@ -134,7 +134,7 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
                         </div>
 
                         {{-- Footer --}}
-                        <div class="border-t border-glass-divider-light px-4 py-3 dark:border-glass-divider-dark">
+                        <div class="border-glass-divider-light dark:border-glass-divider-dark border-t px-4 py-3">
                             <a class="text-sm font-semibold text-red-500 transition-colors hover:text-red-600 dark:text-red-400 dark:hover:text-red-300"
                                 href="{{ route('notifications.index') }}">
                                 Lihat semua notifikasi →
@@ -163,8 +163,9 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
                     id="user-menu-button" type="button" :aria-expanded="open.toString()">
                     <span class="sr-only">Open user menu</span>
                     <img class="h-9 w-9 rounded-full object-cover"
-                        src="{{ auth()->user()->profile_pic ? asset('storage/profile-pictures/' . auth()->user()->profile_pic) : asset('assets/img/profile-picture-5.jpg') }}"
-                        alt="user photo" loading="lazy" onerror="this.src = '{{ asset('assets/img/noImage.webp') }}'">
+                        src="{{ auth()->user()->profile_pic ? asset('storage/profile-pictures/' . auth()->user()->profile_pic) : asset('images/defaults/profile-picture-5.jpg') }}"
+                        alt="user photo" loading="lazy"
+                        onerror="this.src = '{{ asset('images/defaults/noImage.webp') }}'">
                 </button>
 
                 {{-- Profile Dropdown (teleported to body to escape nav backdrop-filter context) --}}
@@ -179,22 +180,22 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
                             ?
                             'border-glass-border-light bg-glass-light backdrop-blur-md shadow-[inset_0_1px_0px_rgba(255,255,255,0.6),0_0_9px_rgba(0,0,0,0.15),0_15px_30px_rgba(0,0,0,0.12)] dark:border-glass-border-dark dark:bg-glass-dark dark:shadow-[inset_0_1px_0px_rgba(255,255,255,0.08),0_0_9px_rgba(0,0,0,0.4),0_15px_30px_rgba(0,0,0,0.35)]' :
                             'border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-dark-primary'"
-                        class="z-[100] w-60 origin-top-right transform-gpu overflow-hidden rounded-2xl border p-1 transition-all duration-300"
+                        class="z-100 w-60 origin-top-right transform-gpu overflow-hidden rounded-2xl border p-1 transition-all duration-300"
                         id="profile-dropdown">
                         <div class="relative z-10">
                             {{-- User Info --}}
                             <div
-                                class="flex items-center gap-3 border-b border-glass-divider-light px-4 py-3.5 dark:border-glass-divider-dark">
-                                <img class="h-9 w-9 shrink-0 rounded-full object-cover ring-2 ring-glass-border-light dark:ring-glass-border-dark"
-                                    src="{{ auth()->user()->profile_pic ? asset('storage/profile-pictures/' . auth()->user()->profile_pic) : asset('assets/img/profile-picture-5.jpg') }}"
+                                class="border-glass-divider-light dark:border-glass-divider-dark flex items-center gap-3 border-b px-4 py-3.5">
+                                <img class="ring-glass-border-light dark:ring-glass-border-dark h-9 w-9 shrink-0 rounded-full object-cover ring-2"
+                                    src="{{ auth()->user()->profile_pic ? asset('storage/profile-pictures/' . auth()->user()->profile_pic) : asset('images/defaults/profile-picture-5.jpg') }}"
                                     alt="user photo" loading="lazy"
-                                    onerror="this.src = '{{ asset('assets/img/noImage.webp') }}'">
+                                    onerror="this.src = '{{ asset('images/defaults/noImage.webp') }}'">
                                 <div class="min-w-0">
                                     <p
-                                        class="truncate text-sm font-bold text-glass-text-light dark:text-glass-text-dark">
+                                        class="text-glass-text-light dark:text-glass-text-dark truncate text-sm font-bold">
                                         {{ auth()->user()->name }}
                                     </p>
-                                    <p class="truncate text-xs text-glass-muted-light dark:text-glass-muted-dark">
+                                    <p class="text-glass-muted-light dark:text-glass-muted-dark truncate text-xs">
                                         {{ auth()->user()->email }}
                                     </p>
                                 </div>
@@ -203,7 +204,7 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
                             {{-- Menu Items --}}
                             <ul class="py-1.5" aria-labelledby="dropdown-item">
                                 <li>
-                                    <a class="flex items-center gap-2.5 px-4 py-2 text-sm font-medium text-glass-text-light transition-colors hover:bg-glass-hover-light hover:text-zinc-900 dark:text-glass-text-dark dark:hover:bg-glass-hover-dark dark:hover:text-white"
+                                    <a class="text-glass-text-light hover:bg-glass-hover-light dark:text-glass-text-dark dark:hover:bg-glass-hover-dark flex items-center gap-2.5 px-4 py-2 text-sm font-medium transition-colors hover:text-zinc-900 dark:hover:text-white"
                                         href="{{ route('profile.me') }}">
                                         My Profile
                                     </a>
@@ -212,7 +213,7 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
                                     <form id="editProfile" action="{{ route('profile.edit') }}"
                                         onclick="event.preventDefault();"></form>
                                     <button
-                                        class="flex w-full items-center gap-2.5 px-4 py-2 text-left text-sm font-medium text-glass-text-light transition-colors hover:bg-glass-hover-light hover:text-zinc-900 dark:text-glass-text-dark dark:hover:bg-glass-hover-dark dark:hover:text-white"
+                                        class="text-glass-text-light hover:bg-glass-hover-light dark:text-glass-text-dark dark:hover:bg-glass-hover-dark flex w-full items-center gap-2.5 px-4 py-2 text-left text-sm font-medium transition-colors hover:text-zinc-900 dark:hover:text-white"
                                         form="editProfile" type="submit">
                                         Account Settings
                                     </button>
@@ -226,7 +227,7 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
                                 <li>
                                     <div class="flex items-center justify-between px-4 py-2.5">
                                         <span
-                                            class="text-sm font-medium text-glass-text-light dark:text-glass-text-dark">Theme</span>
+                                            class="text-glass-text-light dark:text-glass-text-dark text-sm font-medium">Theme</span>
                                         <div class="flex items-center gap-1.5">
                                             <x-button.dark />
                                             <x-button.light />
@@ -234,10 +235,10 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
                                     </div>
                                 </li>
                                 <li>
-                                    <div class="flex cursor-pointer items-center justify-between px-4 py-2.5 transition-colors hover:bg-glass-hover-light dark:hover:bg-glass-hover-dark"
+                                    <div class="hover:bg-glass-hover-light dark:hover:bg-glass-hover-dark flex cursor-pointer items-center justify-between px-4 py-2.5 transition-colors"
                                         @click.stop="dynamicBg = !dynamicBg">
                                         <span
-                                            class="text-sm font-medium text-glass-text-light dark:text-glass-text-dark">Dynamic
+                                            class="text-glass-text-light dark:text-glass-text-dark text-sm font-medium">Dynamic
                                             Bg</span>
                                         <button type="button"
                                             class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-zinc-900/75"
@@ -255,7 +256,7 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
                             </ul>
 
                             {{-- Sign Out & Install --}}
-                            <ul class="border-t border-glass-divider-light py-1.5 dark:border-glass-divider-dark"
+                            <ul class="border-glass-divider-light dark:border-glass-divider-dark border-t py-1.5"
                                 aria-labelledby="dropdown-item">
                                 <li>
                                     <form id="logout" method="post" action="{{ route('logout') }}"

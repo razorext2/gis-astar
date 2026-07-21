@@ -16,7 +16,7 @@
     @livewireStyles()
 
     <!-- Fonts -->
-    <link href="{{ asset('assets/img/logo.ico') }}" rel="icon" />
+    <link href="{{ asset('images/brand/logo.ico') }}" rel="icon" />
     <link href="https://fonts.bunny.net" rel="preconnect">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
@@ -72,7 +72,7 @@
 
     {{-- Fixed Logo Top-Left --}}
     <div class="fixed left-6 top-5 z-50 hidden md:block">
-        <img src="{{ asset('assets/img/logo.png') }}" class="h-10 w-auto object-contain drop-shadow-sm" alt="Logo">
+        <img src="{{ asset('images/brand/logo.png') }}" class="h-10 w-auto object-contain drop-shadow-sm" alt="Logo">
     </div>
 
     {{-- Theme Toggle Top-Right (Collapsible) --}}

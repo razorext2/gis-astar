@@ -14,8 +14,8 @@
             <div class="group relative w-fit" x-data="{ open: false }">
                 <div class="relative">
                     <img class="h-28 w-28 rounded-2xl border-4 border-white object-cover shadow-xl dark:border-zinc-800 sm:h-32 sm:w-32"
-                        src="{{ auth()->user()->profile_pic ? asset('storage/profile-pictures/' . auth()->user()->profile_pic) : asset('assets/img/profile-picture-5.jpg') }}"
-                        alt="{{ auth()->user()->name }}" onerror="this.src = '{{ asset('assets/img/noImage.webp') }}'">
+                        src="{{ auth()->user()->profile_pic ? asset('storage/profile-pictures/' . auth()->user()->profile_pic) : asset('images/defaults/profile-picture-5.jpg') }}"
+                        alt="{{ auth()->user()->name }}" onerror="this.src = '{{ asset('images/defaults/noImage.webp') }}'">
                     {{-- Edit overlay --}}
                     <x-button.secondary @click="open = !open"
                         class="!absolute !inset-0 !flex !items-center !justify-center !rounded-2xl !border-none !bg-zinc-950/50 !opacity-0 !shadow-none !ring-0 !transition-opacity !duration-200 group-hover:!opacity-100"
