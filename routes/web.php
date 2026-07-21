@@ -67,10 +67,6 @@ Route::middleware(['auth'])->group(function () {
 require __DIR__.'/auth.php';
 
 // Offline page
-Route::get('/offline', function () {
-    return view('vendor.laravelpwa.offline');
-});
-
 // File streaming
 Route::get('/file/{path}', function ($path) {
     abort_unless(Storage::exists($path), 404);
