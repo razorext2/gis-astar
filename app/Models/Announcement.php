@@ -12,7 +12,7 @@ class Announcement extends Model
 {
     use HasFactory;
 
-    protected $table = 'tb_announcements';
+    protected $table = 'announcements';
 
     protected $fillable = [
         'title',

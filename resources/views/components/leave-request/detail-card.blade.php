@@ -65,7 +65,7 @@
                         @if ($request->user->pegawai->jabatanRelasi?->supervisors->isNotEmpty())
                             {{ $request->user->pegawai->jabatanRelasi->supervisors->pluck('name')->implode(', ') }}
                         @else
-                            <a href="{{ route('jabatan.edit', $request->user->pegawai->jabatanRelasi->id) }}"
+                            <a href="{{ Route::has('jabatan.edit') && isset($request->user->pegawai->jabatanRelasi->id) ? route('jabatan.edit', $request->user->pegawai->jabatanRelasi->id) : '#' }}"
                                 class="font-black italic text-red-500 hover:underline">
                                 (Atasan belum diatur)
                             </a>
@@ -156,7 +156,7 @@
                 <p class="text-xs font-bold uppercase tracking-wider text-zinc-400">Lampiran Dokumen</p>
                 <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
                     @foreach ($request->attachments as $path)
-                        <a href="{{ route('file.show', ['path' => $path]) }}" target="_blank"
+                        <a href="{{ Route::has('file.show') ? route('file.show', ['path' => $path]) : '#' }}" target="_blank"
                             class="group flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-zinc-200 p-3 transition-colors hover:border-red-500 dark:border-zinc-800">
                             <div class="flex min-w-0 items-center gap-3">
                                 <x-icons.paper-clip class="h-5 w-5 shrink-0 text-gray-400 group-hover:text-red-500" />

@@ -13,19 +13,7 @@
                 <span class="text-sm font-medium text-red-100 dark:text-zinc-400 lg:text-base">
                     {{ $greet }}
                 </span>
-                @if ($isOnLeave)
-                    <span
-                        class="inline-flex items-center rounded-lg px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-300"
-                        x-bind:class="dynamicBg ?
-                            'bg-amber-400/20 text-amber-200 ring-1 ring-amber-400/50' :
-                            'bg-amber-500 text-zinc-950 shadow-sm'">
-                        Sedang Cuti
-                    </span>
-                @endif
             </div>
-            @if ($isOnLeave)
-                <x-icons.clock class="h-4 w-4 text-red-200/50" />
-            @endif
         </div>
 
         <span

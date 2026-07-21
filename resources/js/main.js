@@ -178,26 +178,32 @@ document.addEventListener("livewire:navigated", function () {
         if (!("serviceWorker" in navigator) || !("PushManager" in window))
             return;
 
-        // register SW sekali (biarkan browser handle update)
-        const reg = await navigator.serviceWorker.register("/serviceworker.js");
-        const vapidPublicKey = import.meta.env.VITE_VAPID_PUBLIC_KEY;
+        const metaVapid = document.querySelector('meta[name="vapid-public-key"]')?.content;
+        const vapidPublicKey = metaVapid || import.meta.env.VITE_VAPID_PUBLIC_KEY;
 
-        let sub = await reg.pushManager.getSubscription();
-        if (!sub) {
-            const key = urlBase64ToUint8Array(vapidPublicKey);
-            sub = await reg.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: key,
-            });
+        if (!vapidPublicKey || typeof vapidPublicKey !== "string" || !vapidPublicKey.trim()) {
+            return;
         }
+
         try {
+            const reg = await navigator.serviceWorker.register("/serviceworker.js");
+
+            let sub = await reg.pushManager.getSubscription();
+            if (!sub) {
+                const key = urlBase64ToUint8Array(vapidPublicKey.trim());
+                sub = await reg.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: key,
+                });
+            }
             await axios.post("/push-subscribe", sub);
         } catch (err) {
-            console.error("Gagal simpan subscription:", err);
+            console.warn("Push subscription skipped or failed:", err.message);
         }
     }
 
     function urlBase64ToUint8Array(b64) {
+        if (!b64) return new Uint8Array();
         const pad = "=".repeat((4 - (b64.length % 4)) % 4);
         const base64 = (b64 + pad).replace(/-/g, "+").replace(/_/g, "/");
         const raw = atob(base64);

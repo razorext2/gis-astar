@@ -4,8 +4,6 @@
         {{-- Greetings --}}
         <livewire:utils.greetings />
 
-        <x-signature-reminder />
-
         {{-- All Menu (Mobile only) --}}
         <div class="rounded-xl border border-zinc-200 p-5 shadow-sm dark:border-zinc-800 md:hidden lg:p-6"
             x-bind:class="dynamicBg ?

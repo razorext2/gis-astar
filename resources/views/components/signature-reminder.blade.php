@@ -1,5 +1,5 @@
 {{-- Goal: Reusable banner to remind user to set up their digital signature, Livewire: -, Alpine: - --}}
-@if (!auth()->user()->hasBeenSigned())
+@if (method_exists(auth()->user(), 'hasBeenSigned') && !auth()->user()->hasBeenSigned())
     <div x-bind:class="dynamicBg
         ?
         'border-amber-500/20 bg-amber-500/15 backdrop-blur-md dark:border-amber-500/20 dark:bg-amber-500/5 shadow-lg shadow-amber-500/10' :

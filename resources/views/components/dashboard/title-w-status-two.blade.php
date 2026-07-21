@@ -15,7 +15,7 @@
 	@endif
 
 	<p class="flex max-w-sm items-center text-wrap text-left">
-		@if ($status == 4 && route('driver.index'))
+		@if ($status == 4 && Route::has('driver.index'))
 			<x-button.primary id="assign-button" type="button" class="!py-1" wire:click="assign({{ $id }})"
 				wire:key="assign-{{ $id }}">
 				Assign </x-button.primary>

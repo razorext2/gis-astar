@@ -15,6 +15,7 @@
 <meta name="keywords" content="dashboard, system, indodacin" />
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <meta name="user-id" content="{{ auth()->user()->id }}">
+<meta name="vapid-public-key" content="{{ config('webpush.vapid.public_key') }}">
 
 <!-- Favicons -->
 <link href="{{ asset('assets/img/logo.ico') }}" rel="icon" />

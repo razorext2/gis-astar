@@ -1,7 +1,7 @@
 @extends('dashboard.layoutsDash.app')
 @section('content')
     {{-- Hero Profile Header --}}
-    <div class="relative mb-6 rounded-xl border border-zinc-200 shadow-md dark:border-zinc-800"
+    <div class="relative z-30 mb-6 rounded-xl border border-zinc-200 shadow-md dark:border-zinc-800"
         x-bind:class="dynamicBg ?
             'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
             'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
@@ -29,7 +29,8 @@
                 {{-- Uploader panel --}}
                 <div x-show="open" @click.away="open = false" x-transition:enter="transition ease-out duration-200"
                     x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                    class="absolute left-0 top-36 z-20 w-72 rounded-2xl border border-zinc-200 bg-white p-4 shadow-xl dark:border-zinc-700 dark:bg-zinc-900">
+                    class="absolute left-0 top-full z-50 mt-2 w-72 rounded-2xl border border-zinc-200 bg-white p-4 shadow-xl dark:border-zinc-700 dark:bg-zinc-900 sm:w-80"
+                    x-cloak>
                     <livewire:utils.profile-picture-uploader />
                 </div>
             </div>
@@ -59,11 +60,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    {{-- Digital Signature --}}
-    <div class="mb-6">
-        <livewire:utils.digital-signature />
     </div>
 
     {{-- Form Cards --}}

@@ -184,32 +184,40 @@
 
                     <div class="mt-2 flex w-full flex-wrap justify-center gap-3">
                         @can('collect-create')
-                            <x-button.link href="{{ route('collect.index') }}"
-                                class="w-full min-w-[140px] justify-center border-none !bg-white font-semibold !text-red-700 drop-shadow-sm hover:!bg-red-50 dark:!border-zinc-700 dark:!bg-dark-primary dark:!text-white dark:hover:!border-red-500 sm:w-auto">
-                                <x-slot name="icon">Koletor</x-slot>
-                                <x-icons.arrow-right class="h-4 w-4 -rotate-45" />
-                            </x-button.link>
+                            @if (Route::has('collect.index'))
+                                <x-button.link href="{{ route('collect.index') }}"
+                                    class="w-full min-w-[140px] justify-center border-none !bg-white font-semibold !text-red-700 drop-shadow-sm hover:!bg-red-50 dark:!border-zinc-700 dark:!bg-dark-primary dark:!text-white dark:hover:!border-red-500 sm:w-auto">
+                                    <x-slot name="icon">Koletor</x-slot>
+                                    <x-icons.arrow-right class="h-4 w-4 -rotate-45" />
+                                </x-button.link>
+                            @endif
                         @endcan
                         @can('driver-create')
-                            <x-button.link href="{{ route('driver.create') }}"
-                                class="w-full min-w-[140px] justify-center border-none !bg-white font-semibold !text-red-700 drop-shadow-sm hover:!bg-red-50 dark:!border-zinc-700 dark:!bg-dark-primary dark:!text-white dark:hover:!border-red-500 sm:w-auto">
-                                <x-slot name="icon">Driver</x-slot>
-                                <x-icons.arrow-right class="h-4 w-4 -rotate-45" />
-                            </x-button.link>
+                            @if (Route::has('driver.create'))
+                                <x-button.link href="{{ route('driver.create') }}"
+                                    class="w-full min-w-[140px] justify-center border-none !bg-white font-semibold !text-red-700 drop-shadow-sm hover:!bg-red-50 dark:!border-zinc-700 dark:!bg-dark-primary dark:!text-white dark:hover:!border-red-500 sm:w-auto">
+                                    <x-slot name="icon">Driver</x-slot>
+                                    <x-icons.arrow-right class="h-4 w-4 -rotate-45" />
+                                </x-button.link>
+                            @endif
                         @endcan
                         @can('sales-create')
-                            <x-button.link href="{{ route('sales.create') }}"
-                                class="w-full min-w-[140px] justify-center border-none !bg-white font-semibold !text-red-700 drop-shadow-sm hover:!bg-red-50 dark:!border-zinc-700 dark:!bg-dark-primary dark:!text-white dark:hover:!border-red-500 sm:w-auto">
-                                <x-slot name="icon">Sales</x-slot>
-                                <x-icons.arrow-right class="h-4 w-4 -rotate-45" />
-                            </x-button.link>
+                            @if (Route::has('sales.create'))
+                                <x-button.link href="{{ route('sales.create') }}"
+                                    class="w-full min-w-[140px] justify-center border-none !bg-white font-semibold !text-red-700 drop-shadow-sm hover:!bg-red-50 dark:!border-zinc-700 dark:!bg-dark-primary dark:!text-white dark:hover:!border-red-500 sm:w-auto">
+                                    <x-slot name="icon">Sales</x-slot>
+                                    <x-icons.arrow-right class="h-4 w-4 -rotate-45" />
+                                </x-button.link>
+                            @endif
                         @endcan
                         @can('technician-create')
-                            <x-button.link href="{{ route('technician.index') }}"
-                                class="w-full min-w-[140px] justify-center border-none !bg-white font-semibold !text-red-700 drop-shadow-sm hover:!bg-red-50 dark:!border-zinc-700 dark:!bg-dark-primary dark:!text-white dark:hover:!border-red-500 sm:w-auto">
-                                <x-slot name="icon">Teknisi</x-slot>
-                                <x-icons.arrow-right class="h-4 w-4 -rotate-45" />
-                            </x-button.link>
+                            @if (Route::has('technician.index'))
+                                <x-button.link href="{{ route('technician.index') }}"
+                                    class="w-full min-w-[140px] justify-center border-none !bg-white font-semibold !text-red-700 drop-shadow-sm hover:!bg-red-50 dark:!border-zinc-700 dark:!bg-dark-primary dark:!text-white dark:hover:!border-red-500 sm:w-auto">
+                                    <x-slot name="icon">Teknisi</x-slot>
+                                    <x-icons.arrow-right class="h-4 w-4 -rotate-45" />
+                                </x-button.link>
+                            @endif
                         @endcan
                     </div>
                 </div>

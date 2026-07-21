@@ -1,7 +1,7 @@
 {{-- Goal: Render employee code & name with inactive indicator in tables, Livewire: -, Alpine: - --}}
 @php
     $date = \Carbon\Carbon::parse($waktu)->format('Y-m-d');
-    $url = $pegawai ? route('pegawai.timeline', $pegawai->kode_pegawai) . '?date=' . $date : '#';
+    $url = ($pegawai && \Illuminate\Support\Facades\Route::has('pegawai.timeline')) ? route('pegawai.timeline', $pegawai->kode_pegawai) . '?date=' . $date : '#';
 @endphp
 
 <div class="flex flex-col gap-0.5">

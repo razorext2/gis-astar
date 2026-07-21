@@ -3,7 +3,6 @@
 namespace App\Livewire\Handler\Profile;
 
 use App\Livewire\Concerns\HandlesErrors;
-use App\Models\Pegawai;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -11,22 +10,20 @@ class BioEdit extends Component
 {
     use HandlesErrors;
 
-    public Pegawai $pegawai;
+    public $pegawai = null;
 
     #[Validate('nullable|string|max:20')]
     public $bio;
 
-    public function mount(Pegawai $pegawai)
+    public function mount()
     {
-        $this->pegawai = $pegawai->where('kode_pegawai', auth()->user()->kode_pegawai)
-            ->first();
+        $this->bio = auth()->user()->bio ?? '';
     }
 
     public function updated()
     {
-        // Validasi berjalan otomatis untuk #[Validate] property di Livewire 3 sebelum fungsi ini dijalankan
         $this->runSafely(function () {
-            $this->pegawai->update([
+            auth()->user()->update([
                 'bio' => $this->bio,
             ]);
         }, 'Gagal memperbarui bio.', [

@@ -20,6 +20,8 @@ Route::middleware('throttle:high')->get('/', function () {
     return redirect('login');
 })->name('landing.page');
 
+Route::get('/ping', fn () => response()->json(['status' => 'pong', 'timestamp' => now()->timestamp]))->name('ping');
+
 // Route requiring authentication
 Route::middleware(['auth'])->group(function () {
     // Push Subscription

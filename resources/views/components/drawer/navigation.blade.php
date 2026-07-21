@@ -13,7 +13,7 @@
                     class="{{ Route::is('dashboard') ? 'text-red-600 dark:text-red-500' : 'text-zinc-400 dark:text-zinc-500' }} h-6 w-6 transition-all duration-300 group-hover:text-red-500 dark:group-hover:text-red-400" />
             </x-drawer.button>
 
-            <x-drawer.button href="{{ route('attendanceIn.index') }}" :label="'Masuk'" :active="Route::is('attendanceIn.index')">
+            <x-drawer.button href="{{ Route::has('attendanceIn.index') ? route('attendanceIn.index') : '#' }}" :label="'Masuk'" :active="Route::is('attendanceIn.index')">
                 <x-icons.arrow-left-bracket
                     class="{{ Route::is('attendanceIn.index') ? 'text-red-600 dark:text-red-500' : 'text-zinc-400 dark:text-zinc-500' }} h-6 w-6 transition-all duration-300 group-hover:text-red-500 dark:group-hover:text-red-400" />
             </x-drawer.button>
@@ -47,7 +47,7 @@
                 </button>
             </div>
 
-            <x-drawer.button href="{{ route('attendanceOut.index') }}" :label="'Keluar'" :active="Route::is('attendanceOut.index')">
+            <x-drawer.button href="{{ Route::has('attendanceOut.index') ? route('attendanceOut.index') : '#' }}" :label="'Keluar'" :active="Route::is('attendanceOut.index')">
                 <x-icons.arrow-right-bracket
                     class="{{ Route::is('attendanceOut.index') ? 'text-red-600 dark:text-red-500' : 'text-zinc-400 dark:text-zinc-500' }} h-6 w-6 transition-all duration-300 group-hover:text-red-500 dark:group-hover:text-red-400" />
             </x-drawer.button>

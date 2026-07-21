@@ -58,8 +58,7 @@
         {{-- Report Approval FABs (semua halaman, tanpa auto-open) --}}
         @include('dashboard.partials.report-approval-popups')
 
-        {{-- Leave Approval Popup: auto-open hanya di halaman dashboard --}}
-        <livewire:dashboard.leave-approval-popup :autoPop="Route::is('dashboard')" />
+        {{-- Leave Approval Popup: removed --}}
     </x-dashboard.floating-actions>
 
     <!-- js -->

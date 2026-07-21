@@ -12,7 +12,7 @@ class AnnouncementRead extends Model
 {
     use HasFactory;
 
-    protected $table = 'tb_announcement_reads';
+    protected $table = 'announcement_reads';
     protected $fillable = [
         'announcement_id',
         'user_id',
