@@ -1,6 +1,4 @@
-@extends('layouts.app')
-@section('content')
-    <div class="flex flex-col gap-5">
+<div class="flex flex-col gap-5">
         {{-- Main Profile Section --}}
         <div class="flex flex-col rounded-xl border border-zinc-200 p-4 shadow-md dark:border-zinc-800 lg:p-6"
             x-bind:class="dynamicBg ?
@@ -221,16 +219,7 @@
                         @endcan
                     </div>
                 </div>
-            </div>
-
-            {{-- Calendar Widget --}}
-            @if (auth()->user()->kode_pegawai)
-                <div
-                    class="flex-1 items-start rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-dark-primary">
-                    <livewire:utils.attendance-calendar />
-                </div>
-            @endif
-        </div>
+            </div>        </div>
 
     </div>
-@endsection
+</div>
