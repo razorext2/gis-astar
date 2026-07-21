@@ -266,11 +266,6 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
                                         Sign Out
                                     </button>
                                 </li>
-                                <li class="flex items-center px-4 py-2" id="installAppContainer">
-                                    <x-button.danger wire:navigate class="w-full justify-center" id="installApp">
-                                        Install App
-                                    </x-button.danger>
-                                </li>
                             </ul>
                         </div>
                     </div>
