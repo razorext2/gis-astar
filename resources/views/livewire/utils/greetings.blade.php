@@ -1,4 +1,4 @@
-<div class="{{ $class }} group relative flex flex-col overflow-hidden rounded-xl bg-gradient-to-br from-red-600 to-red-800 p-5 ring-1 ring-red-500/50 transition-all duration-300 dark:from-dark-secondary/70 dark:to-dark-primary/70 dark:ring-zinc-800 sm:p-6"
+<div class="{{ $class }} group relative flex flex-col overflow-hidden rounded-xl bg-linear-to-br from-red-600 to-red-800 p-5 ring-1 ring-red-500/50 transition-all duration-300 dark:from-dark-secondary/70 dark:to-dark-primary/70 dark:ring-zinc-800 sm:p-6"
     x-bind:class="dynamicBg ? 'backdrop-blur-md border border-red-500/20 dark:border-zinc-800/30' :
         'border-transparent shadow-sm'">
 

@@ -4,7 +4,7 @@
         wire:click="$set('showLogUpdateModal', true)">
         <x-slot name="icon">
             <div
-                class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-amber-600 text-white shadow-sm transition-transform duration-300 group-hover:scale-110 dark:bg-amber-500">
+                class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-600 text-white shadow-sm transition-transform duration-300 group-hover:scale-110 dark:bg-amber-500">
                 <x-icons.clock class="h-4 w-4" />
             </div>
         </x-slot>
@@ -56,7 +56,7 @@
                 <div class="relative mb-10 last:mb-0">
                     {{-- Milestone Dot --}}
                     <div
-                        class="absolute -left-[41px] flex h-6 w-6 items-center justify-center rounded-full border-4 border-white bg-red-600 shadow-sm ring-4 ring-zinc-50 dark:border-zinc-900 dark:ring-zinc-900">
+                        class="absolute -left-10.25 flex h-6 w-6 items-center justify-center rounded-full border-4 border-white bg-red-600 shadow-sm ring-4 ring-zinc-50 dark:border-zinc-900 dark:ring-zinc-900">
                         <div class="h-1.5 w-1.5 rounded-full bg-white"></div>
                     </div>
 

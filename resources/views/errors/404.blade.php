@@ -62,7 +62,7 @@
                 <div class="order-2 space-y-8 text-center lg:order-1 lg:text-left">
                     <div class="space-y-4">
                         <h1
-                            class="bg-gradient-to-br from-blue-600 to-indigo-700 bg-clip-text text-8xl font-black leading-none text-transparent lg:text-9xl">
+                            class="bg-linear-to-br from-blue-600 to-indigo-700 bg-clip-text text-8xl font-black leading-none text-transparent lg:text-9xl">
                             404
                         </h1>
                         <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white lg:text-5xl">

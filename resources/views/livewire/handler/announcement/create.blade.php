@@ -247,7 +247,7 @@
                                     <x-icons.file-invoice class="h-12 w-12 text-blue-500" />
                                     <span
                                         class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $file->getClientOriginalName() }}</span>
-                                    <x-button.danger class="!px-4 !py-2 !text-xs" wire:click="$set('file', null)">
+                                    <x-button.danger class="px-4! py-2! text-xs!" wire:click="$set('file', null)">
                                         Hapus File
                                     </x-button.danger>
                                 </div>

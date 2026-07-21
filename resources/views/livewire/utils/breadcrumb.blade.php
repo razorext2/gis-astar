@@ -49,7 +49,7 @@
                                     @if ($isFirst)
                                         <x-icons.home class="{{ $crumbTitle ? 'me-1.5' : '' }} h-3.5 w-3.5 transition-transform group-hover:scale-110" />
                                     @endif
-                                    <span class="leading-none inline-block max-w-[70px] sm:max-w-[120px] lg:max-w-[200px] truncate" title="{{ $crumbTitle }}">{{ $crumbTitle }}</span>
+                                    <span class="leading-none inline-block max-w-17.5 sm:max-w-30 lg:max-w-50 truncate" title="{{ $crumbTitle }}">{{ $crumbTitle }}</span>
                                 </a>
                             @else
                                 <span
@@ -57,7 +57,7 @@
                                     @if ($isFirst)
                                         <x-icons.home class="{{ $crumbTitle ? 'me-1.5' : '' }} h-3.5 w-3.5" />
                                     @endif
-                                    <span class="leading-none inline-block max-w-[70px] sm:max-w-[120px] lg:max-w-[200px] truncate" title="{{ $crumbTitle }}">{{ $crumbTitle }}</span>
+                                    <span class="leading-none inline-block max-w-17.5 sm:max-w-30 lg:max-w-50 truncate" title="{{ $crumbTitle }}">{{ $crumbTitle }}</span>
                                 </span>
                             @endif
                         @endif
@@ -89,7 +89,7 @@
                             @endif
 
                             @if (isset($crumb['is_ellipsis']))
-                                <span class="text-[9px] font-bold uppercase tracking-[0.1em] text-zinc-400 dark:text-zinc-500 leading-none">
+                                <span class="text-[9px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 leading-none">
                                     ...
                                 </span>
                             @else
@@ -100,19 +100,19 @@
 
                                 @if (!$isLast)
                                     <a href="{{ $crumb['url'] }}"
-                                        class="group flex items-center leading-none whitespace-nowrap text-[9px] font-bold uppercase tracking-[0.1em] text-zinc-500 transition-all hover:text-red-600 dark:text-zinc-400 dark:hover:text-red-500">
+                                        class="group flex items-center leading-none whitespace-nowrap text-[9px] font-bold uppercase tracking-widest text-zinc-500 transition-all hover:text-red-600 dark:text-zinc-400 dark:hover:text-red-500">
                                         @if ($isFirst)
                                             <x-icons.home class="{{ $crumbTitle ? 'me-1.5' : '' }} h-3.5 w-3.5 transition-transform group-hover:scale-110" />
                                         @endif
-                                        <span class="leading-none inline-block max-w-[120px] lg:max-w-[200px] truncate" title="{{ $crumbTitle }}">{{ $crumbTitle }}</span>
+                                        <span class="leading-none inline-block max-w-30 lg:max-w-50 truncate" title="{{ $crumbTitle }}">{{ $crumbTitle }}</span>
                                     </a>
                                 @else
                                     <span
-                                        class="flex items-center leading-none whitespace-nowrap text-[9px] font-black uppercase tracking-[0.1em] text-red-600 dark:text-red-500 min-w-0">
+                                        class="flex items-center leading-none whitespace-nowrap text-[9px] font-black uppercase tracking-widest text-red-600 dark:text-red-500 min-w-0">
                                         @if ($isFirst)
                                             <x-icons.home class="{{ $crumbTitle ? 'me-1.5' : '' }} h-3.5 w-3.5" />
                                         @endif
-                                        <span class="leading-none inline-block max-w-[80px] sm:max-w-[120px] lg:max-w-[200px] truncate" title="{{ $crumbTitle }}">{{ $crumbTitle }}</span>
+                                        <span class="leading-none inline-block max-w-20 sm:max-w-30 lg:max-w-50 truncate" title="{{ $crumbTitle }}">{{ $crumbTitle }}</span>
                                     </span>
                                 @endif
                             @endif

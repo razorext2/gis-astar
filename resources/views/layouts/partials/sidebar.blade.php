@@ -62,7 +62,7 @@
         'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md dark:bg-glass-dark dark:border-glass-border-dark' :
         'bg-white border-zinc-200 shadow-sm dark:bg-dark-primary dark:border-zinc-800'
     ]"
-    class="fixed bottom-4 left-4 top-4 z-40 hidden w-[272px] flex-col rounded-2xl border pb-6 transition-transform duration-300 ease-in-out will-change-transform md:flex"
+    class="fixed bottom-4 left-4 top-4 z-40 hidden w-68 flex-col rounded-2xl border pb-6 transition-transform duration-300 ease-in-out will-change-transform md:flex"
     x-cloak id="logo-sidebar" aria-label="Sidebar">
 
     {{-- Header / Toggle --}}
@@ -131,16 +131,16 @@
                             {{ $item['navigate'] ?? true ? 'wire:navigate' : '' }}>
 
                             <x-dynamic-component :component="'icons.' . $item['icon']"
-                                class="{{ $isActive ? 'text-red-600' : 'text-zinc-400 group-hover:text-red-600' }} h-5 w-5 flex-shrink-0 transition-colors duration-200" />
+                                class="{{ $isActive ? 'text-red-600' : 'text-zinc-400 group-hover:text-red-600' }} h-5 w-5 shrink-0 transition-colors duration-200" />
 
                             <div class="flex flex-1 items-center justify-between overflow-hidden">
                                 <span
-                                    class="whitespace-normal break-words text-sm tracking-wide transition-colors duration-200">
+                                    class="whitespace-normal warp-break-word text-sm tracking-wide transition-colors duration-200">
                                     {{ $item['label'] }}
                                 </span>
 
                                 @if ($item['counter'] ?? null)
-                                    <div class="flex-shrink-0">
+                                    <div class="shrink-0">
                                         @if (!($item['counter_permission'] ?? null) || auth()->user()->can($item['counter_permission']))
                                             <livewire:$item['counter'] />
                                         @endif

@@ -26,7 +26,7 @@
         window.addEventListener('scroll', checkScroll, { passive: true });
         checkScroll();
     }
-}" class="mb-6 sm:mb-8 flex items-stretch gap-4 h-[54px] sm:h-[62px]">
+}" class="mb-6 sm:mb-8 flex items-stretch gap-4 h-13.5 sm:h-15.5">
     {{-- Signature Vertical Accent (Fixed size, stretches to match parent height which is constant) --}}
     <div class="w-1.5 rounded-full bg-red-600 shadow-[0_0_20px_rgba(220,38,38,0.4)] dark:bg-red-500"></div>
 

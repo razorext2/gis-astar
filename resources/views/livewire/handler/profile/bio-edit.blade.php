@@ -3,7 +3,7 @@
         <p>{{ auth()->user()->pegawai->bio ?? 'Not set' }}</p>
 
         <x-button.secondary id="bioEdit" type="button" data-popover-target="bioPopover"
-            class="!rounded-md !p-1 !bg-transparent !border-0 !ring-0 hover:!bg-gray-100 dark:hover:!bg-gray-800">
+            class="rounded-md! p-1! bg-transparent! border-0! ring-0! hover:bg-gray-100! dark:hover:bg-gray-800!">
             <x-slot name="icon">
                 <x-icons.pen class="h-4 w-4" />
             </x-slot>

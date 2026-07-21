@@ -6,7 +6,7 @@
             'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">
         {{-- Decorative gradient background --}}
         <div
-            class="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-br from-red-600/10 via-transparent to-transparent dark:from-red-900/20">
+            class="pointer-events-none absolute inset-0 rounded-xl bg-linear-to-br from-red-600/10 via-transparent to-transparent dark:from-red-900/20">
         </div>
 
         <div class="relative flex flex-col gap-6 p-6 sm:flex-row sm:items-end sm:p-8">
@@ -18,7 +18,7 @@
                         alt="{{ auth()->user()->name }}" onerror="this.src = '{{ asset('images/defaults/noImage.webp') }}'">
                     {{-- Edit overlay --}}
                     <x-button.secondary @click="open = !open"
-                        class="!absolute !inset-0 !flex !items-center !justify-center !rounded-2xl !border-none !bg-zinc-950/50 !opacity-0 !shadow-none !ring-0 !transition-opacity !duration-200 group-hover:!opacity-100"
+                        class="absolute! inset-0! flex! items-center! justify-center! rounded-2xl! border-none! bg-zinc-950/50! opacity-0! shadow-none! ring-0! transition-opacity! duration-200! group-hover:opacity-100!"
                         type="button">
                         <x-slot name="icon">
                             <x-icons.camera class="h-7 w-7 text-white" />
