@@ -11,10 +11,6 @@ class Dashboard extends Component
 {
     public function render(): View
     {
-        if (auth()->user()?->can('dashboard')) {
-            return view('livewire.dashboard');
-        }
-
-        return view('livewire.dashboard-user');
+        return view('livewire.dashboard');
     }
 }
