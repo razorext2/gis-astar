@@ -44,7 +44,7 @@ final class LogTable extends PowerGridComponent
 
     public function btnClass()
     {
-        return 'dark:bg-red-800 dark:hover:bg-red-900 dark:text-white dark:border-zinc-800 rounded-lg bg-red-400 px-2 py-1.5 font-semibold text-white border border-zinc-200 hover:bg-red-700 me-0.5';
+        return 'liquid-btn inline-flex items-center gap-2 rounded-xl bg-red-600 px-3 py-1.5 text-xs font-semibold text-white transition-all hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 me-0.5';
     }
 
     public function header(): array
@@ -141,15 +141,15 @@ final class LogTable extends PowerGridComponent
         ];
     }
 
-    public function actions(LogHistory $row): array
+    public function actionsFromView(LogHistory $row)
     {
-        return [
-            Button::add('delete')
-                ->slot(Blade::render('<x-icons.trash-bin class="h-5 w-5 text-white" />'))
-                ->id()
-                ->class($this->btnClass())
-                ->dispatch('delete', ['id' => $row->id]),
-        ];
+        return Blade::render("
+            <x-button.danger wire:click=\"\$dispatch('delete', { id: {{ \$row->id }} })\" iconOnly='true'>
+                <x-slot name='icon'>
+                    <x-icons.trash-bin class='h-4 w-4' />
+                </x-slot>
+            </x-button.danger>
+        ");
     }
 
     #[On('delete')]

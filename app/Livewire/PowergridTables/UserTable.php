@@ -7,7 +7,7 @@ namespace App\Livewire\PowergridTables;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
-use PowerComponents\LivewirePowerGrid\Button;
+use Illuminate\Support\Facades\Blade;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
@@ -121,15 +121,13 @@ final class UserTable extends PowerGridComponent
         ];
     }
 
-    public function actions(User $row): array
+    public function actionsFromView(User $row)
     {
-        return [
-            Button::add('edit')
-                ->slot('Edit')
-                ->id()
-                ->class('rounded-lg bg-blue-400 px-2 py-1.5 text-xs font-semibold text-white hover:bg-blue-700 dark:bg-blue-800 dark:hover:bg-blue-900 me-0.5')
-                ->route('users.edit', ['user' => $row->id]),
-        ];
+        return Blade::render("
+            <x-button.primary href='{{ route('users.edit', \$row->id) }}' wire:navigate>
+                Edit
+            </x-button.primary>
+        ");
     }
 
     public function queryString(): array
