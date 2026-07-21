@@ -1,10 +1,9 @@
 <?php
 
-/** Goal: Menampilkan tabel manajemen User dengan relasi roles & jabatan, Caller: routes/web.php (users.index), Deps: User, Jabatan, Role */
+/** Goal: Display User management table with roles, Caller: routes/web.php (users.index), Deps: User, Role */
 
 namespace App\Livewire\PowergridTables;
 
-use App\Models\Jabatan;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
@@ -36,20 +35,12 @@ final class UserTable extends PowerGridComponent
         ];
     }
 
-    /**
-     * Hanya join tb_pegawai untuk kebutuhan filter jabatan.
-     * Roles dihandle via Eloquent with() + relationSearch (whereHas).
-     * Menghindari leftJoin ke model_has_roles yang menyebabkan duplikasi baris
-     * per role dan membuat PowerGrid hanya menampilkan 1 data.
-     */
     public function datasource(): Builder
     {
         return User::query()
-            ->leftJoin('tb_pegawai', 'users.kode_pegawai', '=', 'tb_pegawai.kode_pegawai')
-            ->select('users.*')
-            ->with(['pegawai.jabatanRelasi', 'roles'])
-            ->orderByDesc('users.is_active')
-            ->orderBy('users.name', 'asc');
+            ->with(['roles'])
+            ->orderByDesc('is_active')
+            ->orderBy('name', 'asc');
     }
 
     public function relationSearch(): array
@@ -63,10 +54,6 @@ final class UserTable extends PowerGridComponent
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('kode_pegawai', fn ($row) => view('components.dashboard.date-w-name', [
-                'date' => 'UserID: '.$row->id,
-                'name' => 'Kode jari: '.($row->kode_pegawai ?? '-'),
-            ]))
             ->add('name', fn ($row) => view('components.dashboard.date-w-name', [
                 'date' => $row->name,
                 'name' => $row->email,
@@ -74,7 +61,6 @@ final class UserTable extends PowerGridComponent
             ]))
             ->add('email')
             ->add('roles_formatted', fn ($row) => $row->roles->pluck('name')->implode(', ') ?: '-')
-            ->add('jabatan', fn ($row) => $row->pegawai?->jabatanRelasi?->nama_jabatan ?? '-')
             ->add('is_active')
             ->add('is_active_formatted', fn ($row) => view('components.table-component.badge-status', [
                 'active' => (bool) $row->is_active,
@@ -92,8 +78,8 @@ final class UserTable extends PowerGridComponent
             Column::action('Action')
                 ->bodyAttribute('text-center'),
 
-            Column::make('Kode / ID', 'kode_pegawai')
-                ->searchable(),
+            Column::make('User ID', 'id')
+                ->sortable(),
 
             Column::make('Nama', 'name')
                 ->sortable()
@@ -104,8 +90,6 @@ final class UserTable extends PowerGridComponent
                 ->searchable(),
 
             Column::make('Roles', 'roles_formatted'),
-
-            Column::make('Jabatan', 'jabatan'),
 
             Column::make('Status', 'is_active_formatted', 'is_active')
                 ->sortable(),
@@ -118,12 +102,8 @@ final class UserTable extends PowerGridComponent
     public function filters(): array
     {
         $roles = Role::select(['id', 'name'])->get();
-        $jabatans = Jabatan::select(['id', 'nama_jabatan'])->get();
 
         return [
-            Filter::inputText('kode_pegawai', 'users.kode_pegawai')
-                ->placeholder('Kode jari'),
-
             Filter::inputText('id', 'users.id')
                 ->placeholder('User ID'),
 
@@ -138,33 +118,18 @@ final class UserTable extends PowerGridComponent
                 ->optionLabel('name')
                 ->optionValue('id')
                 ->builder(fn (Builder $query, $value) => $query->whereHas('roles', fn ($q) => $q->where('id', $value))),
-
-            Filter::select('jabatan', 'tb_pegawai.jabatan')
-                ->dataSource(collect($jabatans))
-                ->optionLabel('nama_jabatan')
-                ->optionValue('id'),
         ];
     }
 
     public function actions(User $row): array
     {
-        $buttons = [
+        return [
             Button::add('edit')
                 ->slot('Edit')
                 ->id()
                 ->class('rounded-lg bg-blue-400 px-2 py-1.5 text-xs font-semibold text-white hover:bg-blue-700 dark:bg-blue-800 dark:hover:bg-blue-900 me-0.5')
                 ->route('users.edit', ['user' => $row->id]),
         ];
-
-        if ($row->kode_pegawai && $row->pegawai) {
-            $buttons[] = Button::add('detail')
-                ->slot('Pegawai')
-                ->id()
-                ->class('rounded-lg bg-green-400 px-2 py-1.5 text-xs font-semibold text-white hover:bg-green-700 dark:bg-green-800 dark:hover:bg-green-900 me-0.5')
-                ->route('pegawai.detail', ['pegawai' => $row->pegawai->id]);
-        }
-
-        return $buttons;
     }
 
     public function queryString(): array

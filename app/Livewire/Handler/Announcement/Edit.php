@@ -90,8 +90,7 @@ class Edit extends Component
     {
         return view('livewire.handler.announcement.edit', [
             'roles' => Role::select(['id', 'name'])->get(),
-            'users' => User::select(['id', 'name', 'kode_pegawai'])
-                ->with('pegawai:kode_pegawai')
+            'users' => User::select(['id', 'name', 'email'])
                 ->get(),
         ]);
     }

@@ -60,7 +60,7 @@ final class LogTable extends PowerGridComponent
     public function datasource(): Builder
     {
         return LogHistory::query()
-            ->with('userRelasi:id,name,kode_pegawai,is_active')
+            ->with('userRelasi:id,name,is_active')
             ->latest();
     }
 
@@ -69,7 +69,6 @@ final class LogTable extends PowerGridComponent
         return [
             'userRelasi' => [
                 'name',
-                'kode_pegawai',
             ],
         ];
     }
@@ -80,11 +79,10 @@ final class LogTable extends PowerGridComponent
             ->add('id')
             ->add('user_name', function ($query) {
                 return view('components.dashboard.name-w-badge', [
-                    'name' => $query->userRelasi->name,
-                    'is_active' => (bool) $query->userRelasi->is_active,
+                    'name' => $query->userRelasi->name ?? 'System',
+                    'is_active' => (bool) ($query->userRelasi->is_active ?? true),
                 ]);
             })
-            ->add('employee_code', fn ($query) => e($query->userRelasi->kode_pegawai ?? '-'))
             ->add('user_action')
             ->add('ip_address')
             ->add('user_agent')
@@ -101,7 +99,6 @@ final class LogTable extends PowerGridComponent
             Column::make('Created At', 'created_at')
                 ->sortable()
                 ->searchable(),
-            Column::make('Kode Pegawai', 'employee_code'),
             Column::make('Nama User', 'user_name'),
             Column::make('User Action', 'user_action')
                 ->sortable()

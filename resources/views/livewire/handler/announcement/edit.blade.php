@@ -173,7 +173,7 @@
                             open: false,
                             search: '',
                             selectedIds: $wire.entangle('target_users'),
-                            users: {{ Js::from($users->map(fn($u) => ['id' => $u->id, 'name' => $u->name, 'kode' => $u->kode_pegawai ?? ''])) }},
+                            users: {{ Js::from($users->map(fn($u) => ['id' => $u->id, 'name' => $u->name, 'email' => $u->email])) }},
                             get filteredUsers() {
                                 if (this.search === '') return this.users.filter(u => !this.selectedIds.includes(u.id)).slice(0, 5);
                                 return this.users.filter(u =>

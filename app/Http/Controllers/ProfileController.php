@@ -21,26 +21,13 @@ class ProfileController extends Controller
      */
     public function show()
     {
-        $data = null;
-        if (class_exists('App\Models\Pegawai') && isset(Auth::user()->kode_pegawai)) {
-            $data = \App\Models\Pegawai::with('jabatanRelasi', 'golonganRelasi')
-                ->where('kode_pegawai', Auth::user()->kode_pegawai)
-                ->first();
-        }
-
-        return view('dashboard.profile.me', compact('data'));
+        return view('dashboard.profile.me');
     }
 
     public function edit(Request $request): View
     {
-        $data = null;
-        if (class_exists('App\Models\Pegawai') && isset($request->user()->kode_pegawai)) {
-            $data = \App\Models\Pegawai::where('kode_pegawai', $request->user()->kode_pegawai)->first();
-        }
-
         return view('dashboard.profile.edit', [
             'user' => $request->user(),
-            'data' => $data,
         ]);
     }
 

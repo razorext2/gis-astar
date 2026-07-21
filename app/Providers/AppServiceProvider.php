@@ -64,6 +64,11 @@ class AppServiceProvider extends ServiceProvider
         // force https
         URL::forceScheme('https');
 
+        // Implicitly grant "Super Admin" role all permissions
+        \Illuminate\Support\Facades\Gate::before(function ($user, $ability) {
+            return $user->hasRole('Super Admin') ? true : null;
+        });
+
         // force root url
         $this->app['url']->forceRootUrl($this->app['config']->get('app.url'));
 
