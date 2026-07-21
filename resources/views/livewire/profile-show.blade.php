@@ -9,7 +9,7 @@
                 <div class="flex items-center gap-2 border-b border-zinc-200 pb-4 dark:border-zinc-800">
                     <div class="h-2 w-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,0.5)] dark:bg-red-700"></div>
                     <h3 class="text-base font-bold tracking-wider text-zinc-800 dark:text-white md:text-xl">
-                        Informasi Pegawai
+                        Informasi Akun
                     </h3>
                 </div>
 
@@ -49,37 +49,18 @@
                                 <dl>
                                     <dt
                                         class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                                        Kode Jari</dt>
+                                        Alamat Email</dt>
                                     <dd class="mt-1 text-sm font-medium text-zinc-800 dark:text-zinc-300">
-                                        {{ $data->kode_pegawai ?? '—' }}</dd>
+                                        {{ auth()->user()->email }}</dd>
                                 </dl>
                                 <dl>
                                     <dt
                                         class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                                        NIK Pegawai</dt>
+                                        Status Akun</dt>
                                     <dd class="mt-1 text-sm font-medium text-zinc-800 dark:text-zinc-300">
-                                        {{ $data->nik_pegawai ?? '—' }}</dd>
-                                </dl>
-                                <dl>
-                                    <dt
-                                        class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                                        Nama Panggilan</dt>
-                                    <dd class="mt-1 text-sm font-medium text-zinc-800 dark:text-zinc-300">
-                                        {{ $data->nick_name ?? '—' }}</dd>
-                                </dl>
-                                <dl>
-                                    <dt
-                                        class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                                        Gender</dt>
-                                    <dd class="mt-1 text-sm font-medium text-zinc-800 dark:text-zinc-300">
-                                        {{ $data->gender ?? '—' }}</dd>
-                                </dl>
-                                <dl>
-                                    <dt
-                                        class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                                        Tanggal Lahir</dt>
-                                    <dd class="mt-1 text-sm font-medium text-zinc-800 dark:text-zinc-300">
-                                        {{ optional($data)->tgl_lahir ? \Carbon\Carbon::parse($data->tgl_lahir)->translatedFormat('d F Y') : '—' }}
+                                        <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold {{ auth()->user()->is_active ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' }}">
+                                            {{ auth()->user()->is_active ? 'Aktif' : 'Nonaktif' }}
+                                        </span>
                                     </dd>
                                 </dl>
                             </div>
@@ -88,41 +69,21 @@
                                 <dl>
                                     <dt
                                         class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                                        No. Telp/WA</dt>
+                                        Terdaftar Sejak</dt>
                                     <dd class="mt-1 text-sm font-medium text-zinc-800 dark:text-zinc-300">
-                                        {{ $data->no_telp ?? '—' }}</dd>
+                                        {{ auth()->user()->created_at ? auth()->user()->created_at->translatedFormat('d F Y') : '—' }}</dd>
                                 </dl>
                                 <dl>
                                     <dt
                                         class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                                        Alamat</dt>
-                                    <dd class="mt-1 text-sm font-medium leading-relaxed text-zinc-800 dark:text-zinc-300">
-                                        {{ $data->alamat ?? '—' }}</dd>
-                                </dl>
-                                <dl>
-                                    <dt
-                                        class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                                        Jabatan</dt>
+                                        Verifikasi Email</dt>
                                     <dd class="mt-1 text-sm font-medium text-zinc-800 dark:text-zinc-300">
-                                        {{ $data->jabatanRelasi->nama_jabatan ?? '—' }}</dd>
-                                </dl>
-                                <dl>
-                                    <dt
-                                        class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                                        Golongan</dt>
-                                    <dd class="mt-1 text-sm font-medium text-zinc-800 dark:text-zinc-300">
-                                        {{ $data->golonganRelasi->nama_golongan ?? '—' }}</dd>
-                                </dl>
-                                <dl>
-                                    <dt
-                                        class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                                        Storage</dt>
-                                    <dd class="mt-1 text-sm font-medium text-zinc-800 dark:text-zinc-300">
-                                        {{ $data->storage ?? '—' }}</dd>
+                                        {{ auth()->user()->email_verified_at ? auth()->user()->email_verified_at->translatedFormat('d F Y') : 'Belum Diverifikasi' }}</dd>
                                 </dl>
                             </div>
                         </div>
                     </div>
+
 
                     {{-- Right Info Area : Permissions --}}
                     <div
