@@ -5,7 +5,10 @@
 @endphp
 
 <div
-    class="flex flex-col"
+    class="flex flex-col rounded-xl border border-zinc-200 p-4 sm:p-6 shadow-sm dark:border-zinc-800"
+    x-bind:class="dynamicBg ?
+        'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
+        'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
     @if ($deferLoading) wire:init="fetchDatasource" @endif
 >
     <div

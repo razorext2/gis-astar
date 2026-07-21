@@ -24,9 +24,9 @@ class Update extends Component
 
     public string $searchPermission = '';
 
-    public function mount($id)
+    public function mount(Role|int|string $role)
     {
-        $this->role = Role::find($id);
+        $this->role = $role instanceof Role ? $role : Role::find($role);
 
         // Jika role tidak ditemukan, redirect atau tampilkan error
         if (! $this->role) {

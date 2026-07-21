@@ -43,7 +43,7 @@
             'light' =>
                 'border border-zinc-200 bg-white text-zinc-700 shadow-sm hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-900 active:bg-zinc-50',
             'dark' =>
-                'dark:border-zinc-700/50 dark:bg-zinc-800/50 dark:text-zinc-300 dark:shadow-black/40 dark:backdrop-blur-md dark:hover:bg-zinc-600/60 dark:hover:text-zinc-100 dark:active:bg-zinc-700/60',
+                'dark:border-zinc-800 dark:bg-zinc-800/60 dark:text-zinc-300 dark:shadow-black/40 dark:backdrop-blur-md dark:hover:border-zinc-700 dark:hover:bg-zinc-700/60 dark:hover:text-zinc-100 dark:active:bg-zinc-700/80',
             'ring' => 'focus-visible:ring-zinc-400/40',
         ],
     ];
@@ -79,7 +79,7 @@
 
     {{-- Layer 1: top edge highlight (dark mode only) --}}
     <span
-        class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent opacity-0 dark:opacity-100"></span>
+        class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 dark:opacity-100"></span>
 
     {{-- Layer 2: inner shadow --}}
     <span

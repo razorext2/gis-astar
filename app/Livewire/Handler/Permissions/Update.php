@@ -19,9 +19,9 @@ class Update extends Component
 
     public ?Permission $permission = null;
 
-    public function mount($id)
+    public function mount(Permission|int|string $permission)
     {
-        $this->permission = Permission::with('roles')->find($id);
+        $this->permission = $permission instanceof Permission ? $permission : Permission::with('roles')->find($permission);
 
         if (! $this->permission) {
             return abort(404);
