@@ -7,6 +7,7 @@
 
 @plugin "@tailwindcss/forms";
 @plugin "@tailwindcss/typography";
+@plugin "flowbite/plugin";
 
 @source "../../node_modules/flowbite/**/*.js";
 @source "../../../vendor/power-components/livewire-powergrid/resources/views/**/*.php";
