@@ -53,7 +53,7 @@
             <div class="mb-4 flex w-full max-w-xs items-center rounded-lg bg-white p-4 text-gray-500 shadow ring-1 ring-zinc-200 dark:bg-dark-primary dark:text-white dark:ring-zinc-800"
                 id="toast-success" role="alert">
                 <div
-                    class="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:text-white">
+                    class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:text-white">
                     <x-icons.check-circle class="h-5 w-5" />
                     <span class="sr-only">Check icon</span>
                 </div>
@@ -61,7 +61,7 @@
                         :status="session('status')" />
                 </div>
                 <x-button.danger
-                    class="!ms-auto !h-8 !w-8 !bg-transparent !p-1.5 !shadow-none ring-0 sm:-mx-1.5 sm:-my-1.5"
+                    class="ms-auto! h-8! w-8! bg-transparent! p-1.5! shadow-none! ring-0 sm:-mx-1.5 sm:-my-1.5"
                     type="button" aria-label="Close" @click="showToast = false">
                     <span class="sr-only">Close</span>
                     <x-icons.close class="h-3 w-3" />
@@ -81,7 +81,7 @@
         {{-- Settings Menu (Expands to Left) --}}
         <div class="flex origin-right items-center gap-1 overflow-hidden transition-all duration-300 ease-in-out"
             x-bind:class="{
-                'max-w-[300px] opacity-100 mr-2 rounded-2xl border p-1.5': showSettings,
+                'max-w-75 opacity-100 mr-2 rounded-2xl border p-1.5': showSettings,
                 'max-w-0 opacity-0 mr-0 border-0 p-0': !showSettings,
                 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm': dynamicBg,
                 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm': !dynamicBg
@@ -97,7 +97,7 @@
                     <span aria-hidden="true" x-bind:class="dynamicBg ? 'bg-red-500' : 'bg-zinc-300 dark:bg-zinc-700'"
                         class="pointer-events-none absolute mx-auto h-3 w-6 rounded-full transition-colors duration-200 ease-in-out"></span>
                     <span aria-hidden="true"
-                        x-bind:class="dynamicBg ? 'translate-x-[0.35rem]' : '-translate-x-[0.35rem]'"
+                        x-bind:class="dynamicBg ? 'translate-x-[0.35rem]' : 'translate-x-[-0.35rem]'"
                         class="pointer-events-none absolute left-1/2 -ml-1.5 inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition-transform duration-200 ease-in-out"></span>
                 </button>
             </div>
@@ -158,7 +158,7 @@
                             setTimeout(() => this.type(), typeSpeed);
                         }
                     }" x-init="setTimeout(() => type(), 800)"
-                        class="bg-gradient-to-r from-red-400 to-red-700 bg-clip-text text-transparent after:animate-pulse after:content-['|'] dark:from-rose-300 dark:to-red-500">
+                        class="bg-linear-to-r from-red-400 to-red-700 bg-clip-text text-transparent after:animate-pulse after:content-['|'] dark:from-rose-300 dark:to-red-500">
                         <span x-text="currentWord">Presisi Utama</span>
                     </span>
                 </h1>
