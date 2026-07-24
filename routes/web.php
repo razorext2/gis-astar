@@ -6,13 +6,10 @@ use App\Http\Controllers\PushController;
 use App\Livewire\Dashboard;
 use App\Livewire\Handler\Announcement\Create;
 use App\Livewire\Handler\Announcement\Edit;
+use App\Livewire\Handler\Announcement\Index;
 use App\Livewire\Handler\Permissions\Update;
 use App\Livewire\NotificationsIndex;
-use App\Livewire\PowergridTables\AnnouncementTable;
 use App\Livewire\PowergridTables\LogTable;
-use App\Livewire\PowergridTables\PermissionsTable;
-use App\Livewire\PowergridTables\RolesTable;
-use App\Livewire\PowergridTables\UserTable;
 use App\Livewire\ProfileEdit;
 use App\Livewire\ProfileShow;
 use Illuminate\Support\Facades\Auth;
@@ -61,22 +58,22 @@ Route::middleware(['auth'])->group(function () {
         Route::livewire('notifications', NotificationsIndex::class)->name('notifications.index');
 
         // Announcements
-        Route::livewire('announcement', AnnouncementTable::class)->name('announcement.index')->middleware('permission:announcement-list');
+        Route::livewire('announcement', Index::class)->name('announcement.index')->middleware('permission:announcement-list');
         Route::livewire('announcement/create', Create::class)->name('announcement.create')->middleware('permission:announcement-create');
         Route::livewire('announcement/{announcement}/edit', Edit::class)->name('announcement.edit')->middleware('permission:announcement-edit');
 
         // Permissions
-        Route::livewire('permissions', PermissionsTable::class)->name('permissions.index')->middleware('permission:permissions-list');
+        Route::livewire('permissions', App\Livewire\Handler\Permissions\Index::class)->name('permissions.index')->middleware('permission:permissions-list');
         Route::livewire('permissions/create', App\Livewire\Handler\Permissions\Create::class)->name('permissions.create')->middleware('permission:permissions-create');
         Route::livewire('permissions/{permission}/edit', Update::class)->name('permissions.edit')->middleware('permission:permissions-edit');
 
         // Roles
-        Route::livewire('roles', RolesTable::class)->name('roles.index')->middleware('permission:roles-list');
+        Route::livewire('roles', App\Livewire\Handler\Roles\Index::class)->name('roles.index')->middleware('permission:roles-list');
         Route::livewire('roles/create', App\Livewire\Handler\Roles\Create::class)->name('roles.create')->middleware('permission:roles-create');
         Route::livewire('roles/{role}/edit', App\Livewire\Handler\Roles\Update::class)->name('roles.edit')->middleware('permission:roles-edit');
 
         // Users
-        Route::livewire('users', UserTable::class)->name('users.index')->middleware('permission:users-list');
+        Route::livewire('users', App\Livewire\Handler\User\Index::class)->name('users.index')->middleware('permission:users-list');
         Route::livewire('users/create', App\Livewire\Handler\User\Create::class)->name('users.create')->middleware('permission:users-create');
         Route::livewire('users/{user}/edit', App\Livewire\Handler\User\Edit::class)->name('users.edit')->middleware('permission:users-edit');
 

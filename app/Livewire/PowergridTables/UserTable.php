@@ -124,10 +124,10 @@ final class UserTable extends PowerGridComponent
     public function actionsFromView(User $row)
     {
         return Blade::render("
-            <x-button.primary href='{{ route('users.edit', \$row->id) }}' wire:navigate>
+            <x-button.primary href=\"{{ route('users.edit', \$row->id) }}\" wire:navigate>
                 Edit
             </x-button.primary>
-        ");
+        ", ['row' => $row]);
     }
 
     public function queryString(): array

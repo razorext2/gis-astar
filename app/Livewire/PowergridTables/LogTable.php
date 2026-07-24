@@ -144,12 +144,12 @@ final class LogTable extends PowerGridComponent
     public function actionsFromView(LogHistory $row)
     {
         return Blade::render("
-            <x-button.danger wire:click=\"\$dispatch('delete', { id: {{ \$row->id }} })\" iconOnly='true'>
+            <x-button.danger wire:click=\"\$dispatch('delete', { id: {{ \$row->id }} })\" :iconOnly=\"true\">
                 <x-slot name='icon'>
                     <x-icons.trash-bin class='h-4 w-4' />
                 </x-slot>
             </x-button.danger>
-        ");
+        ", ['row' => $row]);
     }
 
     #[On('delete')]
