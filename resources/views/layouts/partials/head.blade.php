@@ -10,16 +10,28 @@
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>@yield('title', 'Dashboard System') | Dacin</title>
-<meta name="description" content="Dashboard System" />
-<meta name="keywords" content="dashboard, system, indodacin" />
+<title>@yield('title', setting('site_title', 'Dashboard System')) | {{ setting('site_name', 'Dacin') }}</title>
+<meta name="description" content="{{ setting('meta_description', 'Dashboard System') }}" />
+<meta name="keywords" content="{{ setting('meta_keywords', 'dashboard, system, indodacin') }}" />
+<meta name="author" content="{{ setting('meta_author', 'PT. Indodacin Presisi Utama') }}" />
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <meta name="user-id" content="{{ auth()->user()->id }}">
 <meta name="vapid-public-key" content="{{ config('webpush.vapid.public_key') }}">
 
+@if(setting('google_analytics_id'))
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ setting('google_analytics_id') }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ setting('google_analytics_id') }}');
+    </script>
+@endif
+
 <!-- Favicons -->
-<link href="{{ asset('images/brand/logo.ico') }}" rel="icon" />
-<link href="{{ asset('images/brand/apple-touch-icon.png') }}" rel="apple-touch-icon" />
+<link href="{{ setting('favicon_path') ? asset('storage/' . setting('favicon_path')) : asset('images/brand/logo.ico') }}" rel="icon" />
+<link href="{{ setting('apple_touch_icon_path') ? asset('storage/' . setting('apple_touch_icon_path')) : asset('images/brand/apple-touch-icon.png') }}" rel="apple-touch-icon" />
 <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Poppins&family=Montserrat&display=swap"
     rel="stylesheet">
 

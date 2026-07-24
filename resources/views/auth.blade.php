@@ -125,9 +125,9 @@
 
                 <h1
                     class="flex flex-col items-center text-center text-4xl font-black leading-tight tracking-tight text-zinc-900 drop-shadow-sm dark:text-white md:items-start md:text-left md:text-5xl lg:text-[3.5rem]">
-                    <span>Indodacin</span>
+                    <span>{{ setting('site_name', 'Indodacin') }}</span>
                     <span x-data="{
-                        words: ['Presisi Utama', 'Pasti Presisi', 'Pasti Berkualitas', 'Pasti Pas'],
+                        words: [{{ json_encode(setting('auth_subtitle', 'Presisi Utama')) }}, 'Pasti Presisi', 'Pasti Berkualitas', 'Pasti Pas'],
                         currentWord: '',
                         wordIndex: 0,
                         charIndex: 0,
@@ -159,12 +159,11 @@
                         }
                     }" x-init="setTimeout(() => type(), 800)"
                         class="bg-linear-to-r from-red-400 to-red-700 bg-clip-text text-transparent after:animate-pulse after:content-['|'] dark:from-rose-300 dark:to-red-500">
-                        <span x-text="currentWord">Presisi Utama</span>
+                        <span x-text="currentWord">{{ setting('auth_subtitle', 'Presisi Utama') }}</span>
                     </span>
                 </h1>
                 <p class="mx-auto mt-4 max-w-md text-base leading-relaxed text-zinc-600 dark:text-zinc-300 md:mx-0">
-                    Sistem informasi terpadu untuk koordinasi, pelaporan, dan manajemen data operasional secara
-                    langsung.
+                    {{ setting('auth_description', 'Sistem informasi terpadu untuk koordinasi, pelaporan, dan manajemen data operasional secara langsung.') }}
                 </p>
             </div>
 

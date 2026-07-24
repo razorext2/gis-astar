@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
             'announcement-edit',
             'announcement-delete',
             'log-list',
+            'settings-manage',
         ];
 
         foreach ($permissions as $perm) {
@@ -54,5 +55,7 @@ class DatabaseSeeder extends Seeder
 
         $user->assignRole($role);
         $user->syncPermissions(Permission::all());
+
+        $this->call(SettingSeeder::class);
     }
 }

@@ -6,6 +6,7 @@ namespace App\Providers;
 
 use App\Events\TableRefreshed;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -18,6 +19,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        if (file_exists(app_path('helpers.php'))) {
+            require_once app_path('helpers.php');
+        }
+
         URL::macro(
             'alternateHasCorrectSignature',
             function (Request $request, $absolute = true, array $ignoreQuery = []) {
@@ -65,7 +70,7 @@ class AppServiceProvider extends ServiceProvider
         URL::forceScheme('https');
 
         // Implicitly grant "Super Admin" role all permissions
-        \Illuminate\Support\Facades\Gate::before(function ($user, $ability) {
+        Gate::before(function ($user, $ability) {
             return $user->hasRole('Super Admin') ? true : null;
         });
 

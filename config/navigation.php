@@ -80,6 +80,15 @@ return [
                 'permission' => 'log-list',
                 'navigate' => true,
             ],
+            [
+                'label' => 'Pengaturan Website',
+                'mobile_label' => 'Pengaturan Website',
+                'route' => 'settings.index',
+                'check' => ['settings.*'],
+                'icon' => 'adjustment',
+                'permission' => 'settings-manage',
+                'navigate' => true,
+            ],
         ],
     ],
 ];

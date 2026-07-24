@@ -70,10 +70,10 @@
         class="mx-auto flex w-full items-center justify-between border-b border-zinc-200/50 p-5 dark:border-zinc-800/50">
         <div class="flex items-center justify-start pl-5">
             <a class="flex items-center gap-2.5" href="{{ config('app.url') }}">
-                <img class="h-8 w-8 rounded-lg object-contain" src="{{ asset('images/brand/logo.png') }}"
-                    alt="Attendance Logo" loading="lazy" />
+                <img class="h-8 w-8 rounded-lg object-contain" src="{{ setting('logo_path') ? asset('storage/' . setting('logo_path')) : asset('images/brand/logo.png') }}"
+                    alt="{{ setting('site_name', 'Attendance') }} Logo" loading="lazy" />
                 <span class="text-lg font-bold italic tracking-wide text-zinc-900 dark:text-white">
-                    Attendance
+                    {{ setting('sidebar_title', 'Attendance') }}
                 </span>
             </a>
         </div>

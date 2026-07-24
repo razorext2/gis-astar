@@ -21,6 +21,9 @@
         "tailwindcss-development",
         "debug-using-debugbar",
         "laravel-backup",
-        "laravel-permission-development"
+        "laravel-permission-development",
+        "laravel-security",
+        "laravel-specialist",
+        "php-pro"
     ]
 }

@@ -79,6 +79,9 @@ Route::middleware(['auth'])->group(function () {
 
         // Activity Logs
         Route::livewire('log', LogTable::class)->name('log.index')->middleware('permission:log-list');
+
+        // Website Settings
+        Route::livewire('settings', App\Livewire\Handler\Settings\Index::class)->name('settings.index')->middleware('permission:settings-manage');
     });
 });
 
