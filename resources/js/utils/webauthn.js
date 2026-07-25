@@ -45,47 +45,84 @@ function base64ToBuffer(base64Input) {
     return buffer.buffer;
 }
 
+function parseWebAuthnError(err) {
+    if (!err) return "Terjadi kesalahan pada autentikasi biometrik.";
+
+    const name = err.name || "";
+    const msg = (err.message || "").toLowerCase();
+
+    if (
+        name === "NotAllowedError" ||
+        name === "AbortError" ||
+        msg.includes("not allowed") ||
+        msg.includes("timed out") ||
+        msg.includes("cancelled") ||
+        msg.includes("canceled")
+    ) {
+        return "Pemindaian biometrik / Passkey dibatalkan oleh pengguna.";
+    }
+    if (name === "TimeoutError") {
+        return "Waktu pemindaian Passkey telah habis. Silakan coba kembali.";
+    }
+    if (name === "InvalidStateError") {
+        return "Perangkat atau Passkey ini sudah terdaftar sebelumnya.";
+    }
+    if (name === "NotSupportedError" || msg.includes("not supported")) {
+        return "Browser atau perangkat Anda belum mendukung Passkey biometrik.";
+    }
+
+    return err.message || "Gagal melakukan pemindaian biometrik.";
+}
+
 export async function registerPasskey(options) {
     if (!window.PublicKeyCredential) {
         throw new Error("Browser Anda tidak mendukung Passkey / WebAuthn.");
     }
 
-    // Handle both wrapped { publicKey: { ... } } and direct { challenge: ... }
-    const rawOptions =
-        options && options.publicKey ? options.publicKey : options;
-    const publicKeyOptions = { ...rawOptions };
+    try {
+        // Handle both wrapped { publicKey: { ... } } and direct { challenge: ... }
+        const rawOptions =
+            options && options.publicKey ? options.publicKey : options;
+        const publicKeyOptions = { ...rawOptions };
 
-    if (publicKeyOptions.challenge) {
-        publicKeyOptions.challenge = base64ToBuffer(publicKeyOptions.challenge);
+        if (publicKeyOptions.challenge) {
+            publicKeyOptions.challenge = base64ToBuffer(
+                publicKeyOptions.challenge
+            );
+        }
+
+        if (publicKeyOptions.user && publicKeyOptions.user.id) {
+            publicKeyOptions.user.id = base64ToBuffer(
+                publicKeyOptions.user.id
+            );
+        }
+
+        if (
+            publicKeyOptions.excludeCredentials &&
+            Array.isArray(publicKeyOptions.excludeCredentials)
+        ) {
+            publicKeyOptions.excludeCredentials =
+                publicKeyOptions.excludeCredentials.map((c) => ({
+                    ...c,
+                    id: base64ToBuffer(typeof c === "object" ? c.id : c),
+                }));
+        }
+
+        const credential = await navigator.credentials.create({
+            publicKey: publicKeyOptions,
+        });
+
+        return {
+            id: credential.id,
+            rawId: bufferToBase64(credential.rawId),
+            clientDataJSON: bufferToBase64(credential.response.clientDataJSON),
+            attestationObject: bufferToBase64(
+                credential.response.attestationObject
+            ),
+        };
+    } catch (err) {
+        throw new Error(parseWebAuthnError(err));
     }
-
-    if (publicKeyOptions.user && publicKeyOptions.user.id) {
-        publicKeyOptions.user.id = base64ToBuffer(publicKeyOptions.user.id);
-    }
-
-    if (
-        publicKeyOptions.excludeCredentials &&
-        Array.isArray(publicKeyOptions.excludeCredentials)
-    ) {
-        publicKeyOptions.excludeCredentials =
-            publicKeyOptions.excludeCredentials.map((c) => ({
-                ...c,
-                id: base64ToBuffer(typeof c === "object" ? c.id : c),
-            }));
-    }
-
-    const credential = await navigator.credentials.create({
-        publicKey: publicKeyOptions,
-    });
-
-    return {
-        id: credential.id,
-        rawId: bufferToBase64(credential.rawId),
-        clientDataJSON: bufferToBase64(credential.response.clientDataJSON),
-        attestationObject: bufferToBase64(
-            credential.response.attestationObject,
-        ),
-    };
 }
 
 export async function authenticatePasskey(options) {
@@ -93,39 +130,45 @@ export async function authenticatePasskey(options) {
         throw new Error("Browser Anda tidak mendukung Passkey / WebAuthn.");
     }
 
-    // Handle both wrapped { publicKey: { ... } } and direct { challenge: ... }
-    const rawOptions =
-        options && options.publicKey ? options.publicKey : options;
-    const publicKeyOptions = { ...rawOptions };
+    try {
+        // Handle both wrapped { publicKey: { ... } } and direct { challenge: ... }
+        const rawOptions =
+            options && options.publicKey ? options.publicKey : options;
+        const publicKeyOptions = { ...rawOptions };
 
-    if (publicKeyOptions.challenge) {
-        publicKeyOptions.challenge = base64ToBuffer(publicKeyOptions.challenge);
+        if (publicKeyOptions.challenge) {
+            publicKeyOptions.challenge = base64ToBuffer(
+                publicKeyOptions.challenge
+            );
+        }
+
+        if (
+            publicKeyOptions.allowCredentials &&
+            Array.isArray(publicKeyOptions.allowCredentials)
+        ) {
+            publicKeyOptions.allowCredentials =
+                publicKeyOptions.allowCredentials.map((c) => ({
+                    ...c,
+                    id: base64ToBuffer(typeof c === "object" ? c.id : c),
+                }));
+        }
+
+        const credential = await navigator.credentials.get({
+            publicKey: publicKeyOptions,
+        });
+
+        return {
+            id: credential.id,
+            rawId: bufferToBase64(credential.rawId),
+            clientDataJSON: bufferToBase64(credential.response.clientDataJSON),
+            authenticatorData: bufferToBase64(
+                credential.response.authenticatorData
+            ),
+            signature: bufferToBase64(credential.response.signature),
+        };
+    } catch (err) {
+        throw new Error(parseWebAuthnError(err));
     }
-
-    if (
-        publicKeyOptions.allowCredentials &&
-        Array.isArray(publicKeyOptions.allowCredentials)
-    ) {
-        publicKeyOptions.allowCredentials =
-            publicKeyOptions.allowCredentials.map((c) => ({
-                ...c,
-                id: base64ToBuffer(typeof c === "object" ? c.id : c),
-            }));
-    }
-
-    const credential = await navigator.credentials.get({
-        publicKey: publicKeyOptions,
-    });
-
-    return {
-        id: credential.id,
-        rawId: bufferToBase64(credential.rawId),
-        clientDataJSON: bufferToBase64(credential.response.clientDataJSON),
-        authenticatorData: bufferToBase64(
-            credential.response.authenticatorData,
-        ),
-        signature: bufferToBase64(credential.response.signature),
-    };
 }
 
 window.WebAuthnHelper = {
