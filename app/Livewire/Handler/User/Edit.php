@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
 
@@ -47,17 +48,17 @@ class Edit extends Component
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,'.$this->user->id,
-            'password' => 'nullable|min:8|same:password_confirmation',
+            'password' => ['nullable', 'confirmed', Password::min(8)->letters()->mixedCase()->numbers()],
             'selected_roles' => 'required|array|min:1',
             'is_active' => 'required|boolean',
             'deactivation_reason' => 'required_if:is_active,0|nullable|string|max:255',
         ];
     }
 
-    protected $messages = [
+    protected array $messages = [
         'deactivation_reason.required_if' => 'Alasan nonaktif wajib diisi jika status diatur ke Tidak Aktif.',
         'selected_roles.required' => 'Minimal pilih satu role.',
-        'password.same' => 'Konfirmasi password tidak cocok.',
+        'password.confirmed' => 'Konfirmasi password tidak cocok.',
     ];
 
     public function save(): mixed

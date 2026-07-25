@@ -99,6 +99,7 @@ class Edit extends Component
             'roles' => Role::select(['id', 'name'])->get(),
             'users' => User::select(['id', 'name', 'email'])
                 ->where('is_active', true)
+                ->limit(200)
                 ->get(),
         ]);
     }

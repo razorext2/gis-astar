@@ -4,6 +4,7 @@ namespace App\Livewire\Handler\Roles;
 
 use App\Livewire\Concerns\HandlesErrors;
 use App\Livewire\Forms\Roles\Post;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
 
@@ -19,25 +20,26 @@ class Create extends Component
 
     public string $searchPermission = '';
 
-    public function mount()
+    public function mount(): void
     {
-        // Ambil permission sebagai array asosiatif (id => name)
-        $this->permissions = Permission::pluck('name', 'id')->toArray();
+        // Cache semi-static permission list to avoid repeated DB queries
+        $this->permissions = cache()->remember('permissions.all', now()->addMinutes(10), fn () => Permission::pluck('name', 'id')->toArray()
+        );
     }
 
-    public function toggleSelectAll()
+    public function toggleSelectAll(): void
     {
         // Gabungkan dua fungsi menjadi satu
         $this->form->selectedPermissions = $this->selectAll ? array_keys($this->permissions) : [];
     }
 
-    public function updatedSelectedPermissions()
+    public function updatedSelectedPermissions(): void
     {
         // Jika semua dipilih, update "Select All"
         $this->selectAll = count($this->selectedPermissions) === count($this->permissions);
     }
 
-    public function save()
+    public function save(): void
     {
         // Validasi form
         $this->form->validate();
@@ -57,7 +59,7 @@ class Create extends Component
         ]);
     }
 
-    public function render()
+    public function render(): View
     {
         $filteredPermissions = collect($this->permissions)
             ->filter(fn ($name) => empty($this->searchPermission) || str_contains(strtolower($name), strtolower($this->searchPermission)))

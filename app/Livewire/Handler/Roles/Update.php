@@ -4,6 +4,8 @@ namespace App\Livewire\Handler\Roles;
 
 use App\Livewire\Concerns\HandlesErrors;
 use App\Livewire\Forms\Roles\Post;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -14,9 +16,10 @@ class Update extends Component
 
     public Post $form;
 
+    /** @var Collection<int, Permission> */
     public $permissions;
 
-    public ?Role $role = null; // Ubah menjadi nullable untuk keamanan
+    public ?Role $role = null;
 
     public array $rolePermissions = [];
 
@@ -24,7 +27,7 @@ class Update extends Component
 
     public string $searchPermission = '';
 
-    public function mount(Role|int|string $role)
+    public function mount(Role|int|string $role): void
     {
         $this->role = $role instanceof Role ? $role : Role::find($role);
 
@@ -39,7 +42,7 @@ class Update extends Component
         $this->form->selectedPermissions = $this->rolePermissions;
     }
 
-    public function toggleSelectAll()
+    public function toggleSelectAll(): void
     {
         if ($this->selectAll) {
             // Jika Select All dicentang, pilih semua permissions
@@ -50,13 +53,13 @@ class Update extends Component
         }
     }
 
-    public function updatedFormSelectedPermissions()
+    public function updatedFormSelectedPermissions(): void
     {
         // Cek apakah semua permissions dipilih
-        $this->selectAll = count($this->form->selectedPermissions) === count($this->permissions);
+        $this->selectAll = count($this->form->selectedPermissions) === $this->permissions->count();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->form->validate();
 
@@ -76,15 +79,16 @@ class Update extends Component
         ]);
     }
 
-    public function render()
+    public function render(): View
     {
-        $permissionsQuery = Permission::select('id', 'name')
+        $permissions = Permission::select('id', 'name')
             ->where('name', 'like', '%'.$this->searchPermission.'%')
             ->get();
 
-        $this->permissions = $permissionsQuery;
+        // Update state for selectAll comparison without polluting Livewire wire data
+        $this->permissions = $permissions;
 
-        $groupedPermissions = $permissionsQuery->groupBy(fn ($permission) => explode('-', $permission->name)[0]);
+        $groupedPermissions = $permissions->groupBy(fn ($permission) => explode('-', $permission->name)[0]);
 
         return view('livewire.handler.roles.update', compact('groupedPermissions'));
     }

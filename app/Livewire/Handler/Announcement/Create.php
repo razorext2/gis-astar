@@ -4,6 +4,7 @@
 
 namespace App\Livewire\Handler\Announcement;
 
+use App\Enums\AnnouncementStatus;
 use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Announcement;
 use App\Models\User;
@@ -57,7 +58,7 @@ class Create extends Component
                 'target_type' => $this->target_type,
                 'target_roles' => $this->target_type === 'role' ? $this->target_roles : null,
                 'target_users' => $this->target_type === 'user' ? $this->target_users : null,
-                'status' => 1,
+                'status' => AnnouncementStatus::Active->value,
             ];
 
             if ($this->file) {
@@ -80,6 +81,7 @@ class Create extends Component
             'roles' => Role::select(['id', 'name'])->get(),
             'users' => User::select(['id', 'name', 'email'])
                 ->where('is_active', true)
+                ->limit(200)
                 ->get(),
         ]);
     }

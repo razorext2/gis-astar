@@ -3,6 +3,7 @@
 namespace App\Livewire\Handler\Permissions;
 
 use App\Livewire\Concerns\HandlesErrors;
+use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
@@ -31,7 +32,7 @@ class Update extends Component
         $this->guard_name = $this->permission->guard_name;
     }
 
-    public function save()
+    public function save(): void
     {
         $this->validate();
 
@@ -50,7 +51,7 @@ class Update extends Component
         ]);
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.handler.permissions.update');
     }

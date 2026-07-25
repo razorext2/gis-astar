@@ -4,6 +4,7 @@ namespace App\Livewire\Handler\Permissions;
 
 use App\Livewire\Concerns\HandlesErrors;
 use App\Livewire\Forms\Permissions\Post;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
 class Create extends Component
@@ -12,12 +13,12 @@ class Create extends Component
 
     public Post $form;
 
-    public function addField()
+    public function addField(): void
     {
         $this->form->name[] = '';
     }
 
-    public function removeField($index)
+    public function removeField(int $index): void
     {
         if (count($this->form->name) > 1) {
             unset($this->form->name[$index]);
@@ -25,7 +26,7 @@ class Create extends Component
         }
     }
 
-    public function save()
+    public function save(): void
     {
         // Pindahkan validasi ke luar agar jika invalid, pesan merah form muncul secara native,
         // bukan ditangkap sebagai pesan error Exception Swal.
@@ -56,7 +57,7 @@ class Create extends Component
         ]);
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.handler.permissions.create');
     }

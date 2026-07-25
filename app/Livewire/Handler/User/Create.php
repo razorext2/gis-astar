@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
 
@@ -14,43 +15,43 @@ class Create extends Component
 {
     use HandlesErrors;
 
-    public $name;
+    public ?string $name = null;
 
-    public $email;
+    public ?string $email = null;
 
-    public $password;
+    public ?string $password = null;
 
-    public $password_confirmation;
+    public ?string $password_confirmation = null;
 
-    public $selected_roles = [];
+    public array $selected_roles = [];
 
     protected function rules(): array
     {
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8|same:password_confirmation',
+            'password' => ['required', 'confirmed', Password::min(8)->letters()->mixedCase()->numbers()],
             'selected_roles' => 'required|array|min:1',
         ];
     }
 
-    protected $messages = [
+    protected array $messages = [
         'name.required' => 'Nama lengkap wajib diisi.',
         'email.required' => 'Alamat email wajib diisi.',
         'email.email' => 'Format email tidak valid.',
         'email.unique' => 'Email ini sudah terdaftar.',
         'password.required' => 'Password wajib diisi.',
         'password.min' => 'Password minimal 8 karakter.',
-        'password.same' => 'Konfirmasi password tidak cocok.',
+        'password.confirmed' => 'Konfirmasi password tidak cocok.',
         'selected_roles.required' => 'Minimal pilih satu role.',
         'selected_roles.min' => 'Minimal pilih satu role.',
     ];
 
-    public function save(): mixed
+    public function save(): void
     {
         $this->validate();
 
-        return $this->runSafely(function () {
+        $this->runSafely(function () {
             DB::transaction(function () {
                 $user = User::create([
                     'name' => $this->name,
@@ -62,8 +63,8 @@ class Create extends Component
                 $user->assignRole($this->selected_roles);
             });
 
-            return redirect()->route('users.index')
-                ->with('status', 'Berhasil menambah data user: '.$this->name);
+            $this->redirect(route('users.index'), navigate: true);
+            session()->flash('status', 'Berhasil menambah data user: '.$this->name);
         }, 'Gagal menambah data user', [
             'action' => 'create user',
             'email' => $this->email,

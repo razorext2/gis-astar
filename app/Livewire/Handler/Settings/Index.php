@@ -5,6 +5,7 @@ namespace App\Livewire\Handler\Settings;
 use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Setting;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -132,51 +133,53 @@ class Index extends Component
         $this->validate();
 
         return $this->runSafely(function () {
-            // Text attributes
-            Setting::set('site_name', $this->site_name, 'branding');
-            Setting::set('site_title', $this->site_title, 'branding');
-            Setting::set('sidebar_title', $this->sidebar_title, 'branding');
-            Setting::set('auth_subtitle', $this->auth_subtitle, 'branding');
-            Setting::set('auth_description', $this->auth_description, 'branding', 'text');
-            Setting::set('app_version', $this->app_version, 'branding');
+            DB::transaction(function () {
+                // Text attributes
+                Setting::set('site_name', $this->site_name, 'branding');
+                Setting::set('site_title', $this->site_title, 'branding');
+                Setting::set('sidebar_title', $this->sidebar_title, 'branding');
+                Setting::set('auth_subtitle', $this->auth_subtitle, 'branding');
+                Setting::set('auth_description', $this->auth_description, 'branding', 'text');
+                Setting::set('app_version', $this->app_version, 'branding');
 
-            Setting::set('meta_description', $this->meta_description, 'seo', 'text');
-            Setting::set('meta_keywords', $this->meta_keywords, 'seo');
-            Setting::set('meta_author', $this->meta_author, 'seo');
+                Setting::set('meta_description', $this->meta_description, 'seo', 'text');
+                Setting::set('meta_keywords', $this->meta_keywords, 'seo');
+                Setting::set('meta_author', $this->meta_author, 'seo');
 
-            Setting::set('footer_company', $this->footer_company, 'footer');
-            Setting::set('footer_url', $this->footer_url, 'footer');
-            Setting::set('footer_copyright', $this->footer_copyright, 'footer');
+                Setting::set('footer_company', $this->footer_company, 'footer');
+                Setting::set('footer_url', $this->footer_url, 'footer');
+                Setting::set('footer_copyright', $this->footer_copyright, 'footer');
 
-            Setting::set('contact_email', $this->contact_email, 'contact');
-            Setting::set('whatsapp_number', $this->whatsapp_number, 'contact');
-            Setting::set('office_address', $this->office_address, 'contact', 'text');
-            Setting::set('google_analytics_id', $this->google_analytics_id, 'integration');
-            Setting::set('social_facebook', $this->social_facebook, 'contact');
-            Setting::set('social_instagram', $this->social_instagram, 'contact');
-            Setting::set('social_linkedin', $this->social_linkedin, 'contact');
+                Setting::set('contact_email', $this->contact_email, 'contact');
+                Setting::set('whatsapp_number', $this->whatsapp_number, 'contact');
+                Setting::set('office_address', $this->office_address, 'contact', 'text');
+                Setting::set('google_analytics_id', $this->google_analytics_id, 'integration');
+                Setting::set('social_facebook', $this->social_facebook, 'contact');
+                Setting::set('social_instagram', $this->social_instagram, 'contact');
+                Setting::set('social_linkedin', $this->social_linkedin, 'contact');
 
-            // Handle File Uploads
-            if ($this->new_logo) {
-                $path = $this->new_logo->store('settings', 'public');
-                Setting::set('logo_path', $path, 'media', 'image');
-                $this->logo_path = $path;
-                $this->new_logo = null;
-            }
+                // Handle File Uploads
+                if ($this->new_logo) {
+                    $path = $this->new_logo->store('settings', 'public');
+                    Setting::set('logo_path', $path, 'media', 'image');
+                    $this->logo_path = $path;
+                    $this->new_logo = null;
+                }
 
-            if ($this->new_favicon) {
-                $path = $this->new_favicon->store('settings', 'public');
-                Setting::set('favicon_path', $path, 'media', 'image');
-                $this->favicon_path = $path;
-                $this->new_favicon = null;
-            }
+                if ($this->new_favicon) {
+                    $path = $this->new_favicon->store('settings', 'public');
+                    Setting::set('favicon_path', $path, 'media', 'image');
+                    $this->favicon_path = $path;
+                    $this->new_favicon = null;
+                }
 
-            if ($this->new_apple_touch_icon) {
-                $path = $this->new_apple_touch_icon->store('settings', 'public');
-                Setting::set('apple_touch_icon_path', $path, 'media', 'image');
-                $this->apple_touch_icon_path = $path;
-                $this->new_apple_touch_icon = null;
-            }
+                if ($this->new_apple_touch_icon) {
+                    $path = $this->new_apple_touch_icon->store('settings', 'public');
+                    Setting::set('apple_touch_icon_path', $path, 'media', 'image');
+                    $this->apple_touch_icon_path = $path;
+                    $this->new_apple_touch_icon = null;
+                }
+            });
 
             Setting::clearCache();
 
