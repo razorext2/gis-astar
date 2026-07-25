@@ -187,7 +187,7 @@
                                     <span
                                         x-text="logoUploading ? (logoProgress + '% mengunggah...') : (logoName ?? 'Pilih File Logo')"></span>
                                 </label>
-                                <input id="upload-logo" type="file" wire:model="new_logo" accept="image/*"
+                                <input id="upload-logo" type="file" wire:model="new_logo" accept=".png,.jpg,.jpeg,.svg,.webp,image/png,image/jpeg,image/svg+xml,image/webp"
                                     class="sr-only" @change="logoName = $event.target.files[0]?.name ?? null" />
                                 <x-input.error :messages="$errors->get('new_logo')" />
                             </div>
@@ -263,7 +263,7 @@
                                         x-text="faviconUploading ? (faviconProgress + '% mengunggah...') : (faviconName ?? 'Pilih File Favicon')"></span>
                                 </label>
                                 <input id="upload-favicon" type="file" wire:model="new_favicon"
-                                    accept=".ico,image/*" class="sr-only"
+                                    accept=".ico,.png,.jpg,.jpeg,.svg,image/x-icon,image/png,image/jpeg,image/svg+xml" class="sr-only"
                                     @change="faviconName = $event.target.files[0]?.name ?? null" />
                                 <x-input.error :messages="$errors->get('new_favicon')" />
                             </div>
@@ -338,7 +338,7 @@
                                         x-text="touchUploading ? (touchProgress + '% mengunggah...') : (touchIconName ?? 'Pilih File Icon')"></span>
                                 </label>
                                 <input id="upload-apple-touch" type="file" wire:model="new_apple_touch_icon"
-                                    accept="image/*" class="sr-only"
+                                    accept=".png,.jpg,.jpeg,.svg,image/png,image/jpeg,image/svg+xml" class="sr-only"
                                     @change="touchIconName = $event.target.files[0]?.name ?? null" />
                                 <x-input.error :messages="$errors->get('new_apple_touch_icon')" />
                             </div>
