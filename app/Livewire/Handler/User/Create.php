@@ -30,9 +30,10 @@ class Create extends Component
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => ['required', 'confirmed', Password::min(8)->letters()->mixedCase()->numbers()],
+            'password' => ['required', 'confirmed', Password::min(8)->letters()->mixedCase()->numbers()->uncompromised()],
             'selected_roles' => 'required|array|min:1',
         ];
+
     }
 
     protected array $messages = [

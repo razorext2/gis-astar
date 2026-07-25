@@ -48,11 +48,12 @@ class Edit extends Component
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,'.$this->user->id,
-            'password' => ['nullable', 'confirmed', Password::min(8)->letters()->mixedCase()->numbers()],
+            'password' => ['nullable', 'confirmed', Password::min(8)->letters()->mixedCase()->numbers()->uncompromised()],
             'selected_roles' => 'required|array|min:1',
             'is_active' => 'required|boolean',
             'deactivation_reason' => 'required_if:is_active,0|nullable|string|max:255',
         ];
+
     }
 
     protected array $messages = [

@@ -7,6 +7,7 @@ namespace App\Livewire;
 use App\Livewire\Concerns\HandlesErrors;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -66,8 +67,9 @@ class ProfileEdit extends Component
     public function updatePassword(): void
     {
         $this->validate([
+
             'current_password' => 'required|current_password',
-            'password' => 'required|min:8|same:password_confirmation',
+            'password' => ['required', 'confirmed', Password::min(8)->letters()->mixedCase()->numbers()->uncompromised()],
         ]);
 
         $this->runSafely(function () {
