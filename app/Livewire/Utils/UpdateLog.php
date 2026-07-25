@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Utils;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 
@@ -11,7 +12,7 @@ class UpdateLog extends Component
 
     public function repositoryStats()
     {
-        return \Illuminate\Support\Facades\Cache::remember('github_repo_stats_v2', 86400, function () {
+        return Cache::remember('github_repo_stats_v2', 86400, function () {
             $token = config('services.github.token');
             $url = 'https://api.github.com/repos/razorext2/faceAttendanceV2/commits';
 
@@ -54,7 +55,7 @@ class UpdateLog extends Component
             return collect();
         }
 
-        return \Illuminate\Support\Facades\Cache::remember('github_commit_histories_v3', 1800, function () {
+        return Cache::remember('github_commit_histories_v3', 1800, function () {
             $token = config('services.github.token');
             $repo = 'razorext2/faceAttendanceV2';
 
@@ -73,7 +74,7 @@ class UpdateLog extends Component
             // Enrich with files data
             foreach ($commits as &$commit) {
                 $sha = $commit['sha'];
-                $commit['detailed_files'] = \Illuminate\Support\Facades\Cache::rememberForever("github_commit_files_{$sha}", function () use ($token, $repo, $sha) {
+                $commit['detailed_files'] = Cache::rememberForever("github_commit_files_{$sha}", function () use ($token, $repo, $sha) {
                     $detailResp = Http::withToken($token)
                         ->timeout(10)
                         ->get("https://api.github.com/repos/{$repo}/commits/{$sha}");

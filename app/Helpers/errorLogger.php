@@ -17,11 +17,11 @@ class ErrorLogger
             'error_id' => $errorId,
             'exception' => $e,
             'error_msg' => $e->getMessage(),
-            'file'      => $e->getFile(),
-            'line'      => $e->getLine(),
-            'user_id'   => Auth::id(),
-            'url'       => request()->fullUrl(),
-            'ip'        => request()->header('x-forwarded-for'),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+            'user_id' => Auth::id(),
+            'url' => request()->fullUrl(),
+            'ip' => request()->header('x-forwarded-for'),
         ], $context));
 
         return $errorId;

@@ -39,7 +39,6 @@ class ApiResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
@@ -47,7 +46,7 @@ class ApiResource extends JsonResource
         return [
             'success' => $this->status,
             'message' => $this->message,
-            'data' => $this->resource
+            'data' => $this->resource,
         ];
     }
 }

@@ -4,13 +4,14 @@
 
 namespace App\Livewire\Utils;
 
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
 class Breadcrumb extends Component
 {
     public bool $isNavbar = false;
 
-    public function render(): \Illuminate\Contracts\View\View
+    public function render(): View
     {
         $segments = request()->segments();
         $crumbs = [];

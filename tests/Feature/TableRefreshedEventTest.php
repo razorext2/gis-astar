@@ -3,15 +3,15 @@
 /** Goal: Menguji bahwa event TableRefreshed di-dispatch secara otomatis saat model-model yang di-map mengalami event saved atau deleted, Caller: pest, Deps: TableRefreshed, Event, Sales */
 
 use App\Events\TableRefreshed;
-use App\Models\Sales;
 use App\Models\Pegawai;
+use App\Models\Sales;
 use Illuminate\Support\Facades\Event;
 
 beforeEach(function () {
     Pegawai::firstOrCreate([
         'kode_pegawai' => '394',
         'nik_pegawai' => '394-NIK',
-        'full_name' => 'KEVIN FRANSETIO'
+        'full_name' => 'KEVIN FRANSETIO',
     ]);
 });
 

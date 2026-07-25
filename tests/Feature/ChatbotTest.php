@@ -2,6 +2,7 @@
 
 /** Goal: Feature tests for AI Chatbot, Caller: PHPUnit, Deps: ChatConversation, ChatMessage, User */
 
+use App\Livewire\Chatbot\Chatbot;
 use App\Models\Chatbot\ChatConversation;
 use App\Models\Chatbot\ChatMessage;
 use App\Models\User;
@@ -25,7 +26,7 @@ it('redirects guests to login', function () {
 
 it('can create a new conversation', function () {
     Livewire::actingAs($this->user)
-        ->test(\App\Livewire\Chatbot\Chatbot::class)
+        ->test(Chatbot::class)
         ->call('createConversation')
         ->assertHasNoErrors();
 
@@ -39,7 +40,7 @@ it('can select a conversation', function () {
     ]);
 
     Livewire::actingAs($this->user)
-        ->test(\App\Livewire\Chatbot\Chatbot::class)
+        ->test(Chatbot::class)
         ->call('selectConversation', $conversation->id)
         ->assertSet('activeConversationId', $conversation->id);
 });
@@ -51,7 +52,7 @@ it('can delete a conversation', function () {
     ]);
 
     Livewire::actingAs($this->user)
-        ->test(\App\Livewire\Chatbot\Chatbot::class)
+        ->test(Chatbot::class)
         ->call('deleteConversation', $conversation->id);
 
     expect(ChatConversation::withTrashed()->find($conversation->id)->deleted_at)->not->toBeNull();
@@ -65,7 +66,7 @@ it('cannot access another user conversation', function () {
     ]);
 
     Livewire::actingAs($this->user)
-        ->test(\App\Livewire\Chatbot\Chatbot::class)
+        ->test(Chatbot::class)
         ->call('selectConversation', $conversation->id)
         ->assertStatus(404);
 });
@@ -78,7 +79,7 @@ it('cannot delete another user conversation', function () {
     ]);
 
     Livewire::actingAs($this->user)
-        ->test(\App\Livewire\Chatbot\Chatbot::class)
+        ->test(Chatbot::class)
         ->call('deleteConversation', $conversation->id)
         ->assertStatus(404);
 });
@@ -102,7 +103,7 @@ it('loads messages for active conversation', function () {
     ]);
 
     $component = Livewire::actingAs($this->user)
-        ->test(\App\Livewire\Chatbot\Chatbot::class)
+        ->test(Chatbot::class)
         ->call('selectConversation', $conversation->id);
 
     expect($component->get('activeConversationId'))->toBe($conversation->id);
@@ -115,7 +116,7 @@ it('does not send empty messages', function () {
     ]);
 
     Livewire::actingAs($this->user)
-        ->test(\App\Livewire\Chatbot\Chatbot::class)
+        ->test(Chatbot::class)
         ->set('activeConversationId', $conversation->id)
         ->set('newMessage', '')
         ->call('sendMessage');

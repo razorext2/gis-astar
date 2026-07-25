@@ -28,7 +28,7 @@ class ApiAnnouncementController extends Controller
             DB::beginTransaction();
             $announcement = Announcement::create($request->all());
 
-            if (!$announcement) {
+            if (! $announcement) {
                 return new ApiResource(false, 'Pengumuman gagal ditambahkan', null);
             }
 
@@ -48,9 +48,11 @@ class ApiAnnouncementController extends Controller
             }
 
             DB::commit();
+
             return new ApiResource(true, 'Pengumuman berhasil ditambahkan', $announcement);
         } catch (\Exception $e) {
             DB::rollBack();
+
             return new ApiResource(false, 'Terjadi kesalahan saat menambahkan pengumuman', $e->getMessage());
         }
     }
@@ -60,7 +62,7 @@ class ApiAnnouncementController extends Controller
 
         $announcement = Announcement::find($id);
 
-        if (!$announcement) {
+        if (! $announcement) {
             return new ApiResource(false, 'Data pengumuman tidak ditemukan', null);
         }
 
@@ -107,9 +109,11 @@ class ApiAnnouncementController extends Controller
             }
 
             DB::commit();
+
             return new ApiResource(true, 'Status pengumuman berhasil diubah', null);
         } catch (\Exception $e) {
             DB::rollBack();
+
             return new ApiResource(false, 'Terjadi kesalahan saat mengubah status pengumuman', $e->getMessage());
         }
     }
@@ -127,7 +131,7 @@ class ApiAnnouncementController extends Controller
 
         $announcement = Announcement::find($id);
 
-        if (!$announcement) {
+        if (! $announcement) {
             return new ApiResource(false, 'Data pengumuman tidak ditemukan', null);
         }
 
@@ -139,6 +143,7 @@ class ApiAnnouncementController extends Controller
             return new ApiResource(true, 'Data pengumuman berhasil diperbarui', null);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+
             return new ApiResource(false, 'Terjadi kesalahan saat mengubah pengumuman', $e->getMessage());
         }
     }
@@ -147,7 +152,7 @@ class ApiAnnouncementController extends Controller
     {
         $query = Announcement::findOrFail($id);
 
-        if (!$query) {
+        if (! $query) {
             return new ApiResource(false, 'Data tidak ditemukan', null);
         }
 

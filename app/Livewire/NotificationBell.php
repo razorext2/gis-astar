@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use Livewire\Attributes\On;
+use Livewire\Component;
 
 class NotificationBell extends Component
 {
@@ -14,7 +14,7 @@ class NotificationBell extends Component
         $notification = auth()->user()->unreadNotifications;
 
         return view('livewire.notification-bell', [
-            'notification' => $notification
+            'notification' => $notification,
         ]);
     }
 }

@@ -1,8 +1,13 @@
 <?php
 
+use App\Providers\AppServiceProvider;
+use App\Providers\HorizonServiceProvider;
+use App\Providers\RateLimiterServiceProvider;
+use Yajra\DataTables\DataTablesServiceProvider;
+
 return [
-    App\Providers\AppServiceProvider::class,
-    App\Providers\HorizonServiceProvider::class,
-    App\Providers\RateLimiterServiceProvider::class,
-    Yajra\DataTables\DataTablesServiceProvider::class,
+    AppServiceProvider::class,
+    HorizonServiceProvider::class,
+    RateLimiterServiceProvider::class,
+    DataTablesServiceProvider::class,
 ];

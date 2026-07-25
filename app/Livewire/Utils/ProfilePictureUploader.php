@@ -24,18 +24,18 @@ class ProfilePictureUploader extends Component
     {
         $this->validate();
 
-        $filename = 'avatar-' . Auth::id() . '.' . $this->photo->extension();
+        $filename = 'avatar-'.Auth::id().'.'.$this->photo->extension();
         $this->photo->storeAs('public/profile-pictures', $filename);
 
         User::where('id', Auth::id())->update([
-            'profile_pic' => $filename
+            'profile_pic' => $filename,
         ]);
 
-        $this->dispatch('swal', [
-            'title' => 'Foto Profil Diperbarui',
-            'text' => 'Foto profil Anda berhasil diperbarui.',
-            'icon' => 'success'
-        ]);
+        $this->dispatch('swal',
+            title: 'Foto Profil Diperbarui',
+            text: 'Foto profil Anda berhasil diperbarui.',
+            icon: 'success'
+        );
 
         $this->redirect(route('profile.edit'));
     }

@@ -2,10 +2,14 @@
 
 use App\Http\Middleware\EnsureDatabaseConnection;
 use App\Http\Middleware\LogUserActions;
+use App\Http\Middleware\RemoveHeadersMiddleware;
 use App\Http\Middleware\TrackUserActivity;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Routing\Middleware\ThrottleRequests;
+use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 use Spatie\Permission\Middleware\RoleMiddleware;
 use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
@@ -20,9 +24,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->api(prepend: [
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            \Illuminate\Routing\Middleware\ThrottleRequests::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            EnsureFrontendRequestsAreStateful::class,
+            ThrottleRequests::class,
+            SubstituteBindings::class,
         ]);
 
         $middleware->trustProxies(at: '*');
@@ -38,7 +42,7 @@ return Application::configure(basePath: dirname(__DIR__))
             LogUserActions::class,
         ]);
 
-        $middleware->append(\App\Http\Middleware\RemoveHeadersMiddleware::class);
+        $middleware->append(RemoveHeadersMiddleware::class);
         $middleware->append(EnsureDatabaseConnection::class);
     })
 

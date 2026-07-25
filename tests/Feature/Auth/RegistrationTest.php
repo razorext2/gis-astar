@@ -1,7 +1,6 @@
 <?php
 
 /** Goal: Verify registration is disabled, Caller: Pest, Deps: None */
-
 test('registration screen is disabled', function () {
     $response = $this->get('/register');
 

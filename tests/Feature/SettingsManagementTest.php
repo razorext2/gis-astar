@@ -16,7 +16,7 @@ it('renders settings page for authorized users', function () {
     $this->actingAs($this->user)
         ->get(route('settings.index'))
         ->assertStatus(200)
-        ->assertSee('Pengaturan Atribut Website');
+        ->assertSee('Pengaturan Website');
 });
 
 it('updates text attributes correctly and clears cache', function () {
@@ -25,7 +25,8 @@ it('updates text attributes correctly and clears cache', function () {
         ->set('site_name', 'Dacin Custom')
         ->set('site_title', 'Custom Portal System')
         ->set('sidebar_title', 'Portal HQ')
-        ->call('save');
+        ->call('save')
+        ->assertDispatched('swal');
 
     expect(setting('site_name'))->toBe('Dacin Custom');
     expect(setting('site_title'))->toBe('Custom Portal System');

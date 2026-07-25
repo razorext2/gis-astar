@@ -49,7 +49,7 @@ class RateLimiterServiceProvider extends ServiceProvider
         RateLimiter::for('low', function (Request $request) {
             return [
                 Limit::perSecond(20)->by($request->ip()),
-                Limit::perMinute(60)->by($request->ip())
+                Limit::perMinute(60)->by($request->ip()),
             ];
         });
     }

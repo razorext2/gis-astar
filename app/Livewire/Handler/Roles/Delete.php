@@ -3,6 +3,7 @@
 namespace App\Livewire\Handler\Roles;
 
 use App\Livewire\Concerns\HandlesErrors;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
 
@@ -22,7 +23,7 @@ class Delete extends Component
         $this->dispatch('confirmDelete', id: $this->id);
     }
 
-    #[\Livewire\Attributes\On('confirmDeleteAction')]
+    #[On('confirmDeleteAction')]
     public function confirmDeleteAction()
     {
         $query = Role::find($this->id);

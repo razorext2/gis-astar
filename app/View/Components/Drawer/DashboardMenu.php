@@ -25,30 +25,30 @@ class DashboardMenu extends Component
         foreach ($menu as $item) {
             if ($item['type'] === 'link') {
                 $flat[] = [
-                    'label'        => $item['label'],
+                    'label' => $item['label'],
                     'mobile_label' => $item['mobile_label'] ?? $item['label'],
-                    'link'         => $item['route'],
-                    'check'        => is_array($item['check']) ? $item['check'][0] : $item['check'],
-                    'icon'         => $item['icon'],
-                    'guard'        => $item['guard'] ?? null,
+                    'link' => $item['route'],
+                    'check' => is_array($item['check']) ? $item['check'][0] : $item['check'],
+                    'icon' => $item['icon'],
+                    'guard' => $item['guard'] ?? null,
                 ];
             } elseif ($item['type'] === 'group') {
                 foreach ($item['submenu'] as $sub) {
                     $perm = $sub['permission'] ?? null;
 
                     $guard = match (true) {
-                        $perm === null  => null,
+                        $perm === null => null,
                         is_array($perm) => ['any_permission', $perm],
-                        default         => ['can', $perm],
+                        default => ['can', $perm],
                     };
 
                     $flat[] = [
-                        'label'        => $sub['label'],
+                        'label' => $sub['label'],
                         'mobile_label' => $sub['mobile_label'] ?? $sub['label'],
-                        'link'         => $sub['route'],
-                        'check'        => is_array($sub['check']) ? $sub['check'][0] : $sub['check'],
-                        'icon'         => $sub['icon'],
-                        'guard'        => $guard,
+                        'link' => $sub['route'],
+                        'check' => is_array($sub['check']) ? $sub['check'][0] : $sub['check'],
+                        'icon' => $sub['icon'],
+                        'guard' => $guard,
                     ];
                 }
             }

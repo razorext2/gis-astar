@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Forms\Permissions;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
@@ -20,11 +19,11 @@ use Spatie\Permission\Models\Permission;
 class Post extends Form
 {
     #[Validate([
-        'name.*' => 'required|min:5|max:32'
+        'name.*' => 'required|min:5|max:32',
     ], message: [
         'required' => 'Field :attribute wajib diisi',
         'min' => 'Field :attribute minimal 5 karakter',
-        'max' => 'Field :attribute terlalu panjang'
+        'max' => 'Field :attribute terlalu panjang',
     ], attribute: [
         'name.*' => 'name',
     ])]
@@ -35,11 +34,11 @@ class Post extends Form
         try {
             foreach ($this->name as $name) {
                 Permission::create([
-                    'name' => $name
+                    'name' => $name,
                 ]);
             }
         } catch (\Exception $e) {
-            Log::error(now() . ': Error saat menambah data perizinan ->' . $e->getMessage());
+            Log::error(now().': Error saat menambah data perizinan ->'.$e->getMessage());
         }
     }
 }

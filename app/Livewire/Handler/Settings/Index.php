@@ -180,11 +180,11 @@ class Index extends Component
 
             Setting::clearCache();
 
-            $this->dispatch('swal', [
-                'title' => 'Berhasil!',
-                'text' => 'Atribut website telah berhasil diperbarui.',
-                'icon' => 'success',
-            ]);
+            $this->dispatch('swal',
+                title: 'Berhasil!',
+                text: 'Atribut website telah berhasil diperbarui.',
+                icon: 'success'
+            );
         }, 'Gagal memperbarui pengaturan website', [
             'action' => 'update settings',
             'user_id' => auth()->id(),

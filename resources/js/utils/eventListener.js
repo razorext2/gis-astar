@@ -44,15 +44,18 @@ export async function initEventListener() {
 
     // livewire swal event
     Livewire.on("swal", (data) => {
+        const payload = Array.isArray(data) ? data[0] : (data && typeof data === 'object' && '0' in data ? data[0] : data);
+        if (!payload) return;
+
         Swal.fire({
-            icon: data.icon,
-            title: data.title,
-            html: data.text,
+            icon: payload.icon ?? 'success',
+            title: payload.title ?? '',
+            html: payload.text ?? payload.html ?? '',
             showConfirmButton: false,
-            timer: data.redirect?.delay ?? 3000,
+            timer: payload.redirect?.delay ?? 3000,
         }).then(() => {
-            if (data.redirect && data.redirect.url) {
-                window.location.href = data.redirect.url;
+            if (payload.redirect && payload.redirect.url) {
+                window.location.href = payload.redirect.url;
             }
         });
     });
