@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use App\Models\WebAuthnCredential;
 use Exception;
+use lbuchs\WebAuthn\Binary\ByteBuffer;
 use lbuchs\WebAuthn\WebAuthn;
 
 class WebAuthnService
@@ -13,6 +14,8 @@ class WebAuthnService
 
     public function __construct()
     {
+        ByteBuffer::$useBase64UrlEncoding = true;
+
         $rpName = config('app.name', 'Dacin Dashboard');
         $rpId = request()->getHost();
         if ($rpId === 'localhost' || $rpId === '127.0.0.1') {
