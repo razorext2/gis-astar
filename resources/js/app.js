@@ -6,6 +6,7 @@ import flatpickr from "flatpickr";
 import { initFlowbite } from "flowbite";
 import { initEventListener } from "./utils/eventListener.js";
 import { initWebSocketListener } from "./utils/webSocketListener";
+import "./utils/webauthn.js";
 import "./../../vendor/power-components/livewire-powergrid/dist/powergrid";
 import "./components/dynamic-background.js";
 import "./components/scroll-toggle.js";

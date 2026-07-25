@@ -60,4 +60,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(LogHistory::class, 'user_id', 'id');
     }
+
+    public function webauthnCredentials(): HasMany
+    {
+        return $this->hasMany(WebAuthnCredential::class, 'user_id', 'id');
+    }
 }

@@ -56,15 +56,62 @@
                     </label>
                 </div>
 
-                <div class="flex w-full flex-col">
+                <div class="flex w-full flex-col gap-3">
                     <button
                         class="flex w-full items-center justify-center rounded-xl bg-red-600 py-3.5 text-sm font-bold tracking-wide text-white shadow-lg shadow-red-600/20 transition-all hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-dark-primary"
                         type="submit">
                         {{ __('Sign In') }}
                         <x-icons.arrow-right class="ml-2 h-4 w-4" />
                     </button>
+
+                    <div x-data="{
+                        loading: false,
+                        errorMsg: '',
+                        async loginPasskey() {
+                            this.errorMsg = '';
+                            this.loading = true;
+                            try {
+                                const optResp = await fetch('{{ route('webauthn.login.options') }}');
+                                const optData = await optResp.json();
+                                if (!optData.success) throw new Error(optData.message);
+
+                                const credential = await window.WebAuthnHelper.authenticatePasskey(optData.options);
+
+                                const loginResp = await fetch('{{ route('webauthn.login') }}', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                    },
+                                    body: JSON.stringify({
+                                        id: credential.rawId,
+                                        clientDataJSON: credential.clientDataJSON,
+                                        authenticatorData: credential.authenticatorData,
+                                        signature: credential.signature
+                                    })
+                                });
+                                const loginData = await loginResp.json();
+                                if (!loginData.success) throw new Error(loginData.message);
+
+                                window.location.href = loginData.redirect;
+                            } catch (err) {
+                                this.errorMsg = err.message || 'Login dengan Passkey gagal.';
+                            } finally {
+                                this.loading = false;
+                            }
+                        }
+                    }" class="w-full">
+                        <button type="button" @click="loginPasskey()" x-bind:disabled="loading"
+                            class="flex w-full items-center justify-center rounded-xl border border-zinc-200 bg-zinc-50 py-3 text-sm font-semibold text-zinc-800 shadow-xs transition-all hover:bg-zinc-100 dark:border-zinc-700 dark:bg-dark-secondary dark:text-zinc-200 dark:hover:bg-zinc-800">
+                            <x-icons.fingerprint class="mr-2 h-4 w-4 text-blue-600 dark:text-blue-400" />
+                            <span x-show="!loading">Masuk dengan Passkey / Face ID</span>
+                            <span x-show="loading">Scanning Biometrik...</span>
+                        </button>
+                        <p x-show="errorMsg" x-cloak class="mt-2 text-center text-xs text-red-600 dark:text-red-400" x-text="errorMsg"></p>
+                    </div>
                 </div>
             </form>
+
         </div>
     </div>
 </x-guest-layout>
