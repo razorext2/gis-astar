@@ -3,6 +3,7 @@
 namespace App\Livewire\Handler\Roles;
 
 use App\Livewire\Concerns\HandlesErrors;
+use App\Livewire\Concerns\RequiresSudoMode;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -10,7 +11,7 @@ use Spatie\Permission\Models\Role;
 
 class Delete extends Component
 {
-    use HandlesErrors;
+    use HandlesErrors, RequiresSudoMode;
 
     public int $id;
 
@@ -21,12 +22,24 @@ class Delete extends Component
 
     public function delete(): void
     {
+        if (! $this->isSudoConfirmed()) {
+            $this->dispatch('openSudoModal', targetEventName: "confirmDeleteAction.{$this->id}");
+
+            return;
+        }
+
         $this->dispatch('confirmDelete', id: $this->id);
     }
 
     #[On('confirmDeleteAction.{id}')]
     public function confirmDeleteAction(): void
     {
+        if (! $this->isSudoConfirmed()) {
+            $this->dispatch('openSudoModal', targetEventName: "confirmDeleteAction.{$this->id}");
+
+            return;
+        }
+
         $query = Role::find($this->id);
 
         if (! $query) {
