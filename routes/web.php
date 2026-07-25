@@ -87,9 +87,14 @@ Route::middleware(['auth'])->group(function () {
 
 require __DIR__.'/auth.php';
 
-// Offline page
-// File streaming
-Route::get('/file/{path}', function ($path) {
+// File streaming (protected: auth required + path sanitized)
+Route::middleware('auth')->get('/file/{path}', function (string $path) {
+    // Prevent path traversal: reject any '..' sequences
+    abort_if(str_contains($path, '..'), 403);
+
+    // Whitelist: only alphanumeric, slash, dash, underscore, dot
+    abort_unless(preg_match('#^[\w/\-.]+$#', $path), 400);
+
     abort_unless(Storage::exists($path), 404);
 
     return Storage::response($path);

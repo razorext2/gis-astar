@@ -12,7 +12,7 @@ export async function initEventListener() {
         });
     };
 
-    // livewire confirm delete
+    // livewire confirm delete — scoped per ID to prevent race condition
     Livewire.on("confirmDelete", (data) => {
         confirmationModal(
             "Apa kamu yakin?",
@@ -20,7 +20,8 @@ export async function initEventListener() {
             "warning"
         ).then((result) => {
             if (result.isConfirmed) {
-                Livewire.dispatch("confirmDeleteAction", {
+                // Dispatch scoped event so only the matching Delete component responds
+                Livewire.dispatch(`confirmDeleteAction.${data.id}`, {
                     id: data.id,
                 });
             }

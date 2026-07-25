@@ -3,6 +3,7 @@
 namespace App\Livewire\Handler\Permissions;
 
 use App\Livewire\Concerns\HandlesErrors;
+use Illuminate\Contracts\View\View;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
@@ -13,23 +14,23 @@ class Delete extends Component
 
     public int $id;
 
-    public function mount($id)
+    public function mount(int $id): void
     {
         $this->id = $id;
     }
 
-    public function delete()
+    public function delete(): void
     {
         $this->dispatch('confirmDelete', id: $this->id);
     }
 
-    #[On('confirmDeleteAction')]
-    public function confirmDeleteAction()
+    #[On('confirmDeleteAction.{id}')]
+    public function confirmDeleteAction(): void
     {
         $query = Permission::find($this->id);
 
         if (! $query) {
-            return abort(404);
+            abort(404);
         }
 
         $this->runSafely(function () use ($query) {
@@ -45,7 +46,7 @@ class Delete extends Component
         ]);
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.handler.permissions.delete');
     }

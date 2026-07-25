@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Forms\Permissions;
 
-use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 use Spatie\Permission\Models\Permission;
@@ -29,16 +28,11 @@ class Post extends Form
     ])]
     public array $name = [0 => null];
 
-    public function store()
+    public function store(): void
     {
-        try {
-            foreach ($this->name as $name) {
-                Permission::create([
-                    'name' => $name,
-                ]);
-            }
-        } catch (\Exception $e) {
-            Log::error(now().': Error saat menambah data perizinan ->'.$e->getMessage());
+        // Let any exception bubble up to HandlesErrors::runSafely() in the caller
+        foreach ($this->name as $name) {
+            Permission::create(['name' => $name]);
         }
     }
 }
