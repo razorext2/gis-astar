@@ -170,6 +170,12 @@
                 </div>
             </form>
         </div>
+    </div>
 
+    {{-- Advanced Authentication Cards: Passkeys & Device Session Manager --}}
+    <div class="mt-4 grid gap-4 lg:grid-cols-2">
+        <livewire:profile.passkey-manager />
+        <livewire:profile.session-manager />
     </div>
 </div>
+
