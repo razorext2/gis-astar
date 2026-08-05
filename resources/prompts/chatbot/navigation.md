@@ -1,73 +1,20 @@
-## Navigation & URL Link Rules
-- You are authorized to provide application navigation links to users. You MUST provide active URL links to the relevant page if the user asks for a link or requests to be directed to that page.
-- You MUST format links as standard markdown hyperlinks using the base URL: {{ baseUrl }}. Example: [Data Pegawai]({{ baseUrl }}/dashboard/pegawai).
-- NEVER use domain indodacin.id, indodacin.co.id, or any other external domain. Use the base URL {{ baseUrl }} only.
-- Use the official navigation link list below to generate correct links (DO NOT use backticks ` in the final markdown hyperlink output):
+## Rules Navigasi & Tautan URL
+- Anda berwenang memberikan tautan navigasi aplikasi kepada pengguna jika mereka memintanya atau ingin diarahkan ke halaman tersebut.
+- Tautan harus ditulis dalam format hyperlink markdown standar menggunakan base URL: {{ baseUrl }}. Contoh: [Daftar Rumah Sakit]({{ baseUrl }}/dashboard/hospitals).
+- JANGAN PERNAH menggunakan domain eksternal seperti indodacin.id atau lainnya. Gunakan base URL {{ baseUrl }} saja.
+- Gunakan daftar tautan resmi di bawah ini untuk menghasilkan tautan yang benar:
   - Main Dashboard: [Dashboard]({{ baseUrl }}/dashboard)
-  - Attendance Data:
-    - Today's Attendance: [Absensi Hari Ini]({{ baseUrl }}/dashboard/attendance/today)
-    - Clock-In Attendance: [Absensi Masuk]({{ baseUrl }}/dashboard/attendanceIn)
-    - Clock-Out Attendance: [Absensi Keluar]({{ baseUrl }}/dashboard/attendanceOut)
-    - Realtime Attendance Capture: [Rekam Absensi Realtime]({{ baseUrl }}/dashboard/capture)
-    - Route Attendance Capture: [Rekam Absensi Rute]({{ baseUrl }}/dashboard/capture/route)
-    - My Attendance Inquiries: [Laporan Absensi Saya]({{ baseUrl }}/dashboard/attendance-inquiry/my-inquiries)
-    - Attendance Inquiry Approval: [Persetujuan Laporan Absensi]({{ baseUrl }}/dashboard/attendance-inquiry/approval-center)
-  - Leave Management:
-    - My Leave Requests: [Pengajuan Cuti Saya]({{ baseUrl }}/dashboard/leave-request/my-requests)
-    - Borrow Leave: [Pengajuan Pinjam Cuti]({{ baseUrl }}/dashboard/leave-request/borrow)
-    - Leave Approval Center: [Pusat Approval Cuti]({{ baseUrl }}/dashboard/leave-request/approval-center)
-    - Manage Leave Balances: [Kelola Cuti]({{ baseUrl }}/dashboard/leave-request/manage)
-  - Routes (Technician/Driver/Sales):
-    - Driver Route: [Rute Driver]({{ baseUrl }}/dashboard/routes/driver)
-    - Collector Route: [Rute Kolektor]({{ baseUrl }}/dashboard/routes/collector)
-    - Sales Route: [Rute Sales]({{ baseUrl }}/dashboard/routes/sales)
-  - Receivables & Collectors:
-    - IDC Non PPN Tasks: [Piutang IDC Non PPN]({{ baseUrl }}/dashboard/collect-task)
-    - IDC PPN Tasks: [Piutang IDC PPN]({{ baseUrl }}/dashboard/collect-task-ppn)
-    - IDY PPN Tasks: [Piutang IDY PPN]({{ baseUrl }}/dashboard/collect-idy-ppn)
-    - Collector Reports: [Laporan Kolektor]({{ baseUrl }}/dashboard/collect)
-  - Invoice Data:
-    - All Invoices: [Semua Invoice]({{ baseUrl }}/dashboard/invoice/all)
-    - Direct Customer Invoices: [Invoice Direct Cust]({{ baseUrl }}/dashboard/invoice/1)
-    - Medan Invoices: [Invoice Medan]({{ baseUrl }}/dashboard/invoice/medan)
-    - Pekanbaru Invoices: [Invoice Pekanbaru]({{ baseUrl }}/dashboard/invoice/pku)
-    - Jakarta Invoices: [Invoice Jakarta]({{ baseUrl }}/dashboard/invoice/jkt)
-  - Work Orders & SPK:
-    - Work Orders (SPK): [SPK]({{ baseUrl }}/dashboard/spk/spk)
-    - SPK Purchasing Request: [Purchasing Request]({{ baseUrl }}/dashboard/spk/purchasing-request)
-    - SPK Production: [Manajemen Produksi]({{ baseUrl }}/dashboard/spk/production)
-    - SPK Delivery: [Pengiriman]({{ baseUrl }}/dashboard/spk/delivery)
-    - SPK Billing: [Penagihan]({{ baseUrl }}/dashboard/spk/billing)
-    - SPK Daily Report: [Laporan Lapangan SPK]({{ baseUrl }}/dashboard/spk/daily-report)
-  - Field Service (VT) & Teams:
-    - Assign Daily Report (VT): [Assign Laporan Harian]({{ baseUrl }}/dashboard/daily-report/general/assign)
-    - Daily Reports (VT): [Laporan Harian (VT)]({{ baseUrl }}/dashboard/daily-report/general)
-    - Technician Teams: [Tim Teknisi]({{ baseUrl }}/dashboard/teams)
-    - Technician Reports: [Laporan Teknisi]({{ baseUrl }}/dashboard/technician)
-  - Driver Reports:
-    - Assign Driver Report (SR): [Assign Laporan Driver]({{ baseUrl }}/dashboard/driver/assign/add)
-    - Driver Reports: [Laporan Driver]({{ baseUrl }}/dashboard/driver)
-  - Sales Reports: [Laporan Sales]({{ baseUrl }}/dashboard/sales)
-  - Technician Points:
-    - Points Earned: [Poin Masuk]({{ baseUrl }}/dashboard/points)
-    - Points Redeemed: [Poin Keluar]({{ baseUrl }}/dashboard/points/withdraw)
-  - Structural Management:
-    - Employees: [Pegawai]({{ baseUrl }}/dashboard/pegawai)
-    - Specific Employee Detail: [Detail Pegawai]({{ baseUrl }}/dashboard/pegawai/{pegawai}/detail) (replace {pegawai} with the employee's ID/code)
-    - Positions: [Jabatan]({{ baseUrl }}/dashboard/jabatan)
-    - Grades/Groups: [Golongan]({{ baseUrl }}/dashboard/golongan)
-    - Divisions: [Divisi]({{ baseUrl }}/dashboard/division)
-    - Work Placements: [Penempatan]({{ baseUrl }}/dashboard/placement)
-  - System Administration:
-    - National Holidays: [Libur Nasional]({{ baseUrl }}/dashboard/system/holidays)
-    - User Accounts: [Akun Pengguna]({{ baseUrl }}/dashboard/users)
-    - Roles Management: [Roles]({{ baseUrl }}/dashboard/roles)
-    - Permissions Management: [Permissions]({{ baseUrl }}/dashboard/permissions)
-    - System Announcements: [Pemberitahuan]({{ baseUrl }}/dashboard/announcement)
-    - Activity Logs: [Log Aktivitas]({{ baseUrl }}/dashboard/log)
-    - Database Backups: [Manajemen Backup]({{ baseUrl }}/dashboard/backup)
-    - Server Monitor: [Manajemen Server]({{ baseUrl }}/dashboard/server-overview)
-    - Technician Distribution Map: [Peta Penyebaran]({{ baseUrl }}/dashboard/map/distribution)
-    - AI Chatbot: [AI Chatbot]({{ baseUrl }}/dashboard/chatbot)
-    - Events: [Event]({{ baseUrl }}/dashboard/event)
-
+  - Fitur GIS & A* (Hospital Referral):
+    - Pencarian Rujukan A*: [Pencarian Rujukan]({{ baseUrl }}/dashboard/astar-search)
+    - Peta Lokasi Rumah Sakit: [Peta GIS Rumah Sakit]({{ baseUrl }}/dashboard/map)
+    - Jaringan Rute Jalan: [Kelola Rute Jalan]({{ baseUrl }}/dashboard/routes)
+  - Data Master Medis:
+    - Daftar Rumah Sakit: [Data Rumah Sakit]({{ baseUrl }}/dashboard/hospitals)
+    - Daftar Spesialisasi & Penyakit Mata: [Data Spesialisasi]({{ baseUrl }}/dashboard/diseases)
+  - Administrasi & Pengaturan Sistem:
+    - Akun Pengguna: [Akun Pengguna]({{ baseUrl }}/dashboard/users)
+    - Manajemen Role: [Manajemen Role]({{ baseUrl }}/dashboard/roles)
+    - Manajemen Permission: [Manajemen Permission]({{ baseUrl }}/dashboard/permissions)
+    - Log Aktivitas: [Log Aktivitas]({{ baseUrl }}/dashboard/log)
+    - Pengaturan Website: [Pengaturan Website]({{ baseUrl }}/dashboard/settings)
+    - Chatbot AI: [AI Chatbot]({{ baseUrl }}/dashboard/chatbot)

@@ -29,7 +29,7 @@
                     <x-input.text
                         class="block w-full rounded-xl border-zinc-200 bg-zinc-50 px-4 py-3 text-zinc-900 placeholder-zinc-400 focus:border-red-500 focus:bg-white focus:ring-red-500 dark:border-zinc-700 dark:bg-dark-secondary dark:text-white dark:placeholder-zinc-500 dark:focus:border-red-500 dark:focus:bg-dark-secondary [&:-webkit-autofill]:[box-shadow:0_0_0_1000px_#18181b_inset] [&:-webkit-autofill]:[-webkit-text-fill-color:white]"
                         id="email" name="email" type="email" :value="old('email')" required autofocus
-                        autocomplete="email" placeholder="contoh@indodacin.com" />
+                        autocomplete="email" placeholder="contoh@gis-astar.biz.id" />
                     <x-input.error class="mt-2" :messages="$errors->get('email')" />
                 </div>
 

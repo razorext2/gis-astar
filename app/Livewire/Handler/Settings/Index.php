@@ -67,22 +67,22 @@ class Index extends Component
 
     public function mount(): void
     {
-        $this->site_name = (string) setting('site_name', 'Indodacin');
-        $this->site_title = (string) setting('site_title', 'Dashboard System');
-        $this->sidebar_title = (string) setting('sidebar_title', 'Attendance');
-        $this->auth_subtitle = (string) setting('auth_subtitle', 'Presisi Utama');
-        $this->auth_description = (string) setting('auth_description', 'Sistem informasi terpadu untuk koordinasi, pelaporan, dan manajemen data operasional secara langsung.');
-        $this->app_version = (string) setting('app_version', 'v2.4.0');
+        $this->site_name = (string) setting('site_name', 'GIS Rujukan Mata');
+        $this->site_title = (string) setting('site_title', 'Sistem Rujukan Pasien Mata A*');
+        $this->sidebar_title = (string) setting('sidebar_title', 'GIS A* Rujukan');
+        $this->auth_subtitle = (string) setting('auth_subtitle', 'Pencarian RS Rujukan');
+        $this->auth_description = (string) setting('auth_description', 'Sistem Informasi Geografis berbasis Algoritma A* untuk merekomendasikan rumah sakit rujukan pasien mata terdekat dan tercepat.');
+        $this->app_version = (string) setting('app_version', 'v1.0.0');
 
-        $this->meta_description = (string) setting('meta_description', 'Dashboard System PT. Indodacin Presisi Utama');
-        $this->meta_keywords = (string) setting('meta_keywords', 'dashboard, system, indodacin, attendance');
-        $this->meta_author = (string) setting('meta_author', 'PT. Indodacin Presisi Utama');
+        $this->meta_description = (string) setting('meta_description', 'Sistem Informasi Geografis Pencarian Rumah Sakit Rujukan Pasien Mata menggunakan Algoritma A*');
+        $this->meta_keywords = (string) setting('meta_keywords', 'gis, a-star, rujukan, rumah sakit, mata, rumah sakit rujukan, sistem informasi geografis, pathfinding');
+        $this->meta_author = (string) setting('meta_author', 'Developer GIS A*');
 
-        $this->footer_company = (string) setting('footer_company', 'PT. Indodacin Presisi Utama™');
-        $this->footer_url = (string) setting('footer_url', 'https://indodacin.com');
+        $this->footer_company = (string) setting('footer_company', 'GIS A* RS Rujukan Mata™');
+        $this->footer_url = (string) setting('footer_url', 'https://gis-astar.biz.id');
         $this->footer_copyright = (string) setting('footer_copyright', 'All Rights Reserved.');
 
-        $this->contact_email = (string) setting('contact_email', 'support@indodacin.com');
+        $this->contact_email = (string) setting('contact_email', 'support@gis-astar.biz.id');
         $this->whatsapp_number = (string) setting('whatsapp_number', '628123456789');
         $this->office_address = (string) setting('office_address', 'Jl. Raya Industri No. 88, Jakarta');
         $this->google_analytics_id = (string) setting('google_analytics_id', '');

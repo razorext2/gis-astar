@@ -5,20 +5,20 @@ return [
         'idcnon' => [
             'label' => 'IDC Non PPN',
             'value' => 'idcnon',
-            'api' => 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSR',
-            'api_sisa' => 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSisa',
+            'api' => '',
+            'api_sisa' => '',
         ],
         'idcppn' => [
             'label' => 'IDC PPN',
             'value' => 'idcppn',
-            'api' => 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSR3',
-            'api_sisa' => 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSisa1',
+            'api' => '',
+            'api_sisa' => '',
         ],
         'idyppn' => [
             'label' => 'IDY PPN',
             'value' => 'idyppn',
-            'api' => 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSR2',
-            'api_sisa' => 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=fetchSisa2',
+            'api' => '',
+            'api_sisa' => '',
         ],
     ],
     'satuan' => [

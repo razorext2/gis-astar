@@ -14,21 +14,21 @@ class SettingSeeder extends Seeder
     {
         $defaults = [
             // Identitas & Branding
-            ['key' => 'site_name', 'value' => 'Indodacin', 'group' => 'branding', 'type' => 'string'],
-            ['key' => 'site_title', 'value' => 'Dashboard System', 'group' => 'branding', 'type' => 'string'],
-            ['key' => 'sidebar_title', 'value' => 'Attendance', 'group' => 'branding', 'type' => 'string'],
-            ['key' => 'auth_subtitle', 'value' => 'Presisi Utama', 'group' => 'branding', 'type' => 'string'],
-            ['key' => 'auth_description', 'value' => 'Sistem informasi terpadu untuk koordinasi, pelaporan, dan manajemen data operasional secara langsung.', 'group' => 'branding', 'type' => 'text'],
-            ['key' => 'app_version', 'value' => 'v2.4.0', 'group' => 'branding', 'type' => 'string'],
+            ['key' => 'site_name', 'value' => 'GIS Rujukan Mata', 'group' => 'branding', 'type' => 'string'],
+            ['key' => 'site_title', 'value' => 'Sistem Rujukan Pasien Mata A*', 'group' => 'branding', 'type' => 'string'],
+            ['key' => 'sidebar_title', 'value' => 'GIS A* Rujukan', 'group' => 'branding', 'type' => 'string'],
+            ['key' => 'auth_subtitle', 'value' => 'Pencarian RS Rujukan', 'group' => 'branding', 'type' => 'string'],
+            ['key' => 'auth_description', 'value' => 'Sistem Informasi Geografis berbasis Algoritma A* untuk merekomendasikan rumah sakit rujukan pasien mata terdekat dan tercepat.', 'group' => 'branding', 'type' => 'text'],
+            ['key' => 'app_version', 'value' => 'v1.0.0', 'group' => 'branding', 'type' => 'string'],
 
             // SEO & Meta
-            ['key' => 'meta_description', 'value' => 'Dashboard System PT. Indodacin Presisi Utama', 'group' => 'seo', 'type' => 'text'],
-            ['key' => 'meta_keywords', 'value' => 'dashboard, system, indodacin, attendance', 'group' => 'seo', 'type' => 'string'],
-            ['key' => 'meta_author', 'value' => 'PT. Indodacin Presisi Utama', 'group' => 'seo', 'type' => 'string'],
+            ['key' => 'meta_description', 'value' => 'Sistem Informasi Geografis Pencarian Rumah Sakit Rujukan Pasien Mata menggunakan Algoritma A*', 'group' => 'seo', 'type' => 'text'],
+            ['key' => 'meta_keywords', 'value' => 'gis, a-star, rujukan, rumah sakit, mata, rumah sakit rujukan, sistem informasi geografis, pathfinding', 'group' => 'seo', 'type' => 'string'],
+            ['key' => 'meta_author', 'value' => 'Developer GIS A*', 'group' => 'seo', 'type' => 'string'],
 
             // Footer & Lisensi
-            ['key' => 'footer_company', 'value' => 'PT. Indodacin Presisi Utama™', 'group' => 'footer', 'type' => 'string'],
-            ['key' => 'footer_url', 'value' => 'https://indodacin.com', 'group' => 'footer', 'type' => 'string'],
+            ['key' => 'footer_company', 'value' => 'GIS A* RS Rujukan Mata™', 'group' => 'footer', 'type' => 'string'],
+            ['key' => 'footer_url', 'value' => 'https://gis-astar.biz.id', 'group' => 'footer', 'type' => 'string'],
             ['key' => 'footer_copyright', 'value' => 'All Rights Reserved.', 'group' => 'footer', 'type' => 'string'],
 
             // Media & Assets
@@ -37,7 +37,7 @@ class SettingSeeder extends Seeder
             ['key' => 'apple_touch_icon_path', 'value' => null, 'group' => 'media', 'type' => 'image'],
 
             // Kontak & Integrasi
-            ['key' => 'contact_email', 'value' => 'support@indodacin.com', 'group' => 'contact', 'type' => 'string'],
+            ['key' => 'contact_email', 'value' => 'support@gis-astar.biz.id', 'group' => 'contact', 'type' => 'string'],
             ['key' => 'whatsapp_number', 'value' => '628123456789', 'group' => 'contact', 'type' => 'string'],
             ['key' => 'office_address', 'value' => 'Jl. Raya Industri No. 88, Jakarta', 'group' => 'contact', 'type' => 'text'],
             ['key' => 'google_analytics_id', 'value' => '', 'group' => 'integration', 'type' => 'string'],

@@ -44,11 +44,11 @@ return [
         'url' => env('NATIONAL_HOLIDAY_API_URL', 'https://libur.deno.dev/api'),
     ],
     'attendance_sync' => [
-        'default_url' => env('ATTENDANCE_SYNC_URL', 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendance'),
-        'agrotec_url' => env('ATTENDANCE_SYNC_AGROTEC_URL', 'https://indodacin.nusa.net.id/web/finger/secureapi.php?tipe=insertAttendanceAgrotec'),
+        'default_url' => env('ATTENDANCE_SYNC_URL', ''),
+        'agrotec_url' => env('ATTENDANCE_SYNC_AGROTEC_URL', ''),
     ],
     'face_recognition' => [
-        'url' => env('FACE_RECOGNITION_API_URL', 'https://verify.indodacin.com/recognize'),
+        'url' => env('FACE_RECOGNITION_API_URL', ''),
     ],
     'gemini' => [
         'api_keys' => array_values(array_filter(array_map(

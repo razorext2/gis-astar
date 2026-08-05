@@ -5,6 +5,8 @@
 namespace App\Providers;
 
 use App\Events\TableRefreshed;
+use App\Models\Rujukan;
+use App\Observers\RujukanObserver;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
@@ -91,11 +93,16 @@ class AppServiceProvider extends ServiceProvider
             }
         }
 
+        // Register RujukanObserver untuk auto audit trail riwayat_rujukan
+        Rujukan::observe(RujukanObserver::class);
+
         // Register model observers for real-time PowerGrid table refreshes
         $modelToTablesMap = [
-            'App\Models\Announcement' => ['AnnouncementTable'],
             'App\Models\User' => ['UserTable'],
             'App\Models\LogHistory' => ['LogTable'],
+            'App\Models\Pasien' => ['PasienTable'],
+            'App\Models\RumahSakit' => ['RumahSakitTable'],
+            'App\Models\Rujukan' => ['RujukanTable'],
             'Spatie\Permission\Models\Role' => ['RolesTable'],
             'Spatie\Permission\Models\Permission' => ['PermissionsTable'],
         ];

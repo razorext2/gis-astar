@@ -10,52 +10,63 @@ use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        $role = Role::firstOrCreate(['name' => 'Super Admin']);
-
         $permissions = [
-            'users-list',
-            'users-create',
-            'users-edit',
-            'users-delete',
-            'roles-list',
-            'roles-create',
-            'roles-edit',
-            'roles-delete',
-            'permissions-list',
-            'permissions-create',
-            'permissions-edit',
-            'permissions-delete',
-            'announcement-list',
-            'announcement-create',
-            'announcement-edit',
-            'announcement-delete',
-            'log-list',
-            'settings-manage',
+            // System
+            'users-list', 'users-create', 'users-edit', 'users-delete',
+            'roles-list', 'roles-create', 'roles-edit', 'roles-delete',
+            'permissions-list', 'permissions-create', 'permissions-edit', 'permissions-delete',
+            'log-list', 'settings-manage',
+            // Pasien
+            'pasien-list', 'pasien-create', 'pasien-edit', 'pasien-delete',
+            // Rumah Sakit
+            'rs-list', 'rs-create', 'rs-edit', 'rs-delete',
+            // Rujukan
+            'rujukan-list', 'rujukan-create', 'rujukan-view', 'rujukan-update-status',
         ];
 
         foreach ($permissions as $perm) {
             Permission::firstOrCreate(['name' => $perm]);
         }
 
-        $role->syncPermissions(Permission::all());
+        // Super Admin — semua permission
+        $superAdmin = Role::firstOrCreate(['name' => 'Super Admin']);
+        $superAdmin->syncPermissions(Permission::all());
 
-        $user = User::updateOrCreate(
-            ['email' => 'user@email.com'],
-            [
-                'name' => 'Dummy User',
-                'password' => Hash::make('admin123'),
-                'is_active' => true,
-            ]
+        // Dokter — manajemen pasien + buat rujukan
+        $dokter = Role::firstOrCreate(['name' => 'dokter']);
+        $dokter->syncPermissions([
+            'pasien-list', 'pasien-create', 'pasien-edit',
+            'rs-list',
+            'rujukan-list', 'rujukan-create', 'rujukan-view', 'rujukan-update-status',
+        ]);
+
+        // Operator — lihat & update status
+        $operator = Role::firstOrCreate(['name' => 'operator']);
+        $operator->syncPermissions([
+            'pasien-list', 'rs-list',
+            'rujukan-list', 'rujukan-view', 'rujukan-update-status',
+        ]);
+
+        // Admin user
+        $admin = User::updateOrCreate(
+            ['email' => 'admin@gis-astar.biz.id'],
+            ['name' => 'Admin GIS A*', 'password' => Hash::make('admin123'), 'is_active' => true]
         );
+        $admin->assignRole($superAdmin);
 
-        $user->assignRole($role);
-        $user->syncPermissions(Permission::all());
+        // Dokter user (untuk testing)
+        $dokterUser = User::updateOrCreate(
+            ['email' => 'dokter@gis-astar.biz.id'],
+            ['name' => 'Dr. Budi Santoso', 'password' => Hash::make('dokter123'), 'is_active' => true]
+        );
+        $dokterUser->assignRole($dokter);
 
-        $this->call(SettingSeeder::class);
+        $this->call([
+            SettingSeeder::class,
+            RumahSakitSeeder::class,
+            PasienSeeder::class,
+        ]);
     }
 }

@@ -51,9 +51,9 @@ window.addEventListener('resize', () => { if (!isMobile()) navVisible = true; },
                 class="flex shrink-0 transform items-center justify-start overflow-hidden transition-[opacity,transform,max-width] duration-300 ease-in-out">
                 <a class="flex items-center gap-2" href="{{ config('app.url') }}">
                     <img class="h-7 w-7 rounded-lg object-contain sm:h-8 sm:w-8"
-                        src="{{ asset('images/brand/logo.png') }}" alt="Attendance Logo" loading="lazy" />
+                        src="{{ asset('images/brand/logo.png') }}" alt="GIS A* Logo" loading="lazy" />
                     <span
-                        class="hidden text-sm font-bold italic tracking-wide text-zinc-900 sm:block sm:text-base dark:text-white">Attendance</span>
+                        class="hidden text-sm font-bold italic tracking-wide text-zinc-900 sm:block sm:text-base dark:text-white">GIS Rujukan Mata</span>
                 </a>
             </div>
 

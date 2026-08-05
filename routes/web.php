@@ -4,10 +4,10 @@
 
 use App\Http\Controllers\PushController;
 use App\Livewire\Dashboard;
-use App\Livewire\Handler\Announcement\Create;
-use App\Livewire\Handler\Announcement\Edit;
-use App\Livewire\Handler\Announcement\Index;
+use App\Livewire\Handler\Pasien;
 use App\Livewire\Handler\Permissions\Update;
+use App\Livewire\Handler\Rujukan;
+use App\Livewire\Handler\RumahSakit;
 use App\Livewire\NotificationsIndex;
 use App\Livewire\PowergridTables\LogTable;
 use App\Livewire\ProfileEdit;
@@ -57,11 +57,6 @@ Route::middleware(['auth'])->group(function () {
         // Notifications (Livewire 4 Page Components)
         Route::livewire('notifications', NotificationsIndex::class)->name('notifications.index');
 
-        // Announcements
-        Route::livewire('announcement', Index::class)->name('announcement.index')->middleware('permission:announcement-list');
-        Route::livewire('announcement/create', Create::class)->name('announcement.create')->middleware('permission:announcement-create');
-        Route::livewire('announcement/{announcement}/edit', Edit::class)->name('announcement.edit')->middleware('permission:announcement-edit');
-
         // Permissions
         Route::livewire('permissions', App\Livewire\Handler\Permissions\Index::class)->name('permissions.index')->middleware('permission:permissions-list');
         Route::livewire('permissions/create', App\Livewire\Handler\Permissions\Create::class)->name('permissions.create')->middleware('permission:permissions-create');
@@ -82,6 +77,22 @@ Route::middleware(['auth'])->group(function () {
 
         // Website Settings
         Route::livewire('settings', App\Livewire\Handler\Settings\Index::class)->name('settings.index')->middleware('permission:settings-manage');
+
+        // ───────── PASIEN ─────────
+        Route::livewire('pasien', Pasien\Index::class)->name('pasien.index')->middleware('permission:pasien-list');
+        Route::livewire('pasien/create', Pasien\Create::class)->name('pasien.create')->middleware('permission:pasien-create');
+        Route::livewire('pasien/{pasien}/edit', Pasien\Edit::class)->name('pasien.edit')->middleware('permission:pasien-edit');
+
+        // ───────── RUMAH SAKIT ─────────
+        Route::livewire('rs', RumahSakit\Index::class)->name('rs.index')->middleware('permission:rs-list');
+        Route::livewire('rs/create', RumahSakit\Create::class)->name('rs.create')->middleware('permission:rs-create');
+        Route::livewire('rs/{rumahSakit}/edit', RumahSakit\Edit::class)->name('rs.edit')->middleware('permission:rs-edit');
+
+        // ───────── RUJUKAN ─────────
+        Route::livewire('rujukan', Rujukan\Index::class)->name('rujukan.index')->middleware('permission:rujukan-list');
+        Route::livewire('rujukan/create', Rujukan\Create::class)->name('rujukan.create')->middleware('permission:rujukan-create');
+        Route::livewire('rujukan/{rujukan}', Rujukan\Show::class)->name('rujukan.show')->middleware('permission:rujukan-view');
+        Route::livewire('rujukan/{rujukan}/status', Rujukan\UpdateStatus::class)->name('rujukan.update-status')->middleware('permission:rujukan-update-status');
     });
 });
 

@@ -12,6 +12,39 @@ return [
         'navigate' => true,
     ],
 
+    // ─── GIS A* Referral ──────────────────────────────────────────────────────
+    [
+        'type' => 'header',
+        'label' => 'GIS A* Referral',
+    ],
+    [
+        'type' => 'link',
+        'label' => 'Data Pasien',
+        'route' => 'pasien.index',
+        'check' => ['pasien.*'],
+        'icon' => 'user',
+        'guard' => ['any_permission', ['pasien-list']],
+        'navigate' => true,
+    ],
+    [
+        'type' => 'link',
+        'label' => 'Data Rumah Sakit',
+        'route' => 'rs.index',
+        'check' => ['rs.*'],
+        'icon' => 'office-building',
+        'guard' => ['any_permission', ['rs-list']],
+        'navigate' => true,
+    ],
+    [
+        'type' => 'link',
+        'label' => 'Rujukan Otomatis A*',
+        'route' => 'rujukan.index',
+        'check' => ['rujukan.*'],
+        'icon' => 'map',
+        'guard' => ['any_permission', ['rujukan-list']],
+        'navigate' => true,
+    ],
+
     // ─── Settings ─────────────────────────────────────────────────────────────
     [
         'type' => 'header',
@@ -60,17 +93,8 @@ return [
         'type' => 'group',
         'label' => 'System Settings',
         'icon' => 'computer',
-        'guard' => ['any_permission', ['announcement-list', 'log-list', 'manage-server']],
+        'guard' => ['any_permission', ['log-list', 'manage-server']],
         'submenu' => [
-            [
-                'label' => 'Pemberitahuan',
-                'mobile_label' => 'Manajemen Pemberitahuan',
-                'route' => 'announcement.index',
-                'check' => ['announcement.*'],
-                'icon' => 'bullhorn',
-                'permission' => 'announcement-list',
-                'navigate' => true,
-            ],
             [
                 'label' => 'Log Aktivitas',
                 'mobile_label' => 'Log Aktivitas',

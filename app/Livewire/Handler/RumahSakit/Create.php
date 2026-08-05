@@ -1,0 +1,88 @@
+<?php
+
+/** Goal: Form tambah Rumah Sakit baru dengan layanan operasi (JSON), Caller: rs.create */
+
+namespace App\Livewire\Handler\RumahSakit;
+
+use App\Livewire\Concerns\HandlesErrors;
+use App\Models\RumahSakit;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\DB;
+use Livewire\Component;
+
+class Create extends Component
+{
+    use HandlesErrors;
+
+    public ?string $nama_rumah_sakit = null;
+
+    public ?string $alamat = null;
+
+    public ?string $no_telepon = null;
+
+    public ?float $latitude = null;
+
+    public ?float $longitude = null;
+
+    public array $layanan_operasi = [];
+
+    /** Pool layanan yang tersedia untuk dipilih */
+    public array $layananPool = [
+        'IGD', 'ICU', 'NICU', 'Bedah', 'Penyakit Dalam',
+        'Jantung', 'Saraf', 'Kebidanan', 'Anak', 'Radiologi',
+        'Ortopedi', 'THT', 'Mata', 'Kulit', 'Psikiatri',
+    ];
+
+    protected function rules(): array
+    {
+        return [
+            'nama_rumah_sakit' => 'required|string|max:255',
+            'alamat' => 'required|string',
+            'no_telepon' => 'nullable|string|max:20',
+            'latitude' => 'required|numeric|between:-90,90',
+            'longitude' => 'required|numeric|between:-180,180',
+            'layanan_operasi' => 'required|array|min:1',
+        ];
+    }
+
+    protected array $messages = [
+        'nama_rumah_sakit.required' => 'Nama rumah sakit wajib diisi.',
+        'alamat.required' => 'Alamat wajib diisi.',
+        'latitude.required' => 'Koordinat latitude wajib diisi.',
+        'longitude.required' => 'Koordinat longitude wajib diisi.',
+        'layanan_operasi.required' => 'Pilih minimal satu layanan operasi.',
+        'layanan_operasi.min' => 'Pilih minimal satu layanan operasi.',
+    ];
+
+    public function updateCoordinates(float $lat, float $lng): void
+    {
+        $this->latitude = $lat;
+        $this->longitude = $lng;
+    }
+
+    public function save(): void
+    {
+        $this->validate();
+
+        $this->runSafely(function () {
+            DB::transaction(function () {
+                RumahSakit::create([
+                    'nama_rumah_sakit' => $this->nama_rumah_sakit,
+                    'alamat' => $this->alamat,
+                    'no_telepon' => $this->no_telepon,
+                    'latitude' => $this->latitude,
+                    'longitude' => $this->longitude,
+                    'layanan_operasi' => array_values($this->layanan_operasi),
+                ]);
+            });
+
+            $this->dispatch('swal', title: 'Berhasil', text: "RS {$this->nama_rumah_sakit} berhasil ditambahkan.", icon: 'success');
+            $this->redirect(route('rs.index'), navigate: true);
+        }, 'Gagal menambah data RS', ['action' => 'create rs', 'user_id' => auth()->id()]);
+    }
+
+    public function render(): View
+    {
+        return view('livewire.handler.rumah-sakit.create');
+    }
+}

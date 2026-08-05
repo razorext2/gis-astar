@@ -125,9 +125,9 @@
 
                 <h1
                     class="flex flex-col items-center text-center text-4xl font-black leading-tight tracking-tight text-zinc-900 drop-shadow-sm dark:text-white md:items-start md:text-left md:text-5xl lg:text-[3.5rem]">
-                    <span>{{ setting('site_name', 'Indodacin') }}</span>
+                    <span>{{ setting('site_name', 'GIS Rujukan Mata') }}</span>
                     <span x-data="{
-                        words: [{{ json_encode(setting('auth_subtitle', 'Presisi Utama')) }}, 'Pasti Presisi', 'Pasti Berkualitas', 'Pasti Pas'],
+                        words: [{{ json_encode(setting('auth_subtitle', 'Pencarian RS Rujukan')) }}, 'Algoritma A*', 'Pasien Mata', 'Rute Tercepat', 'Rujukan Terdekat'],
                         currentWord: '',
                         wordIndex: 0,
                         charIndex: 0,

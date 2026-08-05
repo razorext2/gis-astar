@@ -10,10 +10,10 @@
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>@yield('title', setting('site_title', 'Dashboard System')) | {{ setting('site_name', 'Dacin') }}</title>
-<meta name="description" content="{{ setting('meta_description', 'Dashboard System') }}" />
-<meta name="keywords" content="{{ setting('meta_keywords', 'dashboard, system, indodacin') }}" />
-<meta name="author" content="{{ setting('meta_author', 'PT. Indodacin Presisi Utama') }}" />
+<title>@yield('title', setting('site_title', 'Sistem Rujukan Pasien Mata A*')) | {{ setting('site_name', 'GIS Rujukan Mata') }}</title>
+<meta name="description" content="{{ setting('meta_description', 'Sistem Informasi Geografis Pencarian Rumah Sakit Rujukan Pasien Mata menggunakan Algoritma A*') }}" />
+<meta name="keywords" content="{{ setting('meta_keywords', 'gis, a-star, rujukan, rumah sakit, mata') }}" />
+<meta name="author" content="{{ setting('meta_author', 'Developer GIS A*') }}" />
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <meta name="user-id" content="{{ auth()->user()->id }}">
 <meta name="vapid-public-key" content="{{ config('webpush.vapid.public_key') }}">
@@ -43,3 +43,6 @@
 
 {{-- Tom select --}}
 <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.css" rel="stylesheet">
+
+{{-- Leaflet.js CSS --}}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>

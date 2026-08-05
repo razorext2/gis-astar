@@ -85,15 +85,15 @@
 
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <x-input.basic wire:model="site_name" label="Nama Utama Website (App Name)"
-                            placeholder="e.g. Indodacin" />
+                            placeholder="e.g. GIS Rujukan Mata" />
                         <x-input.basic wire:model="site_title" label="Judul Tab Browser (Default Meta Title)"
-                            placeholder="e.g. Dashboard System" />
+                            placeholder="e.g. Sistem Rujukan Pasien Mata A*" />
                         <x-input.basic wire:model="sidebar_title" label="Judul pada Sidebar Navigation"
-                            placeholder="e.g. Attendance" />
+                            placeholder="e.g. GIS A* Rujukan" />
                         <x-input.basic wire:model="auth_subtitle" label="Tagline Animasi pada Halaman Login"
-                            placeholder="e.g. Presisi Utama" />
+                            placeholder="e.g. Pencarian RS Rujukan" />
                         <x-input.basic wire:model="app_version" label="Versi Aplikasi / Sistem"
-                            placeholder="e.g. v2.4.0" />
+                            placeholder="e.g. v1.0.0" />
                     </div>
 
                     <x-input.textarea wire:model="auth_description" label="Deskripsi pada Halaman Login / Auth"
@@ -367,9 +367,9 @@
 
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <x-input.basic wire:model="meta_keywords" label="Meta Keywords (Pisahkan dengan koma)"
-                            placeholder="dashboard, system, indodacin" />
+                            placeholder="gis, a-star, rujukan, rumah sakit, mata" />
                         <x-input.basic wire:model="meta_author" label="Meta Author / Pemilik Hak Cipta"
-                            placeholder="PT. Indodacin Presisi Utama" />
+                            placeholder="Developer GIS A*" />
                         <x-input.basic wire:model="google_analytics_id"
                             label="Google Analytics Tracking ID (Opsional)" placeholder="e.g. G-XXXXXXXXXX" />
                     </div>
@@ -394,9 +394,9 @@
 
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <x-input.basic wire:model="footer_company" label="Nama Perusahaan di Footer"
-                            placeholder="PT. Indodacin Presisi Utama™" />
+                            placeholder="GIS A* RS Rujukan Mata™" />
                         <x-input.basic wire:model="footer_url" label="Tautan URL Perusahaan"
-                            placeholder="https://indodacin.com" />
+                            placeholder="https://gis-astar.biz.id" />
                         <x-input.basic wire:model="footer_copyright" label="Teks Hak Cipta (Copyright)"
                             placeholder="All Rights Reserved." />
                     </div>
@@ -421,7 +421,7 @@
 
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <x-input.basic wire:model="contact_email" label="Email Support / CS"
-                            placeholder="support@indodacin.com" />
+                            placeholder="support@gis-astar.biz.id" />
                         <x-input.basic wire:model="whatsapp_number"
                             label="Nomor WhatsApp CS (Format Internasional tanpa +)" placeholder="628123456789" />
                         <x-input.basic wire:model="social_facebook" label="Link Facebook"
