@@ -1,14 +1,20 @@
 {{-- Goal: Render page title with static vertical red accent and inline breadcrumb beneath it, Title centering dynamically on breadcrumb scroll --}}
 @php
     $titles = [
-        'dashboard' => 'Dashboard',
-        'profile.*' => 'Profile',
-        'log.*' => 'Log Aktivitas',
-        'users.*' => 'Users',
-        'roles.*' => 'Roles',
-        'permissions.*' => 'Permissions',
+        'dashboard'       => 'Dashboard',
+        'profile.*'       => 'Profile',
+        'pasien.*'        => 'Pasien',
+        'rs.*'            => 'Rumah Sakit Rujukan',
+        'rujukan.*'       => 'Rujukan',
+        'analisis.*'      => 'Analisis Rujukan',
+        'riwayat.*'       => 'Riwayat Rujukan',
+        'laporan.*'       => 'Laporan',
+        'log.*'           => 'Log Aktivitas',
+        'users.*'         => 'Users',
+        'roles.*'         => 'Roles',
+        'permissions.*'   => 'Permissions',
         'notifications.*' => 'Pusat Notifikasi',
-        'settings.*' => 'Pengaturan Website',
+        'settings.*'      => 'Pengaturan Website',
     ];
 
     $pageTitle =

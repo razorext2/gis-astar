@@ -14,10 +14,10 @@ class SettingSeeder extends Seeder
     {
         $defaults = [
             // Identitas & Branding
-            ['key' => 'site_name', 'value' => 'GIS Rujukan Mata', 'group' => 'branding', 'type' => 'string'],
-            ['key' => 'site_title', 'value' => 'Sistem Rujukan Pasien Mata A*', 'group' => 'branding', 'type' => 'string'],
-            ['key' => 'sidebar_title', 'value' => 'GIS A* Rujukan', 'group' => 'branding', 'type' => 'string'],
-            ['key' => 'auth_subtitle', 'value' => 'Pencarian RS Rujukan', 'group' => 'branding', 'type' => 'string'],
+            ['key' => 'site_name', 'value' => 'SIPROMATA', 'group' => 'branding', 'type' => 'string'],
+            ['key' => 'site_title', 'value' => 'Sistem Informasi Rujukan Operasi Mata', 'group' => 'branding', 'type' => 'string'],
+            ['key' => 'sidebar_title', 'value' => 'SIPROMATA', 'group' => 'branding', 'type' => 'string'],
+            ['key' => 'auth_subtitle', 'value' => 'Sistem Informasi Rujukan Operasi Mata', 'group' => 'branding', 'type' => 'string'],
             ['key' => 'auth_description', 'value' => 'Sistem Informasi Geografis berbasis Algoritma A* untuk merekomendasikan rumah sakit rujukan pasien mata terdekat dan tercepat.', 'group' => 'branding', 'type' => 'text'],
             ['key' => 'app_version', 'value' => 'v1.0.0', 'group' => 'branding', 'type' => 'string'],
 
@@ -27,7 +27,7 @@ class SettingSeeder extends Seeder
             ['key' => 'meta_author', 'value' => 'Developer GIS A*', 'group' => 'seo', 'type' => 'string'],
 
             // Footer & Lisensi
-            ['key' => 'footer_company', 'value' => 'GIS A* RS Rujukan Mata™', 'group' => 'footer', 'type' => 'string'],
+            ['key' => 'footer_company', 'value' => 'Sistem Informasi Rujukan Operasi Mata™', 'group' => 'footer', 'type' => 'string'],
             ['key' => 'footer_url', 'value' => 'https://gis-astar.biz.id', 'group' => 'footer', 'type' => 'string'],
             ['key' => 'footer_copyright', 'value' => 'All Rights Reserved.', 'group' => 'footer', 'type' => 'string'],
 
@@ -38,8 +38,8 @@ class SettingSeeder extends Seeder
 
             // Kontak & Integrasi
             ['key' => 'contact_email', 'value' => 'support@gis-astar.biz.id', 'group' => 'contact', 'type' => 'string'],
-            ['key' => 'whatsapp_number', 'value' => '628123456789', 'group' => 'contact', 'type' => 'string'],
-            ['key' => 'office_address', 'value' => 'Jl. Raya Industri No. 88, Jakarta', 'group' => 'contact', 'type' => 'text'],
+            ['key' => 'whatsapp_number', 'value' => '6285156581817', 'group' => 'contact', 'type' => 'string'],
+            ['key' => 'office_address', 'value' => 'Jl. Budi Kemasyarakatan No 13D', 'group' => 'contact', 'type' => 'text'],
             ['key' => 'google_analytics_id', 'value' => '', 'group' => 'integration', 'type' => 'string'],
             ['key' => 'social_facebook', 'value' => '', 'group' => 'contact', 'type' => 'string'],
             ['key' => 'social_instagram', 'value' => '', 'group' => 'contact', 'type' => 'string'],

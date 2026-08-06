@@ -89,7 +89,11 @@
         const lat = {{ $latitude ?? -6.2 }};
         const lng = {{ $longitude ?? 106.8 }};
         const map = L.map('map-rs-edit').setView([lat, lng], 14);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+        L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            maxZoom: 20,
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+            attribution: '&copy; Google Maps'
+        }).addTo(map);
         const marker = L.marker([lat, lng], { draggable: true }).addTo(map);
         function upd(lat, lng) { marker.setLatLng([lat, lng]); @this.updateCoordinates(lat, lng); }
         marker.on('dragend', e => { const p = e.target.getLatLng(); upd(p.lat, p.lng); });

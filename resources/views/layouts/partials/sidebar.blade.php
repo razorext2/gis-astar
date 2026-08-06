@@ -62,7 +62,7 @@
         'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md dark:bg-glass-dark dark:border-glass-border-dark' :
         'bg-white border-zinc-200 shadow-sm dark:bg-dark-primary dark:border-zinc-800'
     ]"
-    class="fixed bottom-4 left-4 top-4 z-40 hidden w-68 flex-col rounded-2xl border pb-6 transition-transform duration-300 ease-in-out will-change-transform md:flex"
+    class="w-68 fixed bottom-4 left-4 top-4 z-40 hidden flex-col rounded-2xl border pb-6 transition-transform duration-300 ease-in-out will-change-transform md:flex"
     x-cloak id="logo-sidebar" aria-label="Sidebar">
 
     {{-- Header / Toggle --}}
@@ -70,11 +70,17 @@
         class="mx-auto flex w-full items-center justify-between border-b border-zinc-200/50 p-5 dark:border-zinc-800/50">
         <div class="flex items-center justify-start pl-5">
             <a class="flex items-center gap-2.5" href="{{ config('app.url') }}">
-                <img class="h-8 w-8 rounded-lg object-contain" src="{{ setting('logo_path') ? asset('storage/' . setting('logo_path')) : asset('images/brand/logo.png') }}"
-                    alt="{{ setting('site_name', 'GIS Rujukan Mata') }} Logo" loading="lazy" />
-                <span class="text-lg font-bold italic tracking-wide text-zinc-900 dark:text-white">
-                    {{ setting('sidebar_title', 'GIS A* Rujukan') }}
-                </span>
+                <img class="h-8 w-8 rounded-lg object-contain"
+                    src="{{ setting('logo_path') ? asset('storage/' . setting('logo_path')) : asset('images/brand/logo.png') }}"
+                    alt="{{ setting('site_name', 'SIPROMATA') }} Logo" loading="lazy" />
+                <div class="flex flex-col leading-tight">
+                    <span class="text-sm font-black tracking-wide text-zinc-900 dark:text-white">
+                        {{ setting('sidebar_title', 'SIPROMATA') }}
+                    </span>
+                    <span class="text-[9px] font-medium leading-tight text-zinc-500 dark:text-zinc-400">
+                        Sistem Informasi Rujukan Operasi Mata
+                    </span>
+                </div>
             </a>
         </div>
 
@@ -135,7 +141,7 @@
 
                             <div class="flex flex-1 items-center justify-between overflow-hidden">
                                 <span
-                                    class="whitespace-normal warp-break-word text-sm tracking-wide transition-colors duration-200">
+                                    class="warp-break-word whitespace-normal text-sm tracking-wide transition-colors duration-200">
                                     {{ $item['label'] }}
                                 </span>
 

@@ -99,8 +99,10 @@
         const mapEl = document.getElementById('map-rs-create');
         if (!mapEl || mapEl._leaflet_id) return;
         const map = L.map('map-rs-create').setView([-6.2, 106.8], 11);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
+        L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            maxZoom: 20,
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+            attribution: '&copy; Google Maps'
         }).addTo(map);
         let marker = null;
         map.on('click', function(e) {

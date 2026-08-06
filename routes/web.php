@@ -4,10 +4,16 @@
 
 use App\Http\Controllers\PushController;
 use App\Livewire\Dashboard;
+use App\Livewire\Handler\AnalisisRujukan;
+use App\Livewire\Handler\Laporan;
 use App\Livewire\Handler\Pasien;
+use App\Livewire\Handler\Permissions\Create;
+use App\Livewire\Handler\Permissions\Index;
 use App\Livewire\Handler\Permissions\Update;
+use App\Livewire\Handler\RiwayatRujukan;
 use App\Livewire\Handler\Rujukan;
 use App\Livewire\Handler\RumahSakit;
+use App\Livewire\Handler\User\Edit;
 use App\Livewire\NotificationsIndex;
 use App\Livewire\PowergridTables\LogTable;
 use App\Livewire\ProfileEdit;
@@ -58,8 +64,8 @@ Route::middleware(['auth'])->group(function () {
         Route::livewire('notifications', NotificationsIndex::class)->name('notifications.index');
 
         // Permissions
-        Route::livewire('permissions', App\Livewire\Handler\Permissions\Index::class)->name('permissions.index')->middleware('permission:permissions-list');
-        Route::livewire('permissions/create', App\Livewire\Handler\Permissions\Create::class)->name('permissions.create')->middleware('permission:permissions-create');
+        Route::livewire('permissions', Index::class)->name('permissions.index')->middleware('permission:permissions-list');
+        Route::livewire('permissions/create', Create::class)->name('permissions.create')->middleware('permission:permissions-create');
         Route::livewire('permissions/{permission}/edit', Update::class)->name('permissions.edit')->middleware('permission:permissions-edit');
 
         // Roles
@@ -70,7 +76,7 @@ Route::middleware(['auth'])->group(function () {
         // Users
         Route::livewire('users', App\Livewire\Handler\User\Index::class)->name('users.index')->middleware('permission:users-list');
         Route::livewire('users/create', App\Livewire\Handler\User\Create::class)->name('users.create')->middleware('permission:users-create');
-        Route::livewire('users/{user}/edit', App\Livewire\Handler\User\Edit::class)->name('users.edit')->middleware('permission:users-edit');
+        Route::livewire('users/{user}/edit', Edit::class)->name('users.edit')->middleware('permission:users-edit');
 
         // Activity Logs
         Route::livewire('log', LogTable::class)->name('log.index')->middleware('permission:log-list');
@@ -93,6 +99,15 @@ Route::middleware(['auth'])->group(function () {
         Route::livewire('rujukan/create', Rujukan\Create::class)->name('rujukan.create')->middleware('permission:rujukan-create');
         Route::livewire('rujukan/{rujukan}', Rujukan\Show::class)->name('rujukan.show')->middleware('permission:rujukan-view');
         Route::livewire('rujukan/{rujukan}/status', Rujukan\UpdateStatus::class)->name('rujukan.update-status')->middleware('permission:rujukan-update-status');
+
+        // ───────── ANALISIS RUJUKAN ─────────
+        Route::livewire('analisis', AnalisisRujukan\Index::class)->name('analisis.index')->middleware('permission:rujukan-list');
+
+        // ───────── RIWAYAT RUJUKAN ─────────
+        Route::livewire('riwayat', RiwayatRujukan\Index::class)->name('riwayat.index')->middleware('permission:rujukan-list');
+
+        // ───────── LAPORAN ─────────
+        Route::livewire('laporan', Laporan\Index::class)->name('laporan.index')->middleware('permission:rujukan-list');
     });
 });
 
