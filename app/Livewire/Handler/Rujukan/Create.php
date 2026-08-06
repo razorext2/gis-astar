@@ -1,6 +1,6 @@
 <?php
 
-/** Goal: Form perujukan otomatis dengan algoritma A*, Caller: rujukan.create */
+/** Goal: Form perujukan otomatis dengan algoritma A* — tampilan Analisis Rujukan, Caller: rujukan.create */
 
 namespace App\Livewire\Handler\Rujukan;
 
@@ -8,6 +8,8 @@ use App\Enums\StatusRujukan;
 use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Pasien;
 use App\Models\Rujukan;
+use App\Models\RumahSakit;
+use App\Models\User;
 use App\Services\HospitalScoringService;
 use App\Services\ReferralService;
 use Illuminate\Contracts\View\View;
@@ -19,6 +21,12 @@ class Create extends Component
 
     // Form state
     public ?int $pasienId = null;
+
+    public ?string $rumahSakitTarget = 'semua';
+
+    public string $metode = 'astar';
+
+    public string $prioritasRute = 'jarak';
 
     public ?string $layanan = null;
 
@@ -35,12 +43,20 @@ class Create extends Component
 
     public bool $showResult = false;
 
-    // Pre-selected pasien dari query string (dari tombol Rujuk di PasienTable)
     public function mount(?int $pasien = null): void
     {
         if ($pasien) {
             $this->pasienId = $pasien;
-            $this->loadPasienCoordinates();
+        } else {
+            $firstPasien = Pasien::whereNotNull('latitude')->first();
+            $this->pasienId = $firstPasien?->id_pasien;
+        }
+
+        $this->loadPasienCoordinates();
+
+        // Run initial analysis automatically on page load if patient is available
+        if ($this->pasienId) {
+            $this->autoRunAnalysis();
         }
     }
 
@@ -48,59 +64,66 @@ class Create extends Component
     {
         return [
             'pasienId' => 'required|exists:pasien,id_pasien',
-            'layanan' => 'required|string',
-            'radiusKm' => 'required|integer|min:5|max:200',
         ];
     }
 
     protected array $messages = [
         'pasienId.required' => 'Pilih pasien terlebih dahulu.',
         'pasienId.exists' => 'Pasien tidak ditemukan.',
-        'layanan.required' => 'Pilih layanan yang dibutuhkan.',
     ];
 
-    /** Load koordinat pasien saat pasien dipilih */
     public function updatedPasienId(): void
     {
         $this->loadPasienCoordinates();
-        $this->resetResult();
+        $this->autoRunAnalysis();
     }
 
-    /** Reset hasil A* saat layanan berubah */
-    public function updatedLayanan(): void
+    public function updatedRumahSakitTarget(): void
     {
-        $this->resetResult();
+        $this->autoRunAnalysis();
     }
 
-    /** Sinkron koordinat pasien ke state saat map picker berubah */
-    public function updateCoordinates(float $lat, float $lng): void
+    public function updatedMetode(): void
     {
-        $this->pasienLat = $lat;
-        $this->pasienLng = $lng;
-        $this->resetResult();
+        $this->autoRunAnalysis();
     }
 
-    /**
-     * Jalankan algoritma A* secara synchronous.
-     * Dipanggil saat dokter klik "Cari Rujukan Terbaik".
-     */
+    public function updatedPrioritasRute(): void
+    {
+        $this->autoRunAnalysis();
+    }
+
     public function searchReferral(): void
     {
-        $this->validate();
+        $this->autoRunAnalysis();
+    }
+
+    private function autoRunAnalysis(): void
+    {
+        if (! $this->pasienId) {
+            $this->resetResult();
+
+            return;
+        }
 
         $this->runSafely(function () {
             $pasien = Pasien::findOrFail($this->pasienId);
 
-            // Override koordinat jika sudah diupdate dari map picker
             if ($this->pasienLat && $this->pasienLng) {
                 $pasien->latitude = $this->pasienLat;
                 $pasien->longitude = $this->pasienLng;
             }
 
+            $layananSearch = $this->layanan;
+            if (! $layananSearch) {
+                $available = app(HospitalScoringService::class)->getAllAvailableLayanan();
+                $layananSearch = $available[0] ?? 'Katarak';
+            }
+
             $result = app(ReferralService::class)->processReferral(
                 pasien: $pasien,
-                layananDibutuhkan: $this->layanan,
-                requestedBy: auth()->user(),
+                layananDibutuhkan: $layananSearch,
+                requestedBy: auth()->user() ?? User::first(),
                 radiusKm: $this->radiusKm,
             );
 
@@ -109,16 +132,9 @@ class Create extends Component
             $this->showResult = true;
 
             $this->dispatch('astar-result-ready', result: $this->astarResult);
-        }, 'Gagal menjalankan algoritma A*', [
-            'pasien_id' => $this->pasienId,
-            'layanan' => $this->layanan,
-            'user_id' => auth()->id(),
-        ]);
+        }, 'Gagal menjalankan analisis A*');
     }
 
-    /**
-     * Konfirmasi rujukan yang sudah dipilih → update status ke 'disetujui'.
-     */
     public function confirmReferral(): void
     {
         if (! $this->rujukanId) {
@@ -133,7 +149,7 @@ class Create extends Component
 
             $this->dispatch('swal', title: 'Berhasil', text: 'Rujukan berhasil dikonfirmasi.', icon: 'success');
             $this->redirect(route('rujukan.show', $this->rujukanId), navigate: true);
-        }, 'Gagal mengkonfirmasi rujukan', ['rujukan_id' => $this->rujukanId]);
+        }, 'Gagal mengkonfirmasi rujukan');
     }
 
     private function loadPasienCoordinates(): void
@@ -141,8 +157,8 @@ class Create extends Component
         if ($this->pasienId) {
             $pasien = Pasien::find($this->pasienId);
             if ($pasien) {
-                $this->pasienLat = $pasien->latitude;
-                $this->pasienLng = $pasien->longitude;
+                $this->pasienLat = (float) $pasien->latitude;
+                $this->pasienLng = (float) $pasien->longitude;
             }
         }
     }
@@ -157,7 +173,8 @@ class Create extends Component
     public function render(): View
     {
         return view('livewire.handler.rujukan.create', [
-            'pasienList' => Pasien::orderBy('nama')->limit(200)->get(['id_pasien', 'nama', 'nik', 'latitude', 'longitude']),
+            'pasienList' => Pasien::orderBy('nama')->get(['id_pasien', 'nama', 'nik', 'alamat', 'latitude', 'longitude']),
+            'rumahSakitList' => RumahSakit::orderBy('nama_rumah_sakit')->get(['id_rumah_sakit', 'nama_rumah_sakit', 'alamat', 'latitude', 'longitude']),
             'layananList' => app(HospitalScoringService::class)->getAllAvailableLayanan(),
         ]);
     }
