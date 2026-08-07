@@ -102,7 +102,6 @@ class AppServiceProvider extends ServiceProvider
             'App\Models\LogHistory' => ['LogTable'],
             'App\Models\Pasien' => ['PasienTable'],
             'App\Models\RumahSakit' => ['RumahSakitTable'],
-            'App\Models\Rujukan' => ['RujukanTable'],
             'Spatie\Permission\Models\Role' => ['RolesTable'],
             'Spatie\Permission\Models\Permission' => ['PermissionsTable'],
         ];

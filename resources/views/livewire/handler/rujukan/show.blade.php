@@ -6,7 +6,7 @@
         x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark backdrop-blur-md' : 'bg-white dark:bg-dark-primary'">
         <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div class="flex items-center gap-4">
-                <x-button.danger wire:navigate href="{{ route('rujukan.index') }}">
+                <x-button.danger wire:navigate href="{{ route('riwayat.index') }}">
                     <x-icons.angle-left class="h-5 w-5" />
                 </x-button.danger>
                 <div>

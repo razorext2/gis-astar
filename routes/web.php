@@ -95,7 +95,6 @@ Route::middleware(['auth'])->group(function () {
         Route::livewire('rs/{rumahSakit}/edit', RumahSakit\Edit::class)->name('rs.edit')->middleware('permission:rs-edit');
 
         // ───────── RUJUKAN ─────────
-        Route::livewire('rujukan', Rujukan\Index::class)->name('rujukan.index')->middleware('permission:rujukan-list');
         Route::livewire('rujukan/create', Rujukan\Create::class)->name('rujukan.create')->middleware('permission:rujukan-create');
         Route::livewire('rujukan/{rujukan}', Rujukan\Show::class)->name('rujukan.show')->middleware('permission:rujukan-view');
         Route::livewire('rujukan/{rujukan}/status', Rujukan\UpdateStatus::class)->name('rujukan.update-status')->middleware('permission:rujukan-update-status');

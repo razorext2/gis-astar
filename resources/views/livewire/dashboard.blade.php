@@ -105,7 +105,7 @@
                 </table>
             </div>
             <div class="mt-3 pt-3 border-t border-zinc-100 dark:border-zinc-800">
-                <a href="{{ route('rujukan.index') }}" wire:navigate
+                <a href="{{ route('riwayat.index') }}" wire:navigate
                    class="inline-flex items-center gap-1 rounded-xl border border-zinc-200 dark:border-zinc-700 px-4 py-1.5 text-xs font-semibold text-zinc-600 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors float-right">
                     Lihat Semua
                 </a>
