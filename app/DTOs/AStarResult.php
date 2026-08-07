@@ -44,6 +44,8 @@ readonly class AStarResult
                 'nama' => $this->bestHospital->nama_rumah_sakit,
                 'lat' => $this->bestHospital->latitude,
                 'lng' => $this->bestHospital->longitude,
+                'latitude' => $this->bestHospital->latitude,
+                'longitude' => $this->bestHospital->longitude,
             ],
             'all_ranked' => array_map(fn ($item) => [
                 'hospital' => [
@@ -51,6 +53,8 @@ readonly class AStarResult
                     'nama' => $item['hospital']->nama_rumah_sakit,
                     'lat' => $item['hospital']->latitude,
                     'lng' => $item['hospital']->longitude,
+                    'latitude' => $item['hospital']->latitude,
+                    'longitude' => $item['hospital']->longitude,
                 ],
                 'distance' => round($item['distance'], 2),
                 'estimated_time' => $item['estimated_time'],

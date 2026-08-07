@@ -7,6 +7,7 @@ namespace App\Livewire\Handler\Rujukan;
 use App\Enums\StatusRujukan;
 use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Pasien;
+use App\Models\RiwayatRujukan;
 use App\Models\Rujukan;
 use App\Models\RumahSakit;
 use App\Models\User;
@@ -43,6 +44,9 @@ class Create extends Component
 
     public bool $showResult = false;
 
+    /** ID rumah sakit yang dipilih user di tabel hasil analisis */
+    public ?int $selectedRumahSakitId = null;
+
     public function mount(?int $pasien = null): void
     {
         if ($pasien) {
@@ -53,11 +57,6 @@ class Create extends Component
         }
 
         $this->loadPasienCoordinates();
-
-        // Run initial analysis automatically on page load if patient is available
-        if ($this->pasienId) {
-            $this->autoRunAnalysis();
-        }
     }
 
     protected function rules(): array
@@ -75,22 +74,7 @@ class Create extends Component
     public function updatedPasienId(): void
     {
         $this->loadPasienCoordinates();
-        $this->autoRunAnalysis();
-    }
-
-    public function updatedRumahSakitTarget(): void
-    {
-        $this->autoRunAnalysis();
-    }
-
-    public function updatedMetode(): void
-    {
-        $this->autoRunAnalysis();
-    }
-
-    public function updatedPrioritasRute(): void
-    {
-        $this->autoRunAnalysis();
+        $this->resetResult();
     }
 
     public function searchReferral(): void
@@ -125,9 +109,10 @@ class Create extends Component
                 layananDibutuhkan: $layananSearch,
                 requestedBy: auth()->user() ?? User::first(),
                 radiusKm: $this->radiusKm,
+                targetHospitalId: $this->rumahSakitTarget !== 'semua' ? (int) $this->rumahSakitTarget : null,
             );
 
-            $this->astarResult = $result->toArray();
+            $this->astarResult = $result->astarResult->toArray();
             $this->rujukanId = $result->rujukan->id_rujukan;
             $this->showResult = true;
 
@@ -152,6 +137,40 @@ class Create extends Component
         }, 'Gagal mengkonfirmasi rujukan');
     }
 
+    /**
+     * Simpan riwayat rujukan berdasarkan rumah sakit yang dipilih user di tabel hasil analisis.
+     * Jika RS yang dipilih berbeda dari RS terbaik A*, rujukan diperbarui ke RS tersebut.
+     */
+    public function simpanRiwayat(int $rumahSakitId): void
+    {
+        if (! $this->rujukanId) {
+            $this->dispatch('swal', title: 'Perhatian', text: 'Jalankan analisis terlebih dahulu.', icon: 'warning');
+
+            return;
+        }
+
+        $this->runSafely(function () use ($rumahSakitId) {
+            $rujukan = Rujukan::findOrFail($this->rujukanId);
+
+            // Perbarui RS tujuan jika user memilih RS berbeda dari hasil A*
+            if ($rujukan->id_rumah_sakit !== $rumahSakitId) {
+                $rujukan->update(['id_rumah_sakit' => $rumahSakitId]);
+            }
+
+            RiwayatRujukan::create([
+                'id_rujukan' => $rujukan->id_rujukan,
+                'status_lama' => $rujukan->status->value,
+                'status_baru' => $rujukan->status->value,
+                'keterangan' => 'Riwayat rujukan disimpan dari hasil analisis A*. RS dipilih: ID '.$rumahSakitId,
+                'diubah_oleh' => auth()->id() ?? User::first()?->id,
+                'waktu_perubahan' => now(),
+            ]);
+
+            $this->dispatch('swal', title: 'Berhasil', text: 'Riwayat rujukan berhasil disimpan.', icon: 'success');
+            $this->redirect(route('rujukan.show', $this->rujukanId), navigate: true);
+        }, 'Gagal menyimpan riwayat rujukan');
+    }
+
     private function loadPasienCoordinates(): void
     {
         if ($this->pasienId) {
@@ -168,6 +187,7 @@ class Create extends Component
         $this->astarResult = null;
         $this->rujukanId = null;
         $this->showResult = false;
+        $this->selectedRumahSakitId = null;
     }
 
     public function render(): View

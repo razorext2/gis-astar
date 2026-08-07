@@ -42,7 +42,8 @@ class ReferralService
         Pasien $pasien,
         string $layananDibutuhkan,
         User $requestedBy,
-        int $radiusKm = 50
+        int $radiusKm = 50,
+        ?int $targetHospitalId = null,
     ): ReferralProcessResult {
         // 1. Validasi koordinat pasien
         if (! $pasien->hasCoordinates()) {
@@ -59,6 +60,10 @@ class ReferralService
             layanan: $layananDibutuhkan,
             radiusKm: $radiusKm,
         );
+
+        if ($targetHospitalId) {
+            $candidates = $candidates->filter(fn ($rs) => $rs->id_rumah_sakit == $targetHospitalId);
+        }
 
         if ($candidates->isEmpty()) {
             throw new BusinessException(

@@ -16,7 +16,7 @@
 @endif
 
 <select
-    {{ $attributes->merge(['class' => ($class ?? null) . ' block w-full rounded-lg border border-zinc-200 bg-zinc-50 p-2.5 text-sm text-zinc-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-white dark:placeholder-zinc-500 dark:focus:border-blue-500 dark:focus:ring-blue-500']) }}
+    {{ $attributes->merge(['class' => ($class ?? null) . ' block w-full rounded-lg border border-zinc-200 bg-zinc-50 p-2.5 text-sm text-zinc-900 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-white dark:placeholder-zinc-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 [&>option]:dark:bg-zinc-900 [&>option]:dark:text-white']) }}
     id="{{ $id }}" name="{{ $name }}">
     @if ($defaultOption)
         <option value="">{{ $defaultOption }}</option>
