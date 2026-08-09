@@ -168,7 +168,7 @@
                         <th class="px-4 py-3.5">No. Rujukan</th>
                         <th class="px-4 py-3.5">Pasien</th>
                         <th class="px-4 py-3.5">Tanggal Rujukan</th>
-                        <th class="px-4 py-3.5">Asal (UPTD RS Mata Sumut)</th>
+                        {{-- <th class="px-4 py-3.5">Alamat Pasien</th> --}}
                         <th class="px-4 py-3.5">Rumah Sakit Rujukan</th>
                         <th class="w-24 px-4 py-3.5 text-center">Jarak (km)</th>
                         <th class="w-28 px-4 py-3.5 text-center">Waktu Tempuh</th>
@@ -210,11 +210,11 @@
                                     {{ $item->tanggal_rujukan?->format('H:i') ?? '' }}
                                 </p>
                             </td>
-                            <td class="px-4 py-3.5">
+                            {{-- <td class="px-4 py-3.5">
                                 <p class="font-medium text-zinc-700 dark:text-zinc-300">
                                     {{ $item->pasien?->alamat ?? '-' }}
                                 </p>
-                            </td>
+                            </td> --}}
                             <td class="px-4 py-3.5 font-semibold text-zinc-900 dark:text-white">
                                 {{ $item->rumahSakit?->nama_rumah_sakit ?? '-' }}
                             </td>
