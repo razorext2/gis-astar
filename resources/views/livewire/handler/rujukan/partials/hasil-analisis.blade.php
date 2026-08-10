@@ -35,13 +35,15 @@
                                 @click="selectCandidate(idx)">
                                 <td class="px-3.5 py-3 text-center font-semibold text-zinc-500"
                                     x-text="idx + 1"></td>
-                                <td class="px-3.5 py-3 font-bold text-zinc-900 dark:text-white">
-                                    <span x-text="item.hospital.nama_rumah_sakit"></span>
-                                    <template x-if="idx === selectedIndex">
-                                        <span class="ml-1.5 inline-flex items-center rounded-md bg-emerald-100 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
-                                            ✓ Dipilih
-                                        </span>
-                                    </template>
+                                <td class="px-3.5 py-3">
+                                    <div class="flex flex-col gap-1">
+                                        <span class="font-bold text-zinc-900 dark:text-white" x-text="item.hospital.nama_rumah_sakit"></span>
+                                        <template x-if="idx === selectedIndex">
+                                            <span class="inline-flex w-fit items-center rounded-md bg-emerald-100 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
+                                                ✓ Dipilih
+                                            </span>
+                                        </template>
+                                    </div>
                                 </td>
                                 <td class="px-3.5 py-3 text-center font-medium"
                                     x-text="item.distance ? item.distance.toFixed(1).replace('.', ',') : '-'">
@@ -81,13 +83,15 @@
                                 @click="selectCandidate(idx)">
                                 <td class="px-3.5 py-3 text-center font-semibold text-zinc-500"
                                     x-text="idx + 1"></td>
-                                <td class="px-3.5 py-3 font-bold text-zinc-900 dark:text-white">
-                                    <span x-text="rs.nama_rumah_sakit || rs.nama"></span>
-                                    <template x-if="idx === selectedIndex">
-                                        <span class="ml-1.5 inline-flex items-center rounded-md bg-emerald-100 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
-                                            ✓ Dipilih
-                                        </span>
-                                    </template>
+                                <td class="px-3.5 py-3">
+                                    <div class="flex flex-col gap-1">
+                                        <span class="font-bold text-zinc-900 dark:text-white" x-text="rs.nama_rumah_sakit || rs.nama"></span>
+                                        <template x-if="idx === selectedIndex">
+                                            <span class="inline-flex w-fit items-center rounded-md bg-emerald-100 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
+                                                ✓ Dipilih
+                                            </span>
+                                        </template>
+                                    </div>
                                 </td>
                                 <td class="px-3.5 py-3 text-center font-medium text-zinc-400"
                                     x-text="idx === 0 ? currentDistance : '-'"></td>
