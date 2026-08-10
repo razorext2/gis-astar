@@ -62,6 +62,50 @@ class Create extends Component
         $this->longitude = $lng;
     }
 
+    public array $addressSuggestions = [];
+
+    public function geocodeAddress(): void
+    {
+        if (empty($this->alamat)) {
+            $this->dispatch('swal', title: 'Perhatian', text: 'Masukkan alamat terlebih dahulu.', icon: 'warning');
+
+            return;
+        }
+
+        $results = app(\App\Services\GeocodingService::class)->search($this->alamat, 5);
+
+        if (empty($results)) {
+            $this->dispatch('swal', title: 'Gagal', text: 'Alamat tidak ditemukan atau tidak dapat dilokalisasi.', icon: 'error');
+            return;
+        }
+
+        if (count($results) === 1) {
+            $this->latitude = $results[0]['lat'];
+            $this->longitude = $results[0]['lng'];
+            $this->dispatch('coordinates-updated', lat: $results[0]['lat'], lng: $results[0]['lng']);
+            $this->dispatch('swal', title: 'Berhasil', text: 'Koordinat ditemukan dan peta diperbarui.', icon: 'success');
+            return;
+        }
+
+        // Simpan suggestions dan kirim ke Javascript
+        $this->addressSuggestions = $results;
+        $this->dispatch('show-address-suggestions', suggestions: $results);
+    }
+
+    public function selectAddressSuggestion(int $index): void
+    {
+        if (isset($this->addressSuggestions[$index])) {
+            $selected = $this->addressSuggestions[$index];
+            $this->latitude = $selected['lat'];
+            $this->longitude = $selected['lng'];
+            $this->alamat = $selected['display_name']; // Optional: auto-complete input alamat
+            $this->dispatch('coordinates-updated', lat: $selected['lat'], lng: $selected['lng']);
+            $this->dispatch('swal', title: 'Berhasil', text: 'Koordinat diperbarui ke lokasi yang dipilih.', icon: 'success');
+        }
+
+        $this->addressSuggestions = [];
+    }
+
     public function save(): void
     {
         $this->validate();

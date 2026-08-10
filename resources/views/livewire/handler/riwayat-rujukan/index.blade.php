@@ -37,7 +37,7 @@
             <div class="space-y-1.5">
                 <label class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Rumah Sakit Rujukan</label>
                 <select wire:model="rumahSakitId"
-                    class="h-9 w-full rounded-xl border border-zinc-300/80 bg-zinc-50/50 px-3 text-xs text-zinc-800 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700/80 dark:bg-zinc-800/80 dark:text-white dark:focus:bg-zinc-900">
+                    class="h-9 w-full rounded-xl border border-zinc-300/80 bg-zinc-50/50 px-3 text-xs text-zinc-800 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700/80 dark:bg-zinc-800/80 dark:text-white dark:focus:bg-zinc-900 [&>option]:dark:bg-zinc-800 [&>option]:dark:text-white">
                     <option value="">Semua Rumah Sakit</option>
                     @foreach ($rumahSakitList as $rs)
                         <option value="{{ $rs->id_rumah_sakit }}">{{ $rs->nama_rumah_sakit }}</option>
@@ -49,7 +49,7 @@
             <div class="space-y-1.5">
                 <label class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Status Rujukan</label>
                 <select wire:model="status"
-                    class="h-9 w-full rounded-xl border border-zinc-300/80 bg-zinc-50/50 px-3 text-xs text-zinc-800 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700/80 dark:bg-zinc-800/80 dark:text-white dark:focus:bg-zinc-900">
+                    class="h-9 w-full rounded-xl border border-zinc-300/80 bg-zinc-50/50 px-3 text-xs text-zinc-800 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700/80 dark:bg-zinc-800/80 dark:text-white dark:focus:bg-zinc-900 [&>option]:dark:bg-zinc-800 [&>option]:dark:text-white">
                     <option value="">Semua Status</option>
                     @foreach ($statusOptions as $s)
                         <option value="{{ $s->value }}">{{ $s->label() }}</option>

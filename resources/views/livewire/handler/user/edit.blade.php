@@ -92,7 +92,7 @@
                     <div class="space-y-2">
                         <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Status Akun</label>
                         <select wire:model.live="is_active"
-                            class="block w-full rounded-xl border border-zinc-200 p-2.5 text-sm transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-zinc-800 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500"
+                            class="block w-full rounded-xl border border-zinc-200 p-2.5 text-sm transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-zinc-800 dark:bg-gray-800 dark:text-white dark:focus:border-blue-500 [&>option]:dark:bg-zinc-800 [&>option]:dark:text-white"
                             x-bind:class="dynamicBg ?
                                 'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
                                 'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'">

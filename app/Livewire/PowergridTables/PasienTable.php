@@ -79,7 +79,6 @@ final class PasienTable extends PowerGridComponent
         return Blade::render("
             <div class='flex gap-2 justify-center'>
                 <x-button.primary href=\"{{ route('pasien.edit', \$row->id_pasien) }}\" wire:navigate>Edit</x-button.primary>
-                <x-button.primary href=\"{{ route('rujukan.create', ['pasien' => \$row->id_pasien]) }}\" wire:navigate>Rujuk</x-button.primary>
             </div>
         ", ['row' => $row]);
     }

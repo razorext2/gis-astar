@@ -24,28 +24,35 @@
         <div class="space-y-4 lg:col-span-2">
             <div class="rounded-xl border border-zinc-200 p-6 dark:border-zinc-800"
                 x-bind:class="dynamicBg ? 'bg-glass-light dark:bg-glass-dark backdrop-blur-md' : 'bg-white dark:bg-dark-primary'">
-                <div class="mb-6 flex items-center gap-3">
-                    <div class="h-10 w-1 rounded-full bg-blue-600"></div>
-                    <h3 class="text-xl font-bold">Informasi Rumah Sakit</h3>
+                <div class="mb-5 flex items-center justify-between border-b border-zinc-100 pb-4 dark:border-zinc-800">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-950/30 dark:text-blue-400">
+                            <x-icons.office-building class="h-4.5 w-4.5" />
+                        </div>
+                        <h3 class="font-bold text-zinc-900 dark:text-white">Informasi Rumah Sakit</h3>
+                    </div>
                 </div>
+
                 <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <div class="md:col-span-2">
-                        <x-input.basic wire:model="nama_rumah_sakit" type="text">Nama RS</x-input.basic>
-                        @error('nama_rumah_sakit') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
+                    <div class="md:col-span-2 space-y-1">
+                        <x-input.basic wire:model="nama_rumah_sakit" type="text" placeholder="Nama lengkap rumah sakit">Nama RS</x-input.basic>
+                        @error('nama_rumah_sakit') <span class="text-xs text-red-500 font-semibold mt-1 block">{{ $message }}</span> @enderror
                     </div>
-                    <div><x-input.basic wire:model="no_telepon" type="text">No. Telepon</x-input.basic></div>
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Alamat</label>
-                        <textarea wire:model="alamat" rows="3" class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-800 dark:text-white"></textarea>
-                        @error('alamat') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
+                    <div class="md:col-span-2 space-y-1">
+                        <x-input.basic wire:model="no_telepon" type="text" placeholder="021xxxxxxx">No. Telepon</x-input.basic>
+                        @error('no_telepon') <span class="text-xs text-red-500 font-semibold mt-1 block">{{ $message }}</span> @enderror
                     </div>
-                    <div>
-                        <x-input.basic wire:model.live="latitude" type="number" step="any">Latitude</x-input.basic>
-                        @error('latitude') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
+                    <div class="md:col-span-2 space-y-1">
+                        <x-input.textarea wire:model="alamat" id="alamat" rows="3" placeholder="Alamat lengkap rumah sakit">Alamat</x-input.textarea>
+                        @error('alamat') <span class="text-xs text-red-500 font-semibold mt-1 block">{{ $message }}</span> @enderror
                     </div>
-                    <div>
-                        <x-input.basic wire:model.live="longitude" type="number" step="any">Longitude</x-input.basic>
-                        @error('longitude') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
+                    <div class="space-y-1">
+                        <x-input.basic wire:model.live="latitude" type="number" step="any" placeholder="-90.000000">Latitude</x-input.basic>
+                        @error('latitude') <span class="text-xs text-red-500 font-semibold mt-1 block">{{ $message }}</span> @enderror
+                    </div>
+                    <div class="space-y-1">
+                        <x-input.basic wire:model.live="longitude" type="number" step="any" placeholder="180.000000">Longitude</x-input.basic>
+                        @error('longitude') <span class="text-xs text-red-500 font-semibold mt-1 block">{{ $message }}</span> @enderror
                     </div>
                 </div>
             </div>
@@ -55,7 +62,7 @@
                     <div class="h-10 w-1 rounded-full bg-emerald-600"></div>
                     <h3 class="text-xl font-bold">Koordinat di Peta</h3>
                 </div>
-                <div id="map-rs-edit" class="h-72 w-full rounded-lg border border-zinc-200 dark:border-zinc-700"></div>
+                <div wire:ignore id="map-rs-edit" class="h-72 w-full rounded-lg border border-zinc-200 dark:border-zinc-700"></div>
             </div>
         </div>
 
@@ -86,8 +93,8 @@
     (function() {
         const mapEl = document.getElementById('map-rs-edit');
         if (!mapEl || mapEl._leaflet_id) return;
-        const lat = {{ $latitude ?? -6.2 }};
-        const lng = {{ $longitude ?? 106.8 }};
+        const lat = {{ $latitude ?? 3.595196 }};
+        const lng = {{ $longitude ?? 98.672223 }};
         const map = L.map('map-rs-edit').setView([lat, lng], 14);
         L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
             maxZoom: 20,

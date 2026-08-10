@@ -45,7 +45,7 @@
                     <div class="space-y-1">
                         <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Jenis Kelamin</label>
                         <select wire:model="jenis_kelamin"
-                            class="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white">
+                            class="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white [&>option]:dark:bg-zinc-800 [&>option]:dark:text-white">
                             @foreach($jenisKelaminList as $jk)
                                 <option value="{{ $jk->value }}">{{ $jk->label() }}</option>
                             @endforeach
@@ -55,8 +55,31 @@
                     <div><x-input.basic wire:model="no_telepon" id="no_telepon" name="no_telepon" type="text">No. Telepon</x-input.basic></div>
                     <div class="md:col-span-2">
                         <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Alamat</label>
-                        <textarea wire:model="alamat" rows="3"
+                        <textarea wire:model.blur="alamat" rows="3"
                             class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-800 dark:text-white"></textarea>
+                        <div class="mt-2 flex justify-end">
+                            <x-button.secondary type="button" wire:click="geocodeAddress" wire:loading.attr="disabled"
+                                class="h-9 text-xs">
+                                <x-slot name="icon">
+                                    <x-icons.search wire:loading.remove wire:target="geocodeAddress" class="h-4 w-4" />
+                                    <x-icons.loading wire:loading wire:target="geocodeAddress" class="h-4 w-4 animate-spin" />
+                                </x-slot>
+                                Cari Koordinat dari Alamat
+                            </x-button.secondary>
+                        </div>
+
+                        @if(!empty($addressSuggestions))
+                            <div class="mt-3 space-y-1">
+                                <label class="block text-[11px] font-semibold text-blue-600 dark:text-blue-400">Beberapa Lokasi Terkait Ditemukan:</label>
+                                <select wire:change="selectAddressSuggestion($event.target.value)"
+                                    class="w-full rounded-lg border border-blue-300 bg-blue-50 px-3 py-2 text-xs text-blue-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-blue-700 dark:bg-zinc-800 dark:text-white">
+                                    <option class="dark:bg-zinc-800 dark:text-white" value="">-- Silakan pilih alamat yang sesuai untuk menetapkan pin --</option>
+                                    @foreach($addressSuggestions as $index => $item)
+                                        <option class="dark:bg-zinc-800 dark:text-white" value="{{ $index }}">{{ $item['display_name'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -78,15 +101,19 @@
                         @error('longitude') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                     </div>
                 </div>
-                <button type="button"
-                    class="mb-4 flex items-center gap-2 rounded-lg border border-emerald-300 bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700 hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-300"
-                    onclick="detectGPS('edit')">
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                    </svg>
-                    Deteksi GPS
-                </button>
-                <div id="map-picker-edit" class="h-64 w-full rounded-lg border border-zinc-200 dark:border-zinc-700"></div>
+                <div x-data="{ gpsLoading: false }" class="mb-4">
+                    <x-button.secondary type="button"
+                        x-bind:disabled="gpsLoading"
+                        x-on:click="gpsLoading = true; detectGPS(() => gpsLoading = false)">
+                        <x-slot name="icon">
+                            <x-icons.map-pin x-show="!gpsLoading" class="h-4 w-4" />
+                            <x-icons.loading x-show="gpsLoading" class="h-4 w-4 animate-spin" />
+                        </x-slot>
+                        <span x-show="!gpsLoading">Deteksi GPS</span>
+                        <span x-show="gpsLoading">Mendeteksi...</span>
+                    </x-button.secondary>
+                </div>
+                <div wire:ignore id="map-picker-edit" class="h-64 w-full rounded-lg border border-zinc-200 dark:border-zinc-700"></div>
             </div>
         </div>
 
@@ -111,8 +138,8 @@
     (function() {
         const mapEl = document.getElementById('map-picker-edit');
         if (!mapEl || mapEl._leaflet_id) return;
-        const lat = {{ $latitude ?? -6.2 }};
-        const lng = {{ $longitude ?? 106.8 }};
+        const lat = {{ $latitude ?? 3.595196 }};
+        const lng = {{ $longitude ?? 98.672223 }};
         const map = L.map('map-picker-edit').setView([lat, lng], 14);
         L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
             maxZoom: 20,
@@ -130,12 +157,30 @@
         window._mapPickerEdit = { update };
     })();
 
-    window.detectGPS = function() {
-        navigator.geolocation?.getCurrentPosition(
-            pos => { window._mapPickerEdit?.update(pos.coords.latitude, pos.coords.longitude); },
-            () => Swal.fire('Gagal', 'GPS tidak tersedia', 'warning'),
+    window.detectGPS = function(callback) {
+        if (!navigator.geolocation) {
+            Swal.fire('Error', 'Browser tidak mendukung geolocation', 'error');
+            if (callback) callback();
+            return;
+        }
+        navigator.geolocation.getCurrentPosition(
+            pos => {
+                window._mapPickerEdit?.update(pos.coords.latitude, pos.coords.longitude);
+                if (callback) callback();
+            },
+            () => {
+                Swal.fire('Gagal', 'GPS tidak tersedia', 'warning');
+                if (callback) callback();
+            },
             { enableHighAccuracy: true }
         );
     };
+
+    window.addEventListener('coordinates-updated', event => {
+        const { lat, lng } = event.detail;
+        if (window._mapPickerEdit) {
+            window._mapPickerEdit.update(lat, lng);
+        }
+    });
 </script>
 @endscript

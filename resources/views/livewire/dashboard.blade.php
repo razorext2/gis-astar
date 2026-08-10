@@ -161,7 +161,7 @@
         <div class="mb-4 flex items-center justify-between">
             <h2 class="text-sm font-bold text-zinc-800 dark:text-white">Grafik Rujukan per Bulan</h2>
             <select wire:model.live="selectedYear"
-                class="rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs font-medium text-zinc-700 dark:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-red-500/30">
+                class="rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs font-medium text-zinc-700 dark:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-red-500/30 [&>option]:dark:bg-zinc-800 [&>option]:dark:text-white">
                 @foreach($availableYears as $year)
                     <option value="{{ $year }}">Tahun {{ $year }}</option>
                 @endforeach
