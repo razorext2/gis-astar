@@ -35,6 +35,15 @@ return [
         'guard' => ['any_permission', ['rs-list']],
         'navigate' => true,
     ],
+    [
+        'type' => 'link',
+        'label' => 'Peta & Rute',
+        'route' => 'peta-rute.index',
+        'check' => ['peta-rute.*'],
+        'icon' => 'map',
+        'guard' => ['any_permission', ['rujukan-list']],
+        'navigate' => true,
+    ],
 
     // ─── Rujukan ──────────────────────────────────────────────────────────────
     [

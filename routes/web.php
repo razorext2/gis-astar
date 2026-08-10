@@ -107,6 +107,9 @@ Route::middleware(['auth'])->group(function () {
 
         // ───────── LAPORAN ─────────
         Route::livewire('laporan', Laporan\Index::class)->name('laporan.index')->middleware('permission:rujukan-list');
+
+        // ───────── PETA & RUTE ─────────
+        Route::livewire('peta-rute', App\Livewire\Handler\PetaRute\Index::class)->name('peta-rute.index')->middleware('permission:rujukan-list');
     });
 });
 
