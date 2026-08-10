@@ -200,22 +200,47 @@
 
                         route.legs[0].steps.forEach((step) => {
                             if (step.name && step.name.trim() !== "") {
-                                let instr = step.maneuver.instruction || '';
-                                let icon = '⬆';
-                                if (instr.includes('left')) icon = '↰';
-                                if (instr.includes('right')) icon = '↱';
+                                const streetName = step.name.trim();
+                                const mvr = step.maneuver || {};
+                                const modifier = mvr.modifier;
+                                const type = mvr.type;
 
-                                instr = instr.replace(/Head/g, 'Lanjut lurus di')
-                                    .replace(/turn left/g, 'Belok kiri ke')
-                                    .replace(/turn right/g, 'Belok kanan ke')
-                                    .replace(/Go straight/g, 'Lurus terus di')
-                                    .replace(/onto/g, 'ke')
-                                    .replace(/destination/g, 'tujuan');
+                                let icon = '⬆';
+                                let actionText = 'Lurus terus';
+
+                                if (modifier === 'left') {
+                                    icon = '↰';
+                                    actionText = 'Belok kiri';
+                                } else if (modifier === 'right') {
+                                    icon = '↱';
+                                    actionText = 'Belok kanan';
+                                } else if (modifier === 'sharp left') {
+                                    icon = '↶';
+                                    actionText = 'Belok tajam kiri';
+                                } else if (modifier === 'sharp right') {
+                                    icon = '↷';
+                                    actionText = 'Belok tajam kanan';
+                                } else if (modifier === 'slight left') {
+                                    icon = '↖';
+                                    actionText = 'Serong kiri';
+                                } else if (modifier === 'slight right') {
+                                    icon = '↗';
+                                    actionText = 'Serong kanan';
+                                } else if (modifier === 'uturn') {
+                                    icon = '↲';
+                                    actionText = 'Putar balik';
+                                } else if (type === 'merge') {
+                                    icon = '⤳';
+                                    actionText = 'Bergabung';
+                                } else if (type === 'roundabout' || type === 'rotary') {
+                                    icon = '↻';
+                                    actionText = 'Masuk bundaran';
+                                }
 
                                 stepsFormatted.push({
                                     type: 'step',
                                     icon: icon,
-                                    title: `${instr} ${step.name}`,
+                                    title: `${actionText} ke ${streetName}`,
                                     address: '',
                                     distance: `${(step.distance / 1000).toFixed(1).replace('.', ',')} km`
                                 });
