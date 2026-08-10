@@ -83,10 +83,10 @@
         </div>
 
         {{-- Action Buttons --}}
-        <div class="flex flex-col gap-2 sm:flex-row sm:items-center w-full sm:w-auto">
+        <div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
             {{-- Tombol Reset --}}
             <x-button.secondary x-show="hasSearched" x-transition type="button" @click="astarResult = null"
-                class="h-10 w-full px-5 text-xs font-semibold sm:h-9 sm:w-auto text-zinc-700 hover:text-red-600 dark:text-zinc-300 dark:hover:text-red-400">
+                class="h-10 w-full px-5 text-xs font-semibold text-zinc-700 hover:text-red-600 sm:h-9 sm:w-auto dark:text-zinc-300 dark:hover:text-red-400">
                 <x-slot name="icon">
                     <x-icons.refresh class="h-4 w-4" />
                 </x-slot>
@@ -106,8 +106,7 @@
                     }
                     if (rsId) { $wire.simpanRiwayat(rsId); }
                 "
-                wire:loading.attr="disabled"
-                class="h-10 w-full px-5 text-xs font-semibold sm:h-9 sm:w-auto">
+                wire:loading.attr="disabled" class="h-10 w-full px-5 text-xs font-semibold sm:h-9 sm:w-auto">
                 <x-slot name="icon">
                     <x-icons.clipboard-check wire:loading.remove wire:target="simpanRiwayat" class="h-4 w-4" />
                     <x-icons.loading wire:loading wire:target="simpanRiwayat" class="h-4 w-4 animate-spin" />
@@ -134,4 +133,3 @@
         </div>
     </div>
 </div>
-
