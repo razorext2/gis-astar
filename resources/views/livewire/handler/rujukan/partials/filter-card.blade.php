@@ -98,9 +98,11 @@
                 @click="
                     let rsId = null;
                     if (astarResult && astarResult.all_ranked && astarResult.all_ranked[selectedIndex]) {
-                        rsId = astarResult.all_ranked[selectedIndex].hospital.id_rumah_sakit;
+                        const h = astarResult.all_ranked[selectedIndex].hospital;
+                        rsId = h ? (h.id_rumah_sakit || h.id) : null;
                     } else if (rsList && rsList[selectedIndex]) {
-                        rsId = rsList[selectedIndex].id_rumah_sakit;
+                        const h = rsList[selectedIndex];
+                        rsId = h ? (h.id_rumah_sakit || h.id) : null;
                     }
                     if (rsId) { $wire.simpanRiwayat(rsId); }
                 "

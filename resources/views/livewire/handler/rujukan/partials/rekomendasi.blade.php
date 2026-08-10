@@ -20,7 +20,7 @@
                     adalah:
                 </p>
                 <h4 class="mt-1 truncate text-sm font-extrabold text-zinc-900 sm:text-base dark:text-white"
-                    x-text="astarResult && astarResult.best_hospital ? (astarResult.best_hospital.nama_rumah_sakit || astarResult.best_hospital.nama) : (rsList && rsList.length > 0 ? (rsList[0].nama_rumah_sakit || rsList[0].nama) : '-')">
+                    x-text="astarResult && astarResult.best_hospital ? astarResult.best_hospital.nama_rumah_sakit : (rsList && rsList.length > 0 ? (rsList[0].nama_rumah_sakit || rsList[0].nama) : '-')">
                 </h4>
             </div>
         </div>

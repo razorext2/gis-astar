@@ -10,7 +10,6 @@ use App\Models\Pasien;
 use App\Models\RiwayatRujukan;
 use App\Models\Rujukan;
 use App\Models\RumahSakit;
-use App\Models\User;
 use App\Services\HospitalScoringService;
 use App\Services\ReferralService;
 use Illuminate\Contracts\View\View;
@@ -84,6 +83,8 @@ class Create extends Component
 
     private function autoRunAnalysis(): void
     {
+        abort_unless(auth()->check(), 403);
+
         if (! $this->pasienId) {
             $this->resetResult();
 
@@ -107,7 +108,7 @@ class Create extends Component
             $result = app(ReferralService::class)->processReferral(
                 pasien: $pasien,
                 layananDibutuhkan: $layananSearch,
-                requestedBy: auth()->user() ?? User::first(),
+                requestedBy: auth()->user(),
                 radiusKm: $this->radiusKm,
                 targetHospitalId: $this->rumahSakitTarget !== 'semua' ? (int) $this->rumahSakitTarget : null,
             );
@@ -122,6 +123,8 @@ class Create extends Component
 
     public function confirmReferral(): void
     {
+        abort_unless(auth()->check(), 403);
+
         if (! $this->rujukanId) {
             $this->dispatch('swal', title: 'Perhatian', text: 'Cari rujukan terlebih dahulu.', icon: 'warning');
 
@@ -132,8 +135,10 @@ class Create extends Component
             $rujukan = Rujukan::findOrFail($this->rujukanId);
             $rujukan->update(['status' => StatusRujukan::Disetujui->value]);
 
-            $this->dispatch('swal', title: 'Berhasil', text: 'Rujukan berhasil dikonfirmasi.', icon: 'success');
-            $this->redirect(route('rujukan.show', $this->rujukanId), navigate: true);
+            $this->dispatch('swal', title: 'Berhasil', text: 'Rujukan berhasil dikonfirmasi.', icon: 'success', redirect: [
+                'url' => route('rujukan.show', $this->rujukanId),
+                'delay' => 1500,
+            ]);
         }, 'Gagal mengkonfirmasi rujukan');
     }
 
@@ -143,6 +148,8 @@ class Create extends Component
      */
     public function simpanRiwayat(int $rumahSakitId): void
     {
+        abort_unless(auth()->check(), 403);
+
         if (! $this->rujukanId) {
             $this->dispatch('swal', title: 'Perhatian', text: 'Jalankan analisis terlebih dahulu.', icon: 'warning');
 
@@ -162,12 +169,14 @@ class Create extends Component
                 'status_lama' => $rujukan->status->value,
                 'status_baru' => $rujukan->status->value,
                 'keterangan' => 'Riwayat rujukan disimpan dari hasil analisis A*. RS dipilih: ID '.$rumahSakitId,
-                'diubah_oleh' => auth()->id() ?? User::first()?->id,
+                'diubah_oleh' => auth()->id(),
                 'waktu_perubahan' => now(),
             ]);
 
-            $this->dispatch('swal', title: 'Berhasil', text: 'Riwayat rujukan berhasil disimpan.', icon: 'success');
-            $this->redirect(route('rujukan.show', $this->rujukanId), navigate: true);
+            $this->dispatch('swal', title: 'Berhasil', text: 'Riwayat rujukan berhasil disimpan.', icon: 'success', redirect: [
+                'url' => route('rujukan.show', $this->rujukanId),
+                'delay' => 1500,
+            ]);
         }, 'Gagal menyimpan riwayat rujukan');
     }
 

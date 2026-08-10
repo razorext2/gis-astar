@@ -1,7 +1,7 @@
 <?php
 
 /** Goal: Pest test configuration and database safety guard, Caller: Pest runner, Deps: TestCase, env('DB_DATABASE') */
-if (in_array(env('DB_DATABASE'), ['faceid_dev', 'faceid_staging_v2', 'faceid'])) {
+if (in_array(env('DB_DATABASE'), ['gis_astar', 'faceid_dev', 'faceid_staging_v2', 'faceid'])) {
     exit('Batal menjalankan test! Database yang aktif adalah database development/staging ('.env('DB_DATABASE').") untuk mencegah reset.\n");
 }
 

@@ -52,11 +52,16 @@ export async function initEventListener() {
             icon: payload.icon ?? 'success',
             title: payload.title ?? '',
             html: payload.text ?? payload.html ?? '',
-            showConfirmButton: false,
-            timer: payload.redirect?.delay ?? 3000,
+            showConfirmButton: payload.showConfirmButton ?? false,
+            timer: payload.timer ?? payload.redirect?.delay ?? 2000,
         }).then(() => {
-            if (payload.redirect && payload.redirect.url) {
-                window.location.href = payload.redirect.url;
+            const redirectUrl = payload.redirect?.url;
+            if (redirectUrl && redirectUrl.trim() !== '') {
+                if (typeof Livewire !== 'undefined' && typeof Livewire.navigate === 'function') {
+                    Livewire.navigate(redirectUrl);
+                } else {
+                    window.location.href = redirectUrl;
+                }
             }
         });
     });

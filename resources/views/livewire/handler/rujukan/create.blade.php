@@ -157,7 +157,7 @@
                         icon: rsIcon
                     })
                     .addTo(this.map)
-                    .bindPopup(`<b>${activeHospital.nama_rumah_sakit || activeHospital.nama}</b>`);
+                    .bindPopup(`<b>${activeHospital.nama_rumah_sakit}</b>`);
 
                 // Fetch OSRM route
                 const url =
@@ -225,7 +225,7 @@
                         stepsFormatted.push({
                             type: 'end',
                             icon: '📍',
-                            title: `Tujuan: ${activeHospital.nama_rumah_sakit || activeHospital.nama}`,
+                            title: `Tujuan: ${activeHospital.nama_rumah_sakit}`,
                             address: activeHospital.alamat || '-',
                             distance: `Total ${this.currentDistance} km (${this.currentDuration} menit)`
                         });
