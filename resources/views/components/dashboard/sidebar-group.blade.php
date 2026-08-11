@@ -25,7 +25,7 @@
 }" x-show="isMatch" x-transition:enter="transition ease-out duration-200"
     x-transition:enter-start="opacity-0 translate-y-1" x-transition:enter-end="opacity-100 translate-y-0">
     <button
-        class="{{ $isActive ? 'bg-zinc-100/80 dark:bg-white/5 text-red-600 dark:text-red-400 font-bold border-l-4 border-red-600' : 'text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-200 border-l-4 border-transparent' }} group relative flex w-full items-center rounded-r-2xl px-4 py-3 transition-all duration-200"
+        class="{{ $isActive ? 'bg-red-50/80 dark:bg-red-950/40 text-red-600 dark:text-red-400 font-semibold' : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100/70 dark:hover:bg-zinc-800/60 hover:text-zinc-900 dark:hover:text-zinc-100' }} group relative flex w-full items-center rounded-xl px-3.5 py-2.5 transition-all duration-150"
         type="button"
         @click="
             const scroller = $el.closest('#sidebar-scroll');
@@ -38,21 +38,21 @@
         "
         :aria-expanded="isExpanded">
 
-        <div class="flex flex-1 items-center gap-3.5 overflow-hidden">
+        <div class="flex flex-1 items-center gap-3 overflow-hidden">
             <x-dynamic-component :component="'icons.' . $icon"
-                class="{{ $isActive ? 'text-red-600' : 'text-zinc-400 group-hover:text-red-600' }} h-5 w-5 flex-shrink-0 transition-colors duration-200" />
+                class="{{ $isActive ? 'text-red-600 dark:text-red-400' : 'text-zinc-400 group-hover:text-red-600 dark:group-hover:text-red-400' }} h-5 w-5 flex-shrink-0 transition-colors duration-150" />
 
-            <span class="whitespace-normal break-words text-left text-sm tracking-wide transition-colors duration-200">
+            <span class="whitespace-normal break-words text-left text-sm tracking-wide transition-colors duration-150">
                 {{ $label }}
             </span>
         </div>
 
         <x-icons.carred-down
-            class="{{ $isActive ? 'text-red-600' : 'text-zinc-400 dark:text-zinc-500 group-hover:text-red-600' }} ml-1 h-4 w-4 flex-shrink-0 transform transition-transform duration-300"
+            class="{{ $isActive ? 'text-red-600 dark:text-red-400' : 'text-zinc-400 dark:text-zinc-500 group-hover:text-red-600 dark:group-hover:text-red-400' }} ml-1 h-4 w-4 flex-shrink-0 transform transition-transform duration-300"
             x-bind:class="{ 'rotate-180': isExpanded }" />
     </button>
 
-    <ul class="space-y-4 py-4"
+    <ul class="space-y-1 py-1.5 pl-2"
         x-show="isExpanded"
         x-transition:enter="transition ease-in duration-200"
         x-transition:enter-start="transform opacity-0 -translate-y-5"

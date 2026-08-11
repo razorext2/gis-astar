@@ -57,70 +57,67 @@
 <!-- Sidebar Navigation -->
 <aside
     :class="[
-        openSidebar ? 'translate-x-0' : '-translate-x-80',
+        openSidebar ? 'translate-x-0' : '-translate-x-full',
         dynamicBg ?
-        'bg-glass-light border-glass-border-light backdrop-blur-md shadow-md dark:bg-glass-dark dark:border-glass-border-dark' :
-        'bg-white border-zinc-200 shadow-sm dark:bg-dark-primary dark:border-zinc-800'
+        'bg-glass-light/95 border-glass-border-light backdrop-blur-xl dark:bg-glass-dark/95 dark:border-glass-border-dark' :
+        'bg-white border-zinc-200/80 dark:bg-dark-primary dark:border-zinc-800/80'
     ]"
-    class="w-68 fixed bottom-4 left-4 top-4 z-40 hidden flex-col rounded-2xl border pb-6 transition-transform duration-300 ease-in-out will-change-transform md:flex"
+    class="fixed inset-y-0 left-0 z-40 hidden w-68 flex-col border-r transition-transform duration-300 ease-in-out will-change-transform md:flex"
     x-cloak id="logo-sidebar" aria-label="Sidebar">
 
-    {{-- Header / Toggle --}}
+    {{-- Header / Brand --}}
     <div id="tombolSidebar"
-        class="mx-auto flex w-full items-center justify-between border-b border-zinc-200/50 p-5 dark:border-zinc-800/50">
-        <div class="flex items-center justify-start pl-5">
-            <a class="flex items-center gap-2.5" href="{{ config('app.url') }}">
-                <img class="h-8 w-8 rounded-lg object-contain"
-                    src="{{ setting('logo_path') ? asset('storage/' . setting('logo_path')) : asset('images/brand/logo.png') }}"
-                    alt="{{ setting('site_name', 'SIPROMATA') }} Logo" loading="lazy" />
-                <div class="flex flex-col leading-tight">
-                    <span class="text-sm font-black tracking-wide text-zinc-900 dark:text-white">
-                        {{ setting('sidebar_title', 'SIPROMATA') }}
-                    </span>
-                    <span class="text-[9px] font-medium leading-tight text-zinc-500 dark:text-zinc-400">
-                        Sistem Informasi Rujukan Operasi Mata
-                    </span>
-                </div>
-            </a>
-        </div>
-
+        class="flex h-16 w-full shrink-0 items-center justify-between border-b border-zinc-200/60 px-5 dark:border-zinc-800/60">
+        <a class="flex items-center gap-3" href="{{ config('app.url') }}">
+            <img class="h-8 w-8 rounded-lg object-contain"
+                src="{{ setting('logo_path') ? asset('storage/' . setting('logo_path')) : asset('images/brand/logo.png') }}"
+                alt="{{ setting('site_name', 'SIPROMATA') }} Logo" loading="lazy" />
+            <div class="flex flex-col leading-tight">
+                <span class="text-sm font-black tracking-wide text-zinc-900 dark:text-white">
+                    {{ setting('sidebar_title', 'SIPROMATA') }}
+                </span>
+                <span class="text-[9px] font-medium leading-tight text-zinc-500 dark:text-zinc-400">
+                    Sistem Informasi Rujukan Operasi Mata
+                </span>
+            </div>
+        </a>
     </div>
 
     {{-- Search Bar --}}
-    <div class="px-5 pt-4" x-show="openSidebar" x-transition:enter="transition-opacity ease-out duration-200"
+    <div class="px-4 pb-2 pt-4" x-show="openSidebar" x-transition:enter="transition-opacity ease-out duration-200"
         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
         x-transition:leave="transition-opacity ease-in duration-100" x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0">
         <div class="group relative">
             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                 <x-icons.search
-                    class="h-4 w-4 text-zinc-400 transition-colors duration-200 group-focus-within:text-red-600" />
+                    class="h-4 w-4 text-zinc-400 transition-colors duration-200 group-focus-within:text-red-600 dark:group-focus-within:text-red-500" />
             </div>
             <input type="text" x-model="menuSearch"
-                class="block w-full rounded-xl border-zinc-200 bg-zinc-50/50 py-2.5 pl-10 pr-3 text-sm tracking-wide text-zinc-900 placeholder-zinc-400 transition-colors duration-200 focus:border-red-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-red-600/20 dark:border-zinc-800 dark:text-white dark:placeholder-zinc-500 dark:focus:border-red-500 dark:focus:ring-red-500/20"
+                class="block w-full rounded-xl border-zinc-200 bg-zinc-50/70 py-2 pl-9 pr-8 text-xs tracking-wide text-zinc-900 placeholder-zinc-400 transition-colors duration-200 focus:border-red-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-red-600/20 dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-white dark:placeholder-zinc-500 dark:focus:border-red-500 dark:focus:ring-red-500/20"
                 x-bind:class="dynamicBg ?
-                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md shadow-sm' :
-                    'bg-white dark:bg-dark-primary border-zinc-200 dark:border-zinc-800 shadow-sm'"
+                    'bg-glass-light dark:bg-glass-dark border-glass-border-light dark:border-glass-border-dark backdrop-blur-md' :
+                    'bg-zinc-50/70 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800'"
                 placeholder="Cari Menu..." />
             <button x-show="menuSearch" @click="menuSearch = ''"
-                class="absolute inset-y-0 right-0 flex items-center pr-3 text-zinc-400 hover:text-red-500">
-                <x-icons.close class="h-4 w-4" />
+                class="absolute inset-y-0 right-0 flex items-center pr-2.5 text-zinc-400 hover:text-red-500">
+                <x-icons.close class="h-3.5 w-3.5" />
             </button>
         </div>
     </div>
 
     {{-- Navigation Links --}}
-    <div id="sidebar-scroll" class="overflow-x-hidden overflow-y-scroll p-5 pb-10" style="overflow-anchor: none" x-data
+    <div id="sidebar-scroll" class="flex-1 overflow-x-hidden overflow-y-auto px-4 py-3 pb-24" style="overflow-anchor: none" x-data
         x-init="const saved = sessionStorage.getItem('sidebar-scroll');
         if (saved) $el.scrollTop = parseInt(saved);
         $el.addEventListener('scroll', () => sessionStorage.setItem('sidebar-scroll', $el.scrollTop), { passive: true });
         document.addEventListener('livewire:navigating', () => sessionStorage.setItem('sidebar-scroll', $el.scrollTop));">
-        <ul class="space-y-2 font-medium">
+        <ul class="space-y-1.5 font-medium">
             @foreach ($menu as $item)
                 @if (($item['type'] ?? '') === 'header')
                     {{-- ── Header / Spacer ────────────────────────────────── --}}
                     <li x-show="!menuSearch || '{{ strtolower($item['label']) }}'.includes(menuSearch.toLowerCase())"
-                        class="px-4 py-2">
+                        class="px-3 pb-1 pt-4">
                         <span
                             class="text-[10px] font-bold uppercase tracking-[0.15em] text-zinc-400 dark:text-zinc-500">
                             {{ $item['label'] }}
@@ -133,15 +130,15 @@
                     @endphp
                     <li x-show="!menuSearch || '{{ strtolower($item['label']) }}'.includes(menuSearch.toLowerCase())">
                         <a href="{{ route($item['route']) }}"
-                            class="{{ $isActive ? 'bg-zinc-100/80 dark:bg-white/5 text-red-600 dark:text-red-400 font-bold border-l-4 border-red-600' : 'text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-200 border-l-4 border-transparent' }} group relative flex items-center gap-3.5 rounded-r-2xl px-4 py-3 transition-all duration-200"
+                            class="{{ $isActive ? 'bg-red-50/80 dark:bg-red-950/40 text-red-600 dark:text-red-400 font-semibold' : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100/70 dark:hover:bg-zinc-800/60 hover:text-zinc-900 dark:hover:text-zinc-100' }} group relative flex items-center gap-3 rounded-xl px-3.5 py-2.5 transition-all duration-150"
                             {{ $item['navigate'] ?? true ? 'wire:navigate' : '' }}>
 
                             <x-dynamic-component :component="'icons.' . $item['icon']"
-                                class="{{ $isActive ? 'text-red-600' : 'text-zinc-400 group-hover:text-red-600' }} h-5 w-5 shrink-0 transition-colors duration-200" />
+                                class="{{ $isActive ? 'text-red-600 dark:text-red-400' : 'text-zinc-400 group-hover:text-red-600 dark:group-hover:text-red-400' }} h-5 w-5 shrink-0 transition-colors duration-150" />
 
                             <div class="flex flex-1 items-center justify-between overflow-hidden">
                                 <span
-                                    class="warp-break-word whitespace-normal text-sm tracking-wide transition-colors duration-200">
+                                    class="warp-break-word whitespace-normal text-sm tracking-wide transition-colors duration-150">
                                     {{ $item['label'] }}
                                 </span>
 

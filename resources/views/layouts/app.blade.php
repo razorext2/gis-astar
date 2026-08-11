@@ -25,8 +25,8 @@
 
         @include('layouts.partials.sidebar')
 
-        <div :class="openSidebar ? 'md:ml-72' : ''"
-            class="md:mt-30 mb-20 mt-28 px-4 transition-[margin-left] duration-300 ease-in-out will-change-transform md:mb-4 xl:px-8">
+        <div :class="openSidebar ? 'md:ml-68' : ''"
+            class="mb-20 mt-20 px-4 transition-[margin-left] duration-300 ease-in-out will-change-transform md:mb-4 md:mt-24 xl:px-8">
 
             {{-- Title --}}
             @include('layouts.partials.title')

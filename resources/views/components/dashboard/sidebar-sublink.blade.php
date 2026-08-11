@@ -8,7 +8,7 @@
 <li x-show="!menuSearch || '{{ strtolower($slot) }}'.includes(menuSearch.toLowerCase())"
     x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-1"
     x-transition:enter-end="opacity-100 translate-y-0">
-    <a class="{{ $isActive ? 'text-red-600 dark:text-red-400 font-bold bg-zinc-100/50 dark:bg-white/5' : 'text-zinc-500 dark:text-zinc-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50' }} group relative flex w-full items-center rounded-xl py-2.5 pl-11 pr-4 transition-all duration-200"
+    <a class="{{ $isActive ? 'text-red-600 dark:text-red-400 font-semibold bg-red-50/60 dark:bg-red-950/30' : 'text-zinc-600 dark:text-zinc-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-zinc-100/60 dark:hover:bg-zinc-800/50' }} group relative flex w-full items-center rounded-xl py-2 pl-9 pr-3 text-xs transition-all duration-150"
         href="{{ $href }}" {{ $navigate ? 'wire:navigate' : '' }}>
 
         <div class="flex flex-1 items-center justify-between overflow-hidden">
