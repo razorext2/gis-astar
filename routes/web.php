@@ -2,6 +2,7 @@
 
 /** Goal: Main Web Routing File, Caller: ServiceProvider */
 
+use App\Http\Controllers\LaporanPrintController;
 use App\Http\Controllers\PushController;
 use App\Livewire\Dashboard;
 use App\Livewire\Handler\AnalisisRujukan;
@@ -107,6 +108,7 @@ Route::middleware(['auth'])->group(function () {
 
         // ───────── LAPORAN ─────────
         Route::livewire('laporan', Laporan\Index::class)->name('laporan.index')->middleware('permission:rujukan-list');
+        Route::get('laporan/print', LaporanPrintController::class)->name('laporan.print')->middleware('permission:rujukan-list');
 
         // ───────── PETA & RUTE ─────────
         Route::livewire('peta-rute', App\Livewire\Handler\PetaRute\Index::class)->name('peta-rute.index')->middleware('permission:rujukan-list');
