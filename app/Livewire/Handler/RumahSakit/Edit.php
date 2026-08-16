@@ -88,6 +88,17 @@ class Edit extends Component
         }, 'Gagal memperbarui data RS', ['rs_id' => $this->rumahSakit->id_rumah_sakit]);
     }
 
+    public function delete(): void
+    {
+        $this->runSafely(function () {
+            $nama = $this->rumahSakit->nama_rumah_sakit;
+            $this->rumahSakit->delete();
+
+            $this->dispatch('swal', title: 'Berhasil', text: "Data RS {$nama} berhasil dihapus.", icon: 'success');
+            $this->redirect(route('rs.index'), navigate: true);
+        }, 'Gagal menghapus data RS', ['rs_id' => $this->rumahSakit->id_rumah_sakit]);
+    }
+
     public function render(): View
     {
         return view('livewire.handler.rumah-sakit.edit');

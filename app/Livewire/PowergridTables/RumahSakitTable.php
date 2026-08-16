@@ -26,8 +26,13 @@ final class RumahSakitTable extends PowerGridComponent
     public function setUp(): array
     {
         return [
-            PowerGrid::header()->showSearchInput()->showToggleColumns(),
-            PowerGrid::footer()->showPerPage()->showRecordCount(),
+            PowerGrid::header()
+                ->showSearchInput()
+                ->showSoftDeletes()
+                ->showToggleColumns(),
+            PowerGrid::footer()
+                ->showPerPage()
+                ->showRecordCount(),
             PowerGrid::responsive(),
         ];
     }
@@ -70,10 +75,56 @@ final class RumahSakitTable extends PowerGridComponent
         ];
     }
 
+    public function delete(int $id): void
+    {
+        $rs = RumahSakit::find($id);
+
+        if ($rs) {
+            $nama = $rs->nama_rumah_sakit;
+            $rs->delete();
+            $this->dispatch('swal', title: 'Berhasil', text: "Data RS {$nama} berhasil dihapus.", icon: 'success');
+        }
+    }
+
+    public function restore(int $id): void
+    {
+        $rs = RumahSakit::withTrashed()->find($id);
+
+        if ($rs) {
+            $nama = $rs->nama_rumah_sakit;
+            $rs->restore();
+            $this->dispatch('swal', title: 'Berhasil', text: "Data RS {$nama} berhasil dikembalikan.", icon: 'success');
+        }
+    }
+
     public function actionsFromView(RumahSakit $row)
     {
         return Blade::render("
-            <x-button.primary href=\"{{ route('rs.edit', \$row->id_rumah_sakit) }}\" wire:navigate>Edit</x-button.primary>
+            <div class='flex gap-2 justify-center'>
+                @if(!\$row->trashed())
+                    <x-button.primary href=\"{{ route('rs.edit', \$row->id_rumah_sakit) }}\" wire:navigate>Edit</x-button.primary>
+                    <x-button.danger type=\"button\"
+                        x-on:click=\"Swal.fire({
+                            title: 'Hapus Rumah Sakit?',
+                            text: 'Data RS {{ \$row->nama_rumah_sakit }} akan dihapus.',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#ef4444',
+                            confirmButtonText: 'Ya, Hapus',
+                            cancelButtonText: 'Batal'
+                        }).then((res) => {
+                            if (res.isConfirmed) {
+                                \$wire.delete({{ \$row->id_rumah_sakit }});
+                            }
+                        })\">
+                        Hapus
+                    </x-button.danger>
+                @else
+                    <x-button.secondary type=\"button\" wire:click=\"restore({{ \$row->id_rumah_sakit }})\">
+                        Restore
+                    </x-button.secondary>
+                @endif
+            </div>
         ", ['row' => $row]);
     }
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Handler\Rujukan\Create;
+use App\Livewire\Handler\Rujukan\Show;
 use App\Models\Pasien;
 use App\Models\RiwayatRujukan;
 use App\Models\Rujukan;
@@ -87,4 +88,24 @@ it('simpanRiwayat creates a RiwayatRujukan record and dispatches swal', function
     $component->assertDispatched('swal', function ($name, $params) use ($rujukanId) {
         return $params['title'] === 'Berhasil' && $params['redirect']['url'] === route('rujukan.show', $rujukanId);
     });
+});
+
+it('can soft delete a rujukan via Show handler', function () {
+    $rujukan = Rujukan::create([
+        'no_rujukan' => Rujukan::generateNoRujukan(),
+        'id_pasien' => $this->pasien->id_pasien,
+        'id_rumah_sakit' => $this->rs1->id_rumah_sakit,
+        'id_user' => $this->user->id,
+        'tanggal_rujukan' => now(),
+        'status' => 'pending',
+    ]);
+
+    Livewire::test(Show::class, ['rujukan' => $rujukan])
+        ->call('delete')
+        ->assertDispatched('swal')
+        ->assertRedirect(route('riwayat.index'));
+
+    $this->assertSoftDeleted('rujukan', [
+        'id_rujukan' => $rujukan->id_rujukan,
+    ]);
 });

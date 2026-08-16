@@ -2,6 +2,7 @@
 
 use App\Livewire\Handler\Pasien\Create;
 use App\Livewire\Handler\Pasien\Edit;
+use App\Livewire\PowergridTables\PasienTable;
 use App\Models\Pasien;
 use App\Models\User;
 use Livewire\Livewire;
@@ -13,9 +14,10 @@ beforeEach(function () {
     Permission::firstOrCreate(['name' => 'pasien-list']);
     Permission::firstOrCreate(['name' => 'pasien-create']);
     Permission::firstOrCreate(['name' => 'pasien-edit']);
+    Permission::firstOrCreate(['name' => 'pasien-delete']);
 
     $role = Role::firstOrCreate(['name' => 'Dokter']);
-    $role->syncPermissions(['pasien-list', 'pasien-create', 'pasien-edit']);
+    $role->syncPermissions(['pasien-list', 'pasien-create', 'pasien-edit', 'pasien-delete']);
 
     $this->user = User::factory()->create();
     $this->user->assignRole($role);
@@ -69,5 +71,59 @@ it('can edit an existing pasien via Livewire handler', function () {
         'id_pasien' => $pasien->id_pasien,
         'nama' => 'Pasien Baru',
         'jenis_kelamin' => 'laki_laki',
+    ]);
+});
+
+it('can soft delete a pasien via Edit handler', function () {
+    $this->actingAs($this->user);
+
+    $pasien = Pasien::factory()->create([
+        'nama' => 'Pasien Mau Dihapus',
+    ]);
+
+    Livewire::test(Edit::class, ['pasien' => $pasien])
+        ->call('delete')
+        ->assertDispatched('swal')
+        ->assertRedirect(route('pasien.index'));
+
+    $this->assertSoftDeleted('pasien', [
+        'id_pasien' => $pasien->id_pasien,
+    ]);
+});
+
+it('can soft delete a pasien via PasienTable', function () {
+    $this->actingAs($this->user);
+
+    $pasien = Pasien::factory()->create([
+        'nama' => 'Pasien Tabel Delete',
+    ]);
+
+    Livewire::test(PasienTable::class)
+        ->call('delete', $pasien->id_pasien)
+        ->assertDispatched('swal');
+
+    $this->assertSoftDeleted('pasien', [
+        'id_pasien' => $pasien->id_pasien,
+    ]);
+});
+
+it('can restore a soft deleted pasien via PasienTable', function () {
+    $this->actingAs($this->user);
+
+    $pasien = Pasien::factory()->create([
+        'nama' => 'Pasien Terhapus',
+    ]);
+    $pasien->delete();
+
+    $this->assertSoftDeleted('pasien', [
+        'id_pasien' => $pasien->id_pasien,
+    ]);
+
+    Livewire::test(PasienTable::class)
+        ->call('restore', $pasien->id_pasien)
+        ->assertDispatched('swal');
+
+    $this->assertNotSoftDeleted('pasien', [
+        'id_pasien' => $pasien->id_pasien,
     ]);
 });

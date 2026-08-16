@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DetailRujukan extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'detail_rujukan';
 
     protected $primaryKey = 'id_detail';
@@ -31,11 +34,11 @@ class DetailRujukan extends Model
 
     public function rujukan(): BelongsTo
     {
-        return $this->belongsTo(Rujukan::class, 'id_rujukan', 'id_rujukan');
+        return $this->belongsTo(Rujukan::class, 'id_rujukan', 'id_rujukan')->withTrashed();
     }
 
     public function rute(): BelongsTo
     {
-        return $this->belongsTo(Rute::class, 'id_rute', 'id_rute');
+        return $this->belongsTo(Rute::class, 'id_rute', 'id_rute')->withTrashed();
     }
 }

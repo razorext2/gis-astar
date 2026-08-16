@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Rujukan extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'rujukan';
 
@@ -38,13 +39,13 @@ class Rujukan extends Model
     /** Pasien yang dirujuk */
     public function pasien(): BelongsTo
     {
-        return $this->belongsTo(Pasien::class, 'id_pasien', 'id_pasien');
+        return $this->belongsTo(Pasien::class, 'id_pasien', 'id_pasien')->withTrashed();
     }
 
     /** RS tujuan rujukan */
     public function rumahSakit(): BelongsTo
     {
-        return $this->belongsTo(RumahSakit::class, 'id_rumah_sakit', 'id_rumah_sakit');
+        return $this->belongsTo(RumahSakit::class, 'id_rumah_sakit', 'id_rumah_sakit')->withTrashed();
     }
 
     /** Dokter yang membuat rujukan */

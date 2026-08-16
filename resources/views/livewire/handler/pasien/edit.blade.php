@@ -12,13 +12,38 @@
                     <p class="text-sm text-gray-500 dark:text-gray-400">{{ $pasien->nama }} — NIK: {{ $pasien->nik }}</p>
                 </div>
             </div>
-            <x-button.primary wire:click="save" wire:loading.attr="disabled" wire:target="save">
-                <x-slot name="icon">
-                    <x-icons.loading wire:loading wire:target="save" class="h-4 w-4 animate-spin" />
-                </x-slot>
-                <span wire:loading.remove wire:target="save">Simpan Perubahan</span>
-                <span wire:loading wire:target="save">Menyimpan...</span>
-            </x-button.primary>
+            <div class="flex items-center gap-3">
+                <x-button.danger type="button"
+                    x-on:click="Swal.fire({
+                        title: 'Hapus Pasien?',
+                        text: 'Data pasien {{ $pasien->nama }} akan dihapus.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#ef4444',
+                        confirmButtonText: 'Ya, Hapus',
+                        cancelButtonText: 'Batal'
+                    }).then((res) => {
+                        if (res.isConfirmed) {
+                            $wire.delete();
+                        }
+                    })"
+                    wire:loading.attr="disabled"
+                    wire:target="delete">
+                    <x-slot name="icon">
+                        <x-icons.trash wire:loading.remove wire:target="delete" class="h-4 w-4" />
+                        <x-icons.loading wire:loading wire:target="delete" class="h-4 w-4 animate-spin" />
+                    </x-slot>
+                    <span wire:loading.remove wire:target="delete">Hapus Pasien</span>
+                    <span wire:loading wire:target="delete">Menghapus...</span>
+                </x-button.danger>
+                <x-button.primary wire:click="save" wire:loading.attr="disabled" wire:target="save">
+                    <x-slot name="icon">
+                        <x-icons.loading wire:loading wire:target="save" class="h-4 w-4 animate-spin" />
+                    </x-slot>
+                    <span wire:loading.remove wire:target="save">Simpan Perubahan</span>
+                    <span wire:loading wire:target="save">Menyimpan...</span>
+                </x-button.primary>
+            </div>
         </div>
     </div>
 

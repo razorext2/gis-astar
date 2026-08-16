@@ -5,9 +5,12 @@ namespace App\Models;
 use App\Enums\TipeTitikRute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TitikRute extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'titik_rute';
 
     protected $primaryKey = 'id_titik';
@@ -33,6 +36,6 @@ class TitikRute extends Model
 
     public function rute(): BelongsTo
     {
-        return $this->belongsTo(Rute::class, 'id_rute', 'id_rute');
+        return $this->belongsTo(Rute::class, 'id_rute', 'id_rute')->withTrashed();
     }
 }

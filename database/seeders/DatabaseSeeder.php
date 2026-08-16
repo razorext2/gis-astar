@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
         // Dokter — manajemen pasien + buat rujukan
         $dokter = Role::firstOrCreate(['name' => 'dokter']);
         $dokter->syncPermissions([
-            'pasien-list', 'pasien-create', 'pasien-edit',
+            'pasien-list', 'pasien-create', 'pasien-edit', 'pasien-delete',
             'rs-list',
             'rujukan-list', 'rujukan-create', 'rujukan-view', 'rujukan-update-status',
         ]);

@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RiwayatRujukan extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'riwayat_rujukan';
 
     protected $primaryKey = 'id_riwayat';
@@ -31,7 +34,7 @@ class RiwayatRujukan extends Model
 
     public function rujukan(): BelongsTo
     {
-        return $this->belongsTo(Rujukan::class, 'id_rujukan', 'id_rujukan');
+        return $this->belongsTo(Rujukan::class, 'id_rujukan', 'id_rujukan')->withTrashed();
     }
 
     /** User yang mengubah status */

@@ -7,6 +7,7 @@ namespace App\Livewire\Handler\Pasien;
 use App\Enums\JenisKelamin;
 use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Pasien;
+use App\Services\GeocodingService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -80,10 +81,11 @@ class Edit extends Component
             return;
         }
 
-        $results = app(\App\Services\GeocodingService::class)->search($this->alamat, 5);
+        $results = app(GeocodingService::class)->search($this->alamat, 5);
 
         if (empty($results)) {
             $this->dispatch('swal', title: 'Gagal', text: 'Alamat tidak ditemukan atau tidak dapat dilokalisasi.', icon: 'error');
+
             return;
         }
 
@@ -92,6 +94,7 @@ class Edit extends Component
             $this->longitude = $results[0]['lng'];
             $this->dispatch('coordinates-updated', lat: $results[0]['lat'], lng: $results[0]['lng']);
             $this->dispatch('swal', title: 'Berhasil', text: 'Koordinat ditemukan dan peta diperbarui.', icon: 'success');
+
             return;
         }
 
@@ -136,6 +139,17 @@ class Edit extends Component
             $this->dispatch('swal', title: 'Berhasil', text: "Data pasien {$this->nama} berhasil diperbarui.", icon: 'success');
             $this->redirect(route('pasien.index'), navigate: true);
         }, 'Gagal memperbarui data pasien', ['action' => 'update pasien', 'pasien_id' => $this->pasien->id_pasien]);
+    }
+
+    public function delete(): void
+    {
+        $this->runSafely(function () {
+            $nama = $this->pasien->nama;
+            $this->pasien->delete();
+
+            $this->dispatch('swal', title: 'Berhasil', text: "Data pasien {$nama} berhasil dihapus.", icon: 'success');
+            $this->redirect(route('pasien.index'), navigate: true);
+        }, 'Gagal menghapus data pasien', ['action' => 'delete pasien', 'pasien_id' => $this->pasien->id_pasien]);
     }
 
     public function render(): View
