@@ -172,38 +172,71 @@
         </div>
 
         {{-- Filter Card (Screen Only) --}}
-        <div class="print:hidden rounded-2xl border border-zinc-200/80 bg-white p-4 shadow-sm sm:p-5 dark:border-zinc-800 dark:bg-dark-primary">
-            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
-                {{-- 1. Search --}}
+        <div class="print:hidden rounded-2xl border border-zinc-200/80 bg-white shadow-sm dark:border-zinc-800 dark:bg-dark-primary">
+
+            {{-- Filter Header --}}
+            <div class="flex items-center justify-between border-b border-zinc-100 px-5 py-3 dark:border-zinc-800/70">
+                <div class="flex items-center gap-2">
+                    <x-icons.search class="h-3.5 w-3.5 text-blue-500" />
+                    <span class="text-xs font-semibold text-zinc-600 dark:text-zinc-300">Filter &amp; Pencarian</span>
+                </div>
+                <button type="button" wire:click="resetRujukanFilter" title="Reset semua filter"
+                    class="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-medium text-zinc-500 transition hover:bg-red-50 hover:border-red-200 hover:text-red-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-red-950/40 dark:hover:border-red-900 dark:hover:text-red-400">
+                    <x-icons.refresh class="h-3 w-3" />
+                    Reset Filter
+                </button>
+            </div>
+
+            {{-- Filter Inputs --}}
+            <div class="grid grid-cols-1 gap-3 p-4 sm:grid-cols-2 lg:grid-cols-6 sm:p-5">
+
+                {{-- 1. Search (spans 2 cols on lg) --}}
                 <div class="space-y-1.5 lg:col-span-2">
-                    <label class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Cari Rujukan / Pasien / RS</label>
+                    <label class="block text-[11px] font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                        Pencarian
+                    </label>
                     <div class="relative">
                         <input wire:model.live.debounce.300ms="rujukanSearch" type="text"
-                            placeholder="Ketik No. Rujukan, Nama Pasien, NIK, atau Nama RS..."
-                            class="h-9 w-full rounded-xl border border-zinc-300/80 bg-zinc-50/50 pl-9 pr-3 text-xs text-zinc-800 placeholder-zinc-400 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700/80 dark:bg-zinc-800/80 dark:text-white dark:placeholder-zinc-500 dark:focus:bg-zinc-900">
-                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400">
+                            id="rujukan-search"
+                            placeholder="No. Rujukan, Nama Pasien, NIK, atau Nama RS..."
+                            class="h-9 w-full rounded-xl border border-zinc-200 bg-zinc-50 pl-8 pr-3 text-xs text-zinc-800 placeholder-zinc-400 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-800/70 dark:text-white dark:placeholder-zinc-500 dark:focus:bg-zinc-900">
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2.5 text-zinc-400">
                             <x-icons.search class="h-3.5 w-3.5" />
                         </div>
                     </div>
                 </div>
 
-                {{-- 2. Periode Tanggal --}}
+                {{-- 2. Tanggal Dari --}}
                 <div class="space-y-1.5">
-                    <label class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Periode Tanggal</label>
-                    <div class="flex items-center gap-1.5">
+                    <label for="rujukan-date-from" class="block text-[11px] font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                        Dari Tanggal
+                    </label>
+                    <div class="relative">
                         <input wire:model.live="rujukanDateFrom" type="date"
-                            class="h-9 w-full rounded-xl border border-zinc-300/80 bg-zinc-50/50 px-2.5 text-xs text-zinc-800 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700/80 dark:bg-zinc-800/80 dark:text-white dark:focus:bg-zinc-900">
-                        <span class="shrink-0 text-xs text-zinc-400">–</span>
-                        <input wire:model.live="rujukanDateTo" type="date"
-                            class="h-9 w-full rounded-xl border border-zinc-300/80 bg-zinc-50/50 px-2.5 text-xs text-zinc-800 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700/80 dark:bg-zinc-800/80 dark:text-white dark:focus:bg-zinc-900">
+                            id="rujukan-date-from"
+                            class="h-9 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3 text-xs text-zinc-800 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-800/70 dark:text-zinc-200 dark:focus:bg-zinc-900 dark:[color-scheme:dark]">
                     </div>
                 </div>
 
-                {{-- 3. RS Tujuan --}}
+                {{-- 3. Tanggal Sampai --}}
                 <div class="space-y-1.5">
-                    <label class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">RS Tujuan</label>
-                    <select wire:model.live="rujukanRsId"
-                        class="h-9 w-full rounded-xl border border-zinc-300/80 bg-zinc-50/50 px-3 text-xs text-zinc-800 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700/80 dark:bg-zinc-800/80 dark:text-white dark:focus:bg-zinc-900 [&>option]:dark:bg-zinc-800 [&>option]:dark:text-white">
+                    <label for="rujukan-date-to" class="block text-[11px] font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                        Sampai Tanggal
+                    </label>
+                    <div class="relative">
+                        <input wire:model.live="rujukanDateTo" type="date"
+                            id="rujukan-date-to"
+                            class="h-9 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3 text-xs text-zinc-800 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-800/70 dark:text-zinc-200 dark:focus:bg-zinc-900 dark:[color-scheme:dark]">
+                    </div>
+                </div>
+
+                {{-- 4. RS Tujuan --}}
+                <div class="space-y-1.5">
+                    <label for="rujukan-rs" class="block text-[11px] font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                        RS Tujuan
+                    </label>
+                    <select wire:model.live="rujukanRsId" id="rujukan-rs"
+                        class="h-9 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3 text-xs text-zinc-800 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-800/70 dark:text-zinc-200 dark:focus:bg-zinc-900 [&>option]:dark:bg-zinc-800 [&>option]:dark:text-white">
                         <option value="">Semua RS</option>
                         @foreach ($rumahSakitList as $rs)
                             <option value="{{ $rs->id_rumah_sakit }}">{{ $rs->nama_rumah_sakit }}</option>
@@ -211,25 +244,50 @@
                     </select>
                 </div>
 
-                {{-- 4. Status & Reset --}}
-                <div class="flex items-end gap-2">
-                    <div class="flex-1 space-y-1.5">
-                        <label class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Status</label>
-                        <select wire:model.live="rujukanStatus"
-                            class="h-9 w-full rounded-xl border border-zinc-300/80 bg-zinc-50/50 px-3 text-xs text-zinc-800 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700/80 dark:bg-zinc-800/80 dark:text-white dark:focus:bg-zinc-900 [&>option]:dark:bg-zinc-800 [&>option]:dark:text-white">
-                            <option value="">Semua Status</option>
-                            @foreach ($statusOptions as $s)
-                                <option value="{{ $s->value }}">{{ $s->label() }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <button type="button" wire:click="resetRujukanFilter" title="Reset Filter"
-                        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-zinc-300/80 bg-zinc-50/50 text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-white">
-                        <x-icons.refresh class="h-4 w-4" />
-                    </button>
+                {{-- 5. Status Rujukan --}}
+                <div class="space-y-1.5">
+                    <label for="rujukan-status" class="block text-[11px] font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                        Status
+                    </label>
+                    <select wire:model.live="rujukanStatus" id="rujukan-status"
+                        class="h-9 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3 text-xs text-zinc-800 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-800/70 dark:text-zinc-200 dark:focus:bg-zinc-900 [&>option]:dark:bg-zinc-800 [&>option]:dark:text-white">
+                        <option value="">Semua Status</option>
+                        @foreach ($statusOptions as $s)
+                            <option value="{{ $s->value }}">{{ $s->label() }}</option>
+                        @endforeach
+                    </select>
                 </div>
+
             </div>
+
+            {{-- Active Filter Pills --}}
+            @if ($rujukanSearch || $rujukanDateFrom || $rujukanDateTo || $rujukanStatus || $rujukanRsId)
+                <div class="flex flex-wrap items-center gap-1.5 border-t border-zinc-100 px-5 py-2.5 dark:border-zinc-800/70">
+                    <span class="text-[11px] text-zinc-400">Aktif:</span>
+                    @if ($rujukanSearch)
+                        <span class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-0.5 text-[11px] font-medium text-blue-700 dark:bg-blue-950/50 dark:text-blue-300">
+                            Cari: {{ Str::limit($rujukanSearch, 20) }}
+                        </span>
+                    @endif
+                    @if ($rujukanDateFrom || $rujukanDateTo)
+                        <span class="inline-flex items-center gap-1 rounded-full bg-violet-50 px-2 py-0.5 text-[11px] font-medium text-violet-700 dark:bg-violet-950/50 dark:text-violet-300">
+                            {{ $rujukanDateFrom ? \Carbon\Carbon::parse($rujukanDateFrom)->format('d/m/Y') : '...' }}
+                            →
+                            {{ $rujukanDateTo ? \Carbon\Carbon::parse($rujukanDateTo)->format('d/m/Y') : 'Sekarang' }}
+                        </span>
+                    @endif
+                    @if ($rujukanStatus)
+                        <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300">
+                            Status: {{ collect($statusOptions)->firstWhere('value', $rujukanStatus)?->label() }}
+                        </span>
+                    @endif
+                    @if ($rujukanRsId)
+                        <span class="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:bg-amber-950/50 dark:text-amber-300">
+                            RS: {{ $rumahSakitList->firstWhere('id_rumah_sakit', $rujukanRsId)?->nama_rumah_sakit ?? $rujukanRsId }}
+                        </span>
+                    @endif
+                </div>
+            @endif
         </div>
 
         {{-- Tabel Laporan Rujukan --}}
@@ -389,38 +447,67 @@
         </div>
 
         {{-- Filter Card (Screen Only) --}}
-        <div class="print:hidden rounded-2xl border border-zinc-200/80 bg-white p-4 shadow-sm sm:p-5 dark:border-zinc-800 dark:bg-dark-primary">
-            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
-                {{-- 1. Search --}}
+        <div class="print:hidden rounded-2xl border border-zinc-200/80 bg-white shadow-sm dark:border-zinc-800 dark:bg-dark-primary">
+
+            {{-- Filter Header --}}
+            <div class="flex items-center justify-between border-b border-zinc-100 px-5 py-3 dark:border-zinc-800/70">
+                <div class="flex items-center gap-2">
+                    <x-icons.search class="h-3.5 w-3.5 text-emerald-500" />
+                    <span class="text-xs font-semibold text-zinc-600 dark:text-zinc-300">Filter &amp; Pencarian Pasien</span>
+                </div>
+                <button type="button" wire:click="resetPasienFilter" title="Reset semua filter"
+                    class="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-medium text-zinc-500 transition hover:bg-red-50 hover:border-red-200 hover:text-red-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-red-950/40 dark:hover:border-red-900 dark:hover:text-red-400">
+                    <x-icons.refresh class="h-3 w-3" />
+                    Reset Filter
+                </button>
+            </div>
+
+            {{-- Filter Inputs --}}
+            <div class="grid grid-cols-1 gap-3 p-4 sm:grid-cols-2 lg:grid-cols-6 sm:p-5">
+
+                {{-- 1. Search (spans 2 cols on lg) --}}
                 <div class="space-y-1.5 lg:col-span-2">
-                    <label class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Cari Pasien (Nama / NIK / No. RM / Alamat)</label>
+                    <label class="block text-[11px] font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                        Pencarian Pasien
+                    </label>
                     <div class="relative">
                         <input wire:model.live.debounce.300ms="pasienSearch" type="text"
-                            placeholder="Ketik Nama, NIK, No. RM, atau Alamat..."
-                            class="h-9 w-full rounded-xl border border-zinc-300/80 bg-zinc-50/50 pl-9 pr-3 text-xs text-zinc-800 placeholder-zinc-400 transition focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700/80 dark:bg-zinc-800/80 dark:text-white dark:placeholder-zinc-500 dark:focus:bg-zinc-900">
-                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400">
+                            id="pasien-search"
+                            placeholder="Nama, NIK, No. RM, atau Alamat..."
+                            class="h-9 w-full rounded-xl border border-zinc-200 bg-zinc-50 pl-8 pr-3 text-xs text-zinc-800 placeholder-zinc-400 transition focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-800/70 dark:text-white dark:placeholder-zinc-500 dark:focus:bg-zinc-900">
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2.5 text-zinc-400">
                             <x-icons.search class="h-3.5 w-3.5" />
                         </div>
                     </div>
                 </div>
 
-                {{-- 2. Periode Pendaftaran --}}
+                {{-- 2. Tanggal Dari --}}
                 <div class="space-y-1.5">
-                    <label class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Tgl Pendaftaran</label>
-                    <div class="flex items-center gap-1.5">
-                        <input wire:model.live="pasienDateFrom" type="date"
-                            class="h-9 w-full rounded-xl border border-zinc-300/80 bg-zinc-50/50 px-2.5 text-xs text-zinc-800 transition focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700/80 dark:bg-zinc-800/80 dark:text-white dark:focus:bg-zinc-900">
-                        <span class="shrink-0 text-xs text-zinc-400">–</span>
-                        <input wire:model.live="pasienDateTo" type="date"
-                            class="h-9 w-full rounded-xl border border-zinc-300/80 bg-zinc-50/50 px-2.5 text-xs text-zinc-800 transition focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700/80 dark:bg-zinc-800/80 dark:text-white dark:focus:bg-zinc-900">
-                    </div>
+                    <label for="pasien-date-from" class="block text-[11px] font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                        Terdaftar Dari
+                    </label>
+                    <input wire:model.live="pasienDateFrom" type="date"
+                        id="pasien-date-from"
+                        class="h-9 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3 text-xs text-zinc-800 transition focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-800/70 dark:text-zinc-200 dark:focus:bg-zinc-900 dark:[color-scheme:dark]">
                 </div>
 
-                {{-- 3. Jenis Kelamin --}}
+                {{-- 3. Tanggal Sampai --}}
                 <div class="space-y-1.5">
-                    <label class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Jenis Kelamin</label>
-                    <select wire:model.live="pasienGender"
-                        class="h-9 w-full rounded-xl border border-zinc-300/80 bg-zinc-50/50 px-3 text-xs text-zinc-800 transition focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700/80 dark:bg-zinc-800/80 dark:text-white dark:focus:bg-zinc-900 [&>option]:dark:bg-zinc-800 [&>option]:dark:text-white">
+                    <label for="pasien-date-to" class="block text-[11px] font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                        Terdaftar Sampai
+                    </label>
+                    <input wire:model.live="pasienDateTo" type="date"
+                        id="pasien-date-to"
+                        class="h-9 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3 text-xs text-zinc-800 transition focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-800/70 dark:text-zinc-200 dark:focus:bg-zinc-900 dark:[color-scheme:dark]">
+                </div>
+
+                {{-- 4. Jenis Kelamin --}}
+                <div class="space-y-1.5">
+                    <label for="pasien-gender" class="block text-[11px] font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                        Jenis Kelamin
+                    </label>
+                    <select wire:model.live="pasienGender" id="pasien-gender"
+                        class="h-9 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3 text-xs text-zinc-800 transition focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-800/70 dark:text-zinc-200 dark:focus:bg-zinc-900 [&>option]:dark:bg-zinc-800 [&>option]:dark:text-white">
                         <option value="">Semua Gender</option>
                         @foreach ($genderOptions as $g)
                             <option value="{{ $g->value }}">{{ $g->label() }}</option>
@@ -428,24 +515,49 @@
                     </select>
                 </div>
 
-                {{-- 4. Status Koordinat & Reset --}}
-                <div class="flex items-end gap-2">
-                    <div class="flex-1 space-y-1.5">
-                        <label class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Status Koordinat GPS</label>
-                        <select wire:model.live="pasienCoordStatus"
-                            class="h-9 w-full rounded-xl border border-zinc-300/80 bg-zinc-50/50 px-3 text-xs text-zinc-800 transition focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700/80 dark:bg-zinc-800/80 dark:text-white dark:focus:bg-zinc-900 [&>option]:dark:bg-zinc-800 [&>option]:dark:text-white">
-                            <option value="">Semua Pasien</option>
-                            <option value="with">Sudah Ada GPS</option>
-                            <option value="without">Belum Ada GPS</option>
-                        </select>
-                    </div>
-
-                    <button type="button" wire:click="resetPasienFilter" title="Reset Filter"
-                        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-zinc-300/80 bg-zinc-50/50 text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-white">
-                        <x-icons.refresh class="h-4 w-4" />
-                    </button>
+                {{-- 5. Status Koordinat GPS --}}
+                <div class="space-y-1.5">
+                    <label for="pasien-coord" class="block text-[11px] font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                        Status GPS
+                    </label>
+                    <select wire:model.live="pasienCoordStatus" id="pasien-coord"
+                        class="h-9 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3 text-xs text-zinc-800 transition focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-800/70 dark:text-zinc-200 dark:focus:bg-zinc-900 [&>option]:dark:bg-zinc-800 [&>option]:dark:text-white">
+                        <option value="">Semua Pasien</option>
+                        <option value="with">Sudah Ada GPS</option>
+                        <option value="without">Belum Ada GPS</option>
+                    </select>
                 </div>
+
             </div>
+
+            {{-- Active Filter Pills --}}
+            @if ($pasienSearch || $pasienDateFrom || $pasienDateTo || $pasienGender || $pasienCoordStatus)
+                <div class="flex flex-wrap items-center gap-1.5 border-t border-zinc-100 px-5 py-2.5 dark:border-zinc-800/70">
+                    <span class="text-[11px] text-zinc-400">Aktif:</span>
+                    @if ($pasienSearch)
+                        <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300">
+                            Cari: {{ Str::limit($pasienSearch, 20) }}
+                        </span>
+                    @endif
+                    @if ($pasienDateFrom || $pasienDateTo)
+                        <span class="inline-flex items-center gap-1 rounded-full bg-violet-50 px-2 py-0.5 text-[11px] font-medium text-violet-700 dark:bg-violet-950/50 dark:text-violet-300">
+                            {{ $pasienDateFrom ? \Carbon\Carbon::parse($pasienDateFrom)->format('d/m/Y') : '...' }}
+                            →
+                            {{ $pasienDateTo ? \Carbon\Carbon::parse($pasienDateTo)->format('d/m/Y') : 'Sekarang' }}
+                        </span>
+                    @endif
+                    @if ($pasienGender)
+                        <span class="inline-flex items-center gap-1 rounded-full bg-sky-50 px-2 py-0.5 text-[11px] font-medium text-sky-700 dark:bg-sky-950/50 dark:text-sky-300">
+                            {{ collect($genderOptions)->firstWhere('value', $pasienGender)?->label() }}
+                        </span>
+                    @endif
+                    @if ($pasienCoordStatus)
+                        <span class="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:bg-amber-950/50 dark:text-amber-300">
+                            GPS: {{ $pasienCoordStatus === 'with' ? 'Sudah Ada' : 'Belum Ada' }}
+                        </span>
+                    @endif
+                </div>
+            @endif
         </div>
 
         {{-- Tabel Laporan Pasien --}}

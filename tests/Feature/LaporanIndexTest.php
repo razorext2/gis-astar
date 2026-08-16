@@ -46,7 +46,7 @@ it('filters rujukan report by search and status', function () {
     $pasien = Pasien::factory()->create(['nama' => 'Ahmad Rujukan Laporan']);
     $rs = RumahSakit::factory()->create(['nama_rumah_sakit' => 'RS Khusus Mata']);
 
-    $rujukan = Rujukan::create([
+    Rujukan::create([
         'no_rujukan' => 'RJK-TEST-999',
         'id_pasien' => $pasien->id_pasien,
         'id_rumah_sakit' => $rs->id_rumah_sakit,
@@ -59,10 +59,11 @@ it('filters rujukan report by search and status', function () {
         ->set('rujukanSearch', 'RJK-TEST-999')
         ->assertSee('RJK-TEST-999')
         ->assertSee('Ahmad Rujukan Laporan')
+        // When status filter doesn't match, table row (patient name) should not appear
         ->set('rujukanStatus', 'ditolak')
-        ->assertDontSee('RJK-TEST-999')
+        ->assertDontSee('Ahmad Rujukan Laporan')
         ->set('rujukanStatus', 'disetujui')
-        ->assertSee('RJK-TEST-999');
+        ->assertSee('Ahmad Rujukan Laporan');
 });
 
 it('resets rujukan filters correctly', function () {
