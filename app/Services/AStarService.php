@@ -11,13 +11,10 @@ use Illuminate\Support\Collection;
 /**
  * Implementasi algoritma A* untuk pencarian rumah sakit rujukan terbaik.
  *
- * Dalam mode development (OSM):
- *   - Heuristic h(n) = Haversine distance ke RS target
- *   - Cost g(n)      = Haversine distance dari pasien ke node
- *   - f(n)           = g(n) + h(n) = total estimasi jarak
- *
- * Karena semua kandidat RS adalah goal node langsung (tidak ada graph perantara),
- * algoritma disederhanakan: hitung f(n) untuk setiap RS, pilih yang terkecil.
+ * Menggunakan integrasi jaringan jalan OSRM (Open Source Routing Machine):
+ *   - Cost g(n)      = Jarak jalan nyata (km) dari pasien ke RS kandidat via OSRM (dengan fallback Haversine)
+ *   - Heuristic h(n) = 0 (karena RS kandidat merupakan goal node langsung)
+ *   - f(n)           = g(n) + h(n) = total estimasi jarak evaluasi A*
  */
 class AStarService
 {
@@ -27,11 +24,15 @@ class AStarService
     /** Asumsi kecepatan rata-rata dalam kota (km/jam) */
     private const AVERAGE_SPEED_KMH = 40;
 
-    /** Tarif ambulan per km (Rupiah) */
-    private const COST_PER_KM = 5000;
+    /** Tarif ambulan per km — dikonfigurasi via AMBULANCE_COST_PER_KM di .env */
+    private const DEFAULT_COST_PER_KM = 5000;
+
+    public function __construct(
+        private readonly ?OsrmService $osrmService = null,
+    ) {}
 
     /**
-     * Temukan RS terbaik dari daftar kandidat menggunakan A*.
+     * Temukan RS terbaik dari daftar kandidat menggunakan A* berbasis jarak jaringan jalan OSRM.
      *
      * @param  float  $fromLat  Latitude pasien
      * @param  float  $fromLng  Longitude pasien
@@ -42,15 +43,34 @@ class AStarService
         float $fromLng,
         Collection $hospitals
     ): AStarResult {
+        if ($hospitals->isEmpty()) {
+            throw new \InvalidArgumentException('Daftar rumah sakit kandidat tidak boleh kosong.');
+        }
+
+        // Ambil matriks jarak jalan dan durasi tempuh via OSRM Table API
+        $osrm = $this->osrmService ?? app(OsrmService::class);
+        $metrics = $osrm->getDistancesAndDurations($fromLat, $fromLng, $hospitals);
+
         // Hitung f(n) untuk setiap kandidat RS
-        $scored = $hospitals->map(function (RumahSakit $hospital) use ($fromLat, $fromLng) {
-            $distance = $this->haversine($fromLat, $fromLng, $hospital->latitude, $hospital->longitude);
-            $estimatedTime = $this->estimateTime($distance);
+        $scored = $hospitals->map(function (RumahSakit $hospital) use ($fromLat, $fromLng, $metrics) {
+            $metric = $metrics[$hospital->id_rumah_sakit] ?? null;
+
+            if ($metric !== null) {
+                $distance = (float) $metric['distance'];
+                $estimatedTime = (int) $metric['duration'];
+                $isRoadDistance = (bool) ($metric['is_road_distance'] ?? true);
+            } else {
+                // Fallback internal jika tidak ditemukan di matriks
+                $distance = $this->haversine($fromLat, $fromLng, $hospital->latitude, $hospital->longitude);
+                $estimatedTime = $this->estimateTime($distance);
+                $isRoadDistance = false;
+            }
+
             $estimatedCost = $this->estimateCost($distance);
 
-            // f(n) = g(n) + h(n)
-            // g(n) = haversine(pasien → RS)
-            // h(n) = 0 (RS adalah goal node langsung)
+            // Evaluasi A*: f(n) = g(n) + h(n)
+            // g(n) = jarak jalan nyata ke RS
+            // h(n) = 0 (karena RS adalah goal node langsung)
             $fScore = $distance;
 
             return [
@@ -59,10 +79,11 @@ class AStarService
                 'estimated_time' => $estimatedTime,
                 'estimated_cost' => $estimatedCost,
                 'f_score' => $fScore,
+                'is_road_distance' => $isRoadDistance,
             ];
         });
 
-        // Sort ascending berdasarkan f(n) → RS terdekat di index 0
+        // Sort ascending berdasarkan f(n) → RS terdekat dan optimal di index 0
         $ranked = $scored->sortBy('f_score')->values();
 
         $best = $ranked->first();
@@ -97,7 +118,7 @@ class AStarService
 
     /**
      * Haversine formula — menghitung jarak garis lurus antara dua koordinat.
-     * Hasil dalam kilometer. Admissible sebagai heuristic A* karena selalu ≤ jarak jalan nyata.
+     * Hasil dalam kilometer. Admissible sebagai heuristic A* karena selalu <= jarak jalan nyata.
      */
     public function haversine(float $lat1, float $lng1, float $lat2, float $lng2): float
     {
@@ -125,12 +146,14 @@ class AStarService
 
     /**
      * Estimasi biaya rujukan berdasarkan jarak.
-     * Asumsi tarif ambulan Rp 5.000/km.
+     * Tarif per km dibaca dari config (AMBULANCE_COST_PER_KM di .env), default Rp5.000/km.
      *
      * @return float Estimasi biaya dalam Rupiah
      */
     private function estimateCost(float $distanceKm): float
     {
-        return $distanceKm * self::COST_PER_KM;
+        $costPerKm = (int) config('services.ambulance.cost_per_km', self::DEFAULT_COST_PER_KM);
+
+        return $distanceKm * $costPerKm;
     }
 }

@@ -20,8 +20,8 @@ use Illuminate\Support\Facades\DB;
  *
  * Alur kerja:
  *  1. Validasi koordinat pasien
- *  2. Scoring: getCandidates (filter layanan + radius)
- *  3. A*: findBestHospital (ranking Haversine)
+ *  2. Scoring: getCandidates (filter layanan + radius via Haversine)
+ *  3. A*: findBestHospital (ranking berbasis jarak jalan nyata OSRM, fallback Haversine)
  *  4. Persist: simpan semua hasil ke DB dalam satu transaksi
  *
  * Berjalan SYNCHRONOUS dalam Livewire request cycle.

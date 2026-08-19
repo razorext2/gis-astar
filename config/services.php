@@ -57,4 +57,11 @@ return [
         ))),
         'model' => env('GEMINI_MODEL', 'gemini-2.0-flash'),
     ],
+    'osrm' => [
+        'base_url' => env('OSRM_BASE_URL', 'https://router.project-osrm.org'),
+        'timeout' => (int) env('OSRM_TIMEOUT', 6),
+    ],
+    'ambulance' => [
+        'cost_per_km' => (int) env('AMBULANCE_COST_PER_KM', 5000),
+    ],
 ];

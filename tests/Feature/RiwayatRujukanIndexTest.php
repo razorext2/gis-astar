@@ -25,12 +25,12 @@ it('filters rujukan by search keyword', function () {
     $rs = RumahSakit::factory()->create(['layanan_operasi' => ['Katarak']]);
 
     Rujukan::create([
-        'no_rujukan'      => Rujukan::generateNoRujukan(),
-        'id_pasien'       => $pasien->id_pasien,
-        'id_rumah_sakit'  => $rs->id_rumah_sakit,
-        'id_user'         => $user->id,
+        'no_rujukan' => Rujukan::generateNoRujukan(),
+        'id_pasien' => $pasien->id_pasien,
+        'id_rumah_sakit' => $rs->id_rumah_sakit,
+        'id_user' => $user->id,
         'tanggal_rujukan' => now(),
-        'status'          => 'pending',
+        'status' => 'pending',
     ]);
 
     $this->actingAs($user);
@@ -46,12 +46,12 @@ it('filters rujukan by status', function () {
     $rs = RumahSakit::factory()->create(['layanan_operasi' => ['Katarak']]);
 
     Rujukan::create([
-        'no_rujukan'      => Rujukan::generateNoRujukan(),
-        'id_pasien'       => $pasien->id_pasien,
-        'id_rumah_sakit'  => $rs->id_rumah_sakit,
-        'id_user'         => $user->id,
+        'no_rujukan' => Rujukan::generateNoRujukan(),
+        'id_pasien' => $pasien->id_pasien,
+        'id_rumah_sakit' => $rs->id_rumah_sakit,
+        'id_user' => $user->id,
         'tanggal_rujukan' => now(),
-        'status'          => 'selesai',
+        'status' => 'selesai',
     ]);
 
     $this->actingAs($user);

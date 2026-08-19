@@ -149,7 +149,7 @@ class GeocodingService
      */
     private function queryNominatim(string $query, int $limit): array
     {
-        $cacheKey = 'geocode_nominatim_' . md5($query) . '_' . $limit;
+        $cacheKey = 'geocode_nominatim_'.md5($query).'_'.$limit;
 
         return Cache::remember($cacheKey, self::CACHE_TTL_SECONDS, function () use ($query, $limit) {
             try {

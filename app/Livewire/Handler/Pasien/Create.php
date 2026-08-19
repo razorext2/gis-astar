@@ -7,6 +7,7 @@ namespace App\Livewire\Handler\Pasien;
 use App\Enums\JenisKelamin;
 use App\Livewire\Concerns\HandlesErrors;
 use App\Models\Pasien;
+use App\Services\GeocodingService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -72,10 +73,11 @@ class Create extends Component
             return;
         }
 
-        $results = app(\App\Services\GeocodingService::class)->search($this->alamat, 5);
+        $results = app(GeocodingService::class)->search($this->alamat, 5);
 
         if (empty($results)) {
             $this->dispatch('swal', title: 'Gagal', text: 'Alamat tidak ditemukan atau tidak dapat dilokalisasi.', icon: 'error');
+
             return;
         }
 
@@ -84,6 +86,7 @@ class Create extends Component
             $this->longitude = $results[0]['lng'];
             $this->dispatch('coordinates-updated', lat: $results[0]['lat'], lng: $results[0]['lng']);
             $this->dispatch('swal', title: 'Berhasil', text: 'Koordinat ditemukan dan peta diperbarui.', icon: 'success');
+
             return;
         }
 

@@ -36,6 +36,7 @@
             pasienList: @js($pasienList),
             rsList: @js($rumahSakitList),
             astarResult: @entangle('astarResult'),
+            costPerKm: @js(config('services.ambulance.cost_per_km', 5000)),
             selectedIndex: 0,
             hasSearched: false,
 
@@ -172,7 +173,7 @@
 
                         this.currentDistance = (route.distance / 1000).toFixed(1).replace('.', ',');
                         this.currentDuration = Math.ceil(route.duration / 60);
-                        this.currentCost = Math.round((route.distance / 1000) * 2500 + 10000)
+                        this.currentCost = Math.round((route.distance / 1000) * this.costPerKm)
                             .toLocaleString('id-ID');
 
                         if (this.routeLayer) this.map.removeLayer(this.routeLayer);
